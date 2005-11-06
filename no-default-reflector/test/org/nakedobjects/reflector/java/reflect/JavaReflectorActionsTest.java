@@ -43,7 +43,7 @@ public class JavaReflectorActionsTest extends TestCase {
         Action action = actions[3];
         assertEquals("WithAbout", action.getName());
         
-        assertTrue(action.hasHint());
+        fail();
     }
 
     public void testNumberOfActions() throws Exception {
@@ -53,7 +53,6 @@ public class JavaReflectorActionsTest extends TestCase {
     public void testObjectDefaultActionsWithOneParameter() throws Exception {
         Action action = actions[4];
         assertEquals("Two", action.getName());
-        assertFalse(action.hasHint());
         assertEquals(Action.DEFAULT, action.getActionTarget());
         assertEquals(Action.DEBUG, action.getActionType());
         assertEquals(0, action.getParameterCount());
@@ -64,7 +63,6 @@ public class JavaReflectorActionsTest extends TestCase {
     public void testObjectDefaultActionsWithZeroParameters() throws Exception {
         Action action = actions[1];
         assertEquals("One", action.getName());
-        assertFalse(action.hasHint());
         assertEquals(Action.DEFAULT, action.getActionTarget());
         assertEquals(Action.USER, action.getActionType());
         assertEquals(null, action.getReturnType());

@@ -3,6 +3,7 @@ package org.nakedobjects.reflector.java.reflect;
 import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.object.NakedObjectApplicationException;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 
 import java.lang.reflect.InvocationTargetException;
@@ -14,12 +15,12 @@ import org.apache.log4j.Logger;
 public abstract class JavaMember {
     private final static Logger LOG = Logger.getLogger(JavaMember.class);
     private final static boolean STRICT = NakedObjects.getConfiguration().getBoolean("reflection.strict", true);
-    private final String name;
+    private final MemberIdentifier identifier;
     private Method aboutMethod;
 
-    protected JavaMember(String name, Method about) {
+    protected JavaMember(MemberIdentifier identifier, Method about) {
         this.aboutMethod = about;
-        this.name = name;
+        this.identifier = identifier;
     }
 
     protected Method getAboutMethod() {
@@ -33,8 +34,8 @@ public abstract class JavaMember {
         return aboutMethod != null;
     }
 
-    public String getName() {
-        return name;
+    public MemberIdentifier getIdentifier() {
+        return identifier;
     }
 
     public static void invocationException(String error, InvocationTargetException e) {

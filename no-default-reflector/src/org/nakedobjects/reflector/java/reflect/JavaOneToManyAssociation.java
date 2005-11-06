@@ -1,12 +1,14 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
@@ -24,14 +26,14 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     private Method removeMethod;
     private Method clearMethod;
 
-    public JavaOneToManyAssociation(String name, Class type, Method get, Method add, Method remove, Method about) {
+    public JavaOneToManyAssociation(MemberIdentifier name, Class type, Method get, Method add, Method remove, Method about) {
         super(name, type, get, about, add == null && remove == null);
         this.addMethod = add;
         this.removeMethod = remove;
     }
 
-    public void addAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+    public void addAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("local set association " + getIdentifier() + " in " + inObject + " with " + associate);
         try {
             addMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
         } catch (IllegalArgumentException e) {
@@ -45,8 +47,8 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("init association " + getName() + " in " + inObject + " with " + associate);
+    public void initAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("init association " + getIdentifier() + " in " + inObject + " with " + associate);
         try {
             Object obj = getMethod.invoke(inObject.getObject(), new Object[0]);
 
@@ -68,7 +70,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject element, boolean add) {
+    private Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject element, boolean add) {
         if (hasHint()) {
             Method aboutMethod = getAboutMethod();
             try {
@@ -82,7 +84,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
                 }
                 aboutMethod.invoke(object.getObject(), parameters);
                 if (hint.getDescription().equals("")) {
-                    hint.setDescription("Add " + element.getObject() + " to field " + getName());
+                    hint.setDescription("Add " + element.getObject() + " to field " + getIdentifier());
                 }
                 return hint;
             } catch (InvocationTargetException e) {
@@ -96,7 +98,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    public NakedCollection getAssociations(MemberIdentifier identifier, NakedObject fromObject) {
+    public NakedCollection getAssociations(NakedObject fromObject) {
         return (NakedCollection) get(fromObject);
     }
 
@@ -108,7 +110,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         return new Class[0];
     }
     
-    public void removeAllAssociations(MemberIdentifier identifier, NakedObject inObject) {
+    public void removeAllAssociations(NakedObject inObject) {
         try {
             clearMethod.invoke(inObject, null);
         } catch (InvocationTargetException e) {
@@ -123,8 +125,8 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
      * Remove an associated object (the element) from the specified NakedObject in the association field
      * represented by this object.
      */
-    public void removeAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local clear association " + associate + " from field " + getName() + " in " + inObject);
+    public void removeAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("local clear association " + associate + " from field " + getIdentifier() + " in " + inObject);
 
         try {
             removeMethod.invoke(inObject.getObject(), new Object[] { associate.getObject() });
@@ -143,7 +145,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         String methods = (getMethod == null ? "" : "GET") + (addMethod == null ? "" : " ADD")
                 + (removeMethod == null ? "" : " REMOVE");
 
-        return "OneToManyAssociation [name=\"" + getName() + "\", method=" + getMethod + ",about=" + getAboutMethod()
+        return "OneToManyAssociation [name=\"" + getIdentifier() + "\", method=" + getMethod + ",about=" + getAboutMethod()
                 + ", methods=" + methods + ", type=" + getType() + " ]";
     }
 
@@ -156,7 +158,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
                 return null;
             } else {
                 NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
-                adapter = objectLoader.getAdapterForElseCreateAdapterForCollection(fromObject, getName(), getType(), collection);
+                adapter = objectLoader.getAdapterForElseCreateAdapterForCollection(fromObject, getIdentifier().getName(), getType(), collection);
                 if (adapter == null) {
                     throw new ReflectionException("no adapter created");
                 } else {
@@ -172,7 +174,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject fromObject) {
+    public boolean isEmpty(NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
 
@@ -192,7 +194,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    public void initOneToManyAssociation(MemberIdentifier identifier, NakedObject fromObject, NakedObject[] instances) {
+    public void initOneToManyAssociation(NakedObject fromObject, NakedObject[] instances) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
 
@@ -214,6 +216,35 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
            LOG.error("illegal access of " + getMethod, ignore);
            throw new ReflectionException(ignore);
        }
+    }
+    
+    
+    
+
+    
+    
+    public Consent validToRemove(NakedObject container, NakedObject element) {
+      Hint about = getHint(null, container, element, false);
+      Consent edit = about.canUse();
+      return edit;
+    }
+    
+    public Consent validToAdd(NakedObject container, NakedObject element) {
+          Hint about = getHint(null, container, element, true);
+          Consent edit = about.canUse();
+          return edit;
+    }
+    
+    public Consent isEditable() {
+        return Allow.DEFAULT;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return getHint(null, target, null, true).canAccess();
+    }
+
+    public boolean isAccessible() {
+        return true;
     }
 }
 

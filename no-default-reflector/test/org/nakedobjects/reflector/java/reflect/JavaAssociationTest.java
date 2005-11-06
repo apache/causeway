@@ -71,7 +71,7 @@ public class JavaAssociationTest extends TestCase {
         system.addSpecification(new DummyNakedObjectSpecification()); // for object
         
      	assertNull(javaObjectWithOneToOneAssociations.getReferencedObject());
-     	personField.setAssociation(new DummyIdentifier(), nakedObjectHoldingObjectWithAssociations, associate);
+     	personField.setAssociation(nakedObjectHoldingObjectWithAssociations, associate);
      	assertEquals(javaObjectForReferencing, javaObjectWithOneToOneAssociations.getReferencedObject());
     }     	
     
@@ -82,14 +82,14 @@ public class JavaAssociationTest extends TestCase {
         javaObjectWithOneToOneAssociations.setReferencedObject(javaObjectForReferencing);
     	
     	assertNotNull(javaObjectWithOneToOneAssociations.getReferencedObject());
-    	personField.clearAssociation(new DummyIdentifier(), nakedObjectHoldingObjectWithAssociations, associate);
+    	personField.clearAssociation(nakedObjectHoldingObjectWithAssociations, associate);
     	assertNull(javaObjectWithOneToOneAssociations.getReferencedObject());
     }     	
     
     public void testGet() {
-       	assertNull(personField.getAssociation(new DummyIdentifier(), nakedObjectHoldingObjectWithAssociations));
+       	assertNull(personField.getAssociation(nakedObjectHoldingObjectWithAssociations));
        	javaObjectWithOneToOneAssociations.setReferencedObject(javaObjectForReferencing);
-    	assertEquals(associate, personField.getAssociation(new DummyIdentifier(), nakedObjectHoldingObjectWithAssociations));
+    	assertEquals(associate, personField.getAssociation(nakedObjectHoldingObjectWithAssociations));
     }     	
     
     public void testInitGet() {
@@ -97,12 +97,12 @@ public class JavaAssociationTest extends TestCase {
         system.addSpecification(new DummyNakedObjectSpecification()); // for object
 
         assertNull(javaObjectWithOneToOneAssociations.getReferencedObject());
-    	personField.initAssociation(new DummyIdentifier(), nakedObjectHoldingObjectWithAssociations, associate);
+    	personField.initAssociation(nakedObjectHoldingObjectWithAssociations, associate);
     	assertEquals(javaObjectForReferencing, javaObjectWithOneToOneAssociations.getReferencedObject());
     }
     
     public void testName() {
-    	assertEquals(PERSON_FIELD_NAME, personField.getName());
+    	assertEquals(PERSON_FIELD_NAME, personField.getIdentifier());
     }
      
     public void testAboutAssignment() {

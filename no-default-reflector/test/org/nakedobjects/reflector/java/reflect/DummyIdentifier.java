@@ -1,6 +1,6 @@
 package org.nakedobjects.reflector.java.reflect;
 
-import org.nakedobjects.object.MemberIdentifier;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 
 

@@ -52,16 +52,19 @@ public class JavaActionTest extends TestCase {
     }
 
     public void testAbout() {
-        Hint about = javaAction.getHint(null, nakedObject, new Naked[0]);
-        assertNotNull(about);
-        assertEquals("about for test", about.getName());
+        String label = javaAction.getLabel();
+        assertEquals("about for test", label);
+
+//        Hint about = javaAction.getHint(null, nakedObject, new Naked[0]);
+//        assertNotNull(about);
+        assertEquals("about for test", about.getIdentifier());
     }
 
     public void testAction() throws Exception {
         DummyNakedObjectSpecification spec = new DummyNakedObjectSpecification();
         system.addSpecification(spec);
         
-        javaAction.execute(null, nakedObject, new Naked[0]);
+        javaAction.execute(nakedObject, new Naked[0]);
 
   //      manager.assertAction(0, "start transaction");
    //     manager.assertAction(1, "end transaction");
@@ -72,7 +75,7 @@ public class JavaActionTest extends TestCase {
     }
 
     public void testMethodName() throws Exception {
-        assertEquals("methodName", javaAction.getName());
+        assertEquals("methodName", javaAction.getIdentifier());
     }
 
     public void testReturnType() {

@@ -80,7 +80,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         system.addSpecification(spec);
         
         assertNull(objectWithVector.added);
-        collectionField.addAssociation(new DummyIdentifier(), nakedObject, nakedObjectAssoicate);
+        collectionField.addAssociation(nakedObject, nakedObjectAssoicate);
         assertEquals(associate, objectWithVector.added);
     }     	
     
@@ -95,7 +95,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         system.addSpecification(spec);
         
         assertNull(objectWithVector.removed);
-        collectionField.removeAssociation(new DummyIdentifier(), nakedObject, nakedObjectAssoicate);
+        collectionField.removeAssociation(nakedObject, nakedObjectAssoicate);
         assertEquals(associate, objectWithVector.removed);
     }     	
     
@@ -109,12 +109,12 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         DummyNakedCollection collection = new DummyNakedCollection();
         system.addNakedCollectionAdapter(collection);
         
-    	assertNotNull(collectionField.getAssociations(new DummyIdentifier(), nakedObject));
-    	assertEquals(collection.getObject(), collectionField.getAssociations(new DummyIdentifier(), nakedObject).getObject());
+    	assertNotNull(collectionField.getAssociations(nakedObject));
+    	assertEquals(collection.getObject(), collectionField.getAssociations(nakedObject).getObject());
     }     	
     
     public void testName() {
-    	assertEquals(MEMBERS_FIELD_NAME, collectionField.getName());
+    	assertEquals(MEMBERS_FIELD_NAME, collectionField.getIdentifier());
     }
     
     public void testAbout() {

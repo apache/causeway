@@ -2,16 +2,18 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 import org.nakedobjects.object.transaction.TransactionException;
@@ -36,15 +38,15 @@ public class JavaAction extends JavaMember implements ActionPeer {
     private Action.Type type;
     private Action.Target target;
 
-    public JavaAction(String name, Action.Type type, Action.Target target, Method action, Method about) {
-        super(name, about);
+    public JavaAction(MemberIdentifier identifier, Action.Type type, Action.Target target, Method action, Method about) {
+        super(identifier, about);
         this.type = type;
         this.actionMethod = action;
         this.target = target;
         paramCount = action.getParameterTypes().length;
     }
 
-    public Naked execute(MemberIdentifier identifier, NakedObject inObject, Naked[] parameters) throws ReflectiveActionException {
+    public Naked execute(NakedObject inObject, Naked[] parameters) throws ReflectiveActionException {
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -88,7 +90,10 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return null;
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+    private Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+        if(parameters == null) {
+            parameters = new Naked[0];
+        }
         if (parameters.length != paramCount) {
             LOG.error(actionMethod + " requires " + paramCount + " parameters, not " + parameters.length);
         }
@@ -117,7 +122,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
                 return new DefaultHint();
             }
             if(hint.getDescription().equals("")) {
-                hint.setDescription("Invoke action " + getName());
+                hint.setDescription("Invoke action " + getIdentifier());
             }
 
             return hint;
@@ -161,8 +166,8 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return hasReturn ? specification(returnType) : null;
     }
     
-    public ActionParameterSet getParameters(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
-        Hint hint= getHint(identifier, object, parameters);
+    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
+        Hint hint= getHint(getIdentifier(), object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;
             return new ActionParameterSetImpl(about.getDefaultParameterValues(), about.getParameterLabels(), about.getRequired());
@@ -187,6 +192,42 @@ public class JavaAction extends JavaMember implements ActionPeer {
         }
         return "JavaAction [name=" + actionMethod.getName()  + ",type=" + type.getName() + ",parameters=" + parameters + "]";
     }
+
+    public Consent invokable(NakedObject target, Naked[] parameters) {
+        return Allow.DEFAULT;
+    }
+
+    public Consent validParameters(NakedObject object, Naked[] parameters) {
+        return getHint(null, object, parameters).canUse();
+   }
+
+    public String[] parameterLabels() {
+        return null;
+    }
+
+    public boolean[] mandatoryParameters() {
+        return null;
+    }
+
+    public Object[] defaultParameters() {
+        return null;
+    }
+
+    public String getDescription() {
+        return "";
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return getHint(null, target, new Naked[getParameterCount()]).canAccess();
+    }
+
+    public boolean isAccessible() {
+        return true;
+    }
+    
+    
+    
+    
 }
 
 /*

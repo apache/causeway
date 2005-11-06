@@ -3,13 +3,16 @@ package org.nakedobjects.reflector.java.reflect;
 import org.nakedobjects.application.ValueParseException;
 import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.MemberIdentifier;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.reflector.java.control.SimpleFieldAbout;
@@ -27,15 +30,15 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     protected Method setMethod;
     private boolean isObject;
 
-    public JavaOneToOneAssociation(boolean isObject, String name, Class type, Method get, Method set, Method add, Method remove, Method about, boolean derived) {
-        super(name, type, get, about, derived);
+    public JavaOneToOneAssociation(boolean isObject, MemberIdentifier identifier, Class type, Method get, Method set, Method add, Method remove, Method about, boolean derived) {
+        super(identifier, type, get, about, derived);
         this.setMethod = set;
         this.addMethod = add;
         removeMethod = remove;
         this.isObject = isObject;
     }
 
-    public void clearAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
+    public void clearAssociation(NakedObject inObject, NakedObject associate) {
         LOG.debug("local clear association " + inObject + "/" + associate);
 
         try {
@@ -78,7 +81,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public Naked getAssociation(MemberIdentifier identifier, NakedObject fromObject) {
+    public Naked getAssociation(NakedObject fromObject) {
         return get(fromObject);
     }
 
@@ -90,7 +93,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         return new Class[0];
     }
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
+    private Hint getHint(MemberIdentifier identifier, NakedObject object, Naked associate) {
         Method aboutMethod = getAboutMethod();
 
         Class parameter = getMethod.getReturnType();
@@ -120,7 +123,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
             }
             aboutMethod.invoke(object.getObject(), parameters);
             if(hint.getDescription().equals("") && associate != null) {
-                hint.setDescription("Set field " + getName() + " to " + associate.getObject());
+                hint.setDescription("Set field " + getIdentifier() + " to " + associate.getObject());
             }
             return hint;
         } catch (InvocationTargetException e) {
@@ -140,8 +143,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
      * Set the data in an NakedObject. Passes in an existing object to for the
      * EO to reference.
      */
-    public void initAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+    public void initAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("local set association " + getIdentifier() + " in " + inObject + " with " + associate);
 
         try {
             setMethod.invoke(inObject.getObject(), new Object[] { associate == null ? null : associate.getObject() });
@@ -159,8 +162,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
      * Set the data in an NakedObject. Passes in an existing object to for the
      * EO to reference.
      */
-    public void initValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
-        LOG.debug("local initValue() " + getName() + " " + inObject.getOid() + "/" + setValue);
+    public void initValue(NakedObject inObject, Object setValue) {
+        LOG.debug("local initValue() " + getIdentifier() + " " + inObject.getOid() + "/" + setValue);
 
         try {
             if (setMethod == null) {
@@ -183,7 +186,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public boolean isEmpty(MemberIdentifier identifier, NakedObject fromObject) {
+    public boolean isEmpty(NakedObject fromObject) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
             if (obj instanceof BusinessValueHolder) {
@@ -238,8 +241,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public void setAssociation(MemberIdentifier identifier, NakedObject inObject, NakedObject associate) {
-        LOG.debug("local set association " + getName() + " in " + inObject + " with " + associate);
+    public void setAssociation(NakedObject inObject, NakedObject associate) {
+        LOG.debug("local set association " + getIdentifier() + " in " + inObject + " with " + associate);
 
         try {
             if (associate == null) {
@@ -266,8 +269,8 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         }
     }
 
-    public void setValue(MemberIdentifier identifier, NakedObject inObject, Object setValue) {
-        LOG.debug("local setValue() " + inObject.getOid() + "/" + getName() + "/" + setValue);
+    public void setValue(NakedObject inObject, Object setValue) {
+        LOG.debug("local setValue() " + inObject.getOid() + "/" + getIdentifier() + "/" + setValue);
 
         try {
             if (setMethod == null) {
@@ -289,8 +292,36 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
         String methods = (getMethod == null ? "" : "GET") + (setMethod == null ? "" : " SET") + (addMethod == null ? "" : " ADD")
                 + (removeMethod == null ? "" : " REMOVE");
 
-        return "Association [name=\"" + getName() + "\", method=" + getMethod + ",about=" + getAboutMethod() + ", methods="
+        return "Association [name=\"" + getIdentifier() + "\", method=" + getMethod + ",about=" + getAboutMethod() + ", methods="
                 + methods + ", type=" + getType() + " ]";
+    }
+    
+    
+    
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+        return getHint(null, inObject, value).canUse();
+     }
+    
+    public Consent validValue(NakedObject inObject, NakedValue value) {
+        return getHint(null, inObject, value).canUse();
+    }
+    
+
+    public Consent isEditable() {
+        return Allow.DEFAULT;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return getHint(null, target, null).canAccess();
+    }
+
+    public boolean isAccessible() {
+        return true;
+    }
+    
+    public String getDescription() {
+        return "";
     }
 }
 

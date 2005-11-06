@@ -73,7 +73,7 @@ public class JavaOneToOneAssociationTest extends TestCase {
         system.addSpecification(new DummyNakedObjectSpecification()); // for Object
         
         assertNull(objectWithOneToOneAssoications.getReferencedObject());
-     	personField.setAssociation(new DummyIdentifier(), nakedObject, associatedNakedObject);
+     	personField.setAssociation(nakedObject, associatedNakedObject);
      	assertEquals(referencedObject, objectWithOneToOneAssoications.getReferencedObject());
     }     	
     
@@ -84,14 +84,14 @@ public class JavaOneToOneAssociationTest extends TestCase {
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);
     	
     	assertNotNull(objectWithOneToOneAssoications.getReferencedObject());
-    	personField.clearAssociation(new DummyIdentifier(), nakedObject, associatedNakedObject);
+    	personField.clearAssociation(nakedObject, associatedNakedObject);
     	assertNull(objectWithOneToOneAssoications.getReferencedObject());
     }     	
     
     public void testGet() {
         assertNull(objectWithOneToOneAssoications.getReferencedObject());
     	objectWithOneToOneAssoications.setReferencedObject(referencedObject);    	
-    	assertEquals(referencedObject, personField.getAssociation(new DummyIdentifier(), nakedObject).getObject());
+    	assertEquals(referencedObject, personField.getAssociation(nakedObject).getObject());
     }     	
     
     public void testInitGet() {
@@ -99,12 +99,12 @@ public class JavaOneToOneAssociationTest extends TestCase {
         system.addSpecification(new DummyNakedObjectSpecification()); // for Object
       
         assertNull(objectWithOneToOneAssoications.getReferencedObject());
-    	personField.initAssociation(new DummyIdentifier(), nakedObject, associatedNakedObject);
+    	personField.initAssociation(nakedObject, associatedNakedObject);
     	assertEquals(referencedObject, objectWithOneToOneAssoications.getReferencedObject());
     }
     
     public void testName() {
-    	assertEquals(PERSON_FIELD_NAME, personField.getName());
+    	assertEquals(PERSON_FIELD_NAME, personField.getIdentifier());
     }
      
     public void testAboutAssignment() {

@@ -114,11 +114,11 @@ public class JavaReflectorTest extends TestCase {
         assertEquals(3, fields.length);
         
        OneToOnePeer member = ((DummyOneToOneAssociation) fields[0]).getPeer();
-       assertEquals("One", member.getName());
+       assertEquals("One", member.getIdentifier());
        assertEquals(false, member.isObject());
        
        member = ((DummyOneToOneAssociation) fields[2]).getPeer();
-       assertEquals("Three", member.getName());
+       assertEquals("Three", member.getIdentifier());
        assertEquals(true, member.isObject());
     }
 
@@ -138,7 +138,7 @@ public class JavaReflectorTest extends TestCase {
         String[] interfaces = reflector.getInterfaces();
         assertEquals(2, interfaces.length);
         assertEquals(Interface1.class.getName(), interfaces[0]);
-        assertEquals(Interface2.class.getName(), interfaces[1]);
+        assertEquals(Interface2.class.getIdentifier(), interfaces[1]);
     }
     
     public void testLookup() {

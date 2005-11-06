@@ -3,6 +3,7 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.reflect.MemberIdentifier;
 
 import java.lang.reflect.Method;
 
@@ -12,8 +13,8 @@ public abstract class JavaField extends JavaMember {
     private final boolean isDerived;
     protected final  Class type;
 
-    public JavaField(String name, Class type, Method get, Method about, boolean isDerived) {
-        super(name, about);
+    public JavaField(MemberIdentifier identifier, Class type, Method get, Method about, boolean isDerived) {
+        super(identifier, about);
         this.type = type;
         this.isDerived = isDerived;
         this.getMethod = get;
@@ -32,6 +33,10 @@ public abstract class JavaField extends JavaMember {
      */
     public boolean isDerived() {
         return isDerived;
+    }
+    
+    public String getDescription() {
+        return "";
     }
 }
 
