@@ -3,7 +3,7 @@ import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.ProxyPersistenceManager;
+import org.nakedobjects.distribution.ProxyPersistor;
 import org.nakedobjects.distribution.ProxyPeerFactory;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
@@ -12,14 +12,14 @@ import org.nakedobjects.distribution.pipe.NakedObjectsPipe;
 import org.nakedobjects.distribution.pipe.PipedClient;
 import org.nakedobjects.distribution.pipe.PipedConnection;
 import org.nakedobjects.distribution.pipe.PipedServer;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.persistence.objectstore.ObjectStoreLogger;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
@@ -104,14 +104,14 @@ public abstract class StandaloneClientServer {
                 DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
                 persistAlgorithm.setOidGenerator(oidGenerator);
 
-                ObjectStorePersistenceManager localObjectManager = new ObjectStorePersistenceManager();
+                ObjectStorePersistor localObjectManager = new ObjectStorePersistor();
                 localObjectManager.setObjectStore(objectStore);
                 localObjectManager.setPersistAlgorithm(persistAlgorithm);
                 localObjectManager.setCheckObjectsForDirtyFlag(true);
 
-                NakedObjectPersistenceManager objectManager = localObjectManager;
+                NakedObjectPersistor objectManager = localObjectManager;
           //      objectManager = new ObjectManagerLogger(objectManager, "server-manager.log");
-                nakedObjects.setPersistenceManager(objectManager);
+                nakedObjects.setObjectPersistor(objectManager);
 
                 ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
                 objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
@@ -198,12 +198,12 @@ public abstract class StandaloneClientServer {
 
         JavaDataFactory objectDataFactory = new JavaDataFactory();
 
-        ProxyPersistenceManager proxyObjectManager = new ProxyPersistenceManager();
+        ProxyPersistor proxyObjectManager = new ProxyPersistor();
         proxyObjectManager.setConnection(clientLogger);
         proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-        NakedObjectPersistenceManager objectManager = proxyObjectManager; //new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
-        nakedObjects.setPersistenceManager(objectManager);
+        NakedObjectPersistor objectManager = proxyObjectManager; //new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
+        nakedObjects.setObjectPersistor(objectManager);
 
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
