@@ -17,7 +17,7 @@ import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.defaults.AbstracObjectPersistenceManager;
+import org.nakedobjects.object.defaults.AbstracObjectPersistor;
 import org.nakedobjects.object.defaults.DirtyObjectSetImpl;
 import org.nakedobjects.object.defaults.NakedClassImpl;
 import org.nakedobjects.object.defaults.NullDirtyObjectSet;
@@ -36,8 +36,8 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class ObjectStorePersistenceManager extends AbstracObjectPersistenceManager implements PersistedObjectAdder {
-    private static final Logger LOG = Logger.getLogger(ObjectStorePersistenceManager.class);
+public class ObjectStorePersistor extends AbstracObjectPersistor implements PersistedObjectAdder {
+    private static final Logger LOG = Logger.getLogger(ObjectStorePersistor.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
     private final DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
@@ -47,7 +47,7 @@ public class ObjectStorePersistenceManager extends AbstracObjectPersistenceManag
     private int transactionLevel;
     private PersistAlgorithm persistAlgorithm;
 
-    public ObjectStorePersistenceManager() {
+    public ObjectStorePersistor() {
         LOG.info("creating object manager");
     }
 
@@ -296,7 +296,7 @@ public class ObjectStorePersistenceManager extends AbstracObjectPersistenceManag
             return;
         }
 
-        LOG.info("resolve-field" + object + "/" + field.getName());
+        LOG.info("resolve-field" + object + "/" + field.getId());
         objectStore.resolveField(object, field);
     }
 

@@ -12,7 +12,7 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
     private final OneToManyPeer reflectiveAdapter;
 
     public OneToManyAssociationImpl(String className, String methodName, NakedObjectSpecification type, OneToManyPeer association) {
-        super(methodName, type, new MemberIdentifierImpl(className, methodName));
+        super(methodName, type);
         this.reflectiveAdapter = association;
     }
 
@@ -72,6 +72,17 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
     }
     
     
+    /**
+     * Return the default label for this member. This is based on the name of
+     * this member.
+     * 
+     * @see #getId()
+     */
+    public String getLabel() {
+        String label = reflectiveAdapter.getName();
+        return label == null ? defaultLabel : label;
+    }
+    
     public boolean isEmpty(NakedObject inObject) {
         return reflectiveAdapter.isEmpty(inObject);
     }
@@ -110,8 +121,8 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
         return reflectiveAdapter.validToAdd(container, element);
     }
 
-    public Consent isEditable() {
-        return reflectiveAdapter.isEditable();
+    public Consent isEditable(NakedObject target) {
+        return reflectiveAdapter.isEditable(target);
     }
 
     public Consent isVisible(NakedObject target) {

@@ -72,7 +72,7 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public Naked getField(NakedObjectField field) {
-        return (Naked) fieldContents.get(field.getName());
+        return (Naked) fieldContents.get(field.getId());
     }
 
     public NakedObjectField[] getFields() {
@@ -137,7 +137,7 @@ public class DummyNakedObject implements NakedObject {
     }
 
     private void init(NakedObjectMember field, Object object) {
-        String name = field.getName();
+        String name = field.getId();
         fieldContents.put(name, object);
     }
 

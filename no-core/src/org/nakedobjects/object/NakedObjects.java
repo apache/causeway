@@ -47,8 +47,8 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
     /**
      * Returns the object manager.
      */
-    public static NakedObjectPersistenceManager getPersistenceManager() {
-        return getInstance().objectManager();
+    public static NakedObjectPersistor getObjectPersistor() {
+        return getInstance().objectPersistor();
     }
 
     /*
@@ -64,7 +64,7 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
 
     public void shutdown() {
         LOG.info("shutting down " + getInstance());
-        objectManager().shutdown();
+        objectPersistor().shutdown();
         objectLoader().shutdown();
         specificationLoader().shutdown();
         clearReferences();
@@ -80,7 +80,7 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
     }
 
     private void clearReferences() {
-        setPersistenceManager(null);
+        setObjectPersistor(null);
         setObjectLoader(null);
         setSpecificationLoader(null);
         setConfiguration(null);
@@ -106,32 +106,32 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
             debug.appendln(4, i + ")", specs[i].toString());
         }
 
-        debug.append(objectManager());
+        debug.append(objectPersistor());
 
         return debug.toString();
     }
 
     public void init() {
         LOG.info("initialising " + this);
-        Assert.assertNotNull("no object manager set up", getPersistenceManager());
+        Assert.assertNotNull("no object persistor set up", getObjectPersistor());
         Assert.assertNotNull("no configuration set up", getConfiguration());
         Assert.assertNotNull("no object loader set up", getObjectLoader());
         Assert.assertNotNull("no specification loader set up", getSpecificationLoader());
 
         getSpecificationLoader().init();
         getObjectLoader().init();
-        getPersistenceManager().init();
+        getObjectPersistor().init();
     }
 
     protected abstract NakedObjectLoader objectLoader();
 
-    protected abstract NakedObjectPersistenceManager objectManager();
+    protected abstract NakedObjectPersistor objectPersistor();
 
     public abstract void setConfiguration(NakedObjectConfiguration configuration);
 
     public abstract void setObjectLoader(NakedObjectLoader loader);
 
-    public abstract void setPersistenceManager(NakedObjectPersistenceManager objectManager);
+    public abstract void setObjectPersistor(NakedObjectPersistor objectManager);
 
     public abstract void setSession(Session session);
 

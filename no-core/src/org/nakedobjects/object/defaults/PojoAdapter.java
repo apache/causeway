@@ -29,17 +29,17 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
      }
 
     public void clearAssociation(NakedObjectAssociation field, NakedObject associate) {
-        LOG.debug("clearAssociation " + field.getName() + "/" + associate + " in " + this);
+        LOG.debug("clearAssociation " + field.getId() + "/" + associate + " in " + this);
         field.clearAssociation(this, associate);
     }
 
     public void clearCollection(OneToManyAssociation field) {
-        LOG.debug("clearCollection " + field.getName() + " in " + this);
+        LOG.debug("clearCollection " + field.getId() + " in " + this);
         field.clearCollection(this);
     }
 
     public void clearValue(OneToOneAssociation field) {
-        LOG.debug("clearValue " + field.getName() + " in " + this);
+        LOG.debug("clearValue " + field.getId() + " in " + this);
         field.clearValue(this);
     }
 
@@ -70,7 +70,7 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
      */
 
     public Naked execute(Action action, Naked[] parameters) {
-        LOG.debug("execute " + action.getName() + " in " + this);
+        LOG.debug("execute " + action.getId() + " in " + this);
         Naked result = action.execute(this, parameters);
         return result;
     }
@@ -133,17 +133,17 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
-        LOG.debug("initAssociation " + field.getName() + "/" + associatedObject + " in " + this);
+        LOG.debug("initAssociation " + field.getId() + "/" + associatedObject + " in " + this);
         field.initAssociation(this, associatedObject);
     }
 
     public void initAssociation(OneToManyAssociation field, NakedObject[] instances) {
-        LOG.debug("initAssociation " + field.getName() + " with " + instances.length + "instances in " + this);
+        LOG.debug("initAssociation " + field.getId() + " with " + instances.length + "instances in " + this);
         field.initOneToManyAssociation(this, instances);
     }
 
     public void initValue(OneToOneAssociation field, Object object) {
-        LOG.debug("initValue " + field.getName() + " with " + object + " in " + this);
+        LOG.debug("initValue " + field.getId() + " with " + object + " in " + this);
         field.initValue(this, object);
     }
 
@@ -152,12 +152,12 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
-        LOG.debug("setAssociation " + field.getName() + " with " + associatedObject + " in " + this);
+        LOG.debug("setAssociation " + field.getId() + " with " + associatedObject + " in " + this);
         field.setAssociation(this, associatedObject);
     }
 
     public void setValue(OneToOneAssociation field, Object object) {
-        LOG.debug("setValue " + field.getName() + " with " + object + " in " + this);
+        LOG.debug("setValue " + field.getId() + " with " + object + " in " + this);
         field.setValue(this, object);
     }
 
@@ -175,7 +175,7 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
             ResolveState resolveState = getResolveState();
             if (resolveState.isGhost()) {
                 LOG.info("attempting to use unresolved object; resolving it immediately: " + this);
-                NakedObjects.getPersistenceManager().resolveImmediately(this);
+                NakedObjects.getObjectPersistor().resolveImmediately(this);
             }
         }
         if (title == null) {

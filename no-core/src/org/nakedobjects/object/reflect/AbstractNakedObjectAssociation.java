@@ -7,8 +7,8 @@ import org.nakedobjects.object.NakedObjectSpecification;
 
 public abstract class AbstractNakedObjectAssociation extends AbstractNakedObjectField implements NakedObjectAssociation {
 
-    public AbstractNakedObjectAssociation(String name, NakedObjectSpecification type, MemberIdentifier identifier) {
-        super(name, type, identifier);
+    public AbstractNakedObjectAssociation(String name, NakedObjectSpecification type) {
+        super(name, type);
     }
 
     public abstract void clearAssociation(NakedObject inObject, NakedObject associate);

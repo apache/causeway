@@ -13,7 +13,7 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
     private final OneToOnePeer reflectiveAdapter;
 
     public OneToOneAssociationImpl(String className, String fieldName, NakedObjectSpecification specification, OneToOnePeer association) {
-        super(fieldName, specification, new MemberIdentifierImpl(className, fieldName));
+        super(fieldName, specification);
         this.reflectiveAdapter = association;
     }
 
@@ -39,6 +39,17 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
 
     public Class[] getExtensions() {
         return reflectiveAdapter.getExtensions();
+    }
+    
+    /**
+     * Return the default label for this member. This is based on the name of
+     * this member.
+     * 
+     * @see #getId()
+     */
+    public String getLabel() {
+        String label = reflectiveAdapter.getName();
+        return label == null ? defaultLabel : label;
     }
 
     public void initAssociation(NakedObject inObject, NakedObject associate) {
@@ -110,8 +121,8 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
         return reflectiveAdapter.validAssociation(inObject, value);
     }
 
-    public Consent isEditable() {
-        return reflectiveAdapter.isEditable();
+    public Consent isEditable(NakedObject inObject) {
+        return reflectiveAdapter.isEditable(inObject);
     }
 
     public String getDescription() {

@@ -5,7 +5,7 @@ import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 
 import junit.framework.TestCase;
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 
 public class NakedObjectsTest extends TestCase {
 
@@ -21,10 +21,10 @@ public class NakedObjectsTest extends TestCase {
     }
     
     public void testObjectManager() {
-        MockObjectPersistenceManager objectManager = new MockObjectPersistenceManager();
+        MockObjectPersistor objectManager = new MockObjectPersistor();
         NakedObjects.reset();
-        new NakedObjectsClient().setPersistenceManager(objectManager);
-        assertEquals(objectManager, NakedObjects.getPersistenceManager());
+        new NakedObjectsClient().setObjectPersistor(objectManager);
+        assertEquals(objectManager, NakedObjects.getObjectPersistor());
     }
 }
 

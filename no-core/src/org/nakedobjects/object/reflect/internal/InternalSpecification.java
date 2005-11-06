@@ -85,7 +85,7 @@ public class InternalSpecification implements NakedObjectSpecification {
         outer: for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
             if (action.getActionType().equals(type)) {
-                if (action.getName().equals(searchName)) {
+                if (action.getId().equals(searchName)) {
                     if (action.parameters().length == parameters.length) {
                         for (int j = 0; j < parameters.length; j++) {
                             if (!parameters[j].isOfType(action.parameters()[j])) {
@@ -172,7 +172,7 @@ public class InternalSpecification implements NakedObjectSpecification {
         // TODO put fields into hash
         String searchName = searchName(name);
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(searchName)) {
+            if (fields[i].getId().equals(searchName)) {
                 return fields[i];
             }
         }

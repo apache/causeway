@@ -63,6 +63,10 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return null;
     }
     
+    public String getName() {
+        return null;
+    }
+    
     public int getParameterCount() {
         return paramCount;
     }

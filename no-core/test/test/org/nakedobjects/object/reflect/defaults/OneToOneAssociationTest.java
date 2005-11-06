@@ -83,7 +83,7 @@ public class OneToOneAssociationTest extends NakedObjectTestCase {
     }
 
     public void testName() {
-        assertEquals(FIELD_NAME, association.getName());
+        assertEquals(FIELD_NAME, association.getId());
     }
 
     public void testLabel() {

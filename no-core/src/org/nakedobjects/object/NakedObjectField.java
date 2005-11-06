@@ -3,8 +3,11 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.Consent;
 
 
-
 public interface NakedObjectField extends NakedObjectMember {
+
+    Naked get(NakedObject fromObject);
+
+    Class[] getExtensions();
 
     /**
      * Return the specification of the object (or objects) that this field holds. For a value are one-to-one
@@ -24,7 +27,17 @@ public interface NakedObjectField extends NakedObjectMember {
      */
     boolean isDerived();
 
+    /**
+     * Determines if this field is editable.
+     */
+    Consent isEditable(NakedObject inObject);
+
     boolean isEmpty(NakedObject adapter);
+
+    /**
+     * Determines if this field must be complete before the object is in a valid state
+     */
+    boolean isMandatory();
 
     /**
      * Returns true if this field is for an object, not a collection.
@@ -35,25 +48,7 @@ public interface NakedObjectField extends NakedObjectMember {
      * Returns true if this field is for a value
      */
     boolean isValue();
-
-    Class[] getExtensions();
-
-
-    Naked get(NakedObject fromObject);
-
-    
-    
-    /**
-     * Determines if this field must be complete before the object is in a valid state
-     */
-    boolean isMandatory();
-
-    /**
-     * Determines if this field is editable.
-     */
-    Consent isEditable();
 }
-
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

@@ -1,7 +1,7 @@
 package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.reflect.AbstractOneToManyPeer;
 import org.nakedobjects.object.reflect.OneToManyPeer;
@@ -17,7 +17,7 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
     }
 
     public void addAssociation(NakedObject inObject, NakedObject associate) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -34,7 +34,7 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
     }
 
     public void removeAllAssociations(NakedObject inObject) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -51,7 +51,7 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
         }
     }
 
-    private void abort(NakedObjectPersistenceManager objectManager) {
+    private void abort(NakedObjectPersistor objectManager) {
         LOG.info("exception executing " + getIdentifier() + ", aborting transaction");
         try {
             objectManager.abortTransaction();
@@ -61,7 +61,7 @@ public class OneToManyTransaction extends AbstractOneToManyPeer {
     }
 
     public void removeAssociation(NakedObject inObject, NakedObject associate) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();

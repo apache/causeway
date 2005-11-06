@@ -70,7 +70,7 @@ public class DummyOneToManyAssociation implements NakedObjectField {
         return null;
     }
 
-    public String getName() {
+    public String getId() {
         return fieldPeer.getIdentifier();
     }
 

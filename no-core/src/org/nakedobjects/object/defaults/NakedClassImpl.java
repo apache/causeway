@@ -3,7 +3,7 @@ package org.nakedobjects.object.defaults;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NotPersistableException;
@@ -128,8 +128,8 @@ public class NakedClassImpl implements NakedClass {
         return forObjectType().getShortName();
     }
 
-    private NakedObjectPersistenceManager getObjectManager() {
-        return NakedObjects.getPersistenceManager();
+    private NakedObjectPersistor getObjectManager() {
+        return NakedObjects.getObjectPersistor();
     }
 
     public String getPluralName() {
@@ -141,7 +141,7 @@ public class NakedClassImpl implements NakedClass {
     }
 
     private NakedObject newInstance() {
-        NakedObjectPersistenceManager objectManager = getObjectManager();
+        NakedObjectPersistor objectManager = getObjectManager();
         NakedObject object = objectManager.createTransientInstance(forObjectType());
         if (createPersistentInstances) {
             try {

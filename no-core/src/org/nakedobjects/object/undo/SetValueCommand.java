@@ -26,7 +26,7 @@ public class SetValueCommand implements Command {
     public void undo() {
    //     value.getValue(object).restoreFromEncodedString(oldValue);
        // object.getContext().getObjectManager().objectChanged(object);
-        NakedObjects.getPersistenceManager().saveChanges();
+        NakedObjects.getObjectPersistor().saveChanges();
     }
 
     public void execute() {}

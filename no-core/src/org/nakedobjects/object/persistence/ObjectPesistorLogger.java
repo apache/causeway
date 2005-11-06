@@ -5,7 +5,7 @@ import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.Oid;
@@ -14,15 +14,15 @@ import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.utility.Logger;
 
 
-public class ObjectPesistorLogger extends Logger implements NakedObjectPersistenceManager {
-    private final NakedObjectPersistenceManager decorated;
+public class ObjectPesistorLogger extends Logger implements NakedObjectPersistor {
+    private final NakedObjectPersistor decorated;
 
-    public ObjectPesistorLogger(final NakedObjectPersistenceManager decorated, final String logFileName) {
+    public ObjectPesistorLogger(final NakedObjectPersistor decorated, final String logFileName) {
         super(logFileName, false);
         this.decorated = decorated;
     }
 
-    public ObjectPesistorLogger(final NakedObjectPersistenceManager decorated) {
+    public ObjectPesistorLogger(final NakedObjectPersistor decorated) {
         super(null, false);
         this.decorated = decorated;
     }

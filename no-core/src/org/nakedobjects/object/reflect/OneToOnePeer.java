@@ -40,7 +40,7 @@ public interface OneToOnePeer extends FieldPeer {
 
     public Consent validAssociation(NakedObject inObject, NakedObject value);
 
-    public Consent isEditable();
+    public Consent isEditable(NakedObject inObject);
 
     public String getDescription();
 

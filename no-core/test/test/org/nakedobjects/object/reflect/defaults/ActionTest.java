@@ -18,7 +18,7 @@ import org.apache.log4j.LogManager;
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.DummyNakedObjectSpecificationLoader;
 import test.org.nakedobjects.object.NakedObjectTestCase;
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.reflect.DummyActionPeer;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
@@ -44,7 +44,7 @@ public class ActionTest extends NakedObjectTestCase {
         LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
-        nakedObjects.setPersistenceManager(new MockObjectPersistenceManager());
+        nakedObjects.setObjectPersistor(new MockObjectPersistor());
         nakedObjects.setSpecificationLoader(new DummyNakedObjectSpecificationLoader());
         
         actionPeer = new DummyActionPeer();
@@ -89,7 +89,7 @@ public class ActionTest extends NakedObjectTestCase {
     }
 
     public void testName() {
-        assertEquals(ACTION_NAME, action.getName());
+        assertEquals(ACTION_NAME, action.getId());
     }
 
     public void testReturnType() {

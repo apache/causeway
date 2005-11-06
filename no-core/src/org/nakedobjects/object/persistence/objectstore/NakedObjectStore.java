@@ -4,7 +4,7 @@ import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectsComponent;
 import org.nakedobjects.object.ObjectNotFoundException;
@@ -134,14 +134,14 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
     /**
      * Called by the resolveEagerly method in NakedObjectManager.
      * 
-     * @see NakedObjectPersistenceManager#resolveField(NakedObject, NakedObjectField)
+     * @see NakedObjectPersistor#resolveField(NakedObject, NakedObjectField)
      */
     void resolveField(NakedObject object, NakedObjectField field) throws ObjectPerstsistenceException;
 
     /**
      * Called by the resolveImmediately method in NakedObjectManager.
      * 
-     * @see NakedObjectPersistenceManager#resolveImmediately(NakedObject)
+     * @see NakedObjectPersistor#resolveImmediately(NakedObject)
      */
     void resolveImmediately(NakedObject object) throws ObjectPerstsistenceException;
 

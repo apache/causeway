@@ -18,7 +18,7 @@ import org.apache.log4j.LogManager;
 
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.NakedObjectTestCase;
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.reflect.DummyNakedCollection;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyOneToManyPeer;
@@ -44,7 +44,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void setUp()  throws ObjectPerstsistenceException {
     	LogManager.getLoggerRepository().setThreshold(Level.OFF);
 
-    	new NakedObjectsClient().setPersistenceManager(new MockObjectPersistenceManager());
+    	new NakedObjectsClient().setObjectPersistor(new MockObjectPersistor());
     	
        	nakedObject = new DummyNakedObject();
         associate = new DummyNakedObject();
@@ -98,7 +98,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testName() {
-    	assertEquals(FIELD_NAME, association.getName());
+    	assertEquals(FIELD_NAME, association.getId());
     }
     
     public void testLabel() {

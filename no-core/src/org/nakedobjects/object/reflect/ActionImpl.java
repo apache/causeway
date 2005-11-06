@@ -27,12 +27,12 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
     }
 
     public ActionImpl(String className, String methodName, ActionPeer actionDelegate) {
-        super(methodName, new MemberIdentifierImpl(className, methodName, actionDelegate.parameterTypes()));
+        super(methodName);
         this.reflectiveAdapter = actionDelegate;
     }
 
     public Naked execute(final NakedObject object, final Naked[] parameters) {
-        LOG.debug("execute action " + object + "." + getName());
+        LOG.debug("execute action " + object + "." + getId());
         Naked[] params = parameters == null ?  new Naked[0] : parameters;
         Naked result = reflectiveAdapter.execute(object, params);
         return result;
@@ -53,6 +53,19 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
     public Object getExtension(Class cls) {
         return reflectiveAdapter.getExtension(null);
     }
+    
+    
+    /**
+     * Return the default label for this member. This is based on the name of
+     * this member.
+     * 
+     * @see #getId()
+     */
+    public String getLabel() {
+        String label = reflectiveAdapter.getName();
+        return label == null ? defaultLabel : label;
+    }
+
 
     /**
      * Returns true if the represented action returns something, else returns

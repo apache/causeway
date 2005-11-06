@@ -1,7 +1,7 @@
 package org.nakedobjects.object.repository;
 
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Session;
@@ -11,7 +11,7 @@ import org.nakedobjects.utility.NakedObjectConfiguration;
 public class NakedObjectsClient extends NakedObjects {
     protected NakedObjectLoader objectLoader;
     protected NakedObjectConfiguration configuration;
-    protected NakedObjectPersistenceManager objectManager;
+    protected NakedObjectPersistor objectManager;
     protected NakedObjectSpecificationLoader specificationLoader;
     protected Session session;
 
@@ -27,7 +27,7 @@ public class NakedObjectsClient extends NakedObjects {
         return "Naked Objects Client Repository";
     }
 
-    protected NakedObjectPersistenceManager objectManager() {
+    protected NakedObjectPersistor objectPersistor() {
         return objectManager;
     }
 
@@ -49,8 +49,8 @@ public class NakedObjectsClient extends NakedObjects {
      * 
      * @property
      */
-    public void set_ObjectManager(NakedObjectPersistenceManager objectManager) {
-        setPersistenceManager(objectManager);
+    public void set_ObjectPersistor(NakedObjectPersistor objectManager) {
+        setObjectPersistor(objectManager);
     }
 
     /**
@@ -84,7 +84,7 @@ public class NakedObjectsClient extends NakedObjects {
         this.configuration = configuration;
     }
 
-    public void setPersistenceManager(NakedObjectPersistenceManager objectManager) {
+    public void setObjectPersistor(NakedObjectPersistor objectManager) {
         this.objectManager = objectManager;
     }
 

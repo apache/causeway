@@ -15,15 +15,15 @@ public interface NakedObjectMember {
     /**
      * Return the default label for this member. This is based on the name of this member.
      * 
-     * @see #getName()
+     * @see #getId()
      */
     String getLabel();
 
     /**
      * Returns the name of the member.
      */
-    String getName();
-
+    String getId();
+    
     /**
      * Determines if the user has acces to this member, and hence whether it is visible
      * 

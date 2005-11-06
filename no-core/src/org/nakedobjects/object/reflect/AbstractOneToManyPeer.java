@@ -41,6 +41,10 @@ public abstract class AbstractOneToManyPeer implements OneToManyPeer {
         return decorated.getType();
     }
 
+    public String getName() {
+        return decorated.getName();
+    }
+    
     public void initAssociation(NakedObject inObject, NakedObject associate) {
         decorated.initAssociation(inObject, associate);
     }
@@ -73,8 +77,8 @@ public abstract class AbstractOneToManyPeer implements OneToManyPeer {
         return decorated.validToAdd(container, element);
     }
 
-    public Consent isEditable() {
-        return decorated.isEditable();
+    public Consent isEditable(NakedObject target) {
+        return decorated.isEditable(target);
     }
 
     public Consent isVisible(NakedObject target) {

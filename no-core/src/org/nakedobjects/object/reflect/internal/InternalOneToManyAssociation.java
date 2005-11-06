@@ -139,6 +139,10 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         return new Class[0];
     }
     
+    public String getName() {
+        return null;
+    }
+    
     public boolean isEmpty(NakedObject inObject) {
         throw new NotImplementedException();
     }
@@ -174,7 +178,7 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         return Allow.DEFAULT;
     }
 
-    public Consent isEditable() {
+    public Consent isEditable(NakedObject target) {
         return Allow.DEFAULT;
     }
 

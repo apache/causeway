@@ -1,7 +1,7 @@
 package org.nakedobjects.object.repository;
 
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Session;
@@ -22,8 +22,8 @@ public abstract class NakedObjectsServer extends NakedObjects {
 
     protected abstract NakedObjectsData getLocal();
 
-    protected NakedObjectPersistenceManager objectManager() {
-        return getLocal().objectManager;
+    protected NakedObjectPersistor objectPersistor() {
+        return getLocal().objectPersistor;
     }
 
     protected NakedObjectLoader objectLoader() {
@@ -44,8 +44,8 @@ public abstract class NakedObjectsServer extends NakedObjects {
      * 
      * @property
      */
-    public void set_ObjectManager(NakedObjectPersistenceManager objectManager) {
-        setPersistenceManager(objectManager);
+    public void set_ObjectPersistor(NakedObjectPersistor objectManager) {
+        setObjectPersistor(objectManager);
     }
 
     /**
@@ -79,8 +79,8 @@ public abstract class NakedObjectsServer extends NakedObjects {
         getLocal().configuration = configuration;
     }
 
-    public void setPersistenceManager(NakedObjectPersistenceManager objectManager) {
-        getLocal().objectManager = objectManager;
+    public void setObjectPersistor(NakedObjectPersistor objectManager) {
+        getLocal().objectPersistor = objectManager;
     }
 
     public void setObjectLoader(NakedObjectLoader objectLoader) {

@@ -31,7 +31,7 @@ public class FastFinder implements InternalNakedObject {
 	}
 	
 	public Naked actionFind() {
-		NakedCollection instances = NakedObjects.getPersistenceManager().findInstances(new TitleCriteria(specification, term, true));
+		NakedCollection instances = NakedObjects.getObjectPersistor().findInstances(new TitleCriteria(specification, term, true));
 		if(instances.size() == 1) { 
 			return (NakedObject) instances.elements().nextElement();
 		} else {

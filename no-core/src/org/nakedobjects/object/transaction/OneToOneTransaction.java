@@ -1,7 +1,7 @@
 package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.reflect.AbstractOneToOnePeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
@@ -17,7 +17,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
 
     public void clearAssociation(NakedObject inObject, NakedObject associate) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -34,7 +34,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
 
     public void setAssociation(NakedObject inObject, NakedObject associate) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -51,7 +51,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
 
     public void setValue(NakedObject inObject, Object value) {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         if (inObject.getResolveState().isPersistent()) {
             try {
                 objectManager.startTransaction();
@@ -69,7 +69,7 @@ public class OneToOneTransaction extends AbstractOneToOnePeer {
     }
     
 
-    private void abort(NakedObjectPersistenceManager objectManager) {
+    private void abort(NakedObjectPersistor objectManager) {
         LOG.info("exception executing " + getIdentifier() + ", aborting transaction");
         try {
             objectManager.abortTransaction();

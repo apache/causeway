@@ -3,7 +3,7 @@ package org.nakedobjects.object;
 import org.nakedobjects.utility.DebugInfo;
 
 
-public interface NakedObjectPersistenceManager extends NakedObjectsComponent, DebugInfo {
+public interface NakedObjectPersistor extends NakedObjectsComponent, DebugInfo {
 
     void abortTransaction();
 

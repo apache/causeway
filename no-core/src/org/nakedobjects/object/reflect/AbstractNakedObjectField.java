@@ -9,8 +9,8 @@ import org.nakedobjects.object.NakedObjectSpecification;
 public abstract class AbstractNakedObjectField extends AbstractNakedObjectMember implements NakedObjectField {
     private final NakedObjectSpecification specification;
 
-    public AbstractNakedObjectField(String name, NakedObjectSpecification type, MemberIdentifier identifier) {
-        super(name, identifier);
+    public AbstractNakedObjectField(String name, NakedObjectSpecification type) {
+        super(name);
         if (type == null) {
             throw new IllegalArgumentException("type cannot be null for " + name);
         }

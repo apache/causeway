@@ -6,6 +6,8 @@ public interface FieldPeer {
     String getDescription();
 
     MemberIdentifier getIdentifier();
+    
+    String getName();
 }
 
 

@@ -31,7 +31,7 @@ public abstract class ApplicationContext implements UserContext {
     protected NakedClass addClass(String className) {
         LOG.info("added class " + className + " to " + this);
         NakedObjectSpecification nc = NakedObjects.getSpecificationLoader().loadSpecification(className);
-        NakedClass nakedClass = NakedObjects.getPersistenceManager().getNakedClass(nc);
+        NakedClass nakedClass = NakedObjects.getObjectPersistor().getNakedClass(nc);
         classes.addElement(nakedClass);
         return nakedClass;
     }

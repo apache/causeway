@@ -2,7 +2,7 @@ package org.nakedobjects.object.transaction;
 
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -18,7 +18,7 @@ public class ActionTransaction extends AbstractActionPeer {
     }
     
     public Naked execute(NakedObject object, Naked[] parameters) throws ReflectiveActionException {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
 
         try {
             objectManager.startTransaction();

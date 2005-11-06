@@ -113,7 +113,7 @@ public class Dump {
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
             Naked obj = object.getField(field);
-            String name = field.getName();
+            String name = field.getId();
             graphIndent(s, level);
 
             if (obj == null) {

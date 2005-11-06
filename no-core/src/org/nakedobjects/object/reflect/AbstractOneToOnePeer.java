@@ -26,6 +26,10 @@ public abstract class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.getIdentifier();
     }
 
+    public String getName() {
+        return decorated.getName();
+    }
+    
     public Object getExtension(Class cls) {
         return decorated.getExtension(cls);
     }
@@ -78,8 +82,8 @@ public abstract class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.validAssociation(inObject, value);
     }
 
-    public Consent isEditable() {
-        return decorated.isEditable();
+    public Consent isEditable(NakedObject target) {
+        return decorated.isEditable(target);
     }
 
     public String getDescription() {

@@ -150,7 +150,7 @@ public class MemoryObjectStore implements NakedObjectStore {
             NakedObjectField field = fields[i];
             Object obj = object.getField(field);
 
-            name = field.getName();
+            name = field.getId();
             indent(s, level);
 
             if (field.isCollection()) {

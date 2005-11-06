@@ -2,13 +2,13 @@ package test.org.nakedobjects.object;
 
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 
-import test.org.nakedobjects.object.defaults.MockObjectPersistenceManager;
+import test.org.nakedobjects.object.defaults.MockObjectPersistor;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.utility.configuration.TestConfiguration;
 
@@ -16,13 +16,13 @@ import test.org.nakedobjects.utility.configuration.TestConfiguration;
 public class TestSystem {
     private final DummyObjectLoader objectLoader;
     private NakedObjectsClient nakedObjects;
-    private NakedObjectPersistenceManager objectManager;
+    private NakedObjectPersistor objectManager;
     private final DummyNakedObjectSpecificationLoader specificationLoader;
       
     public TestSystem() {
         specificationLoader = new DummyNakedObjectSpecificationLoader();
         objectLoader = new DummyObjectLoader();
-        objectManager = new MockObjectPersistenceManager();
+        objectManager = new MockObjectPersistor();
     }
 
     public void init() {
@@ -31,7 +31,7 @@ public class TestSystem {
         nakedObjects.setConfiguration(new TestConfiguration());
         nakedObjects.setSpecificationLoader(specificationLoader);
         nakedObjects.setObjectLoader(objectLoader);
-        nakedObjects.setPersistenceManager(objectManager);
+        nakedObjects.setObjectPersistor(objectManager);
 
         nakedObjects.init();
     }
@@ -55,7 +55,7 @@ public class TestSystem {
         nakedObjects.shutdown();
     }
 
-    public void setObjectManager(NakedObjectPersistenceManager objectManager) {
+    public void setObjectManager(NakedObjectPersistor objectManager) {
         this.objectManager = objectManager;
     }
     

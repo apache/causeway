@@ -90,7 +90,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         outer: for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
             if (action.getActionType().equals(type)) {
-                if (action.getName().equals(searchName)) {
+                if (action.getId().equals(searchName)) {
                     if (action.parameters().length == parameters.length) {
                         for (int j = 0; j < parameters.length; j++) {
                             if (! parameters[j].isOfType(action.parameters()[j])) {
@@ -167,7 +167,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         String searchName = searchName(name);
 
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(searchName)) {
+            if (fields[i].getId().equals(searchName)) {
                 return fields[i].getExtension(cls);
             }
         }
@@ -183,7 +183,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         String searchName = searchName(name);
 
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(searchName)) {
+            if (fields[i].getId().equals(searchName)) {
                 return fields[i];
             }
         }
@@ -350,7 +350,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
                     if (member == null) {
                         continue;
                     }
-                    if (member.getName().equalsIgnoreCase(order[orderIndex])) {
+                    if (member.getId().equalsIgnoreCase(order[orderIndex])) {
                         ordered[orderedIndex++] = original[memberIndex];
                         original[memberIndex] = null;
 

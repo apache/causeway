@@ -35,11 +35,12 @@ public interface OneToManyPeer extends FieldPeer {
     
     public Consent validToAdd(NakedObject container, NakedObject element);
 
-    public Consent isEditable();
+    public Consent isEditable(NakedObject target);
 
     public Consent isVisible(NakedObject target);
 
     public boolean isAccessible();
+
 }
 
 /*

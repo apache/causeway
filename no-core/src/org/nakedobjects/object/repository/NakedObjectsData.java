@@ -1,7 +1,7 @@
 package org.nakedobjects.object.repository;
 
 import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.utility.NakedObjectConfiguration;
@@ -10,7 +10,7 @@ import org.nakedobjects.utility.ToString;
 public class NakedObjectsData {
     protected NakedObjectLoader objectLoader;
     protected NakedObjectConfiguration configuration;
-    protected NakedObjectPersistenceManager objectManager;
+    protected NakedObjectPersistor objectPersistor;
     protected NakedObjectSpecificationLoader specificationLoader;
     protected Session session;
 
@@ -18,7 +18,7 @@ public class NakedObjectsData {
     public String toString() {
         ToString toString = new ToString(this);
         toString.append("thread", Thread.currentThread());
-        toString.append("objectManager", objectManager);
+        toString.append("objectPersistor", objectPersistor);
         toString.append("session", session);
         toString.append("objectLoader", objectLoader);
         return toString.toString();

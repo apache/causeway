@@ -66,7 +66,7 @@ public class DummyAction implements Action {
         return null;
     }
 
-    public String getName() {
+    public String getId() {
         return peer.getIdentifier();
     }
 

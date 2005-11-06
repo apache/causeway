@@ -23,6 +23,10 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.getIdentifier();
     }
     
+    public String getName() {
+        return decorated.getName();
+    }
+    
     public Naked execute(NakedObject object, Naked[] parameters) throws ReflectiveActionException {
         return decorated.execute(object, parameters);
     }

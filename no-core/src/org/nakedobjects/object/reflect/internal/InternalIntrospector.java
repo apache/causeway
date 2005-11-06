@@ -473,7 +473,7 @@ public class InternalIntrospector {
                     if (member == null) {
                         continue;
                     }
-                    if (member.getName().equalsIgnoreCase(order[orderIndex])) {
+                    if (member.getId().equalsIgnoreCase(order[orderIndex])) {
                         ordered[orderedIndex++] = original[memberIndex];
                         original[memberIndex] = null;
 

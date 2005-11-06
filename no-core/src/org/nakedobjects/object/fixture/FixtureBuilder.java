@@ -1,6 +1,6 @@
 package org.nakedobjects.object.fixture;
 
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 
 import java.util.Vector;
@@ -24,7 +24,7 @@ public abstract class FixtureBuilder {
     }
 
     public final void installFixtures() {
-        NakedObjectPersistenceManager objectManager = NakedObjects.getPersistenceManager();
+        NakedObjectPersistor objectManager = NakedObjects.getObjectPersistor();
         
         preInstallFixtures(objectManager);
 
@@ -51,11 +51,11 @@ public abstract class FixtureBuilder {
         fixtures.removeAllElements();
     }
 
-    protected void postInstallFixtures(NakedObjectPersistenceManager objectManager) {}
+    protected void postInstallFixtures(NakedObjectPersistor objectManager) {}
 
-    protected void preInstallFixtures(NakedObjectPersistenceManager objectManager) {}
+    protected void preInstallFixtures(NakedObjectPersistor objectManager) {}
 
-    protected abstract void installFixture(NakedObjectPersistenceManager objectManager, Fixture fixture);
+    protected abstract void installFixture(NakedObjectPersistor objectManager, Fixture fixture);
 
     public final void registerClass(String className) {
         classes.addElement(className);

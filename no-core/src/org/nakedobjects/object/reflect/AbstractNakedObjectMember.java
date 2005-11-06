@@ -4,45 +4,30 @@ import org.nakedobjects.object.NakedObjectMember;
 
 
 public abstract class AbstractNakedObjectMember implements NakedObjectMember {
-    private final MemberIdentifier identifier;
-    private final String label;
-    private final String name;
+    protected final String defaultLabel ;
+    private final String id;
 
-    protected AbstractNakedObjectMember(String name, MemberIdentifier identifier) {
-        this.identifier = identifier;
+    protected AbstractNakedObjectMember(String name) {
         if (name == null) {
             throw new IllegalArgumentException("Name must always be set");
         }
 
-        this.label = NameConvertor.naturalName(name);
-        this.name = NameConvertor.simpleName(name);
+        this.defaultLabel  = NameConvertor.naturalName(name);
+        this.id = NameConvertor.simpleName(name);
     }
     
     public abstract Object getExtension(Class cls);
-        
-    public MemberIdentifier getIdentifier() {
-        return identifier;
-    }
-
-    /**
-     * Return the default label for this member. This is based on the name of
-     * this member.
-     * 
-     * @see #getName()
-     */
-    public String getLabel() {
-        return label;
-    }
+   
 
     /**
      * Returns the name of the member.
      */
-    public String getName() {
-        return name;
+    public String getId() {
+        return id;
     }
 
     public String toString() {
-        return "name=" + getName() + ",label='" + getLabel() + "'";
+        return "id=" + getId() + ",label='" + getLabel() + "'";
     }
 
 }

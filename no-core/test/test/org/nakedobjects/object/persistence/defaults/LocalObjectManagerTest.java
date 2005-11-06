@@ -2,7 +2,7 @@ package test.org.nakedobjects.object.persistence.defaults;
 
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.ResolveState;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistenceManager;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 
 import junit.framework.TestCase;
 
@@ -21,7 +21,7 @@ public class LocalObjectManagerTest extends TestCase {
         junit.textui.TestRunner.run(LocalObjectManagerTest.class);
     }
 
-    private ObjectStorePersistenceManager objectManager;
+    private ObjectStorePersistor objectManager;
     private DummyNakedObjectSpecification objectSpecification;
     private MockObjectStore objectStore;
     private MockNakedObject testNakedObject;
@@ -32,7 +32,7 @@ public class LocalObjectManagerTest extends TestCase {
         
         system = new TestSystem();
 
-        objectManager = new ObjectStorePersistenceManager();
+        objectManager = new ObjectStorePersistor();
         objectStore = new MockObjectStore();
         objectManager.setObjectStore(objectStore);
         objectManager.setPersistAlgorithm(new DummyPersistAlgorithm());
