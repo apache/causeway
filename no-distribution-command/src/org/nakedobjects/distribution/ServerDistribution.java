@@ -6,7 +6,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
-import org.nakedobjects.object.NakedObjectPersistenceManager;
+import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
@@ -42,7 +42,7 @@ public class ServerDistribution implements Distribution {
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAccessible() || association.isEditable().isVetoed()) {
+        if (! association.isAccessible() || association.isEditable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.clearAssociation(association, associate);
@@ -135,7 +135,7 @@ public class ServerDistribution implements Distribution {
     private NakedObject getPersistentNakedObject(Session session, ReferenceData object) {
         LOG.debug("get object " + object + " for " + session);
         NakedObjectSpecification spec = getSpecification(object.getType());
-        NakedObject obj = NakedObjects.getPersistenceManager().getObject(object.getOid(), spec);
+        NakedObject obj = NakedObjects.getObjectPersistor().getObject(object.getOid(), spec);
         obj.checkLock(object.getVersion());
         return obj;
      }
@@ -144,7 +144,7 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request resolveImmediately " + target +" for " + session);
          
         NakedObjectSpecification spec = getSpecification(target.getType());
-        NakedObject object = NakedObjects.getPersistenceManager().getObject(target.getOid(), spec);
+        NakedObject object = NakedObjects.getObjectPersistor().getObject(target.getOid(), spec);
 
         return objectDataFactory.createCompletePersistentGraph(object);
     }
@@ -156,7 +156,7 @@ public class ServerDistribution implements Distribution {
         NakedObjectField field = spec.getField(fieldName);
 //        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
         NakedObject object = NakedObjects.getObjectLoader().recreateAdapterForPersistent(target.getOid(), spec);
-        NakedObjects.getPersistenceManager().resolveField(object, field);
+        NakedObjects.getObjectPersistor().resolveField(object, field);
         return objectDataFactory.createForResolveField(object, fieldName);
     }
 
@@ -198,7 +198,7 @@ public class ServerDistribution implements Distribution {
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAccessible() || association.isEditable().isVetoed()) {
+        if (! association.isAccessible() || association.isEditable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.setAssociation(association, associate);
@@ -216,7 +216,7 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAccessible() || association.isEditable().isVetoed()) {
+        if (! association.isAccessible() || association.isEditable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
 
@@ -244,8 +244,8 @@ public class ServerDistribution implements Distribution {
         objectManager().startTransaction();
     }
 
-    private NakedObjectPersistenceManager objectManager() {
-        return NakedObjects.getPersistenceManager();
+    private NakedObjectPersistor objectManager() {
+        return NakedObjects.getObjectPersistor();
     }
 
     /**

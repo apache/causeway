@@ -109,7 +109,7 @@ public abstract class DataFactory {
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getName().equals(fieldName)) {
+            if (fields[i].getId().equals(fieldName)) {
                 Naked field = object.getField(fields[i]);
                 if (field == null) {
                     fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());

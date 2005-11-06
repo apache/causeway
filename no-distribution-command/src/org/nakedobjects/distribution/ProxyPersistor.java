@@ -17,7 +17,7 @@ import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UnsupportedFindException;
-import org.nakedobjects.object.defaults.AbstracObjectPersistenceManager;
+import org.nakedobjects.object.defaults.AbstracObjectPersistor;
 import org.nakedobjects.object.defaults.InstanceCollectionVector;
 import org.nakedobjects.object.defaults.NakedClassImpl;
 import org.nakedobjects.utility.DebugString;
@@ -30,8 +30,8 @@ import org.apache.log4j.Logger;
 
 // TODO this class replaces most of AbstractNakedObjectManager, therefore just
 // implement NakedObjectManager
-public final class ProxyPersistenceManager extends AbstracObjectPersistenceManager {
-    final static Logger LOG = Logger.getLogger(ProxyPersistenceManager.class);
+public final class ProxyPersistor extends AbstracObjectPersistor {
+    final static Logger LOG = Logger.getLogger(ProxyPersistor.class);
     private Distribution connection;
     private final Hashtable nakedClasses = new Hashtable();
     private DataFactory objectDataFactory;
@@ -200,8 +200,8 @@ public final class ProxyPersistenceManager extends AbstracObjectPersistenceManag
             return;
         }
         
-        LOG.info("resolve-eagerly on server " + object + "/" + field.getName());
-        Data data = connection.resolveField(session, objectDataFactory.createReference(object), field.getName());
+        LOG.info("resolve-eagerly on server " + object + "/" + field.getId());
+        Data data = connection.resolveField(session, objectDataFactory.createReference(object), field.getId());
         DataHelper.restore(data);
     }
 

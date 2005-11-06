@@ -33,7 +33,7 @@ public class ProxyObjectManagerTest extends TestCase {
         LogManager.getRootLogger().setLevel(Level.OFF);
         
         system = new TestSystem();
-        ProxyPersistenceManager om = new ProxyPersistenceManager();
+        ProxyPersistor om = new ProxyPersistor();
         distribution = new DummyDistribution();
         om.setConnection(distribution);
         om.setObjectDataFactory(new DummyObjectDataFactory());
@@ -62,7 +62,7 @@ public class ProxyObjectManagerTest extends TestCase {
         distribution.setupMakePersistentResults(new DummyObjectData(new DummyOid(123), "type", new Data[] {null, field2}, true, new DummyVersion(456) ));
        
         NakedObject transientObject = obj.getAdapter();
-        NakedObjects.getPersistenceManager().makePersistent(transientObject);
+        NakedObjects.getObjectPersistor().makePersistent(transientObject);
        
         assertEquals(new DummyOid(123), transientObject.getOid());
         assertEquals(new DummyOid(345), referencedObject.getAdapter().getOid());

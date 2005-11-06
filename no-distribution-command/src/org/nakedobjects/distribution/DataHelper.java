@@ -110,7 +110,7 @@ public class DataHelper {
             NakedObjectField[] fields = object.getSpecification().getFields();
             for (int i = 0; i < fields.length; i++) {
                 if (fieldContent[i] == null) {
-                    LOG.debug("no data for field " + fields[i].getName());
+                    LOG.debug("no data for field " + fields[i].getId());
                     continue;
                 }
 
@@ -121,7 +121,7 @@ public class DataHelper {
                         NakedObject[] elements = new NakedObject[size];
                         for (int j = 0; j < elements.length; j++) {
                             elements[j] = restoreObject(((ObjectData) collection.getElements()[j]));
-                            LOG.debug("adding element to " + fields[i].getName() + ": " + elements[j]);
+                            LOG.debug("adding element to " + fields[i].getId() + ": " + elements[j]);
                         }
 
                         NakedCollection col = (NakedCollection) object.getField(fields[i]);
@@ -145,7 +145,7 @@ public class DataHelper {
                         }
                     }
                 } else if (fields[i].isValue()) {
-                    LOG.debug("setting value for field " + fields[i].getName() + ": " + fieldContent[i]);
+                    LOG.debug("setting value for field " + fields[i].getId() + ": " + fieldContent[i]);
                     object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
                             : ((ValueData) fieldContent[i]).getValue());
                 } else {
@@ -156,7 +156,7 @@ public class DataHelper {
                     } else {
                         associate = restoreObject((ObjectData) fieldContent[i]);
                     }
-                    LOG.debug("setting association for field " + fields[i].getName() + ": " + associate);
+                    LOG.debug("setting association for field " + fields[i].getId() + ": " + associate);
                     object.initAssociation(field, associate);
                 }
             }
