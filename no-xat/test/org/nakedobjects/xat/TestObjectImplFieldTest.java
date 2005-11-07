@@ -5,6 +5,8 @@ import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.ActionImpl;
 import org.nakedobjects.object.reflect.OneToManyAssociationImpl;
 import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
@@ -18,8 +20,6 @@ import org.apache.log4j.Logger;
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.MockNakedObject;
 import test.org.nakedobjects.object.TestSystem;
-import test.org.nakedobjects.object.control.MockHint;
-import test.org.nakedobjects.object.control.NoOpAllow;
 import test.org.nakedobjects.object.reflect.DummyActionPeer;
 import test.org.nakedobjects.object.reflect.DummyNakedCollection;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
@@ -47,10 +47,11 @@ public class TestObjectImplFieldTest extends TestCase {
 
         object = new MockNakedObject();
         target = new TestObjectImplExt(object, factory);
-        MockHint hint = new MockHint();
-        hint.setupCanAccess(new NoOpAllow());
-        hint.setupCanUse(new NoOpAllow());
-        object.setupHint(hint);
+        object.setupIsUsable(Veto.DEFAULT);
+        object.setupIsVisible(Allow.DEFAULT);
+//        hint.setupCanAccess(new NoOpAllow());
+   //     hint.setupCanUse(new NoOpAllow());
+      //  object.setupHint(hint);
 
 
         //new NakedObjectsClient().setObjectManager(new MockObjectManager());
@@ -178,8 +179,6 @@ public class TestObjectImplFieldTest extends TestCase {
         
         target.verify();
         factory.verify();
-        
-        
     }
     
     

@@ -1,5 +1,7 @@
 package org.nakedobjects.xat;
 
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.ActionImpl;
 import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
 
@@ -9,12 +11,14 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import test.org.nakedobjects.object.DummyAction;
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.MockNakedObject;
-import test.org.nakedobjects.object.control.MockHint;
+import test.org.nakedobjects.object.TestSystem;
 import test.org.nakedobjects.object.control.NoOpAllow;
 import test.org.nakedobjects.object.control.NoOpVeto;
 import test.org.nakedobjects.object.reflect.DummyActionPeer;
+import test.org.nakedobjects.object.reflect.DummyField;
 import test.org.nakedobjects.object.reflect.DummyOneToOnePeer;
 
 
@@ -37,6 +41,7 @@ public class TestObjectImplFieldsTest extends TestCase {
         object = new MockNakedObject();
         TestObjectFactory factory = new MockObjectFactory();
         target = new TestObjectImplExt(object, factory);
+   //     target.setupAction(new DummyAction());
     }
     
     public void testZeroParameterAssertActionExistsFails() {
@@ -123,10 +128,9 @@ public class TestObjectImplFieldsTest extends TestCase {
     
 
     public void testAssertActionInvisible() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-        hint.setupCanAccess(new NoOpVeto());
+        target.setupAction(new DummyAction());        
+        object.setupIsVisible(Veto.DEFAULT);
+        
         
         expectCallToGetAction(false, 0);
         target.assertActionInvisible("Action Name");
@@ -135,10 +139,8 @@ public class TestObjectImplFieldsTest extends TestCase {
     }
 
     public void testAssertActionInvisibleFails() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-        hint.setupCanAccess(new NoOpAllow());
+        target.setupAction(new DummyAction());
+        object.setupIsVisible(Allow.DEFAULT);
 
         expectCallToGetAction(false, 0);
         
@@ -153,11 +155,9 @@ public class TestObjectImplFieldsTest extends TestCase {
     
 
     public void testAssertActionVisible() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-       hint.setupCanAccess(new NoOpAllow());
-        
+        target.setupAction(new DummyAction());
+        object.setupIsVisible(Allow.DEFAULT);
+                
         expectCallToGetAction(false, 0);
         target.assertActionVisible("Action Name");
 
@@ -165,10 +165,8 @@ public class TestObjectImplFieldsTest extends TestCase {
     }
 
     public void testAssertActionVisibleFails() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-        hint.setupCanAccess(new NoOpVeto());
+        target.setupAction(new DummyAction());
+        object.setupIsVisible(Veto.DEFAULT);
 
         expectCallToGetAction(false, 0);
         
@@ -182,10 +180,9 @@ public class TestObjectImplFieldsTest extends TestCase {
     }
 
     public void testAssertActionUsable() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-       hint.setupCanUse(new NoOpAllow());
+        target.setupAction(new DummyAction());
+        object.setupIsUsable(Allow.DEFAULT);
+        object.setupIsValid(Allow.DEFAULT);
         
         expectCallToGetAction(false, 0);
         target.assertActionUsable("Action Name");
@@ -194,11 +191,9 @@ public class TestObjectImplFieldsTest extends TestCase {
     }
 
     public void testAssertActionUsableFails() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-        hint.setupCanUse(new NoOpVeto());
-
+        target.setupAction(new DummyAction());
+        object.setupIsUsable(Veto.DEFAULT);
+        
         expectCallToGetAction(false, 0);
         
         try {
@@ -211,10 +206,22 @@ public class TestObjectImplFieldsTest extends TestCase {
     }
 
     public void testAssertActionUnusable() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
+        target.setupAction(new DummyAction());
+        object.setupIsVisible(Allow.DEFAULT);
+        object.setupIsUsable(Veto.DEFAULT);
+//        object.setupIsValid(Allow.DEFAULT);        
+        
+        expectCallToGetAction(false, 0);
+        target.assertActionUnusable("Action Name");
 
-       hint.setupCanUse(new NoOpVeto());
+        target.verify();
+    }
+
+    public void testAssertActionUnusableAsNotValuie() {
+        target.setupAction(new DummyAction());
+        object.setupIsVisible(Allow.DEFAULT);
+        object.setupIsUsable(Allow.DEFAULT);
+        object.setupIsValid(Veto.DEFAULT);        
         
         expectCallToGetAction(false, 0);
         target.assertActionUnusable("Action Name");
@@ -223,11 +230,11 @@ public class TestObjectImplFieldsTest extends TestCase {
     }
 
     public void testAssertActionUnusableFails() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-        hint.setupCanUse(new NoOpAllow());
-
+        target.setupAction(new DummyAction());
+        object.setupIsVisible(Allow.DEFAULT);
+        object.setupIsUsable(Allow.DEFAULT);
+        object.setupIsValid(Allow.DEFAULT);
+        
         expectCallToGetAction(false, 0);
         
         try {
@@ -240,10 +247,7 @@ public class TestObjectImplFieldsTest extends TestCase {
     }
 
     public void testAssertFieldInvisible() {
-        MockHint hint = new MockHint();
-        object.setupHint(hint);
-
-        hint.setupCanAccess(new NoOpVeto());
+        new TestSystem().init();
         
         expectCallToFieldFor();
         target.assertFieldInvisible("Field Name");

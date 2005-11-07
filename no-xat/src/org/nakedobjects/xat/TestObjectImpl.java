@@ -6,7 +6,6 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
@@ -466,7 +465,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     public void assertFieldInvisible(final String fieldName) {
         NakedObjectField field = fieldAccessorFor(fieldName);
-        boolean canAccess = field.isAccessible() && getForNakedObject().isVisible(field).isAllowed();
+        boolean canAccess = field.isAuthorised() && getForNakedObject().isVisible(field).isAllowed();
         assertFalse("Field '" + fieldName + "' is visible", canAccess);
     }
 
@@ -477,14 +476,14 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
 
     private void assertFieldModifiable(String fieldName, NakedObjectField field) {
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = field.isEditable(getForNakedObject()).isAllowed();
+        boolean canUse = field.isUsable(getForNakedObject()).isAllowed();
         assertTrue("Field '" + fieldName + "' in " + getForNaked() + " is unmodifiable", canUse);
     }
 
     public void assertFieldUnmodifiable(final String fieldName) {
         NakedObjectField field = fieldAccessorFor(fieldName);
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = field.isEditable(getForNakedObject()).isAllowed();
+        boolean canUse = field.isUsable(getForNakedObject()).isAllowed();
         assertFalse("Field '" + fieldName + "' is modifiable", canUse);
     }
 
@@ -494,7 +493,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertFieldVisible(NakedObjectField field) {
-        boolean canAccess = field.isAccessible() && getForNakedObject().isVisible(field).isAllowed();
+        boolean canAccess = field.isAuthorised() && getForNakedObject().isVisible(field).isAllowed();
         assertTrue("Field '" + field.getId() + "' is invisible", canAccess);
     }
 
@@ -671,7 +670,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new IllegalActionError("Field already contains an object: " + targetField.getForNaked());
         }
 
-        NakedObjectAssociation association = (NakedObjectAssociation) fieldAccessorFor(fieldName);
+        NakedObjectField association = (NakedObjectField) fieldAccessorFor(fieldName);
         NakedObject obj = (NakedObject) object.getForNaked();
 
         if (association.getSpecification() != null && !obj.getSpecification().isOfType(association.getSpecification())) {
@@ -682,7 +681,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
         NakedObject nakedObject = (NakedObject) getForNaked();
 
         boolean isAccessible = true;
-        isAccessible = association.isAccessible() && nakedObject.isVisible(association).isAllowed();
+        isAccessible = association.isAuthorised() && nakedObject.isVisible(association).isAllowed();
         if (!isAccessible) {
             throw new IllegalActionError("Cannot access the field " + field);
         }
@@ -755,7 +754,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
             throw new NakedAssertionFailedError("A NakedObject was to be removed from the InternalCollection, but found " + no);
         }
 
-        ((OneToManyAssociation) assoc).clearAssociation((NakedObject) getForNaked(), (NakedObject) no);
+        ((OneToManyAssociation) assoc).removeElement((NakedObject) getForNaked(), (NakedObject) no);
     }
 
     public boolean equals(Object obj) {
@@ -897,7 +896,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
                 for (int i = 0; i < a.length; i++) {
                     NakedObjectField att = a[i];
 
-                    if (att instanceof NakedObjectAssociation) {
+                    if (att instanceof NakedObjectField) {
                         TestNaked associatedView = null;
 
                         Naked associate;
