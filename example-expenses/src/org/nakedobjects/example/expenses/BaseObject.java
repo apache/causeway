@@ -1,6 +1,6 @@
 package org.nakedobjects.example.expenses;
 
-import org.nakedobjects.NakedObjects;
+import org.nakedobjects.object.NakedObjects;
 
 
 public class BaseObject {
@@ -11,7 +11,7 @@ public class BaseObject {
     
 
     protected  static Object createInstance(Class class1) {
-        return NakedObjects.getObjectManager().createPersistentInstance(class1.getName());
+        return NakedObjects.getObjectPersistor().createPersistentInstance(class1.getName());
     }
 
 }
