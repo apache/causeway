@@ -1,4 +1,5 @@
 import org.nakedobjects.application.system.SystemClock;
+import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashMap;
@@ -21,7 +22,6 @@ import org.nakedobjects.utility.SplashWindow;
 import org.nakedobjects.utility.configuration.ConfigurationException;
 import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.configuration.PropertiesFileLoader;
-import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 
