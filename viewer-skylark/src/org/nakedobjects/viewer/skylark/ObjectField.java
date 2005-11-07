@@ -31,7 +31,7 @@ final class ObjectField {
     }
 
     public final String getName() {
-        return field.getLabel();
+        return field.getName();
     }
 
     public NakedObject getParent() {

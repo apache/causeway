@@ -13,7 +13,7 @@ import org.nakedobjects.viewer.skylark.ParameterContent;
 public class ActionHelper {
 
     public static ActionHelper createInstance(NakedObject target, Action action) {
-        int numberParameters = action.parameters().length;
+        int numberParameters = action.parameterTypes().length;
         Naked[] parameters;
         parameters = new Naked[numberParameters];
 
@@ -34,7 +34,7 @@ public class ActionHelper {
         Naked[] parameterValues;
         Naked[] values;
         NakedObjectSpecification[] parameterTypes;
-        parameterTypes = action.parameters();
+        parameterTypes = action.parameterTypes();
         values = new Naked[parameterTypes.length];
         for (int i = 0; i < parameterTypes.length; i++) {
             if (parameterTypes[i].isValue()) {
@@ -100,7 +100,7 @@ public class ActionHelper {
     }
 
     public String getName() {
-        return action.getLabel();
+        return action.getName();
     }
 
     public String getDescription() {

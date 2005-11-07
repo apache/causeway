@@ -22,11 +22,11 @@ import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 class ImmediateObjectOption extends MenuOption {
 
     public static ImmediateObjectOption createOption(Action action, NakedObject object) {
-        Assert.assertTrue("Only suitable for 0 param methods", action.parameters().length == 0);
-        if (! action.isAccessible() || object.isVisible(action).isVetoed()) {
+        Assert.assertTrue("Only suitable for 0 param methods", action.parameterTypes().length == 0);
+        if (! action.isAuthorised() || object.isVisible(action).isVetoed()) {
             return null;
         }
-        String labelName = action.getLabel();
+        String labelName = action.getName();
         ImmediateObjectOption option = new ImmediateObjectOption(labelName, object, action);
 
 	    return option;

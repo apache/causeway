@@ -18,7 +18,7 @@ public class TableAxis implements ViewAxis {
         widths = new int[fields.length];
         names = new String[fields.length];
         for (int i = 0; i < widths.length; i++) {
-            names[i] = fields[i].getLabel();
+            names[i] = fields[i].getName();
         }
     }
 

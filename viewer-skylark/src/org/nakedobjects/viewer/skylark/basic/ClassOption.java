@@ -42,7 +42,7 @@ public class ClassOption {
 
     private static void addOption(NakedObject cls, MenuOptionSet menuOptionSet, Action action, int type) {
         MenuOption option;
-        if (action.parameters().length == 0) {
+        if (action.parameterTypes().length == 0) {
             option = ImmediateObjectOption.createOption(action, cls);
         } else {
             option = DialogedObjectOption.createOption(action, cls);

@@ -47,7 +47,7 @@ public class ObjectOption {
 
         for (int i = 0; i < actions.length; i++) {
             MenuOption option;
-            if (actions[i].parameters().length == 0) {
+            if (actions[i].parameterTypes().length == 0) {
                 option = ImmediateObjectOption.createOption(actions[i], object);
             } else {
                 option = DialogedObjectOption.createOption(actions[i], object);

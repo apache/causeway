@@ -5,9 +5,9 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.UserContext;
 import org.nakedobjects.object.control.AbstractConsent;
@@ -46,7 +46,7 @@ public abstract class ObjectContent extends AbstractContent {
                     for (int i = 0; i < fields.length; i++) {
                         if (source.getSpecification().isOfType(fields[i].getSpecification())) {
                             if (target.getField(fields[i]) == null) {
-                                return new Allow("Set field " + fields[i].getLabel());
+                                return new Allow("Set field " + fields[i].getName());
                             }
                         }
                     }
@@ -77,8 +77,7 @@ public abstract class ObjectContent extends AbstractContent {
                 NakedObjectField[] fields = target.getVisibleFields();
                 for (int i = 0; i < fields.length; i++) {
                     if (source.getSpecification().isOfType(fields[i].getSpecification()) && target.getField(fields[i]) == null) {
-                        target.setAssociation(((NakedObjectAssociation) fields[i]), source);
-                        //           invalidateContent();
+                        target.setAssociation(((OneToOneAssociation) fields[i]), source);
                         break;
                     }
                 }

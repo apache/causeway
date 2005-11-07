@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
@@ -13,7 +14,6 @@ import org.nakedobjects.utility.ToString;
 import org.nakedobjects.utility.configuration.ComponentException;
 import org.nakedobjects.utility.configuration.ComponentLoader;
 import org.nakedobjects.utility.configuration.ConfigurationException;
-import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;

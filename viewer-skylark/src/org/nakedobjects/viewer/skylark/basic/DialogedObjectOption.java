@@ -20,11 +20,11 @@ class DialogedObjectOption extends MenuOption {
     public static DialogedObjectOption createOption(Action action, NakedObject object) {
         int paramCount = action.getParameterCount();
         Assert.assertTrue("Only for actions taking one or more params", paramCount > 0);
-    	if(! action.isAccessible() || object.isVisible(action).isVetoed()) {
+    	if(! action.isAuthorised() || object.isVisible(action).isVetoed()) {
     		return null;
     	}
 
-    	String label =  action.getLabel() + "...";
+    	String label =  action.getName() + "...";
     	DialogedObjectOption option = new DialogedObjectOption(label, action, object);
     	return option;
     }

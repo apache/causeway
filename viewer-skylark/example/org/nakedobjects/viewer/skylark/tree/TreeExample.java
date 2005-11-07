@@ -5,6 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOneAssociationImpl;
@@ -67,6 +68,7 @@ public class TreeExample extends TestViews {
                 return null;
             }
 
+            
             public MemberIdentifier getIdentifier() {
                 return null;
             }
@@ -111,7 +113,7 @@ public class TreeExample extends TestViews {
                 return null;
             }
 
-            public Consent isEditable() {
+            public Consent isUsable(NakedObject inObject) {
                 return null;
             }
 
@@ -123,7 +125,11 @@ public class TreeExample extends TestViews {
                 return null;
             }
 
-            public boolean isAccessible() {
+            public String getName() {
+                return null;
+            }
+
+            public boolean isAuthorised(Session session) {
                 return false;
             }
         };

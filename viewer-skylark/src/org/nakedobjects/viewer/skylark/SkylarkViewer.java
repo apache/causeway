@@ -1,10 +1,10 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedObjectsComponent;
 import org.nakedobjects.object.UserContext;
-import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
 public class SkylarkViewer implements NakedObjectsComponent {

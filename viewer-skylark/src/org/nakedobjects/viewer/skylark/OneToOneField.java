@@ -87,7 +87,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
     
     public Consent isEditable() {
-        return getField().isEditable(getParent());
+        return getField().isUsable(getParent());
     }
 
     /*public String getIconName() {
@@ -176,7 +176,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     
     
     public String getName() {
-        return getOneToOneAssociation().getLabel();
+        return getOneToOneAssociation().getName();
     }
 
     public String getDescription() {

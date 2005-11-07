@@ -46,7 +46,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         NakedObject parentObject = getParent();
         OneToManyAssociation association = getOneToManyAssociation();
         LOG.debug("remove " + element + " from " + parentObject);
-        association.clearAssociation(parentObject, element);
+        association.removeElement(parentObject, element);
     }
 
     public void debugDetails(DebugString debug) {
@@ -124,7 +124,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
     }
     
     public String getName() {
-        return getOneToManyAssociation().getLabel();
+        return getOneToManyAssociation().getName();
     }
 
     public String getDescription() {
