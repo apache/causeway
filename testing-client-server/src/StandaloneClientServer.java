@@ -12,6 +12,7 @@ import org.nakedobjects.distribution.pipe.NakedObjectsPipe;
 import org.nakedobjects.distribution.pipe.PipedClient;
 import org.nakedobjects.distribution.pipe.PipedConnection;
 import org.nakedobjects.distribution.pipe.PipedServer;
+import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
@@ -35,7 +36,6 @@ import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.utility.SplashWindow;
 import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.configuration.PropertiesFileLoader;
-import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 
