@@ -3,6 +3,7 @@ package test.org.nakedobjects.object.reflect;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
@@ -94,15 +95,11 @@ public class DummyOneToManyPeer implements OneToManyPeer {
         expectedActions.verify();
     }
 
-    public Consent validToRemove(NakedObject container, NakedObject element) {
+    public Consent isRemoveValid(NakedObject container, NakedObject element) {
         return null;
     }
 
-    public Consent validToAdd(NakedObject container, NakedObject element) {
-        return null;
-    }
-
-    public Consent isEditable() {
+    public Consent isAddValid(NakedObject container, NakedObject element) {
         return null;
     }
 
@@ -110,11 +107,23 @@ public class DummyOneToManyPeer implements OneToManyPeer {
         return null;
     }
 
-    public boolean isAccessible() {
+    public String getDescription() {
+        return null;
+    }
+
+    public boolean isMandatory() {
         return false;
     }
 
-    public String getDescription() {
+    public String getName() {
+        return null;
+    }
+
+    public boolean isAuthorised(Session session) {
+        return false;
+    }
+
+    public Consent isUsable(NakedObject target) {
         return null;
     }
 

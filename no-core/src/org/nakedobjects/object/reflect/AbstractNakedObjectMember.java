@@ -27,7 +27,7 @@ public abstract class AbstractNakedObjectMember implements NakedObjectMember {
     }
 
     public String toString() {
-        return "id=" + getId() + ",label='" + getLabel() + "'";
+        return "id=" + getId() + ",label='" + getName() + "'";
     }
 
 }

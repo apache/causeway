@@ -1,20 +1,29 @@
-package org.nakedobjects.object;
 
+package org.nakedobjects.object.reflect;
 
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Session;
+import org.nakedobjects.object.control.Consent;
 
-public interface NakedObjectAssociation extends NakedObjectField {
+public interface MemberPeer {
 
-    void clearAssociation(NakedObject inObject, NakedObject associate);
+    String getDescription();
 
-    /**
-     * set up a field within an object - this call should not be transfered to a
-     * remote object
-     */
-    void initAssociation(NakedObject inObject, NakedObject associate);
+    Object getExtension(Class cls);
 
-    void setAssociation(NakedObject inObject, NakedObject associate);
+    Class[] getExtensions();
 
+    MemberIdentifier getIdentifier();
+
+    String getName();
+
+    boolean isAuthorised(Session session);
+
+    Consent isUsable(NakedObject target);
+
+    Consent isVisible(NakedObject target);
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

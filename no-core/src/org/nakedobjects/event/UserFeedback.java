@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer;
+package org.nakedobjects.event;
 
 import org.nakedobjects.object.NakedObject;
 

@@ -5,6 +5,7 @@ import org.nakedobjects.object.ActionParameterSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Consent;
 
 public abstract class AbstractActionPeer implements ActionPeer {
@@ -17,6 +18,10 @@ public abstract class AbstractActionPeer implements ActionPeer {
 
     public Object getExtension(Class cls) {
         return decorated.getExtension(cls);
+    }
+    
+    public Class[] getExtensions() {
+        return decorated.getExtensions();
     }
     
     public MemberIdentifier getIdentifier() {
@@ -39,40 +44,28 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.getType();
     }
 
-    public NakedObjectSpecification[] parameterTypes() {
-        return decorated.parameterTypes();
+    public NakedObjectSpecification[] getParameterTypes() {
+        return decorated.getParameterTypes();
     }
 
-    public NakedObjectSpecification returnType() {
-        return decorated.returnType();
+    public NakedObjectSpecification getReturnType() {
+        return decorated.getReturnType();
     }
 
-    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
-        return decorated.getParameters(object, parameters);
+    public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
+        return decorated.createParameterSet(object, parameters);
     }
 
     public Action.Target getTarget() {
         return decorated.getTarget();
     }
 
-    public Consent invokable(NakedObject target, Naked[] parameters) {
-        return decorated.invokable(target, parameters);
+    public Consent isUsable(NakedObject target) {
+        return decorated.isUsable(target);
     }
 
-    public Consent validParameters(NakedObject object, Naked[] parameters) {
-        return decorated.validParameters(object, parameters);
-    }
-
-    public String[] parameterLabels() {
-        return decorated.parameterLabels();
-    }
-
-    public boolean[] mandatoryParameters() {
-        return decorated.mandatoryParameters();
-    }
-
-    public Object[] defaultParameters() {
-        return decorated.defaultParameters();
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        return decorated.hasValidParameters(object, parameters);
     }
 
     public String getDescription() {
@@ -83,8 +76,8 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.isVisible(target);
     }
 
-    public boolean isAccessible() {
-        return decorated.isAccessible();
+    public boolean isAuthorised(Session session) {
+        return decorated.isAuthorised(session);
     }
 }
 

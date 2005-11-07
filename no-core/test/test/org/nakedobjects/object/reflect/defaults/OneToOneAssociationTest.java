@@ -87,13 +87,13 @@ public class OneToOneAssociationTest extends NakedObjectTestCase {
     }
 
     public void testLabel() {
-        assertEquals(FIELD_LABEL, association.getLabel());
+        assertEquals(FIELD_LABEL, association.getName());
 
 //        mockHint.setupName("label from hint");
 
         associationDelegate.expect("getHint " + "#SmallPerson()" + " " + nakedObject + " null");
         
-        assertEquals("label from hint", association.getLabel());
+        assertEquals("label from hint", association.getName());
     }
 
     public void testIsEmpty() {

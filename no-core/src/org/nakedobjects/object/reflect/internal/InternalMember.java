@@ -6,6 +6,14 @@ import org.nakedobjects.object.reflect.MemberIdentifier;
 public abstract class InternalMember {
     protected MemberIdentifier identifeir;
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+    
     public MemberIdentifier getIdentifier() {
         return identifeir;
     }

@@ -3,6 +3,7 @@ package test.org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.AbstractNakedObjectField;
 
 
@@ -13,7 +14,7 @@ public class DummyField extends AbstractNakedObjectField {
     private boolean isValue;
 
     public DummyField(String name, NakedObjectSpecification spec) {
-        super(name, spec, null);
+        super(name, spec);
         
         isObject = spec.isObject();
         isCollection = spec.isCollection();
@@ -24,14 +25,10 @@ public class DummyField extends AbstractNakedObjectField {
         return contentObject;
     }
 
-    public String getLabel(NakedObject object) {
+    public String getName() {
         return null;
     }
 
-    public boolean hasHint() {
-        return false;
-    }
-    
     public boolean isDerived() {
         return false;
     }
@@ -62,6 +59,22 @@ public class DummyField extends AbstractNakedObjectField {
     
     public boolean isValue() {
         return isValue;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public boolean isAuthorised() {
+        return true;
+    }
+
+    public Consent isUsable(NakedObject target) {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
     }
 }
 

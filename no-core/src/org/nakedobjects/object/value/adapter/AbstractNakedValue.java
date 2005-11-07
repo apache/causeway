@@ -3,12 +3,12 @@ package org.nakedobjects.object.value.adapter;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.control.Hint;
 
 public abstract class AbstractNakedValue implements NakedValue {
@@ -30,7 +30,7 @@ public abstract class AbstractNakedValue implements NakedValue {
     
     public void copyObject(Naked object) {}
 
-    public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
+    public void clearAssociation(OneToOneAssociation specification, NakedObject ref) {}
 
     public Naked execute(Action action, Naked[] parameters) {
         return null;

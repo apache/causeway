@@ -66,12 +66,12 @@ public class DummyOneToOneAssociation implements NakedObjectField {
         return null;
     }
 
-    public String getLabel() {
+    public String getName() {
         return null;
     }
 
     public String getId() {
-        return fieldPeer.getIdentifier();
+        return fieldPeer.getIdentifier().getName();
     }
 
     public boolean hasHint() {

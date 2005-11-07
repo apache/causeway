@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.ToString;
@@ -81,7 +82,7 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
 
     protected void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
         if (collection.getResolveState().isPersistent()) {
-    //    if(collection.getResolveState() != ResolveState.GHOST) {
+        // if(collection.getResolveState() != ResolveState.GHOST) {
             return;
         }
         

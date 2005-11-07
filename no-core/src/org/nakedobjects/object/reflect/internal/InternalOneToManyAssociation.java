@@ -8,7 +8,6 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
-import org.nakedobjects.utility.NotImplementedException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -131,22 +130,6 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
         }
     }
     
-    public Object getExtension(Class cls) {
-        return null;
-    }
-
-    public Class[] getExtensions() {
-        return new Class[0];
-    }
-    
-    public String getName() {
-        return null;
-    }
-    
-    public boolean isEmpty(NakedObject inObject) {
-        throw new NotImplementedException();
-    }
-
     public void initOneToManyAssociation(NakedObject fromObject, NakedObject[] instances) {
         try {
             Object obj = getMethod.invoke(fromObject.getObject(), new Object[0]);
@@ -170,25 +153,14 @@ public class InternalOneToManyAssociation extends InternalField implements OneTo
     
     }
 
-    public Consent validToRemove(NakedObject container, NakedObject element) {
+    public Consent isRemoveValid(NakedObject container, NakedObject element) {
         return Allow.DEFAULT;
     }
 
-    public Consent validToAdd(NakedObject container, NakedObject element) {
+    public Consent isAddValid(NakedObject container, NakedObject element) {
         return Allow.DEFAULT;
     }
-
-    public Consent isEditable(NakedObject target) {
-        return Allow.DEFAULT;
-    }
-
-    public Consent isVisible(NakedObject target) {
-        return Allow.DEFAULT;
-    }
-
-    public boolean isAccessible() {
-        return true;
-    }
+    
 }
 
 /*

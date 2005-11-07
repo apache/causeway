@@ -59,20 +59,20 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }
     	
     public void testSet() {
-        association.setAssociation(nakedObject, associate);
+        association.addElement(nakedObject, associate);
         associationDelegate.assertAction(0, "add " + nakedObject);
         associationDelegate.assertAction(1, "add " + associate);
     }     	
     
     public void testClear() {
-        association.clearAssociation(nakedObject, associate);
+        association.removeElement(nakedObject, associate);
         associationDelegate.assertAction(0, "remove " + nakedObject);
         associationDelegate.assertAction(1, "remove " + associate);
  }     	
     
     public void testClearWithNull() {
         try {
-        association.clearAssociation(nakedObject, null);
+        association.removeElement(nakedObject, null);
         fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -82,7 +82,7 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     
     public void testSetWithNull() {
         try {
-        association.setAssociation(nakedObject, null);
+        association.addElement(nakedObject, null);
         fail();
         } catch (IllegalArgumentException expected) {
         }
@@ -104,13 +104,13 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     public void testLabel() {
         associationDelegate.setupHint(null);
         
-        assertEquals(FIELD_NAME, association.getLabel());
+        assertEquals(FIELD_NAME, association.getName());
 
 //        mockHint.setupName("label from hint");
         
         associationDelegate.expect("getHint " + "#members()" + " " + nakedObject + " null true");
 
-        assertEquals("label from hint", association.getLabel());
+        assertEquals("label from hint", association.getName());
    }
     
     public void testAboutForSet() {

@@ -201,25 +201,9 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
                 throw new NakedObjectRuntimeException(ignore);
             }
 	}
-	
-	public Object getExtension(Class cls) {
-        return null;
-    }
 
-    public Class[] getExtensions() {
-        return new Class[0];
-    }
-	
-    public String getName() {
-        return null;
-    }
-    
     public boolean isEmpty(NakedObject inObject) {
         throw new NotImplementedException();
-    }
-    
-    public boolean isMandatory() {
-        return false;
     }
     
     public boolean isObject() {
@@ -232,22 +216,6 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
 
     public Consent validAssociation(NakedObject inObject, NakedObject value) {
         return Allow.DEFAULT;
-    }
-
-    public Consent isEditable(NakedObject target) {
-        return Allow.DEFAULT;
-    }
-
-    public String getDescription() {
-        return "";
-    }
-
-    public Consent isVisible(NakedObject target) {
-        return Allow.DEFAULT;
-    }
-
-    public boolean isAccessible() {
-        return true;
     }
 }
 

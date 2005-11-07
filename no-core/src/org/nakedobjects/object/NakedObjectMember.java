@@ -12,29 +12,37 @@ public interface NakedObjectMember {
 
     Object getExtension(Class cls);
 
+    Class[] getExtensions();
+    
     /**
-     * Return the default label for this member. This is based on the name of this member.
+     * Returns the identifier of the member, which must not change. This should be all lowercase with no
+     * spaces: so if the member is called 'Return Date' then the a suitable id would be 'returndate'.
+     */
+    String getId();
+
+    /**
+     * Return the name for this member - the field or action. This is based on the name of this member.
      * 
      * @see #getId()
      */
-    String getLabel();
+    String getName();
 
     /**
-     * Returns the name of the member.
-     */
-    String getId();
-    
-    /**
-     * Determines if the user has acces to this member, and hence whether it is visible
+     * Determines if the user is authorised to access this member, and hence whether it is visible.
      * 
      * @see #isVisible(NakedObject)
      */
-    boolean isAccessible();
+    boolean isAuthorised();
+
+    /**
+     * Detemines whether this method is usable on, or the field is editable witin, the specified object.
+     */
+    Consent isUsable(NakedObject target);
 
     /**
      * Determines if this member is visible according to the current state of the object.
      * 
-     * @see #isAccessible()
+     * @see #isAuthorised()
      */
     Consent isVisible(NakedObject target);
 }

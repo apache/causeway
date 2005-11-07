@@ -2,6 +2,7 @@ package test.org.nakedobjects.object.security;
 
 import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.object.security.ActionAuthorisation;
+import org.nakedobjects.object.security.NullSession;
 
 import junit.framework.TestCase;
 import test.org.nakedobjects.object.reflect.DummyActionPeer;
@@ -27,7 +28,7 @@ public class ActionAuthorisationTest extends TestCase {
         manager.setupUsable(true);
         manager.setupVisible(true);
 
-        assertTrue(action.isAccessible());
+        assertTrue(action.isAuthorised(new NullSession()));
     }
 
 
@@ -35,7 +36,7 @@ public class ActionAuthorisationTest extends TestCase {
         manager.setupUsable(true);
         manager.setupVisible(false);
 
-        assertFalse(action.isAccessible());
+        assertFalse(action.isAuthorised(new NullSession()));
     }
 }
 

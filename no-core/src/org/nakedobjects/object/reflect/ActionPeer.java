@@ -8,43 +8,22 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 
 
-public interface ActionPeer {
-
-    Object[] defaultParameters();
-
+public interface ActionPeer extends MemberPeer {
+    ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters);
+    
     Naked execute(NakedObject object, Naked[] parameters) throws ReflectiveActionException;
-
-    String getDescription();
-
-    Object getExtension(Class cls);
-
-    MemberIdentifier getIdentifier();
-
-    String getName();
 
     int getParameterCount();
 
-    ActionParameterSet getParameters(NakedObject object, Naked[] parameters);
+    NakedObjectSpecification[] getParameterTypes();
+
+    NakedObjectSpecification getReturnType();
 
     Action.Target getTarget();
 
     Action.Type getType();
 
-    Consent invokable(NakedObject target, Naked[] parameters);
-
-    boolean isAccessible();
-
-    Consent isVisible(NakedObject target);
-
-    boolean[] mandatoryParameters();
-
-    String[] parameterLabels();
-
-    NakedObjectSpecification[] parameterTypes();
-
-    NakedObjectSpecification returnType();
-
-    Consent validParameters(NakedObject object, Naked[] parameters);
+    Consent hasValidParameters(NakedObject object, Naked[] parameters);
 }
 
 /*

@@ -3,34 +3,26 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.Consent;
 
 
-public interface OneToOneAssociation extends NakedObjectAssociation {
+public interface OneToOneAssociation extends NakedObjectField {
 
     void clearAssociation(NakedObject inObject, NakedObject associate);
 
     void clearValue(NakedObject inObject);
 
-    Object getExtension(Class cls);
-
-    Class[] getExtensions();
-
+    /**
+     * set up a field within an object - this call should not be transfered to a remote object
+     */
     void initAssociation(NakedObject inObject, NakedObject associate);
 
-    void initValue(NakedObject inObject, Object associate);
+    void initValue(NakedObject inObject, Object value);
 
-    boolean isDerived();
-
-    boolean isEmpty(NakedObject inObject);
-
-    boolean isObject();
-
-    boolean isValue();
+    void setAssociation(NakedObject inObject, NakedObject associate);
 
     void setValue(NakedObject inObject, Object value);
 
-    Consent validAssociation(NakedObject inObject, NakedObject value);
+    Consent isAssociationValid(NakedObject inObject, NakedObject associate);
 
-    Consent validValue(NakedObject inObject, NakedValue value);
-
+    Consent isValueValid(NakedObject inObject, NakedValue value);
 }
 
 /*

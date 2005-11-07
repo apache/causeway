@@ -3,12 +3,13 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.ToString;
 
 
-public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation implements OneToManyAssociation {
+public class OneToManyAssociationImpl extends AbstractNakedObjectField implements OneToManyAssociation {
     private final OneToManyPeer reflectiveAdapter;
 
     public OneToManyAssociationImpl(String className, String methodName, NakedObjectSpecification type, OneToManyPeer association) {
@@ -16,7 +17,7 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
         this.reflectiveAdapter = association;
     }
 
-    public void clearAssociation(NakedObject inObject, NakedObject associate) {
+    public void removeElement(NakedObject inObject, NakedObject associate) {
         if (associate == null) {
             throw new IllegalArgumentException("element should not be null");
         }
@@ -47,13 +48,13 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
         return !reflectiveAdapter.isDerived();
     }
 
-    public void initAssociation(NakedObject inObject, NakedObject associate) {
+    public void initElement(NakedObject inObject, NakedObject associate) {
         if (readWrite()) {
             reflectiveAdapter.initAssociation(inObject, associate);
         }
     }
 
-    public void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances) {
+    public void initCollection(NakedObject inObject, NakedObject[] instances) {
         if (readWrite()) {
             reflectiveAdapter.initOneToManyAssociation(inObject, instances);
         }
@@ -78,7 +79,7 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
      * 
      * @see #getId()
      */
-    public String getLabel() {
+    public String getName() {
         String label = reflectiveAdapter.getName();
         return label == null ? defaultLabel : label;
     }
@@ -91,7 +92,7 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
         return true;
     }
 
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+    public void addElement(NakedObject inObject, NakedObject associate) {
         if (associate == null) {
             throw new IllegalArgumentException("Can't use null to add an item to a collection");
         }
@@ -114,23 +115,23 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectAssociation imp
     
     
     public Consent validToRemove(NakedObject container, NakedObject element) {
-      return reflectiveAdapter.validToRemove(container, element);
+      return reflectiveAdapter.isRemoveValid(container, element);
     }
     
     public Consent validToAdd(NakedObject container, NakedObject element) {
-        return reflectiveAdapter.validToAdd(container, element);
+        return reflectiveAdapter.isAddValid(container, element);
     }
 
-    public Consent isEditable(NakedObject target) {
-        return reflectiveAdapter.isEditable(target);
+    public Consent isUsable(NakedObject target) {
+        return reflectiveAdapter.isUsable(target);
     }
 
     public Consent isVisible(NakedObject target) {
         return reflectiveAdapter.isVisible(target);
     }
 
-    public boolean isAccessible() {
-        return reflectiveAdapter.isAccessible();
+    public boolean isAuthorised() {
+        return reflectiveAdapter.isAuthorised(NakedObjects.getCurrentSession());
     }
 }
 

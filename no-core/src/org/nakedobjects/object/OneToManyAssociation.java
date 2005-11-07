@@ -3,31 +3,20 @@ package org.nakedobjects.object;
 import org.nakedobjects.object.control.Consent;
 
 
-public interface OneToManyAssociation extends NakedObjectAssociation {
+public interface OneToManyAssociation extends NakedObjectField {
 
-    void clearAssociation(NakedObject inObject, NakedObject associate);
+    void removeElement(NakedObject inObject, NakedObject associate);
 
     void clearCollection(NakedObject inObject);
 
-    Naked get(NakedObject fromObject);
+    /**
+     * set up a field within an object - this call should not be transfered to a remote object
+     */
+    void initElement(NakedObject inObject, NakedObject associate);
 
-    Object getExtension(Class cls);
+    void initCollection(NakedObject inObject, NakedObject[] instances);
 
-    Class[] getExtensions();
-
-    void initAssociation(NakedObject inObject, NakedObject associate);
-
-    void initOneToManyAssociation(NakedObject inObject, NakedObject[] instances);
-
-    boolean isCollection();
-
-    boolean isDerived();
-
-    boolean isEmpty(NakedObject inObject);
-
-    boolean isPart();
-
-    void setAssociation(NakedObject inObject, NakedObject associate);
+    void addElement(NakedObject inObject, NakedObject associate);
 
     Consent validToAdd(NakedObject container, NakedObject element);
 

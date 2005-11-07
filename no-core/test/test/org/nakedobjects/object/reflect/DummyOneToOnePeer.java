@@ -1,20 +1,18 @@
 package test.org.nakedobjects.object.reflect;
 
-import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.TextEntryParseException;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
 import java.util.Vector;
 
-import test.org.nakedobjects.utility.ExpectedSet;
-
 import junit.framework.Assert;
+import test.org.nakedobjects.utility.ExpectedSet;
 
 
 public class DummyOneToOnePeer implements OneToOnePeer {
@@ -95,6 +93,34 @@ public class DummyOneToOnePeer implements OneToOnePeer {
 
     public void assertAction(int index, String expected) {
         Assert.assertEquals(expected, actions.elementAt(index));
+    }
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+        return null;
+    }
+
+    public Consent validValue(NakedObject inObject, NakedValue value) {
+        return null;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
+
+    public boolean isAuthorised(Session session) {
+        return false;
+    }
+
+    public Consent isUsable(NakedObject target) {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
     }
 }
 

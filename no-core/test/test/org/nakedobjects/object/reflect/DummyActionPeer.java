@@ -5,6 +5,7 @@ import org.nakedobjects.object.ActionParameterSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -40,7 +41,7 @@ public final class DummyActionPeer implements ActionPeer {
         return 0;
     }
 
-    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
+    public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
         return new ActionParameterSetImpl(new Object[] { new String(), new Integer(123), new Vector() }, new String[] { "one", "two",
                 "three" }, new boolean[3]);
     }
@@ -53,11 +54,11 @@ public final class DummyActionPeer implements ActionPeer {
         return null;
     }
 
-    public NakedObjectSpecification[] parameterTypes() {
+    public NakedObjectSpecification[] getParameterTypes() {
         return paramterTypes;
     }
 
-    public NakedObjectSpecification returnType() {
+    public NakedObjectSpecification getReturnType() {
         return returnType;
     }
     
@@ -86,23 +87,11 @@ public final class DummyActionPeer implements ActionPeer {
         this.name = name;
     }
 
-    public Consent invokable(NakedObject target, Naked[] parameters) {
+    public Consent isUsable(NakedObject target) {
         return null;
     }
 
-    public Consent validParameters(NakedObject object, Naked[] parameters) {
-        return null;
-    }
-
-    public String[] parameterLabels() {
-        return null;
-    }
-
-    public boolean[] mandatoryParameters() {
-        return null;
-    }
-
-    public Object[] defaultParameters() {
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
         return null;
     }
 
@@ -114,12 +103,20 @@ public final class DummyActionPeer implements ActionPeer {
         return null;
     }
 
-    public boolean isAccessible() {
+    public boolean isAuthorised(Session session) {
         return false;
     }
 
     public void setupLabel(String action_label) {
         this.action_label = action_label;}
+
+    public Class[] getExtensions() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
 
 }
 

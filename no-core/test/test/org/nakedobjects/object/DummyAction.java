@@ -6,31 +6,25 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
-import org.nakedobjects.object.reflect.ActionPeer;
-import org.nakedobjects.object.reflect.MemberIdentifier;
 
 public class DummyAction implements Action {
-
-    private final ActionPeer peer;
-
-    public DummyAction(ActionPeer peer) {
-        this.peer = peer;
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
+    public Class[] getExtensions() {
+        return new Class[0];
     }
 
     public int getParameterCount() {
         return 0;
     }
 
-    public Type getActionType() {
-        return peer.getType();
+    public Type getType() {
+        return null;
     }
 
-    public Target getActionTarget() {
-        return peer.getTarget();
-    }
-
-    public Object getExtension(Class cls) {
+    public Target getTarget() {
         return null;
     }
 
@@ -38,7 +32,7 @@ public class DummyAction implements Action {
         return false;
     }
 
-    public NakedObjectSpecification[] parameters() {
+    public NakedObjectSpecification[] parameterTypes() {
         return null;
     }
 
@@ -50,43 +44,15 @@ public class DummyAction implements Action {
         return null;
     }
 
+    public Naked execute(NakedObject target, Naked[] parameters) {
+        return null;
+    }
+
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        return null;
+    }
+
     public ActionParameterSet getParameters(NakedObject object) {
-        return null;
-    }
-
-    public Naked execute(NakedObject object, Naked[] parameters) {
-        return null;
-    }
-
-    public MemberIdentifier getIdentifier() {
-        return null;
-    }
-
-    public String getLabel() {
-        return null;
-    }
-
-    public String getId() {
-        return peer.getIdentifier();
-    }
-
-    public Consent invokable(NakedObject target, Naked[] parameters) {
-        return null;
-    }
-
-    public Consent validParameters(NakedObject object, Naked[] parameters) {
-        return null;
-    }
-
-    public String[] parameterLabels() {
-        return null;
-    }
-
-    public boolean[] mandatoryParameters() {
-        return null;
-    }
-
-    public Object[] defaultParameters() {
         return null;
     }
 
@@ -94,14 +60,27 @@ public class DummyAction implements Action {
         return null;
     }
 
+    public String getId() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
+
+    public boolean isAuthorised() {
+        return true;
+    }
+
+    public Consent isUsable(NakedObject target) {
+        return null;
+    }
+
     public Consent isVisible(NakedObject target) {
         return null;
     }
 
-    public boolean isAccessible() {
-        return false;
-    }
-
+    
 }
 
 

@@ -108,6 +108,10 @@ public class DummyNakedCollection implements NakedCollection {
 
     public void setupVersion(DummyVersion version) {
         this.version = version;}
+
+    public void persistedAs(Oid oid) {}
+
+    public void changeState(ResolveState newState) {}
 }
 
 /*

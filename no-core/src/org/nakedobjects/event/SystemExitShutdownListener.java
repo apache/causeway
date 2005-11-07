@@ -1,4 +1,4 @@
-package org.nakedobjects.viewer;
+package org.nakedobjects.event;
 
 /**
  * Shuts down the JVM.

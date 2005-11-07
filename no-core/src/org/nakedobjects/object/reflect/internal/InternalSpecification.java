@@ -84,11 +84,11 @@ public class InternalSpecification implements NakedObjectSpecification {
         String searchName = searchName(name);
         outer: for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
-            if (action.getActionType().equals(type)) {
+            if (action.getType().equals(type)) {
                 if (action.getId().equals(searchName)) {
-                    if (action.parameters().length == parameters.length) {
+                    if (action.parameterTypes().length == parameters.length) {
                         for (int j = 0; j < parameters.length; j++) {
-                            if (!parameters[j].isOfType(action.parameters()[j])) {
+                            if (!parameters[j].isOfType(action.parameterTypes()[j])) {
                                 continue outer;
                             }
                         }
@@ -105,7 +105,7 @@ public class InternalSpecification implements NakedObjectSpecification {
         Vector actions = new Vector();
         for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
-            if (action.getActionType().equals(type) && (noParameters == -1 || action.parameters().length == noParameters)) {
+            if (action.getType().equals(type) && (noParameters == -1 || action.parameterTypes().length == noParameters)) {
                 actions.addElement(action);
             }
         }
@@ -146,10 +146,10 @@ public class InternalSpecification implements NakedObjectSpecification {
     private Action getDefaultAction(Action[] availableActions, Action.Type type, NakedObjectSpecification[] parameters) {
         outer: for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
-            if (action.getActionType().equals(type)) {
-                if (action.parameters().length == parameters.length) {
+            if (action.getType().equals(type)) {
+                if (action.parameterTypes().length == parameters.length) {
                     for (int j = 0; j < parameters.length; j++) {
-                        if (!parameters[j].isOfType(action.parameters()[j])) {
+                        if (!parameters[j].isOfType(action.parameterTypes()[j])) {
                             continue outer;
                         }
                     }

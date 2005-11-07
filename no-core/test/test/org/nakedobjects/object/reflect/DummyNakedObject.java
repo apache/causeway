@@ -4,7 +4,6 @@ import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectMember;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -16,6 +15,7 @@ import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Version;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
 
 import java.util.Hashtable;
@@ -53,7 +53,7 @@ public class DummyNakedObject implements NakedObject {
 
     public void checkLock(Version version) {}
 
-    public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
+    public void clearAssociation(NakedObjectField field, NakedObject ref) {}
 
     public void clearCollection(OneToManyAssociation association) {}
 
@@ -64,7 +64,7 @@ public class DummyNakedObject implements NakedObject {
     public void destroyed() {}
 
     public Naked execute(Action action, Naked[] parameters) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public NakedObject getAssociation(OneToOneAssociation field) {
@@ -80,7 +80,7 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public String getIconName() {
-        return null;
+        throw new NotImplementedException();
     }
 
     public String getLabel(Action action) {
@@ -100,7 +100,7 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public ActionParameterSet getParameters(Action action) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public ResolveState getResolveState() {
@@ -112,7 +112,7 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public NakedValue getValue(OneToOneAssociation field) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public Version getVersion() {
@@ -123,7 +123,7 @@ public class DummyNakedObject implements NakedObject {
         return getFields();
     }
 
-    public void initAssociation(NakedObjectAssociation field, NakedObject associatedObject) {
+    public void initAssociation(NakedObjectField field, NakedObject associatedObject) {
         init(field, associatedObject);
     }
 
@@ -146,10 +146,10 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public Persistable persistable() {
-        return null;
+        throw new NotImplementedException();
     }
 
-    public void setAssociation(NakedObjectAssociation field, NakedObject associatedObject) {}
+    public void setAssociation(NakedObjectField field, NakedObject associatedObject) {}
 
     public void setOptimisticLock(Version version) {
         this.version = version;
@@ -205,27 +205,35 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public Consent isValid(OneToOneAssociation field, NakedValue nakedValue) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public Consent isValid(OneToOneAssociation field, NakedObject nakedObject) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public Consent canAdd(OneToManyAssociation field, NakedObject nakedObject) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public Consent isValid(Action action, Naked[] parameters) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public Consent isVisible(NakedObjectField field) {
-        return null;
+        throw new NotImplementedException();
     }
 
     public Consent isVisible(Action action) {
-        return null;
+        throw new NotImplementedException();
+    }
+    
+    public Consent isUsable(Action action) {
+        throw new NotImplementedException();
+    }
+    
+    public Consent isUsable(NakedObjectField field) {
+        throw new NotImplementedException();
     }
 
     public void persistedAs(Oid oid) {}

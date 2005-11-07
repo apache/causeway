@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -31,7 +32,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         this.actionMethod = action;
         paramCount = action.getParameterTypes().length;
         
-        identifeir = new MemberIdentifierImpl(className, name, parameterTypes());
+        identifeir = new MemberIdentifierImpl(className, name, getParameterTypes());
     }
 
     public Naked execute(NakedObject inObject, Naked[] parameters) {
@@ -59,10 +60,6 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return null;
     }
 
-    public Object getExtension(Class cls) {
-        return null;
-    }
-    
     public String getName() {
         return null;
     }
@@ -83,7 +80,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }
 
-    public NakedObjectSpecification[] parameterTypes() {
+    public NakedObjectSpecification[] getParameterTypes() {
         Class[] cls = actionMethod.getParameterTypes();
         NakedObjectSpecification[] naked = new NakedObjectSpecification[cls.length];
         for (int i = 0; i < cls.length; i++) {
@@ -92,34 +89,22 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return naked;
     }
 
-    public NakedObjectSpecification returnType() {
+    public NakedObjectSpecification getReturnType() {
         Class returnType = actionMethod.getReturnType();
         boolean hasReturn = returnType != void.class && returnType != NakedError.class;
         return hasReturn ? nakedClass(returnType) : null;
     }
 
-    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
+    public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
         throw new UnexpectedCallException();
     }
 
-    public Consent invokable(NakedObject target, Naked[] parameters) {
+    public Consent isUsable(NakedObject target) {
         return Allow.DEFAULT;
     }
 
-    public Consent validParameters(NakedObject object, Naked[] parameters) {
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
         return Allow.DEFAULT;
-    }
-
-    public String[] parameterLabels() {
-        return null;
-    }
-
-    public boolean[] mandatoryParameters() {
-        return null;
-    }
-
-    public Object[] defaultParameters() {
-        return null;
     }
 
     public String getDescription() {
@@ -130,7 +115,7 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return Allow.DEFAULT;
     }
 
-    public boolean isAccessible() {
+    public boolean isAuthorised(Session session) {
         return true;
     }
 }

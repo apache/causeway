@@ -5,12 +5,14 @@ import org.nakedobjects.object.control.Consent;
 
 public interface NakedObject extends NakedReference {
 
-    void clearAssociation(NakedObjectAssociation specification, NakedObject ref);
+    Consent canAdd(OneToManyAssociation field, NakedObject nakedObject);
+
+    void clearAssociation(NakedObjectField specification, NakedObject ref);
 
     void clearCollection(OneToManyAssociation association);
 
     void clearValue(OneToOneAssociation association);
- 
+
     Naked execute(Action action, Naked[] parameters);
 
     NakedObject getAssociation(OneToOneAssociation field);
@@ -25,7 +27,7 @@ public interface NakedObject extends NakedReference {
 
     NakedObjectField[] getVisibleFields();
 
-    void initAssociation(NakedObjectAssociation field, NakedObject associatedObject);
+    void initAssociation(NakedObjectField field, NakedObject associatedObject);
 
     void initAssociation(OneToManyAssociation association, NakedObject[] instances);
 
@@ -33,23 +35,23 @@ public interface NakedObject extends NakedReference {
 
     boolean isEmpty(NakedObjectField field);
 
-    void setAssociation(NakedObjectAssociation field, NakedObject associatedObject);
-
-    void setValue(OneToOneAssociation field, Object object);
-
-    
-    
-    Consent isValid(OneToOneAssociation field, NakedValue nakedValue);
+    Consent isValid(Action action, Naked[] parameters);
 
     Consent isValid(OneToOneAssociation field, NakedObject nakedObject);
 
-    Consent canAdd(OneToManyAssociation field, NakedObject nakedObject);
-
-    Consent isValid(Action action, Naked[] parameters);
-
-    Consent isVisible(NakedObjectField field);
+    Consent isValid(OneToOneAssociation field, NakedValue nakedValue);
 
     Consent isVisible(Action action);
+
+    Consent isVisible(NakedObjectField field);
+    
+    Consent isUsable(NakedObjectField field);
+    
+    Consent isUsable(Action action);
+
+    void setAssociation(NakedObjectField field, NakedObject associatedObject);
+
+    void setValue(OneToOneAssociation field, Object object);
 }
 
 /*

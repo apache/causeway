@@ -1,6 +1,5 @@
 package org.nakedobjects.object;
 
-import org.nakedobjects.object.control.Consent;
 
 
 public interface NakedObjectField extends NakedObjectMember {
@@ -26,11 +25,6 @@ public interface NakedObjectField extends NakedObjectMember {
      * therefore not be editable nor persisted.
      */
     boolean isDerived();
-
-    /**
-     * Determines if this field is editable.
-     */
-    Consent isEditable(NakedObject inObject);
 
     boolean isEmpty(NakedObject adapter);
 

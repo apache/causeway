@@ -66,7 +66,7 @@ public class DummyOneToManyAssociation implements NakedObjectField {
         return null;
     }
 
-    public String getLabel() {
+    public String getName() {
         return null;
     }
 

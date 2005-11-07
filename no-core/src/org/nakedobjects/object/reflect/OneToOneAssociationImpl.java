@@ -3,13 +3,14 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.ToString;
 
 
-public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation implements OneToOneAssociation {
+public class OneToOneAssociationImpl extends AbstractNakedObjectField implements OneToOneAssociation {
     private final OneToOnePeer reflectiveAdapter;
 
     public OneToOneAssociationImpl(String className, String fieldName, NakedObjectSpecification specification, OneToOnePeer association) {
@@ -47,7 +48,7 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
      * 
      * @see #getId()
      */
-    public String getLabel() {
+    public String getName() {
         String label = reflectiveAdapter.getName();
         return label == null ? defaultLabel : label;
     }
@@ -113,16 +114,16 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
     
     
     
-    public Consent validValue(NakedObject inObject, NakedValue value) {
+    public Consent isValueValid(NakedObject inObject, NakedValue value) {
         return reflectiveAdapter.validValue(inObject, value);
     }
 
-    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+    public Consent isAssociationValid(NakedObject inObject, NakedObject value) {
         return reflectiveAdapter.validAssociation(inObject, value);
     }
 
-    public Consent isEditable(NakedObject inObject) {
-        return reflectiveAdapter.isEditable(inObject);
+    public Consent isUsable(NakedObject inObject) {
+        return reflectiveAdapter.isUsable(inObject);
     }
 
     public String getDescription() {
@@ -133,8 +134,8 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectAssociation impl
         return reflectiveAdapter.isVisible(target);
     }
 
-    public boolean isAccessible() {
-        return reflectiveAdapter.isAccessible();
+    public boolean isAuthorised() {
+        return reflectiveAdapter.isAuthorised(NakedObjects.getCurrentSession());
     }
     
 }

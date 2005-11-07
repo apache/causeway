@@ -74,11 +74,9 @@ public interface Action extends NakedObjectMember {
 
     int getParameterCount();
 
-    Action.Type getActionType();
+    Action.Type getType();
 
-    Action.Target getActionTarget();
-
-    Object getExtension(Class cls);
+    Action.Target getTarget();
 
     /**
      * Returns true if the represented action returns something, else returns
@@ -86,32 +84,17 @@ public interface Action extends NakedObjectMember {
      */
     boolean hasReturn();
 
-    NakedObjectSpecification[] parameters();
+    NakedObjectSpecification[] parameterTypes();
 
     Naked[] parameterStubs();
 
     NakedObjectSpecification getReturnType();
 
-    /** @deprecated */
-    ActionParameterSet getParameters(NakedObject object);
-
     Naked execute(final NakedObject target, final Naked[] parameters);
+        
+    Consent hasValidParameters(NakedObject object, Naked[] parameters);
     
-    
-    
-
-    
-    Consent invokable(NakedObject target, Naked[] parameters);
-    
-    Consent validParameters(NakedObject object, Naked[] parameters);
-    
-    String[] parameterLabels();
-    
-    boolean[] mandatoryParameters();
-    
-    Object[] defaultParameters();
-    
-    
+    ActionParameterSet getParameters(NakedObject object);
 }
 
 /*

@@ -78,14 +78,14 @@ public class ActionTest extends NakedObjectTestCase {
     }
 
     public void testLabel() {
-        assertEquals(ACTION_NAME, action.getLabel());
+        assertEquals(ACTION_NAME, action.getName());
         
         actionPeer.setupLabel(ACTION_LABEL);
 //        MockHint hint = new MockHint();
 //        hint.setupName(ACTION_LABEL);
 //        actionPeer.setupHint(hint);
         
-        assertEquals(ACTION_LABEL, action.getLabel());
+        assertEquals(ACTION_LABEL, action.getName());
     }
 
     public void testName() {

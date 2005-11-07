@@ -3,7 +3,9 @@ package test.org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Session;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.utility.UnexpectedCallException;
@@ -32,20 +34,12 @@ public class TestPojoReferencePeer implements OneToOnePeer {
     }
 
 
-    public Hint getHint(MemberIdentifier identifier, NakedObject object, Naked value) {
-        return null;
-    }
-
     public MemberIdentifier getIdentifier() {
         return null;
     }
 
     public NakedObjectSpecification getType() {
         return null;
-    }
-
-    public boolean hasHint() {
-        return false;
     }
 
     public void initAssociation(NakedObject inObject, NakedObject associate) {
@@ -71,22 +65,48 @@ public class TestPojoReferencePeer implements OneToOnePeer {
         return false;
     }
 
-    public void setAssociation(NakedObject inObject, NakedObject associate) {
+    public void addElement(NakedObject inObject, NakedObject associate) {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
 
-        setAssociation(inObject, associate);
+        ((TestPojo) inObject.getObject()).setReference(associate.getObject());
     }
 
     public void setValue(NakedObject inObject, Object associate) {
         throw new UnexpectedCallException();
     }
 
-    private void setAssociation(NakedObject inObject, NakedObject associate) {
-        ((TestPojo) inObject.getObject()).setReference(associate.getObject());
-    }
-
     public boolean isObject() {
         return false;
+    }
+
+    public void setAssociation(NakedObject inObject, NakedObject associate) {}
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+        return null;
+    }
+
+    public Consent validValue(NakedObject inObject, NakedValue value) {
+        return null;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
+
+    public boolean isAuthorised(Session session) {
+        return false;
+    }
+
+    public Consent isUsable(NakedObject target) {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
     }
 }
 

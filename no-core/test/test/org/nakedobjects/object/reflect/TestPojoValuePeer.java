@@ -3,6 +3,9 @@ package test.org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedValue;
+import org.nakedobjects.object.Session;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
@@ -77,16 +80,40 @@ public class TestPojoValuePeer implements OneToOnePeer {
     public void setValue(NakedObject inObject, Object associate) {
         Assert.assertTrue(inObject.getObject()  instanceof TestPojo);
 
-        setValue(inObject, associate);
-    }
-
-    private void setValue(NakedObject inObject, Object associate) {
         int intValue = ((Integer) associate).intValue();
         ((TestPojo) inObject.getObject()).setValue(intValue);
     }
 
     public boolean isObject() {
         return false;
+    }
+
+    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+        return null;
+    }
+
+    public Consent validValue(NakedObject inObject, NakedValue value) {
+        return null;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public String getName() {
+        return null;
+    }
+
+    public boolean isAuthorised(Session session) {
+        return false;
+    }
+
+    public Consent isUsable(NakedObject target) {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
     }
 }
 
