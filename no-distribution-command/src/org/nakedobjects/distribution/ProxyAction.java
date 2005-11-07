@@ -64,7 +64,7 @@ public final class ProxyAction extends AbstractActionPeer {
     }
 
     private Data[] parameterValues(Naked[] parameters) {
-        NakedObjectSpecification[] parameterTypes = parameterTypes();
+        NakedObjectSpecification[] parameterTypes = getParameterTypes();
         Data parameterObjectData[] = new Data[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
             Naked parameter = parameters[i];

@@ -4,7 +4,6 @@ import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -41,8 +40,8 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request clearAssociation " + fieldIdentifier + " on " + target + " of " + associated+ " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
-        NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAccessible() || association.isEditable(inObject).isVetoed()) {
+        NakedObjectField association = (NakedObjectField) inObject.getSpecification().getField(fieldIdentifier);
+        if (! association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.clearAssociation(association, associate);
@@ -197,8 +196,8 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request setAssociation " + fieldIdentifier + " on " +target + " with " + associated + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
-        NakedObjectAssociation association = (NakedObjectAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAccessible() || association.isEditable(inObject).isVetoed()) {
+        NakedObjectField association = (NakedObjectField) inObject.getSpecification().getField(fieldIdentifier);
+        if (! association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.setAssociation(association, associate);
@@ -216,7 +215,7 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAccessible() || association.isEditable(inObject).isVetoed()) {
+        if (! association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
 

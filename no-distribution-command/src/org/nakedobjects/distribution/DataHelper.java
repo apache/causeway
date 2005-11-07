@@ -4,7 +4,6 @@ import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -149,7 +148,7 @@ public class DataHelper {
                     object.initValue((OneToOneAssociation) fields[i], fieldContent[i] instanceof NullData ? null
                             : ((ValueData) fieldContent[i]).getValue());
                 } else {
-                    NakedObjectAssociation field = (NakedObjectAssociation) fields[i];
+                    OneToOneAssociation field = (OneToOneAssociation) fields[i];
                     NakedObject associate;
                     if (fieldContent[i] instanceof NullData) {
                         associate = null;
