@@ -27,6 +27,14 @@ public abstract class JavaMember {
         return aboutMethod;
     }
 
+    public Object getExtension(Class cls) {
+        return null;
+    }
+    
+    public Class[] getExtensions() {
+        return new Class[0];
+    }
+    
     /**
      * Returns true if an about method is defined for this Member.
      */

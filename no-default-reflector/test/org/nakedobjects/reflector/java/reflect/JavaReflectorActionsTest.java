@@ -53,8 +53,8 @@ public class JavaReflectorActionsTest extends TestCase {
     public void testObjectDefaultActionsWithOneParameter() throws Exception {
         Action action = actions[4];
         assertEquals("Two", action.getId());
-        assertEquals(Action.DEFAULT, action.getActionTarget());
-        assertEquals(Action.DEBUG, action.getActionType());
+        assertEquals(Action.DEFAULT, action.getTarget());
+        assertEquals(Action.DEBUG, action.getType());
         assertEquals(0, action.getParameterCount());
         //   assertEquals(String.class.getName(),
         // action.returnType().getFullName());
@@ -63,8 +63,8 @@ public class JavaReflectorActionsTest extends TestCase {
     public void testObjectDefaultActionsWithZeroParameters() throws Exception {
         Action action = actions[1];
         assertEquals("One", action.getId());
-        assertEquals(Action.DEFAULT, action.getActionTarget());
-        assertEquals(Action.USER, action.getActionType());
+        assertEquals(Action.DEFAULT, action.getTarget());
+        assertEquals(Action.USER, action.getType());
         assertEquals(null, action.getReturnType());
         assertEquals(0, action.getParameterCount());
     }
@@ -72,13 +72,13 @@ public class JavaReflectorActionsTest extends TestCase {
     public void testObjectLocalAction() throws NakedObjectSpecificationException {
         Action action = actions[0];
         assertEquals("RunOnClient", action.getId());
-        assertEquals(Action.LOCAL, action.getActionTarget());
+        assertEquals(Action.LOCAL, action.getTarget());
     }
 
     public void testObjectRemoteAction() throws NakedObjectSpecificationException {
         Action action = actions[2];
         assertEquals("RunOnServer", action.getId());
-        assertEquals(Action.REMOTE, action.getActionTarget());
+        assertEquals(Action.REMOTE, action.getTarget());
     }
 
 }

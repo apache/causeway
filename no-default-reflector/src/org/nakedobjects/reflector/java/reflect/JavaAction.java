@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedError;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.DefaultHint;
@@ -155,7 +156,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }
 
-    public NakedObjectSpecification[] parameterTypes() {
+    public NakedObjectSpecification[] getParameterTypes() {
         Class[] cls = actionMethod.getParameterTypes();
         NakedObjectSpecification[] naked = new NakedObjectSpecification[cls.length];
         for (int i = 0; i < cls.length; i++) {
@@ -164,13 +165,13 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return naked;
     }
 
-    public NakedObjectSpecification returnType() {
+    public NakedObjectSpecification getReturnType() {
         Class returnType = actionMethod.getReturnType();
         boolean hasReturn = returnType != void.class && returnType != NakedError.class;
         return hasReturn ? specification(returnType) : null;
     }
     
-    public ActionParameterSet getParameters(NakedObject object, Naked[] parameters) {
+    public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
         Hint hint= getHint(getIdentifier(), object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;
@@ -197,35 +198,23 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return "JavaAction [name=" + actionMethod.getName()  + ",type=" + type.getName() + ",parameters=" + parameters + "]";
     }
 
-    public Consent invokable(NakedObject target, Naked[] parameters) {
+    public Consent isUsable(NakedObject target) {
         return Allow.DEFAULT;
     }
 
-    public Consent validParameters(NakedObject object, Naked[] parameters) {
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
         return getHint(null, object, parameters).canUse();
    }
-
-    public String[] parameterLabels() {
-        return null;
-    }
-
-    public boolean[] mandatoryParameters() {
-        return null;
-    }
-
-    public Object[] defaultParameters() {
-        return null;
-    }
 
     public String getDescription() {
         return "";
     }
 
     public Consent isVisible(NakedObject target) {
-        return getHint(null, target, new Naked[getParameterCount()]).canAccess();
+        return Allow.DEFAULT;
     }
 
-    public boolean isAccessible() {
+    public boolean isAuthorised(Session session) {
         return true;
     }
     

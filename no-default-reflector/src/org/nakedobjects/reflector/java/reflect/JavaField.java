@@ -3,6 +3,7 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 
 import java.lang.reflect.Method;
@@ -37,6 +38,14 @@ public abstract class JavaField extends JavaMember {
     
     public String getDescription() {
         return "";
+    }
+    
+    public boolean isMandatory() {
+        return false;
+    }
+
+    public boolean isAuthorised(Session session) {
+        return true;
     }
 }
 

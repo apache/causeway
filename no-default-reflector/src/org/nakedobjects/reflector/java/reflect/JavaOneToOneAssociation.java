@@ -312,7 +312,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
     }
     
 
-    public Consent isEditable(NakedObject target) {
+    public Consent isUsable(NakedObject target) {
         return getHint(target, null).canUse();
     }
 

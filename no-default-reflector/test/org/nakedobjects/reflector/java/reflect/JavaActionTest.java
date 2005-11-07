@@ -79,7 +79,7 @@ public class JavaActionTest extends TestCase {
     }
 
     public void testReturnType() {
-        assertNull(javaAction.returnType());
+        assertNull(javaAction.getReturnType());
     }
 
     public void testType() {

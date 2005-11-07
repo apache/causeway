@@ -69,7 +69,7 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
         }
     }
 
-    private Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject element, boolean add) {
+    private Hint getHint(NakedObject object, NakedObject element, boolean add) {
         if (hasHint()) {
             Method aboutMethod = getAboutMethod();
             try {
@@ -224,26 +224,23 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     
     
 
-    
-    
-    public Consent validToRemove(NakedObject container, NakedObject element) {
-      Hint about = getHint(null, container, element, false);
+    public Consent isUsable(NakedObject target) {
+        return getHint(target, null, true).canUse();
+    }
+    public Consent isRemoveValid(NakedObject container, NakedObject element) {
+      Hint about = getHint(container, element, false);
       Consent edit = about.canUse();
       return edit;
     }
     
-    public Consent validToAdd(NakedObject container, NakedObject element) {
-          Hint about = getHint(null, container, element, true);
+    public Consent isAddValid(NakedObject container, NakedObject element) {
+          Hint about = getHint(container, element, true);
           Consent edit = about.canUse();
           return edit;
     }
     
-    public Consent isEditable(NakedObject target) {
-        return getHint(null, target, null, true).canUse();
-    }
-
     public Consent isVisible(NakedObject target) {
-        return getHint(null, target, null, true).canAccess();
+        return getHint(target, null, true).canAccess();
     }
 
     public boolean isAccessible() {

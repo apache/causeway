@@ -74,7 +74,7 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         }
     }
 
-    private Hint getHint(MemberIdentifier identifier, NakedObject object, NakedObject element, boolean add) {
+    private Hint getHint(NakedObject object, NakedObject element, boolean add) {
         if (hasHint()) {
             Method aboutMethod = getAboutMethod();
             try {
@@ -194,6 +194,10 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
     }
     
 
+    public Consent isUsable(NakedObject target) {
+        return getHint(target, null, true).canUse();
+    }
+
     public void initOneToManyAssociation(NakedObject fromObject, NakedObject[] instances) {
         try {
             InternalCollection collection = (InternalCollection) getMethod.invoke(fromObject.getObject(), new Object[0]);
@@ -218,27 +222,18 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
    }
 
    
-    public Consent validToRemove(NakedObject container, NakedObject element) {
-        return getHint(null, container, element, false).canUse();
+    public Consent isRemoveValid(NakedObject container, NakedObject element) {
+        return getHint(container, element, false).canUse();
     }
 
-    public Consent validToAdd(NakedObject container, NakedObject element) {
-        return getHint(null, container, element, true).canUse();
+    public Consent isAddValid(NakedObject container, NakedObject element) {
+        return getHint(container, element, true).canUse();
     }
 
-    public Consent isEditable(NakedObject target) {
-        return getHint(null, target, null, true).canUse();
-    }
 
     public Consent isVisible(NakedObject target) {
-        return getHint(null, target, null, true).canAccess();
+        return getHint(target, null, true).canAccess();
     }
-
-    public boolean isAccessible() {
-        return true;
-    }
-   
-
 }
 
 /*

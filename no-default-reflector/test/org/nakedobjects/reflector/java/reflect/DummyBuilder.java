@@ -7,12 +7,11 @@ import org.nakedobjects.object.reflect.OneToManyPeer;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 import org.nakedobjects.object.reflect.ReflectionPeerBuilder;
 
-import test.org.nakedobjects.object.DummyAction;
 import test.org.nakedobjects.object.DummyOneToManyAssociation;
 import test.org.nakedobjects.object.DummyOneToOneAssociation;
 
 
-public class DummyBuilder extends ReflectionPeerBuilder {
+class DummyBuilder extends ReflectionPeerBuilder {
     public Action createAction(String className, ActionPeer actionPeer) {
         return new DummyAction(actionPeer);
     }
