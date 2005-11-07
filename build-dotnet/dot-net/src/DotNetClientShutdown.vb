@@ -1,6 +1,6 @@
 Imports System
 
-Imports org.nakedobjects.viewer
+Imports org.nakedobjects.event
 
 namespace org.nakedobjects.dotnet
 
@@ -8,7 +8,7 @@ namespace org.nakedobjects.dotnet
     Public Class DotNetClientShutdown
         Implements ObjectViewingMechanismListener
 
-        Public Sub viewerClosing() Implements org.nakedobjects.viewer.ObjectViewingMechanismListener.viewerClosing
+        Public Sub viewerClosing() Implements ObjectViewingMechanismListener.viewerClosing
             Environment.Exit(0)
         End Sub
     End Class

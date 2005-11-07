@@ -8,7 +8,7 @@ Imports org.apache.log4j
 
 Imports org.nakedobjects.utility
 
-Imports org.nakedobjects.viewer
+Imports org.nakedobjects.event
 Imports org.nakedobjects.viewer.skylark
 Imports org.nakedobjects.viewer.skylark.special
 Imports org.nakedobjects.object
