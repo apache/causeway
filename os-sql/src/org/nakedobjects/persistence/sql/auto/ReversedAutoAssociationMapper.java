@@ -55,7 +55,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 			Oid oid = recreateOid(rs, nakedClass, elementIdColumn);
 			NakedObject element = getAdapter(nakedClass, oid);
 			LOG.debug("  element  " + element);
-			parent.setAssociation((NakedObjectAssociation) field, element);
+			parent.addElement((NakedObjectAssociation) field, element);
 		}
         rs.close();
 	}

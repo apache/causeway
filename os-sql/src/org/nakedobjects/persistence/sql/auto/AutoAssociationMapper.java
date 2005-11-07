@@ -66,7 +66,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
                 Oid oid = recreateOid(rs, elementCls, elementIdColumn);
                 NakedObject element = mapper.getAdapter(elementCls, oid);
                 LOG.debug("  element  " + element.getOid());
-                parent.initAssociation((NakedObjectAssociation) field, element);
+                parent.initElement((NakedObjectAssociation) field, element);
             }
             rs.close();
             NakedObjects.getObjectLoader().end(collection);
