@@ -5,7 +5,6 @@ import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -318,7 +317,7 @@ public class XmlObjectStore implements NakedObjectStore {
                 } else {
                     adapter = getObject(elementOid, null);
                 }
-                object.initAssociation((NakedObjectAssociation) field, adapter);
+                object.initAssociation((NakedObjectField) field, adapter);
 
                 /*
                  * if (loadedObjects().isLoaded(elementOid)) {
