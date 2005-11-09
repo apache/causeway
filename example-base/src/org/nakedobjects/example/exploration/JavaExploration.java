@@ -1,5 +1,6 @@
 package org.nakedobjects.example.exploration;
 
+import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.fixture.Fixture;
 import org.nakedobjects.object.help.HelpManagerAssist;
@@ -26,7 +27,6 @@ import org.nakedobjects.utility.AboutNakedObjects;
 import org.nakedobjects.utility.SplashWindow;
 import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.configuration.PropertiesFileLoader;
-import org.nakedobjects.viewer.ObjectViewingMechanismListener;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 
