@@ -345,7 +345,7 @@
         <mkdir dir="e:/transfer" failonerror="false"/>
         <copy todir="e:/transfer" failonerror="false">
 			<fileset basedir="${release-dir}">
-				<include name="nakedobjects.net-${build.version}-${build.number}-dotnet.zip"/>
+				<include name="nakedobjects-${build.version}-${build.number}-dotnet.zip"/>
 			</fileset>
 		</copy>
     </target>
