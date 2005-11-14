@@ -35,13 +35,25 @@ public class AboutView extends AbstractView {
             canvas.drawIcon(image, padding, padding);
         }
         int line = padding + Style.LABEL.getAscent();
-        canvas.drawText(AboutNakedObjects.getName(), left, line, Style.BLACK, Style.TITLE);
+        // application detail
+        canvas.drawText(AboutNakedObjects.getApplicationName(), left, line, Style.BLACK, Style.TITLE);
         line += Style.TITLE.getLineHeight();
-        canvas.drawText(AboutNakedObjects.getVersion(), left, line, Style.BLACK, Style.LABEL);
+        canvas.drawText(AboutNakedObjects.getFrameworkCopyrightNotice(), left, line, Style.BLACK, Style.LABEL);
         line += Style.LABEL.getLineHeight();
-        canvas.drawText(AboutNakedObjects.getBuildId(), left, line, Style.BLACK, Style.LABEL);
+        canvas.drawText(AboutNakedObjects.getApplicationVersion(), left, line, Style.BLACK, Style.LABEL);
+        line += 2 * Style.LABEL.getLineHeight();
+        
+        // framework details
+        canvas.drawText(AboutNakedObjects.getFrameworkName(), left, line, Style.BLACK, Style.TITLE);
+        line += Style.TITLE.getLineHeight();
+        canvas.drawText(AboutNakedObjects.getFrameworkCopyrightNotice(), left, line, Style.BLACK, Style.LABEL);
         line += Style.LABEL.getLineHeight();
-        canvas.drawText(AboutNakedObjects.getCopyrightNotice(), left, line, Style.BLACK, Style.LABEL);
+        canvas.drawText(frameworkVersion(), left, line, Style.BLACK, Style.LABEL);
+
+    }
+
+    private String frameworkVersion() {
+        return AboutNakedObjects.getFrameworkVersion() + " ("+ AboutNakedObjects.getFrameworkBuild() + ")";
     }
     
     private boolean showingImage() {
@@ -51,11 +63,18 @@ public class AboutView extends AbstractView {
     public Size getRequiredSize() {
         int height = Style.TITLE.getAscent();
         height += Style.LABEL.getLineHeight();
+        height += 2 * Style.LABEL.getLineHeight();
+        
+        int width = Style.TITLE.stringWidth(AboutNakedObjects.getFrameworkName());
+        width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getFrameworkCopyrightNotice()));
+        width = Math.max(width, Style.LABEL.stringWidth(frameworkVersion()));
+        
+        height += Style.TITLE.getAscent();
         height += Style.LABEL.getLineHeight();
         
-        int width = Style.TITLE.stringWidth(AboutNakedObjects.getName());
-        width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getName()));
-        width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getCopyrightNotice()));
+        width = Math.max(width, Style.TITLE.stringWidth(AboutNakedObjects.getApplicationName()));
+        width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getApplicationCopyrightNotice()));
+        width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getApplicationVersion()));
         
         if(showingImage()) {
             height = Math.max(height, image.getHeight());
