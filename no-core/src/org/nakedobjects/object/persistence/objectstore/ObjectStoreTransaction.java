@@ -95,9 +95,10 @@ public class ObjectStoreTransaction implements Transaction {
     private PersistenceCommand getCommand(Class commandClass, NakedObject onObject) {
         for (Enumeration e = commands.elements(); e.hasMoreElements();) {
             PersistenceCommand command = (PersistenceCommand) e.nextElement();
-            boolean correctType = commandClass.isAssignableFrom(command.getClass());
-            if (correctType && command.onObject().equals(onObject)) {
-                return command;
+            if (command.onObject().equals(onObject)) {
+                if(commandClass.isAssignableFrom(command.getClass())) {
+                    return command;
+                }
             }
         }
         return null;
