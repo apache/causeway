@@ -4,7 +4,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.Oid;
 
 import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -18,7 +17,6 @@ import org.apache.log4j.Logger;
  */
 class TransientObjectStoreInstances {
     protected final Vector objectInstances = new Vector();
-    protected final Hashtable titleIndex = new Hashtable();
 
     protected void finalize() throws Throwable {
         super.finalize();
@@ -50,12 +48,10 @@ class TransientObjectStoreInstances {
     }
     
     public void save(NakedObject object) {
-        titleIndex.put(object.titleString().toLowerCase(), object.getOid());
     }
 
     public void shutdown() {
         objectInstances.removeAllElements();
-        titleIndex.clear();
     }
 
 }
