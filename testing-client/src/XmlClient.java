@@ -2,8 +2,8 @@
 import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.distribution.DistributionLogger;
-import org.nakedobjects.distribution.ProxyPersistor;
 import org.nakedobjects.distribution.ProxyPeerFactory;
+import org.nakedobjects.distribution.ProxyPersistor;
 import org.nakedobjects.distribution.java.JavaDataFactory;
 import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.NakedObjectPersistor;
@@ -26,7 +26,6 @@ import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 import exploration.Context;
@@ -49,10 +48,7 @@ public class XmlClient {
         PropertyConfigurator.configure(configuration.getProperties("log4j"));
         nakedObjects.setConfiguration(configuration);
 
-        Logger log = Logger.getLogger("Naked Objects");
-        log.info(AboutNakedObjects.getName());
-        log.info(AboutNakedObjects.getVersion());
-        log.info(AboutNakedObjects.getBuildId());
+        AboutNakedObjects.logVersion();
 
         SplashWindow splash = null;
         boolean noSplash = configuration.getBoolean("nosplash", false);
