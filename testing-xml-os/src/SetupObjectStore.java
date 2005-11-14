@@ -24,7 +24,6 @@ import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.logging.Logger;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
@@ -49,10 +48,7 @@ public class SetupObjectStore {
         NakedObjectsClient nakedObjects = new NakedObjectsClient();
         nakedObjects.setConfiguration(configuration);
         
-        Logger log = Logger.getLogger("Naked Objects");
-        log.info(AboutNakedObjects.getName());
-        log.info(AboutNakedObjects.getVersion());
-        log.info(AboutNakedObjects.getBuildId());
+        AboutNakedObjects.logVersion();
 
         SplashWindow splash = null;
         boolean noSplash =configuration.getBoolean("nosplash", false);
