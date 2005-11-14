@@ -3,8 +3,8 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="var" path="MOCKOBJECTS"/>
 	<classpathentry kind="var" path="LOG4J"/>
 	<classpathentry sourcepath="JUNIT_SRC" kind="var" path="JUNIT"/>
+	<classpathentry kind="var" path="EASYMOCK"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
