@@ -3,6 +3,7 @@ package exploration;
 import org.nakedobjects.example.exploration.JavaExploration;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
+import org.nakedobjects.utility.AboutNakedObjects;
 
 import fixtures.BookingsFixture;
 import fixtures.CitiesFixture;
@@ -12,6 +13,10 @@ import fixtures.ClassesFixture;
 public class TestingExploration {
 
     public static void main(String[] args) {
+        AboutNakedObjects.setApplicationCopyrightNotice("Copywrite 2005");
+        AboutNakedObjects.setApplicationName("ECS Testing Applicaiton");
+        AboutNakedObjects.setApplicationVersion("Version 3");
+        
         JavaExploration e = new JavaExploration();
 
         ((ObjectStorePersistor) NakedObjects.getObjectPersistor()).setCheckObjectsForDirtyFlag(true);

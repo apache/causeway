@@ -209,6 +209,23 @@ public class ECSAcceptanceTest extends JavaAcceptanceTestCase {
         customer.getField("home");
         */
     }
+    
+    public void testUnusableMethod() {
+        TestClass testClass = getTestClass(Customer.class.getName());
+        TestObject customer = 
+            testClass.findInstance("Harry");
+        
+      // TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
+       //TestObject location = customer.getField("locations", "234 E 42nd Street, New York");
+       // customer.associate("home", location);
+        
+        //customer.assertFieldContains("home", location);
+        
+        //customer.getField("home");
+        
+       customer.assertActionUnusable("create booking", new TestNaked[6]);
+    }
+
 
     public void testCollectionFromAction() {
         testBasicBooking();

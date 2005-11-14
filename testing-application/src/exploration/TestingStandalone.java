@@ -10,13 +10,11 @@ import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.ObjectPesistorLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.persistence.objectstore.ObjectStoreLogger;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
-import org.nakedobjects.object.reflect.internal.NullSpecifcationLoader;
-import org.nakedobjects.object.reflect.internal.NullSpecification;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -27,8 +25,8 @@ import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
 import org.nakedobjects.reflector.java.reflect.JavaSpecificationLoader;
 import org.nakedobjects.utility.AboutNakedObjects;
 import org.nakedobjects.utility.SplashWindow;
-import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.configuration.ConfigurationException;
+import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 import org.nakedobjects.viewer.skylark.SkylarkViewer;
 import org.nakedobjects.viewer.skylark.ViewUpdateNotifier;
@@ -60,10 +58,7 @@ public class TestingStandalone {
         }
         PropertyConfigurator.configure(configuration.getProperties("log4j"));
 
-        Logger log = Logger.getLogger("Naked Objects");
-        log.info(AboutNakedObjects.getName());
-        log.info(AboutNakedObjects.getVersion());
-        log.info(AboutNakedObjects.getBuildId());
+        AboutNakedObjects.logVersion();
 
         setUpLocale();
         

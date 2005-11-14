@@ -10,6 +10,7 @@ import bom.Booking;
 import bom.City;
 import bom.CreditCard;
 import bom.Customer;
+import bom.Location;
 import bom.Telephone;
 import fixtures.BookingsFixture;
 import fixtures.CitiesFixture;
@@ -143,6 +144,26 @@ public class ECSAcceptanceTestUsingFixtures extends JavaAcceptanceTestCase {
         customer.assertFieldContains("Locations", dropoff);
     }
 
+    public void testUnusableAction() {
+        TestObject location = getTestClass(Location.class.getName()).findInstance("234 E 42nd Street");
+        TestObject location2 = getTestClass(Location.class.getName()).findInstance("Office");
+
+        location.assertActionUnusable("new booking", location2);
+    }
+    
+    public void testUsableAction() {
+        TestObject location = getTestClass(Location.class.getName()).findInstance("234 E 42nd Street");
+        TestObject location2 = getTestClass(Location.class.getName()).findInstance("JFK Airport");
+
+        location.assertActionUsable("new booking", location2);
+    }
+    
+    public void testAssertInvaldEnrty() {
+        TestObject customer = getTestClass(Customer.class.getName()).findInstance("Pawson");
+        TestObject card = (TestObject) customer.getField("Preferred Payment Method");
+        card.assertFieldEntryInvalid("Number", "12343");
+    }
+    
     public void testReuseBooking() {
         firstStep("Retrieve the customer object.");
         
