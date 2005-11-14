@@ -28,7 +28,7 @@ public class RemoteLogger {
         String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") "
                 + System.getProperty("os.version");
         String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
-        String version = AboutNakedObjects.getVersion() + " " + AboutNakedObjects.getBuildId();
+        String version = AboutNakedObjects.getFrameworkVersion() + " " + AboutNakedObjects.getFrameworkBuild();
         
         try {
             URL url = proxyAddress == null ? new URL(URL_SPEC) : new URL("http", proxyAddress, proxyPort, URL_SPEC);

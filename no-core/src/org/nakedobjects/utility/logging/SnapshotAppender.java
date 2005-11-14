@@ -88,7 +88,7 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
             String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") "
                     + System.getProperty("os.version");
             String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
-            String version = AboutNakedObjects.getVersion() + " " + AboutNakedObjects.getBuildId();
+            String version = AboutNakedObjects.getFrameworkVersion() + " " + AboutNakedObjects.getFrameworkBuild();
 
             LoggingEvent infoEvent = new LoggingEvent("", Logger.getRootLogger(), Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system
                     + "\n\t" + java + "\n\t" + version, null);
