@@ -47,7 +47,8 @@ public class TestObjectImplFieldTest extends TestCase {
 
         object = new MockNakedObject();
         target = new TestObjectImplExt(object, factory);
-        object.setupIsUsable(Veto.DEFAULT);
+    //    object.setupIsUsable(Veto.DEFAULT);
+        object.setupIsUsable(Allow.DEFAULT);
         object.setupIsVisible(Allow.DEFAULT);
 //        hint.setupCanAccess(new NoOpAllow());
    //     hint.setupCanUse(new NoOpAllow());
@@ -63,8 +64,10 @@ public class TestObjectImplFieldTest extends TestCase {
         DummyNakedObjectSpecification fieldSpec = new DummyNakedObjectSpecification();
 
         DummyNakedObjectSpecification objectSpec = new DummyNakedObjectSpecification();
-        OneToOneAssociation field1 = new OneToOneAssociationImpl("cls", "one", fieldSpec, new DummyOneToOnePeer());
-        OneToOneAssociation field2 = new OneToOneAssociationImpl("cls", "two", fieldSpec, new DummyOneToOnePeer());
+        DummyOneToOnePeer peerOne = new DummyOneToOnePeer();
+        peerOne.setupVisible(true);
+        OneToOneAssociation field1 = new OneToOneAssociationImpl("cls", "one", fieldSpec, peerOne);
+        OneToOneAssociation field2 = new OneToOneAssociationImpl("cls", "two", fieldSpec, peerOne);
         objectSpec.setupFields(new NakedObjectField[] { field1, field2 });
         object.setupSpecification(objectSpec);
     
@@ -183,6 +186,8 @@ public class TestObjectImplFieldTest extends TestCase {
     
     
     public void testInvokeAction() {
+        object.setupIsValid(Allow.DEFAULT);
+        
         target.expected.addExpectedMethod("getAction");
         target.expected.addExpectedParameter("testaction");
 

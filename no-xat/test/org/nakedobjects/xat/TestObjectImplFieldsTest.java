@@ -15,10 +15,7 @@ import test.org.nakedobjects.object.DummyAction;
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
 import test.org.nakedobjects.object.MockNakedObject;
 import test.org.nakedobjects.object.TestSystem;
-import test.org.nakedobjects.object.control.NoOpAllow;
-import test.org.nakedobjects.object.control.NoOpVeto;
 import test.org.nakedobjects.object.reflect.DummyActionPeer;
-import test.org.nakedobjects.object.reflect.DummyField;
 import test.org.nakedobjects.object.reflect.DummyOneToOnePeer;
 
 
@@ -182,6 +179,7 @@ public class TestObjectImplFieldsTest extends TestCase {
     public void testAssertActionUsable() {
         target.setupAction(new DummyAction());
         object.setupIsUsable(Allow.DEFAULT);
+        object.setupIsVisible(Allow.DEFAULT);
         object.setupIsValid(Allow.DEFAULT);
         
         expectCallToGetAction(false, 0);
@@ -192,6 +190,7 @@ public class TestObjectImplFieldsTest extends TestCase {
 
     public void testAssertActionUsableFails() {
         target.setupAction(new DummyAction());
+        object.setupIsVisible(Allow.DEFAULT);
         object.setupIsUsable(Veto.DEFAULT);
         
         expectCallToGetAction(false, 0);
@@ -249,6 +248,8 @@ public class TestObjectImplFieldsTest extends TestCase {
     public void testAssertFieldInvisible() {
         new TestSystem().init();
         
+        object.setupIsVisible(Veto.DEFAULT);
+
         expectCallToFieldFor();
         target.assertFieldInvisible("Field Name");
 

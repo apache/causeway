@@ -7,7 +7,6 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NameConvertor;
 
 
@@ -121,14 +120,17 @@ abstract class AbstractTestObject {
 
     private void assertActionUnusable(String name, Action action, TestNaked[] parameters) {
         assertTrue("Action cannot be seen (by this user): " + action.getName(), action.isAuthorised());
-        assertTrue("Action cannot be seen (in current state): " + action.getName(), getForNakedObject().isVisible(action).isAllowed());
+//        assertTrue("Action cannot be seen (in current state): " + action.getName(), getForNakedObject().isVisible(action).isAllowed());
 
-        Consent canUse = getForNakedObject().isUsable(action);
-        if (canUse.isAllowed()) {
-            Naked[] parameterObjects = nakedObjects(parameters);
-            Consent canExecute = getForNakedObject().isValid(action, parameterObjects);
-            if (canExecute.isAllowed()) {
-                throw new NakedAssertionFailedError("Action '" + name + "' is usable and executable: " + canExecute.getReason());
+        if (getForNakedObject().isVisible(action).isAllowed()) {
+            Consent canUse = getForNakedObject().isUsable(action);
+            if (canUse.isAllowed()) {
+                Naked[] parameterObjects = nakedObjects(parameters);
+                Consent canExecute = getForNakedObject().isValid(action, parameterObjects);
+                if (canExecute.isAllowed()) {
+                    throw new NakedAssertionFailedError("Action '" + name + "' is usable and executable: "
+                            + canExecute.getReason());
+                }
             }
         }
 
@@ -148,7 +150,8 @@ abstract class AbstractTestObject {
 
     protected void assertActionUsable(String name, Action action, final TestNaked[] parameters) {
         assertTrue("Action cannot be seen (by this user): " + action.getName(), action.isAuthorised());
-        assertTrue("Action cannot be seen (in current state): " + action.getName(), getForNakedObject().isUsable(action).isAllowed());
+        assertTrue("Action cannot be seen (in current state): " + action.getName(), getForNakedObject().isVisible(action).isAllowed());
+        assertTrue("Action is not usable: " + action.getName(), getForNakedObject().isUsable(action).isAllowed());
         
         Naked[] paramaterObjects = nakedObjects(parameters);
         Consent canUse =  getForNakedObject().isValid(action, paramaterObjects);

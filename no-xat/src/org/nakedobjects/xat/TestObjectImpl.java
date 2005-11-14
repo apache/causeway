@@ -475,8 +475,13 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertFieldModifiable(String fieldName, NakedObjectField field) {
+        assertFieldVisible(field);
+        
+//        assertTrue("Field '" + fieldName + "' in " + getForNaked() + " is invisible", field.isAuthorised());
+        
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = field.isUsable(getForNakedObject()).isAllowed();
+//        boolean canUse = field.isUsable(getForNakedObject()).isAllowed();
+        boolean canUse = getForNakedObject().isUsable(field).isAllowed();
         assertTrue("Field '" + fieldName + "' in " + getForNaked() + " is unmodifiable", canUse);
     }
 
@@ -493,8 +498,8 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     }
 
     private void assertFieldVisible(NakedObjectField field) {
-        boolean canAccess = field.isAuthorised() && getForNakedObject().isVisible(field).isAllowed();
-        assertTrue("Field '" + field.getId() + "' is invisible", canAccess);
+        boolean isVisible = field.isAuthorised() && getForNakedObject().isVisible(field).isAllowed();
+        assertTrue("Field '" + field.getId() + "' is invisible", isVisible);
     }
 
     public void assertFirstElementInField(String fieldName, String expected) {
@@ -812,7 +817,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     protected NakedObjectField fieldAccessorFor(final String fieldName) {
         NakedObject nakedObject = (NakedObject) getForNaked();
  //       NakedObjects.getObjectManager().resolveImmediately(nakedObject);
-        NakedObjectField att = (NakedObjectField) (nakedObject).getSpecification().getField(simpleName(fieldName));
+        NakedObjectField att = (NakedObjectField) nakedObject.getSpecification().getField(simpleName(fieldName));
         if (att == null) {
             throw new NakedAssertionFailedError("No field called '" + fieldName + "' in " + getForNaked().getClass().getName());
         } else {
