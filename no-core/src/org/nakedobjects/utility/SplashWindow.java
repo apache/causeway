@@ -1,7 +1,5 @@
 package org.nakedobjects.utility;
 
-
-
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -63,8 +61,7 @@ public class SplashWindow extends Window implements Runnable {
     }
 
     /**
-     * Get an Image object from the jar/zip file that this class was loaded
-     * from.
+     * Get an Image object from the jar/zip file that this class was loaded from.
      */
     private static Image loadAsResource(String ref) {
         URL url = SplashWindow.class.getResource("/" + DIRECTORY + ref);
@@ -96,11 +93,10 @@ public class SplashWindow extends Window implements Runnable {
     }
 
     /**
-     * Load a java.awt.Image object using the file name <code>name</code>.
-     * This method attempts to load the image from the jar/zip file this class
-     * was loaded from ie, your application, and then from the file system as a
-     * file if can't be found as a resource. If neither method works the default
-     * image is returned.
+     * Load a java.awt.Image object using the file name <code>name</code>. This method attempts to load the
+     * image from the jar/zip file this class was loaded from ie, your application, and then from the file
+     * system as a file if can't be found as a resource. If neither method works the default image is
+     * returned.
      * 
      * @see java.lang.Class#getResource(String)
      */
@@ -128,26 +124,35 @@ public class SplashWindow extends Window implements Runnable {
         logo = loadImage(LOGO_FILE);
 
         labelFont = new Font("SansSerif", Font.PLAIN, 9);
-        titleFont = new Font("SansSerif", Font.BOLD, 24);
+        titleFont = new Font("SansSerif", Font.BOLD, 11);
         FontMetrics labelMetrics = getFontMetrics(labelFont);
         FontMetrics titleMetrics = getFontMetrics(titleFont);
         labelLineHeight = (int) (labelMetrics.getHeight() * 1.05);
-        
-        int width;
+
+        int width = 0;
         int height = PADDING;
-        if(logo == null) {
-            width = titleMetrics.stringWidth(AboutNakedObjects.getName());
-            height += titleMetrics.getHeight();
-        } else {
-	        width = logo.getWidth(this);
-	        height += logo.getHeight(this);
-      }
+        if (logo != null) {
+            width = logo.getWidth(this);
+            height += logo.getHeight(this);
+        }
         height += PADDING;
-        
-        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getCopyrightNotice()));
+
+        width = Math.max(width, titleMetrics.stringWidth(AboutNakedObjects.getApplicationName()));
+        height += titleMetrics.getHeight();
+
+        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getApplicationCopyrightNotice()));
         height += labelLineHeight;
-            
-        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getVersion()));
+
+        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getApplicationVersion()));
+        height += labelLineHeight;
+
+        width = Math.max(width, titleMetrics.stringWidth(AboutNakedObjects.getFrameworkName()));
+        height += titleMetrics.getHeight();
+
+        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getFrameworkCopyrightNotice()));
+        height += labelLineHeight;
+
+        width = Math.max(width, labelMetrics.stringWidth(frameworkVersion()));
         height += labelLineHeight;
 
         height += PADDING * 2;
@@ -157,14 +162,14 @@ public class SplashWindow extends Window implements Runnable {
 
         this.height = height;
         this.width = width;
-        
+
         Dimension screen = getToolkit().getScreenSize();
         int x = (screen.width / 2) - (width / 2);
 
         if ((screen.width / screen.height) >= 2) {
             x = (screen.width / 4) - (width / 2);
         }
-        
+
         int y = (screen.height / 2) - (width / 2);
         setLocation(x, y);
         setBackground(Color.black);
@@ -176,44 +181,72 @@ public class SplashWindow extends Window implements Runnable {
     public void paint(Graphics g) {
         g.setColor(Color.gray);
         g.drawRect(0, 0, width - 1, height - 1);
-        
+
         if (logo != null) {
             g.drawImage(logo, PADDING, PADDING, this);
         } else {
-	        g.setFont(titleFont);
-	        FontMetrics fm = g.getFontMetrics();
-	        String name= AboutNakedObjects.getName();
-	        g.drawString(name, PADDING, PADDING + fm.getAscent());
+            g.setFont(titleFont);
+            FontMetrics fm = g.getFontMetrics();
+            String name = AboutNakedObjects.getFrameworkName();
+            g.drawString(name, PADDING, PADDING + fm.getAscent());
         }
-        
-        g.setFont(labelFont);
-        FontMetrics fm = g.getFontMetrics();
-        
 
-        String build = AboutNakedObjects.getBuildId();
-        int left3 = width / 2 - fm.stringWidth(build) / 2;
-        int baseline3 = height - PADDING - fm.getDescent();        
-        
-        
-        String copyrightNotice = AboutNakedObjects.getCopyrightNotice();
-        int left1 = width / 2 - fm.stringWidth(copyrightNotice) / 2;
-        int baseline2 = baseline3 - fm.getHeight();        
+        FontMetrics labelMetrics = getFontMetrics(labelFont);
+        FontMetrics titleMetrics = getFontMetrics(titleFont);
 
-        String version = AboutNakedObjects.getVersion();
-        int left2 = width / 2 - fm.stringWidth(version) / 2;
-        int baseline1 = baseline2 - fm.getHeight();        
+        // application details
+        String applicationName = AboutNakedObjects.getApplicationName();
+        int left1 = width / 2 - titleMetrics.stringWidth(applicationName) / 2;
+
+        String applicationVersion = AboutNakedObjects.getApplicationVersion();
+        int left2 = width / 2 - labelMetrics.stringWidth(applicationVersion) / 2;
+
+        String applicationCopyrightNotice = AboutNakedObjects.getApplicationCopyrightNotice();
+        int left3 = width / 2 - labelMetrics.stringWidth(applicationCopyrightNotice) / 2;
+
+        // framework details
+        String frameworkName = AboutNakedObjects.getFrameworkName();
+        int left4 = width / 2 - titleMetrics.stringWidth(frameworkName) / 2;
+
+        String frameworkCopyrightNotice = AboutNakedObjects.getFrameworkCopyrightNotice();
+        int left5 = width / 2 - labelMetrics.stringWidth(frameworkCopyrightNotice) / 2;
+
+        String frameworkVersion = frameworkVersion();
+        int left6 = width / 2 - labelMetrics.stringWidth(frameworkVersion) / 2;
+
+        int baseline = (int) (height - PADDING - 2 * titleMetrics.getHeight() - 4.5 * labelLineHeight + titleMetrics.getDescent());
 
         int left = Math.min(left1, left2);
         left = Math.min(left, left3);
-        
-        g.drawString(copyrightNotice, left, baseline1);
-        g.drawString(version, left, baseline2);
-        g.drawString(build, left, baseline3);
+        left = Math.min(left, left4);
+        left = Math.min(left, left5);
+        left = Math.min(left, left6);
+
+        g.setFont(titleFont);
+        g.drawString(applicationName, left, baseline);
+        baseline += titleMetrics.getHeight();
+        g.setFont(labelFont);
+        g.drawString(applicationCopyrightNotice, left, baseline);
+        baseline += labelMetrics.getHeight();
+        g.drawString(applicationVersion, left, baseline);
+        baseline += labelMetrics.getHeight() * 1.5;
+
+        g.setFont(titleFont);
+        g.drawString(frameworkName, left, baseline);
+        baseline += titleMetrics.getHeight();
+        g.setFont(labelFont);
+        g.drawString(frameworkCopyrightNotice, left, baseline);
+        baseline += labelMetrics.getHeight();
+        g.drawString(frameworkVersion, left, baseline);
+        baseline += labelMetrics.getHeight();
+    }
+
+    private String frameworkVersion() {
+        return AboutNakedObjects.getFrameworkVersion() + " (" + AboutNakedObjects.getFrameworkBuild() + ")";
     }
 
     /**
-     * leaves the screen up for the specified period (in seconds) and then
-     * removes it.
+     * leaves the screen up for the specified period (in seconds) and then removes it.
      */
     public void removeAfterDelay(int seconds) {
         this.delay = seconds * 1000;
@@ -237,25 +270,20 @@ public class SplashWindow extends Window implements Runnable {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
