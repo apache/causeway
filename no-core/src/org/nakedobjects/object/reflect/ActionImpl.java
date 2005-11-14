@@ -31,7 +31,7 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         this.reflectiveAdapter = actionDelegate;
     }
 
-    public NakedObjectSpecification[] parameterTypes() {
+    public NakedObjectSpecification[] getParameterTypes() {
         return reflectiveAdapter.getParameterTypes();
     }
 
@@ -76,10 +76,10 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         return reflectiveAdapter.getParameterCount();
     }
 
-    public ActionParameterSet getParameters(NakedObject object) {
+    public ActionParameterSet getParameterSet(NakedObject object) {
         ActionParameterSet parameters = reflectiveAdapter.createParameterSet(object, parameterStubs());
         if (parameters != null) {
-            parameters.checkParameters(reflectiveAdapter.getIdentifier().toString(), parameterTypes());
+            parameters.checkParameters(reflectiveAdapter.getIdentifier().toString(), getParameterTypes());
         }
         return parameters;
     }
@@ -111,7 +111,7 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         Naked[] parameterValues;
         int paramCount = getParameterCount();
         parameterValues = new Naked[paramCount];
-        NakedObjectSpecification[] parameters = parameterTypes();
+        NakedObjectSpecification[] parameters = getParameterTypes();
         for (int i = 0; i < paramCount; i++) {
             NakedObjectSpecification parameter = parameters[i];
             if (parameter.isValue()) {
@@ -132,11 +132,11 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         sb.append(",returns=");
         sb.append(getReturnType());
         sb.append(",parameters={");
-        for (int i = 0; i < parameterTypes().length; i++) {
+        for (int i = 0; i < getParameterTypes().length; i++) {
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(parameterTypes()[i]);
+            sb.append(getParameterTypes()[i]);
         }
         sb.append("}]");
         return sb.toString();

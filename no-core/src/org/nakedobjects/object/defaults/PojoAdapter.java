@@ -123,7 +123,7 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public ActionParameterSet getParameters(Action action) {
-        return action.getParameters(this);
+        return action.getParameterSet(this);
     }
 
     public NakedValue getValue(OneToOneAssociation field) {
@@ -213,6 +213,14 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
 
     public Consent canAdd(OneToManyAssociation field, NakedObject element) {
         return field.validToAdd(this, element);
+    }
+    
+    public Consent isUsable(Action action) {
+        return action.isUsable(this);
+    }
+    
+    public Consent isUsable(NakedObjectField field) {
+        return field.isUsable(this);
     }
 
 }

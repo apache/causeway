@@ -10,6 +10,8 @@ public interface NakedObjectSpecification {
 
     void deleted(NakedObject object);
 
+    NakedObjectField[] getAccessibleFields();
+
     Action getClassAction(Action.Type type, String name);
 
     Action getClassAction(Action.Type type, String name, NakedObjectSpecification[] parameters);
@@ -71,6 +73,8 @@ public interface NakedObjectSpecification {
 
     boolean hasSubclasses();
 
+    NakedObjectSpecification[] interfaces();
+
     /**
      * Discovers what attributes and behaviour the type specified by this specification. As specification are
      * cyclic (specifically a class will reference its subclasses, which in turn reference their superclass)
@@ -79,8 +83,6 @@ public interface NakedObjectSpecification {
      * complete.
      */
     void introspect();
-
-    NakedObjectSpecification[] interfaces();
 
     boolean isAbstract();
 

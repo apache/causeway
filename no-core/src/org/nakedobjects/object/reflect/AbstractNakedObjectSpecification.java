@@ -91,9 +91,9 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
             Action action = availableActions[i];
             if (action.getType().equals(type)) {
                 if (action.getId().equals(searchName)) {
-                    if (action.parameterTypes().length == parameters.length) {
+                    if (action.getParameterTypes().length == parameters.length) {
                         for (int j = 0; j < parameters.length; j++) {
-                            if (! parameters[j].isOfType(action.parameterTypes()[j])) {
+                            if (! parameters[j].isOfType(action.getParameterTypes()[j])) {
                                 continue outer;
                             }
                         }
@@ -110,7 +110,7 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         Vector actions = new Vector();
         for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
-            if (action.getType().equals(type) && (noParameters == -1 || action.parameterTypes().length == noParameters)) {
+            if (action.getType().equals(type) && (noParameters == -1 || action.getParameterTypes().length == noParameters)) {
                 actions.addElement(action);
             }
         }
@@ -148,9 +148,9 @@ public abstract class AbstractNakedObjectSpecification implements NakedObjectSpe
         outer: for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
             if (action.getType().equals(type)) {
-                if (action.parameterTypes().length == parameters.length) {
+                if (action.getParameterTypes().length == parameters.length) {
                     for (int j = 0; j < parameters.length; j++) {
-                        if (!parameters[j].isOfType(action.parameterTypes()[j])) {
+                        if (!parameters[j].isOfType(action.getParameterTypes()[j])) {
                             continue outer;
                         }
                     }

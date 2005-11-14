@@ -91,12 +91,12 @@ public abstract class AbstractOneToOnePeer implements OneToOnePeer {
         decorated.setValue(inObject, associate);
     }
 
-    public Consent validAssociation(NakedObject inObject, NakedObject value) {
-        return decorated.validAssociation(inObject, value);
+    public Consent isAssociationValid(NakedObject inObject, NakedObject value) {
+        return decorated.isAssociationValid(inObject, value);
     }
 
-    public Consent validValue(NakedObject inObject, NakedValue value) {
-        return decorated.validValue(inObject, value);
+    public Consent isValueValid(NakedObject inObject, NakedValue value) {
+        return decorated.isValueValid(inObject, value);
     }
 }
 

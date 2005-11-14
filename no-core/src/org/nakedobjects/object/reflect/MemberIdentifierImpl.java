@@ -23,10 +23,58 @@ public class MemberIdentifierImpl implements MemberIdentifier {
     public MemberIdentifierImpl(String className, String methodName, NakedObjectSpecification[] specifications) {
         this.className = className;
         name =  methodName;
-        parameters = new String[specifications.length];
-        for (int i = 0; i < specifications.length; i++) {
+        parameters = new String[specifications == null ? 0 : specifications.length];
+        for (int i = 0; i < parameters.length; i++) {
             parameters[i] = specifications[i].getFullName();
         }
+    }
+    
+    public boolean equals(Object obj) {
+        if(this == obj) {
+            return true;
+        } else if(obj instanceof MemberIdentifierImpl) {
+            MemberIdentifierImpl other = (MemberIdentifierImpl) obj;
+            return equals(other.className, className) && equals(other.name, other.name) && equals(other.parameters, parameters);
+        }
+        return false;
+    }
+
+    private boolean equals(String[] a, String[] b) {
+        if(a == null && b == null) {
+            return true;
+       }
+
+        if(a == null && b != null) {
+            return false;
+        }
+
+        if(a != null && b == null) {
+            return false;
+        }
+
+        if(a.length != b.length) {
+            return false;
+        }
+        
+        for (int i = 0; i < b.length; i++) {
+            if(!a[i].equals(b[i])) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+    private boolean equals(String a, String b) {
+        if(a == b) {
+            return true;
+        }
+        
+        if(a != null) {
+            return a.equals(b);
+        }
+        
+        return false;
     }
     
     public String getClassName() {

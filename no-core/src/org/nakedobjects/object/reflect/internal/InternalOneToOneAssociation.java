@@ -210,11 +210,11 @@ public class InternalOneToOneAssociation extends InternalField implements OneToO
         return isObject;
     }
 
-    public Consent validValue(NakedObject inObject, NakedValue value) {
+    public Consent isValueValid(NakedObject inObject, NakedValue value) {
         return Allow.DEFAULT;
     }
 
-    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+    public Consent isAssociationValid(NakedObject inObject, NakedObject value) {
         return Allow.DEFAULT;
     }
 }

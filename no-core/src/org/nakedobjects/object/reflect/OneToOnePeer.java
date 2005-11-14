@@ -22,9 +22,9 @@ public interface OneToOnePeer extends FieldPeer {
 
     void setValue(NakedObject inObject, Object associate);
 
-    public Consent validAssociation(NakedObject inObject, NakedObject value);
+    public Consent isAssociationValid(NakedObject inObject, NakedObject value);
 
-    public Consent validValue(NakedObject inObject, NakedValue value);
+    public Consent isValueValid(NakedObject inObject, NakedValue value);
 }
 
 /*

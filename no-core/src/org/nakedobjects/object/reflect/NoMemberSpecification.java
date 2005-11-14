@@ -27,6 +27,10 @@ public class NoMemberSpecification implements NakedObjectSpecification {
 
     public void deleted(NakedObject object) {}
 
+    public NakedObjectField[] getAccessibleFields() {
+        return new NakedObjectField[0];
+    }
+
     public Action getClassAction(Action.Type type, String name) {
         return null;
     }

@@ -84,7 +84,7 @@ public interface Action extends NakedObjectMember {
      */
     boolean hasReturn();
 
-    NakedObjectSpecification[] parameterTypes();
+    NakedObjectSpecification[] getParameterTypes();
 
     Naked[] parameterStubs();
 
@@ -94,7 +94,7 @@ public interface Action extends NakedObjectMember {
         
     Consent hasValidParameters(NakedObject object, Naked[] parameters);
     
-    ActionParameterSet getParameters(NakedObject object);
+    ActionParameterSet getParameterSet(NakedObject object);
 }
 
 /*
