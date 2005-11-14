@@ -22,7 +22,7 @@ import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 class ImmediateObjectOption extends MenuOption {
 
     public static ImmediateObjectOption createOption(Action action, NakedObject object) {
-        Assert.assertTrue("Only suitable for 0 param methods", action.parameterTypes().length == 0);
+        Assert.assertTrue("Only suitable for 0 param methods", action.getParameterTypes().length == 0);
         if (! action.isAuthorised() || object.isVisible(action).isVetoed()) {
             return null;
         }

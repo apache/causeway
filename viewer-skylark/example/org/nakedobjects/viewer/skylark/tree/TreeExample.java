@@ -105,11 +105,11 @@ public class TreeExample extends TestViews {
                 return false;
             }
 
-            public Consent validValue(NakedObject inObject, NakedValue value) {
+            public Consent isValueValid(NakedObject inObject, NakedValue value) {
                 return null;
             }
 
-            public Consent validAssociation(NakedObject inObject, NakedObject value) {
+            public Consent isAssociationValid(NakedObject inObject, NakedObject value) {
                 return null;
             }
 

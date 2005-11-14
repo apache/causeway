@@ -2,17 +2,17 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.reflect.ActionImpl;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.easymock.MockControl;
 
 import test.org.nakedobjects.object.DummyNakedObjectSpecification;
-import test.org.nakedobjects.object.reflect.DummyActionPeer;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 
 
@@ -23,23 +23,28 @@ public class ActionHelperTest extends TestCase {
     }
 
     private ActionHelper actionHelper;
-    private DummyNakedObject target;
+    private NakedObject target;
     private DummyNakedObject param1;
     private DummyNakedObject param2;
 
     protected void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        DummyActionPeer mockActionPeer = new DummyActionPeer();
-        mockActionPeer.setUpParamterTypes(new NakedObjectSpecification[] {});
-
-        Action action = new ActionImpl("cls name", "method name", mockActionPeer);
-
-        target = new DummyNakedObject();
-
         param1 = new DummyNakedObject();
         param2 = new DummyNakedObject();
         Naked[] values = new Naked[] { param1, param2 };
+
+        MockControl control2 = MockControl.createControl(Action.class);
+        Action action = (Action) control2.getMock();
+        control2.replay();
+
+        MockControl control = MockControl.createControl(NakedObject.class);
+        target = (NakedObject) control.getMock();
+        control.expectAndReturn(target.execute(action, values), null);
+        control.replay();
+
+    //   target = new DummyNakedObject();
+
         NakedObjectSpecification[] types = new DummyNakedObjectSpecification[] { new DummyNakedObjectSpecification(),
                 new DummyNakedObjectSpecification() };
         String[] labels = {"one", "two"};
