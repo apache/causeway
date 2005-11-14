@@ -1,10 +1,34 @@
 package org.nakedobjects.object.loader;
 
+import org.nakedobjects.object.NakedReference;
+import org.nakedobjects.utility.DebugInfo;
+import org.nakedobjects.utility.DebugString;
+
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 
-public abstract class IdentityAdapterMap extends Hashtable {
+public abstract class IdentityAdapterMap extends Hashtable  implements DebugInfo {
 
+    public String getDebugData() {
+            DebugString debug = new DebugString();
+            Enumeration e = keys();
+            int count = 0;
+            while (e.hasMoreElements()) {
+                Object pojo = (Object) e.nextElement();
+                NakedReference object = (NakedReference) get(pojo);
+                debug.append(count++, 5);
+                debug.append(" '");
+                debug.append(pojo.toString(), 25);
+                debug.append("'    ");
+                debug.appendln(object.toString());
+            }
+            return debug.toString();
+    }
+    
+    public String getDebugTitle() {
+        return "Identity adapter map";
+    }
 }
 
 
