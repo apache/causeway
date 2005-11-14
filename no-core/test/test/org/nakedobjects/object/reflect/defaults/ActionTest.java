@@ -34,7 +34,7 @@ public class ActionTest extends NakedObjectTestCase {
     private Action action;
 
     private DummyActionPeer actionPeer;
-    private NakedObject nakedObject;
+//    private NakedObject nakedObject;
 
     public ActionTest(String name) {
         super(name);
@@ -78,9 +78,9 @@ public class ActionTest extends NakedObjectTestCase {
     }
 
     public void testLabel() {
-        assertEquals(ACTION_NAME, action.getName());
+        assertEquals(ACTION_NAME + "()", action.getName());
         
-        actionPeer.setupLabel(ACTION_LABEL);
+        actionPeer.setupName(ACTION_LABEL);
 //        MockHint hint = new MockHint();
 //        hint.setupName(ACTION_LABEL);
 //        actionPeer.setupHint(hint);
@@ -105,7 +105,7 @@ public class ActionTest extends NakedObjectTestCase {
 
     public void testGetParameters() {
         NakedObject nakedObject = new DummyNakedObject();
-        ActionParameterSet parameters = action.getParameters(nakedObject);
+        ActionParameterSet parameters = action.getParameterSet(nakedObject);
 
         String[] parameterLabels = parameters.getParameterLabels();
         assertEquals("one", parameterLabels[0]);

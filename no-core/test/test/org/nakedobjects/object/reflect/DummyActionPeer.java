@@ -6,6 +6,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Session;
+import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -22,7 +23,6 @@ public final class DummyActionPeer implements ActionPeer {
     private NakedObjectSpecification returnType;
     private NakedObjectSpecification[] paramterTypes = new NakedObjectSpecification[0];
     private String name;
-    private String action_label;
 
     public Naked execute(NakedObject object, Naked[] parameters) {
         expectedActions.addActual("execute " + getIdentifier() + " " + object);
@@ -88,7 +88,7 @@ public final class DummyActionPeer implements ActionPeer {
     }
 
     public Consent isUsable(NakedObject target) {
-        return null;
+        return Allow.DEFAULT;
     }
 
     public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
@@ -100,24 +100,20 @@ public final class DummyActionPeer implements ActionPeer {
     }
 
     public Consent isVisible(NakedObject target) {
-        return null;
+        return Allow.DEFAULT;
     }
 
     public boolean isAuthorised(Session session) {
-        return false;
+        return true;
     }
-
-    public void setupLabel(String action_label) {
-        this.action_label = action_label;}
 
     public Class[] getExtensions() {
         return null;
     }
 
     public String getName() {
-        return null;
+        return name;
     }
-
 }
 
 /*

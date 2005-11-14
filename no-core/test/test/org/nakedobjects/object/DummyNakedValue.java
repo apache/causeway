@@ -4,7 +4,6 @@ import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
@@ -62,7 +61,7 @@ public class DummyNakedValue implements NakedValue {
         this.object = object;
     }
     
-    public void clearAssociation(NakedObjectAssociation specification, NakedObject ref) {}
+    public void clearAssociation(NakedObjectField specification, NakedObject ref) {}
 
     public Naked execute(Action action, Naked[] parameters) {
         return null;

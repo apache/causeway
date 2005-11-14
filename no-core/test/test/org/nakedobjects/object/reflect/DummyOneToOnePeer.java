@@ -5,7 +5,9 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Session;
+import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
@@ -20,7 +22,8 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     Vector actions = new Vector();
     public NakedObject getObject;
     public boolean isEmpty;
-
+    public boolean isVisible;
+    
     public void clearAssociation(NakedObject inObject, NakedObject associate) {
         actions.addElement("clear " + inObject);
         actions.addElement("clear " + associate);
@@ -88,18 +91,18 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     }
 
     public boolean isObject() {
-        return false;
+        return true;
     }
 
     public void assertAction(int index, String expected) {
         Assert.assertEquals(expected, actions.elementAt(index));
     }
 
-    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+    public Consent isAssociationValid(NakedObject inObject, NakedObject value) {
         return null;
     }
 
-    public Consent validValue(NakedObject inObject, NakedValue value) {
+    public Consent isValueValid(NakedObject inObject, NakedValue value) {
         return null;
     }
 
@@ -112,7 +115,7 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     }
 
     public boolean isAuthorised(Session session) {
-        return false;
+        return true;
     }
 
     public Consent isUsable(NakedObject target) {
@@ -120,7 +123,11 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     }
 
     public Consent isVisible(NakedObject target) {
-        return null;
+        return isVisible ? (Consent) Allow.DEFAULT : Veto.DEFAULT;
+    }
+    
+    public void setupVisible(boolean isVisible) {
+        this.isVisible = isVisible;
     }
 }
 

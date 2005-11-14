@@ -15,6 +15,7 @@ import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Version;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
 
@@ -100,7 +101,21 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public ActionParameterSet getParameters(Action action) {
-        throw new NotImplementedException();
+        return new ActionParameterSet(){
+
+            public Object[] getDefaultParameterValues() {
+                return new Object[] {"test"};
+            }
+
+            public String[] getParameterLabels() {
+                return new String[] {"one"};
+            }
+
+            public boolean[] getRequiredParameters() {
+                return new boolean[] {false};
+            }
+
+            public void checkParameters(String name, NakedObjectSpecification[] requiredTypes) {}};
     }
 
     public ResolveState getResolveState() {
@@ -146,7 +161,7 @@ public class DummyNakedObject implements NakedObject {
     }
 
     public Persistable persistable() {
-        throw new NotImplementedException();
+        return Persistable.USER_PERSISTABLE;
     }
 
     public void setAssociation(NakedObjectField field, NakedObject associatedObject) {}

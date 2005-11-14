@@ -88,11 +88,11 @@ public class TestPojoValuePeer implements OneToOnePeer {
         return false;
     }
 
-    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+    public Consent isAssociationValid(NakedObject inObject, NakedObject value) {
         return null;
     }
 
-    public Consent validValue(NakedObject inObject, NakedValue value) {
+    public Consent isValueValid(NakedObject inObject, NakedValue value) {
         return null;
     }
 

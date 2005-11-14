@@ -4,6 +4,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToOnePeer;
 
@@ -76,6 +77,22 @@ public class DummyOneToOneAssociation implements NakedObjectField {
 
     public boolean hasHint() {
         return false;
+    }
+
+    public String getDescription() {
+        return null;
+    }
+
+    public boolean isAuthorised() {
+        return false;
+    }
+
+    public Consent isUsable(NakedObject target) {
+        return null;
+    }
+
+    public Consent isVisible(NakedObject target) {
+        return null;
     }
 
 }

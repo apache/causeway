@@ -6,8 +6,8 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.OneToManyAssociation;
-import org.nakedobjects.object.control.DefaultHint;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.control.Allow;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.OneToManyAssociationImpl;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 
@@ -102,57 +102,8 @@ public class OneToManyAssociationTest extends NakedObjectTestCase {
     }
     
     public void testLabel() {
-        associationDelegate.setupHint(null);
-        
         assertEquals(FIELD_NAME, association.getName());
-
-//        mockHint.setupName("label from hint");
-        
-        associationDelegate.expect("getHint " + "#members()" + " " + nakedObject + " null true");
-
-        assertEquals("label from hint", association.getName());
    }
-    
-    public void testAboutForSet() {
-       associationDelegate.assertActions(0);
-
-       associationDelegate.assertAction(0, "about " + nakedObject);
-       associationDelegate.assertAction(1, "about " + associate);
-       associationDelegate.assertAction(2, "about " + true);
-    }
-    
-    
-    public void testAboutForClear() {
-        Hint about = association.getHint(nakedObject, associate, false);
-       assertNull(associationDelegate.hint);
-       assertTrue(about instanceof DefaultHint);
-       associationDelegate.assertActions(0);
-
-       associationDelegate.hint = mockHint;
-       
-       associationDelegate.expect("getHint " + "#members()" + " " + nakedObject  + " " + associate + " false");
-
-       about = association.getHint(nakedObject, associate, false);
-       assertEquals(associationDelegate.hint, about);
-       associationDelegate.assertAction(0, "about " + nakedObject);
-       associationDelegate.assertAction(1, "about " + associate);
-       associationDelegate.assertAction(2, "about " + false);
-    }
-
-    public void testFullAbout() {
-        Hint about = association.getHint(nakedObject);
-       assertNull(associationDelegate.hint);
-       assertTrue(about instanceof DefaultHint);
-
-       MockHint mockHint = new MockHint();
-       associationDelegate.hint = mockHint;
-       
-       associationDelegate.expect("getHint " + "#members()" + " " + nakedObject  + " null true");
-
-       about = association.getHint(nakedObject);
-       assertEquals(associationDelegate.hint, about);
-    }
-
 }
 
 /*

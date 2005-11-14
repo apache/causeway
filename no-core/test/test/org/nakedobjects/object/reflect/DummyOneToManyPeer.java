@@ -7,13 +7,12 @@ import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.OneToManyPeer;
+import org.nakedobjects.utility.NotImplementedException;
 
 import java.util.Vector;
 
 import junit.framework.Assert;
 import test.org.nakedobjects.utility.ExpectedSet;
-
-import com.mockobjects.util.NotImplementedException;
 
 
 public class DummyOneToManyPeer implements OneToManyPeer {

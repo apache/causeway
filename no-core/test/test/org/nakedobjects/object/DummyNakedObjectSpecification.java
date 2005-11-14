@@ -61,7 +61,7 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public NakedObjectField getField(String name) {
-        return null;
+        return fields[0];
     }
 
     public Object getFieldExtension(String name, Class cls) {
@@ -208,6 +208,10 @@ public class DummyNakedObjectSpecification implements NakedObjectSpecification {
     }
 
     public void addSubclass(NakedObjectSpecification specification) {}
+
+    public NakedObjectField[] getAccessibleFields() {
+        return null;
+    }
 }
 
 /*

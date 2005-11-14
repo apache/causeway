@@ -76,16 +76,16 @@ public class TestPojoReferencePeer implements OneToOnePeer {
     }
 
     public boolean isObject() {
-        return false;
+        return true;
     }
 
     public void setAssociation(NakedObject inObject, NakedObject associate) {}
 
-    public Consent validAssociation(NakedObject inObject, NakedObject value) {
+    public Consent isAssociationValid(NakedObject inObject, NakedObject value) {
         return null;
     }
 
-    public Consent validValue(NakedObject inObject, NakedValue value) {
+    public Consent isValueValid(NakedObject inObject, NakedValue value) {
         return null;
     }
 
