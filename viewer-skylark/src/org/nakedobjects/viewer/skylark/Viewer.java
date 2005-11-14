@@ -432,6 +432,9 @@ public class Viewer {
         Canvas c = new DrawingCanvas(bufferGraphics, r.x, r.y, r.width, r.height);
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
 
+        if(spy != null) {
+            spy.redraw(r, redrawCount);
+        }
         if (AbstractView.debug) {
             LOG.debug("------ repaint viewer #" + redrawCount + " " + r.x + "," + r.y + " " + r.width + "x" + r.height);
         }

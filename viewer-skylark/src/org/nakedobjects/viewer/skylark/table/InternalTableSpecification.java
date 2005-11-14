@@ -3,19 +3,34 @@ package org.nakedobjects.viewer.skylark.table;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.special.CollectionElementBuilder;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
+import org.nakedobjects.viewer.skylark.special.StackLayout;
 
 
 public class InternalTableSpecification extends TableSpecification {
     public String getName() {
         return "Internal Table";
     }
-    
+
+    public InternalTableSpecification() {
+        builder = new StackLayout(new CollectionElementBuilder(this, true));
+    }
+
     public View createView(Content content, ViewAxis axis) {
-        View table = super.createView(content, axis);
-        return new ScrollBorder(table);
+       // View table = super.createView(content, axis);
+      //  return new ScrollBorder(table);
         
         //return new TableBorder(new ScrollBorder(table));
+        
+        View view = super.createView(content, axis);
+        ScrollBorder scrollingView = new ScrollBorder(view);
+//        WindowBorder viewWithWindowBorder = new WindowBorder(scrollingView, false);
+        // note - the next call needs to be after the creation of the window border so that it exists when the
+        // header is set up
+        scrollingView.setTopHeader(new TableHeader(view.getViewAxis()));
+        return scrollingView;
+
     }
 }
 

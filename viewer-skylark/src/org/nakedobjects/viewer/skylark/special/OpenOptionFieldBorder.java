@@ -9,6 +9,8 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.core.BackgroundTask;
+import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 
 public abstract class OpenOptionFieldBorder extends AbstractBorder {
     private boolean over;
@@ -67,18 +69,31 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
 	        float x = click.getLocation().getX() - 2;
 	        float boundary = getSize().getWidth() - right;
 	        if (x >= boundary) {
-	            View overlay = createOverlay();
-	
-	            Size size = overlay.getRequiredSize();
-	            size.ensureWidth(getSize().getWidth());
-	            overlay.setSize(size);
-	
-	            Location location = getView().getAbsoluteLocation();
-	            location.add(getView().getPadding().getLeft() - 1, getSize().getHeight() + 2);
-	            overlay.setLocation(location);
-	
-	            overlay.layout();
-	            getViewManager().setOverlayView(overlay);
+                
+                BackgroundThread.run(this, new BackgroundTask() {
+                    public void execute() {
+        	            View overlay = createOverlay();
+        	
+        	            Size size = overlay.getRequiredSize();
+        	            size.ensureWidth(getSize().getWidth());
+        	            overlay.setSize(size);
+        	
+        	            Location location = getView().getAbsoluteLocation();
+        	            location.add(getView().getPadding().getLeft() - 1, getSize().getHeight() + 2);
+        	            overlay.setLocation(location);
+        	
+        	            overlay.layout();
+        	            getViewManager().setOverlayView(overlay);
+                    }
+                    
+                    public String getName() {
+                        return "Opening lookup";
+                    }
+                    
+                    public String getDescription() {
+                        return "";
+                    }
+                });
 	        }
         }
     }

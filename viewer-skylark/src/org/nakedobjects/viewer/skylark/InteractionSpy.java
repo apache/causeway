@@ -2,6 +2,7 @@ package org.nakedobjects.viewer.skylark;
 
 import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -45,7 +46,7 @@ public class InteractionSpy {
     private String damagedArea;
     private int event;
     private String label[][] = new String[2][20];
-    private SpyFrame spy;
+    private SpyFrame frame;
     private String[] trace = new String[60];
     private int traceIndex;
     private boolean isVisible;
@@ -83,8 +84,8 @@ public class InteractionSpy {
 
     public void close() {
         if (isVisible) {
-            spy.hide();
-            spy.dispose();
+            frame.hide();
+            frame.dispose();
             isVisible = false;
         }
     }
@@ -104,10 +105,12 @@ public class InteractionSpy {
     }
 
     private void set(int index, String label, Object debug) {
-        this.label[0][index] = debug == null ? null : label + ":";
-        this.label[1][index] = debug == null ? null : debug.toString();
+        if (frame != null) {
+            this.label[0][index] = debug == null ? null : label + ":";
+            this.label[1][index] = debug == null ? null : debug.toString();
 
-        spy.repaint();
+            frame.repaint();
+        }
     }
 
     public void setAbsoluteLocation(Location absoluteLocation) {
@@ -154,15 +157,20 @@ public class InteractionSpy {
 
     public void open() {
         if (!isVisible) {
-            spy = new SpyFrame();
-            spy.setBounds(10, 10, 800, 500);
-            spy.show();
+            frame = new SpyFrame();
+            frame.setBounds(10, 10, 800, 500);
+            frame.show();
             isVisible = true;
         }
     }
 
     public boolean isVisible() {
         return isVisible;
+    }
+
+    public void redraw(Rectangle redrawArea, int redrawCount) {
+        set(8, "Redraw", "#" + redrawCount + "  " + redrawArea);
+        damagedArea = "";
     }
 }
 

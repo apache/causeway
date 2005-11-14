@@ -10,6 +10,8 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.text.TextContent;
 
+import org.apache.log4j.Logger;
+
 
 public class SingleLineTextField extends TextField {
     private static final int LIMIT = 20;
@@ -65,6 +67,7 @@ public class SingleLineTextField extends TextField {
         }
 
         String chars = lines[0];
+        Logger.getLogger(this.getClass()).debug("drawing text: " + chars);
         if (chars == null) {
             throw new NakedObjectRuntimeException();
         }

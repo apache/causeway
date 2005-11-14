@@ -112,13 +112,13 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         if (selection.hasSelection()) {
             textContent.delete(selection);
             selection.resetTo(selection.from());
-            markDamaged();
         } else {
             textContent.deleteLeft(cursor);
             cursor.left();
             selection.resetTo(cursor);
         }
         isSaved = false;
+        markDamaged();
     }
 
     /**
@@ -128,12 +128,11 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         if (selection.hasSelection()) {
             textContent.delete(selection);
             selection.resetTo(selection.from());
-            markDamaged();
         } else {
             textContent.deleteRight(cursor);
-            markDamaged();
         }
         isSaved = false;
+        markDamaged();
     }
 
     public void drag(InternalDrag drag) {
@@ -377,6 +376,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 	            invalidateLayout();
 	        }
 	        isSaved = false;
+            markDamaged();
         } else {
             getViewManager().setStatus("Entry can be no longer than " + maximumLength + " characters");
         }
@@ -456,8 +456,6 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
             break;
         }
 
-        markDamaged();
-
         LOG.debug("character at " + cursor.getCharacter() + " line " + cursor.getLine());
         LOG.debug(selection);
     }
@@ -471,6 +469,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         } else {
             cursor.pageDown();
         }
+        markDamaged();
     }
 
     protected void pageUp(final boolean ctrl) {
@@ -481,16 +480,19 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         } else {
             cursor.pageUp();
         }
+        markDamaged();
     }
 
     protected void down(final boolean shift) {
         cursor.lineDown();
         highlight(shift);
+        markDamaged();
     }
 
     protected void up(final boolean shift) {
         cursor.lineUp();
         highlight(shift);
+        markDamaged();
     }
 
     protected void home(final boolean alt, final boolean shift) {
@@ -501,6 +503,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         }
 
         highlight(shift);
+        markDamaged();
     }
 
     protected void end(final boolean alt, final boolean shift) {
@@ -511,6 +514,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         }
 
         highlight(shift);
+        markDamaged();
     }
 
     protected void left(final boolean alt, final boolean shift) {
@@ -521,6 +525,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         }
 
         highlight(shift);
+        markDamaged();
     }
 
     protected void right(final boolean alt, final boolean shift) {
@@ -531,11 +536,13 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         }
 
         highlight(shift);
+        markDamaged();
     }
 
     protected void escape() {
         invalidReason = null;
         refresh();
+        markDamaged();
     }
 
     protected void tab() {

@@ -118,7 +118,12 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
     private void updateBuild(View view, NakedObject object, NakedObjectField[] flds) {
         LOG.debug("rebuild view " + view + " for " + object);
-
+        /*
+         * 1/ To remove fields: look through views and remove any that don't  exists in visible fields
+         * 2/ From remaining views chaeck for changes as already being done, and replace if needed
+         * 3/ Finally look through fields to see if there is no existing subview; and add one
+         */
+        
         View[] subviews = view.getSubviews();
         
         // remove views for fields that no longer exist
@@ -184,7 +189,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         {
 	       View[] dsubviews = view.getSubviews();
 	        for (int i = 0; i < flds.length; i++) {
-	            LOG.debug(i + " " + flds[i].getId() + " " + flds[i].hashCode());
+	            LOG.debug(i + " " + flds[i].getName() + " " + flds[i].hashCode());
 	        }
 	        
 	        for (int i = 0; i < dsubviews.length; i++) {
@@ -193,12 +198,6 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 	        }
         }
         // end debug
-        
-        /*
-         * 1/ To remove fields: look through views and remove any that don't  exists in visible fields
-         * 2/ From remaining views chaeck for changes as already being done, and replace if needed
-         * 3/ Finally look through fields to see if there is no existing subview; and add one
-         */
     }
 }
 
