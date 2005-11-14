@@ -35,13 +35,6 @@ public abstract class JavaMember {
         return new Class[0];
     }
     
-    /**
-     * Returns true if an about method is defined for this Member.
-     */
-    public boolean hasHint() {
-        return aboutMethod != null;
-    }
-
     public MemberIdentifier getIdentifier() {
         return identifier;
     }

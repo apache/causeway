@@ -70,8 +70,10 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     }
 
     private Hint getHint(NakedObject object, NakedObject element, boolean add) {
-        if (hasHint()) {
             Method aboutMethod = getAboutMethod();
+            if(aboutMethod == null){
+                return new DefaultHint();
+            }
             try {
                 SimpleFieldAbout hint = new SimpleFieldAbout(NakedObjects.getCurrentSession(), object.getObject());
                 Object[] parameters;
@@ -92,9 +94,6 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
                 LOG.error("illegal access of " + aboutMethod, ignore);
             }
             return null;
-        } else {
-            return new DefaultHint();
-        }
     }
 
     public NakedCollection getAssociations(NakedObject fromObject) {

@@ -4,6 +4,7 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 
 import java.lang.reflect.Method;
 
@@ -56,7 +57,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         Method get = cls.getDeclaredMethod("getMethod", new Class[0]);
         Method add = cls.getDeclaredMethod("addToMethod", new Class[] {JavaReferencedObject.class});
         Method remove = cls.getDeclaredMethod("removeFromMethod", new Class[] {JavaReferencedObject.class});
-        collectionField = new JavaOneToManyAssociation(MEMBERS_FIELD_NAME, InternalCollection.class, get, add, remove, null);
+        collectionField = new JavaOneToManyAssociation(new MemberIdentifierImpl("cls", MEMBERS_FIELD_NAME), InternalCollection.class, get, add, remove, null);
     }
 
     protected void tearDown() throws Exception {
@@ -114,11 +115,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
     }     	
     
     public void testName() {
-    	assertEquals(MEMBERS_FIELD_NAME, collectionField.getIdentifier());
-    }
-    
-    public void testAbout() {
-    	assertFalse(collectionField.hasHint());
+    	assertEquals(new MemberIdentifierImpl("cls", MEMBERS_FIELD_NAME), collectionField.getIdentifier());
     }
 }
 

@@ -37,7 +37,7 @@ public class JavaSpecificationTest extends TestCase {
     public void testPersistable() throws Exception {
         system.addSpecification(new DummyNakedObjectSpecification(Object.class.getName()));
         system.addSpecification(new DummyNakedObjectSpecification(Interface1.class.getName()));
-        system.addSpecification(new DummyNakedObjectSpecification(Interface2.class.getIdentifier()));
+        system.addSpecification(new DummyNakedObjectSpecification(Interface2.class.getName()));
         
         JavaSpecification spec = new JavaSpecification(JavaObjectForReflector.class, new DummyBuilder());
         spec.introspect();
@@ -47,7 +47,7 @@ public class JavaSpecificationTest extends TestCase {
     public void testNotPersistable() throws Exception {
         system.addSpecification(new DummyNakedObjectSpecification(Object.class.getName()));
         system.addSpecification(new DummyNakedObjectSpecification(Interface1.class.getName()));
-        system.addSpecification(new DummyNakedObjectSpecification(Interface2.class.getIdentifier()));
+        system.addSpecification(new DummyNakedObjectSpecification(Interface2.class.getName()));
         system.addSpecification(new DummyNakedObjectSpecification(NonPersistable.class.getName()));
         
         JavaSpecification spec = new JavaSpecification(JavaObjectForReflectorTransient.class, new DummyBuilder());

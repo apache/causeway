@@ -4,6 +4,7 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 
 import java.lang.reflect.Method;
 
@@ -54,7 +55,7 @@ public class JavaOneToOneAssociationTest extends TestCase {
         Method set = cls.getDeclaredMethod("setReferencedObject", new Class[] {JavaReferencedObject.class});
         Method about = cls.getDeclaredMethod("aboutReferencedObject", new Class[] {FieldAbout.class, JavaReferencedObject.class});
         
-        personField = new JavaOneToOneAssociation(true, PERSON_FIELD_NAME, JavaReferencedObject.class, get, set, null, null, about, false);
+        personField = new JavaOneToOneAssociation(true, new MemberIdentifierImpl("cls", PERSON_FIELD_NAME), JavaReferencedObject.class, get, set, null, null, about, false);
         
         referencedObject = new JavaReferencedObject();
         associatedNakedObject = system.createAdapterForTransient(referencedObject);
@@ -104,13 +105,9 @@ public class JavaOneToOneAssociationTest extends TestCase {
     }
     
     public void testName() {
-    	assertEquals(PERSON_FIELD_NAME, personField.getIdentifier());
+    	assertEquals(new MemberIdentifierImpl("cls", PERSON_FIELD_NAME), personField.getIdentifier());
     }
      
-    public void testAboutAssignment() {
-    	assertTrue(personField.hasHint());
-    	assertNotNull(personField.getHint(null, nakedObject, associatedNakedObject));
-    }
 }
 
 /*

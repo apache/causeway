@@ -39,13 +39,6 @@ public class JavaReflectorActionsTest extends TestCase {
         system.shutdown();
     }
 
-    public void testAbout() {
-        Action action = actions[3];
-        assertEquals("WithAbout", action.getId());
-        
-        fail();
-    }
-
     public void testNumberOfActions() throws Exception {
         assertEquals(5, actions.length);
     }

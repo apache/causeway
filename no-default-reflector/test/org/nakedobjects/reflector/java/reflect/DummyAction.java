@@ -41,7 +41,7 @@ class DummyAction implements Action {
         return false;
     }
 
-    public NakedObjectSpecification[] parameterTypes() {
+    public NakedObjectSpecification[] getParameterTypes() {
         return null;
     }
 
@@ -53,7 +53,7 @@ class DummyAction implements Action {
         return null;
     }
 
-    public ActionParameterSet getParameters(NakedObject object) {
+    public ActionParameterSet getParameterSet(NakedObject object) {
         return null;
     }
 

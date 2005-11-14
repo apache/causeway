@@ -38,10 +38,12 @@ public class JavaAction extends JavaMember implements ActionPeer {
     private final int paramCount;
     private Action.Type type;
     private Action.Target target;
+    private final NakedObjectSpecification[] parameters;
 
-    public JavaAction(MemberIdentifier identifier, Action.Type type, Action.Target target, Method action, Method about) {
+    public JavaAction(MemberIdentifier identifier, Action.Type type, NakedObjectSpecification[] parameters, Action.Target target, Method action, Method about) {
         super(identifier, about);
         this.type = type;
+        this.parameters = parameters;
         this.actionMethod = action;
         this.target = target;
         paramCount = action.getParameterTypes().length;
@@ -95,7 +97,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return null;
     }
     
-    private Hint getHint(MemberIdentifier identifier, NakedObject object, Naked[] parameters) {
+    private Hint getHint(NakedObject object, Naked[] parameters) {
         if(parameters == null) {
             parameters = new Naked[0];
         }
@@ -157,12 +159,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
     }
 
     public NakedObjectSpecification[] getParameterTypes() {
-        Class[] cls = actionMethod.getParameterTypes();
-        NakedObjectSpecification[] naked = new NakedObjectSpecification[cls.length];
-        for (int i = 0; i < cls.length; i++) {
-            naked[i] = specification(cls[i]);
-        }
-        return naked;
+        return parameters;
     }
 
     public NakedObjectSpecification getReturnType() {
@@ -172,7 +169,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
     }
     
     public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
-        Hint hint= getHint(getIdentifier(), object, parameters);
+        Hint hint= getHint(object, parameters);
         if(hint instanceof SimpleActionAbout) {
             SimpleActionAbout about = (SimpleActionAbout) hint;
             return new ActionParameterSetImpl(about.getDefaultParameterValues(), about.getParameterLabels(), about.getRequired());
@@ -203,7 +200,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
     }
 
     public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
-        return getHint(null, object, parameters).canUse();
+        return getHint(object, parameters).canUse();
    }
 
     public String getDescription() {

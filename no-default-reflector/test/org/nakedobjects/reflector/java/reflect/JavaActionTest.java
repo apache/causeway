@@ -4,8 +4,9 @@ import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.reflect.MemberIdentifierImpl;
 
 import java.lang.reflect.Method;
 
@@ -43,21 +44,12 @@ public class JavaActionTest extends TestCase {
         Class cls = Class.forName(getClass().getName() + "Object");
         Method action = cls.getDeclaredMethod("actionMethod", new Class[0]);
         Method about = cls.getDeclaredMethod("aboutMethod", new Class[] { ActionAbout.class });
-        javaAction = new JavaAction("methodName", Action.EXPLORATION, Action.LOCAL, action, about);
+        javaAction = new JavaAction(new MemberIdentifierImpl("cls", "methodName", null), Action.EXPLORATION, new NakedObjectSpecification[0], Action.LOCAL, action, about);
         assertNotNull(javaAction);
     }
 
     protected void tearDown() throws Exception {
         system.shutdown();
-    }
-
-    public void testAbout() {
-        String label = javaAction.getName();
-        assertEquals("about for test", label);
-
-//        Hint about = javaAction.getHint(null, nakedObject, new Naked[0]);
-//        assertNotNull(about);
-        assertEquals("about for test", about.getIdentifier());
     }
 
     public void testAction() throws Exception {
@@ -70,12 +62,8 @@ public class JavaActionTest extends TestCase {
    //     manager.assertAction(1, "end transaction");
     }
 
-    public void testHasAbout() {
-        assertTrue(javaAction.hasHint());
-    }
-
     public void testMethodName() throws Exception {
-        assertEquals("methodName", javaAction.getIdentifier());
+        assertEquals(new MemberIdentifierImpl("cls", "methodName"), javaAction.getIdentifier());
     }
 
     public void testReturnType() {

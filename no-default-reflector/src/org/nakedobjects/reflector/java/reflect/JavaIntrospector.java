@@ -13,7 +13,9 @@ import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectMember;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
@@ -276,10 +278,20 @@ public class JavaIntrospector {
     }
 
     ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action, Action.Target target) {
-        MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
-        return new JavaAction(identifier, action, target, method, aboutMethod);
+        Class[] cls = method.getParameterTypes();
+        NakedObjectSpecification[] parameters = new NakedObjectSpecification[cls.length];
+        for (int i = 0; i < cls.length; i++) {
+            parameters[i] = specification(cls[i]);
+        }
+ 
+        MemberIdentifier identifier = new MemberIdentifierImpl(className, name, parameters);
+        return new JavaAction(identifier, action, parameters, target, method, aboutMethod);
     }
 
+    private NakedObjectSpecification specification(Class returnType) {
+        return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
+    }
+    
     private Action[] createActions(ReflectionPeerBuilder builder, ActionPeer[] actions) {
         Action actionChains[] = new Action[actions.length];
 
