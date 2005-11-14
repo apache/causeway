@@ -24,11 +24,11 @@ public class Assert {
     }
 
     public static void assertNotNull(Object identified) {
-        assertNotNull("unexpected null", identified);
+        assertNotNull("", identified);
     }
 
     public static void assertNotNull(String message, Object object) {
-        assertTrue(message, object != null);
+        assertTrue("unexpected null: " + message, object != null);
     }
 
     public static void assertNotNull(String message, Object target, Object object) {
