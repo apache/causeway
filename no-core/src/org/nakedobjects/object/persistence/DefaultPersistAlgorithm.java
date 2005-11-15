@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.ToString;
@@ -80,23 +81,16 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
     }
 
     protected void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
-        if (collection.getResolveState().isPersistent()) {
-        // if(collection.getResolveState() != ResolveState.GHOST) {
+        if (collection.getResolveState() != ResolveState.GHOST) {
             return;
         }
-        
-        LOG.info("persist " + collection);
-        //NakedObjects.getObjectLoader().madePersistent(collection, createOid(collection));
-        
-//        NakedObjects.getObjectLoader().madePersistent(collection, null);
-        collection.persistedAs(null);
 
-        //        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVING);
-//        ((AbstractNakedReference) collection).changeState(ResolveState.RESOLVED);
+        LOG.info("persist " + collection);
+        NakedObjects.getObjectLoader().start(collection, ResolveState.RESOLVING);
+        NakedObjects.getObjectLoader().end(collection);
         for (int j = 0; j < collection.size(); j++) {
             makePersistent(collection.elementAt(j), manager);
         }
-
     }
     
     public String name() {
