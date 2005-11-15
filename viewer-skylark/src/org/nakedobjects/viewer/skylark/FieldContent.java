@@ -6,7 +6,7 @@ public interface FieldContent extends Content {
 
 	String getFieldName();
 	
-	NakedObjectField getFieldReflector();
+	NakedObjectField getField();
 	
 	boolean isMandatory();
 }

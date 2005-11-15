@@ -58,7 +58,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         return field.getName();
     }
 
-    public NakedObjectField getFieldReflector() {
+    public NakedObjectField getField() {
         return field.getFieldReflector();
     }
 

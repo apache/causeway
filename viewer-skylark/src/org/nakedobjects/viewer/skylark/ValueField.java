@@ -56,15 +56,11 @@ public class ValueField extends ValueContent implements FieldContent {
         return field.getDescription();
     }
 
-    private NakedObjectField getField() {
-        return field.getFieldReflector();
-    }
-
     public String getFieldName() {
         return field.getName();
     }
 
-    public NakedObjectField getFieldReflector() {
+    public NakedObjectField getField() {
         return field.getFieldReflector();
     }
 

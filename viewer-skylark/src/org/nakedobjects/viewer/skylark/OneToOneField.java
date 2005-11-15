@@ -74,15 +74,11 @@ public class OneToOneField extends ObjectContent implements FieldContent {
         debug.appendln(4, "object", object);
     }
 
-    private OneToOneAssociation getField() {
-        return (OneToOneAssociation) field.getFieldReflector();
-    }
-
     public String getFieldName() {
         return field.getName();
     }
 
-    public NakedObjectField getFieldReflector() {
+    public NakedObjectField getField() {
         return field.getFieldReflector();
     }
     

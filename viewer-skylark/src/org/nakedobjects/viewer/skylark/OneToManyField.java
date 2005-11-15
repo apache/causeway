@@ -92,7 +92,7 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         return field.getName();
     }
 
-    public NakedObjectField getFieldReflector() {
+    public NakedObjectField getField() {
         return field.getFieldReflector();
     }
 

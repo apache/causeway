@@ -188,7 +188,7 @@ public class TextContent {
         
         TextBlockReference block = getBlockFor(cursorAt.getLine());
         
-        Assert.assertNotNull("can't insert '" + characters + "' at " + cursorAt, block);
+        Assert.assertNotNull("failed to get block for line " + cursorAt.getLine(), block);
         
         block.block.insert(block.line, cursorAt.getCharacter(), characters);
     }
