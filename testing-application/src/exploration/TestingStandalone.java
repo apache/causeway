@@ -7,7 +7,7 @@ import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
-import org.nakedobjects.object.persistence.ObjectPesistorLogger;
+import org.nakedobjects.object.persistence.ObjectPersistorLogger;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
@@ -87,7 +87,7 @@ public class TestingStandalone {
             lom.setCheckObjectsForDirtyFlag(true);
             lom.setPersistAlgorithm(persistAlgorithm);
             
-            NakedObjectPersistor objectManager = new ObjectPesistorLogger(lom, "manager.log");
+            NakedObjectPersistor objectManager = new ObjectPersistorLogger(lom, "manager.log");
             nakedObjects.setObjectPersistor(objectManager);
             
             ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
