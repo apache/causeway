@@ -48,7 +48,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         Content content = view.getContent();
         NakedObject object = ((ObjectContent) content).getObject();
 
-        LOG.debug("rebuild view " + view + " for " + object);
+        LOG.debug("build view " + view + " for " + object);
 
         NakedObjectSpecification cls = null;
         if(useFieldType) {
@@ -95,7 +95,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     }
 
     private void newBuild(View view, NakedObject object, NakedObjectField[] flds) {
-        LOG.debug("build new view " + view + " for " + object);
+        LOG.debug("  as new build");
         for (int f = 0; f < flds.length; f++) {
             NakedObjectField field = flds[f];
             addField(view, object, field);
@@ -117,7 +117,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     }
 
     private void updateBuild(View view, NakedObject object, NakedObjectField[] flds) {
-        LOG.debug("rebuild view " + view + " for " + object);
+        LOG.debug("  as update build");
         /*
          * 1/ To remove fields: look through views and remove any that don't  exists in visible fields
          * 2/ From remaining views chaeck for changes as already being done, and replace if needed
@@ -133,11 +133,10 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                 
                 for (int j = 0; j < flds.length; j++) {
                     NakedObjectField field = flds[j];
-                    if(fieldContent.getFieldReflector() == field) {
+                    if(fieldContent.getField() == field) {
                         continue outer;
                     }
                 }
-
                 view.removeView(subviews[i]);
             }
         
@@ -146,7 +145,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         subviews = view.getSubviews();
         for (int i = 0; i < subviews.length; i++) {
             View subview = subviews[i];
-            NakedObjectField fieldReflector = ((FieldContent) subview.getContent()).getFieldReflector();
+            NakedObjectField fieldReflector = ((FieldContent) subview.getContent()).getField();
             Naked value = object.getField(fieldReflector);
             if (fieldReflector.isValue()) {
                 subview.refresh();
@@ -176,25 +175,26 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             NakedObjectField field = flds[j];
             for (int i = 0; i < subviews.length; i++) {
                 FieldContent fieldContent = ((FieldContent) subviews[i].getContent());
-                if(fieldContent.getFieldReflector() == field) {
+                if(fieldContent.getField() == field) {
                     continue outer2;
                 }
             }
-            
             addField(view, object, field);
         }
             
         
         // debug
         {
+            LOG.debug("fields:-");
 	       View[] dsubviews = view.getSubviews();
 	        for (int i = 0; i < flds.length; i++) {
-	            LOG.debug(i + " " + flds[i].getName() + " " + flds[i].hashCode());
+	            LOG.debug("  - " + i + ") " + flds[i].getId() + " " + flds[i].hashCode());
 	        }
 	        
+            LOG.debug("subviews:-");
 	        for (int i = 0; i < dsubviews.length; i++) {
 	            FieldContent fieldContent = ((FieldContent) dsubviews[i].getContent());
-	            LOG.debug(i + " " + fieldContent.getFieldName() + " " + fieldContent.getFieldReflector().hashCode());
+	            LOG.debug("  - " + i + ") " + fieldContent.getFieldName() + " " + fieldContent.getField().hashCode());
 	        }
         }
         // end debug
