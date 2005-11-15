@@ -28,9 +28,9 @@ public class DistributionLogger extends Logger implements Distribution {
 
     private static void dump(StringBuffer str, Data data, int indent) {
         if (data == null) {
-            str.append("''");
+            str.append("null");
         } else if (data instanceof NullData) {
-            str.append("NULL");
+            str.append("NULL (NullData object)");
         } else if (data instanceof ValueData) {
             ValueData valueData = ((ValueData) data);
             str.append("ValueData " + valueData.getType() + ":" + valueData.getValue());

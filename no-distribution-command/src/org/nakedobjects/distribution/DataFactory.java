@@ -224,7 +224,9 @@ public abstract class DataFactory {
             NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
             for (int i = 0; i < fields.length; i++) {
                 Naked field = object.getField(fields[i]);
-                if (field == null && isComplete) {
+                if(fields[i].isDerived()) {
+                    fieldContent[i] = null;
+                } else if (field == null && isComplete) {
                     fieldContent[i] = createNullData(fields[i].getSpecification().getFullName());
                 } else if (field == null && !isComplete) {
                     fieldContent[i] = null;

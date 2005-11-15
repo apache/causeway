@@ -37,7 +37,6 @@ public class DataHelper {
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
-
         
         /*
          * either create a new transient object, get an existing object and update it if data is for
@@ -108,7 +107,7 @@ public class DataHelper {
         if (fieldContent != null && fieldContent.length > 0) {
             NakedObjectField[] fields = object.getSpecification().getFields();
             for (int i = 0; i < fields.length; i++) {
-                if (fieldContent[i] == null) {
+                if (fieldContent[i] == null || fields[i].isDerived()) {
                     LOG.debug("no data for field " + fields[i].getId());
                     continue;
                 }
