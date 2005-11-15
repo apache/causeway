@@ -57,7 +57,7 @@ public class Dump {
             } else  if (object instanceof NakedObject) {
                 objectGraph((NakedObject) object, level, ignoreObjects, info);
             } else {
-                info.append("??? " + object);
+            //    info.append("??? " + object);
             }
         }
     }
