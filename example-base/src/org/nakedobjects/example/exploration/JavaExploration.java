@@ -136,7 +136,7 @@ public class JavaExploration {
             LOG.error("exploration startup problem", e);
         } finally {
             if (splash != null) {
-                splash.removeAfterDelay(4);
+                splash.removeAfterDelay(6);
             }
         }
     }
