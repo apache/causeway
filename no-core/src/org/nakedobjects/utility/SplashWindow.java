@@ -21,6 +21,7 @@ public class SplashWindow extends Window implements Runnable {
     private static final String DIRECTORY = "images" + File.separator;
     private static final String LOGO_FILE = "logo.jpg";
     final static Logger LOG = Logger.getLogger(SplashWindow.class);
+    private static final String LOGO_TEXT = "Naked Objects";
 
     /**
      * Get an Image object from the specified file path on the file system.
@@ -109,73 +110,104 @@ public class SplashWindow extends Window implements Runnable {
     }
 
     private int delay;
-    private final Font labelFont;
+    private final Font textFont;
     private final int height;
-    private final int labelLineHeight;
+    private final int textLineHeight;
+    private final int titleLineHeight;
     private Image logo;
     private final int PADDING = 9;
     private Frame parent;
     private final int width;
     private Font titleFont;
+    private int left;
+    private Font logoFont;
 
     public SplashWindow() {
         super(new Frame());
         parent = (Frame) getParent();
         logo = loadImage(LOGO_FILE);
 
-        labelFont = new Font("SansSerif", Font.PLAIN, 9);
+        textFont = new Font("SansSerif", Font.PLAIN, 10);
         titleFont = new Font("SansSerif", Font.BOLD, 11);
-        FontMetrics labelMetrics = getFontMetrics(labelFont);
-        FontMetrics titleMetrics = getFontMetrics(titleFont);
-        labelLineHeight = (int) (labelMetrics.getHeight() * 1.05);
+        logoFont = new Font("Serif", Font.PLAIN, 36);
+        textLineHeight = (int) (getFontMetrics(textFont).getHeight() * 0.85);
+        titleLineHeight = (int) (getFontMetrics(titleFont).getHeight() * 1.20);
 
+        int height = 0;
         int width = 0;
-        int height = PADDING;
+        
         if (logo != null) {
             width = logo.getWidth(this);
             height += logo.getHeight(this);
+        } else {
+            FontMetrics metrics = getFontMetrics(logoFont);
+            width = metrics.stringWidth(LOGO_TEXT);
+            height = metrics.getHeight();
         }
         height += PADDING;
 
-        width = Math.max(width, titleMetrics.stringWidth(AboutNakedObjects.getApplicationName()));
-        height += titleMetrics.getHeight();
-
-        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getApplicationCopyrightNotice()));
-        height += labelLineHeight;
-
-        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getApplicationVersion()));
-        height += labelLineHeight;
-
-        width = Math.max(width, titleMetrics.stringWidth(AboutNakedObjects.getFrameworkName()));
-        height += titleMetrics.getHeight();
-
-        width = Math.max(width, labelMetrics.stringWidth(AboutNakedObjects.getFrameworkCopyrightNotice()));
-        height += labelLineHeight;
-
-        width = Math.max(width, labelMetrics.stringWidth(frameworkVersion()));
-        height += labelLineHeight;
-
-        height += PADDING * 2;
-
+        Dimension text = textBounds();
+        width = Math.max(width, text.width);
+        height += text.height;
+        
+        height = PADDING + height + PADDING;
         width = PADDING + width + PADDING;
         setSize(width, height);
 
         this.height = height;
         this.width = width;
+        this.left = width / 2 - text.width / 2;
 
-        Dimension screen = getToolkit().getScreenSize();
-        int x = (screen.width / 2) - (width / 2);
-
-        if ((screen.width / screen.height) >= 2) {
-            x = (screen.width / 4) - (width / 2);
-        }
-
-        int y = (screen.height / 2) - (width / 2);
-        setLocation(x, y);
-        setBackground(Color.black);
+        setupCenterLocation();
 
         show();
         toFront();
+    }
+
+    private void setupCenterLocation() {
+        Dimension screen = getToolkit().getScreenSize();
+        int x = (screen.width / 2) - (this.width / 2);
+        if ((screen.width / screen.height) >= 2) {
+            x = (screen.width / 4) - (this.width / 2);
+        }
+        int y = (screen.height / 2) - (this.width / 2);
+        setLocation(x, y);
+        setBackground(Color.black);
+    }
+
+    private Dimension textBounds() {
+        FontMetrics textMetrics = getFontMetrics(textFont);
+        FontMetrics titleMetrics = getFontMetrics(titleFont);
+        int width = 0;
+        int height = 0;
+
+        
+        // framework details
+        width = titleMetrics.stringWidth(AboutNakedObjects.getFrameworkName());
+        height += titleLineHeight;
+        width = Math.max(width, textMetrics.stringWidth(AboutNakedObjects.getFrameworkCopyrightNotice()));
+        height += textLineHeight;
+        width = Math.max(width, textMetrics.stringWidth(frameworkVersion()));
+        height += textLineHeight;
+
+        // application details
+        String text = AboutNakedObjects.getApplicationName();
+        if (text != null) {
+            width = Math.max(width, titleMetrics.stringWidth(text));
+            height += titleLineHeight;
+        }
+        text = AboutNakedObjects.getApplicationCopyrightNotice();
+        if (text != null) {
+            width = Math.max(width, textMetrics.stringWidth(text));
+            height += textLineHeight;
+        }
+        text = AboutNakedObjects.getApplicationVersion();
+        if (text != null) {
+            width = Math.max(width, textMetrics.stringWidth(text));
+            height += textLineHeight;
+        }
+
+        return new Dimension(width, height);
     }
 
     public void paint(Graphics g) {
@@ -184,61 +216,42 @@ public class SplashWindow extends Window implements Runnable {
 
         if (logo != null) {
             g.drawImage(logo, PADDING, PADDING, this);
+     //       g.drawRect(PADDING, PADDING, logo.getWidth(this) - 1, logo.getHeight(this) - 1);
         } else {
-            g.setFont(titleFont);
+            g.setFont(logoFont);
             FontMetrics fm = g.getFontMetrics();
-            String name = AboutNakedObjects.getFrameworkName();
-            g.drawString(name, PADDING, PADDING + fm.getAscent());
+            g.drawString(LOGO_TEXT, PADDING, PADDING + fm.getAscent());
         }
 
-        FontMetrics labelMetrics = getFontMetrics(labelFont);
-        FontMetrics titleMetrics = getFontMetrics(titleFont);
-
-        // application details
-        String applicationName = AboutNakedObjects.getApplicationName();
-        int left1 = width / 2 - titleMetrics.stringWidth(applicationName) / 2;
-
+        int baseline = height - PADDING - getFontMetrics(textFont).getDescent();
+        
+        // framework details - from bottom to top
+        g.setFont(textFont);
+        g.drawString(frameworkVersion(), left, baseline);
+        baseline -= textLineHeight;
+        g.drawString(AboutNakedObjects.getFrameworkCopyrightNotice(), left, baseline);
+        baseline -= textLineHeight;
+        g.setFont(titleFont);
+        g.drawString(AboutNakedObjects.getFrameworkName(), left, baseline);
+        baseline -= titleLineHeight;
+        
+        // application details - from bottom to top
+        g.setFont(textFont);
         String applicationVersion = AboutNakedObjects.getApplicationVersion();
-        int left2 = width / 2 - labelMetrics.stringWidth(applicationVersion) / 2;
-
+        if (applicationVersion != null) {
+            g.drawString(applicationVersion, left, baseline);
+            baseline -= textLineHeight;
+        }
         String applicationCopyrightNotice = AboutNakedObjects.getApplicationCopyrightNotice();
-        int left3 = width / 2 - labelMetrics.stringWidth(applicationCopyrightNotice) / 2;
-
-        // framework details
-        String frameworkName = AboutNakedObjects.getFrameworkName();
-        int left4 = width / 2 - titleMetrics.stringWidth(frameworkName) / 2;
-
-        String frameworkCopyrightNotice = AboutNakedObjects.getFrameworkCopyrightNotice();
-        int left5 = width / 2 - labelMetrics.stringWidth(frameworkCopyrightNotice) / 2;
-
-        String frameworkVersion = frameworkVersion();
-        int left6 = width / 2 - labelMetrics.stringWidth(frameworkVersion) / 2;
-
-        int baseline = (int) (height - PADDING - 2 * titleMetrics.getHeight() - 4.5 * labelLineHeight + titleMetrics.getDescent());
-
-        int left = Math.min(left1, left2);
-        left = Math.min(left, left3);
-        left = Math.min(left, left4);
-        left = Math.min(left, left5);
-        left = Math.min(left, left6);
-
-        g.setFont(titleFont);
-        g.drawString(applicationName, left, baseline);
-        baseline += titleMetrics.getHeight();
-        g.setFont(labelFont);
-        g.drawString(applicationCopyrightNotice, left, baseline);
-        baseline += labelMetrics.getHeight();
-        g.drawString(applicationVersion, left, baseline);
-        baseline += labelMetrics.getHeight() * 1.5;
-
-        g.setFont(titleFont);
-        g.drawString(frameworkName, left, baseline);
-        baseline += titleMetrics.getHeight();
-        g.setFont(labelFont);
-        g.drawString(frameworkCopyrightNotice, left, baseline);
-        baseline += labelMetrics.getHeight();
-        g.drawString(frameworkVersion, left, baseline);
-        baseline += labelMetrics.getHeight();
+        if (applicationCopyrightNotice != null) {
+            g.drawString(applicationCopyrightNotice, left, baseline);
+            baseline -= textLineHeight;
+        }
+        String applicationName = AboutNakedObjects.getApplicationName();
+        if (applicationName != null) {
+            g.setFont(titleFont);
+            g.drawString(applicationName, left, baseline);
+        }
     }
 
     private String frameworkVersion() {

@@ -9,15 +9,15 @@ public class AboutNakedObjects {
     private static String applicationVersion;
 
     public static String getApplicationCopyrightNotice() {
-        return applicationCopyrightNotice == null ? "" : applicationCopyrightNotice;
+        return applicationCopyrightNotice;
     }
 
     public static String getApplicationName() {
-        return applicationName == null ? "" : applicationName;
+        return applicationName;
     }
 
     public static String getApplicationVersion() {
-        return applicationVersion == null ? "" : applicationVersion;
+        return applicationVersion;
     }
 
     public static String getFrameworkBuild() {
@@ -44,8 +44,12 @@ public class AboutNakedObjects {
         Logger log = Logger.getLogger("Naked Objects");
         log.info(getFrameworkName());
         log.info(getFrameworkVersion() + getFrameworkBuild());
+        if(getApplicationName() != null) {
         log.info(getApplicationName());
-        log.info(getApplicationVersion());
+        }
+        if(getApplicationVersion() != null) {
+            log.info(getApplicationVersion());
+        }
     }
 
     public static void main(String[] args) {
