@@ -298,6 +298,13 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
             at.subtract(HPADDING, VPADDING);
             cursor.cursorAt(at);
             resetSelection();
+            
+            // testing
+            if( cursor.getLine() > textContent.getNoLinesOfContent()) {
+            throw new NakedObjectRuntimeException("not inside content for line " + cursor.getLine() + " : " + textContent.getNoLinesOfContent());
+            }
+            
+            
             markDamaged();
         } 
 
