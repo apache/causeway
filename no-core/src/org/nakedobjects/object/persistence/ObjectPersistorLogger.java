@@ -14,15 +14,15 @@ import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.utility.Logger;
 
 
-public class ObjectPesistorLogger extends Logger implements NakedObjectPersistor {
+public class ObjectPersistorLogger extends Logger implements NakedObjectPersistor {
     private final NakedObjectPersistor decorated;
 
-    public ObjectPesistorLogger(final NakedObjectPersistor decorated, final String logFileName) {
+    public ObjectPersistorLogger(final NakedObjectPersistor decorated, final String logFileName) {
         super(logFileName, false);
         this.decorated = decorated;
     }
 
-    public ObjectPesistorLogger(final NakedObjectPersistor decorated) {
+    public ObjectPersistorLogger(final NakedObjectPersistor decorated) {
         super(null, false);
         this.decorated = decorated;
     }
