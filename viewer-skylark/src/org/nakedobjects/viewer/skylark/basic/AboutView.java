@@ -35,13 +35,23 @@ public class AboutView extends AbstractView {
             canvas.drawIcon(image, padding, padding);
         }
         int line = padding + Style.LABEL.getAscent();
-        // application detail
-        canvas.drawText(AboutNakedObjects.getApplicationName(), left, line, Style.BLACK, Style.TITLE);
-        line += Style.TITLE.getLineHeight();
-        canvas.drawText(AboutNakedObjects.getFrameworkCopyrightNotice(), left, line, Style.BLACK, Style.LABEL);
-        line += Style.LABEL.getLineHeight();
-        canvas.drawText(AboutNakedObjects.getApplicationVersion(), left, line, Style.BLACK, Style.LABEL);
-        line += 2 * Style.LABEL.getLineHeight();
+        
+        // application details
+        String text = AboutNakedObjects.getApplicationName();
+        if(text != null) {
+            canvas.drawText(text, left, line, Style.BLACK, Style.TITLE);
+            line += Style.TITLE.getLineHeight();
+        }
+        text = AboutNakedObjects.getApplicationCopyrightNotice();
+        if(text != null) {
+            canvas.drawText(text, left, line, Style.BLACK, Style.LABEL);
+            line += Style.LABEL.getLineHeight();
+        }
+        text = AboutNakedObjects.getApplicationVersion();
+        if(text != null) {
+            canvas.drawText(text, left, line, Style.BLACK, Style.LABEL);
+            line += 2 * Style.LABEL.getLineHeight();
+        }
         
         // framework details
         canvas.drawText(AboutNakedObjects.getFrameworkName(), left, line, Style.BLACK, Style.TITLE);
@@ -69,12 +79,22 @@ public class AboutView extends AbstractView {
         width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getFrameworkCopyrightNotice()));
         width = Math.max(width, Style.LABEL.stringWidth(frameworkVersion()));
         
-        height += Style.TITLE.getAscent();
-        height += Style.LABEL.getLineHeight();
         
-        width = Math.max(width, Style.TITLE.stringWidth(AboutNakedObjects.getApplicationName()));
-        width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getApplicationCopyrightNotice()));
-        width = Math.max(width, Style.LABEL.stringWidth(AboutNakedObjects.getApplicationVersion()));
+        String text = AboutNakedObjects.getApplicationName();
+        if(text != null) {
+            height += Style.TITLE.getAscent();
+            width = Math.max(width, Style.TITLE.stringWidth(text));
+        }
+        text = AboutNakedObjects.getApplicationCopyrightNotice();
+        if(text != null) {
+            height += Style.LABEL.getLineHeight();
+            width = Math.max(width, Style.LABEL.stringWidth(text));
+        }
+        text = AboutNakedObjects.getApplicationVersion();
+        if(text != null) {
+            height += Style.LABEL.getLineHeight();
+            width = Math.max(width, Style.LABEL.stringWidth(text));
+        }
         
         if(showingImage()) {
             height = Math.max(height, image.getHeight());
