@@ -3,8 +3,9 @@ import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.ProxyPersistor;
+import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ProxyPeerFactory;
+import org.nakedobjects.distribution.ProxyPersistor;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.java.JavaDataFactory;
@@ -20,9 +21,9 @@ import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.SimpleOidGenerator;
-import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.persistence.objectstore.ObjectStoreLogger;
+import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -186,7 +187,7 @@ public abstract class StandaloneClientServer {
         PipedClient client =  new PipedClient();
         client.setConnection(connection);
         
-        Distribution clientLogger = client; //new DistributionLogger(client, "client-connection.log");
+        Distribution clientLogger = new DistributionLogger(client, "client-connection.log");
 
         Date.setClock(new SystemClock());
 
@@ -202,7 +203,7 @@ public abstract class StandaloneClientServer {
         proxyObjectManager.setConnection(clientLogger);
         proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-        NakedObjectPersistor objectManager = proxyObjectManager; //new ObjectManagerLogger(proxyObjectManager, "client-manager.log");
+        NakedObjectPersistor objectManager = proxyObjectManager; //new ObjectPersistorLogger(proxyObjectManager, "client-manager.log");
         nakedObjects.setObjectPersistor(objectManager);
 
 
@@ -213,12 +214,13 @@ public abstract class StandaloneClientServer {
         objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
         nakedObjects.setObjectLoader(objectLoader);
 
-        ProxyPeerFactory reflectionFactory = new ProxyPeerFactory();
-        reflectionFactory.setConnection(clientLogger);
-        reflectionFactory.setObjectDataFactory(objectDataFactory);
+        ProxyPeerFactory proxyPeerFactory = new ProxyPeerFactory();
+        proxyPeerFactory.setConnection(clientLogger);
+        proxyPeerFactory.setObjectDataFactory(objectDataFactory);
 
         ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
-                reflectionFactory,
+                proxyPeerFactory,
+                new TransactionPeerFactory()
         };
 
         JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
