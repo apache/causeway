@@ -3,12 +3,19 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObjectField;
 
+import org.apache.log4j.Logger;
+
 
 public class ReflectionPeerBuilder {
+    private static final Logger LOG = Logger.getLogger(ReflectionPeerBuilder.class);
     private ReflectionPeerFactory[] factories;
 
     public void setFactories(ReflectionPeerFactory[] factories) {
         this.factories = factories;
+        LOG.debug("Reflection peers");
+        for (int i = 0; i < factories.length; i++) {
+            LOG.debug("  " + factories[i]);
+        }
     }
 
     /**
@@ -17,12 +24,12 @@ public class ReflectionPeerBuilder {
      * @property
      */
     public void set_Factories(ReflectionPeerFactory[] factories) {
-        this.factories = factories;
+        setFactories(factories);
     }
 
     public Action createAction(String className, ActionPeer actionPeer) {
         ActionPeer peer = actionPeer;
-        for (int i = 0; i < factories.length; i++) {
+        for (int i = factories.length - 1; i >= 0; i--) {
             peer = factories[i].createAction(peer);
         }
         return new ActionImpl(className, peer.getIdentifier().getName(), peer);
@@ -30,7 +37,7 @@ public class ReflectionPeerBuilder {
 
     public NakedObjectField createField(String className, OneToManyPeer fieldPeer) {
         OneToManyPeer peer = fieldPeer;
-        for (int i = 0; i < factories.length; i++) {
+        for (int i = factories.length - 1; i >= 0; i--) {
             peer = factories[i].createField(peer);
         }
         return new OneToManyAssociationImpl(className, peer.getIdentifier().getName(), peer.getType(), peer);
@@ -38,7 +45,7 @@ public class ReflectionPeerBuilder {
 
     public NakedObjectField createField(String className, OneToOnePeer fieldPeer) {
         OneToOnePeer peer = fieldPeer;
-        for (int i = 0; i < factories.length; i++) {
+        for (int i = factories.length - 1; i >= 0; i--) {
             peer = factories[i].createField(peer);
         }
         return new OneToOneAssociationImpl(className, peer.getIdentifier().getName(), peer.getType(), peer);
