@@ -10,7 +10,7 @@ import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashMap;
-import org.nakedobjects.object.persistence.ObjectPesistorLogger;
+import org.nakedobjects.object.persistence.ObjectPersistorLogger;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.repository.NakedObjectsClient;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
@@ -74,7 +74,7 @@ public class XmlClient {
             proxyObjectManager.setConnection(connection);
             proxyObjectManager.setObjectDataFactory(objectDataFactory);
 
-            NakedObjectPersistor objectManager = new ObjectPesistorLogger(proxyObjectManager, "manager.log");
+            NakedObjectPersistor objectManager = new ObjectPersistorLogger(proxyObjectManager, "manager.log");
             nakedObjects.setObjectPersistor(objectManager);
             
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
