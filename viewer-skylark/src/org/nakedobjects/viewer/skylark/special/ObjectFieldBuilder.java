@@ -71,25 +71,6 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         return new CompositeView(content, specification, axis);
     }
 
-    private Content createContent(NakedObject parent, Naked object, NakedObjectField field) {
-        if (field == null) {
-            throw new NullPointerException();
-        }
-
-        Content content;
-        if (field instanceof OneToManyAssociation) {
-            content = new OneToManyField(parent, (InternalCollection) object, (OneToManyAssociation) field);
-        } else if (field.isValue()) {
-            content = new ValueField(parent, (NakedValue) object, (OneToOneAssociation) field);
-        } else if (field instanceof OneToOneAssociation) {
-            content = new OneToOneField(parent, (NakedObject) object, (OneToOneAssociation) field);
-        } else {
-            throw new NakedObjectRuntimeException();
-        }
-
-        return content;
-    }
-
     public View decorateSubview(View subview) {
         return subviewDesign.decorateSubview(subview);
     }
@@ -105,8 +86,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
     private void addField(View view, NakedObject object, NakedObjectField field) {
         try {
             Naked value = object.getField(field);
-            Content content = createContent(object, value, field);
-            View fieldView = subviewDesign.createSubview(content, view.getViewAxis());
+            View fieldView = createFieldView(view, object, field, value);
             if (fieldView != null) {
                 view.addView(decorateSubview(fieldView));
             }
@@ -145,9 +125,15 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         subviews = view.getSubviews();
         for (int i = 0; i < subviews.length; i++) {
             View subview = subviews[i];
-            NakedObjectField fieldReflector = ((FieldContent) subview.getContent()).getField();
-            Naked value = object.getField(fieldReflector);
-            if (fieldReflector.isValue()) {
+            NakedObjectField field = ((FieldContent) subview.getContent()).getField();
+            Naked value = object.getField(field);
+            if (field.isValue()) {
+                
+                if(!value.getObject().equals(subview.getContent().getNaked().getObject())) {
+                    View fieldView = createFieldView(view, object, field, value);
+                    view.replaceView(subview, decorateSubview(fieldView));
+                }
+                
                 subview.refresh();
             } else if (value instanceof NakedCollection) {
                 subview.update(value);
@@ -157,7 +143,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                 if (changedValue) {
                     View fieldView;
                     try {
-                        fieldView = subviewDesign.createSubview(createContent(object, value, fieldReflector), view.getViewAxis());
+                        fieldView = createFieldView(view, object, field, value);
                     } catch (NakedObjectFieldException e) {
                         LOG.error("invalid field", e);
                         fieldView = new FieldErrorView(e.getMessage());
@@ -198,6 +184,26 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 	        }
         }
         // end debug
+    }
+
+    private View createFieldView(View view, NakedObject object, NakedObjectField field, Naked value) {
+        if (field == null) {
+            throw new NullPointerException();
+        }
+        
+        Content content1;
+        if (field instanceof OneToManyAssociation) {
+            content1 = new OneToManyField(object, (InternalCollection) value, (OneToManyAssociation) field);
+        } else if (field.isValue()) {
+            content1 = new ValueField(object, (NakedValue) value, (OneToOneAssociation) field);
+        } else if (field instanceof OneToOneAssociation) {
+            content1 = new OneToOneField(object, (NakedObject) value, (OneToOneAssociation) field);
+        } else {
+            throw new NakedObjectRuntimeException();
+        }
+
+        View fieldView = subviewDesign.createSubview(content1, view.getViewAxis());
+        return fieldView;
     }
 }
 
