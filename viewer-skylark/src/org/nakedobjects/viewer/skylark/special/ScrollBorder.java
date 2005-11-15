@@ -534,6 +534,16 @@ public class ScrollBorder extends AbstractViewDecorator {
             return null;
         }
     }
+    
+    public void limitBoundsWithin(Bounds bounds) {
+        super.limitBoundsWithin(bounds);
+        if(verticalScrollPosition > verticalMaximum) {
+            verticalScrollPosition = verticalMaximum;
+        }
+        if(horizontalScrollPosition > horizontalMaximum) {
+            horizontalScrollPosition = horizontalMaximum;
+        }
+    }
 
     public void markDamaged(Bounds bounds) {
         /* TODO this only works for the main content area, not for the headers.
@@ -672,7 +682,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     }
 
     public void setSize(Size size) {
-        // TODO need to restore the offset after size change
+        // TODO need to restore the offset after size change - see limitBounds
         //      float verticalRatio = ((float) verticalScrollPosition) /
         // contentArea().getHeight();
 
@@ -712,10 +722,6 @@ public class ScrollBorder extends AbstractViewDecorator {
         }
         
         wrappedView.setSize(requiredSize);
-        
-        // temp TODO fix
-        verticalScrollPosition = 0;
-        horizontalScrollPosition = 0;
     }
 
     public void setVerticalPostion(final int position) {
