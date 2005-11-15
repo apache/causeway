@@ -1,6 +1,8 @@
 package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.InstancesCriteria;
+import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.Logger;
@@ -38,12 +40,15 @@ public class DistributionLogger extends Logger implements Distribution {
             ObjectData objectData = ((ObjectData) data);
             str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
                     + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
+            NakedObjectField[] fs = NakedObjects.getSpecificationLoader().loadSpecification(objectData.getType()).getFields();
             Object[] fields = objectData.getFieldContent();
             for (int i = 0; fields != null && i < fields.length; i++) {
                 str.append("\n");
                 str.append(padding(indent));
                 str.append(i + 1);
                 str.append(") ");
+                str.append(fs[i].getId());
+                str.append(": ");
                 dump(str, (Data) fields[i], indent + 1);
             }
         } else if (data instanceof CollectionData) {
