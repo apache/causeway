@@ -19,17 +19,13 @@
 			<include name="nakedobjects-${build.version}-${build.number}-dotnet.zip" />
 		</fileset>
 
-		<ftp action="mkdir" remotedir="test" password="${password}" server="${server}" userid="${userid}" verbose="yes">
-			<fileset><include name="*.*"/></fileset>
-		</ftp>
-
 		<ftp password="${password}" server="${server}" userid="${userid}" remotedir="." verbose="yes" binary="no" passive="yes">
 			<fileset refid="released-files"/>
 		</ftp>
 
-		<!--copy todir="${release2.dir}">
+		<copy todir="${release2.dir}">
 			<fileset refid="released-files"/>
-		</copy-->
+		</copy>
 	
 	</target>
 </project>
