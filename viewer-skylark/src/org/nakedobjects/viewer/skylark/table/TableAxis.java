@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.table;
 
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -13,7 +12,7 @@ public class TableAxis implements ViewAxis {
     private final int[] widths;
     private final NakedObjectField[] fields;
 
-    public TableAxis(NakedObjectField[] fields, NakedObject exampleObject) {
+    public TableAxis(NakedObjectField[] fields) {
         this.fields = fields;
         widths = new int[fields.length];
         names = new String[fields.length];

@@ -52,7 +52,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         NakedObjectSpecification cls = null;
         if(useFieldType) {
-            cls = content.getSpecification();  //cls = ((ObjectField) content).getSpecification();
+            cls = content.getSpecification();
         } 
         if(cls == null) {
             cls = object.getSpecification();
@@ -128,8 +128,9 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
             NakedObjectField field = ((FieldContent) subview.getContent()).getField();
             Naked value = object.getField(field);
             if (field.isValue()) {
+                Naked naked = subview.getContent().getNaked();
                 
-                if(!value.getObject().equals(subview.getContent().getNaked().getObject())) {
+                if(value != null && !value.getObject().equals(naked.getObject())) {
                     View fieldView = createFieldView(view, object, field, value);
                     view.replaceView(subview, decorateSubview(fieldView));
                 }

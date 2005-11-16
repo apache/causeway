@@ -1,9 +1,7 @@
 package org.nakedobjects.viewer.skylark.table;
 
-import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.viewer.skylark.CollectionContent;
@@ -43,10 +41,8 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
     public boolean canDisplay(Content content) {
         if (content.isCollection()) {
             TypedNakedCollection coll = (TypedNakedCollection) ((CollectionContent) content).getCollection();
-            NakedObjectSpecification elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(
-                    coll.getElementSpecification().getFullName());
-
-            return !elementSpecification.isAbstract();
+            NakedObjectSpecification elementSpecification = coll.getElementSpecification();
+            return elementSpecification.getAccessibleFields().length > 0;
         } else {
             return false;
         }
@@ -58,12 +54,10 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
 
     public View createView(Content content, ViewAxis axis) {
         TypedNakedCollection coll = (TypedNakedCollection) ((CollectionContent) content).getCollection();
-        NakedObjectSpecification elementSpecification = NakedObjects.getSpecificationLoader().loadSpecification(
-                coll.getElementSpecification().getFullName());
+        NakedObjectSpecification elementSpecification = coll.getElementSpecification();
 
-        NakedObject exampleObject = NakedObjects.getObjectLoader().createTransientInstance(elementSpecification);
-        NakedObjectField[] viewFields = exampleObject.getVisibleFields();
-        TableAxis tableAxis = new TableAxis(tableFields(viewFields), exampleObject);
+        NakedObjectField[] viewFields = elementSpecification.getAccessibleFields();
+        TableAxis tableAxis = new TableAxis(tableFields(viewFields));
         tableAxis.setupColumnWidths(new TypeBasedColumnWidthStrategy());
 
         View table = super.createView(content, tableAxis);
