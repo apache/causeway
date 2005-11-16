@@ -1,8 +1,14 @@
 package bom;
 
+import org.nakedobjects.application.control.FieldAbout;
+import org.nakedobjects.application.valueholder.Color;
+
 public class CompanyCreditCard extends CreditCard {
     private String company;
     
+    public void aboutColor(FieldAbout about, Color color) {
+        about.invisible();
+    }
     
     public String getCompany() {
         return company;

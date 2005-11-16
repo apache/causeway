@@ -27,6 +27,10 @@ public class CreditCard implements PaymentMethod, Common {
         
     }
     
+    public void aboutColor(FieldAbout about, Color color) {
+       // about.invisible();
+    }
+    
      public CreditCard() {
         expires = new TextString();
         nameOnCard = new TextString();

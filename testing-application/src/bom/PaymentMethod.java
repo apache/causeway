@@ -1,8 +1,11 @@
 package bom;
 
+import org.nakedobjects.application.valueholder.TextString;
+
 
 
 public abstract interface PaymentMethod {
+    TextString getExpires();
 }
 
 /*

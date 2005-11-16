@@ -59,6 +59,11 @@ public class Telephone implements Common {
         return number;
     }
     
+    public final String getReversed() {
+        StringBuffer n = new StringBuffer(number.titleString());
+        return n.reverse().toString();
+    }
+    
     public final Logical getUnmodifiable() {
         return temporary;
     }

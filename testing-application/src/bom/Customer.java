@@ -37,6 +37,7 @@ public class Customer {
     private MultilineTextString notes = new MultilineTextString();
     private final Vector objects = new Vector();
     private final Vector common = new Vector();
+    private Vector creditCards;
 
     public Password getPassword() {
         return password;
@@ -77,9 +78,26 @@ public class Customer {
         markDirty();
     }
 
-    public void addToPaymentMethods(PaymentMethod method) {}
+    public void addToPaymentMethods(PaymentMethod method) {
+        paymentMethods.addElement(method);
+    }
 
-    public void removeFromPaymentMethods(PaymentMethod method) {}
+    public void removeFromPaymentMethods(PaymentMethod method) {
+        paymentMethods.removeElement(method);
+    }
+    
+    public Vector getCreditCards() {
+        return creditCards;
+    }
+
+
+    public void addToCreditCards(CreditCard method) {
+        creditCards.addElement(method);
+    }
+
+    public void removeFromCreditCards(CreditCard method) {
+        creditCards.removeElement(method);
+    }
 
     public Customer() {
         firstName = new TextString();
@@ -87,7 +105,8 @@ public class Customer {
         locations = new Vector();
         phoneNumbers = new Vector();
         bookings = new Vector();
-        membership = new Percentage();
+        creditCards = new Vector();
+              membership = new Percentage();
     }
     
 
