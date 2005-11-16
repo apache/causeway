@@ -1,6 +1,8 @@
 package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -21,6 +23,7 @@ import org.nakedobjects.viewer.skylark.table.InternalTableSpecification;
 
 class TreeBrowserFrame extends AbstractView implements ViewAxis {
     private ViewSpecification mainViewFormSpec;
+    private ViewSpecification mainViewListSpec;
     private ViewSpecification mainViewTableSpec;
     private boolean invalidLayout = true;
     private int layoutCount = 0;
@@ -33,6 +36,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
 
         mainViewFormSpec = new TreeBrowserFormSpecification();
         mainViewTableSpec = new InternalTableSpecification();
+        mainViewListSpec = new SimpleListSpecification();
     }
 
     public String debugDetails() {
@@ -229,14 +233,22 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     }
 
     public void setSelectedNode(View view) {
-        Naked object = view.getContent().getNaked();
-        if (object != null) {
-            if (mainViewFormSpec.canDisplay(view.getContent())) {
+        Content content = view.getContent();
+        Naked object = content.getNaked();
+        NakedObjectSpecification specification = object.getSpecification();
+
+        if (specification.isObject()) {
+            if (object != null && mainViewFormSpec.canDisplay(content)) {
                 selectedNode = view;
-                showInRightPane(mainViewFormSpec.createView(view.getContent(), null));
-            } else if (mainViewTableSpec.canDisplay(view.getContent())) {
+                showInRightPane(mainViewFormSpec.createView(content, null));
+            }
+        } else if (specification.isCollection() && ((NakedCollection) object).size() > 0) {
+            if (mainViewTableSpec.canDisplay(content)) {
                 selectedNode = view;
-                showInRightPane(mainViewTableSpec.createView(view.getContent(), null));
+                showInRightPane(mainViewTableSpec.createView(content, null));
+            } else if (mainViewListSpec.canDisplay(content)) {
+                selectedNode = view;
+                showInRightPane(mainViewListSpec.createView(content, null));
             }
         }
     }
