@@ -59,7 +59,7 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
      * field represented by this object.
      */
     public void removeAssociation(NakedObject inObject, NakedObject associate) {
-        if (isPersistent(inObject) && fullProxy) {
+        if (isPersistent(inObject)) {
             LOG.debug("clear association remotely " + inObject + "/" + associate);
             try {
                 ReferenceData targetReference = objectDataFactory.createReference(inObject);
