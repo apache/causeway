@@ -7,6 +7,12 @@ import java.awt.Font;
 public interface NakedObjectConfiguration {
 
     /**
+     * Adds a name-value pair to the list of properties. If the named property already exists then the
+     * specified value replaces the existing one.
+     */
+    void add(String name, String value);
+    
+    /**
      * Gets the boolean value for the specified name where no value or 'on' will
      * result in true being returned; anything gives false. If no boolean
      * property is specified with this name then false is returned.
@@ -99,7 +105,7 @@ public interface NakedObjectConfiguration {
     boolean hasProperty(String name);
     
     /**
-     * Returns as a String what the named property is refered to as.  For example in a
+     * Returns as a String that the named property is refered to as.  For example in a
      * simple properties file the property z might be specified in the file as x.y.z.  
      */
     String referedToAs(String name);
