@@ -239,7 +239,7 @@
             <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
               font-family="sans-serif" 
               text-align="start" text-indent="-3.5cm">
-              Draft 
+               <xsl:text>Draft (</xsl:text>
             </fo:block>
             <fo:block font-size="8pt"
               space-before="-10pt" 
@@ -255,8 +255,10 @@
                 space-before="8cm"
                 font-family="sans-serif"
                 space-after=".65cm"
+                id="{generate-id(.)}">
+                <!--
                 id="{generate-id(key('parts', .))}"
-              >
+              -->
                 <xsl:text>Part </xsl:text>
                 <xsl:number level="multiple" count="/publication/section" format="I"/>
              </fo:block>
@@ -298,7 +300,9 @@
             <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
               font-family="sans-serif" 
               text-align="start" text-indent="-3.5cm">
-              Draft 
+               <xsl:text>Draft (</xsl:text>
+               <xsl:value-of select="@file"/>
+               <xsl:text>)</xsl:text>
             </fo:block>
             <fo:block font-size="8pt"
               space-before="-10pt" 
@@ -327,11 +331,13 @@
       line-height="130%"
       font-family="Arial, Garamond, sans-serif"
       space-after=".65cm"
-      border-width="2mm"
+      border-width="0.5mm"
       border-color="black"
       keep-with-next="always"
-      id="{generate-id(key('chapters', .))}"
-      >
+      id="{generate-id(.)}">
+
+<!--      id="{generate-id(key('chapters', .))}"
+      -->
       <xsl:if test="string-length(title) > 0">
         <xsl:attribute name="border-after-style">solid</xsl:attribute>
       </xsl:if>
@@ -386,7 +392,7 @@
       space-before=".2cm"
       space-after=".2cm"
       border-after-style="solid"
-      border-width="1mm"
+      border-width="0.5mm"
       border-color="black"
       keep-with-next="always"
       >
@@ -457,7 +463,7 @@
 
   <xsl:template match="item2">
     <fo:list-item>
-    <fo:list-item-label end-indent="label-end()">
+    <fo:list-item-label >
     <fo:block
         space-before=".2cm"
         space-after="1.2pc"
@@ -467,7 +473,7 @@
     </fo:block>
     </fo:list-item-label>
     
-    <fo:list-item-body start-indent="body-start()">
+    <fo:list-item-body start-indent="20px">
     <fo:block>
         <xsl:apply-templates select="para|commnad-listing|program-listing|screenshot"/>
     </fo:block>
@@ -480,7 +486,7 @@
   <xsl:template match ="para">
     <fo:block
       font-family="Times"
-      font-size="11pt"
+      font-size="10pt"
       text-indent="0.0cm"
       space-after="9px"
       >

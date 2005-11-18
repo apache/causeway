@@ -1,4 +1,4 @@
-ant
+ant clean pdf
 
 
 pause

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>Adapters and Identifiers</title>
+
+  <para></para>
+
+  <para></para>
+
+  <para></para>
+
+  <subheading>The naked object lifecyle</subheading>
+
+  <para>To put this into context we will briefly examine the lifecyle of a
+  domain object that is persisted within the NOF. This should be contrasted
+  with the simple lifecyle that Java objects have where each object is created
+  when required (using the <code>new</code> operator) and is garbage collected
+  and finalized when it no longer has any references to it. The need to be
+  able to persist objects so that they can be removed from working memory and
+  be restore later, often in a different invocation of the virtual machine,
+  complicates this by requiring new objects to be made explicitly persistent
+  and then when they are no longer required to explicitly delete them. An
+  added complexity is that the objects are not necessarily in working memory
+  even though they exist within the persistent mechanism. The full life cycle
+  is as follows:-</para>
+
+  <list>
+    <item2>
+      <label>new</label>
+
+      <para>All new objects are transient and are not immediately added to the
+      persistence mechanism.</para>
+
+      <para>New objects are instantiated using the <code>new</code> operator,
+      or the <method>newInstance</method> method in <class>Class</class>.
+      After a naked object is first created, however, its
+      <method>created</method> method should be called. This normally happens
+      within Naked Objects as the objects are usually created by the user
+      selecting the <menu>New Instance...</menu> menu item on the class icon
+      or the programmer invoking the static <method>createInstance...</method>
+      methods in the <class>AbstractNakedObject</class> class.</para>
+
+      <para>A transient object need never move on to the next stage, but
+      unless it does it can not be referenced by other persistent
+      objects.</para>
+    </item2>
+
+    <item2>
+      <label>persistent</label>
+
+      <para>A transient object is made <term>persistent</term> by calling its
+      <method>makePersistent</method> method. This adds the object to the set
+      of retrievable objects by placing it within the persistent mechanism and
+      gives the object an OID. This normally also occurs as part of the
+      <menu>New Instance...</menu> menu option or by another explicit action
+      by the user. This method is also invoked by the
+      <method>createInstance</method> method but not by
+      <method>createInstanceTransient</method>.</para>
+
+      <para>The newly persistent object can now be referenced by other
+      persistent objects.</para>
+    </item2>
+
+    <item2>
+      <label>dirty</label>
+
+      <para>Whenever an object is changed - its values are edited or
+      associations are added or removed - then the object becomes
+      <term>dirty</term>. Object changes will occur through editing fields,
+      dropping and removing objects from fields and during some action method
+      invocations. The programmer can explicitly tells an object that it has
+      changed during a method invocation by calling its
+      <method>objectChanged</method> method. In response to an object being
+      changed the data in the persistent store is updated.</para>
+    </item2>
+
+    <item2>
+      <label>restored</label>
+
+      <para></para>
+    </item2>
+
+    <item2>
+      <label>resolved</label>
+    </item2>
+
+    <item2>
+      <label>destroyed</label>
+
+      <para>An object is <term>deleted</term> by calling its
+      <method>destroy</method> method. At this point the object will no longer
+      be persisted. The user normally deletes an object by selecting the
+      <menu>Destroy</menu> option for that object.</para>
+    </item2>
+  </list>
+
+  <para>In addition to these four main states a persistent object can be in
+  two minor states:-</para>
+
+  <list>
+    <para>An object that does not yet have its data loaded and its
+    associations set is <term>unresolved</term>.</para>
+
+    <para>Once an unresolved object has had it data loaded and its association
+    recreated it is <term>resolved</term>. The loading of data is requested by
+    invoking the objects <method>resolve</method> method.</para>
+
+    <el>test element</el>
+  </list>
+
+  <subheading>Object IDs and Java references</subheading>
+
+  <para>The relationship between the objects held by the object store, their
+  Java references, and the Naked Objects OID is an important one, and must be
+  maintained while an object remains in working memory. That is, while an
+  object is in working memory any requests to the persistor for that object
+  (using its OID) must return that same object, i.e. the same Java instance.
+  The persistor must, therefore, store business objects and be able to return
+  an object given its OID.</para>
+
+  <para>When an object is no longer being referenced it can be removed from
+  working memory. When it is needed next it will have to be restored from the
+  persistent mechanism and placed back in working memory.</para>
+
+  <para>Failure to do this will result in more than one Java object being in
+  use for the same naked object.</para>
+
+  <para>The following two methods from the <class>NakedObjectPersistor</class>
+  must be implemented (these method are already implemented in
+  <class>AbstractObjectStore</class>):-</para>
+
+  <list>
+    <para><code>public boolean isInWorkingMemory(Object oid)</code> determines
+    if the specified object is currently held by the cache, returning
+    <code>true</code> if it is.</para>
+
+    <para><code>public void dispose(NakedObject object)</code> removes the
+    specified object from working memory. This method should only be called
+    when an object is no longer being referenced within working memory.</para>
+
+    <para><code>public NakedObject recreateObject(ExternalOid oid)</code>
+    recreates the object that is identified by the external OID.</para>
+  </list>
+</section>

@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE section SYSTEM "./documentation.dtd">
+<!DOCTYPE section SYSTEM "../documentation.dtd">
 <section>
-  <title>Object Loader</title>
+  <title>Object Loading</title>
+
+  <para>Within the NOF there are two aspects to object management: the
+  management of objects in volatile memory; and the long persistence of
+  objects that need to be retrieved after the objects have been removed from
+  volatile memory. The NOF provides two interfaces for these services:
+  NakedObjectLoader and NakedObjectPersistor. In this section we look at
+  loading objects, and deal with persistence in the next section.</para>
 
   <para>The object loader manages the domain objects in local memory, creating
   an adapter for each domain object that is in use within the system. The NOF
@@ -56,31 +63,15 @@
 
   <subheading>Installation</subheading>
 
-  <para>The naked objects repositry needs to have a object loader installed.
-  To install the loader call the <method>setObjectLoader method</method> on
+  <para>The naked objects repositry needs to have an object loader installed.
+  To install the loader call the <method>setObjectLoader</method> method on
   <class>NakedObjects</class> passing in an instance of
-  <class>org.nakedobjects.object.NakedObjects</class>. The supplied loader -
-  <class>org.nakedobjects.object.defaults.ObjectLoaderImpl</class> - is
-  normally suitable, so a common configuration would be:-</para>
+  <class>org.nakedobjects.object.NakedObjectLoader</class>. The supplied
+  loader - <class>org.nakedobjects.object.defaults.ObjectLoaderImpl</class> -
+  is normally suitable, so a common configuration would be:-</para>
 
   <program-listing>objectLoader = new ObjectLoaderImpl();
 :
 :
 NakedObjects.setObjectLoader(objectLoader);</program-listing>
-
-  <subheading>Implementations</subheading>
-
-  <para>The implementation provided with the NOF delegates its mapping and
-  creation of adapters to four separate delegates: PojoAdapterMap,
-  IdentityAdapterMap, ObjectFactory and AdapterFactory. These are set up using
-  their accessor methods<comment>should we add a reference to configuration
-  and running section?</comment>.</para>
-
-  <subheading>Creating a New Object Loader</subheading>
-
-  <para>Implement the interface
-  org.nakedobjects.object.NakedObjectLoader.</para>
-
-  <comment><para>Add the method details from the interface
-  declaration</para></comment>
 </section>

@@ -89,40 +89,50 @@
   </section>
 
   <section numbered="on">
-    <title>Developing a DOM</title>
+    <title>NOF Architecture</title>
 
-    <subtitle>Using the Naked Objects Framework to produce an
-    Application</subtitle>
-  </section>
+    <comment>Section: Developing a DOM - Using the Naked Objects Framework to
+    produce an Application</comment>
 
-  <section numbered="on">
-    <title>The Naked Objects Framework</title>
+    <include file="architecture/introduction.xml" />
 
-    <include file="framework design introduction.xml" />
-  </section>
+    <comment>Section to add: DOM Library and Container</comment>
 
-  <section>
-    <title>DOM Library and Container908908</title>
+    <include file="architecture/reflection.xml" />
+
+    <include file="architecture/object loading.xml" />
+
+    <include file="architecture/object persistence.xml" />
+
+    <include file="architecture/session.xml" />
+
+    <include file="architecture/adapters.xml" />
+
+    <include file="architecture/repository.xml" />
+
+    <include file="architecture/configuration.xml" />
+
+    <include file="architecture/utilities.xml" />
   </section>
 
   <section>
     <title>Components</title>
 
-    <include file="nakedobjects-repository.xml" />
+    <include file="components/repository.xml" />
 
-    <include file="reflector.xml" />
+    <include file="components/reflection.xml" />
 
-    <include file="object loader.xml" />
+    <include file="components/object loader.xml" />
 
-    <include file="object-persistence.xml" />
+    <include file="components/object persistor.xml" />
 
-    <include file="configuration.xml" />
+    <include file="components/configuration.xml" />
 
-    <include file="security.xml" />
+    <include file="components/security.xml" />
 
-    <include file="help.xml" />
+    <include file="components/help.xml" />
 
-    <include file="distribution.xml" />
+    <include file="components/distribution.xml" />
   </section>
 
   <section>

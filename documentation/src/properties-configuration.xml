@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "./documentation.dtd">
-<section>
+<section label="java-properties-file">
   <title>Configuration with Properties Files</title>
 
   <subheading>Editing configuration files</subheading>

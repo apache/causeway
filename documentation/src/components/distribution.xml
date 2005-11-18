@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE section SYSTEM "./documentation.dtd">
+<!DOCTYPE section SYSTEM "../documentation.dtd">
 <section>
   <title>Distribution</title>
-
-  <subheading>How Distribution Works</subheading>
 
   <para>Distribution is achieved in the NOF by passing requests to the
   reflection mechanism and to the object persistence manager over to a server
@@ -140,16 +138,31 @@ public LineItem actionNewLineItem(Product p) {
 
   <subheading>Installing Distribution</subheading>
 
+  <comment>to review this is out of date</comment>
+
   <para>To setup the NOF in a distributed mode, as a server and separate
-  clients, you need a proxying object manager and proxing reflection peers on
-  the client and some form of network end point on the server for the proxies
-  to forward their requests to. The proxying object manager needs to added to
-  the <class>org.nakedobjects.NakedObjects</class> repository by calling its
-  <method>setObjectPersistenceManager</method> method. A
-  <class>org.nakedobjects.object.ReflectionPeerFactory</class> that will
-  create the proxing peers needs to added to the
-  <class>NakedObjectSpecificationLoader</class> using the
+  clients, you need a proxying object pesrsistor and proxing reflection peers
+  on the client and some form of network end point on the server for the
+  proxies to forward their requests to. The proxying object manager needs to
+  added to the <class>org.nakedobjects.NakedObjects</class> repository by
+  calling its <method>setObjectPersistor</method> method. A
+  <class>org.nakedobjects.object.reflect.ReflectionPeerFactory</class> that
+  will create the proxing peers needs to added to the
+  <class>AbstractSpecificationLoader</class> using the
   <method>appendReflectionPeerFactory</method> method.</para>
+
+  <program-listing>        ProxyPeerFactory proxyPeerFactory = new ProxyPeerFactory();
+        proxyPeerFactory.setConnection(clientLogger);
+        proxyPeerFactory.setObjectDataFactory(objectDataFactory);
+
+        ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                proxyPeerFactory,
+                new TransactionPeerFactory()
+        };
+
+        JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+        specificationLoader.setReflectionPeerFactories(factories);
+</program-listing>
 
   <subheading>Implementations</subheading>
 
@@ -222,7 +235,7 @@ public LineItem actionNewLineItem(Product p) {
   <para>The <class>org.nakedobjects.distribution.pipe</class> package uses
   synchronised pipes (see PipedConnection) to pass requests and responses back
   and forth between a client and server in the same memory space. ....to
-  provides a concrete subclass of client </para>
+  provides a concrete subclass of client</para>
 
   <minorheading>Creating a New Channel</minorheading>
 

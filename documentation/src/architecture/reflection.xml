@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE section SYSTEM "./documentation.dtd">
+<!DOCTYPE section SYSTEM "../documentation.dtd">
 <section>
   <title>Reflection</title>
 
@@ -70,38 +70,9 @@
   <method>setSpecificationLoader</method> method. For example, the following
   sets the NOF up to use the basic reflector.</para>
 
-  <program-listing>NakedObjectSpecificationLoader loader = new JavaSpecificationLoader();</program-listing>
-
-  <program-listing>NakedObjects.setSpecificationLoader(loader);</program-listing>
-
-  <para></para>
+  <program-listing>NakedObjectSpecificationLoader loader = new JavaSpecificationLoader();
+NakedObjects.setSpecificationLoader(loader);
+</program-listing>
 
   <para></para>
-
-  <para>In addition the core reflection mechanism, additional peers can be
-  added that provide services like security authourisation, help and
-  internationalisation, transactional management and distribution. To add an
-  addition layer to the reflection mechanism...</para>
-
-  <program-listing>loader.addPeer(new SecurityPeerFactory());</program-listing>
-
-  <subheading>Implementation</subheading>
-
-  <para>The NOF provides a Java 1.1 compatible reflector in the class
-  <class>JavaReflector</class>. Methods beginning with 'get', 'set' and
-  'action' are recognised, along with any methods that are additionally
-  prefixed with 'about', as fields and methods respectivley.</para>
-
-  <para>As certain methods must match one another, the method names must be
-  consistently spelt with just the prefix changing e.g., getCustomer with
-  setCustomer and actionRelease aboutActionRelease. Certain other aspects of
-  the declaration are also checked to ensure that only valid method are made
-  available e.g., get methods must return a valid type and cannot be void,
-  whereas set methods must be void and have to have a parameter type that
-  matches the type specified by the corresponding get. It should be noted that
-  all non-public method are completely ignored as they will not be able to be
-  accessed when needed.</para>
-
-  <para>The <class>JavaReflector</class> is defined in the package
-  <class>org.nakedobjects.reflector.java.reflect</class>.</para>
 </section>

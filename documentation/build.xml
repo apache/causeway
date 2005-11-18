@@ -23,6 +23,7 @@
 		</javadoc>
 	</target>
 
+
 	<target name="pdf" description="Generates a single PDF file">
 		<property name="fop.dir" value="C:/Program Files/Java/fop-0.20.5" />
 		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
@@ -38,20 +39,23 @@
 
 		<xslt in="${src.dir}/manual.xml" out="${dest.dir}/merge.xml" style="merge.xsl" />
 
-                <xslt in="${dest.dir}/merge.xml"
+          <xslt in="${dest.dir}/merge.xml"
 		      out="${dest.dir}/outline.fo"
 		      style="outline.xsl" />
-		<xslt in="${dest.dir}/merge.xml"
+
+        <xslt in="${dest.dir}/merge.xml"
 		      out="${dest.dir}/document.fo"
 		      style="draft.xsl" />
 
 		<fop format="application/pdf"
 		     fofile="${dest.dir}\outline.fo"
 		     outfile="${dest.dir}\outline.pdf" />
-		<fop format="application/pdf"
+		    
+            <fop format="application/pdf"
 		     fofile="${dest.dir}\document.fo"
-		     outfile="${dest.dir}\manual.pdf" />
+		     outfile="${dest.dir}\nof-manual.pdf" />
 	</target>
+
 
 	<target name="html">
 		<mkdir dir="${dest.dir}" />
