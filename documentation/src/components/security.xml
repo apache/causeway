@@ -33,12 +33,13 @@
   <class>org.nakedobjects.object.security.SecurityPeerFactory</class> to the
   specification loader, along with any other needed peer factories. This
   factory needs to be set up with a security manager via its
-  <method>setAuthorisationManager</method> method.</para>
+  <method>setAuthorisationManager</method> method. The following example does
+  just that:-</para>
 
   <program-listing>JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
 
 SecrityPeerFactory peerFactory = new SecrityPeerFactory();
-peerFactory.AuthorisationManager(securityManager);
+peerFactory.setAuthorisationManager(securityManager);
 ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
     peerFactory
 };

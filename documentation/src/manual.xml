@@ -118,19 +118,21 @@
   <section>
     <title>Components</title>
 
-    <include file="components/repository.xml" />
-
     <include file="components/reflection.xml" />
 
     <include file="components/object loader.xml" />
 
     <include file="components/object persistor.xml" />
 
+    <include file="components/repository.xml" />
+
     <include file="components/configuration.xml" />
 
     <include file="components/security.xml" />
 
     <include file="components/help.xml" />
+
+    <include file="components/transactions.xml" />
 
     <include file="components/distribution.xml" />
   </section>

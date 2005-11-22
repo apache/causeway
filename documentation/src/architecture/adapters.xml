@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE section SYSTEM "../documentation.dtd">
-<section>
+<section label="adapters">
   <title>Adapters and Identifiers</title>
 
   <para></para>
