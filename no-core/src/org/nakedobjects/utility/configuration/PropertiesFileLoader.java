@@ -33,7 +33,7 @@ public class PropertiesFileLoader implements ConfigurationLoader {
         }
     }
 
-    public static Properties loadProperties(URL resource, boolean mustLoadFile) throws ConfigurationException {
+    private Properties loadProperties(URL resource, boolean mustLoadFile) throws ConfigurationException {
         InputStream in;
 
         try {
@@ -63,7 +63,7 @@ public class PropertiesFileLoader implements ConfigurationLoader {
         }
     }
 
-    public static Properties loadProperties(String resource, boolean mustLoadFile) throws ConfigurationException {
+    private Properties loadProperties(String resource, boolean mustLoadFile) throws ConfigurationException {
 
         try {
             URL url = PropertiesFileLoader.class.getResource(resource);

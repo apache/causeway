@@ -2,6 +2,7 @@ package org.nakedobjects.utility;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Enumeration;
 
 
 public interface NakedObjectConfiguration {
@@ -109,6 +110,14 @@ public interface NakedObjectConfiguration {
      * simple properties file the property z might be specified in the file as x.y.z.  
      */
     String referedToAs(String name);
+
+    NakedObjectConfiguration createSubset(String prefix);
+    
+    boolean isEmpty();
+    
+    int size();
+    
+    Enumeration properties();
 
 }
 

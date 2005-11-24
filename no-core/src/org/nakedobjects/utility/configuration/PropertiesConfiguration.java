@@ -13,7 +13,6 @@ import org.apache.log4j.Logger;
 
 public class PropertiesConfiguration implements NakedObjectConfiguration {
     private static final Logger LOG = Logger.getLogger(PropertiesConfiguration.class);
-    public static final String PREFIX = "nakedobjects.";    
     private final Properties p = new Properties();
 
     public PropertiesConfiguration() {}
@@ -43,7 +42,7 @@ public class PropertiesConfiguration implements NakedObjectConfiguration {
     }
    
     public String referedToAs(String name) {
-        return PREFIX + name;
+        return name;
     }
 
     /**
@@ -174,17 +173,11 @@ public class PropertiesConfiguration implements NakedObjectConfiguration {
         return Integer.valueOf(value).intValue();
     }
 
-    /**
-     * Gets the set of properties with the specified prefix
-     */
     public Properties getProperties(String withPrefix) {
         return getProperties(withPrefix, "");
     }
-
-    /**
-     * Gets the set of properties with the specified prefix
-     */
-    public Properties getProperties(String withPrefix, String stripPrefix) {
+    
+    private Properties getProperties(String withPrefix, String stripPrefix) {
         int prefixLength = stripPrefix.length();
         
         Properties pp = new Properties();
@@ -199,21 +192,7 @@ public class PropertiesConfiguration implements NakedObjectConfiguration {
         return pp;
     }
 
-
-    private String getProperty(String name) {
-        return getProperty(name, null);
-    }
-
-    private String getProperty(String name, String defaultValue) {
-        String key = referedToAs(name);
-        if (key.indexOf("..") >= 0) {
-            throw new NakedObjectRuntimeException("property names should not have '..' within them: " + name);
-        }
-        String property = p.getProperty(key, defaultValue);
-        LOG.debug("property: " + key + " =  <" + property + ">");
-        return property;
-    }
-
+    /*    
     public Properties getPropertiesStrippingPrefix(String prefix) {
         return getProperties(referedToAs(prefix), referedToAs(prefix));
     }
@@ -237,6 +216,21 @@ public class PropertiesConfiguration implements NakedObjectConfiguration {
     }
 */
 
+
+    private String getProperty(String name) {
+        return getProperty(name, null);
+    }
+
+    private String getProperty(String name, String defaultValue) {
+        String key = referedToAs(name);
+        if (key.indexOf("..") >= 0) {
+            throw new NakedObjectRuntimeException("property names should not have '..' within them: " + name);
+        }
+        String property = p.getProperty(key, defaultValue);
+        LOG.debug("property: " + key + " =  <" + property + ">");
+        return property;
+    }
+
     /**
      * Returns the configuration property with the specified name. If there is
      * no matching property then null is returned.
@@ -256,6 +250,37 @@ public class PropertiesConfiguration implements NakedObjectConfiguration {
 
     public String toString() {
         return "ConfigurationParameters [properties=" + p + "]";
+    }
+
+    public NakedObjectConfiguration createSubset(String prefix) {
+        PropertiesConfiguration subset = new PropertiesConfiguration();
+        
+        if(! prefix.endsWith(".")) {
+            prefix = prefix + '.';
+        }
+        int prefixLength = prefix.length();
+        
+        Enumeration e = p.keys();
+        while (e.hasMoreElements()) {
+            String key = (String) e.nextElement();
+            if (key.startsWith(prefix)) {
+                String modifiedKey = key.substring(prefixLength);
+                subset.p.put(modifiedKey, p.get(key));
+            }
+        }
+        return subset;
+  }
+
+    public boolean isEmpty() {
+        return p.isEmpty();
+    }
+
+    public int size() {
+        return p.size();
+    }
+
+    public Enumeration properties() {
+        return p.keys();
     }
 }
 
