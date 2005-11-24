@@ -36,6 +36,8 @@
     <para>Generates OIDs for each of the objects that are persisted.</para>
   </list>
 
+  <inline-graphic fileref="objectstore.jpg"></inline-graphic>
+
   <minorheading>Data, domain objects, and adapters</minorheading>
 
   <para>The persistent store normally stores the data for an object, not the
@@ -46,22 +48,22 @@
   label="adapters">adapters</see> and <see label="reflection">reflection</see>
   for details of how to access the modify the fields of a naked object.</para>
 
-  <minorheading>Persisting objects</minorheading>
+  <subheading>Persisting objects</subheading>
 
-  <para>When the NOF calls the <method>startTransaction</method> on the
+  <para>When the NOF calls the <method> startTransaction </method> on the
   persistor it creates a new <class>Transaction</class> object to collect the
-  subsequent persistence requests. Each persistor request via
-  <method>makePersistent</method>, <method>destroyObject</method> and
-  <method>objectChanged</method> causes the persistor to ask the object store
-  for one or more <class>PersistenceCommand</class>'s that it will then add to
-  the set of commands for the current transactional. These will then be run
-  when the transaction is ended via a call to the
-  <method>runTransaction</method> method. The transaction object collates all
-  the commands ensuring there are no unnecessary one, such as a change to an
-  object that preceeds the deletion of the same object (as the change will be
-  destroyed). Similarly the object store can batch together similar changes by
-  iterating through the commands during <method>runTransaction</method>. The
-  following methods need to be implemented by the object store.</para>
+  subsequent persistence requests. Each persistor request via <method>
+  makePersistent </method>, <method> destroyObject </method> and <method>
+  objectChanged </method> causes the persistor to ask the object store for one
+  or more <class>PersistenceCommand</class>'s that it will then add to the set
+  of commands for the current transactional. These will then be run when the
+  transaction is ended via a call to the <method> runTransaction </method>
+  method. The transaction object collates all the commands ensuring there are
+  no unnecessary one, such as a change to an object that preceeds the deletion
+  of the same object (as the change will be destroyed). Similarly the object
+  store can batch together similar changes by iterating through the commands
+  during <method> runTransaction </method>. The following methods need to be
+  implemented by the object store.</para>
 
   <list>
     <item2>
@@ -95,22 +97,22 @@
     <item2>
       <label><class>void abortTransaction()</class></label>
 
-      <para>Roll back the changes made since the call to
-      <method>startTransaction</method>.</para>
+      <para>Roll back the changes made since the call to <method>
+      startTransaction </method>.</para>
     </item2>
 
     <item2>
       <label><class>void abortTransaction()</class></label>
 
-      <para>Roll back the changes made since the call to
-      <method>startTransaction</method>.</para>
+      <para>Roll back the changes made since the call to <method>
+      startTransaction </method>.</para>
     </item2>
 
     <item2>
       <label><class>void endTransaction()</class></label>
 
-      <para>Commit the changes made since the call to
-      <method>startTransaction</method>.</para>
+      <para>Commit the changes made since the call to <method>
+      startTransaction </method>.</para>
     </item2>
 
     <item2>
@@ -125,12 +127,105 @@
 
       <para>Apply all the persistence commands to the persistent storage. If
       not throw a ObjectPersistenceException to indicate that the transaction
-      is to be aborted, which will cause <method>abortTransaction</method> to
-      be called instead of <method>endTransaction</method>.</para>
+      is to be aborted, which will cause <method> abortTransaction </method>
+      to be called instead of <method> endTransaction </method>.</para>
     </item2>
   </list>
 
-  <minorheading>Retrieving objects</minorheading>
+  <minorheading>Make persistent</minorheading>
+
+  <para>When an object is to be made persistent it is often not just a simple
+  case of saving the details of the specified object. The object to be
+  persisted is normally just the root of a graph of objects others of which
+  may also be persistent. To avoid the problem of persistent objects refering
+  to transient objects all the transient objects in the graph need to be made
+  persistent together.</para>
+
+  <para>As each object is made persistent it needs to be given an identity
+  that identifies it within the NOF - specifically within the object persistor
+  and during distribution. Both these requirements are dealt with by two
+  interfaces in the object store persistor sub-framework.</para>
+
+  <para><method>ObjectStorePersistor.makePersistent(NakedObject)</method>
+  requires a <class>PersistAlgorithm</class> to make the specified object
+  graph persistent. The algoritm's <method> makePersistent</method> method
+  expects a <class>PersistedObjectAdder</class> instance to be supplied so
+  that it can call back the persistor, via the <method>
+  createObject(NakedObject)</method> method, to tell the persistor about each
+  new object that needs to be added. <class>ObjectStorePersistor</class>
+  implements the adder interface, which calls the
+  <class>NakedObjectStore</class>'s <method>createCreateObjectCommand</method>
+  method to create a transaction command and adds the command to the current
+  transaction.</para>
+
+  <javadoc class="PersistAlgorithm"
+            package="org.nakedobjects.object.persistence"
+           outline="yes"></javadoc>
+
+  <javadoc class="DefaultPersistAlgorithm"
+            package="org.nakedobjects.object.persistence"
+           outline="yes"></javadoc>
+
+  <para>The NOF provides two implementations of PersistAlgorithm:-</para>
+
+  <list>
+    <item2>
+      <label><class>DefaultPersistAlgorithm</class></label>
+
+      <para>Iterates through each field, and element in each internal
+      collection, in the transient object and recursively makes any referenced
+      objects that are transient persistent. As the fields are made persistent
+      before the parent this works from the bottom of the graph up.</para>
+    </item2>
+
+    <item2>
+      <label><class>TwoPassPersistAlgorithm</class></label>
+
+      <para>Iterates through each field, but not the internal collections, in
+      the transient object and recursively makes any referenced objects that
+      are transient persistent. In a second pass of the fields the one to one
+      associations are ignored, and the internal collections are dealt
+      with.</para>
+    </item2>
+  </list>
+
+  <para>Both the above algorithm use <class>OidGenerator</class> to create
+  OIDs for the newly persisted objected. The generator must create an ongoing
+  sequence of unique OIDs, and will normally be able to be restarted without
+  recreating any already created OIDs.</para>
+
+  <javadoc package="org.nakedobjects.object.persistence"
+           class="OidGenerator"
+           outline="yes"></javadoc>
+
+  <para>The NOF provide two implementations of
+  <class>OidGenerator</class>:-</para>
+
+  <list>
+    <item2>
+      <label><class>SimpleOidGenerator</class></label>
+
+      <para>Creates an OID with a number as its identifier, starting at zero
+      when instantiated and incrementing by one every time it creates an OID.
+      This implementation is limited to in-memory models as it will reset to
+      zero every time it is installed. It is useful though, as the OID's
+      generated are very simple and easy to remember as they are always small
+      numbers. This is often used when developing the framework and its
+      components for this reason.</para>
+    </item2>
+
+    <item2>
+      <label><class>TimeBasedOidGenerator</class></label>
+
+      <para>When instantiated this implementation creates its initial id from
+      the <class>java.util.Date</class> class using the milliseconds since the
+      epoch. Once initialised it increments that number every time it creates
+      an OID. Using this initial id generated this way we can be generate
+      unique OID even if we run on two different machines.</para>
+    </item2>
+  </list>
+
+  <subheading>Retrieving objects</subheading>
 
   <para>A persistor provide three ways to get hold of a know object. These
   allow the NOF to get an object by it Oid, and to lazily load objects that
@@ -149,8 +244,8 @@
 
       <para>Return the object that has the specified OID. The second parameter
       hints at what type the object is, and hence can help the persistent
-      store to more efficiently locate the object. The object store needs
-      </para>
+      store to more efficiently locate the object. The object store
+      needs</para>
 
       <para>setrieves the object identified by the specified OID from the
       object store. The loaded objects should be checked first and, if the
@@ -179,7 +274,7 @@
       'part-resolved' state then the object's data should be retreieved from
       the persistent store and used to set up the value objects and
       associations. The object should be set up in the same manner as in
-      <method>getObject</method> above.</para>
+      <method> getObject </method> above.</para>
     </item2>
 
     <item2>
@@ -192,11 +287,11 @@
       object is in a 'ghost' or 'part-resolved' state then the object's data
       should be retreieved from the persistent store and used to set up the
       value objects and associations. The object should be set up in the same
-      manner as in <method>getObject</method> above.</para>
+      manner as in <method> getObject </method> above.</para>
     </item2>
   </list>
 
-  <minorheading>Instances</minorheading>
+  <subheading>Instances</subheading>
 
   <para>The object store persistor will ask the object store for details about
   the instances that are known. This includes whether instances exist, how

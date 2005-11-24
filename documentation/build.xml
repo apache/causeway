@@ -17,7 +17,10 @@
 	<target name="javadoc">
 		<mkdir dir="${dest.dir}" />
 		
-		<javadoc destdir="${dest.dir}/javadocs">
+		<javadoc destdir="${dest.dir}"
+            doclet="org.apache.maven.jellydoc.XMLDoclet"
+            docletpath="maven-jellydoc-plugin-2.3.1.jar;dom4j-1.6.1.jar">
+            
 			<sourcepath location="../no-core/src"></sourcepath>
 			<package name="org.nakedobjects.*"/>
 		</javadoc>
@@ -36,7 +39,16 @@
 		</taskdef>
 
 		<mkdir dir="${dest.dir}" />
-
+        
+        <copy todir="${dest.dir}" flatten="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.png" />
+				<include name="**/*.jpg" />
+				<include name="**/*.eps" />
+				<include name="**/*.svg" />
+			</fileset>
+		</copy>
+        
 		<xslt in="${src.dir}/manual.xml" out="${dest.dir}/merge.xml" style="merge.xsl" />
 
           <xslt in="${dest.dir}/merge.xml"
@@ -51,7 +63,7 @@
 		     fofile="${dest.dir}\outline.fo"
 		     outfile="${dest.dir}\outline.pdf" />
 		    
-            <fop format="application/pdf"
+        <fop basedir="${dest.dir}" format="application/pdf"
 		     fofile="${dest.dir}\document.fo"
 		     outfile="${dest.dir}\nof-manual.pdf" />
 	</target>
@@ -66,10 +78,10 @@
 
 		<xslt basedir="${src.dir}"
 		      destdir="${dest.dir}"
-		      extension=".html"
 		      style="html.xsl"
-		      includes="*.xml"
-		      excludes="build.xml">
+		      >
+              
+              <mapper type="glob" from="*.xml" to="*.html"/>
 		</xslt>
 
 		<copy todir="${dest.dir}">

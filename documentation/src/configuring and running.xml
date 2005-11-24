@@ -23,47 +23,49 @@
   program that creates each component and sets up its parameters and
   dependencies, as the example below shows.</para>
 
-  <program-listing>        LocalObjectManager objectManager = new LocalObjectManager();
-        objectManager.setObjectStore(objectStore);
-        objectManager.setPersistAlgorithm(persistAlgorithm);
-        objectManager.setCheckObjectsForDirtyFlag(true);
+  <program-listing>ObjectStorePersistor persistor = new ObjectStorePersistor();
+persistor.setObjectStore(objectStore);
+persistor.setPersistAlgorithm(persistAlgorithm);
+persistor.setCheckObjectsForDirtyFlag(true);
 
-        nakedObjects.setObjectManager(objectManager);
+nakedObjects.setObjectPersistor(persistor);
 </program-listing>
 
-  <para>This example sets up the object manager by creating a
-  <class>LocalObjectManager</class> instance and specifying it dependicies as
-  the object store and persist algorithm, and setting up the 'check objects
+  <para>This sets up the persistor by creating a
+  <class>ObjectStorePersistor</class> instance and specifying its dependencies
+  as the object store and persist algorithm, and setting up the 'check objects
   for dirty' flag. The last line then takes this new component and sets it up
   as a dependent of the naked objects repository
-  (<class>NakedObjects</class>), see
+  (<class>NakedObjects</class>). See
   <class>org.nakedobjects.example.exploration.JavaExploration</class> and
-  <class>org.nakedobjects.xat.AcceptanceTestCase</class>.</para>
+  <class>org.nakedobjects.xat.AcceptanceTestCase</class> for complete
+  configurations done this way.</para>
 
   <subheading>Properties Configuration</subheading>
 
-  <para>A special class called
-  <class>org.nakedobjects.container.configuration.Startup</class> is provided
-  with the NOF that loads up a coniguration file, which can can specified on
-  the command line, that specifies what components are to be loaded, and how
-  they are to be configured. Using a pattern that is used in products such the
-  Jetty web server and Log4J the components are specified by their class names
-  and identified by name. These names can then be used to set up the
-  dependencies. The following properties do the same job as the Java code
-  previously.</para>
+  <para>A special class called <class>org.nakedobjects.app.Startup</class> is
+  provided with the NOF that loads up a configuration file, which can can
+  specified on the command line, that specifies what components are to be
+  loaded and how they are to be configured. Using a pattern that is used in
+  products such the Jetty web server and Log4J the components are specified by
+  their class names and identified by property name. These names can then be
+  used to set up the dependencies. The following properties do the same job as
+  the Java code previously (the backslashes are line continuation
+  characters).</para>
 
-  <program-listing>nakedobjects.container.objectManager=org.nakedobjects.object.persistence.defaults.LocalObjectManager
-nakedobjects.container.objectManager.objectStore= org.nakedobjects.object.persistence.defaults.TransientObjectStore
-nakedobjects.container.objectManager.checkObjectsForDirtyFlag= true  
+  <program-listing>nakedobjects.container.persistor=\
+    org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor
+nakedobjects.container.persistor.objectStore=\
+    org.nakedobjects.object.persistence.objectstore.inmemory.TransientObjectStore
+nakedobjects.container.persistor.checkObjectsForDirtyFlag=true  
 </program-listing>
 
-  <para>The first line creates the object manager instance and assigns it the
+  <para>The first line creates the persistor instance and assigns it the
   container object, which was described ealier - but is not shown - in the
   configuration. The second line creates the object store instance and assigns
-  it to the object manager using its <method>setObjectStore</method> method.
-  The final line similarly calls the
-  <method>setcheckObjectsForDirtyFlag</method> method, passing in a literal
-  instead of another object.</para>
+  it to the persistor using its <method>setObjectPersistor</method>method. The
+  final line similarly calls the <method>setCheckObjectsForDirtyFlag</method>
+  method, passing in a literal instead of another object.</para>
 
   <subheading>Spring Configuration</subheading>
 

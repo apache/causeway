@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?><umlet_diagram><element><type>com.umlet.element.base.Relation</type><coordinates><x>200</x><y>60</y><w>260</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=adapts a
+</panel_attributes><additional_attributes>240;20;20;20</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>160</x><y>140</y><w>160</w><h>160</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>20;20;140;140</additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>180</x><y>390</y><w>140</w><h>140</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>120;20;20;120</additional_attributes></element><element><type>com.umlet.element.base.Interface</type><coordinates><x>130</x><y>510</y><w>111</w><h>120</h></coordinates><panel_attributes>NakedCollection
+--
+elements</panel_attributes><additional_attributes></additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>290</x><y>390</y><w>120</w><h>130</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>20;20;100;110</additional_attributes></element><element><type>com.umlet.element.base.Interface</type><coordinates><x>350</x><y>510</y><w>112</w><h>120</h></coordinates><panel_attributes>NakedObject
+--
+getVisibleFields
+execute
+setAssociation</panel_attributes><additional_attributes></additional_attributes></element><element><type>com.umlet.element.base.Class</type><coordinates><x>460</x><y>70</y><w>100</w><h>30</h></coordinates><panel_attributes>POJO
+</panel_attributes><additional_attributes></additional_attributes></element><element><type>com.umlet.element.base.Interface</type><coordinates><x>520</x><y>300</y><w>69</w><h>120</h></coordinates><panel_attributes>Oid
+</panel_attributes><additional_attributes></additional_attributes></element><element><type>com.umlet.element.base.Interface</type><coordinates><x>260</x><y>290</y><w>109</w><h>120</h></coordinates><panel_attributes>NakedReference
+--
+getOid
+getResolveState
+getVersion
+persistable</panel_attributes><additional_attributes></additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>90</x><y>140</y><w>80</w><h>160</h></coordinates><panel_attributes>lt=&lt;.</panel_attributes><additional_attributes>60;20;20;140</additional_attributes></element><element><type>com.umlet.element.base.Interface</type><coordinates><x>50</x><y>290</y><w>109</w><h>120</h></coordinates><panel_attributes>NakedValue
+--
+parseTextString()
+</panel_attributes><additional_attributes></additional_attributes></element><element><type>com.umlet.element.base.Interface</type><coordinates><x>110</x><y>60</y><w>109</w><h>120</h></coordinates><panel_attributes>Naked
+--
+getObject()
+getSpecification()
+titleString()</panel_attributes><additional_attributes></additional_attributes></element><element><type>com.umlet.element.base.Relation</type><coordinates><x>370</x><y>310</y><w>180</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+m1=1
+r1=identified by
+</panel_attributes><additional_attributes>160;20;20;20</additional_attributes></element></umlet_diagram>

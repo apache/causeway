@@ -6,6 +6,8 @@
 
     <xsl:output indent="yes"/>
   
+    <xsl:variable name="javadoc" select="document('build/javadoc.xml')/javadoc"/>
+        
     
     <xsl:template match="include">
         <xsl:variable name="source" select="document(@file)/section"/>
@@ -30,4 +32,27 @@
             <xsl:apply-templates select="@*|node()"/>
         </xsl:copy>
     </xsl:template>
+   
+   
+    <xsl:template match="javadoc">
+        <xsl:variable name="class" select="@class"/>
+        <javadoc>
+            <xsl:apply-templates select="$javadoc/package/interface[@name=$class]"/>
+            <xsl:apply-templates select="$javadoc/package/class[@name=$class]"/>
+        </javadoc>
+    </xsl:template>
+    
+    <xsl:template match="javadoc/package/interface|javadoc/package/class">
+        <xsl:variable name="package" select="../@name"/>
+        <package>
+            <xsl:attribute name="name">
+                <xsl:value-of select="$package"/>
+            </xsl:attribute>
+                
+            <xsl:copy>
+                <xsl:apply-templates select="@*|node()"/>
+            </xsl:copy>
+        </package>
+    </xsl:template>
+   
 </xsl:stylesheet>

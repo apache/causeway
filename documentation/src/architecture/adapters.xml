@@ -3,7 +3,163 @@
 <section label="adapters">
   <title>Adapters and Identifiers</title>
 
+  <para>Adapters allow the NOF to represent all the different types of object
+  in the domain model, to manipulate, distribute and persist the domain
+  objects. Through the adapters the domain objects take on a known interface
+  that the rest of the NOF knows about, and is programmed to, hence the
+  framework can then work with those objects through the adapters. The NOF
+  works with three types of objects: value objects, reference objects and
+  collections.</para>
+
+  <para><em>Value objects</em> tend to be small objects that don't reference
+  other objects, and whose state is commonly editable via the keyboard, or
+  more precisely by parsing a string; this also allows them to be persisted as
+  strings. Value objects are do not have an identity like the reference
+  objects do. Finally, value objects are not shared in same way, so that two
+  fields with the same value will use two value objects to represent
+  them.</para>
+
+  <para><em>Reference objects</em> are objects that reference other objects
+  (value, reference and collection types), have user invokable behaviours, and
+  have their own unique identifier when they are persistent. We say that a
+  reference object has a set of fields or properties and actions; the identity
+  is an internal aspect.</para>
+
+  <para><em>Collection objects</em> are similar to reference objects except
+  they hold a set of references instead of a number of disparate
+  fields.</para>
+
+  <para>Each type of domain object is given an adapter when it is used by the
+  NOF. Adapters must be created by the <see
+  label="oibject-loader"><class>NakedObjectLoader</class></see> and not
+  instantiated directly. The loader will ensure that only one adapter is
+  created for any particular domain object, as having more than one adapter
+  will cause issues. All the adapter interfaces extend from the interface
+  <class>Naked</class> as shown below.</para>
+
+  <inline-graphic fileref="adapter-classes.jpg"></inline-graphic>
+
+  <subheading>Adapters</subheading>
+
+  <para>There are specific types of adapter for each type of domain object.
+  Every adapter is able to tell you what domain object is adapting, provide a
+  specification for that type of object, and provide a title for that
+  object.</para>
+
+  <javadoc class="Naked" package="???"></javadoc>
+
+  <minorheading>Value object adapters</minorheading>
+
+  <para>Value objects are integrated using <class>NakedValue</class> adapter
+  classes. This type of adapter is responsible for managing user entry by
+  parsing a string to set up or create a domain value object. If the string
+  entry is not valid then an InvalidEnrtyException can be thrown to indicate
+  this, and to acknowledge that the adapted value has not been modified. If
+  the value can be cleared then the adapter should flag this by returning true
+  from the canClear method and clear the value when clear is called.
+  Consequently the isEmpty method should then return true to show that the
+  value is empty. Not all values support the concept of empty hence it is
+  possible to turn off this feature. The other responsibility of value
+  adapters is to provide encode and decode functionality to allow simple
+  persistence and distribution. Note that this is not the same as getting the
+  title string and parsing it, as the formatting of the text string might vary
+  between platform due to locale; dates are a good example of this.</para>
+
+  <para>There is a series of specific value adapter interfaces defined within
+  the NOF. These allow common types like integers, booleans and strings to be
+  recognised by the framework. The interfaces are:
+  <class>BooleanValue</class>, <class>ByteValue</class>,
+  <class>CharValue</class>, <class>ColorValue</class>,
+  <class>DateValue</class>, <class>DoubleFloatingPointValue</class>,
+  <class>FloatingPointValue</class>, <class>IntegerValue</class>,
+  <class>LongValue</class>, <class>MultilineStringValue</class>,
+  <class>PasswordValue</class>, <class>ShortValue</class> and
+  <class>StringValue</class>, which are all in the package
+  <class>org.nakedobjects.object.value</class>. The framework provide
+  implementations of some of these for the primitives provided by Java and for
+  the <class>java.lang.String</class> class, these are:
+  <class>BooleanAdapter</class>, <class>ByteAdapter</class>,
+  <class>CharAdapter</class>, <class>DateAdapter</class>,
+  <class>DoubleAdapter</class>, <class>FloatAdapter</class>,
+  <class>IntAdapter</class>, <class>LongAdapter</class>,
+  <class>ShortAdapter</class> and <class>StringAdapter</class>, which are all
+  in the package <class>org.nakedobjects.object.value.adapter</class>.</para>
+
+  <javadoc class="NakedValue" package="???"></javadoc>
+
+  <minorheading>Collection adapters</minorheading>
+
+  <para>Collections are integrated using <class>NakedCollection</class>
+  classes. This type of adapter is responsible providing the NOF with the
+  elements of a collection (as adapted objects of course). A special
+  subinterface that is very commonly used with systems is the
+  <class>TypedNakedCollection</class>, which is used for typed collection
+  (those that can only store a specific type of object).</para>
+
+  <comment>need to note that these interfaces are based on
+  NakedReference</comment>
+
+  <javadoc class="NakedCollection" package="???"></javadoc>
+
+  <javadoc class="TypedNakedCollection" package="???"></javadoc>
+
+  <minorheading>Reference object adapters</minorheading>
+
+  <para>Reference objects are integrated using <class>NakedObject</class>
+  classes. This type of adapter is responsible providing the NOF with access
+  to the fields and action methods of the domain objects. For each field the
+  NOF is able to get hold of its contents (suitably adapted), set its content
+  and initialise it contents. (The difference between setting and intialising
+  a field is the extent to which other objects are affected, when setting,
+  associated object are also set up and the object is marked as dirty, but
+  when initialised only the field is set and it is not marked as dirty.) For
+  each field the NOF can also find out if it is visible, currently usable or
+  if it is valid to set the field with a specified value.</para>
+
+  <para>Similarly for each method. The NOF is able to execute a specific
+  method, and can determine if it is visible, currently usable or if it is
+  valid to execute it with the specified set of parameters.</para>
+
+  <comment>need to note that this interface is based on
+  NakedReference</comment>
+
+  <javadoc class="NakedObject" package="???"></javadoc>
+
   <para></para>
+
+  <subheading>Object IDs and Java references</subheading>
+
+  <para>The relationship between the objects held by the object store, their
+  Java references, and the Naked Objects OID is an important one, and must be
+  maintained while an object remains in working memory. That is, while an
+  object is in working memory any requests to the persistor for that object
+  (using its OID) must return that same object, i.e. the same Java instance.
+  The persistor must, therefore, store business objects and be able to return
+  an object given its OID.</para>
+
+  <para>When an object is no longer being referenced it can be removed from
+  working memory. When it is needed next it will have to be restored from the
+  persistent mechanism and placed back in working memory.</para>
+
+  <para>Failure to do this will result in more than one Java object being in
+  use for the same naked object.</para>
+
+  <para>The following two methods from the <class>NakedObjectPersistor</class>
+  must be implemented (these method are already implemented in
+  <class>AbstractObjectStore</class>):-</para>
+
+  <list>
+    <para><code>public boolean isInWorkingMemory(Object oid)</code> determines
+    if the specified object is currently held by the cache, returning
+    <code>true</code> if it is.</para>
+
+    <para><code>public void dispose(NakedObject object)</code> removes the
+    specified object from working memory. This method should only be called
+    when an object is no longer being referenced within working memory.</para>
+
+    <para><code>public NakedObject recreateObject(ExternalOid oid)</code>
+    recreates the object that is identified by the external OID.</para>
+  </list>
 
   <para></para>
 
@@ -106,39 +262,5 @@
     invoking the objects <method>resolve</method> method.</para>
 
     <el>test element</el>
-  </list>
-
-  <subheading>Object IDs and Java references</subheading>
-
-  <para>The relationship between the objects held by the object store, their
-  Java references, and the Naked Objects OID is an important one, and must be
-  maintained while an object remains in working memory. That is, while an
-  object is in working memory any requests to the persistor for that object
-  (using its OID) must return that same object, i.e. the same Java instance.
-  The persistor must, therefore, store business objects and be able to return
-  an object given its OID.</para>
-
-  <para>When an object is no longer being referenced it can be removed from
-  working memory. When it is needed next it will have to be restored from the
-  persistent mechanism and placed back in working memory.</para>
-
-  <para>Failure to do this will result in more than one Java object being in
-  use for the same naked object.</para>
-
-  <para>The following two methods from the <class>NakedObjectPersistor</class>
-  must be implemented (these method are already implemented in
-  <class>AbstractObjectStore</class>):-</para>
-
-  <list>
-    <para><code>public boolean isInWorkingMemory(Object oid)</code> determines
-    if the specified object is currently held by the cache, returning
-    <code>true</code> if it is.</para>
-
-    <para><code>public void dispose(NakedObject object)</code> removes the
-    specified object from working memory. This method should only be called
-    when an object is no longer being referenced within working memory.</para>
-
-    <para><code>public NakedObject recreateObject(ExternalOid oid)</code>
-    recreates the object that is identified by the external OID.</para>
   </list>
 </section>

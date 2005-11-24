@@ -16,7 +16,7 @@
 
 <!ENTITY  % section-elements "heading|subheading|minorheading|para|list|program-listing|
    command-listing|property-listing|inline-graphic|figure|panel|
-   comment|index|anchor|biblio|include">
+   comment|index|anchor|biblio|include|javadoc">
 
 <!-- publication - made up of a number of sections -->
 <!ELEMENT publication (title?, subtitle?, author?, copyright?, preamble, (section|include)*)>
@@ -195,9 +195,24 @@ contain other sections -->
 
 
 
+<!ELEMENT javadoc (method-entry|constant-entry|property-entry|para|heading|subheading|minorheading)*>
+<!ATTLIST javadoc
+        package CDATA #REQUIRED
+        class CDATA #REQUIRED
+        outline (yes|no) "no"
+        comments (yes|no) "no">
 
+<!ELEMENT method-entry EMPTY>
+<!ATTLIST method-entry
+        signature CDATA #REQUIRED>
 
+<!ELEMENT constant-entry EMPTY>
+<!ATTLIST constant-entry
+        name CDATA #REQUIRED>
 
+<!ELEMENT property-entry EMPTY>
+<!ATTLIST property-entry
+        name CDATA #REQUIRED>
 
 
 

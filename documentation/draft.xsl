@@ -327,9 +327,10 @@
 
   <xsl:template match="section">
     <fo:block 
-      font-size="16pt"
-      line-height="130%"
       font-family="Arial, Garamond, sans-serif"
+      font-size="20pt"
+      font-weight="bold"
+      line-height="130%"
       space-after=".65cm"
       border-width="0.5mm"
       border-color="black"
@@ -339,7 +340,7 @@
 <!--      id="{generate-id(key('chapters', .))}"
       -->
       <xsl:if test="string-length(title) > 0">
-        <xsl:attribute name="border-after-style">solid</xsl:attribute>
+        <!--xsl:attribute name="border-after-style">solid</xsl:attribute-->
       </xsl:if>
         <xsl:if test="@numbered='on'">
           <xsl:number level="multiple" count="//section[@numbered='on']" format="1. "/>
@@ -466,9 +467,7 @@
     <fo:list-item-label >
     <fo:block
         space-before=".2cm"
-        space-after="1.2pc"
-        font-family="Times"
-        font-size="11pt">
+        space-after="1.2pc">
         <xsl:apply-templates select="label"/>
     </fo:block>
     </fo:list-item-label>
@@ -485,7 +484,7 @@
 
   <xsl:template match ="para">
     <fo:block
-      font-family="Times"
+      font-family="Times, Serif"
       font-size="10pt"
       text-indent="0.0cm"
       space-after="9px"
@@ -678,7 +677,7 @@
     <fo:inline
       hyphenation-keep="column"
       color="#888"
-      font-family="sans-serif"
+      font-family="Arial, Garamond, sans-serif"
       >
       <xsl:apply-templates/> 
     </fo:inline>
@@ -686,7 +685,7 @@
 
   <xsl:template match="object|menu|field">
     <fo:inline
-      font-family="sans-serif"
+      font-family="Arial, Garamond, sans-serif"
       background-color="#EEE"
 
       >
@@ -696,7 +695,7 @@
 
   <xsl:template match="code|path|property">
     <fo:inline
-      font-family="sans-serif"
+      font-family="Arial, Garamond, sans-serif"
       font-weight="bold"
       >
       <xsl:apply-templates/> 
@@ -795,7 +794,128 @@
 
 
 
+<xsl:template match ="javadoc">
+  <xsl:for-each select="package/class|package/interface">
+    <xsl:sort select="@name"/>
 
+  <fo:block
+    space-before.optimum="8pt"
+    font-size="10pt" 
+    font-family="sans-serif" 
+    line-height="14pt"
+    space-after="12pt"
+    padding="6px"
+    border-style="solid"
+    >
+    
+    
+  <fo:block
+    font-weight="bold"
+    text-align="start" >
+    <xsl:value-of select="../@name"/>.<xsl:value-of select="@name"/>
+  </fo:block>
+
+  <fo:block
+    font-size="8pt" 
+    font-family="sans-serif" 
+    line-height="12pt"
+    space-after="3pt"
+    width="100%"
+     >
+
+        <fo:block text-align="end" font-style="italic">
+            <xsl:value-of select="extends_class/classref/@name"/>
+        </fo:block>
+        <xsl:for-each select="implements/interfaceref">
+            <fo:block text-align="end">
+                <xsl:text>  </xsl:text>
+                <xsl:value-of select="@name"/>
+            </fo:block>
+        </xsl:for-each>
+  </fo:block>
+  
+  <fo:table table-layout="fixed">
+    <fo:table-column column-width="22mm"/>
+    <fo:table-column column-width="17mm"/>
+    <fo:table-column column-width="110mm"/>
+    <fo:table-body 
+      line-height="12pt"
+      font-family="sans-serif"
+      font-size="8pt">
+      <xsl:apply-templates/> 
+    </fo:table-body>
+  </fo:table>
+  
+  </fo:block>
+</xsl:for-each>
+
+</xsl:template>
+
+
+
+<xsl:template match ="class/method|class/constructor|interface/method">
+  <fo:table-row> 
+  <fo:table-cell>
+    <fo:block>
+        <xsl:value-of select="@access"/>
+
+        <xsl:if test="@extensiblity!='default'">
+            <xsl:value-of select="@extensiblity"/>
+        </xsl:if>
+
+    </fo:block>
+    </fo:table-cell>
+            
+    <fo:table-cell>
+      <fo:block text-align="end">
+        <xsl:call-template name="strip">
+           <xsl:with-param name="string" select="returns//@type" />
+        </xsl:call-template>       
+        <xsl:call-template name="strip">
+           <xsl:with-param name="string" select="returns//@name" />
+        </xsl:call-template>
+        <xsl:value-of select="returns//@dimension"/>
+      </fo:block>
+    </fo:table-cell>
+    
+    <fo:table-cell>
+      <fo:block start-indent="5mm">
+        <fo:inline font-weight="bold"><xsl:value-of select="@name"/></fo:inline>
+        <xsl:text> (</xsl:text>
+        <xsl:for-each select="parameter">
+            <xsl:if test="position() > 1">
+               <xsl:text>, </xsl:text>
+            </xsl:if>
+            
+            <!--xsl:apply-templates select="./primitive/@type"/-->
+            <xsl:call-template name="strip">
+               <xsl:with-param name="string" select="./classref/@name|./interfaceref/@name|./primitive/@type" />
+            </xsl:call-template>       
+            <!--xsl:call-template name="strip">
+               <xsl:with-param name="string" select="./interfaceref/@name" />
+            </xsl:call-template-->
+            <xsl:apply-templates select="@dimension"/>
+            <xsl:text> </xsl:text>
+            <fo:inline font-style="italic">
+                <xsl:apply-templates select="@name"/>
+            </fo:inline>
+        </xsl:for-each>
+        <xsl:text>) </xsl:text>
+        
+      <!--xsl:apply-templates select="exception"/-->
+
+    </fo:block>	<xsl:text> - </xsl:text>
+    
+    </fo:table-cell>
+</fo:table-row> 
+</xsl:template>
+
+
+
+
+
+
+<!--
 
 
 
@@ -818,6 +938,9 @@
 </xsl:template>
 
 <xsl:template match ="javadoc">
+JavaDoc...
+    <xsl:apply-templates select="@name"/> 
+
   <xsl:for-each select="class|interface">
     <xsl:sort select="@name"/>
 
@@ -1002,7 +1125,24 @@
     <xsl:apply-templates/> 
 </xsl:template>
 
+-->
 
+
+
+<xsl:template name="strip">
+    <xsl:param name="string" select="''" />
+
+    <xsl:choose>
+      <xsl:when test="contains($string, '.')">
+         <xsl:call-template name="strip">
+            <xsl:with-param name="string" select="substring-after($string, '.')" />
+         </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+         <xsl:value-of select="$string" />
+      </xsl:otherwise>
+   </xsl:choose>
+</xsl:template>
 
 
 

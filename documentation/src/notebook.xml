@@ -12,4 +12,6 @@
     <section file="viewer properties.xml"/>
     <section file="nakedobjects-repository.xml"/>
     
+    <section file="architecture/utilities.xml"/>
+    
 </content>

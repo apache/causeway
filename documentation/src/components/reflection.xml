@@ -153,4 +153,17 @@ specificationLoader.setReflectionPeerFactories(factories);
 
   <para>The <class>JavaReflector</class> is defined in the package
   <class>org.nakedobjects.reflector.java.reflect</class>.</para>
+
+  <subheading>Classes</subheading>
+
+  <javadoc class="AbstractNakedObjectSpecification" outline="yes"
+           package="???"></javadoc>
+
+  <javadoc class="SpecificationCache" outline="yes" package="???"></javadoc>
+
+  <javadoc class="ActionPeer" outline="yes" package="???"></javadoc>
+
+  <javadoc class="OneToOnePeer" outline="yes" package="???"></javadoc>
+
+  <javadoc class="OneToManyPeer" outline="yes" package="???"></javadoc>
 </section>

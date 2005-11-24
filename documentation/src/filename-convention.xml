@@ -3,33 +3,97 @@
 <section>
   <title>Distribution file naming convention</title>
 
-  <description></description>
+  <para>The names given to download files indicates what the product is, what
+  platform it runs on, its version. Through the version you can also determine
+  how stable the system should be. The file name format is as follows:</para>
 
-  <intro></intro>
+  <command-listing>[product]-[version]-[build]-[platform].[file-type]</command-listing>
 
-  <para>Version numbers allow you to distinguish what the product is, what
-  platform it runs on, and what version it is. Through the version number you
-  can also determine how stable the system should be.</para>
+  <para>For example:-</para>
 
-  <property-listing>nakedobjects-2.0-java.zip</property-listing>
+  <command-listing>nakedobjects-2.0M3-20051124-1258-java.zip
+nakedobjects-2.0M3-20051124-1258-dotnet.zip
+nakedobjects-2.0M3-20051124-1258-source.zip
+ossql-D-20051127-0958-java.zip</command-listing>
 
-  <property-listing>nakedobjects-2.0-dotnet.zip</property-listing>
-
-  <property-listing>os-xml-1.2-java.zip</property-listing>
-
-  <property-listing>[product]-[version]-[platform].zip</property-listing>
-
-  <para>The main products are:-</para>
+  <para>The parts of the name are:</para>
 
   <list>
-    <para>nakedobjects</para>
+    <item2>
+      <label>product</label>
 
-    <para>examples</para>
+      <para>At the moment we only build the core framework, which is
+      <property>nakedobjects</property>. In the future will provide other
+      products.</para>
+    </item2>
 
-    <para></para>
+    <item2>
+      <label>version</label>
+
+      <para></para>
+    </item2>
+
+    <item2>
+      <label>build</label>
+
+      <para>The build number is a date/time stamp showing when the
+      distribution was built.</para>
+    </item2>
+
+    <item2>
+      <label>platform</label>
+
+      <para>We target two platforms with the core framework; Java and .NET
+      (idicated as <property>java</property> and <property>dotnet</property>).
+      Other components might support either or both. Also available is source
+      distribution, which is much smaller and must be built before it can be
+      used.</para>
+    </item2>
+
+    <item2>
+      <label>file-type</label>
+
+      <para>The file type is always <property>zip</property>.</para>
+    </item2>
+  </list>
+
+  <minorheading>Versions</minorheading>
+
+  <list>
+    <item2>
+      <label>n.n</label>
+
+      <para></para>
+    </item2>
+
+    <item2>
+      <label>n.nMn</label>
+
+      <para></para>
+    </item2>
+
+    <item2>
+      <label>D</label>
+
+      <para></para>
+    </item2>
+
+    <item2>
+      <label>N</label>
+
+      <para></para>
+    </item2>
+
+    <item2>
+      <label>I</label>
+
+      <para></para>
+    </item2>
   </list>
 
   <para></para>
 
   <para></para>
+
+  <para>.</para>
 </section>
