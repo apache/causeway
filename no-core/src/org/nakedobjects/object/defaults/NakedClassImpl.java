@@ -36,7 +36,7 @@ public class NakedClassImpl implements NakedClass {
     public void aboutExplorationActionFind(InternalAbout about) {
         about.setDescription("Get a simple finder object to start searches within the " + getSingularName() + " instances");
         about.setName("Find " + getPluralName());
-        about.unusableOnCondition(!getObjectManager().hasInstances(forObjectType()), "No instances available to find");
+        about.unusableOnCondition(!getObjectManager().hasInstances(forObjectType(), false), "No instances available to find");
         Hint ca = specification.getClassHint();
         if (ca != null && ca.canAccess().isVetoed()) {
             about.invisible();
@@ -48,7 +48,7 @@ public class NakedClassImpl implements NakedClass {
         if (ca != null && ca.canAccess().isVetoed()) {
             return Veto.DEFAULT;
         } else {
-            return AbstractConsent.create(getObjectManager().hasInstances(forObjectType()), "", "No instances available");
+            return AbstractConsent.create(getObjectManager().hasInstances(forObjectType(), false), "", "No instances available");
         }
     }
     

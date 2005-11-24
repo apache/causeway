@@ -269,7 +269,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
         LOG.debug("made persistent " + adapter + " as " + assignedOid);
             Assert.assertTrue("No adapter found in map", pojoAdapterMap.getPojo(adapter.getObject()) != null );
             Assert.assertTrue("Not the same adapter in map", pojoAdapterMap.getPojo(adapter.getObject()) == adapter);
-            Assert.assertNull("OID should not already map to a known adapter", identityAdapterMap.get(assignedOid));
+            Assert.assertNull("OID should not already map to a known adapter " + assignedOid, identityAdapterMap.get(assignedOid));
         
         adapter.persistedAs(assignedOid);
 
