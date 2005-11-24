@@ -1,6 +1,7 @@
 package test.org.nakedobjects.object.security;
 
 import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.security.NullSession;
 import org.nakedobjects.object.security.OneToOneAuthorisation;
 
 import junit.framework.TestCase;
@@ -30,7 +31,7 @@ public class OneToOneAuthorisationTest extends TestCase {
         manager.setupUsable(true);
         manager.setupVisible(true);
 
-        assertTrue(oneToOne.isAccessible());
+        assertTrue(oneToOne.isAuthorised(new NullSession()));
     }
 }
 

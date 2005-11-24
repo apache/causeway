@@ -1,5 +1,6 @@
 package test.org.nakedobjects.utility.configuration;
 
+import org.nakedobjects.utility.NakedObjectConfiguration;
 import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 
 import java.util.Properties;
@@ -37,42 +38,42 @@ public class ConfigurationTest extends TestCase {
     }
 
     public void testBoolean() {
-        assertEquals(true, configuration.getBoolean("bool"));
+        assertEquals(true, configuration.getBoolean("nakedobjects.bool"));
     }
 
     public void testHas() {
-        assertTrue(configuration.hasProperty("str"));
-        assertFalse(configuration.hasProperty("none"));
+        assertTrue(configuration.hasProperty("nakedobjects.str"));
+        assertFalse(configuration.hasProperty("nakedobjects.none"));
     }
 
     public void testMissingString() {
-        assertEquals(null, configuration.getString("none"));
+        assertEquals(null, configuration.getString("nakedobjects.none"));
     }
 
     public void testMissingStringWithDefault() {
-        assertEquals("default", configuration.getString("none", "default"));
+        assertEquals("default", configuration.getString("nakedobjects.none", "default"));
     }
 
-    public void testPropertiesWithPrefix() {
-        Properties p = configuration.getProperties("nakedobjects.group");
-        assertTrue(p.containsKey("nakedobjects.group.one"));
-        assertTrue(p.containsKey("nakedobjects.group.two"));
+    public void testSubsetWithPrefix() {
+        NakedObjectConfiguration p = configuration.createSubset("nakedobjects.group");
+        assertTrue(p.hasProperty("one"));
+        assertTrue(p.hasProperty("two"));
         assertEquals(2, p.size());
     }
 
-    public void testPropertySubset() {
-        Properties p = configuration.getProperties("nakedobjects.group.", "nakedobjects.group.");
-        assertTrue(p.containsKey("one"));
-        assertTrue(p.containsKey("two"));
+    public void testSubsetWithTrailingDot() {
+        NakedObjectConfiguration p = configuration.createSubset("nakedobjects.group.");
+        assertTrue(p.hasProperty("one"));
+        assertTrue(p.hasProperty("two"));
         assertEquals(2, p.size());
     }
 
     public void testString() {
-        assertEquals("string", configuration.getString("str"));
+        assertEquals("string", configuration.getString("nakedobjects.str"));
     }
 
     public void testStringWithDefault() {
-        assertEquals("string", configuration.getString("str", "default"));
+        assertEquals("string", configuration.getString("nakedobjects.str", "default"));
     }
 }
 

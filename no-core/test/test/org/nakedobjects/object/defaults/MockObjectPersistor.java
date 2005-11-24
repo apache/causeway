@@ -101,7 +101,7 @@ public class MockObjectPersistor extends AbstracObjectPersistor {
         throw new NotImplementedException();
     }
     
-    public boolean hasInstances(NakedObjectSpecification cls) {
+    public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         throw new NotImplementedException();
     }
 
@@ -111,7 +111,7 @@ public class MockObjectPersistor extends AbstracObjectPersistor {
         actions.addElement("make persistent " + object);
     }
 
-    public int numberOfInstances(NakedObjectSpecification cls) {
+    public int numberOfInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
         throw new NotImplementedException();
     }
 

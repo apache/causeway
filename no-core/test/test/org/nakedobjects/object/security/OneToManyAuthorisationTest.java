@@ -1,6 +1,7 @@
 package test.org.nakedobjects.object.security;
 
 import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.security.NullSession;
 import org.nakedobjects.object.security.OneToManyAuthorisation;
 
 import junit.framework.TestCase;
@@ -29,14 +30,14 @@ public class OneToManyAuthorisationTest extends TestCase {
         manager.setupUsable(true);
         manager.setupVisible(true);
 
-        assertTrue(oneToMany.isAccessible());
+        assertTrue(oneToMany.isAuthorised(new NullSession()));
     }
 
     public void testNotAccessible() {
         manager.setupUsable(true);
         manager.setupVisible(false);
 
-        assertFalse(oneToMany.isAccessible());
+        assertFalse(oneToMany.isAuthorised(new NullSession()));
     }
 }
 
