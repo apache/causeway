@@ -27,7 +27,7 @@ public class SnapshotServer {
         PropertiesFileLoader loader = new PropertiesFileLoader("nakedobjects.properties", true);
         PropertiesConfiguration c = new PropertiesConfiguration(loader);
 
-        String prefix = "snapshotserver.";
+        String prefix = "nakedobjects.snapshotserver.";
         port = c.getInteger(prefix + "port", 9289);
         directoryPath = c.getString(prefix + "directory", ".");
         fileName = c.getString(prefix + "filename", "log");
