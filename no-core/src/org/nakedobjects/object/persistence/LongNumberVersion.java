@@ -21,6 +21,10 @@ public class LongNumberVersion extends AbstractVersion {
             return false;
         }
     }
+    
+    public long getSequence() {
+        return versionNumber;
+    }
 
     protected AbstractVersion next() {
         return new LongNumberVersion(versionNumber + 1, null, null);

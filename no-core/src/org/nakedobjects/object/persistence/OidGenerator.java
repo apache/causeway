@@ -1,17 +1,14 @@
 package org.nakedobjects.object.persistence;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.object.NakedObjectsComponent;
 import org.nakedobjects.object.Oid;
 
 
-public interface OidGenerator {
+public interface OidGenerator extends NakedObjectsComponent {
 	Oid next(Naked object);
 
 	String name();
-	
-	void init();
-	
-	void shutdown();
 }
 
 /*
