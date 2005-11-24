@@ -3,7 +3,6 @@ package org.nakedobjects.persistence.sql.auto;
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
@@ -66,7 +65,7 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
                 Oid oid = recreateOid(rs, elementCls, elementIdColumn);
                 NakedObject element = mapper.getAdapter(elementCls, oid);
                 LOG.debug("  element  " + element.getOid());
-                parent.initElement((NakedObjectAssociation) field, element);
+                parent.initAssociation(field, element);
             }
             rs.close();
             NakedObjects.getObjectLoader().end(collection);

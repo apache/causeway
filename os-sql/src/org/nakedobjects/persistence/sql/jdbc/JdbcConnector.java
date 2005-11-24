@@ -54,7 +54,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
     public void open() throws SqlObjectStoreException {
         try {
             NakedObjectConfiguration params = NakedObjects.getConfiguration();
-            String BASE = "sql-object-store.jdbc.";
+            String BASE = "nakedobjects.sql-object-store.jdbc.";
             String driver = params.getString(BASE + "driver");
             String url = params.getString(BASE + "connection");
             String user = params.getString(BASE + "user");

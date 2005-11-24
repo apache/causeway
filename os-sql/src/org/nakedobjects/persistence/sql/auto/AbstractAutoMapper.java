@@ -9,6 +9,7 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
+import org.nakedobjects.object.persistence.LongNumberVersion;
 import org.nakedobjects.persistence.sql.AbstractObjectMapper;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
@@ -18,10 +19,8 @@ import org.nakedobjects.persistence.sql.ValueMapper;
 import org.nakedobjects.persistence.sql.ValueMapperLookup;
 import org.nakedobjects.utility.NakedObjectConfiguration;
 import org.nakedobjects.utility.NotImplementedException;
-import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 
 import java.util.Enumeration;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -208,7 +207,8 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		oneToOnefields = new NakedObjectField [simpleFieldCount];
 		oneToManyFields = new NakedObjectField [collectionFieldCount];
 		collectionMappers = new CollectionMapper[collectionFieldCount];
-		Properties collectionMappings = configParameters.getPropertiesStrippingPrefix(parameterBase + "collection");
+		//Properties collectionMappings = configParameters.getPropertiesStrippingPrefix(parameterBase + "collection");
+        NakedObjectConfiguration subset = NakedObjects.getConfiguration().createSubset(parameterBase + ".mapper.");
 
 		for (int i = 0, simpleFieldNo = 0, collectionFieldNo = 0; i < allFields.length; i++) {
 			if (allFields[i].isDerived()) {
@@ -216,7 +216,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 			} else if (allFields[i].isCollection()) {
 				oneToManyFields[collectionFieldNo] = allFields[i];
 				
-				String type = collectionMappings.getProperty(allFields[i].getId());
+				String type = subset.getString(allFields[i].getId());
 				if(type == null || type.equals("association-table")) {
 					collectionMappers[collectionFieldNo] = new AutoAssociationMapper(this, nakedClass, oneToManyFields[collectionFieldNo]);
 				} else if(type.equals("fk-table")) 	{
@@ -246,30 +246,32 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 	}
 
 	private void setupSpecifiedMapping(NakedObjectSpecification nakedClass, NakedObjectConfiguration configParameters, String parameterBase) throws SqlObjectStoreException {
-		Properties columnMappings = configParameters.getProperties(parameterBase + "column");
+//		Properties columnMappings = configParameters.getProperties(parameterBase + "column");
+        NakedObjectConfiguration columnMappings = NakedObjects.getConfiguration().createSubset(parameterBase + ".mapper.");
 		int columnsSize = columnMappings.size();
 		columnNames = new String[columnsSize];
 		oneToOnefields = new NakedObjectField[columnsSize];
 
 		
 		int i = 0;
-		for (Enumeration names = columnMappings.propertyNames(); names.hasMoreElements(); i++) {
+		for (Enumeration names = columnMappings.properties(); names.hasMoreElements(); i++) {
 			String columnName = (String) names.nextElement();
 			columnNames[i] = columnName;
 
-			String fieldName = columnMappings.getProperty(columnName);
+			String fieldName = columnMappings.getString(columnName);
 			oneToOnefields[i] = nakedClass.getField(fieldName);
 		}
 
-		Properties collectionMappings = configParameters.getProperties(parameterBase + "collection");
+//		Properties collectionMappings = configParameters.getProperties(parameterBase + "collection");
+        NakedObjectConfiguration collectionMappings = NakedObjects.getConfiguration().createSubset(parameterBase + ".mapper.");
 		int collectionsSize = collectionMappings.size();
 		collectionMappers = new AutoAssociationMapper[collectionsSize];
 		oneToManyFields= new NakedObjectField[collectionsSize];
 
 		int j = 0;
-		for(Enumeration names = collectionMappings.propertyNames(); names.hasMoreElements(); j++) {
+		for(Enumeration names = collectionMappings.properties(); names.hasMoreElements(); j++) {
 			String collectionName = (String) names.nextElement();
-			String type = collectionMappings.getProperty(collectionName);
+			String type = collectionMappings.getString(collectionName);
 			
 			oneToManyFields[j] = nakedClass.getField(collectionName);
 			if(type.equals("auto")) {
@@ -312,6 +314,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 
     protected String updateWhereClause(NakedObject object, boolean and) throws SqlObjectStoreException {
         Version version = object.getVersion();
-        return (and ? " and " +  version + " = \"version\"" : "");
+        long versionNumber = ((LongNumberVersion) version).getSequence();
+        return (and ? " and " +  versionNumber + " = \"version\"" : "");
     }
 }

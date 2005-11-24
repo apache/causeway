@@ -1,7 +1,6 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.InternalCollection;
-import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
@@ -12,12 +11,10 @@ import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.configuration.ComponentException;
 import org.nakedobjects.utility.configuration.ComponentLoader;
-import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.configuration.ConfigurationException;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
@@ -87,17 +84,16 @@ public class ObjectMapperLookup {
 
      //   Properties properties = NakedObjects.getConfiguration().getPropertiesStrippingPrefix(BASE_NAME + ".mapper.");
 
-        NakedObjectConfiguration subset = NakedObjects.getConfiguration().getConfigurationSubsetStrippingPrefix(BASE_NAME + ".mapper.");
+        NakedObjectConfiguration subset = NakedObjects.getConfiguration().createSubset(BASE_NAME + ".mapper.");
         
-        if (properties.size() == 0) {
+        if (subset.isEmpty()) {
             throw new ConfigurationException("No mappers defined");
-
         }
 
-        Enumeration e = properties.keys();
+        Enumeration e = subset.properties();
         while (e.hasMoreElements()) {
             String className = (String) e.nextElement();
-            String value = properties.getProperty(className);
+            String value = subset.getString(className);
 
             if (value.startsWith("auto.")) {
                 add(className, mapperFactory.createMapper(className, BASE_NAME + ".automapper." + value.substring(5) + "."));
@@ -107,7 +103,7 @@ public class ObjectMapperLookup {
 	            LOG.debug("mapper " + className + "=" + value);
 	
 	            try {
-	                add(className, (ObjectMapper) ComponentLoader.loadNamedComponent(value, ObjectMapper.class));
+	                add(className, (ObjectMapper) ComponentLoader.loadComponent(value, ObjectMapper.class));
 	            } catch (ObjectPerstsistenceException ex) {
 	                throw new ComponentException("Failed to set up mapper for " + className, ex);
 	            }

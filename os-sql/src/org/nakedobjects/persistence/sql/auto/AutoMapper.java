@@ -83,6 +83,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 	    String id = ((SqlOid) oid).stringValue();
         String selectStatment = "select * from " + quote(table) + " where " + quote(idColumn) + " = " + id;
 		Results rs = connector.select(selectStatment);
+        rs.next();
 		return loadObject(connector, hint, rs);
 	}
 
@@ -232,7 +233,7 @@ public class AutoMapper extends AbstractAutoMapper  implements ObjectMapper {
 
 		String id = primaryKey(object.getOid());
         String statement = "update " + quote(table) + " set " + assignments + " where " + 
-				quote(idColumn) + "=" + id  + " and \"version\" = " + object.getVersion() + updateWhereClause;
+				quote(idColumn) + "=" + id + updateWhereClause;
 		int updateCount = connector.update(statement);
 		
 		if(updateCount == 0) {

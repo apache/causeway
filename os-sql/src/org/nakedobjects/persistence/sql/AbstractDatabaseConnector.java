@@ -1,10 +1,8 @@
 package org.nakedobjects.persistence.sql;
 
-import org.apache.log4j.Logger;
 
 
 public abstract class AbstractDatabaseConnector implements DatabaseConnector {
-    private static final Logger LOG = Logger.getLogger(AbstractDatabaseConnector.class);
     private boolean isUsed;
 
     public final void setUsed(boolean isUsed) {

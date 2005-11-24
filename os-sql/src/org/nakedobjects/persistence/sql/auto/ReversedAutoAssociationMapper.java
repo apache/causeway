@@ -2,10 +2,8 @@ package org.nakedobjects.persistence.sql.auto;
 
 import org.nakedobjects.object.InternalCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectAssociation;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.ResolveException;
 import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
@@ -43,8 +41,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 		}
 	}
 
-	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent)
-			throws ResolveException, SqlObjectStoreException {
+	public void loadInternalCollection(DatabaseConnector connector, NakedObject parent) {
 		LOG.debug("Loading internal collection " + field);
 		String parentId = primaryKey(parent.getOid());
 		
@@ -55,7 +52,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
 			Oid oid = recreateOid(rs, nakedClass, elementIdColumn);
 			NakedObject element = getAdapter(nakedClass, oid);
 			LOG.debug("  element  " + element);
-			parent.addElement((NakedObjectAssociation) field, element);
+			parent.initAssociation(field, element);
 		}
         rs.close();
 	}

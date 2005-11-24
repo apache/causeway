@@ -24,7 +24,7 @@ import org.apache.log4j.Logger;
 
 
 public final class SqlObjectStore implements NakedObjectStore {
-    static final String BASE_NAME = "sql-object-store";
+    static final String BASE_NAME = "nakedobjects.sql-object-store";
     private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
     private DatabaseConnectorPool connectionPool;
     private ObjectMapperLookup mapperLookup;

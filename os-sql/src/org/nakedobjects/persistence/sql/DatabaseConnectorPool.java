@@ -13,12 +13,16 @@ public class DatabaseConnectorPool {
 
 
     public DatabaseConnectorPool(DatabaseConnectorFactory factory) throws SqlObjectStoreException {
+        this(factory, AVERAGE_POOL_SIZE);
+    }
+
+    public DatabaseConnectorPool(DatabaseConnectorFactory factory, int size) throws SqlObjectStoreException {
         this.factory = factory;
         connectorPool = new Vector();
-        for (int i = 0; i < AVERAGE_POOL_SIZE; i++) {
+        for (int i = 0; i < size; i++) {
             newConnector();
         }
-        LOG.info("Created an intial pool of " + AVERAGE_POOL_SIZE + " database connections");
+        LOG.info("Created an intial pool of " + size + " database connections");
     }
     
     private DatabaseConnector newConnector() throws SqlObjectStoreException {
