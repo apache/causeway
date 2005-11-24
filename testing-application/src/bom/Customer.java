@@ -51,11 +51,11 @@ public class Customer {
         return paymentMethods;
     }
 
-    public Vector getObjects() {
+    public Vector XXXgetObjects() {
         return objects;
     }
 
-    public Vector getCommon() {
+    public Vector XXXgetCommon() {
         return common;
     }
 
@@ -86,7 +86,7 @@ public class Customer {
         paymentMethods.removeElement(method);
     }
     
-    public Vector getCreditCards() {
+    public Vector xxxgetCreditCards() {
         return creditCards;
     }
 

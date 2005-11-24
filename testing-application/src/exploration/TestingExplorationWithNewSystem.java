@@ -1,6 +1,6 @@
 package exploration;
 
-import org.nakedobjects.JavaExploration;
+import org.nakedobjects.app.JavaExploration;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
 

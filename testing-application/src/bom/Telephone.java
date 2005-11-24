@@ -34,6 +34,17 @@ public class Telephone implements Common {
         container.objectChanged(this);
     }
     
+    public void actionRemoteSave() {
+        container.makePersistent(this);
+    }
+    
+    public Telephone actionCreateTransient() {
+        Telephone copy = (Telephone) container.createTransientInstance(Telephone.class);
+        copy.number.setValue(number);
+        copy.knownAs.setValue(knownAs);
+        return copy;
+    }
+    
     public void aboutKnownAs(FieldAbout about, TextString entry) {
         about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
 

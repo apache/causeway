@@ -12,6 +12,7 @@ public class LocationGroup {
     private final TextString name = new TextString();
 
     private final InternalCollection collection = new InternalCollection(Location.class.getName());
+    private boolean isChanged;
     
     public InternalCollection getCollection() {
         return collection;
@@ -31,19 +32,41 @@ public class LocationGroup {
 
     public void setCity(City city) {
         this.city = city;
+        isChanged = true;
     }
 
     public void addToLocations(Location location) {
         locations.addElement(location);
+        isChanged = true;
     }
     
     public void removeFromLocations(Location location) {
         locations.removeElement(location);
+        isChanged = true;
     }
 
     public String toString() {
         return name.stringValue();
     }
+    
+    
+    
+
+    public boolean isDirty() {
+        return isChanged;
+    }
+
+    public void markDirty() {
+        isChanged = true;
+    }
+    
+
+    public void clearDirty() {
+        isChanged = false;
+    }
+
+    
+    
 }
 
 /*
