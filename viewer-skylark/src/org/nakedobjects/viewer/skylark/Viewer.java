@@ -56,7 +56,7 @@ public class Viewer {
     private static final Logger LOG = Logger.getLogger(Viewer.class);
     private static final Logger UI_LOG = Logger.getLogger("ui." + Viewer.class.getName());
     private static final Bounds NO_REDRAW = new Bounds();
-    public static final String PROPERTY_BASE = "viewer.skylark.";
+    public static final String PROPERTY_BASE = "nakedobjects.viewer.skylark.";
     private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
 
     public static Viewer getInstance() {
