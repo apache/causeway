@@ -1,11 +1,12 @@
 package org.nakedobjects.distribution.xml;
 
-import org.nakedobjects.distribution.ServerDistribution;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Vector;
@@ -13,23 +14,23 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class ServerListener implements Runnable {
+public abstract class ServerListener implements Runnable {
 	private static final Logger LOG = Logger.getLogger(ServerListener.class);
-	private Vector clients = new Vector();
-	private ServerDistribution server;
-	private ServerSocket socket;
+    private static final int PORT = 9567;
+    private static final String SERVER_PORT = "server.port";
 	private boolean acceptConnection;
+	private Vector clients = new Vector();
+	private ServerSocket socket;
 	
-	public void setServerDistribution(ServerDistribution server) {
-		this.server = server;
-	}
-	
+	protected abstract ServerConnection connect(Socket socket) throws IOException;
+    
 	public void run() {
 		try {
 			socket.setSoTimeout(1000);
+            LOG.debug("listening for connection on "  + socket);
 	    	while(acceptConnection) {
 	    		try {
-					ServerConnection connection = new ServerConnection(socket.accept(), server);
+					ServerConnection connection = connect(socket.accept());
 					LOG.debug("connection requested from "  + connection.getClient());
 					clients.addElement(connection);
 					connection.start();
@@ -43,27 +44,27 @@ public class ServerListener implements Runnable {
 			LOG.error("listener failure", e);
 		}
 	}
+    
+	public synchronized void shutdown() {
+		acceptConnection = false;
+		Enumeration e = clients.elements();
+		while (e.hasMoreElements()) {
+			 ServerConnection client = (ServerConnection) e.nextElement();
+			 client.shutdown();
+		}		
+	}
 
 	public void start() {
     	LOG.info("creating listener on localhost");
     	try{
-    		socket = new ServerSocket(9567);
+            int port = NakedObjects.getConfiguration().getInteger(SERVER_PORT, PORT);
+    		socket = new ServerSocket(port);
     	} catch (IOException e) {
     	    throw new NakedObjectRuntimeException(e);
     	}
 		acceptConnection = true;
 
 		new Thread(this, "Listener").start();
-	}
-
-	public synchronized void shutdown() {
-		acceptConnection = false;
-//		wait();
-		Enumeration e = clients.elements();
-		while (e.hasMoreElements()) {
-			 ServerConnection client = (ServerConnection) e.nextElement();
-			 client.shutdown();
-		}		
 	}
 	
     public String toString() {
