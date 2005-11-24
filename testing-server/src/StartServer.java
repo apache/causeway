@@ -1,4 +1,4 @@
-import org.nakedobjects.StartUp;
+import org.nakedobjects.app.StartUp;
 
 
 

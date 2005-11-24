@@ -4,7 +4,7 @@ import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.java.JavaDataFactory;
-import org.nakedobjects.distribution.xml.ServerListener;
+import org.nakedobjects.distribution.xml.XServerListener;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashMap;
@@ -62,12 +62,12 @@ public class XmlServer {
         DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
         persistAlgorithm.setOidGenerator(oidGenerator);
 
-        ObjectStorePersistor objectManager = new ObjectStorePersistor();
-        objectManager.setObjectStore(objectStore);
-        objectManager.setPersistAlgorithm(persistAlgorithm);
-        objectManager.setCheckObjectsForDirtyFlag(true);
+        ObjectStorePersistor objectPersistor = new ObjectStorePersistor();
+        objectPersistor.setObjectStore(objectStore);
+        objectPersistor.setPersistAlgorithm(persistAlgorithm);
+        objectPersistor.setCheckObjectsForDirtyFlag(true);
 
-        nakedObjects.setObjectPersistor(objectManager);
+        nakedObjects.setObjectPersistor(objectPersistor);
 
         ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
                 new TransactionPeerFactory(),
@@ -86,11 +86,12 @@ public class XmlServer {
 
         ServerDistribution sd = new ServerDistribution();
         sd.setObjectDataFactory(objectDataFactory);
+        sd.setUpdateNotifier(updateNotifier);
 
-        ServerListener serverListener = new ServerListener();
+        XServerListener serverListener = new XServerListener();
         serverListener.setServerDistribution(sd);
 
-        objectManager.addObjectChangedListener(updateNotifier);
+        objectPersistor.addObjectChangedListener(updateNotifier);
 
         nakedObjects.init();
         
@@ -110,7 +111,7 @@ public class XmlServer {
                 System.exit(0);
             }
         };
-        DebugInfo debugInfo = objectManager;
+        DebugInfo debugInfo = objectPersistor;
         debugFrame.setInfo(debugInfo);
         debugFrame.setBounds(10, 10, 1000, 800);
         debugFrame.refresh();
