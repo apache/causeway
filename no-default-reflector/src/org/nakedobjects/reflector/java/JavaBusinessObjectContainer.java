@@ -74,7 +74,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public boolean hasInstances(Class cls) {
-        return objectManager().hasInstances(getSpecification(cls));
+        return objectManager().hasInstances(getSpecification(cls), false);
     }
 
     public void makePersistent(Object transientObject) {
@@ -85,7 +85,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public int numberOfInstances(Class cls) {
-        return objectManager().numberOfInstances(getSpecification(cls));
+        return objectManager().numberOfInstances(getSpecification(cls), false);
     }
 
     public void objectChanged(Object object) {
