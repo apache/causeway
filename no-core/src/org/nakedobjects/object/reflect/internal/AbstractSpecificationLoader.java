@@ -19,6 +19,9 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
     private ReflectionPeerBuilder reflectionPeerBuilder;
 
 
+    /**
+     * Return the specification for the specified class of object.
+     */
     public final NakedObjectSpecification loadSpecification(Class cls) {
         Assert.assertNotNull(cls);
         
@@ -39,6 +42,9 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
 
     }
 
+    /**
+     * Return the specification for the specified class of object.
+     */
     public final NakedObjectSpecification loadSpecification(String className) {
         Assert.assertNotNull(className);
 
@@ -85,6 +91,9 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
 
     protected abstract NakedObjectSpecification install(Class cls, ReflectionPeerBuilder builder);
 
+    /**
+     * Return all the loaded specifications.
+     */
     public NakedObjectSpecification[] allSpecifications() {
         return cache.allSpecifications();
     }
