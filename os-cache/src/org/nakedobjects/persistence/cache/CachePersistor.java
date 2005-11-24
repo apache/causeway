@@ -106,8 +106,8 @@ public class CachePersistor extends AbstracObjectPersistor {
         return object;
     }
 
-    public boolean hasInstances(NakedObjectSpecification specification) {
-        return numberOfInstances(specification) > 0;
+    public boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
+        return numberOfInstances(specification, false) > 0;
     }
 
     public void init() {
@@ -130,7 +130,7 @@ public class CachePersistor extends AbstracObjectPersistor {
         return "Cache Object Manager/Store";
     }
 
-    public int numberOfInstances(NakedObjectSpecification specification) {
+    public int numberOfInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         return objectStore.instances(specification).numberInstances();
     }
 
