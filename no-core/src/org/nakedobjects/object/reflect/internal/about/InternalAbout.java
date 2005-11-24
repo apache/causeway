@@ -6,7 +6,7 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.control.Veto;
 
-
+/** @deprecated */
 public class InternalAbout implements Hint {
 
     private String description;
