@@ -130,15 +130,6 @@ public class ObjectStoreTransaction implements Transaction {
             try {
                 objectStore.runTransaction(commandsArray);
                 objectStore.endTransaction();
-                
-/*
- * // PojoAdapterFactory loaded = NakedObjects.getPojoAdapterFactory(); for (int i = 0; i <
- * commandsArray.length; i++) { PersistenceCommand command = commandsArray[i]; if(command instanceof
- * CreateObjectCommand) { NakedObject object; object = command.onObject(); // loaded.loaded(object);
- *  } else if(command instanceof DestroyObjectCommand) { NakedObject object = command.onObject(); //
- * loaded.unloaded(object);
- *  } }
- */
             } catch (ObjectPerstsistenceException e) {
                 objectStore.abortTransaction();
                 throw e;
