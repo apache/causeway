@@ -11,17 +11,6 @@ import org.nakedobjects.object.reflect.MemberIdentifier;
 public interface AuthorisationManager extends NakedObjectsComponent {
 
     /**
-     * Returns true when the user respresented by the specified session is authorised to use the member of the
-     * class/object represented by the menber identifier.
-     * 
-     * <p>
-     * Normally a user is authorised to access a particular member, whcih means they can see it, hence we rely
-     * on the isVisible() method. However, sometimes we want leave thing visible, but just allow them to be
-     * used. It is in these situations that this method is used.
-     */
-    boolean isUsable(Session session, MemberIdentifier identifier);
-
-    /**
      * Returns true when the user respresented by the specified session is authorised to view the member of
      * the class/object represented by the menber identifier. Normally the view of the specified field, or the
      * display of the action will be supressed if this returns false.
