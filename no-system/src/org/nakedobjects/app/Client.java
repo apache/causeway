@@ -1,11 +1,11 @@
-package org.nakedobjects;
+package org.nakedobjects.app;
 
 /**
- * Utility class to start a server, using the default configuration file: standalone.properties.
+ * Utility class to start a server, using the default configuration file: client.properties.
  */
-public final class Standalone extends StartUp {
+public final class Client extends StartUp {
     public static void main(String[] args) {
-        String configurationFile = args.length > 0 ? args[0] : "standalone.properties";
+        String configurationFile = args.length > 0 ? args[0] : "client.properties";
         start(configurationFile);
     }
 }

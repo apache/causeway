@@ -1,4 +1,4 @@
-package org.nakedobjects;
+package org.nakedobjects.app;
 
 import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.AdapterFactory;

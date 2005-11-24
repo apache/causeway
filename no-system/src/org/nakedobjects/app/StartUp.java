@@ -1,4 +1,4 @@
-package org.nakedobjects;
+package org.nakedobjects.app;
 
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedObjectsComponent;
