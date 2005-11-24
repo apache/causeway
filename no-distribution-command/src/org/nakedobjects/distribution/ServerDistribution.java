@@ -165,7 +165,7 @@ public class ServerDistribution implements Distribution {
 
     public boolean hasInstances(Session session, String objectType) {
         LOG.debug("request hasInstances of " +  objectType + " for " + session);
-        return objectManager().hasInstances(getSpecification(objectType));
+        return objectManager().hasInstances(getSpecification(objectType), false);
     }
 
     public ObjectData makePersistent(Session session, ObjectData data) {
@@ -180,7 +180,7 @@ public class ServerDistribution implements Distribution {
 
     public int numberOfInstances(Session session, String objectType) {
         LOG.debug("request numberOfInstances of " + objectType + " for " + session);
-        return objectManager().numberOfInstances(getSpecification(objectType));
+        return objectManager().numberOfInstances(getSpecification(objectType), false);
     }
     
     /**

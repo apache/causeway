@@ -112,7 +112,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         throw new NotImplementedException();
     }
 
-    public boolean hasInstances(NakedObjectSpecification specification) {
+    public boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.debug("hasInstances of " + specification);
         return connection.hasInstances(session, specification.getFullName());
     }
@@ -158,7 +158,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         }
     }
 
-    public int numberOfInstances(NakedObjectSpecification specification) {
+    public int numberOfInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.debug("numberOfInstance of " + specification);
         return connection.numberOfInstances(session, specification.getFullName());
     }
