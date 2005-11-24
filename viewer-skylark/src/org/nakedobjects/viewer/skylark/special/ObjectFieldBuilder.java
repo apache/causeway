@@ -50,15 +50,15 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
 
         LOG.debug("build view " + view + " for " + object);
 
-        NakedObjectSpecification cls = null;
+        NakedObjectSpecification spec = null;
         if(useFieldType) {
-            cls = content.getSpecification();
+            spec = content.getSpecification();
         } 
-        if(cls == null) {
-            cls = object.getSpecification();
+        if(spec == null) {
+            spec = object.getSpecification();
         }
         
-        NakedObjectField[] flds = cls.getVisibleFields(object);
+        NakedObjectField[] flds = spec.getVisibleFields(object);
 
         if (view.getSubviews().length == 0) {
             newBuild(view, object, flds);
