@@ -82,8 +82,8 @@ public class DataHelper {
             // unknown object; create an instance
             NakedObject object;
             object = objectLoader.recreateAdapterForPersistent(oid, specification);
+            object.setOptimisticLock(data.getVersion());
             if(data.getFieldContent() != null) {
-                object.setOptimisticLock(data.getVersion());
                 ResolveState state;
 	            state = data.hasCompleteData() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
                 LOG.debug("restoring existing object (" + state.name() + ") " + object);
