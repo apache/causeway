@@ -105,8 +105,8 @@ public class ObjectPersistorLogger extends Logger implements NakedObjectPersisto
         return object;
     }
 
-    public boolean hasInstances(NakedObjectSpecification specification) {
-        boolean hasInstances = decorated.hasInstances(specification);
+    public boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
+        boolean hasInstances = decorated.hasInstances(specification, false);
         log("Has instances of " + specification.getShortName(), "" + hasInstances);
         return hasInstances;
     }
@@ -121,8 +121,8 @@ public class ObjectPersistorLogger extends Logger implements NakedObjectPersisto
         decorated.makePersistent(object);
     }
 
-    public int numberOfInstances(NakedObjectSpecification specification) {
-        int number = decorated.numberOfInstances(specification);
+    public int numberOfInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
+        int number = decorated.numberOfInstances(specification, false);
         log("Number of instances of " + specification.getShortName(), "" + number);
         return number;
     }

@@ -11,7 +11,6 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.NotPersistableException;
 import org.nakedobjects.object.ObjectNotFoundException;
-import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
@@ -87,7 +86,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         }
     }
 
-    public void createObject(NakedObject object) throws ObjectPerstsistenceException {
+    public void createObject(NakedObject object) {
         getTransaction().addCommand(objectStore.createCreateObjectCommand(object));
     }
 
@@ -196,7 +195,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
      * instances of the type represented by <variable>type </variable> and return <code>true</code> if there
      * are, or <code>false</code> if there are not.
      */
-    public boolean hasInstances(NakedObjectSpecification specification) {
+    public boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.info("hasInstances of " + specification.getShortName());
         return objectStore.hasInstances(specification, false);
     }
@@ -268,7 +267,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
     /**
      * A count of the number of instances matching the specified pattern.
      */
-    public int numberOfInstances(NakedObjectSpecification specification) {
+    public int numberOfInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.info("numberOfInstances like " + specification.getShortName());
         return objectStore.numberOfInstances(specification, false);
     }

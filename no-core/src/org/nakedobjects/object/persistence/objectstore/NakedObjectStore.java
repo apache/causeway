@@ -20,7 +20,7 @@ import org.nakedobjects.utility.DebugInfo;
 
 public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
 
-    public void abortTransaction() throws ObjectPerstsistenceException;
+    public void abortTransaction();
 
     /**
      * Makes a naked object persistent. The specified object should be stored
@@ -62,14 +62,13 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
      */
     SaveObjectCommand createSaveObjectCommand(NakedObject object);
 
-    public void endTransaction() throws ObjectPerstsistenceException;
+    public void endTransaction();
 
-    NakedObject[] getInstances(InstancesCriteria criteria) throws ObjectPerstsistenceException,
-            UnsupportedFindException;
+    NakedObject[] getInstances(InstancesCriteria criteria);
 
-    NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectPerstsistenceException;
+    NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
-    NakedClass getNakedClass(String name) throws ObjectNotFoundException, ObjectPerstsistenceException;
+    NakedClass getNakedClass(String name);
 
     /**
      * Retrieves the object identified by the specified OID from the object
@@ -119,7 +118,7 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
      * @param includeSubclasses
      *                       TODO
      */
-    boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses) throws ObjectPerstsistenceException;
+    boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
     /**
      * The name of this objects store (for logging/debugging purposes)
@@ -129,25 +128,25 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
     /**
      * A count of the number of instances matching the specified pattern.
      */
-    int numberOfInstances(NakedObjectSpecification specification, boolean includedSubclasses) throws ObjectPerstsistenceException;
+    int numberOfInstances(NakedObjectSpecification specification, boolean includedSubclasses);
 
     /**
      * Called by the resolveEagerly method in NakedObjectManager.
      * 
      * @see NakedObjectPersistor#resolveField(NakedObject, NakedObjectField)
      */
-    void resolveField(NakedObject object, NakedObjectField field) throws ObjectPerstsistenceException;
+    void resolveField(NakedObject object, NakedObjectField field);
 
     /**
      * Called by the resolveImmediately method in NakedObjectManager.
      * 
      * @see NakedObjectPersistor#resolveImmediately(NakedObject)
      */
-    void resolveImmediately(NakedObject object) throws ObjectPerstsistenceException;
+    void resolveImmediately(NakedObject object);
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectPerstsistenceException;
+    public void runTransaction(PersistenceCommand[] commands);
 
-    public void startTransaction() throws ObjectPerstsistenceException;
+    public void startTransaction();
 
     public void reset();
 }

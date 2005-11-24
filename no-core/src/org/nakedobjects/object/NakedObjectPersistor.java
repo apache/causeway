@@ -76,7 +76,7 @@ public interface NakedObjectPersistor extends NakedObjectsComponent, DebugInfo {
      * </variable> and return <code>true</code> if there are, or
      * <code>false</code> if there are not.
      */
-    boolean hasInstances(NakedObjectSpecification specification);
+    boolean hasInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
      /**
      * Makes a naked object persistent. The specified object should be stored
@@ -102,8 +102,9 @@ public interface NakedObjectPersistor extends NakedObjectsComponent, DebugInfo {
 
     /**
      * A count of the number of instances matching the specified pattern.
+     * @param includeSubclasses TODO
      */
-    int numberOfInstances(NakedObjectSpecification specification);
+    int numberOfInstances(NakedObjectSpecification specification, boolean includeSubclasses);
 
     void objectChanged(NakedObject object);
 
