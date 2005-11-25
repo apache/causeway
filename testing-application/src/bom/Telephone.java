@@ -55,6 +55,10 @@ public class Telephone implements Common {
         return knownAs;
     }
 
+    public final TextString getHiddenExtra() {
+        return knownAs;
+    }
+
     public void aboutNumber(FieldAbout about, TextString entry) {
         about.unmodifiableOnCondition(temporary.isSet(), "Flag set");
         
