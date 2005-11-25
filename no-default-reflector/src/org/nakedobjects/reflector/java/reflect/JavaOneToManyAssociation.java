@@ -25,8 +25,8 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     private Method removeMethod;
     private Method clearMethod;
 
-    public JavaOneToManyAssociation(MemberIdentifier name, Class type, Method get, Method add, Method remove, Method about) {
-        super(name, type, get, about, add == null && remove == null);
+    public JavaOneToManyAssociation(MemberIdentifier name, Class type, Method get, Method add, Method remove, Method about, boolean isHidden) {
+        super(name, type, get, about, isHidden, add == null && remove == null);
         this.addMethod = add;
         this.removeMethod = remove;
     }

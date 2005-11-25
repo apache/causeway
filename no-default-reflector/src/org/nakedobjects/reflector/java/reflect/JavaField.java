@@ -12,12 +12,14 @@ import java.lang.reflect.Method;
 public abstract class JavaField extends JavaMember {
     protected final Method getMethod;
     private final boolean isDerived;
+    private final boolean isHidden;
     protected final  Class type;
 
-    public JavaField(MemberIdentifier identifier, Class type, Method get, Method about, boolean isDerived) {
+    public JavaField(MemberIdentifier identifier, Class type, Method get, Method about, boolean isHidden, boolean isDerived) {
         super(identifier, about);
         this.type = type;
         this.isDerived = isDerived;
+        this.isHidden = isHidden;
         this.getMethod = get;
     }
 
@@ -38,6 +40,10 @@ public abstract class JavaField extends JavaMember {
     
     public String getDescription() {
         return "";
+    }
+    
+    public boolean isHidden() {
+        return isHidden;
     }
     
     public boolean isMandatory() {

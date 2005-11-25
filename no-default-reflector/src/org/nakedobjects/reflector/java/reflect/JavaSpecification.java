@@ -251,7 +251,7 @@ public class JavaSpecification implements NakedObjectSpecification {
         NakedObjectField[] viewFields = new NakedObjectField[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
-            boolean useField = fields[i].isAuthorised() && object.isVisible(fields[i]).isAllowed();
+            boolean useField = !fields[i].isHidden() && fields[i].isAuthorised() && object.isVisible(fields[i]).isAllowed();
             if (useField) {
                 viewFields[v++] = fields[i];
             }
@@ -268,7 +268,7 @@ public class JavaSpecification implements NakedObjectSpecification {
         NakedObjectField[] viewFields = new NakedObjectField[fields.length];
         int v = 0;
         for (int i = 0; i < fields.length; i++) {
-            boolean useField = fields[i].isAuthorised();
+            boolean useField = !fields[i].isHidden() && fields[i].isAuthorised();
             if (useField) {
                 viewFields[v++] = fields[i];
             }

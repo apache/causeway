@@ -53,7 +53,7 @@ public class JavaAssociationTest extends TestCase {
         Method set = cls.getDeclaredMethod("setReferencedObject", new Class[] {JavaReferencedObject.class});
         Method about = cls.getDeclaredMethod("aboutReferencedObject", new Class[] {FieldAbout.class, JavaReferencedObject.class});
         
-        personField = new JavaOneToOneAssociation(true, new MemberIdentifierImpl("cls", PERSON_FIELD_NAME), JavaReferencedObject.class, get, set, null, null, about, false);
+        personField = new JavaOneToOneAssociation(true, new MemberIdentifierImpl("cls", PERSON_FIELD_NAME), JavaReferencedObject.class, get, set, null, null, about, false, false);
         
         javaObjectForReferencing = new JavaReferencedObject();
         associate = system.createAdapterForTransient(javaObjectForReferencing);

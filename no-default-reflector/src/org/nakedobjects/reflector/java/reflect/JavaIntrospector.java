@@ -43,6 +43,7 @@ import org.apache.log4j.Logger;
 
 
 public class JavaIntrospector {
+    private static final String HIDDEN_PREFIX = "Hidden";
     private static final String ABOUT_FIELD_DEFAULT = "aboutFieldDefault";
     private static final String ABOUT_PREFIX = "about";
     public static final boolean CLASS = true;
@@ -346,14 +347,9 @@ public class JavaIntrospector {
                 aboutMethod = defaultAboutFieldMethod;
             }
 
-            // create Field
-            // JavaValueField attribute = new JavaValueField(name,
-            // method.getReturnType(), method, null, aboutMethod, null, true);
-            // fields.addElement(attribute);
-
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(false, identifier , method.getReturnType(), method, null,
-                    null, null, aboutMethod, true);
+                    null, null, aboutMethod, false, true);
             fields.addElement(association);
 
         }
@@ -651,10 +647,16 @@ public class JavaIntrospector {
                 LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
+            
+            boolean isHidden = false;
+            if(name.startsWith(HIDDEN_PREFIX)) {
+                isHidden = true;
+                name = name.substring(HIDDEN_PREFIX.length());
+            }
 
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             associations.addElement(new JavaOneToManyAssociation(identifier, elementType, getMethod, addMethod, removeMethod,
-                    aboutMethod));
+                    aboutMethod, isHidden));
         }
     }
 
@@ -710,9 +712,15 @@ public class JavaIntrospector {
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
+            boolean isHidden = false;
+            if(name.startsWith(HIDDEN_PREFIX)) {
+                isHidden = true;
+                name = name.substring(HIDDEN_PREFIX.length());
+            }
+
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             associations
-                    .addElement(new JavaInternalCollection(identifier, elementType, getMethod, addMethod, removeMethod, aboutMethod));
+                    .addElement(new JavaInternalCollection(identifier, elementType, getMethod, addMethod, removeMethod, aboutMethod, isHidden));
         }
     }
 
@@ -785,9 +793,15 @@ public class JavaIntrospector {
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
 
-            MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
+            boolean isHidden = false;
+            if(name.startsWith(HIDDEN_PREFIX)) {
+                isHidden = true;
+                name = name.substring(HIDDEN_PREFIX.length());
+            }
+
+         MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             associations.addElement(new JavaOneToManyAssociation(identifier, elementType, getMethod, addMethod, removeMethod,
-                    aboutMethod));
+                    aboutMethod, isHidden));
         }
     }
 
@@ -838,10 +852,16 @@ public class JavaIntrospector {
             // look for set set method
             Method setMethod = findMethod(OBJECT, SET_PREFIX + name, void.class, params);
 
+            boolean isHidden = false;
+            if(name.startsWith(HIDDEN_PREFIX)) {
+                isHidden = true;
+                name = name.substring(HIDDEN_PREFIX.length());
+            }
+
             LOG.info("one-to-one association " + name + " ->" + addMethod);
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(true, identifier, getMethod.getReturnType(), getMethod,
-                    setMethod, addMethod, removeMethod, aboutMethod, setMethod == null);
+                    setMethod, addMethod, removeMethod, aboutMethod, isHidden, setMethod == null);
             associations.addElement(association);
         }
     }
@@ -1032,12 +1052,18 @@ public class JavaIntrospector {
             if (findMethod(OBJECT, "associate" + name, void.class, params) != null) {
                 LOG.error("the method associate" + name + " is not needed for the NakedValue class " + className());
             }
+            
+            boolean isHidden = false;
+            if(name.startsWith(HIDDEN_PREFIX)) {
+                isHidden = true;
+                name = name.substring(HIDDEN_PREFIX.length());
+            }
 
             // create Field
             LOG.info("  identified value " + name + " -> " + getMethod);
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(false, identifier, getMethod.getReturnType(), getMethod,
-                    setMethod, null, null, aboutMethod, setMethod == null && !valueHolder);
+                    setMethod, null, null, aboutMethod, isHidden, setMethod == null && !valueHolder);
             fields.addElement(association);
         }
 

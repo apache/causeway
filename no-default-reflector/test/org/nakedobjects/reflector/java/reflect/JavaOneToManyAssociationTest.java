@@ -57,7 +57,7 @@ public class JavaOneToManyAssociationTest extends NakedObjectTestCase {
         Method get = cls.getDeclaredMethod("getMethod", new Class[0]);
         Method add = cls.getDeclaredMethod("addToMethod", new Class[] {JavaReferencedObject.class});
         Method remove = cls.getDeclaredMethod("removeFromMethod", new Class[] {JavaReferencedObject.class});
-        collectionField = new JavaOneToManyAssociation(new MemberIdentifierImpl("cls", MEMBERS_FIELD_NAME), InternalCollection.class, get, add, remove, null);
+        collectionField = new JavaOneToManyAssociation(new MemberIdentifierImpl("cls", MEMBERS_FIELD_NAME), InternalCollection.class, get, add, remove, null, false);
     }
 
     protected void tearDown() throws Exception {

@@ -27,8 +27,8 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
     private Method removeMethod;
     private Method clearMethod;
 
-    public JavaInternalCollection(MemberIdentifier identifier, Class type, Method get, Method add, Method remove, Method about) {
-        super(identifier, type, get, about, false);
+    public JavaInternalCollection(MemberIdentifier identifier, Class type, Method get, Method add, Method remove, Method about, boolean isHidden) {
+        super(identifier, type, get, about, isHidden, false);
         this.addMethod = add;
         this.removeMethod = remove;
     }
