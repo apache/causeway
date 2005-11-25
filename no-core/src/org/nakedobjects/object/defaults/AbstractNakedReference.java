@@ -37,7 +37,7 @@ public abstract class AbstractNakedReference implements NakedReference {
     }
 
     public void checkLock(Version version) {
-        if (this.version.different(version)) {
+        if (this.version != null && this.version.different(version)) {
             throw new ConcurrencyException(version.getUser() + " changed "
                     + titleString() + " at " + DATE_TIME.format(version.getTime()) + " (" + this.version + "~" + version + ")");
         }
@@ -108,7 +108,7 @@ public abstract class AbstractNakedReference implements NakedReference {
     }
 
     private boolean shouldSetVersion(Version version) {
-        return this.version == null || version.different(this.version);
+        return this.version == null || version == null || version.different(this.version);
     }
 
     protected void setResolveState(ResolveState resolveState) {
