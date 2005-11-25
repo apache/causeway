@@ -3,10 +3,10 @@ package org.nakedobjects.distribution.command;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataHelper;
 import org.nakedobjects.distribution.Distribution;
+import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.InstancesCriteria;
-import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.persistence.TitleCriteria;
@@ -94,7 +94,7 @@ public abstract class CommandClient implements Distribution {
 
         ObjectData[] updates = response.getUpdates();
         for (int i = 0; i < updates.length; i++) {
-            LOG.debug("update " + updates[i]);
+            LOG.debug("update " + DistributionLogger.dump(updates[i]));
             DataHelper.restore(updates[i]);
         }
     }
