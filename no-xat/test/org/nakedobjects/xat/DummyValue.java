@@ -94,6 +94,10 @@ public class DummyValue implements OneToOneAssociation {
         return Allow.DEFAULT;
     }
 
+    public boolean isHidden() {
+        return false;
+    }
+
 }
 
 
