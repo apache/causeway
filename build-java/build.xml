@@ -291,6 +291,7 @@
 
 		<!-- generate docs -->
 		<ant dir="../documentation" target="html">
+			<property name="src.dir" value="../documentation/src"/>
 			<property name="dest.dir" value="${basedir}/build/dist/doc/docs"/>
 		</ant>
 
