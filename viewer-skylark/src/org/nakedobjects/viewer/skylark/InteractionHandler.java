@@ -41,6 +41,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     }
 
     private void dragStart(MouseEvent me) {
+        if (!isOverThreshold(downAt, me.getPoint())) {
+            return;
+        }
+
         spy.addAction("Drag start  at " + downAt);
         drag = viewer.dragStart(new DragStart(downAt, me.getModifiers()));
 
