@@ -132,6 +132,10 @@ public class TreeExample extends TestViews {
             public boolean isAuthorised(Session session) {
                 return false;
             }
+
+            public boolean isHidden() {
+                return false;
+            }
         };
 
         NakedObjectField[] fields = new NakedObjectField[] { new OneToOneAssociationImpl("cls", "fld", spec, peer),
