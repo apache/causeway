@@ -158,7 +158,9 @@ public class DistributionLogger extends Logger implements Distribution {
 
     public ObjectData makePersistent(Session session, ObjectData object) {
         log("make persistent " + dump(object));
-        return decorated.makePersistent(session, object);
+        ObjectData result = decorated.makePersistent(session, object);
+        log("make persistent " + dump(result));
+        return result;
     }
 
     public int numberOfInstances(Session sessionId, String fullName) {
