@@ -76,6 +76,10 @@ public class DummyField extends AbstractNakedObjectField {
     public Consent isVisible(NakedObject target) {
         return null;
     }
+
+    public boolean isHidden() {
+        return false;
+    }
 }
 
 /*

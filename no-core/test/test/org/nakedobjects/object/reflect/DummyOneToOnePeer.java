@@ -129,6 +129,10 @@ public class DummyOneToOnePeer implements OneToOnePeer {
     public void setupVisible(boolean isVisible) {
         this.isVisible = isVisible;
     }
+
+    public boolean isHidden() {
+        return false;
+    }
 }
 
 /*

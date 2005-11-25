@@ -88,6 +88,10 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectField implement
         return reflectiveAdapter.isEmpty(inObject);
     }
 
+    public boolean isHidden() {
+        return reflectiveAdapter.isHidden();
+    }
+
     public boolean isPart() {
         return true;
     }

@@ -95,6 +95,10 @@ public class DummyOneToOneAssociation implements NakedObjectField {
         return null;
     }
 
+    public boolean isHidden() {
+        return false;
+    }
+
 }
 
 

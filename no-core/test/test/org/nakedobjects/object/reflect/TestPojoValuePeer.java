@@ -115,6 +115,10 @@ public class TestPojoValuePeer implements OneToOnePeer {
     public Consent isVisible(NakedObject target) {
         return null;
     }
+
+    public boolean isHidden() {
+        return false;
+    }
 }
 
 /*

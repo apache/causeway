@@ -67,6 +67,10 @@ public abstract class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.isEmpty(inObject);
     }
 
+    public boolean isHidden() {
+        return decorated.isHidden();
+    }
+
     public boolean isMandatory() {
         return decorated.isMandatory();
     }

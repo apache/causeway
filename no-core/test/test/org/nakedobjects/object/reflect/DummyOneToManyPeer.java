@@ -126,6 +126,10 @@ public class DummyOneToManyPeer implements OneToManyPeer {
         return null;
     }
 
+    public boolean isHidden() {
+        return false;
+    }
+
 }
 
 /*

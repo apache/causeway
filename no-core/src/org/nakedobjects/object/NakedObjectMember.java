@@ -31,6 +31,7 @@ public interface NakedObjectMember {
      * Determines if the user is authorised to access this member, and hence whether it is visible.
      * 
      * @see #isVisible(NakedObject)
+     * @see NakedObjectField#isHidden()
      */
     boolean isAuthorised();
 

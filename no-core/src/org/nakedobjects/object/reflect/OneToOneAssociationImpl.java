@@ -73,6 +73,10 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectField implements
         return reflectiveAdapter.isDerived();
     }
 
+    public boolean isHidden() {
+        return reflectiveAdapter.isHidden();
+    }
+
     public boolean isMandatory() {
         return reflectiveAdapter.isMandatory();
     }

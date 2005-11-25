@@ -12,8 +12,9 @@ public interface FieldPeer extends MemberPeer {
 
     boolean isEmpty(NakedObject inObject);
 
+    boolean isHidden();
+    
     boolean isMandatory();
-
 }
 
 /*

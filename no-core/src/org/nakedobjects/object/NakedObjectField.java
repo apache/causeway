@@ -27,6 +27,14 @@ public interface NakedObjectField extends NakedObjectMember {
     boolean isDerived();
 
     boolean isEmpty(NakedObject adapter);
+    
+    /**
+     * Determines if this field is hidden from the user, and hence whether it is invisible.
+     * 
+     * @see NakedObjectMember#isVisible(NakedObject)
+     * @see NakedObjectMember#isAuthorised()
+     */
+    boolean isHidden();
 
     /**
      * Determines if this field must be complete before the object is in a valid state

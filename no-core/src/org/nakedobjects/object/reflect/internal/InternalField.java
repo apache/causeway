@@ -65,6 +65,10 @@ public abstract class InternalField extends InternalMember {
         throw new NotImplementedException();
     }
 
+    public boolean isHidden() {
+        return false;
+    }
+
     public boolean isMandatory() {
         return false;
     }
