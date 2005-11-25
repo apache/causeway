@@ -81,13 +81,11 @@ public class DefaultPersistAlgorithm implements PersistAlgorithm {
     }
 
     protected void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
-        if (collection.getResolveState() != ResolveState.GHOST) {
-            return;
-        }
-
         LOG.info("persist " + collection);
-        NakedObjects.getObjectLoader().start(collection, ResolveState.RESOLVING);
-        NakedObjects.getObjectLoader().end(collection);
+        if (collection.getResolveState() == ResolveState.GHOST) {
+            NakedObjects.getObjectLoader().start(collection, ResolveState.RESOLVING);
+            NakedObjects.getObjectLoader().end(collection);
+        }
         for (int j = 0; j < collection.size(); j++) {
             makePersistent(collection.elementAt(j), manager);
         }
