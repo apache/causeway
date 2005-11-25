@@ -80,8 +80,7 @@
 		      destdir="${dest.dir}"
 		      style="html.xsl"
 		      >
-              
-              <mapper type="glob" from="*.xml" to="*.html"/>
+              <include name="**/*.xml"/>
 		</xslt>
 
 		<copy todir="${dest.dir}">
