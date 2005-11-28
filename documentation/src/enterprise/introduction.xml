@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>Introduction</title>
+
+  <para>The NOF has been designed from the outset to be used within an
+  enterprise application architecture. This section describes what you will
+  need to do in order to build the NOF into your own existing enterprise
+  application architecture, or to create a complete ‘green field’ architecture
+  based around the NOF. Whichever approach you are taking, some significant
+  systems integration work is needed. Over time it is our expectation that the
+  amount of this integration work required will significant reduce as more and
+  more open source solutions emerge.</para>
+</section>

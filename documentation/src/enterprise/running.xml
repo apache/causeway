@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>How to Run an Enterprise Application Using Default Components</title>
+
+  <para>If you have developed an application as a fully-functional standalone
+  prototype, then you can very easily deploy the application in a
+  client-server configuration. </para>
+
+  <para>Out of the box you can run a client-server system, with a very simple
+  persistor, file-based help, zero access control, default distribution,
+  manual installation.</para>
+</section>
