@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>Introduction</title>
+
+  <para>The term ‘prototype’ is commonly used to mean a number of different
+  things. To an aircraft manufacturer, a ‘prototype’ is something that
+  actually flies; to other people a prototype might refer to a simple
+  balsa-wood model. Even within the field of systems development there are
+  many different uses of the term. As a prototyping tool, we find that the NOF
+  is used in three distinct ways:</para>
+
+  <list>
+    <para>As a tool for building rapid sketches of application ideas (known as
+    ‘spikes’ in agile development terminology). There are many such rapid
+    prototyping tools, some based on web pages, some on databases, others on
+    spreadsheets. Like each of these tools, Naked Objects has its own
+    particular advantages and disadvantages. It is not at all effective for
+    prototyping applications where graphics or layout are important, but it is
+    very strong for prototyping different ways of representing the application
+    domain and for adding real functionality as distinct from merely
+    information retrieval.</para>
+
+    <para>If you intend that your new application be built on a true
+    object-oriented domain model - even if you intend that the delivered
+    system has a more conventional user interface on top of the model - then
+    you should know that prototyping the application using the NOF will
+    improve the quality of your object model.</para>
+
+    <para>In the two approaches above, the NOF is used during the prototyping
+    stage, but not necessarily for the delivery of the final system. In the
+    third usage, the NOF is used to prototype a system that is intended to be
+    delivered on the NOF platform also. Note that there is no significant
+    difference between the way that the objects are coded for an NOF prototype
+    or for a delivered NOF system, so it is perfectly possible to build a
+    prototype according to either of the first two motivations and then to
+    decide to implement the finished system using NOF subsequently. However,
+    where the NOF is the intended delivery platform, then the role of the
+    ‘prototype’ changes somewhat. Instead of being just a sketch, or a
+    comprehensive object model design, the prototype now has the potential to
+    be a complete implementation of the user-oriented aspects of the system.
+    In other words: the users should be able to test all aspects of the
+    functionality that will be accessible to them, including the enforcement
+    of all business rules, on the prototype. This prototype will usually be a
+    standalone, single user system. It will not have any underlying database
+    (all persistent data being implemented as fixtures), will not have any
+    security model, will not support batch processes (unless these are
+    simulated as object methods in the prototype), interfaces to other
+    systems, or reporting. Several tasks involved in translating this kind of
+    functionally-complete prototype into a delivered enterprise system are
+    conventional in nature; those that are particular to the NOF are addressed
+    in the next main section.</para>
+  </list>
+
+  <para>The next few pages tell you what you need to know to start building
+  prototypes with the NOF.</para>
+</section>

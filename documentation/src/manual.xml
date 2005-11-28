@@ -3,7 +3,7 @@
 <publication>
   <title>Naked Objects</title>
 
-  <subtitle>A programmer's and developer's guide to using the Naked Objects
+  <subtitle>A Programmer's and Developer's Guide to Using the Naked Objects
   Framework</subtitle>
 
   <author>Robert Matthews</author>
@@ -66,30 +66,58 @@
     </section>
   </preamble>
 
-  <section numbered="on">
-    <title>Introduction</title>
+  <section>
+    <title>How to Use the NOF to Build Functionally-Rich Applications</title>
 
-    <include file="introduction.xml" />
+    <include file="prototype/introduction.xml" />
 
-    <include file="how no works.xml" />
+    <include file="prototype/running.xml" />
 
-    <include file="running an example.xml" />
+    <include file="prototype/development-cycle.xml" />
+
+    <include file="prototype/domain-objects.xml" />
+
+    <include file="prototype/preferences.xml" />
+
+    <include file="prototype/dom-services.xml" />
+  </section>
+
+  <section>
+    <title>How to Use the NOF to Provide an Enterprise System</title>
+
+    <include file="enterprise/introduction.xml" />
+
+    <include file="enterprise/running.xml" />
+
+    <include file="enterprise/configuration.xml" />
+
+    <include file="enterprise/persistence.xml" />
+
+    <include file="enterprise/transactions.xml" />
+
+    <include file="enterprise/security.xml" />
+
+    <include file="enterprise/client-server.xml" />
+
+    <include file="enterprise/distribution.xml" />
+
+    <include file="enterprise/help.xml" />
+  </section>
+
+  <section>
+    <title>How to Change the Programming Model</title>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
+
+    <para></para>
   </section>
 
   <section numbered="on">
-    <title>Installation and Configuration</title>
-
-    <include file="installation.xml" />
-
-    <include file="configuring and running.xml" />
-
-    <include file="properties-configuration.xml" />
-
-    <include file="logging.xml" />
-  </section>
-
-  <section numbered="on">
-    <title>NOF Architecture</title>
+    <title>Reference</title>
 
     <comment>Section: Developing a DOM - Using the Naked Objects Framework to
     produce an Application</comment>
@@ -113,6 +141,28 @@
     <include file="architecture/configuration.xml" />
 
     <include file="architecture/utilities.xml" />
+
+    <include file="filename-convention.xml" />
+  </section>
+
+  <section numbered="on">
+    <title>Old part I</title>
+
+    <comment>this section to be reworked</comment>
+
+    <include file="introduction.xml" />
+
+    <include file="how no works.xml" />
+
+    <include file="running an example.xml" />
+
+    <include file="properties-configuration.xml" />
+
+    <include file="configuring and running.xml" />
+
+    <include file="installation.xml" />
+
+    <include file="logging.xml" />
   </section>
 
   <section>
@@ -127,22 +177,12 @@
     <include file="components/repository.xml" />
 
     <include file="components/configuration.xml" />
-
-    <include file="components/security.xml" />
-
-    <include file="components/help.xml" />
-
-    <include file="components/transactions.xml" />
-
-    <include file="components/distribution.xml" />
   </section>
 
   <section>
     <title>Clients</title>
 
     <include file="skylark-viewer.xml" />
-
-    <include file="xats.xml" />
 
     <section>
       <title>Other clients</title>
@@ -163,14 +203,5 @@
 
       <el>Phone/PDA UI</el>
     </list>
-  </section>
-
-  <section numbered="on">
-    <title>Framework Development</title>
-
-    <comment>to include: svn access; creating patches; development within
-    eclips; running the builds</comment>
-
-    <include file="filename-convention.xml" />
   </section>
 </publication>

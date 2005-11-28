@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>How to Write Domain Objects for Use by the NOF</title>
+
+  <para>Creating a new application prototype consists of nothing more than
+  writing the domain objects themselves. In this section we show you how to
+  create domain object classes and make these classes accessible to the
+  user.</para>
+</section>

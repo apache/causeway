@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>How to Make DOM Capabilities Accessible to External Applications
+  (e.g. through Web Services)</title>
+
+  <para>Methods in your domain objects can easily be written to obtain data,
+  and/or to delegate part of their execution to an external service. However,
+  it might also be desirable to make some of your domain objects and/or their
+  methods accessible to external systems (i.e. those not running on the NOF).
+  This can be done either at prototyping or at systems integration stage. We
+  are addressing it here because it is purely a matter of application coding -
+  it does not require any specific knowledge of the NOF as an enterprise
+  platform.</para>
+</section>

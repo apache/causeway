@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>How to Change Preferences</title>
+
+  <para>So far all our examples have used the NOF with its default settings.
+  The framework is capable of being configured or extended in many different
+  ways. Many of these will be covered in the section on using the NOF as a
+  platform to deliver an enterprise system. However, there are aspects of the
+  framework that you might want to change even during the prototyping stage.
+  These include:</para>
+
+  <list>
+    <para>Changing preferences on the default user interface</para>
+
+    <para>Selecting an alternative viewing mechanism</para>
+
+    <para>Changing Logging preferences (+ notes about how to use logging
+    within your application if you want to)</para>
+
+    <para>Programming preferences </para>
+  </list>
+
+  <para></para>
+</section>
