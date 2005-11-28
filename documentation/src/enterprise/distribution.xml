@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>How to Control How Clients Communicate with the Server</title>
+
+  <para>Distribution is achieved in the NOF by passing requests to the
+  reflection mechanism and to the object persistence manager over to a server
+  to be executed rather than running them on the client machine. To pass over
+  the request the parameters and results for the methods need to be marshalled
+  some form of serializable data stream on the sending tier and deserialized
+  and unmarshalled on the receiving tier. Also if any referenced persistent
+  objects are not in memory then these need to be loaded, being careful not to
+  overwrite any changes that already exist on the receiving end. Not only
+  that, but any other objects that are affected during such requests need to
+  be passed back to the client so that it is up to date.</para>
+
+  <para>All persistent objects are held on the server and all signifiaction
+  action are executed there. Clients copies the objects that are held by the
+  server so they can be viewed and manipulated by the user. (When we talk
+  about objects on the server we imply that they are in memory, or can be
+  brought into memory from persistent stroreage.) To enable this request made
+  to the client's persistence manager are passed on to the server's
+  persistence manager, as are certain requests to the reflection
+  mechanism.</para>
+
+  <para>When a NOF application is run as client communicating with a server,
+  rather than standalone, a distribution framework needs to distribute the
+  work between the two machines. The server takes care of persisting the
+  objects and the client makes those objects available to the user via some
+  form of interface. The objects in use, however, effectively exist
+  simultaneously on both machines mapped to each other by their OID, which is
+  a shared identifier. The server holds, what we refer to as, the
+  authoritative version of the object so any methods that mutates an object,
+  i.e. an <method>action...</method> methods should ideally be executed on the
+  server's version of the object.</para>
+
+  <para>When objects exist on two platforms at once they can be copied in
+  three different ways:-</para>
+
+  <list>
+    <para>If the client <em>replicates</em> the server's objects, their data
+    is downloaded from the server so the client can access it without
+    revisiting the server. When the <method>action...</method> methods are
+    excuted any changes to the object, or any related object, made through the
+    accessor method will cause a remote update to be made to server.</para>
+
+    <para>If the client <em>caches</em> the objects, their data is downloaded
+    from the server so the client can access it without revisiting the server.
+    As when the objects are loaded from the object store the data is only
+    downloaded when the object is resolve. This means that the object can be
+    displayed to the user efficiently without having to download the entire
+    object graph, and any <method>about...</method> methods can run on the
+    client.</para>
+
+    <para>If the client <em>proxies</em> the objects, its data is accessed,
+    i.e. its accessor methods are called, directly from the server. This is
+    slower but means that the user is always working with the latest data held
+    by the object store.</para>
+  </list>
+
+  <para>Transient objects are not replicated as they only exist on the node
+  they where created on. They also have no OID as they are not persistent or
+  distributable.</para>
+
+  <minorheading>An Example</minorheading>
+
+  <para>Consider the <method>actionNewLineItem</method> method below, and its
+  corresponding about method, from a class called <class>Invoice</class>. In a
+  graphical user interface the invoices's view the display will flash red or
+  green as the user drags a <class>Product</class> object over the invoice
+  object to indicated whether or not the list of products in the invoice
+  already contains a <class>LineItem</class> that references for that product.
+  If the action is allowed and the object is actually dropped then the
+  <method>actionNewLineItem</method> will be invoked. This method will create
+  a new LineItem object, assign the dropped product to it and then add itself
+  to the list of lines.</para>
+
+  <program-listing>public void aboutNewLineItem(ActionAbout a, Product p) {
+    Enumeration e = lines.elements();
+    while(e.hasMoreElements()){
+        LineItem l = (LineItem)e.nextElement();
+        if(l.getProduct().equals(p)){
+            a.unusable("Already have a line item for " + p.title();
+            break;
+        }
+    }
+} 
+
+public LineItem actionNewLineItem(Product p) {
+    LineItem line = (LineItem)createInstance(LineItem.class);
+    line.setProduct(p);
+    lines.add(line);
+    return line;
+}</program-listing>
+
+  <para>Now consider it running on a client rather that as a standalone
+  application. The flow of control is now more involved as there are now four
+  objects to consider rather than two: one invoice and product on the client
+  and one invoice and product on the server. Now when the user drags the
+  product over the invoice <method>aboutNewLineItem</method> is called on the
+  object, but it now resides on the client. This iterates through the
+  collection of lines, which is being held (as a copy) locally, and modifies
+  the <class>ActionAbout</class> as before.</para>
+
+  <para>When the user tries to drop the product, however, things start to
+  differ. Instead of the viewing mechanism invoking the
+  <method>actionNewLineItem</method> method on the client's copy of the object
+  it establishes a connection to the server and makes a request for a for the
+  action be executed on the server.</para>
+
+  <para>Upon receiving this request the server retrieves the invoice and
+  product objects (the action target and parameter respectively), using their
+  OIDs, from the persistent object manager. Before proceeding the server
+  checks the version of the object from the client against it authorative
+  version and throws a concurrency exception if they do not match. This
+  ensures that the remote objects are same versions as the server's. Such an
+  exception is passed back to client so it can reload the object to bring
+  itself up to date.</para>
+
+  <para>With the objects in memory on the sever the action method can be
+  invoked on the server's copy of the object, with the server's product object
+  as the argument. As this method execute a new <class>LineItem</class> object
+  is created on the server and is made persistent, the created object has the
+  product assigned to it and that change is also made persistent, the new
+  object then adds itself to the collection on the invoice, which also gets
+  made persistent.</para>
+
+  <para>With this method complete the new object the returned object is then
+  passed back to the client where it will be shown on the screen. Also and
+  objects that were modified in the process - in this case the invoice and
+  product - are sent back to the client where the client's copies can be
+  updated and their views refreshed.</para>
+
+  <para>In this example the client caches it copies of the objects so the
+  <method>about...</method> method was executed on the client using a copy of
+  the object and the <method>action...</method> method was executed on the
+  server using the authorative object.</para>
+
+  <subheading>Installing Distribution</subheading>
+
+  <comment>to review this is out of date</comment>
+
+  <para>To setup the NOF in a distributed mode, as a server and separate
+  clients, you need a proxying object pesrsistor and proxing reflection peers
+  on the client and some form of network end point on the server for the
+  proxies to forward their requests to. The proxying object manager needs to
+  added to the <class>org.nakedobjects.NakedObjects</class> repository by
+  calling its <method>setObjectPersistor</method> method. A
+  <class>org.nakedobjects.object.reflect.ReflectionPeerFactory</class> that
+  will create the proxing peers needs to added to the
+  <class>AbstractSpecificationLoader</class> using the
+  <method>appendReflectionPeerFactory</method> method.</para>
+
+  <program-listing>        ProxyPeerFactory proxyPeerFactory = new ProxyPeerFactory();
+        proxyPeerFactory.setConnection(clientLogger);
+        proxyPeerFactory.setObjectDataFactory(objectDataFactory);
+
+        ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+                proxyPeerFactory,
+                new TransactionPeerFactory()
+        };
+
+        JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+        specificationLoader.setReflectionPeerFactories(factories);
+</program-listing>
+
+  <subheading>Implementations</subheading>
+
+  <para>The NOF provides a very basic distribution framework in the
+  <class>org.nakedobjects.distribution </class>package that can be used within
+  both Java and .Net. It provides an implementation of
+  <class>NakedObjectPersistenceManager</class> called
+  <class>ProxyObjectPersistenceManager</class> and three reflection peers:
+  <class>ProxyAction</class>, <class>ProxyOneToOne</class> and
+  <class>ProxyOneToMany</class>. These all pass on their remote requests to
+  <class>ClientDistribution</class>, an inteface that needs to be implemented
+  to pass the requests to the server. The server side is provided by the class
+  <class>ServerDistribution</class> that takes each request and calls the
+  necessary methods in the server's
+  <class>NakedObjectPersistenceManager</class> or proxy reflection
+  classes.</para>
+
+  <para>Distribution within this subframework is achieved through the
+  implementation of <class>ClientDistribution</class>, using data objects to
+  transport the serilzed data, to process the requests remotely via the same
+  call on the server's <class>ServerDistribution</class> object. A static
+  helper class, <class>DataFactory</class>, is used create data objects that
+  are passed over the wire. An concrete subclass of the factory is needed to
+  create the data objects of a type that the operating platform can serialize
+  (this is because serialization differs between the Java and .Net platforms
+  and they are not particularly compatiable). On the receiving end another
+  static class, <class>DataHelper</class>, is used to recreate and update
+  domain objects from the data objects that have been passed across.</para>
+
+  <para>Also provided by this subframework is
+  <class>SingleResponseUpdateNotifier</class>, an implementation of
+  <class>DirtyObjectSet</class>, which captures changes to objects and
+  provides a set of updates (captured as data objects) that are passed from
+  the server to the client after a action method has been executed.</para>
+
+  <minorheading>Using commands</minorheading>
+
+  <para>An implementation of the <class>ClientDistribution</class> is provided
+  in the <class>org.nakedobjects.distribution.command</class> package that
+  uses the command pattern to execute the distribution requests remotely. Each
+  method in <class>CommandClient</class> creates a <class>Request</class>
+  object that identifies the request, carries the target and parameter objects
+  as <class>Data</class> objects, and has a holder for the response to that
+  completed request. Once a <class>Request</class> is created it is passed to
+  the server via the executeRemotely method that is provided by the concrete
+  subclass of <class>CommandClient</class>.</para>
+
+  <para>On the server side the execute method is invoked on the
+  <class>Request</class> object that was passed across, passing in a reference
+  to the <class>ServerDistribution</class> object. In the
+  <class>execute</class> method the request invoke the same method that
+  created it on the <class>ServerDistribution</class> object, for example if
+  the method <class>allInstances(Session, String, boolean)</class> was called
+  on the <class>ClientDistribution</class> object then the request calls
+  <class>allInstances(Session, String, boolean)</class> on the
+  <class>ServerDistribution</class> object. The method completes by setting
+  the request's response field with the method's return.</para>
+
+  <para>After executing the request the server needs to extract the response
+  from the request object, collect any updates and pass back all those details
+  to the client. Back on the client the updates are unpacked and the client's
+  objects updated through the <class>DataHelper</class>. Any response is put
+  into the client's request object ready to be extracted an passed back to the
+  caller of the <class>CommandClient</class> method.</para>
+
+  <minorheading>XML over Socket Channel</minorheading>
+
+  <minorheading>Piped Channel</minorheading>
+
+  <para>The <class>org.nakedobjects.distribution.pipe</class> package uses
+  synchronised pipes (see PipedConnection) to pass requests and responses back
+  and forth between a client and server in the same memory space. ....to
+  provides a concrete subclass of client</para>
+
+  <minorheading>Creating a New Channel</minorheading>
+
+  <minorheading>Creating a New ClientDistribution/ServerDistribution
+  Pair</minorheading>
+
+  <subheading>Creating a Different Distribution Layer</subheading>
+
+  <para>This is easier said than done, there are only two requirements. First,
+  implement a persistence manager from the
+  <class>org.nakedobjects.object.NakedObjectPersistenceManager</class>
+  interface that will forward requests to it on to the server, calling the
+  normal implementation on the server. Second, define three reflection peers
+  based on the interfaces <class>ActionPeer</class>,
+  <class>OneToOnePeer</class> and <class>OneToManyPeer</class> that also
+  forward their requests to the server. These then need to be created in a
+  <class>org.nakedobjects.object.ReflectionPeerFactory</class>
+  implementation.</para>
+
+  <para>The hard part is to devise a mechanism for marshalling and
+  unmarshalling the objects and requests, and ensuring they all work
+  reliably.</para>
+</section>

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE section SYSTEM "../documentation.dtd">
+<section>
+  <title>How to Add On-line Help</title>
+
+  <para>A way of providing help and assistance to the user is provided by the
+  NOF through the decoration of the reflection peers (ActionPeer, OneToOnePeer
+  and OneToManyPeer) and though an interface to a lookup service.</para>
+
+  <subheading>How it works</subheading>
+
+  <para>The reflection peers <class>ActionHelp</class>,
+  <class>OneToOneHelp</class> and <class>OneToManyHelp</class> forward
+  requests to the <class>HelpManager</class> (all from the
+  <class>org.nakedobjects.object.help</class> package) when when the
+  <class>ActionImpl</class>, <class>OneToOneAssociationImpl</class> and
+  <class>OneToOneAssociationImpl</class> (from
+  <class>org.nakedobjects.object.reflect</class>) classes call their
+  <method>getDescription</method> method. . The help manager interface has a
+  single method - <method>help</method> - that will initiate a lookup of help
+  information. This information is therefore passed up to the underlying
+  relfection peers. This method takes a <class>MemberIdentifier</class> to
+  allow the service to identify which method or field information is needed
+  for. The identifier contains the class name, member name and array of
+  parameter names for the method to be executed, allowing the external system
+  to determine what method is being targeted without any reference ti the NOF
+  itself.</para>
+
+  <subheading>Installation</subheading>
+
+  <para>To install help you need to add the peer factory
+  <class>org.nakedobjects.object.help.HelpPeerFactory</class> to the
+  specification loader, along with any other needed peer factories. This
+  factory needs to be set up with a help manager via its
+  <method>setHelpManager</method> method. The following example does just
+  that:-</para>
+
+  <program-listing>JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
+
+SimpleHelpManager helpManager = new SimpleHelpManager();
+helpManager.setFile("help.txt");
+
+HelpPeerFactory peerFactory = new HelpPeerFactory();
+peerFactory.setHelpManager(helpManager);
+ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
+    peerFactory
+};
+specificationLoader.setReflectionPeerFactories(factories);</program-listing>
+
+  <para>In the above example we are using the very basic an inefficient help
+  manager that reads help from a text file (every time it is called). The text
+  file needs to in the form (blank lines are ignored outside of the help
+  text):</para>
+
+  <property-listing>C:&lt;fully qualified class name&gt;
+M:&lt;member name&gt;
+&lt;help text&gt;
+&lt;help text&gt;
+&lt;help text&gt;
+M:&lt;member name&gt;
+&lt;help text&gt;
+&lt;help text&gt;
+&lt;help text&gt;
+
+C:&lt;fully qualified class name&gt;
+M:&lt;member name&gt;
+&lt;help text&gt;
+:
+:</property-listing>
+
+  <subheading>Extending this component</subheading>
+
+  <para>To create a help manager you must implement the
+  <class>org.nakedobjects.object.help.HelpManager</class> class, which is a
+  <class>NakedObjectComponent</class>.</para>
+
+  <para><comment>Add in javadoc refs</comment></para>
+</section>
