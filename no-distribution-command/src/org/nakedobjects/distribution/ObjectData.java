@@ -10,6 +10,8 @@ public interface ObjectData extends ReferenceData {
     Data[] getFieldContent();
     
     boolean hasCompleteData();
+
+    void setFieldContent(Data[] fieldContent);
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

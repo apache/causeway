@@ -12,8 +12,8 @@ import org.nakedobjects.object.Version;
 
 
 public class DummyObjectDataFactory extends DataFactory {
-    protected ObjectData createObjectData(Oid oid, String type, Data[] fieldContent, boolean hasCompleteData, Version version) {
-        return new DummyObjectData(oid, type, fieldContent, hasCompleteData,  version);
+    protected ObjectData createObjectData(Oid oid, String type, boolean hasCompleteData, Version version) {
+        return new DummyObjectData(oid, type, hasCompleteData,  version);
     }
 
     public ValueData createValueData(String fullName, Object object) {

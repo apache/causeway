@@ -14,6 +14,7 @@ import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 
 /**
@@ -31,7 +32,7 @@ public abstract class DataFactory {
         if (result == null) {
             return createNullData("");
         } else if (result instanceof NakedCollection) {
-            return createCollectionData((NakedCollection) result, true, persistentGraphDepth);
+            return createCollectionData((NakedCollection) result, true, persistentGraphDepth, new Hashtable());
         } else if (result instanceof NakedObject) {
             return createCompletePersistentGraph((NakedObject) result);
         } else {
@@ -39,7 +40,7 @@ public abstract class DataFactory {
         }
     }
 
-    private CollectionData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth) {
+    private CollectionData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth, Hashtable previous) {
         Oid oid = collection.getOid();
         String type = collection.getSpecification().getFullName();
         boolean hasAllElements = collection.getResolveState() == ResolveState.TRANSIENT
@@ -52,7 +53,7 @@ public abstract class DataFactory {
             int i = 0;
             while (e.hasMoreElements()) {
                 NakedObject element = (NakedObject) e.nextElement();
-                elements[i++] = createObjectData(element, recursePersistentObjects, depth);
+                elements[i++] = createObjectData(element, recursePersistentObjects, depth, previous);
             }
         } else {
             elements = new ObjectData[0];
@@ -74,21 +75,31 @@ public abstract class DataFactory {
      * objects.
      */
     public final ObjectData createCompletePersistentGraph(NakedObject object) {
-        return createObjectData(object, true, persistentGraphDepth);
+        return createObjectData(object, true, persistentGraphDepth, new Hashtable());
     }
 
     public final ObjectData createDataForActionTarget(NakedObject object) {
-        return createObjectData(object, false, actionGraphDepth);
+        return createObjectData(object, false, actionGraphDepth, new Hashtable());
     }
 
-    public final Data createDataForParameter(String type, Naked object) {
+    public final Data[] createDataForParameters(NakedObjectSpecification[] parameterTypes, Naked[] parameters) {
+        Data parameterData[] = new Data[parameters.length];
+        for (int i = 0; i < parameters.length; i++) {
+            Naked parameter = parameters[i];
+            String type = parameterTypes[i].getFullName();
+            parameterData[i] = createDataForParameter(type, parameter);
+        }
+        return parameterData;
+    }
+    
+    private final Data createDataForParameter(String type, Naked object) {
         if (object == null) {
             return createNullData(type);
         }
 
         if (object.getSpecification().isObject()) {
             NakedObject nakedObject = (NakedObject) object;
-            return createObjectData(nakedObject, false, persistentGraphDepth);
+            return createObjectData(nakedObject, false, persistentGraphDepth, new Hashtable());
         } else if (object.getSpecification().isValue()) {
             return createValueData(object);
         } else {
@@ -108,6 +119,7 @@ public abstract class DataFactory {
         fieldContent = new Data[fields.length];
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
+        Hashtable previous = new Hashtable();
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].getId().equals(fieldName)) {
                 Naked field = object.getField(fields[i]);
@@ -116,9 +128,9 @@ public abstract class DataFactory {
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
                 } else if (fields[i].isCollection()) {
-                    fieldContent[i] = createCollectionData((NakedCollection) field, true, persistentGraphDepth);
+                    fieldContent[i] = createCollectionData((NakedCollection) field, true, persistentGraphDepth, previous);
                 } else {
-                    fieldContent[i] = createObjectData((NakedObject) field, true, persistentGraphDepth);
+                    fieldContent[i] = createObjectData((NakedObject) field, true, persistentGraphDepth, previous);
                 }
                 break;
             }
@@ -129,7 +141,10 @@ public abstract class DataFactory {
         // resolving (is not a ghost) yet it has no version number
         // return createObjectData(oid, type, fieldContent, resolveState.isResolved(),
         // !resolveState.isGhost(), object.getVersion());
-        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
+        ObjectData data = createObjectData(oid, type, resolveState.isResolved(), object.getVersion());
+        data.setFieldContent(fieldContent);
+        return data;
+//        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
     }
 
     /**
@@ -137,7 +152,7 @@ public abstract class DataFactory {
      * referenced objects. For each referenced object only the reference is passed across.
      */
     public final ObjectData createForUpdate(NakedObject object) {
-        return createObjectData(object, true, updateGraphDepth);
+        return createObjectData(object, true, updateGraphDepth, new Hashtable());
     }
 
     /**
@@ -147,6 +162,11 @@ public abstract class DataFactory {
      * @param updateNotifier
      */
     public ObjectData createMadePersistentGraph(ObjectData data, NakedObject object, SingleResponseUpdateNotifier updateNotifier) {
+        if(object.getResolveState().isSerializing()) {
+            return data;
+        }
+        
+        
         Oid oid = object.getOid();
         String type = data.getType();
         ReferenceData[] fieldContent = data.getFieldContent() == null ? null : new ReferenceData[data.getFieldContent().length];
@@ -184,8 +204,11 @@ public abstract class DataFactory {
         }
         NakedObjects.getObjectLoader().end(object);
 
-        ObjectData createReferenceData = createObjectData(oid, type, fieldContent, true, version);
+        ObjectData createReferenceData = createObjectData(oid, type, true, version);
+        createReferenceData.setFieldContent(fieldContent);
         return createReferenceData;
+//        ObjectData createReferenceData = createObjectData(oid, type, fieldContent, true, version);
+//        return createReferenceData;
     }
 
     /**
@@ -195,18 +218,23 @@ public abstract class DataFactory {
      */
     public final ObjectData createMakePersistentGraph(NakedObject object) {
         Assert.assertTrue("transient", object.getResolveState().isTransient());
-        return createObjectData(object, false, persistentGraphDepth);
+        return createObjectData(object, false, persistentGraphDepth, new Hashtable());
     }
 
     protected abstract NullData createNullData(String type);
 
-    protected final ObjectData createObjectData(NakedObject object, boolean recursePersistentObjects, int depth) {
+    private final ObjectData createObjectData(NakedObject object, boolean recursePersistentObjects, int depth, Hashtable previous) {
         if (object == null) {
             return null;
         }
 
         boolean nextLevel = object.getResolveState().isTransient() || recursePersistentObjects;
 
+        
+        if(previous.containsKey(object)) {
+            return (ObjectData) previous.get(object);
+        }
+        
         Oid oid = object.getOid();
         NakedObjectSpecification specification = object.getSpecification();
         String type = specification.getFullName();
@@ -214,13 +242,17 @@ public abstract class DataFactory {
         boolean isComplete = object.getResolveState() == ResolveState.TRANSIENT
                 || object.getResolveState() == ResolveState.RESOLVED;
 
+        
+        ObjectData data = createObjectData(oid, type, isComplete, object.getVersion());
+        previous.put(object, data);
+        
+        
         Data[] fieldContent;
         if (resolveState.isSerializing() || !nextLevel || depth == 0 || resolveState.isGhost()) {
             fieldContent = null;
         } else {
             NakedObjectField[] fields = specification.getFields();
             fieldContent = new Data[fields.length];
-
             NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
             for (int i = 0; i < fields.length; i++) {
                 Naked field = object.getField(fields[i]);
@@ -233,21 +265,22 @@ public abstract class DataFactory {
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
                 } else if (fields[i].isCollection()) {
-                    fieldContent[i] = createCollectionData((NakedCollection) field, recursePersistentObjects, depth - 1);
+                    fieldContent[i] = createCollectionData((NakedCollection) field, recursePersistentObjects, depth - 1, previous);
                 } else {
-                    fieldContent[i] = createObjectData((NakedObject) field, recursePersistentObjects, depth - 1);
+                    fieldContent[i] = createObjectData((NakedObject) field, recursePersistentObjects, depth - 1, previous);
                 }
             }
             NakedObjects.getObjectLoader().end(object);
         }
 
-        return createObjectData(oid, type, fieldContent, isComplete, object.getVersion());
+        data.setFieldContent(fieldContent);
+      //  return createObjectData(oid, type, fieldContent, isComplete, object.getVersion());
+        return data;
     }
 
     protected abstract ObjectData createObjectData(
             Oid oid,
             String type,
-            Data[] fieldContent,
             boolean hasCompleteData,
             Version version);
 

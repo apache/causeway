@@ -7,12 +7,11 @@ import org.nakedobjects.object.Version;
 
 
 public class DummyObjectData extends DummyReferenceData implements ObjectData {
-    private final Data[] fieldContent;
+    private Data[] fieldContent;
     private final boolean resolved;
 
-    public DummyObjectData(Oid oid, String type, Data[] fieldContent, boolean resolved, final Version version) {
+    public DummyObjectData(Oid oid, String type, boolean resolved, final Version version) {
         super(oid, type, version);
-        this.fieldContent = fieldContent;
         this.resolved = resolved;
     }
 
@@ -24,6 +23,9 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         return resolved;
     }
 
+    public void setFieldContent(Data[] fieldContent) {
+        this.fieldContent = fieldContent;        
+    }
 }
 
 
