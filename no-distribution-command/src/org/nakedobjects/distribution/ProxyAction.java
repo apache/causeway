@@ -65,13 +65,7 @@ public final class ProxyAction extends AbstractActionPeer {
 
     private Data[] parameterValues(Naked[] parameters) {
         NakedObjectSpecification[] parameterTypes = getParameterTypes();
-        Data parameterObjectData[] = new Data[parameters.length];
-        for (int i = 0; i < parameters.length; i++) {
-            Naked parameter = parameters[i];
-            String type = parameterTypes[i].getFullName();
-            parameterObjectData[i] = dataFactory.createDataForParameter(type, parameter);
-        }
-        return parameterObjectData;
+        return dataFactory.createDataForParameters(parameterTypes, parameters);
     }
 
     private String debug(String message, MemberIdentifier identifier, NakedObject target, Naked[] parameters) {
