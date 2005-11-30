@@ -14,6 +14,8 @@ import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.ResolveState;
 
+import java.util.Hashtable;
+
 import org.apache.log4j.Logger;
 
 
@@ -39,13 +41,13 @@ public class DataHelper {
         } else if (data instanceof NullData) {
             return null;
         } else if (data instanceof CollectionData) {
-            return restoreCollection((CollectionData) data);
+            return restoreCollection((CollectionData) data, new Hashtable());
         } else {
-            return restoreObject((ObjectData) data);
+            return restoreObject((ObjectData) data, new Hashtable());
         }
     }
 
-    private static Naked restoreCollection(CollectionData data) {
+    private static Naked restoreCollection(CollectionData data, Hashtable previous) {
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
@@ -65,7 +67,7 @@ public class DataHelper {
             LOG.debug("restoring collection " + elements.length + " elements");
             Object[] initData = new Object[elements.length];
             for (int i = 0; i < elements.length; i++) {
-                NakedObject element = restoreObject(elements[i]);
+                NakedObject element = restoreObject(elements[i], previous);
                 LOG.debug("restoring collection element :" + element);
                 initData[i] = element.getObject();
             }
@@ -74,24 +76,31 @@ public class DataHelper {
         }
     }
 
-    private static NakedObject restoreObject(ObjectData data) {
+    private static NakedObject restoreObject(ObjectData data, Hashtable previous) {
+        if(previous.containsKey(data)) {
+            return (NakedObject) previous.get(data);
+        }
+        
         Oid oid = data.getOid();
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
 
+        NakedObject object;
         /*
          * either create a new transient object, get an existing object and update it if data is for resolved
          * object, or create new object and set it
          */
         if (oid == null) {
-            return restoreTransient(data, objectLoader);
+            object = restoreTransient(data, objectLoader, previous);
         } else if (objectLoader.isIdentityKnown(oid)) {
-            return updateLoadedObject(data, oid, objectLoader);
+            object = updateLoadedObject(data, oid, objectLoader, previous);
         } else {
-            return restorePersistentObject(data, oid, objectLoader);
+            object = restorePersistentObject(data, oid, objectLoader, previous);
         }
+        
+        return object;
     }
 
-    private static NakedObject restorePersistentObject(ObjectData data, Oid oid, NakedObjectLoader objectLoader) {
+    private static NakedObject restorePersistentObject(ObjectData data, Oid oid, NakedObjectLoader objectLoader, Hashtable previous) {
         // unknown object; create an instance
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(data.getType());
 
@@ -102,18 +111,19 @@ public class DataHelper {
             ResolveState state;
             state = data.hasCompleteData() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
             LOG.debug("restoring existing object (" + state.name() + ") " + object);
-            setupFields(data, objectLoader, object, state);
+            setupFields(data, objectLoader, object, state, previous);
         }
         return object;
     }
 
-    private static NakedObject restoreTransient(ObjectData data, NakedObjectLoader objectLoader) {
+    private static NakedObject restoreTransient(ObjectData data, NakedObjectLoader objectLoader, Hashtable previous) {
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(data.getType());
 
         NakedObject object;
         object = objectLoader.recreateTransientInstance(specification);
         LOG.debug("restore transient object " + object);
-        setUpFields(data, object);
+        previous.put(data, object);
+        setUpFields(data, object, previous);
         return object;
     }
 
@@ -126,15 +136,15 @@ public class DataHelper {
         DataHelper.updateNotifier = updateNotifier;
     }
 
-    private static void setupFields(ObjectData data, NakedObjectLoader objectLoader, NakedObject object, ResolveState state) {
+    private static void setupFields(ObjectData data, NakedObjectLoader objectLoader, NakedObject object, ResolveState state, Hashtable previous) {
         if (object.getResolveState().isResolvable(state)) {
             objectLoader.start(object, state);
-            setUpFields(data, object);
+            setUpFields(data, object, previous);
             objectLoader.end(object);
         }
     }
 
-    private static void setUpFields(ObjectData data, NakedObject object) {
+    private static void setUpFields(ObjectData data, NakedObject object, Hashtable previous) {
         Data[] fieldContent = data.getFieldContent();
         if (fieldContent != null && fieldContent.length > 0) {
             NakedObjectField[] fields = object.getSpecification().getFields();
@@ -147,22 +157,22 @@ public class DataHelper {
                 }
 
                 if (field.isCollection()) {
-                    setUpCollectionField(object, field, (CollectionData) fieldData);
+                    setUpCollectionField(object, field, (CollectionData) fieldData, previous);
                 } else if (field.isValue()) {
                     setUpValueField(object, field, fieldData);
                 } else {
-                    setUpReferenceField(object, field, fieldData);
+                    setUpReferenceField(object, field, fieldData, previous);
                 }
             }
         }
     }
 
-    private static void setUpReferenceField(NakedObject object, NakedObjectField field, Data data) {
+    private static void setUpReferenceField(NakedObject object, NakedObjectField field, Data data, Hashtable previous) {
         NakedObject associate;
         if (data instanceof NullData) {
             associate = null;
         } else {
-            associate = restoreObject((ObjectData) data);
+            associate = restoreObject((ObjectData) data, previous);
         }
         LOG.debug("setting association for field " + field.getId() + ": " + associate);
         object.initAssociation(field, associate);
@@ -179,7 +189,7 @@ public class DataHelper {
         object.initValue((OneToOneAssociation) field, value);
     }
 
-    private static void setUpCollectionField(NakedObject object, NakedObjectField field, CollectionData content) {
+    private static void setUpCollectionField(NakedObject object, NakedObjectField field, CollectionData content, Hashtable previous) {
         if (!content.hasAllElements()) {
             return;
         }
@@ -187,7 +197,7 @@ public class DataHelper {
         int size = content.getElements().length;
         NakedObject[] elements = new NakedObject[size];
         for (int j = 0; j < elements.length; j++) {
-            elements[j] = restoreObject(((ObjectData) content.getElements()[j]));
+            elements[j] = restoreObject(((ObjectData) content.getElements()[j]), previous);
             LOG.debug("adding element to " + field.getId() + ": " + elements[j]);
         }
 
@@ -203,7 +213,7 @@ public class DataHelper {
         }
     }
 
-    private static NakedObject updateLoadedObject(ObjectData data, Oid oid, NakedObjectLoader objectLoader) {
+    private static NakedObject updateLoadedObject(ObjectData data, Oid oid, NakedObjectLoader objectLoader, Hashtable previous) {
         // object known and we have all the latetest data; update/resolve the object
         NakedObject object;
         object = objectLoader.getAdapterFor(oid);
@@ -212,7 +222,7 @@ public class DataHelper {
             ResolveState state = nextState(object.getResolveState(), data.hasCompleteData());
             if (state != null) {
                 LOG.debug("updating existing object (" + state.name() + ") " + object);
-                setupFields(data, objectLoader, object, state);
+                setupFields(data, objectLoader, object, state, previous);
                 updateNotifier.addDirty(object);
             }
         } else {
