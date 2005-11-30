@@ -166,6 +166,12 @@ public class JavaIntrospector {
         }
         this.cls = cls;
         methods = cls.getMethods();
+        
+        for (int i = 0; i < methods.length; i++) {
+            LOG.debug("  " + methods[i]);
+            
+        }
+        LOG.debug("");
 
         isDirtyMethod = findMethod(false, "isDirty", boolean.class, new Class[0]);
         clearDirtyMethod = findMethod(false, "clearDirty", void.class, new Class[0]);
