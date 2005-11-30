@@ -51,6 +51,7 @@ public class SqlOidGenerator implements OidGenerator {
         try {
             db.open();
             db.update("update \"no_serial_id\" set \"number\" = " + number);
+            db.commit();
         } catch (ObjectPerstsistenceException e) {
             throw new NakedObjectRuntimeException(e);
         } finally {

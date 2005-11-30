@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 public class JdbcConnector extends AbstractDatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
     private Connection connection;
-    private boolean isUsed;
+   // private boolean isUsed;
 
     public void close() throws SqlObjectStoreException {
         try {
