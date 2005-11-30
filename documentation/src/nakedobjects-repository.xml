@@ -1,20 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE section SYSTEM "../documentation.dtd">
+<!DOCTYPE section SYSTEM "./documentation.dtd">
 <section>
   <title>Repository</title>
 
-  <para>There are a number of implementation of <class>NakedObjects</class>
-  within the NOF, specifically one for client side use
+  <para><class>NakedObjects</class> is a respository for NOF providing a
+  central access point for the <class>NakedObjectConfiguration</class>,
+  <class>NakedObjectLoader</class> and <class>NakedObjectPersistor</class>
+  objects amongst other things. It is a abstract singleton that expects its
+  concrete subclass to store these details. There are a number of
+  implementation within the NOF, specifically one for client side use
   (<class>NakedObjectsClient)</class>, which is for use in applications where
-  there is one of each component and hence no sharing. The other main
+  there is one of each component and hence no ssharing. The other main
   implementation is for server use (<class>NakedObjectsByThread</class>),
   which keeps the one instance of each component for each thread in
   use.</para>
 
+  <subheading>Using the Repository</subheading>
+
+  <para>To install a repository instantiate an instance, it acts as singleton
+  storing a reference to itself. The NOF provides three
+  implementations:-</para>
+
     <block>
       <label><class>org.nakedonbjects.NakedObjectsClient</class></label>
 
-      <para>a single-threaded version that simply stores all the component
+      <para>a single-threaded version that simply store all the component
       references and will return those components regardless of the thread
       that it call with.</para>
     </block>
@@ -35,7 +45,10 @@
       running a client-server configuration in a single memory space, where
       the threads are used to keep the components separate.</para>
     </block>
-  
+
+  <para>To get hold of one of the components held by the repository use the
+  static get methods on the <class>NakedObjects</class> class.</para>
+
   <subheading>Extending the Repository</subheading>
 
   <para>To create your own repository extend the

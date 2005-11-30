@@ -65,8 +65,7 @@
   during <method> runTransaction </method>. The following methods need to be
   implemented by the object store.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>CreateObjectCommand
       createCreateObjectCommand(NakedObject)</class></label>
 
@@ -76,62 +75,61 @@
       it. The object to be persisted will have had an OID created for it by
       the persistor, and this this needs to be saved alongside all the other
       object's data.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>DestroyObjectCommand
       createDestroyObjectCommand(NakedObject)</class></label>
 
       <para>Create a command that will remove the specified object from
       persistent storage.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>SaveObjectCommand
       createSaveObjectCommand(NakedObject)</class></label>
 
       <para>Create a command that will update the specified object in
       persistent storage.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void abortTransaction()</class></label>
 
       <para>Roll back the changes made since the call to <method>
       startTransaction </method>.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void abortTransaction()</class></label>
 
       <para>Roll back the changes made since the call to <method>
       startTransaction </method>.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void endTransaction()</class></label>
 
       <para>Commit the changes made since the call to <method>
       startTransaction </method>.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void startTransaction()</class></label>
 
       <para>Prepare the persistence mechanism to deal with a transactional
       unit of work.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void runTransaction(PersistenceCommand[])</class></label>
 
       <para>Apply all the persistence commands to the persistent storage. If
       not throw a ObjectPersistenceException to indicate that the transaction
       is to be aborted, which will cause <method> abortTransaction </method>
       to be called instead of <method> endTransaction </method>.</para>
-    </item2>
-  </list>
-
+    </block>
+  
   <minorheading>Make persistent</minorheading>
 
   <para>When an object is to be made persistent it is often not just a simple
@@ -168,17 +166,16 @@
 
   <para>The NOF provides two implementations of PersistAlgorithm:-</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>DefaultPersistAlgorithm</class></label>
 
       <para>Iterates through each field, and element in each internal
       collection, in the transient object and recursively makes any referenced
       objects that are transient persistent. As the fields are made persistent
       before the parent this works from the bottom of the graph up.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>TwoPassPersistAlgorithm</class></label>
 
       <para>Iterates through each field, but not the internal collections, in
@@ -186,9 +183,8 @@
       are transient persistent. In a second pass of the fields the one to one
       associations are ignored, and the internal collections are dealt
       with.</para>
-    </item2>
-  </list>
-
+    </block>
+  
   <para>Both the above algorithm use <class>OidGenerator</class> to create
   OIDs for the newly persisted objected. The generator must create an ongoing
   sequence of unique OIDs, and will normally be able to be restarted without
@@ -201,8 +197,7 @@
   <para>The NOF provide two implementations of
   <class>OidGenerator</class>:-</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>SimpleOidGenerator</class></label>
 
       <para>Creates an OID with a number as its identifier, starting at zero
@@ -212,9 +207,9 @@
       generated are very simple and easy to remember as they are always small
       numbers. This is often used when developing the framework and its
       components for this reason.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>TimeBasedOidGenerator</class></label>
 
       <para>When instantiated this implementation creates its initial id from
@@ -222,9 +217,8 @@
       epoch. Once initialised it increments that number every time it creates
       an OID. Using this initial id generated this way we can be generate
       unique OID even if we run on two different machines.</para>
-    </item2>
-  </list>
-
+    </block>
+  
   <subheading>Retrieving objects</subheading>
 
   <para>A persistor provide three ways to get hold of a know object. These
@@ -237,8 +231,7 @@
   confirms that they are not already in a resolved state. The following
   methods need to be implemented by the object store.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><code>NakedObject getObject(Oid,
       NakedObjectSpecification)</code></label>
 
@@ -263,9 +256,9 @@
       <para>If the persistor does not known of an object with the specified
       OID then a <class>ObjectNotFoundException</class> should be
       thrown.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><code>void resolveImmediately(NakedObject)</code></label>
 
       <para>initialises the fields of an object that have not yet been set up.
@@ -275,9 +268,9 @@
       the persistent store and used to set up the value objects and
       associations. The object should be set up in the same manner as in
       <method> getObject </method> above.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><code>void resolveField(NakedObject,
       NakedObjectField)</code></label>
 
@@ -288,9 +281,8 @@
       should be retreieved from the persistent store and used to set up the
       value objects and associations. The object should be set up in the same
       manner as in <method> getObject </method> above.</para>
-    </item2>
-  </list>
-
+    </block>
+  
   <subheading>Instances</subheading>
 
   <para>The object store persistor will ask the object store for details about
@@ -299,42 +291,40 @@
   arrays and the persistor then generates naked collections out of them. The
   following methods need to be implemented by the object store.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>boolean hasInstances(NakedObjectSpecification
       specification, boolean includeSubclasses)</class></label>
 
       <para>Checks whether there are any instances of the specified type,
       including instances of any subclasses if specified by the include
       flag.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>int numberOfInstances(NakedObjectSpecification
       specification, boolean includeSubclasses))</class></label>
 
       <para>Determines how many instances of the specific type there are,
       including instances of any subclasses if specified by the include
       flag.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>NakedObject[] getInstances(NakedObjectSpecification
       specification, boolean includeSubclasses)</class></label>
 
       <para>Return an array of all instances of the specified type, including
       instances of any subclasses if specified by the include flag.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>NakedObject[] findInstances(InstancesCriteria
       criteria)</class></label>
 
       <para>Return an array of all the instances that match the specified
       criteria object.</para>
-    </item2>
-  </list>
-
+    </block>
+  
   <subheading>Installation</subheading>
 
   <para>The following example shows how a persistor is created that uses an

@@ -9,34 +9,32 @@
 
   <subheading>About</subheading>
 
-  <para>The NOF provides a static class AboutNakedObjects in the
-  org.nakedobjects.utility package that is used by the famework, and can be
+  <para>The NOF provides a static class <class>AboutNakedObjects</class> in the
+  <path>org.nakedobjects.utility</path> package that is used by the famework, and can be
   used elsewhere, to display information about the framework and the
   application being run. This includes titles, versions and copyright
   messages. The details about the framework are hard code when the framework
   is build, but details about the application can be set at runtime.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><method>setApplicationName(String) </method></label>
 
       <para>Allows you to programmatically specify the application name for
       your application.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><method>setApplicationCopyrightNotice(String)</method></label>
 
       <para>Allows you to programmatically specify a copyright notice for your
       application.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><method>setApplicationVersion(String)</method></label>
 
       <para>Allows you to programmatically specify the version.</para>
-    </item2>
-  </list>
+    </block>
 
   <para>These details and details about the framework can be accessed using
   the static accessors.</para>
@@ -156,27 +154,25 @@ Persistable: User Persistable</property-listing>
   Log4J logger to log messages as that class rather than as a separate class).
   Within the subclass you can use the following methods:</para>
 
-  <list>
-    <item2>
+    <block>
       <label><method>void log(String message) </method></label>
 
       <para>output a log entry with the specified message.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><method>void log(String message, Object result) </method></label>
 
       <para>output a log entry with the specified message and the specified
       result. This is useful when needing to show both the entry and exit
       states, or the paramters and the return value.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><method>void close() </method></label>
 
       <para>closes the file that is being written to.</para>
-    </item2>
-  </list>
+    </block>
 
   <minorheading>Using a logger</minorheading>
 

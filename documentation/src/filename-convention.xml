@@ -18,29 +18,28 @@ ossql-D-20051127-0958-java.zip</command-listing>
 
   <para>The parts of the name are:</para>
 
-  <list>
-    <item2>
+    <block>
       <label>product</label>
 
       <para>At the moment we only build the core framework, which is
       <property>nakedobjects</property>. In the future will provide other
       products.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>version</label>
 
       <para></para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>build</label>
 
       <para>The build number is a date/time stamp showing when the
       distribution was built.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>platform</label>
 
       <para>We target two platforms with the core framework; Java and .NET
@@ -48,48 +47,45 @@ ossql-D-20051127-0958-java.zip</command-listing>
       Other components might support either or both. Also available is source
       distribution, which is much smaller and must be built before it can be
       used.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>file-type</label>
 
       <para>The file type is always <property>zip</property>.</para>
-    </item2>
-  </list>
+    </block>
 
   <minorheading>Versions</minorheading>
 
-  <list>
-    <item2>
+    <block>
       <label>n.n</label>
 
       <para></para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>n.nMn</label>
 
       <para></para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>D</label>
 
       <para></para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>N</label>
 
       <para></para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>I</label>
 
       <para></para>
-    </item2>
-  </list>
+    </block>
 
   <para></para>
 

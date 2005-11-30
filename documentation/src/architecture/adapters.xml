@@ -180,8 +180,7 @@
   even though they exist within the persistent mechanism. The full life cycle
   is as follows:-</para>
 
-  <list>
-    <item2>
+    <block>
       <label>new</label>
 
       <para>All new objects are transient and are not immediately added to the
@@ -199,9 +198,9 @@
       <para>A transient object need never move on to the next stage, but
       unless it does it can not be referenced by other persistent
       objects.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>persistent</label>
 
       <para>A transient object is made <term>persistent</term> by calling its
@@ -215,9 +214,9 @@
 
       <para>The newly persistent object can now be referenced by other
       persistent objects.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>dirty</label>
 
       <para>Whenever an object is changed - its values are edited or
@@ -228,28 +227,27 @@
       changed during a method invocation by calling its
       <method>objectChanged</method> method. In response to an object being
       changed the data in the persistent store is updated.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>restored</label>
 
       <para></para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>resolved</label>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label>destroyed</label>
 
       <para>An object is <term>deleted</term> by calling its
       <method>destroy</method> method. At this point the object will no longer
       be persisted. The user normally deletes an object by selecting the
       <menu>Destroy</menu> option for that object.</para>
-    </item2>
-  </list>
-
+    </block>
+  
   <para>In addition to these four main states a persistent object can be in
   two minor states:-</para>
 

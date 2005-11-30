@@ -151,8 +151,7 @@
   respectively. There are also a number of metods to refresh objects that
   might have changed, as well lazily load object.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>makePersistent(NakedObject)</class></label>
 
       <para>makes a naked object persistent. The specified object will have an
@@ -164,29 +163,29 @@
       <para>If the object has any associations (either one-to-one or
       one-to-many) then each of these, that aren't already persistent, should
       also be made persistent.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>objectChanged(NakedObject)</class></label>
 
       <para>add the specified object to list of objects that needs to be saved
       when <method>savChanges()</method> is called..</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>saveChanges()</class></label>
 
       <para>updates the changed object in the persistent medium.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><code>destroyObject(NakedObject)</code></label>
 
       <para>removes the specified object from the set of persistent
       objects.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><code>getObject(Oid, NakedObjectSpecification)</code></label>
 
       <para>retrieves the object identified by the specified OID from the
@@ -205,18 +204,18 @@
       <para>If the persistor does not known of an object with the specified
       OID then a <class>ObjectNotFoundException</class> should be
       thrown.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><code>reload(NakedObject)</code></label>
 
       <para>re-retrieves the specified object's data from the persistent store
       and updates the attributes of the object. This is used when an object on
       a user screen has been changed by another user and is therefore out of
       date.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><code>resolveImmediately(NakedObject)</code></label>
 
       <para>initialises the fields of an object that have not yet been set up.
@@ -226,9 +225,9 @@
       the persistent store and used to set up the value objects and
       associations. The object should be set up in the same manner as in
       <method>getObject</method> above.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><code>resolveField(NakedObject, NakedObjectField)</code></label>
 
       <para>initialises the specified field of the specified object,
@@ -238,8 +237,7 @@
       should be retreieved from the persistent store and used to set up the
       value objects and associations. The object should be set up in the same
       manner as in <method>getObject</method> above.</para>
-    </item2>
-  </list>
+    </block>
 
   <minorheading>Managing instances</minorheading>
 
@@ -259,39 +257,37 @@
   successive calls where no new instances have been persistent or existing
   ones destroyed.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>boolean hasInstances(NakedObjectSpecification
       specification)</class></label>
 
       <para>Checks whether there are any instances of the specified
       type.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>int numberOfInstances(NakedObjectSpecification
       specification)</class></label>
 
       <para>Determines how many instances of the specific type there
       are.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>TypedNakedCollection allInstances(NakedObjectSpecification
       specification, boolean includeSubclasses)</class></label>
 
       <para>Get hold of all instances of the specified type, including
       instances of any subclasses if specified by the include flag.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>TypedNakedCollection findInstances(InstancesCriteria
       criteria)</class></label>
 
       <para>Find all the instances that match the specified criteria
       object.</para>
-    </item2>
-  </list>
+    </block>
 
   <comment>TODO Add in details about InstancesCriteria</comment>
 
@@ -308,31 +304,29 @@
   then <method>abortTransaction</method> will be called instead of
   <method>endTransaction</method>.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>void startTransaction()</class></label>
 
       <para>starts a transaction. The persistor should tell the persistor
       (assuming it supports transactions) that a transaction is
       starting.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void endTransaction()</class></label>
 
       <para>ends the transaction. The persistor should tell the persistor
       (assuming it supports transactions) that a transaction has ended
       succesfully.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void abortTransaction()</class></label>
 
       <para>aborts the transaction. The persistor should tell the persistor
       (assuming it supports transactions) that a transaction has failed and
       that all changes need to be reversed/undone.</para>
-    </item2>
-  </list>
+    </block>
 
   <minorheading>Other methods</minorheading>
 
@@ -342,30 +336,28 @@
   these are already implemented in <class>AbstractObjectStore</class>, but are
   listed here for completeness.</para>
 
-  <list>
-    <item2>
+    <block>
       <label><class>void init()</class></label>
 
       <para>initialises the object store. The persistor should initialise
       itself by connecting to resources it will require, and log any opening
       comments.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void shutdown()</class></label>
 
       <para>shuts down the object store. The persistor should take this as a
       signal to disconnect itself from any services it is using, dispose of
       any objects in the cache and free up resources. There should be no more
       requests after this has been invoked.</para>
-    </item2>
+    </block>
 
-    <item2>
+    <block>
       <label><class>void reset()</class></label>
 
       <para>restart the persistor.</para>
-    </item2>
-  </list>
+    </block>
 
   <subheading>Installation</subheading>
 

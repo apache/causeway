@@ -40,7 +40,7 @@
         <fo:simple-page-master master-name="first"
           page-width="210mm"  page-height="297mm"
            margin-top="5mm"  margin-bottom="3mm"
-           margin-left="50mm" margin-right="20mm">
+           margin-left="40mm" margin-right="20mm">
           <fo:region-body margin-top="15mm" margin-bottom="15mm"/>
           <fo:region-before extent="15mm"/>
           <fo:region-after extent="10mm"/>
@@ -49,7 +49,7 @@
         <fo:simple-page-master master-name="regular"
           page-width="210mm"  page-height="297mm"
            margin-top="5mm"  margin-bottom="3mm"
-           margin-left="50mm" margin-right="20mm">
+           margin-left="40mm" margin-right="20mm">
           <fo:region-body margin-top="15mm" margin-bottom="15mm"/>
           <fo:region-before extent="15mm"/>
           <fo:region-after extent="10mm"/>
@@ -91,20 +91,24 @@
       <!-- Title page -->
       <fo:page-sequence master-reference="title">
         <fo:flow flow-name="xsl-region-body">
-          <fo:block text-align="center"
-            space-before="12cm"
-            font-size="30pt" 
-            font-family="sans-serif">
+          <fo:block text-align="start"
+            space-before="9cm"
+            text-indent="1cm"
+            font-size="40pt" 
+            font-family="Arial, Garamond, sans-serif">
             <xsl:value-of select="/publication/title"/>
           </fo:block>
-          <fo:block text-align="center" 
+          <fo:block 
+            text-align="start"
+            padding-top="1.5cm"
+            margin-left="6cm"
             font-size="20pt" 
-            font-family="sans-serif" >
+            font-family="Arial, Garamond, sans-serif" >
             <xsl:value-of select="/publication/subtitle"/>
           </fo:block>
           <fo:block text-align="right" 
-            space-before="2cm"
-            font-size="16pt" 
+            space-before="4cm"
+            font-size="12pt" 
             font-family="serif" >
             <xsl:value-of select="/publication/author"/>
           </fo:block>
@@ -118,7 +122,7 @@
           <fo:block text-align="left"
             space-before="24cm"
             font-size="10pt" 
-            font-family="sans-serif">
+            font-family="Arial, Garamond, sans-serif">
             &#xA9;
             <xsl:text> </xsl:text>
             Copyright
@@ -132,7 +136,7 @@
             <fo:block text-align="left" 
               space-before="6px"
               font-size="10pt" 
-              font-family="sans-serif" >
+              font-family="Arial, Garamond, sans-serif" >
               <xsl:apply-templates select="."/>
             </fo:block>
           </xsl:for-each>
@@ -141,11 +145,11 @@
       
       <!-- preamble -->
       <xsl:for-each select="/publication/preamble/section">
-        <fo:page-sequence master-reference="regular" initial-page-number="1">
+        <fo:page-sequence master-reference="first">
           <fo:static-content flow-name="xsl-region-after">
             <fo:block font-size="8pt"
               space-before="-10pt" 
-              font-family="sans-serif" 
+              font-family="Arial, Garamond, sans-serif" 
               text-align="end">
               <fo:page-number format="i"/>
             </fo:block>
@@ -237,13 +241,13 @@
         <fo:page-sequence master-reference="first">
           <fo:static-content flow-name="xsl-region-after">
             <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
-              font-family="sans-serif" 
+              font-family="Arial, Garamond, sans-serif" 
               text-align="start" text-indent="-3.5cm">
                <xsl:text>Draft (</xsl:text>
             </fo:block>
             <fo:block font-size="8pt"
               space-before="-10pt" 
-              font-family="sans-serif" 
+              font-family="Arial, Garamond, sans-serif" 
               text-align="end">
               <fo:page-number></fo:page-number>
             </fo:block>
@@ -252,8 +256,8 @@
           <fo:flow flow-name="xsl-region-body">
               <fo:block 
                 font-size="46pt"
-                space-before="8cm"
-                font-family="sans-serif"
+                space-before="6cm"
+                font-family="Arial, Garamond, sans-serif"
                 space-after=".65cm"
                 id="{generate-id(.)}">
                 <!--
@@ -266,7 +270,7 @@
              <fo:block 
                 font-size="23pt"
                 line-height="130%"
-                font-family="sans-serif"
+                font-family="Arial, Garamond, sans-serif"
                 space-after=".65cm"
               >
                 <xsl:value-of select="title"/>
@@ -283,32 +287,32 @@
         <fo:page-sequence master-reference="regular">
           <fo:static-content flow-name="xsl-region-before">
             <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
-              font-family="sans-serif" 
+              font-family="Arial, Garamond, sans-serif" 
               text-align="start" text-indent="-3.5cm">
-              <xsl:value-of select="title"/>
-            </fo:block>
-            <fo:block text-align="end" 
-              font-size="8pt" 
-              font-family="sans-serif" 
-              space-before="-10pt" 
-              line-height="14pt" >
               <xsl:value-of select="../title"/>
+            </fo:block>
+            <fo:block font-size="8pt"
+              space-before="-10pt" 
+              font-family="Arial, Garamond, sans-serif" 
+              text-align="end">
+              <fo:page-number></fo:page-number>
             </fo:block>
           </fo:static-content>
     
           <fo:static-content flow-name="xsl-region-after">
             <fo:block font-size="8pt" line-height="10pt" space-before="0cm" 
-              font-family="sans-serif" 
+              font-family="Arial, Garamond, sans-serif" 
               text-align="start" text-indent="-3.5cm">
                <xsl:text>Draft (</xsl:text>
                <xsl:value-of select="@file"/>
                <xsl:text>)</xsl:text>
             </fo:block>
-            <fo:block font-size="8pt"
+            <fo:block text-align="end" 
+              font-size="8pt" 
+              font-family="Arial, Garamond, sans-serif" 
               space-before="-10pt" 
-              font-family="sans-serif" 
-              text-align="end">
-              <fo:page-number></fo:page-number>
+              line-height="14pt" >
+              <xsl:value-of select="title"/>
             </fo:block>
           </fo:static-content> 
         
@@ -326,9 +330,24 @@
 
 
   <xsl:template match="section">
+
+    <xsl:if test="string-length(title) > 0 and @numbered='on'">
+        <fo:block 
+          font-family="Arial, Garamond, sans-serif"
+          font-size="12pt"
+          font-weight="bold"
+          line-height="130%"
+          text-align="end"
+          border-after-style="solid"
+          border-width="0.1mm"
+          border-color="black">
+            Section <xsl:number level="multiple" count="//section[@numbered='on']" format="1.1 "/>
+        </fo:block>
+    </xsl:if>
+    
     <fo:block 
       font-family="Arial, Garamond, sans-serif"
-      font-size="20pt"
+      font-size="18pt"
       font-weight="bold"
       line-height="130%"
       space-after=".65cm"
@@ -337,14 +356,6 @@
       keep-with-next="always"
       id="{generate-id(.)}">
 
-<!--      id="{generate-id(key('chapters', .))}"
-      -->
-      <xsl:if test="string-length(title) > 0">
-        <!--xsl:attribute name="border-after-style">solid</xsl:attribute-->
-      </xsl:if>
-        <xsl:if test="@numbered='on'">
-          <xsl:number level="multiple" count="//section[@numbered='on']" format="1. "/>
-        </xsl:if>
         <xsl:value-of select="title"/>
         <xsl:if test="@draft='yes'">
           <fo:inline font-size="60%" font-style="italic"> draft</fo:inline>
@@ -385,20 +396,33 @@
   </xsl:template>
 
 
-  <xsl:template match ="subheading">
+  <xsl:template match ="heading">
     <fo:block
-      font-family="sans-serif"
-      font-size="14pt"
+      font-family="Arial, Garamond, sans-serif"
+      font-size="16pt"
       text-align="start"
-      space-before=".2cm"
+      space-before=".5cm"
       space-after=".2cm"
-      border-after-style="solid"
-      border-width="0.5mm"
-      border-color="black"
       keep-with-next="always"
       >
-      <xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
-      <xsl:number level="multiple" count="//section[@numbered='on']//subheading" format="1. "/>
+      <!--xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
+      <xsl:number level="multiple" count="//section[@numbered='on']//subheading" format="1. "/-->
+      <xsl:apply-templates/> 
+    </fo:block>
+  </xsl:template>
+  
+
+  <xsl:template match ="subheading">
+    <fo:block
+      font-family="Arial, Garamond, sans-serif"
+      font-size="14pt"
+      text-align="start"
+      space-before=".5cm"
+      space-after=".2cm"
+      keep-with-next="always"
+      >
+      <!--xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
+      <xsl:number level="multiple" count="//section[@numbered='on']//subheading" format="1. "/-->
       <xsl:apply-templates/> 
     </fo:block>
   </xsl:template>
@@ -406,14 +430,11 @@
   
   <xsl:template match ="minorheading">
     <fo:block
-      font-family="sans-serif"
+      font-family="Arial, Garamond, sans-serif"
       font-size="12pt"
       text-align="start"
-      space-before=".2cm"
+      space-before=".5cm"
       space-after=".2cm"
-      border-after-style="solid"
-      border-width="0.5mm"
-      border-color="black"
       keep-with-next="always"
       >
       <!--xsl:number level="multiple" count="//section[@numbered='on']" format="1."/>
@@ -432,15 +453,16 @@
   </xsl:template>
 
   <xsl:template match="list/para|list/el">
-    <fo:list-item>
+    <fo:list-item
+        space-after="9px">
       <fo:list-item-label end-indent="label-end()">
-        <fo:block font-size="140%">&#x2022;</fo:block>
+        <fo:block font-size="100%">&#x2022;</fo:block>
       </fo:list-item-label>
       
       <fo:list-item-body start-indent="body-start()">
         <fo:block
-            font-family="Times"
-            font-size="11pt">
+            font-family="Times, Serif"
+            font-size="10pt">
           <xsl:apply-templates/>
         </fo:block>
       </fo:list-item-body>
@@ -462,23 +484,6 @@
     </fo:list-item>
   </xsl:template>
 
-  <xsl:template match="item2">
-    <fo:list-item>
-    <fo:list-item-label >
-    <fo:block
-        space-before=".2cm"
-        space-after="1.2pc">
-        <xsl:apply-templates select="label"/>
-    </fo:block>
-    </fo:list-item-label>
-    
-    <fo:list-item-body start-indent="20px">
-    <fo:block>
-        <xsl:apply-templates select="para|commnad-listing|program-listing|screenshot"/>
-    </fo:block>
-    </fo:list-item-body>
-    </fo:list-item>
-  </xsl:template>
 
 
 
@@ -490,6 +495,21 @@
       space-after="9px"
       >
       <xsl:apply-templates/> 
+    </fo:block>
+  </xsl:template>
+
+  <xsl:template match="block">
+    <fo:block
+        font-family="Times, Serif"
+        font-size="10pt"
+        text-indent="0.0cm"
+        font-style="italic"
+        space-after="2px">
+        <xsl:apply-templates select="label"/>
+    </fo:block>
+    
+    <fo:block start-indent="0.5cm">
+        <xsl:apply-templates select="para|commnad-listing|program-listing|screenshot"/>
     </fo:block>
   </xsl:template>
 
@@ -551,7 +571,6 @@
 
   <xsl:template match ="command-listing|property-listing">
     <fo:block font-size="9pt"
-      font-weight="bold"
       font-family="monospace"
       color="blue"
       text-align="start"
@@ -663,7 +682,7 @@
   <xsl:template match="index">
     <fo:block
       color="green"
-      font-family="sans-serif"
+      font-family="Arial, Garamond, sans-serif"
       font-size="75%"
       text-align="right"
       ><xsl:value-of select="term"/><xsl:text>: </xsl:text><xsl:value-of select="usage"/>
@@ -675,9 +694,10 @@
 
   <xsl:template match="class|method|variable">
     <fo:inline
+      font-family="monospace"
+      font-size="10pt"
       hyphenation-keep="column"
-      color="#888"
-      font-family="Arial, Garamond, sans-serif"
+      color="#009"
       >
       <xsl:apply-templates/> 
     </fo:inline>
@@ -685,7 +705,8 @@
 
   <xsl:template match="object|menu|field">
     <fo:inline
-      font-family="Arial, Garamond, sans-serif"
+      font-family="monospace"
+      font-size="10pt"
       background-color="#EEE"
 
       >
@@ -695,8 +716,9 @@
 
   <xsl:template match="code|path|property">
     <fo:inline
-      font-family="Arial, Garamond, sans-serif"
-      font-weight="bold"
+      font-family="monospace"
+      font-size="10pt"
+      color="#033"
       >
       <xsl:apply-templates/> 
     </fo:inline>
@@ -800,25 +822,24 @@
 
   <fo:block
     space-before.optimum="8pt"
-    font-size="10pt" 
-    font-family="sans-serif" 
+    font-size="9pt" 
+    font-family="Arial, Garamond, sans-serif"
     line-height="14pt"
     space-after="12pt"
     padding="6px"
     border-style="solid"
+    border-width="1px"
     >
     
     
   <fo:block
-    font-weight="bold"
     text-align="start" >
     <xsl:value-of select="../@name"/>.<xsl:value-of select="@name"/>
   </fo:block>
 
   <fo:block
+    line-height="11pt"
     font-size="8pt" 
-    font-family="sans-serif" 
-    line-height="12pt"
     space-after="3pt"
     width="100%"
      >
@@ -839,9 +860,9 @@
     <fo:table-column column-width="17mm"/>
     <fo:table-column column-width="110mm"/>
     <fo:table-body 
-      line-height="12pt"
-      font-family="sans-serif"
-      font-size="8pt">
+      line-height="11pt"
+      font-family="Arial, Garamond, sans-serif"
+      font-size="7pt">
       <xsl:apply-templates/> 
     </fo:table-body>
   </fo:table>
@@ -924,7 +945,7 @@
 <xsl:template match ="package">
   <fo:block 
     font-size="14pt" 
-    font-family="sans-serif" 
+    font-family="Arial, Garamond, sans-serif" 
     font-weight="bold" 
     line-height="18pt"
     space-before.optimum="15pt"
@@ -947,7 +968,7 @@ JavaDoc...
   <fo:block
     font-weight="bold"
     font-size="10pt" 
-    font-family="sans-serif" 
+    font-family="Arial, Garamond, sans-serif" 
     line-height="14pt"
     space-before.optimum="15pt"
     space-after="3pt"
@@ -957,7 +978,7 @@ JavaDoc...
 
   <fo:block
     font-size="8pt" 
-    font-family="sans-serif" 
+    font-family="Arial, Garamond, sans-serif" 
     line-height="12pt"
     space-after="3pt"
     width="100%"
@@ -972,7 +993,7 @@ JavaDoc...
     <fo:table-column column-width="110mm"/>
     <fo:table-body 
       line-height="12pt"
-      font-family="sans-serif"
+      font-family="Arial, Garamond, sans-serif"
       font-size="8pt">
       <xsl:apply-templates/> 
     </fo:table-body>
