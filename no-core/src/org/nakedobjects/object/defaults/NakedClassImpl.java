@@ -88,6 +88,19 @@ public class NakedClassImpl implements NakedClass {
         }
     }
 
+
+    public void aboutExplorationActionNewTransientInstance(InternalAbout about) {
+        about.setDescription("Create a new " + getSingularName() + " instance");
+        about.setName("New " + getSingularName());
+        Hint ca = specification.getClassHint();
+        if (ca != null && ca.canUse().isVetoed() && !createPersistentInstances) {
+            about.invisible();
+        }
+        if(specification.isAbstract()) {
+            about.unusable("Cannot create an instance of an abstract class");
+        }
+    }
+    
     public FastFinder explorationActionFind() {
         FastFinder find = new FastFinder();
         find.setFromClass(forObjectType());
@@ -104,6 +117,12 @@ public class NakedClassImpl implements NakedClass {
 
     public NakedObject explorationActionNewInstance() {
         return newInstance();
+    }
+
+    public NakedObject explorationActionNewTransientInstance() {
+        NakedObjectPersistor objectManager = getObjectManager();
+        NakedObject object = objectManager.createTransientInstance(forObjectType());
+        return object;
     }
 
     public NakedObjectSpecification forObjectType() {
