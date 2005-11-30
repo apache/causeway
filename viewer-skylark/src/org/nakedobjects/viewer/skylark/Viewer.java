@@ -327,10 +327,10 @@ public class Viewer {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Restart object manager") {
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Restart object loader/persistor") {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObjects.getObjectPersistor().reset();
-                //           NakedObjects.getPojoAdapterFactory().reset();
+                NakedObjects.getObjectLoader().reset();
             }
         });
 
@@ -342,7 +342,7 @@ public class Viewer {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object manager") {
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object persistor") {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObjectPersistor om = NakedObjects.getObjectPersistor();
                 InfoDebugFrame f = new InfoDebugFrame();

@@ -9,6 +9,7 @@ import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.UserContext;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
@@ -167,7 +168,8 @@ public abstract class ObjectContent extends AbstractContent {
 
         options.add(MenuOptionSet.DEBUG, new MenuOption("Clear resolved") {
             public Consent disabled(View component) {
-                return AbstractConsent.allow(object != null && !object.getResolveState().isResolved());
+                return AbstractConsent.allow(object == null ||  object.getResolveState() != ResolveState.TRANSIENT || 
+                        object.getResolveState() == ResolveState.GHOST);
             }
 
             public void execute(Workspace workspace, View view, Location at) {

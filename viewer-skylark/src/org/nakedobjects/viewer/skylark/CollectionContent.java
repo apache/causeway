@@ -2,8 +2,10 @@ package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InvalidEntryException;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.control.AbstractConsent;
+import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
@@ -17,12 +19,12 @@ public abstract class CollectionContent extends AbstractContent implements Conte
     public abstract NakedCollection getCollection();
 
     public void menuOptions(MenuOptionSet options) {
-        Naked object = getNaked();
+        final NakedCollection collection = getCollection();
         
   		// TODO find all collection actions, and make them available
   		// not valid       ObjectOption.menuOptions((NakedObject) object, options);
             
-        Action[] actions = object.getSpecification().getObjectActions(Action.USER);
+        Action[] actions = collection.getSpecification().getObjectActions(Action.USER);
 
         for (int i = 0; i < actions.length; i++) {
             
@@ -36,6 +38,17 @@ public abstract class CollectionContent extends AbstractContent implements Conte
             }
         }
         
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Clear resolved") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(collection == null ||  collection.getResolveState() != ResolveState.TRANSIENT || 
+                        collection.getResolveState() == ResolveState.GHOST);
+            }
+
+            public void execute(Workspace workspace, View view, Location at) {
+                collection.debugClearResolved();
+            }
+        });
+
     }
     
     public void parseTextEntry(String entryText) throws InvalidEntryException {
