@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry sourcepath="C:/Program Files/Java/ibatis/ibatis-src.zip" kind="lib" path="/lib/ibatis-sqlmap-2.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
