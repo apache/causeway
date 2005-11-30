@@ -324,8 +324,8 @@
 		</zip>
 		
 		<!-- TODO use variables and a properties file -->
-		<zip zipfile="${release-dir}/nakedobjects-${build.version}-${build.number}-dotnet.zip">
-			<fileset basedir="build" prefix="nakedobjects-${build.version}-${build.number}">
+		<zip zipfile="${release-dir}/nakedobjects-${build.version}${build.number}-dotnet.zip">
+			<fileset basedir="build" prefix="nakedobjects-${build.version}${build.number}">
 				<include name="*.dll"/>
 				<include name="*.pdb"/>
 				<include name="src.zip"/>
@@ -345,7 +345,7 @@
         <mkdir dir="e:/transfer" failonerror="false"/>
         <copy todir="e:/transfer" failonerror="false">
 			<fileset basedir="${release-dir}">
-				<include name="nakedobjects-${build.version}-${build.number}-dotnet.zip"/>
+				<include name="nakedobjects-${build.version}${build.number}-dotnet.zip"/>
 			</fileset>
 		</copy>
     </target>
@@ -353,11 +353,11 @@
 
 
     <target name="quick-release" depends="copy-source, dist">
-    	<echo>Completed quick release ${build.version}-${build.number} (docs not up-to-date)</echo>
+    	<echo>Completed quick release ${build.version}${build.number} (docs not up-to-date)</echo>
     </target>
 
     <target name="release" depends="copy-source, docs, dist">
-    	<echo>Completed release ${build.version}-${build.number}</echo>
+    	<echo>Completed release ${build.version}${build.number}</echo>
     </target>
 
     

@@ -12,11 +12,11 @@
 		<property file="common.properties"/>
 		
 		<echo>Uploading distributions</echo>
-		<echo>Version ${build.version}, build ${build.number}</echo>
+		<echo>Version ${build.version}${build.number}</echo>
 
 		<fileset dir="${release.dir}" id="released-files">
-			<include name="nakedobjects-${build.version}-${build.number}-java.zip" />
-			<include name="nakedobjects-${build.version}-${build.number}-dotnet.zip" />
+			<include name="nakedobjects-${build.version}${build.number}-java.zip" />
+			<include name="nakedobjects-${build.version}${build.number}-dotnet.zip" />
 		</fileset>
 
 		<ftp password="${password}" server="${server}" userid="${userid}" remotedir="." verbose="yes" binary="yes" passive="yes">

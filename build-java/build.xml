@@ -310,7 +310,7 @@
 		<!-- generate HTML browseable source -->
 		<taskdef name="java2html" classname="com.java2html.Java2HTMLTask"/>
 
-		<java2html title="Naked Objects Framework - ${build.version}-${build.number}"
+		<java2html title="Naked Objects Framework - ${build.version}${build.number}"
 			simple="no"
 	       	tabsize="4"
 			marginsize="6"
@@ -335,8 +335,8 @@
 
 		<!-- produce release zip -->
 		<mkdir dir="${release.dir}" />
-		<zip zipfile="${release.dir}/nakedobjects-${build.version}-${build.number}-java.zip">
-			<zipfileset dir="${dist.dir}" prefix="nakedobjects-${build.version}-${build.number}"/>
+		<zip zipfile="${release.dir}/nakedobjects-${build.version}${build.number}-java.zip">
+			<zipfileset dir="${dist.dir}" prefix="nakedobjects-${build.version}${build.number}"/>
 		</zip>
 
 	</target>
@@ -359,7 +359,7 @@
 			</fileset>
 		</copy>
 
-		<touch file="${artifacts.dir}/${build.version}-${build.number}"/>
+		<touch file="${artifacts.dir}/${build.version}${build.number}"/>
 	</target>
 
 
