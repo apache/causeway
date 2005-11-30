@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.ToString;
 
@@ -26,7 +27,7 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
 
     public void init() {}
 
-    public void makePersistent(NakedObject object, PersistedObjectAdder manager) {
+    public void makePersistent(NakedObject object, PersistedObjectAdder persistor) {
         if (object.getResolveState().isPersistent() || object.persistable() == Persistable.TRANSIENT) {
             return;
         }
@@ -52,7 +53,7 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
                 if (!(fieldValue instanceof NakedObject)) {
                     throw new NakedObjectRuntimeException();
                 }
-                makePersistent((NakedObject) fieldValue, manager);
+                makePersistent((NakedObject) fieldValue, persistor);
             }
         }
 
@@ -64,10 +65,11 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
                 continue;
             } else if (field instanceof OneToManyAssociation) {
                 InternalCollection collection = (InternalCollection) object.getField(field);
-                makePersistent(collection, manager);
-                NakedObjects.getObjectLoader().madePersistent(collection, createOid(object));
+                makePersistent(collection, persistor);
+//                NakedObjects.getObjectLoader().madePersistent(collection, createOid(object));
+                collection.changeState(ResolveState.RESOLVED);
                 for (int j = 0; j < collection.size(); j++) {
-                    makePersistent(collection.elementAt(j), manager);
+                    makePersistent(collection.elementAt(j), persistor);
                 }
             } else {
                 // skip in second pass
@@ -75,17 +77,17 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
             }
         }
 
-        manager.createObject(object);
+        persistor.createObject(object);
     }
 
-    public void makePersistent(InternalCollection collection, PersistedObjectAdder manager) {
+    public void makePersistent(InternalCollection collection, PersistedObjectAdder persistor) {
         if (collection.getResolveState().isPersistent() || collection.persistable() == Persistable.TRANSIENT) {
             return;
         }
         LOG.info("persist " + collection);
         NakedObjects.getObjectLoader().madePersistent(collection, createOid(collection));
         for (int j = 0; j < collection.size(); j++) {
-            makePersistent(collection.elementAt(j), manager);
+            makePersistent(collection.elementAt(j), persistor);
         }
     }
 
