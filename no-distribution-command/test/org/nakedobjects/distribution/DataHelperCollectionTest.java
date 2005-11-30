@@ -62,9 +62,9 @@ public class DataHelperCollectionTest extends TestCase {
     public void testRecreateCollection() {
         ObjectData elements[] = new ObjectData[2];
         DummyOid fieldOid = new DummyOid(345);
-        elements[0] = new DummyObjectData(fieldOid, "type.1", null, false, new DummyVersion());
+        elements[0] = new DummyObjectData(fieldOid, "type.1", false, new DummyVersion());
         fieldOid = new DummyOid(678);
-        elements[1] = new DummyObjectData(fieldOid, "type.1", null, false, new DummyVersion());
+        elements[1] = new DummyObjectData(fieldOid, "type.1", false, new DummyVersion());
 
         DummyOid collectionOid = new DummyOid(123);
         CollectionData data = new DummyCollectionData(collectionOid, "type.2", elements, new DummyVersion());

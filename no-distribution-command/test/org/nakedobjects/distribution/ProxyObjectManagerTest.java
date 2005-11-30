@@ -58,8 +58,11 @@ public class ProxyObjectManagerTest extends TestCase {
         obj.init(system);
 
         
-        Data field2 = new DummyObjectData(new DummyOid(345), "type", new Data[] {}, true, new DummyVersion(456) );
-        distribution.setupMakePersistentResults(new DummyObjectData(new DummyOid(123), "type", new Data[] {null, field2}, true, new DummyVersion(456) ));
+        ObjectData field2 = new DummyObjectData(new DummyOid(345), "type", true, new DummyVersion(456) );
+        field2.setFieldContent(new Data[] {});
+        DummyObjectData dummyObjectData = new DummyObjectData(new DummyOid(123), "type", true, new DummyVersion(456) );
+        dummyObjectData.setFieldContent(new Data[] {null, field2});
+        distribution.setupMakePersistentResults(dummyObjectData);
        
         NakedObject transientObject = obj.getAdapter();
         NakedObjects.getObjectPersistor().makePersistent(transientObject);

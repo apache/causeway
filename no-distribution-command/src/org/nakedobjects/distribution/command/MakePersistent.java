@@ -5,15 +5,15 @@ import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.object.Session;
 
 public class MakePersistent extends AbstractRequest {
-    private ObjectData object;
+    private ObjectData data;
 
-    public MakePersistent(Session session, ObjectData object) {
+    public MakePersistent(Session session, ObjectData data) {
         super(session);
-        this.object = object;
+        this.data = data;
     }
 
     public void execute(Distribution distribution) {
-        response = distribution.makePersistent(session, object);
+        response = distribution.makePersistent(session, data);
     }
 
     public ObjectData getResults() {

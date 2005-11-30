@@ -43,10 +43,7 @@ public class DataHelperTest extends TestCase {
         
         TestObjectBuilder referencedObject;
         referencedObject = new TestObjectBuilder(new TestPojo());
-//        referencedObject.setOid(new DummyOid(345));
         referencedObject.setResolveState(ResolveState.GHOST);
-        
-//        TestValue value = new TestValue(new TestPojoValuePeer());
         
         TestObjectBuilder obj;
         obj = new TestObjectBuilder(new TestPojo());
@@ -55,8 +52,7 @@ public class DataHelperTest extends TestCase {
         obj.setResolveState(ResolveState.GHOST);
 
         obj.setValueField("value", new TestValue(new TestPojoValuePeer()));
-//        obj.setValueField("value", value);
- //       obj.setReferenceField("reference", referencedObject);
+        obj.setReferenceField("ref", obj);
 
         obj.init(system);
     }
@@ -68,7 +64,8 @@ public class DataHelperTest extends TestCase {
     public void testRecreatedObjectIsPartResolved() {
         DummyOid oid = new DummyOid(123);
         Data fields[] = new Data[0];
-        Data data = new DummyObjectData(oid, TestPojo.class.getName(), fields, false, new DummyVersion());
+        ObjectData data = new DummyObjectData(oid, TestPojo.class.getName(), false, new DummyVersion());
+        data.setFieldContent(fields);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(ResolveState.PART_RESOLVED, ((NakedObject) naked).getResolveState());
@@ -77,7 +74,8 @@ public class DataHelperTest extends TestCase {
     public void testRecreatedObjectIsResolved() {
         DummyOid oid = new DummyOid(123);
         Data fields[] = new Data[0];
-        Data data = new DummyObjectData(oid, TestPojo.class.getName(), fields, true, new DummyVersion());
+        ObjectData data = new DummyObjectData(oid, TestPojo.class.getName(), true, new DummyVersion());
+        data.setFieldContent(fields);
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(ResolveState.RESOLVED, ((NakedObject) naked).getResolveState());
@@ -87,13 +85,40 @@ public class DataHelperTest extends TestCase {
         Data fields[] = new Data[2];
         fields[0] = new DummyValueData(new Integer(13), "");
         DummyOid fieldOid = new DummyOid(345);
-        fields[1] = new DummyObjectData(fieldOid, TestPojo.class.getName(), null, false, new DummyVersion());
+    //    fields[1] = new DummyObjectData(fieldOid, TestPojo.class.getName(),  false, new DummyVersion());
         
         // TODO test the one-to-many collection aswell
         
         DummyOid rootOid = new DummyOid(123);
-        Data data = new DummyObjectData(rootOid, TestPojo.class.getName(), fields, false, new DummyVersion(4));
+        ObjectData data = new DummyObjectData(rootOid, TestPojo.class.getName(), false, new DummyVersion(4));
+        
+        fields[1] = data;
+        
+        data.setFieldContent(fields);
+        
+        DummyNakedObject restored = (DummyNakedObject) DataHelper.restore(data);
+        assertEquals(new DummyVersion(4), restored.getVersion());
+        assertEquals(rootOid, restored.getOid());
 
+        TestPojo pojo = (TestPojo) restored.getObject();
+        assertEquals(rootObject.getPojo(), pojo);
+
+        restored.assertFieldContains("value", new Integer(13));
+    }
+
+    public void testRecreateObjectWithFieldData2() {
+        Data fields[] = new Data[3];
+        fields[0] = new DummyValueData(new Integer(13), "");
+        DummyOid fieldOid = new DummyOid(345);
+    //    fields[1] = new DummyObjectData(fieldOid, TestPojo.class.getName(),  false, new DummyVersion());
+     //   fields[1] = fields[0];
+        
+        // TODO test the one-to-many collection aswell
+        
+        DummyOid rootOid = new DummyOid(123);
+        ObjectData data = new DummyObjectData(rootOid, TestPojo.class.getName(), false, new DummyVersion(4));
+        data.setFieldContent(fields);
+        
         DummyNakedObject restored = (DummyNakedObject) DataHelper.restore(data);
         assertEquals(new DummyVersion(4), restored.getVersion());
         assertEquals(rootOid, restored.getOid());
@@ -107,7 +132,7 @@ public class DataHelperTest extends TestCase {
     public void testRecreateObjectWithNoFieldData() {
         DummyOid oid = new DummyOid(123);
 
-        Data data = new DummyObjectData(oid, TestPojo.class.getName(), null, false, new NullVersion());
+        Data data = new DummyObjectData(oid, TestPojo.class.getName(), false, new NullVersion());
 
         NakedObject naked = (NakedObject) DataHelper.restore(data);
         assertEquals(rootObject.getPojo(), naked.getObject());
@@ -117,7 +142,7 @@ public class DataHelperTest extends TestCase {
     }
 
     public void testRecreateTransientObjectGivenDataObject() {
-        Data data = new DummyObjectData(null, TestPojo.class.getName(), null, false, new DummyVersion());
+        Data data = new DummyObjectData(null, TestPojo.class.getName(), false, new DummyVersion());
 
         DummyNakedObject adapter = new DummyNakedObject();
         adapter.setupObject(rootObject);
@@ -130,8 +155,9 @@ public class DataHelperTest extends TestCase {
     }
 
     public void testRecreateTransientObjectWithFieldData() {
-        Data data = new DummyObjectData(null, TestPojo.class.getName(), new Data[0], false, new DummyVersion());
-
+        ObjectData data = new DummyObjectData(null, TestPojo.class.getName(), false, new DummyVersion());
+        data.setFieldContent(new Data[0]);
+        
         DummyNakedObject adapter = new DummyNakedObject();
         adapter.setupObject(rootObject);
         system.addRecreatedTransient(adapter);
