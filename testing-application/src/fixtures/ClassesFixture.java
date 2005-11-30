@@ -5,6 +5,7 @@ import org.nakedobjects.reflector.java.fixture.JavaFixture;
 import bom.Booking;
 import bom.City;
 import bom.CompanyCreditCard;
+import bom.CopyOfLocation;
 import bom.CreditCard;
 import bom.Customer;
 import bom.Location;
@@ -21,8 +22,9 @@ public class ClassesFixture extends JavaFixture {
         registerClass(CompanyCreditCard.class);
         registerClass(Customer.class);
         registerClass(Telephone.class);  
+        registerClass(CopyOfLocation.class);  
         registerClass(LocationGroup.class);  
-    }
+           }
     
     
 }

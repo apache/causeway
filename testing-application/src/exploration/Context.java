@@ -4,11 +4,12 @@ import org.nakedobjects.object.defaults.ApplicationContext;
 
 import bom.Booking;
 import bom.City;
+import bom.CopyOfLocation;
 import bom.CreditCard;
 import bom.Customer;
 import bom.Location;
-import bom.LocationGroup;
 import bom.Telephone;
+import bom.TestObject;
 
 
 public class Context extends ApplicationContext {
@@ -17,13 +18,15 @@ public class Context extends ApplicationContext {
    //     addClass(City.class);
     //    addClass(Location.class);
 
-        addClass(Customer.class);
-        addClass(Booking.class);
-        addClass(Location.class);
-        addClass(Telephone.class);
-        addClass(CreditCard.class);
-        addClass(City.class);
-        addClass(LocationGroup.class);
+  //      addClass(Customer.class);
+      //  addClass(Booking.class);
+       addClass(Location.class);
+//        addClass(Telephone.class);
+    //    addClass(CreditCard.class);
+     //   addClass(City.class);
+        //addClass(CopyOfLocation.class);
+        
+       addClass(TestObject.class);
     }
 
     public String getName() {

@@ -34,7 +34,7 @@ public class Telephone implements Common {
         container.objectChanged(this);
     }
     
-    public void actionRemoteSave() {
+    public void actionRemoteTestSaveInActionOnServer() {
         container.makePersistent(this);
     }
     
