@@ -380,6 +380,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         }
         objectsToBeSaved.shutdown();
         objectsToRefreshViewsFor.shutdown();
+        persistAlgorithm.shutdown();
         objectStore.shutdown();
         objectStore = null;
         nakedClasses.clear();
