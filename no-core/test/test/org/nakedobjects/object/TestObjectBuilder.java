@@ -44,6 +44,10 @@ public class TestObjectBuilder {
     }
     
     public void init(TestSystem system) {
+        init(system, new Vector());
+    }
+
+    private void init(TestSystem system, Vector previous) {
         String className = pojo.getClass().getName();
         if(specification == null) {
             specification = new DummyNakedObjectSpecification(className);
@@ -70,10 +74,13 @@ public class TestObjectBuilder {
             //NakedObjectField field;
             if(content instanceof TestObjectBuilder) {
                 TestObjectBuilder testObjectSpec = ((TestObjectBuilder) content);
-                testObjectSpec.init(system);
-                fields[i]  = new OneToOneAssociationImpl(className, name, testObjectSpec.specification,
-                        new TestPojoReferencePeer());
-                adapter.setupFieldValue(name, testObjectSpec.getAdapter());
+                if(!previous.contains(testObjectSpec)) {
+                    previous.addElement(testObjectSpec);
+                    testObjectSpec.init(system, previous);
+                    fields[i]  = new OneToOneAssociationImpl(className, name, testObjectSpec.specification,
+                            new TestPojoReferencePeer());
+                    adapter.setupFieldValue(name, testObjectSpec.getAdapter());
+                }
             } else if(content instanceof TestValue) {
                 DummyNakedObjectSpecification valueFieldSpec = new DummyNakedObjectSpecification();
                 valueFieldSpec.setupIsValue();
