@@ -38,7 +38,6 @@ public class TopDownPersistAlgorithm implements PersistAlgorithm {
         }
 
 
-        manager.createObject(object);
 
 		/*
 		this loop forces collection as references to be loaded in in a transient state
@@ -58,6 +57,7 @@ public class TopDownPersistAlgorithm implements PersistAlgorithm {
         
         LOG.info("persist " + object);
         NakedObjects.getObjectLoader().madePersistent(object, createOid(object));
+        manager.createObject(object);
 
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
