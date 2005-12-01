@@ -358,12 +358,6 @@ public class Viewer {
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Dump all") {
-            public void execute(Workspace workspace, View view, Location at) {
-                DebugFileDump.dump(NakedObjects.debug());
-            }
-        });
     }
 
     public void mouseMoved(Location location) {
