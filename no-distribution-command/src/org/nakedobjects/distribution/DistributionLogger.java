@@ -2,6 +2,7 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
@@ -10,6 +11,8 @@ import org.nakedobjects.utility.Logger;
 
 public class DistributionLogger extends Logger implements Distribution {
     private static String padding = "      ";
+    private static DataStructure dataStructure = new DataStructure();
+
 
     public static String dump(Data data) {
         StringBuffer str = new StringBuffer();
@@ -40,7 +43,9 @@ public class DistributionLogger extends Logger implements Distribution {
             ObjectData objectData = ((ObjectData) data);
             str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
                     + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
-            NakedObjectField[] fs = NakedObjects.getSpecificationLoader().loadSpecification(objectData.getType()).getFields();
+            //NakedObjectField[] fs = NakedObjects.getSpecificationLoader().loadSpecification(objectData.getType()).getFields();
+            NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(objectData.getType());
+            NakedObjectField[] fs = dataStructure.getFields(specification);
             Object[] fields = objectData.getFieldContent();
             for (int i = 0; fields != null && i < fields.length; i++) {
                 str.append("\n");

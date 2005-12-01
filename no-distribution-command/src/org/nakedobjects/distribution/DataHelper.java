@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 public class DataHelper {
     private static final Logger LOG = Logger.getLogger(DataHelper.class);
     private static DirtyObjectSet updateNotifier;
+    private static DataStructure dataStructure = new DataStructure();
 
     private static ResolveState nextState(ResolveState initialState, boolean complete) {
         ResolveState state = null;
@@ -147,7 +148,8 @@ public class DataHelper {
     private static void setUpFields(ObjectData data, NakedObject object, Hashtable previous) {
         Data[] fieldContent = data.getFieldContent();
         if (fieldContent != null && fieldContent.length > 0) {
-            NakedObjectField[] fields = object.getSpecification().getFields();
+            //NakedObjectField[] fields = object.getSpecification().getFields();
+            NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
             for (int i = 0; i < fields.length; i++) {
                 NakedObjectField field = fields[i];
                 Data fieldData = fieldContent[i];

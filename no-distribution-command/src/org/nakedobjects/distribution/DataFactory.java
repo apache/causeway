@@ -27,6 +27,7 @@ public abstract class DataFactory {
     private int actionGraphDepth = 100;
     private int persistentGraphDepth = 100;
     private int updateGraphDepth = 1;
+    private DataStructure dataStructure = new DataStructure();
 
     public Data createActionResult(Naked result) {
         if (result == null) {
@@ -115,7 +116,7 @@ public abstract class DataFactory {
         ResolveState resolveState = object.getResolveState();
 
         Data[] fieldContent;
-        NakedObjectField[] fields = specification.getFields();
+        NakedObjectField[] fields = getFields(specification);
         fieldContent = new Data[fields.length];
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
@@ -147,6 +148,11 @@ public abstract class DataFactory {
 //        return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
     }
 
+    private NakedObjectField[] getFields(NakedObjectSpecification specification) {
+//        return specification.getFields();
+        return dataStructure.getFields(specification);
+    }
+
     /**
      * Creates an ObjectData that contains the data for the specified object, but not the data for any
      * referenced objects. For each referenced object only the reference is passed across.
@@ -174,7 +180,8 @@ public abstract class DataFactory {
 
         updateNotifier.removeUpdateFor(object);
 
-        NakedObjectField[] fields = object.getFields();
+  //      NakedObjectField[] fields = object.getFields();      
+        NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
         for (int i = 0; i < fields.length; i++) {
@@ -251,7 +258,7 @@ public abstract class DataFactory {
         if (resolveState.isSerializing() || !nextLevel || depth == 0 || resolveState.isGhost()) {
             fieldContent = null;
         } else {
-            NakedObjectField[] fields = specification.getFields();
+            NakedObjectField[] fields = getFields(specification);
             fieldContent = new Data[fields.length];
             NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
             for (int i = 0; i < fields.length; i++) {
