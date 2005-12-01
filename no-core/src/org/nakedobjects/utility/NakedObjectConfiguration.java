@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.util.Enumeration;
 
 
-public interface NakedObjectConfiguration {
+public interface NakedObjectConfiguration extends DebugInfo {
 
     /**
      * Adds a name-value pair to the list of properties. If the named property already exists then the

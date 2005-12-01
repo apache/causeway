@@ -37,7 +37,7 @@ public class AboutNakedObjects {
     }
 
     public static String getFrameworkVersion() {
-        return "Version " + select("%VERSION%", "2");
+        return "Version " + select("%VERSION%", "");
     }
 
     public static void logVersion() {

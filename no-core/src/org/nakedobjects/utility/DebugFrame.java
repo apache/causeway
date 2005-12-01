@@ -6,12 +6,19 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Frame;
+import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Panel;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
@@ -24,6 +31,7 @@ import java.util.Vector;
  */
 public abstract class DebugFrame extends Frame {
     private static Vector frames = new Vector();
+    private int panel = 0;
 
     /**
      * Calls dispose on all the open debug frames
@@ -42,8 +50,17 @@ public abstract class DebugFrame extends Frame {
     }
 
     private TextArea field;
+    private TabPane tabPane;
 
     public DebugFrame() {
+        frames.addElement(this);
+
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent e) {
+                closeDialog();
+            }
+        });
+        
         URL url = DebugFrame.class.getResource("/" + "images/debug.png");
         if (url != null) {
             Image image = Toolkit.getDefaultToolkit().getImage(url);
@@ -52,29 +69,38 @@ public abstract class DebugFrame extends Frame {
             }
         }
 
-        frames.addElement(this);
         setLayout(new BorderLayout(7, 7));
+        Panel tabPane = createTabPane();
+        add(tabPane);
+    }
 
-        addWindowListener(new WindowAdapter() {
-           // DebugFrame frame = DebugFrame.this;
-
-            public void windowClosing(WindowEvent e) {
-                closeDialog();
+    private Panel createTabPane() {
+        tabPane = new TabPane();
+        tabPane.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                Point point = e.getPoint();
+                panel = tabPane.select(point);
+                
+                DebugInfo info = tabPane.getInfo();
+                setTitle(info.getDebugTitle());
+                field.setText(info.getDebugData());
             }
         });
 
-        TextArea area = new TextArea("", 60, 110, TextArea.SCROLLBARS_BOTH);
+        tabPane.setLayout(new BorderLayout(7, 7));
 
-        area.setForeground(Color.black);
-
+        
+        TextArea textArea = new TextArea("", 60, 110, TextArea.SCROLLBARS_BOTH);
+        textArea.setForeground(Color.black);
+        textArea.setEditable(false);
         Font font = new Font("Courier", Font.PLAIN, 11);
-        area.setFont(font);
-        add("Center", area);
-        field = area;
+        textArea.setFont(font);
+        tabPane.add("Center", textArea);
+        field = textArea;
 
         Panel buttons = new Panel();
         buttons.setLayout(new FlowLayout());
-        add(buttons, BorderLayout.SOUTH);
+        tabPane.add(buttons, BorderLayout.SOUTH);
 
         // add buttons
         Button b = new java.awt.Button("Refresh");
@@ -118,9 +144,19 @@ public abstract class DebugFrame extends Frame {
                 closeDialog();
             }
         });
-
+        
+        return tabPane;
     }
 
+    public Insets getInsets() {
+        Insets insets = super.getInsets();
+        insets.left += 10;
+        insets.right += 10;
+        insets.top += 10;
+        insets.bottom += 10;
+        return insets;
+    }
+    
     private void closeDialog() {
         dialogClosing();
         hide();
@@ -135,14 +171,16 @@ public abstract class DebugFrame extends Frame {
     }
 
     public void refresh() {
-        DebugInfo info = getInfo();
+        DebugInfo[] infos = getInfo();
+        tabPane.setInfo(infos);
+        DebugInfo info = infos[panel];
         if(info != null) {
 	        setTitle(info.getDebugTitle());
 	        field.setText(info.getDebugData());
         }
     }
 
-    protected abstract DebugInfo getInfo();
+    protected abstract DebugInfo[] getInfo();
 
     /**
      * show the frame at the specified coordinates
@@ -181,6 +219,77 @@ public abstract class DebugFrame extends Frame {
     }
 }
 
+class TabPane extends Panel {
+        private DebugInfo[] info;
+        private Rectangle[] tabs;
+        private int panel = 0;
+
+        public int select(Point point) {
+            for (int i = 0; i < tabs.length; i++) {
+                if(tabs[i] != null && tabs[i].contains(point)) {
+                    panel = i;
+                    repaint();
+                    break;
+                }
+            }
+            return panel;
+        }
+        
+        public DebugInfo getInfo() {
+            return info[panel];
+        }
+
+        public void setInfo(DebugInfo[] info) {
+            this.info = info;
+            tabs = new Rectangle[info.length];
+        }
+        
+        public Insets getInsets() {
+            Insets insets = super.getInsets();
+            insets.left += 10;
+            insets.right += 10;
+            insets.top += 30;
+            insets.bottom += 10;
+            return insets;
+        }
+        
+        public void paint(Graphics g) {
+            Dimension size = getSize();
+            g.setColor(Color.gray);
+            g.drawRect(0, 20,size.width - 1, size.height - 21);
+            
+            FontMetrics fm;
+            fm = g.getFontMetrics();
+            int offset = 0;
+            int maxWidth = size.width / info.length - 1;
+            for (int i = 0; i < info.length; i++) {
+                String title = info[i].getDebugTitle();
+                int width = Math.min(maxWidth, fm.stringWidth(title) + 20);
+                
+                tabs[i] = new Rectangle(offset, 0, width, 20);
+                g.setColor(Color.gray);
+                g.drawRect(offset + 0, 0, width, 20);
+                if(i == panel) {
+                    g.setColor(Color.white);
+                    g.fillRect(offset + 1, 1, width - 1, 20);
+                    //g.drawLine(offset + 1, 20, offset + width, 20);
+                    g.setColor(Color.black);
+                } else {
+                    g.setColor(Color.lightGray);
+                    g.fillRect(offset + 1, 1, width - 1, 20 - 1);
+                    g.setColor(Color.gray);
+                }
+
+                g.drawString(title, offset + 9, 20 - 5);
+                
+                offset += width;
+            }
+            g.setColor(Color.white);
+            g.fillRect(offset + 1, 1, size.width - offset, 20 - 1);
+
+        }
+    
+}
 /*
  * Naked Objects - a framework that exposes behaviourally complete business
  * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group

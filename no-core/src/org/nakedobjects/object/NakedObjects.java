@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.AboutNakedObjects;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
@@ -93,21 +94,13 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
 
     public String getDebugData() {
         DebugString debug = new DebugString();
-
-        debug.appendln(0, "configuration", configuration());
-
-        debug.appendln(0, "session", currentSession());
-
-        debug.appendTitle("specification loader");
-        NakedObjectSpecificationLoader loader = specificationLoader();
-        debug.appendln(0, "instance", loader);
-        NakedObjectSpecification[] specs = loader.allSpecifications();
-        for (int i = 0; i < specs.length; i++) {
-            debug.appendln(4, i + ")", specs[i].toString());
-        }
-
-        debug.append(objectPersistor());
-
+        debug.appendln(AboutNakedObjects.getFrameworkName());
+        debug.appendln(AboutNakedObjects.getFrameworkVersion() + AboutNakedObjects.getFrameworkBuild());
+        debug.appendln();
+        debug.appendln(0, "configuration", configuration().getClass().getName());
+        debug.appendln(0, "session", currentSession().getClass().getName());
+        debug.appendln(0, "instance", specificationLoader().getClass().getName());
+        debug.appendln(0, "persistor", objectPersistor().getClass().getName());
         return debug.toString();
     }
 

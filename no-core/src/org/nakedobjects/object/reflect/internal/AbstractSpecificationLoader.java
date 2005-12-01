@@ -9,6 +9,7 @@ import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.reflect.SimpleSpecificationCache;
 import org.nakedobjects.object.reflect.SpecificationCache;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.DebugString;
 
 import org.apache.log4j.Logger;
 
@@ -98,6 +99,26 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
         return cache.allSpecifications();
     }
 
+    public String getDebugData() {
+        NakedObjectSpecification[] specs = allSpecifications();
+        DebugString str = new DebugString();
+        for (int i = 0; i < specs.length; i++) {
+            NakedObjectSpecification specification = specs[i];
+            str.append(specification.isAbstract() ? "A" : ".");
+            str.append(specification.isCollection() ? "C" : ".");
+            str.append(specification.isLookup() ? "L" : ".");
+            str.append(specification.isObject() ? "O" : ".");
+            str.append(specification.isValue() ? "V" : ".");
+            str.append("  ");
+            str.appendln(specification.getFullName());
+        }
+        return str.toString();
+    }
+
+    public String getDebugTitle() {
+        return "Specification Loader";
+    }
+    
     /**
      * Expose as a .NET property
      * 

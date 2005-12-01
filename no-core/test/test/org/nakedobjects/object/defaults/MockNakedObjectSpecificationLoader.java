@@ -43,6 +43,14 @@ public class MockNakedObjectSpecificationLoader implements NakedObjectSpecificat
 
     public void init() {}
 
+    public String getDebugData() {
+        return null;
+    }
+
+    public String getDebugTitle() {
+        return null;
+    }
+
 }
 
 

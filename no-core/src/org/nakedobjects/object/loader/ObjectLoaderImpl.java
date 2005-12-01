@@ -208,10 +208,11 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
 
     public String getDebugData() {
         DebugString debug = new DebugString();
+        debug.appendTitle("POJO-Adapter Mappings");
         debug.append(pojoAdapterMap);
         debug.appendln();
 
-        debug.appendTitle("Loaded objects");
+        debug.appendTitle("Identity-Adapter Mappings");
         Enumeration e = identityAdapterMap.keys();
         int count = 0;
         while (e.hasMoreElements()) {
@@ -228,7 +229,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
 
     public String getDebugTitle() {
-        return "Loaded objects and POJOs";
+        return "Object Loader";
     }
 
     public Enumeration getIdentifiedObjects() {

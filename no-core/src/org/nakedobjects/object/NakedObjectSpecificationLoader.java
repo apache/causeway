@@ -1,12 +1,14 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.utility.DebugInfo;
 
-public interface NakedObjectSpecificationLoader extends NakedObjectsComponent {
-    public abstract NakedObjectSpecification loadSpecification(String name);
+
+public interface NakedObjectSpecificationLoader extends NakedObjectsComponent, DebugInfo {
+    NakedObjectSpecification loadSpecification(String name);
     
-    public abstract NakedObjectSpecification loadSpecification(Class cls);
+    NakedObjectSpecification loadSpecification(Class cls);
     
-    public abstract NakedObjectSpecification[] allSpecifications();
+    NakedObjectSpecification[] allSpecifications();
 }
 
 

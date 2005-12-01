@@ -129,12 +129,22 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
 
     public String getDebugData() {
         DebugString debug = new DebugString();
+        debug.appendTitle("Persistor");
+        debug.appendln(0, "Check dirty flag", checkObjectsForDirtyFlag);
+        debug.appendln(0, "Classes", nakedClasses);
+        debug.appendln(0, "To Save", objectsToBeSaved);
+        debug.appendln(0, "To Refresh", objectsToRefreshViewsFor);
+        debug.appendln(0, "Transaction", transaction);
+        debug.appendln(0, "Persist Algorithm", persistAlgorithm);
+        debug.appendln(0, "Object Store", objectStore);
+        debug.appendln();
+
         debug.append(objectStore);
         return debug.toString();
     }
 
     public String getDebugTitle() {
-        return objectStore.getDebugTitle();
+        return "Object Store Persistor";
     }
 
     protected NakedObject[] getInstances(InstancesCriteria criteria) {

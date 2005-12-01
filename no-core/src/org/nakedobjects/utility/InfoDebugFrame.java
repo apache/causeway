@@ -3,9 +3,9 @@ package org.nakedobjects.utility;
 
 public class InfoDebugFrame extends DebugFrame {
     private static final long serialVersionUID = 1L;
-    private DebugInfo info;
+    private DebugInfo[] info;
 
-    protected DebugInfo getInfo() {
+    protected DebugInfo[] getInfo() {
         return info;
     }
 
@@ -13,6 +13,13 @@ public class InfoDebugFrame extends DebugFrame {
      * set the display strategy to use to display the information.
      */
     public void setInfo(DebugInfo info) {
+       this.info = new DebugInfo[] {info};
+    }
+
+    /**
+     * set the display strategies to use to display the information.
+     */
+    public void setInfo(DebugInfo[] info) {
        this.info = info;
     }
 

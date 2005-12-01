@@ -99,7 +99,7 @@ public class DebugString {
     }
 
     public void append(DebugInfo debug) {
-        appendTitle(debug.getDebugTitle());
+//        appendTitle(debug.getDebugTitle());
         append(debug.getDebugData());
     }
     

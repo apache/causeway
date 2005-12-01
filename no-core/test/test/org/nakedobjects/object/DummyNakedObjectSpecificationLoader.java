@@ -41,6 +41,14 @@ public class DummyNakedObjectSpecificationLoader implements NakedObjectSpecifica
         specs.put(specification.getFullName(), specification);
     }
 
+    public String getDebugData() {
+        return null;
+    }
+
+    public String getDebugTitle() {
+        return null;
+    }
+
 }
 
 
