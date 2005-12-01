@@ -15,15 +15,15 @@ import bom.TestObject;
 public class Context extends ApplicationContext {
  
     public Context() {
-   //     addClass(City.class);
+       // addClass(City.class);
     //    addClass(Location.class);
 
-  //      addClass(Customer.class);
-      //  addClass(Booking.class);
+        addClass(Customer.class);
+       addClass(Booking.class);
        addClass(Location.class);
-//        addClass(Telephone.class);
-    //    addClass(CreditCard.class);
-     //   addClass(City.class);
+        addClass(Telephone.class);
+        addClass(CreditCard.class);
+        addClass(City.class);
         //addClass(CopyOfLocation.class);
         
        addClass(TestObject.class);
