@@ -55,7 +55,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     }
 
     private static final UserAction DEBUG_VIEW_OPTION = new DebugViewOption();
-    private static final UserAction DEBUG_OBJECT_OPTION = new DebugObjectOption();
+ //   private static final UserAction DEBUG_OBJECT_OPTION = new DebugObjectOption();
     private static final UserAction DEBUG_DUMP_SNAPSHOT = new DebugDumpSnapshotOption();
 
     private static final Logger LOG = Logger.getLogger(DefaultPopupMenu.class);
@@ -191,7 +191,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
             over.contentMenuOptions(optionSet);
         }
         optionSet.add(MenuOptionSet.DEBUG, DEBUG_VIEW_OPTION);
-        optionSet.add(MenuOptionSet.DEBUG, DEBUG_OBJECT_OPTION);
+//        optionSet.add(MenuOptionSet.DEBUG, DEBUG_OBJECT_OPTION);
         optionSet.add(MenuOptionSet.DEBUG, DEBUG_DUMP_SNAPSHOT);
         optionIdentified = 0;
         backgroundColor = optionSet.getColor();

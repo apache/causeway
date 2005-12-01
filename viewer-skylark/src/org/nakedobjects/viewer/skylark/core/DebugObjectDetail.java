@@ -8,10 +8,10 @@ import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.DebugString;
 
 
-public class DebugObject implements DebugInfo {
+public class DebugObjectDetail implements DebugInfo {
     private final Naked object;
 
-    public DebugObject(final Naked object) {
+    public DebugObjectDetail(final Naked object) {
         this.object = object;
     }
 
@@ -21,45 +21,22 @@ public class DebugObject implements DebugInfo {
         if (object instanceof NakedObject) {
             NakedObject obj = (NakedObject) object;
             dumpObject(obj, debug);
-            debug.blankLine();
-      //      dumpSpecification(obj, debug);
-            debug.blankLine();
-            dumpGraph(obj, debug);
 
         } else if (object instanceof NakedCollection) {
             NakedCollection collection = (NakedCollection) object;
             dumpObject(collection, debug);
-            debug.blankLine();
-       //     dumpSpecification(collection, debug);
-            debug.blankLine();
-            dumpGraph(collection, debug);
         }
         
         return debug.toString();
     }
 
     public String getDebugTitle() {
-        return "Debug: " + object;
-    }
-
-    private void dumpGraph(final Naked object, DebugString info) {
-        if (object != null) {
-            info.appendTitle("GRAPH");
-            Dump.graph(object, info);
-        }
+        return "Object Details";
     }
 
     private void dumpObject(final Naked object, DebugString info) {
         if (object != null) {
-            info.appendTitle("OBJECT");
             Dump.object(object, info);
-        }
-    }
-
-    private void dumpSpecification(Naked object, DebugString info) {
-        if (object != null) {
-            info.appendTitle("SPECIFICATION");
-            Dump.specification(object, info);
         }
     }
 }

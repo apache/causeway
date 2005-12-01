@@ -1,14 +1,13 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.event.ObjectViewingMechanismListener;
-import org.nakedobjects.object.NakedObjectLoader;
-import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.DebugFileDump;
 import org.nakedobjects.utility.DebugFrame;
+import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.utility.configuration.ComponentException;
@@ -67,7 +66,7 @@ public class Viewer {
     private Image doubleBuffer;
     private boolean doubleBuffering = false;
     private Insets insets;
-    private Size internalDisplaySize = new Size(1,1);
+    private Size internalDisplaySize = new Size(1, 1);
     private View keyboardFocus;
     private ObjectViewingMechanismListener listener;
     private View overlayView;
@@ -84,7 +83,7 @@ public class Viewer {
     private final UndoStack undoStack = new UndoStack();
     protected ViewUpdateNotifier updateNotifier;
     private String userStatus;
-    private Vector busy  = new Vector();
+    private Vector busy = new Vector();
 
     public Viewer() {
         instance = this;
@@ -113,7 +112,7 @@ public class Viewer {
         }
         this.clearOverlayView();
     }
-    
+
     public void clearStatus() {
         setStatus("");
     }
@@ -131,10 +130,9 @@ public class Viewer {
 
     // TODO remove this method; use clearOverlay instead
     public void disposeOverlayView() {
-    /*    if (overlayView != null) {
-            overlayView.dispose();
-        }
-        */
+        /*
+         * if (overlayView != null) { overlayView.dispose(); }
+         */
         clearOverlayView();
     }
 
@@ -243,9 +241,9 @@ public class Viewer {
         String factoryName = NakedObjects.getConfiguration().getString(SPECIFICATION_BASE + name);
         ViewSpecification spec;
         if (factoryName != null) {
-            spec= (ViewSpecification) ComponentLoader.loadComponent(factoryName, ViewSpecification.class);
+            spec = (ViewSpecification) ComponentLoader.loadComponent(factoryName, ViewSpecification.class);
         } else {
-            spec= (ViewSpecification) ComponentLoader.loadComponent(cls.getName(), ViewSpecification.class);
+            spec = (ViewSpecification) ComponentLoader.loadComponent(cls.getName(), ViewSpecification.class);
         }
         return spec;
     }
@@ -285,7 +283,7 @@ public class Viewer {
     }
 
     public void markDamaged(Bounds bounds) {
-        if(spy != null) {
+        if (spy != null) {
             spy.addDamagedArea(bounds);
         }
         synchronized (redrawArea) {
@@ -334,38 +332,29 @@ public class Viewer {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug notification receivers...") {
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug system...") {
             public void execute(Workspace workspace, View view, Location at) {
                 InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(updateNotifier);
+                f.setInfo(new DebugInfo[] { NakedObjects.debug(), NakedObjects.getObjectPersistor(),
+                        NakedObjects.getObjectLoader(), NakedObjects.getConfiguration(), NakedObjects.getSpecificationLoader(),
+                        updateNotifier });
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
+        
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object persistor") {
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug viewer...") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjectPersistor om = NakedObjects.getObjectPersistor();
                 InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(om);
+                f.setInfo(new DebugInfo[] { Skylark.getViewFactory(),
+                        updateNotifier });
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
-
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug object loader") {
+        
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug overlay...") {
             public void execute(Workspace workspace, View view, Location at) {
-                NakedObjectLoader om = NakedObjects.getObjectLoader();
-                InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(om);
-                f.show(at.x + 50, workspace.getBounds().y + 6);
-            }
-        });
-
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug repository") {
-            public void execute(Workspace workspace, View view, Location at) {
-                InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(NakedObjects.debug());
+                DebugFrame f = new OverlayDebugFrame(Viewer.this);
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
@@ -375,22 +364,6 @@ public class Viewer {
                 DebugFileDump.dump(NakedObjects.debug());
             }
         });
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug overlay...") {
-            public void execute(Workspace workspace, View view, Location at) {
-                DebugFrame f = new OverlayDebugFrame(Viewer.this);
-                f.show(at.x + 50, workspace.getBounds().y + 6);
-            }
-        });
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug prototypes...") {
-            public void execute(Workspace workspace, View view, Location at) {
-                InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(Skylark.getViewFactory());
-                f.show(at.x + 50, workspace.getBounds().y + 6);
-            }
-        });
-
     }
 
     public void mouseMoved(Location location) {
@@ -432,18 +405,18 @@ public class Viewer {
         Canvas c = new DrawingCanvas(bufferGraphics, r.x, r.y, r.width, r.height);
         // Canvas c = new Canvas(bufferGraphics, 0, 0, w, h);
 
-        if(spy != null) {
+        if (spy != null) {
             spy.redraw(r, redrawCount);
         }
         if (AbstractView.debug) {
             LOG.debug("------ repaint viewer #" + redrawCount + " " + r.x + "," + r.y + " " + r.width + "x" + r.height);
         }
 
-        //paint icons
+        // paint icons
 
         // paint views
         if (rootView != null) {
-            rootView.draw(c.createSubcanvas()); //rootView.getBounds()));
+            rootView.draw(c.createSubcanvas()); // rootView.getBounds()));
         }
 
         // paint overlay
@@ -517,21 +490,21 @@ public class Viewer {
 
     private void popupStatus(View over, boolean forView, boolean includeExploration, boolean includeDebug) {
         StringBuffer status = new StringBuffer("Menu for ");
-        if(forView) {
+        if (forView) {
             status.append("view ");
-            status.append(    over.getSpecification().getName());
+            status.append(over.getSpecification().getName());
         } else {
             status.append("object: ");
             Content content = over.getContent();
             status.append(content.title());
         }
-        if(includeDebug || includeExploration) {
+        if (includeDebug || includeExploration) {
             status.append(" (includes ");
-            if(includeExploration) {
+            if (includeExploration) {
                 status.append("exploration");
             }
-            if(includeDebug) {
-                if(includeExploration) {
+            if (includeDebug) {
+                if (includeExploration) {
                     status.append(" & ");
                 }
                 status.append("debug");
@@ -548,7 +521,7 @@ public class Viewer {
     void repaint() {
         updateNotifier.invalidateViewsForChangedObjects();
         synchronized (redrawArea) {
-	        rootView.layout();
+            rootView.layout();
             if (!redrawArea.equals(NO_REDRAW)) {
                 UI_LOG.debug("repaint viewer " + redrawArea);
                 Bounds area = new Bounds(redrawArea);
@@ -652,9 +625,9 @@ public class Viewer {
             viewFactory.addCompositeRootViewSpecification(new DataFormSpecification());
             viewFactory.addCompositeRootViewSpecification(new ListSpecification());
             viewFactory.addCompositeRootViewSpecification(new TableSpecification());
-            //            viewFactory.addCompositeRootViewSpecification(new
+            // viewFactory.addCompositeRootViewSpecification(new
             // BarchartSpecification());
-            //           viewFactory.addCompositeRootViewSpecification(new
+            // viewFactory.addCompositeRootViewSpecification(new
             // GridSpecification());
             viewFactory.addCompositeRootViewSpecification(new TreeBrowserSpecification());
         }
@@ -773,7 +746,7 @@ public class Viewer {
         for (int i = 0; i < subviews.length; i++) {
             subviews[i].invalidateLayout();
         }
-        
+
         Size size = rootView.getRequiredSize();
         rootView.setSize(size);
 
@@ -813,7 +786,7 @@ public class Viewer {
     }
 
     public void addSpyAction(String actionMessage) {
-        if(spy != null) {
+        if (spy != null) {
             spy.addAction(actionMessage);
         }
     }
@@ -829,31 +802,26 @@ public class Viewer {
     }
 
     public boolean isBusy(View view) {
-//        return busy.contains(view);
+        // return busy.contains(view);
         return busy.size() > 0;
     }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

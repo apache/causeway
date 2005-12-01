@@ -13,9 +13,10 @@ public class OverlayDebugFrame extends DebugFrame {
         this.viewer = viewer;
     }
     
-    protected DebugInfo getInfo() {
+    protected DebugInfo[] getInfo() {
         View overlay = viewer.getOverlayView();
-        return new DebugView(overlay == null ? new EmptyView() : overlay);
+        DebugView debugView = new DebugView(overlay == null ? new EmptyView() : overlay);
+        return new DebugInfo[] {debugView};
     }
     
     class EmptyView extends AbstractView {
