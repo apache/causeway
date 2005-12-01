@@ -66,6 +66,19 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
         if (header != null) {
             details.append(header);
         }
+
+        if (addInfo) {
+            String user = System.getProperty("user.name");
+            String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") "
+                    + System.getProperty("os.version");
+            String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
+            String version = AboutNakedObjects.getFrameworkVersion() + " " + AboutNakedObjects.getFrameworkBuild();
+
+            LoggingEvent infoEvent = new LoggingEvent("", Logger.getRootLogger(), Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system
+                    + "\n\t" + java + "\n\t" + version, null);
+            details.append(layout.format(infoEvent));
+        }
+
         int len = buffer.length();
         String message = "";
         for (int i = 0; i < len; i++) {
@@ -82,22 +95,6 @@ public abstract class SnapshotAppender extends AppenderSkeleton {
                 }
             }
         }
-        
-        if (addInfo) {
-            String user = System.getProperty("user.name");
-            String system = System.getProperty("os.name") + " (" + System.getProperty("os.arch") + ") "
-                    + System.getProperty("os.version");
-            String java = System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version");
-            String version = AboutNakedObjects.getFrameworkVersion() + " " + AboutNakedObjects.getFrameworkBuild();
-
-            LoggingEvent infoEvent = new LoggingEvent("", Logger.getRootLogger(), Level.INFO, "Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system
-                    + "\n\t" + java + "\n\t" + version, null);
-            // Logger.getRootLogger().info("Snapshot:- " + new Date() + "\n\t" + user + "\n\t" + system +
-            // "\n\t" + java + "\n\t" + version);
-            
-            details.append(layout.format(infoEvent));
-        }
-
 
         String footer = layout.getFooter();
         if (footer != null) {

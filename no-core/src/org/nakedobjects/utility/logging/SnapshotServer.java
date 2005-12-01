@@ -30,7 +30,7 @@ public class SnapshotServer {
         String prefix = "nakedobjects.snapshotserver.";
         port = c.getInteger(prefix + "port", 9289);
         directoryPath = c.getString(prefix + "directory", ".");
-        fileName = c.getString(prefix + "filename", "log");
+        fileName = c.getString(prefix + "filename", "log-snapshot-");
         extension = c.getString(prefix + "extension", "txt");
         
         ServerSocket server;
