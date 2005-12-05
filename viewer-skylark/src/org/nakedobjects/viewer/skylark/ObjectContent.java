@@ -135,7 +135,7 @@ public abstract class ObjectContent extends AbstractContent {
             });
         }
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Class...") {
+        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Class...") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
@@ -148,7 +148,7 @@ public abstract class ObjectContent extends AbstractContent {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Clone...") {
+        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Clone...") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
