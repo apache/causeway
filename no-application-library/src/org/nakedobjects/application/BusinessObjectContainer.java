@@ -17,16 +17,18 @@ public interface BusinessObjectContainer {
 
     boolean hasInstances(Class cls);
 
+    void init();
+
     void makePersistent(Object transientObject);
 
     int numberOfInstances(Class cls);
 
-    void resolve(Object parent, Object object);
+    void objectChanged(Object object);
 
+    void resolve(Object parent, Object object);
+    
     long serialNumber(String sequence);
 
-    void objectChanged(Object object);
-    
     void userMessage(String text);
 }
 
