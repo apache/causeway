@@ -3,7 +3,7 @@
 	<!ENTITY xxdistribution SYSTEM "file:../build-templates/distribution-build.xml">
 ]>
 
-<project name="Naked Objects framework - java version"
+<project name="Naked Objects Framework - Java Version"
          default="check"
          basedir=".">
 
@@ -297,7 +297,7 @@
 
 		<!-- generate javadocs -->
 		<javadoc destDir="${dist.api.dir}"
-		         windowtitle="Naked Objects ${distribution} API version ${build.version}"
+		         windowtitle="Naked Objects API version ${build.version}${build.number}"
 		         additionalparam="-breakiterator -tag group -tag testpackage -tag testcase -tag testkind -tag testfamily -tag testsetup -tag testedclass -tag property">
 
 			<classpath refid="libs.external" />
