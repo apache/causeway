@@ -218,8 +218,8 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         LOG.info("initialising " + this);
         Assert.assertNotNull("persist algorithm required", persistAlgorithm);
         Assert.assertNotNull("object store required", objectStore);
-        persistAlgorithm.init();
         objectStore.init();
+        persistAlgorithm.init();
     }
 
     private boolean isPersistent(NakedReference object) {
