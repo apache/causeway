@@ -21,21 +21,23 @@ public class SingleLineTextField extends TextField {
 
     protected void align() {
         String line = textContent.getText(0);
-        int maxWidth = getMaxWidth();
-        int leftLimit = offset + LIMIT;
-        int rightLimit = offset + maxWidth - LIMIT;
-        
-        if(cursor.getCharacter() > line.length()) {
-            cursor.end();
-        }
-        
-        int cursorPosition = style.stringWidth( line.substring(0, cursor.getCharacter()));
-        if(cursorPosition > rightLimit) {
-            offset = offset + (cursorPosition - rightLimit);
-            offset = Math.min(style.stringWidth(line), offset);            
-        } else if(cursorPosition < leftLimit) {
-            offset = offset - (leftLimit - cursorPosition);
-            offset = Math.max(0, offset);
+        if(line != null) {
+            int maxWidth = getMaxWidth();
+            int leftLimit = offset + LIMIT;
+            int rightLimit = offset + maxWidth - LIMIT;
+            
+            if(cursor.getCharacter() > line.length()) {
+                cursor.end();
+            }
+            
+            int cursorPosition = style.stringWidth( line.substring(0, cursor.getCharacter()));
+            if(cursorPosition > rightLimit) {
+                offset = offset + (cursorPosition - rightLimit);
+                offset = Math.min(style.stringWidth(line), offset);            
+            } else if(cursorPosition < leftLimit) {
+                offset = offset - (leftLimit - cursorPosition);
+                offset = Math.max(0, offset);
+            }
         }
     }
     
@@ -47,10 +49,11 @@ public class SingleLineTextField extends TextField {
         int to = selection.to().getCharacter();
 
         String line = textContent.getText(0);
-        
-        int start = style.stringWidth(line.substring(0, from));
-        int end = style.stringWidth(line.substring(0, to));
-        canvas.drawSolidRectangle(start + (HPADDING), top, end - start, style.getLineHeight(), Style.PRIMARY3);
+        if(line != null) {
+            int start = style.stringWidth(line.substring(0, from));
+            int end = style.stringWidth(line.substring(0, to));
+            canvas.drawSolidRectangle(start + (HPADDING), top, end - start, style.getLineHeight(), Style.PRIMARY3);
+        }
     }
 
     protected void drawLines(Canvas canvas, Color color, int width) {
