@@ -1,5 +1,6 @@
 package org.nakedobjects.app;
 
+import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.AdapterFactory;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -63,7 +64,7 @@ public class NakedObjectsSystem {
 
             setUpLocale(configuration.getString("locale"));
 
-            ObjectStorePersistor objectManager = createObjectManager();
+            ObjectStorePersistor objectManager = createObjectPersistor();
             NakedObjectSpecificationLoader specificationLoader = createSpecificationLoader();
             AdapterFactory adapterFactory = createReflectorFactory();
             ObjectLoaderImpl objectLoader = createObjectLoader();
@@ -71,8 +72,8 @@ public class NakedObjectsSystem {
             NakedObjectsClient nakedObjects = setupNakedObjects(configuration, objectManager, specificationLoader,
                     adapterFactory, objectLoader);
             nakedObjects.init();
-        } catch (Exception e) {
-            LOG.error("Exploration startup problem", e);
+//        } catch (Exception e) {
+//            LOG.error("Exploration startup problem", e);
         } finally {
             if (splash != null) {
                 splash.removeAfterDelay(4);
@@ -96,11 +97,15 @@ public class NakedObjectsSystem {
     }
 
     protected ObjectLoaderImpl createObjectLoader() {
-        JavaBusinessObjectContainer container = new JavaBusinessObjectContainer();
+        BusinessObjectContainer container = new JavaBusinessObjectContainer();
+     //   container.init();
         JavaObjectFactory objectFactory = new JavaObjectFactory();
         objectFactory.setContainer(container);
+        
+        JavaAdapterFactory adapterFactory = new JavaAdapterFactory();
 
         ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
+        objectLoader.setAdapterFactory(adapterFactory);
         objectLoader.setObjectFactory(objectFactory);
         objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
         objectLoader.setIdentityAdapterMap(new IdentityAdapterHashMap());
@@ -122,17 +127,17 @@ public class NakedObjectsSystem {
         return specificationLoader;
     }
 
-    protected ObjectStorePersistor createObjectManager() {
+    protected ObjectStorePersistor createObjectPersistor() {
         TransientObjectStore objectStore = new TransientObjectStore();
         OidGenerator oidGenerator = new SimpleOidGenerator();
 
         DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
         persistAlgorithm.setOidGenerator(oidGenerator);
 
-        ObjectStorePersistor objectManager = new ObjectStorePersistor();
-        objectManager.setObjectStore(objectStore);
-        objectManager.setPersistAlgorithm(persistAlgorithm);
-        return objectManager;
+        ObjectStorePersistor objectPersistor = new ObjectStorePersistor();
+        objectPersistor.setObjectStore(objectStore);
+        objectPersistor.setPersistAlgorithm(persistAlgorithm);
+        return objectPersistor;
     }
 
     private void setUpLocale(String localeSpec) {
