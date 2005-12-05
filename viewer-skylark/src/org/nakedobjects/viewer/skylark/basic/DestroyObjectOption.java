@@ -34,8 +34,10 @@ public class DestroyObjectOption extends MenuOption {
 */		
         // TODO remove any views in the instance collections
         
-        NakedObjectPersistor manager = NakedObjects.getObjectPersistor();
-        manager.destroyObject(object);
+        NakedObjectPersistor persistor = NakedObjects.getObjectPersistor();
+        persistor.startTransaction();
+        persistor.destroyObject(object);
+        persistor.endTransaction();
         workspace.removeViewsFor(object);
 	}
 }
