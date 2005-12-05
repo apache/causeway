@@ -76,6 +76,9 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     public boolean hasInstances(Class cls) {
         return objectManager().hasInstances(getSpecification(cls), false);
     }
+    
+    public void init() {
+    }
 
     public void makePersistent(Object transientObject) {
         NakedObject adapter = adapterFor(transientObject);
