@@ -6,5 +6,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/no-core"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/no-default-reflector"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/no-system"/>
+	<classpathentry kind="lib" path="mysql-connector-java-3.1.12-bin.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

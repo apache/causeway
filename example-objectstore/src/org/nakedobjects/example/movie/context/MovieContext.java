@@ -1,22 +1,19 @@
-package org.nakedobjects.example.movie.exploration;
+package org.nakedobjects.example.movie.context;
 
-import org.nakedobjects.example.ecs.fixtures.BookingsFixture;
-import org.nakedobjects.example.ecs.fixtures.CitiesFixture;
-import org.nakedobjects.example.ecs.fixtures.ClassesFixture;
-import org.nakedobjects.example.exploration.JavaExploration;
+import org.nakedobjects.example.movie.bom.Movie;
+import org.nakedobjects.example.movie.bom.Person;
+import org.nakedobjects.object.defaults.ApplicationContext;
 
 
-public class EcsExploration {
+public class MovieContext extends ApplicationContext {
+ 
+    public MovieContext() {
+        addClass(Movie.class);
+        addClass(Person.class);
+    }
 
-    public static void main(String[] args) {
-        JavaExploration e = new JavaExploration();
-        
-        CitiesFixture cities;
-        e.addFixture(cities = new CitiesFixture());
-        e.addFixture(new BookingsFixture(cities));
-        e.addFixture(new ClassesFixture());
-        
-        e.display();
+    public String getName() {
+        return "ECS Bookings";
     }
 }
 

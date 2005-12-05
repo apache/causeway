@@ -1,5 +1,7 @@
 package org.nakedobjects.example.movie.bom;
 
+import org.nakedobjects.application.control.ActionAbout;
+
 import java.util.Vector;
 
 
@@ -38,6 +40,17 @@ public class Movie {
 
     public String title() {
         return name;
+    }
+    
+    public static void aboutActionFindMovie(ActionAbout about, String name, Person director, Person actor) {
+        about.setParameter(0, "Name");
+        about.setParameter(1, "Director");
+        about.setParameter(2, "Actor");
+    }
+    
+    public static Movie[] actionFindMovie(String name, Person director, Person actor) {
+ //       return MovieFinder.getFinder().findMovies(name, director, actor);
+        return new Movie[0];
     }
 }
 
