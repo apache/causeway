@@ -162,7 +162,7 @@ public class TextContent {
     public String getText(int forLine) {
         TextBlockReference block = getBlockFor(forLine);
         if (block == null) {
-            return null;
+            return "";
         }
         return block.block.getLine(block.line);
     }
