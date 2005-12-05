@@ -17,6 +17,7 @@ import org.nakedobjects.viewer.skylark.basic.EmptyField;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
+import org.nakedobjects.viewer.skylark.core.DebugDumpSnapshotOption;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
 import org.nakedobjects.viewer.skylark.core.DrawingCanvas;
 import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
@@ -249,7 +250,7 @@ public class Viewer {
     }
 
     private MenuOption loggingOption(String name, final Level level) {
-        return new MenuOption("Log " + level + " " + name + "...") {
+        return new MenuOption("Log level " + level) {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(LogManager.getRootLogger().getLevel() != level);
             }
@@ -358,6 +359,8 @@ public class Viewer {
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
+   
+        options.add(MenuOptionSet.DEBUG, new DebugDumpSnapshotOption());
     }
 
     public void mouseMoved(Location location) {
