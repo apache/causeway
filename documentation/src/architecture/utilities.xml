@@ -9,32 +9,33 @@
 
   <subheading>About</subheading>
 
-  <para>The NOF provides a static class <class>AboutNakedObjects</class> in the
-  <path>org.nakedobjects.utility</path> package that is used by the famework, and can be
-  used elsewhere, to display information about the framework and the
-  application being run. This includes titles, versions and copyright
-  messages. The details about the framework are hard code when the framework
-  is build, but details about the application can be set at runtime.</para>
+  <para>The NOF provides a static class <class>AboutNakedObjects</class> in
+  the <path>org.nakedobjects.utility</path> package that is used by the
+  famework, and can be used elsewhere, to display information about the
+  framework and the application being run. This includes titles, versions and
+  copyright messages. The details about the framework are hard code when the
+  framework is build, but details about the application can be set at
+  runtime.</para>
 
-    <block>
-      <label><method>setApplicationName(String) </method></label>
+  <block>
+    <label><method>setApplicationName(String) </method></label>
 
-      <para>Allows you to programmatically specify the application name for
-      your application.</para>
-    </block>
+    <para>Allows you to programmatically specify the application name for your
+    application.</para>
+  </block>
 
-    <block>
-      <label><method>setApplicationCopyrightNotice(String)</method></label>
+  <block>
+    <label><method>setApplicationCopyrightNotice(String)</method></label>
 
-      <para>Allows you to programmatically specify a copyright notice for your
-      application.</para>
-    </block>
+    <para>Allows you to programmatically specify a copyright notice for your
+    application.</para>
+  </block>
 
-    <block>
-      <label><method>setApplicationVersion(String)</method></label>
+  <block>
+    <label><method>setApplicationVersion(String)</method></label>
 
-      <para>Allows you to programmatically specify the version.</para>
-    </block>
+    <para>Allows you to programmatically specify the version.</para>
+  </block>
 
   <para>These details and details about the framework can be accessed using
   the static accessors.</para>
@@ -51,134 +52,4 @@
   removed using the <method>removeImmediately</method> and
   <method>removeAfterDelay</method> methods. The parameter for delaying
   version is the number of seconds it should remain on the screen for.</para>
-
-  <subheading>Dump</subheading>
-
-  <para>The <class>org.nakedobjects.object.Dump</class> class provides a
-  simple way out outputting the details of adapters and specifications. The
-  two <method>specification </method>methods detail the specified
-  <class>NakedObjectSpecification</class> as follows:- </para>
-
-  <property-listing>Full Name: bom.Location
-Short Name: Location
-Plural Name: Locations
-Singular Name: Location
-
-Abstract: false
-Lookup: false
-Object: true
-Value: false
-Persistable: User Persistable
-Superclass: java.lang.Object
-Subclasses: empty
-Interfaces: bom.Common
-Fields
-    OneToOneAssociationImpl@1408a92 [type=VALUE,id=type,label='Type',derived=false,type=Option]
-    OneToOneAssociationImpl@4977e2 [type=VALUE,id=knownas,label='Known As',derived=false,type=TextString]
-    OneToOneAssociationImpl@15db13f [type=VALUE,id=streetaddress,label='Street Address',derived=false,type=TextString]
-    OneToOneAssociationImpl@1fc1a6 [type=OBJECT,id=city,label='City',derived=false,type=City]
-    OneToOneAssociationImpl@e29820 [type=OBJECT,id=customer,label='Customer',derived=false,type=Customer]
-Object Actions
-    Action [id=newbooking,label='New Booking',type=USER,returns=org.nakedobjects.reflector.java.reflect.JavaSpecification@1ff0dde,parameters={org.nakedobjects.reflector.java.reflect.JavaSpecification@64ea66}]
-    Action [id=otherlocations,label='Other Locations',type=USER,returns=org.nakedobjects.reflector.java.reflect.JavaSpecification@16f70a4,parameters={}]
-    Action [id=createtransientcopy,label='Create Transient Copy',type=USER,returns=org.nakedobjects.reflector.java.reflect.JavaSpecification@64ea66,parameters={}]
-    Action [id=changecity,label='Change City',type=USER,returns=null,parameters={org.nakedobjects.reflector.java.reflect.JavaSpecification@15093f1}]
-    Action [id=slowaction,label='Slow Action',type=USER,returns=null,parameters={org.nakedobjects.reflector.java.reflect.JavaSpecification@14c5b37}]
-    Action [id=slowaction,label='Slow Action',type=USER,returns=null,parameters={}]
-    Action [id=explorationmethod,label='Exploration Method',type=EXPLORATION,returns=null,parameters={}]
-    Action [id=debugmethod,label='Debug Method',type=DEBUG,returns=null,parameters={}]
-Class Actions
-    Action [id=slowclassaction,label='Slow Class Action',type=USER,returns=null,parameters={org.nakedobjects.reflector.java.reflect.JavaSpecification@14c5b37}]
-    Action [id=slowclassaction,label='Slow Class Action',type=USER,returns=null,parameters={}]</property-listing>
-
-  <para>The two <method>object</method> methods detail the specified
-  <class>Naked</class> object as follows:- </para>
-
-  <property-listing>Specification: bom.Location
-Class: bom.Location
-Adapter: org.nakedobjects.object.defaults.PojoAdapter
-Hash: #dada24
-Title: test, Fort Worth
-Object: bom.Location@18e4327
-OID: OID#2F
-State: ResolveState@1e1be92 [name=Resolved,code=PR]
-Version: LongNumberVersion#1 20051118-025400170
-Icon: null
-Persistable: User Persistable</property-listing>
-
-  <para>The two <method>graph</method> methods detail the specified
-  <class>Naked</class> object as follows, showing each adapter, it associated
-  objects and values:- </para>
-
-  <property-listing>PojoAdapter@dada24 [PR:OID#2F,specification=Location,version=LongNumberVersion#1 20051118-025400170,title=test, Fort Worth,pojo-hash=#18e4327]
-    +--type: POJO BusinessValueAdapter: One
-    +--knownas: POJO TextStringAdapter: test
-    +--streetaddress: POJO TextStringAdapter: address
-    +--city: PojoAdapter@b51404 [PR:OID#C,specification=City,version=LongNumberVersion#1 20051118-025141321,title=Fort Worth,pojo-hash=#c68a98]
-    |    +--name: POJO TextStringAdapter: Fort Worth
-    +--customer: PojoAdapter@92dcdb [PR:OID#1C,specification=Customer,version=LongNumberVersion#1 20051118-025141341,title=Richard Pawson,pojo-hash=#19ec4ed]
-    |    +--firstname: POJO TextStringAdapter: Richard
-    |    +--lastname: POJO TextStringAdapter: Pawson
-    |    +--phonenumbers: VectorCollectionAdapter@1d381d2 [PR:-,specification=Vector,version=null,title='Vector',vector=[bom.Telephone@c3c315, bom.Telephone@1328c7a, bom.Telephone@121177e]]
-    |    |    +--PojoAdapter@3c9c31 [PR:OID#1D,specification=Telephone,version=LongNumberVersion#1 20051118-025141341,title=Home,pojo-hash=#c3c315]
-    |    |    |    +--number: POJO TextStringAdapter: 617/211 2899
-    |    |    |    +--knownas: POJO TextStringAdapter: Home
-    |    |    |    +--unmodifiable: POJO LogicalAdapter: false
-    |    |    |    +--hidefields: POJO LogicalAdapter: false
-    |    |    |    +--reversed: StringAdapter: 9982 112/716
-    |    |    +--PojoAdapter@1a4ded3 [PR:OID#1E,specification=Telephone,version=LongNumberVersion#1 20051118-025141341,title=Office,pojo-hash=#1328c7a]
-    |    |    |    +--number: POJO TextStringAdapter: 617/353 9828
-    |    |    |    +--knownas: POJO TextStringAdapter: Office
-    |    |    |    +--unmodifiable: POJO LogicalAdapter: false
-    |    |    |    +--hidefields: POJO LogicalAdapter: false
-    |    |    |    +--reversed: StringAdapter: 8289 353/716
-    |    |    +--nameoncard: POJO TextStringAdapter: MR R Pawson
-    |    |
-    | </property-listing>
-
-  <subheading>Logger</subheading>
-
-  <para>The abstract <class>org.nakedobjects.utility.Logger</class> class
-  provide a mechanism to log details to either the Log4J logging mechanism or
-  to a separate file. It is useful for creating decorators that log the
-  activity in particular classes. This is used in the NOF for logging the use
-  of the NakedObjectPersistor and the Distribution classes (see
-  <class>org.nakedobject.object.persistence.ObjectPersistorLogger</class> and
-  <class>org.nakedobject.distribution.DistributionLogger</class>).</para>
-
-  <minorheading>Defining a logger</minorheading>
-
-  <para>To define a logger extend the Logger class, providing a suitable
-  constructor, and implement the getDecoratedClass so it passes back the
-  <class>Class</class> object of the class being decorated (this allows the
-  Log4J logger to log messages as that class rather than as a separate class).
-  Within the subclass you can use the following methods:</para>
-
-    <block>
-      <label><method>void log(String message) </method></label>
-
-      <para>output a log entry with the specified message.</para>
-    </block>
-
-    <block>
-      <label><method>void log(String message, Object result) </method></label>
-
-      <para>output a log entry with the specified message and the specified
-      result. This is useful when needing to show both the entry and exit
-      states, or the paramters and the return value.</para>
-    </block>
-
-    <block>
-      <label><method>void close() </method></label>
-
-      <para>closes the file that is being written to.</para>
-    </block>
-
-  <minorheading>Using a logger</minorheading>
-
-  <para>When setting up the logger pass into the constructor the name of the
-  file to write to, and flag if you also wish to log to the Log4J logger. If
-  the filename specified is <variable>null</variable> then the log messages
-  will not be written to a file. When logging is complete or is to be turned
-  of call the <method>close</method> method.</para>
 </section>

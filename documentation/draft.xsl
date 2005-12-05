@@ -157,7 +157,7 @@
         
           <fo:flow flow-name="xsl-region-body">
                 <xsl:apply-templates select="."/>
-                <block/>
+                <fo:block/>
            </fo:flow>
         </fo:page-sequence>
     </xsl:for-each>
@@ -318,7 +318,7 @@
         
           <fo:flow flow-name="xsl-region-body">
                 <xsl:apply-templates select="."/>
-                <block/>
+                <fo:block/>
            </fo:flow>
         </fo:page-sequence>
          </xsl:for-each>
@@ -547,6 +547,30 @@
       keep-together="always"
       white-space-collapse="false"
       space-after="9px"
+      padding="6px"
+    border-style="solid"
+    border-width="0.1mm"
+      >
+      <xsl:apply-templates/> 
+    </fo:block>
+  </xsl:template>
+
+
+  <xsl:template match ="output-listing">
+    <fo:block font-weight="normal"
+      font-size="9pt"
+      font-family="monospace"
+      color="red"
+      text-align="start"
+      start-indent="0cm"
+      padding-before="10pt"
+      padding-after="10pt"
+      keep-together="always"
+      white-space-collapse="false"
+      space-after="9px"
+      padding="6px"
+    border-style="solid"
+    border-width="0.1mm"
       >
       <xsl:apply-templates/> 
     </fo:block>
@@ -563,6 +587,9 @@
       white-space-collapse="true"
       text-align="start"
       margin-left=".5in"
+      padding="6px"
+    border-style="solid"
+    border-width="0.1mm"
     >
       <xsl:apply-templates/> 
     </fo:block>
@@ -577,6 +604,9 @@
       start-indent="0cm"
       white-space-collapse="false"
       space-after="9px"
+      padding="6px"
+        border-style="solid"
+        border-width="0.1mm"
       >
       <xsl:apply-templates/> 
     </fo:block>
@@ -653,7 +683,7 @@
   </xsl:template>
   
 
-  <xsl:template match ="inline-graphic">
+  <xsl:template match ="inline-graphic|screenshot">
     <fo:block
       space-before="0px"
       space-after="10px"
@@ -662,7 +692,7 @@
         background-color="white"
         >
         <xsl:attribute name="src"><xsl:value-of select="@fileref"/></xsl:attribute>
-        <xsl:attribute name="width">127mm</xsl:attribute>
+        <!--xsl:attribute name="width">127mm</xsl:attribute-->
         <!--xsl:if test="@width='80%'">
           <xsl:attribute name="width">127mm</xsl:attribute>
         </xsl:if-->
@@ -765,7 +795,7 @@
           </fo:inline>
           <fo:footnote-body>
             <fo:block font-size="8pt">
-              <fo:inline baseline-shift="200%" font-size="75%">
+              <fo:inline baseline-shift="super" font-size="75%">
                 <xsl:number level="any" count="weblink|note"  format="(1) "/>
               </fo:inline>
               <xsl:value-of select="@address"/>
@@ -828,7 +858,7 @@
     space-after="12pt"
     padding="6px"
     border-style="solid"
-    border-width="1px"
+    border-width="0.1mm"
     >
     
     

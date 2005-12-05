@@ -15,7 +15,7 @@
    note|anchor|comment|weblink|ref|see">
 
 <!ENTITY  % section-elements "heading|subheading|minorheading|para|block|list|program-listing|
-   command-listing|property-listing|inline-graphic|figure|panel|
+   output-listing|command-listing|property-listing|screenshot|inline-graphic|figure|panel|
    comment|index|anchor|biblio|include|javadoc">
 
 <!-- publication - made up of a number of sections -->
@@ -57,7 +57,7 @@ contain other sections -->
 <!ELEMENT block (label,(para|index|program-listing|command-listing|screenshot|note)*)>
 <!ELEMENT label (%para-elements;)*>
 
-<!ELEMENT list (para|item|item2|comment|index|el)*>
+<!ELEMENT list (para|item|comment|index|el)*>
 <!ELEMENT el (%text;|%code;)*>
 <!ELEMENT item (para|index|program-listing|command-listing|screenshot|note)*>
 
@@ -78,8 +78,17 @@ contain other sections -->
   xml:space (preserve) #FIXED 'preserve'
 >
 
-<!ELEMENT screenshot (%text;)*>
+<!ELEMENT output-listing (%text;)*>
+<!ATTLIST output-listing
+  xml:space (preserve) #FIXED 'preserve'
+>
 
+<!ELEMENT screenshot (%text;)*>
+<!ATTLIST screenshot
+    fileref CDATA #REQUIRED   width CDATA  "80%"
+   	wrap (yes|no) "no"
+	side (left|centre|right|inside|outside) "centre">
+        
 <!ELEMENT property-listing (%text;)*>
 <!ATTLIST property-listing
   xml:space (preserve) #FIXED 'preserve'

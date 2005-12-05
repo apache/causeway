@@ -13,10 +13,19 @@
 		<delete dir="${dest.dir}" />
 	</target>
 
+	<target name="-init">
+ 		<mkdir dir="${dest.dir}" />
+		<mkdir dir="${dest.dir}/images" />
+        
+        <copy todir="${dest.dir}/images" flatten="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.png" />
+				<include name="**/*.svg" />
+			</fileset>
+		</copy>
+    </target>
 
-	<target name="javadoc">
-		<mkdir dir="${dest.dir}" />
-		
+	<target name="javadoc" depends="-init">
 		<javadoc destdir="${dest.dir}"
             doclet="org.apache.maven.jellydoc.XMLDoclet"
             docletpath="maven-jellydoc-plugin-2.3.1.jar;dom4j-1.6.1.jar">
@@ -27,7 +36,7 @@
 	</target>
 
 
-	<target name="pdf" description="Generates a single PDF file">
+	<target name="pdf" depends="-init" description="Generates a single PDF file">
 		<property name="fop.dir" value="C:/Program Files/Java/fop-0.20.5" />
 		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
 			<classpath>
@@ -38,17 +47,6 @@
 			</classpath>
 		</taskdef>
 
-		<mkdir dir="${dest.dir}" />
-        
-        <copy todir="${dest.dir}" flatten="true">
-			<fileset dir="${src.dir}">
-				<include name="**/*.png" />
-				<include name="**/*.jpg" />
-				<include name="**/*.eps" />
-				<include name="**/*.svg" />
-			</fileset>
-		</copy>
-        
 		<xslt in="${src.dir}/manual.xml" out="${dest.dir}/merge.xml" style="merge.xsl" />
 
           <xslt in="${dest.dir}/merge.xml"
@@ -70,8 +68,6 @@
 
 
 	<target name="html">
-		<mkdir dir="${dest.dir}" />
-
 		<xslt in="${src.dir}/notebook.xml"
 		      out="${dest.dir}/index.html"
 		      style="html-set.xsl" />

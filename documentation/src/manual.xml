@@ -77,6 +77,8 @@
 
     <include file="prototype/domain-objects.xml" />
 
+    <include file="prototype/tests.xml" />
+
     <include file="prototype/preferences.xml" />
 
     <include file="prototype/dom-services.xml" />
@@ -90,6 +92,8 @@
     <include file="enterprise/running.xml" />
 
     <include file="enterprise/configuration.xml" />
+
+    <include file="enterprise/debugging.xml" />
 
     <include file="enterprise/persistence.xml" />
 
@@ -118,90 +122,5 @@
 
   <section numbered="on">
     <title>Reference</title>
-
-    <comment>Section: Developing a DOM - Using the Naked Objects Framework to
-    produce an Application</comment>
-
-    <include file="architecture/introduction.xml" />
-
-    <comment>Section to add: DOM Library and Container</comment>
-
-    <include file="architecture/reflection.xml" />
-
-    <include file="architecture/object loading.xml" />
-
-    <include file="architecture/object persistence.xml" />
-
-    <include file="architecture/session.xml" />
-
-    <include file="architecture/adapters.xml" />
-
-    <include file="architecture/repository.xml" />
-
-    <include file="architecture/configuration.xml" />
-
-    <include file="architecture/utilities.xml" />
-
-    <include file="filename-convention.xml" />
-  </section>
-
-  <section numbered="on">
-    <title>Old part I</title>
-
-    <comment>this section to be reworked</comment>
-
-    <include file="introduction.xml" />
-
-    <include file="how no works.xml" />
-
-    <include file="running an example.xml" />
-
-    <include file="properties-configuration.xml" />
-
-    <include file="configuring and running.xml" />
-
-    <include file="installation.xml" />
-
-    <include file="logging.xml" />
-  </section>
-
-  <section>
-    <title>Components</title>
-
-    <include file="components/reflection.xml" />
-
-    <include file="components/object loader.xml" />
-
-    <include file="components/object store persistor.xml" />
-
-    <include file="components/repository.xml" />
-
-    <include file="components/configuration.xml" />
-  </section>
-
-  <section>
-    <title>Clients</title>
-
-    <include file="skylark-viewer.xml" />
-
-    <section>
-      <title>Other clients</title>
-    </section>
-
-    <para>Possible other clients include:</para>
-
-    <list>
-      <el>Batch programs</el>
-
-      <el>Command line interface</el>
-
-      <el>Web browsable objects</el>
-
-      <el>JSP TagLib</el>
-
-      <el>Swing/Windows based GUI</el>
-
-      <el>Phone/PDA UI</el>
-    </list>
   </section>
 </publication>
