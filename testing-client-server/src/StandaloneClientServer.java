@@ -15,6 +15,7 @@ import org.nakedobjects.distribution.pipe.PipedConnection;
 import org.nakedobjects.distribution.pipe.PipedServer;
 import org.nakedobjects.event.ObjectViewingMechanismListener;
 import org.nakedobjects.object.NakedObjectPersistor;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.loader.IdentityAdapterHashMap;
 import org.nakedobjects.object.loader.ObjectLoaderImpl;
 import org.nakedobjects.object.loader.PojoAdapterHashMap;
@@ -105,14 +106,14 @@ public abstract class StandaloneClientServer {
                 DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
                 persistAlgorithm.setOidGenerator(oidGenerator);
 
-                ObjectStorePersistor localObjectManager = new ObjectStorePersistor();
-                localObjectManager.setObjectStore(objectStore);
-                localObjectManager.setPersistAlgorithm(persistAlgorithm);
-                localObjectManager.setCheckObjectsForDirtyFlag(true);
+                ObjectStorePersistor objectStorePersistor = new ObjectStorePersistor();
+                objectStorePersistor.setObjectStore(objectStore);
+                objectStorePersistor.setPersistAlgorithm(persistAlgorithm);
+                objectStorePersistor.setCheckObjectsForDirtyFlag(true);
 
-                NakedObjectPersistor objectManager = localObjectManager;
-          //      objectManager = new ObjectManagerLogger(objectManager, "server-manager.log");
-                nakedObjects.setObjectPersistor(objectManager);
+                NakedObjectPersistor persistor = objectStorePersistor;
+          //      persistor = new ObjectManagerLogger(persistor, "server-manager.log");
+                nakedObjects.setObjectPersistor(persistor);
 
                 ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
                 objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
@@ -145,7 +146,7 @@ public abstract class StandaloneClientServer {
                 //server.setUpdateNotifier(updateNotifier);
                 server.setDistribution(sd);
 
-                objectManager.addObjectChangedListener(updateNotifier);
+                persistor.addObjectChangedListener(updateNotifier);
 
                 nakedObjects.init();
                 
@@ -163,8 +164,11 @@ public abstract class StandaloneClientServer {
                         System.exit(0);
                     }
                 };
-                DebugInfo debugInfo = objectManager;
-                debugFrame.setInfo(debugInfo);
+                debugFrame.setInfo(                
+                new DebugInfo[] { NakedObjects.debug(), NakedObjects.getObjectPersistor(),
+                        NakedObjects.getObjectLoader(), NakedObjects.getConfiguration(), NakedObjects.getSpecificationLoader(),
+                        updateNotifier }
+                );
                 debugFrame.setBounds(500, 300, 1000, 700);
                 debugFrame.refresh();
                 debugFrame.show();
