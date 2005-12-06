@@ -118,7 +118,14 @@ public abstract class AbstractControlView implements View {
     public void focusReceived() {}
 
     public Location getAbsoluteLocation() {
-        return null;
+        Location location = parent.getAbsoluteLocation();
+        getViewManager().getSpy().addTrace(this, "parent location", location);
+        location.add(this.location.getX(), this.location.getY());
+        getViewManager().getSpy().addTrace(this, "plus view's location", location);
+        Padding pad = parent.getPadding();
+        location.add(pad.getLeft(), pad.getTop());
+        getViewManager().getSpy().addTrace(this, "plus view's padding", location);
+        return location;
     }
 
     public int getBaseline() {
