@@ -29,17 +29,22 @@ public abstract class DataFactory {
     private int updateGraphDepth = 1;
     private DataStructure dataStructure = new DataStructure();
 
-    public Data createActionResult(Naked result) {
-        if (result == null) {
-            return createNullData("");
-        } else if (result instanceof NakedCollection) {
-            return createCollectionData((NakedCollection) result, true, persistentGraphDepth, new Hashtable());
-        } else if (result instanceof NakedObject) {
-            return createCompletePersistentGraph((NakedObject) result);
+    public ResultData createActionResult(Naked returns, ObjectData[] updatesData, ObjectData persistedTarget, ObjectData[] persistedParameters) {
+        Data result;
+        if (returns == null) {
+            result = createNullData("");
+        } else if (returns instanceof NakedCollection) {
+            result =  createCollectionData((NakedCollection) returns, true, persistentGraphDepth, new Hashtable());
+        } else if (returns instanceof NakedObject) {
+            result =  createCompletePersistentGraph((NakedObject) returns);
         } else {
             throw new NakedObjectRuntimeException();
         }
+        
+        return createResult(result, updatesData, persistedTarget, persistedParameters);
     }
+
+    protected abstract ResultData createResult(Data result, ObjectData[] updatesData, ObjectData persistedTarget, ObjectData[] persistedParameters);
 
     private CollectionData createCollectionData(NakedCollection collection, boolean recursePersistentObjects, int depth, Hashtable previous) {
         Oid oid = collection.getOid();
@@ -172,6 +177,9 @@ public abstract class DataFactory {
             return data;
         }
         
+        if(data == null || data.getOid() != null) {
+            return null;
+        }
         
         Oid oid = object.getOid();
         String type = data.getType();
@@ -180,7 +188,6 @@ public abstract class DataFactory {
 
         updateNotifier.removeUpdateFor(object);
 
-  //      NakedObjectField[] fields = object.getFields();      
         NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
@@ -214,8 +221,6 @@ public abstract class DataFactory {
         ObjectData createReferenceData = createObjectData(oid, type, true, version);
         createReferenceData.setFieldContent(fieldContent);
         return createReferenceData;
-//        ObjectData createReferenceData = createObjectData(oid, type, fieldContent, true, version);
-//        return createReferenceData;
     }
 
     /**

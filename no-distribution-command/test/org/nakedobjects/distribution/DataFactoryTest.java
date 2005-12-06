@@ -91,13 +91,13 @@ public class DataFactoryTest extends TestCase {
 
         field1_1Specification = new DummyNakedObjectSpecification();
         field1_1Specification.fields = new NakedObjectField[1];
-        field1Specification.fields[0] = new DummyField("four", field1Specification);
+        field1Specification.fields[0] = new DummyField("field5", field1Specification);
 
         field1_1 = new DummyNakedObject();
         field1_1.setupVersion(new DummyVersion(13));
         field1_1.setupResolveState(ResolveState.RESOLVED);
         field1_1.setupSpecification(field1_1Specification);
-        field1.setupFieldValue("four", field1_1);
+        field1.setupFieldValue("field5", field1_1);
         
         // value field
         field2 = new DummyNakedValue();
@@ -136,18 +136,18 @@ public class DataFactoryTest extends TestCase {
         // root object
         rootSpecification = new DummyNakedObjectSpecification();
         rootSpecification.fields = new NakedObjectField[4];
-        rootSpecification.fields[0] = new DummyField("one", field1Specification);
-        rootSpecification.fields[1] = new DummyField("two", valueSpecification);
-        rootSpecification.fields[2] = new DummyField("collection", field3Specification);
-        rootSpecification.fields[3] = new DummyField("three", field4Specification);
+        rootSpecification.fields[0] = new DummyField("field1", field1Specification);
+        rootSpecification.fields[1] = new DummyField("field2", valueSpecification);
+        rootSpecification.fields[2] = new DummyField("field3", field3Specification);
+        rootSpecification.fields[3] = new DummyField("field4", field4Specification);
 
         rootObject = new DummyNakedObject();
         rootObject.setupVersion(new DummyVersion(11));
         rootObject.setupResolveState(ResolveState.RESOLVED);
         rootObject.setupSpecification(rootSpecification);
-        rootObject.setupFieldValue("one", field1);
-        rootObject.setupFieldValue("two", field2);
-        rootObject.setupFieldValue("collection", field3);
+        rootObject.setupFieldValue("field1", field1);
+        rootObject.setupFieldValue("field2", field2);
+        rootObject.setupFieldValue("field3", field3);
 
         
         // cyclic references
@@ -156,7 +156,7 @@ public class DataFactoryTest extends TestCase {
         field1_1.setupFieldValue("backref1", field1_1_1);
 
         DummyNakedObject element1_field1 = rootObject;
-       element1Specification.fields[0] = new DummyField("backref2", rootSpecification);
+        element1Specification.fields[0] = new DummyField("backref2", rootSpecification);
         element1.setupFieldValue("backref2", element1_field1);
     }
 
@@ -165,17 +165,17 @@ public class DataFactoryTest extends TestCase {
     }
 
     public void testCreateActionResultWithNull() {
-        Data data = factory.createActionResult(null);
-        assertTrue(data instanceof NullData);
+        ResultData data = factory.createActionResult(null, null, null, null);
+        assertTrue(data.getReturn() instanceof NullData);
     }
 
     public void testCreateActionResultWithCollection() {
         DummyNakedCollection collection = new DummyNakedCollection();
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         collection.setupSpecification(type);
-        Data data = factory.createActionResult(collection);
-        assertTrue(data instanceof CollectionData);
-        assertEquals(type.getFullName(), data.getType());
+        ResultData data = factory.createActionResult(collection, null, null, null);
+        assertTrue(data.getReturn() instanceof CollectionData);
+        assertEquals(type.getFullName(), data.getReturn().getType());
    }
 
     public void testCreateActionResultWithObject() {
@@ -183,9 +183,9 @@ public class DataFactoryTest extends TestCase {
         object.setupResolveState(ResolveState.PART_RESOLVED);
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         object.setupSpecification(type);
-        Data data = factory.createActionResult(object);
-        assertTrue(data instanceof ObjectData);
-        assertEquals(type.getFullName(), data.getType());
+        ResultData data = factory.createActionResult(object, null, null, null);
+        assertTrue(data.getReturn() instanceof ObjectData);
+        assertEquals(type.getFullName(), data.getReturn().getType());
      }
 
     public void testCreateCompletePersistentGraph() {
@@ -323,6 +323,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupResolveState(ResolveState.TRANSIENT);
         field1.setupResolveState(ResolveState.TRANSIENT);
         field1_1.setupResolveState(ResolveState.TRANSIENT);
+        element1.setupResolveState(ResolveState.TRANSIENT);
 
         ObjectData rootData = (ObjectData) factory.createMakePersistentGraph(rootObject);
         assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
@@ -385,17 +386,22 @@ public class DataFactoryTest extends TestCase {
         field1.setupResolveState(ResolveState.TRANSIENT);
         field1.setupFields(field1Specification.getFields());
         field1.setupOid(new DummyOid(583));
+        
     
         DummyCollectionData coll = new DummyCollectionData(null, "coll", new ObjectData[] {el1, el2}, null);
     
-        ObjectData data = new DummyObjectData(null, "root",false, null);
-        data.setFieldContent( new Data[] {reference1, value, coll, null});
+        ObjectData rootData = new DummyObjectData(null, "root",false, null);
+        rootData.setFieldContent( new Data[] {reference1, value, coll, null});
         rootObject.setupResolveState(ResolveState.TRANSIENT);
         rootObject.setupFields(rootSpecification.getFields());
         rootObject.setupOid(new DummyOid(712));
         
+        reference2.setFieldContent(new Data[] {rootData});
+
+        el1.setFieldContent(new Data[] {rootData});
+
         // test
-        ObjectData transientGraph = factory.createMadePersistentGraph(data, rootObject, new SingleResponseUpdateNotifier());
+        ObjectData transientGraph = factory.createMadePersistentGraph(rootData, rootObject, new SingleResponseUpdateNotifier());
         assertEquals(new DummyOid(712), transientGraph.getOid());
         assertEquals(new DummyVersion(11), transientGraph.getVersion());
         assertEquals(4, transientGraph.getFieldContent().length);

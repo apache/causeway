@@ -1,11 +1,9 @@
 package org.nakedobjects.distribution.command;
-import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.utility.ToString;
 
 public class Response {
     private int id;
     private Object object;
-    private ObjectData[] updates;
 
     public Response(Request request) {
         this.id = request.getId();
@@ -19,20 +17,11 @@ public class Response {
     public int getId() {
         return id;
     }
-
-    public void setUpdates(ObjectData[] updates) {
-        this.updates = updates;
-    }
-
-    public ObjectData[] getUpdates() {
-        return updates;
-    }
     
     public String toString() {
         ToString str = new ToString(this);
         str.append("id", id);
         str.append("object", object);
-        str.append("updates", updates == null ? "null" : "" + updates.length);
         return str.toString();
     }
 }

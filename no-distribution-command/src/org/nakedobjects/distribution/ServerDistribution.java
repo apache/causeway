@@ -61,7 +61,7 @@ public class ServerDistribution implements Distribution {
         objectManager().destroyObject(inObject);
     }
 
-    public Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
+    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
         LOG.debug("request executeAction " + actionIdentifier + " on " + target + " for " + session);
 
         NakedObject object;// = getPersistentNakedObject(session, target);
@@ -78,7 +78,16 @@ public class ServerDistribution implements Distribution {
         Naked[] parameters = getParameters(session, parameterData);
 
         Naked result = object.execute(action, parameters);
-        return objectDataFactory.createActionResult(result);
+        
+        ObjectData persistedTarget = objectDataFactory.createMadePersistentGraph(target, object, updateNotifier);
+        ObjectData[] persistedParameters = new ObjectData[parameterData.length];
+        for (int i = 0; i < persistedParameters.length; i++) {
+            if(action.getParameterTypes()[i].isObject() && parameterData[i] instanceof ObjectData) {
+                persistedParameters[i] = objectDataFactory.createMadePersistentGraph((ObjectData) parameterData[i], (NakedObject) parameters[i], updateNotifier);
+            }
+        }
+        // TODO for efficiency, need to remove the objects in the results graph from the updates set
+        return objectDataFactory.createActionResult(result, getUpdates(), persistedTarget, persistedParameters);
     }
 
     private Naked[] getParameters(Session session, Data[] parameterData) {
@@ -177,7 +186,6 @@ public class ServerDistribution implements Distribution {
         return objectDataFactory.createMadePersistentGraph(data, object, updateNotifier);
     }
 
-
     public int numberOfInstances(Session session, String objectType) {
         LOG.debug("request numberOfInstances of " + objectType + " for " + session);
         return objectManager().numberOfInstances(getSpecification(objectType), false);
@@ -261,7 +269,7 @@ public class ServerDistribution implements Distribution {
         this.updateNotifier = updateNotifier;
     }
 
-    public ObjectData[] getUpdates() {
+    private ObjectData[] getUpdates() {
         NakedObject[] updateObjects = updateNotifier.getUpdates();
         int noUpdates = updateObjects.length;
         ObjectData[] updateData = new ObjectData[noUpdates];

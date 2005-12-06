@@ -6,6 +6,7 @@ import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.distribution.ResultData;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
@@ -34,7 +35,7 @@ public abstract class CommandClient implements Distribution {
         throw new NotImplementedException();
     }
 
-    public Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, target, parameters);
         execute(request);
         return request.getActionResult();
@@ -91,12 +92,6 @@ public abstract class CommandClient implements Distribution {
         }
         LOG.debug("response " + response);
         request.setResponse(response.getObject());
-
-        ObjectData[] updates = response.getUpdates();
-        for (int i = 0; i < updates.length; i++) {
-            LOG.debug("update " + DistributionLogger.dump(updates[i]));
-            DataHelper.restore(updates[i]);
-        }
     }
 
     protected abstract Response executeRemotely(Request request);

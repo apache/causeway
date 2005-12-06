@@ -2,6 +2,8 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.utility.DebugInfo;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
 
 import java.util.Enumeration;
@@ -10,7 +12,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class SingleResponseUpdateNotifier implements DirtyObjectSet {
+public class SingleResponseUpdateNotifier implements DirtyObjectSet, DebugInfo {
     private static final Logger LOG = Logger.getLogger(SingleResponseUpdateNotifier.class);
     private Vector updates = new Vector();
 
@@ -55,6 +57,21 @@ public class SingleResponseUpdateNotifier implements DirtyObjectSet {
 
     public void removeUpdateFor(NakedObject object) {
         updates.removeElement(object);
+    }
+
+    public String getDebugData() {
+        DebugString str = new DebugString();
+        int i = 1;
+        for (Enumeration e = updates.elements(); e.hasMoreElements();) {
+            NakedObject object = (NakedObject) e.nextElement();
+            str.append(i++, 3);
+            str.append(object);
+        }
+        return str.toString();
+    }
+
+    public String getDebugTitle() {
+        return "SingleResponseUpdateNotifier";
     }
 }
 

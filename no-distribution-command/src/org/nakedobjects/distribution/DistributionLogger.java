@@ -8,6 +8,8 @@ import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.utility.Logger;
 
+import java.util.Vector;
+
 
 public class DistributionLogger extends Logger implements Distribution {
     private static String padding = "      ";
@@ -16,7 +18,7 @@ public class DistributionLogger extends Logger implements Distribution {
 
     public static String dump(Data data) {
         StringBuffer str = new StringBuffer();
-        dump(str, data, 1);
+        dump(str, data, 1, new Vector());
         return str.toString();
     }
 
@@ -26,12 +28,12 @@ public class DistributionLogger extends Logger implements Distribution {
             str.append("\n    [");
             str.append(i + 1);
             str.append("] ");
-            dump(str, data[i], 3);
+            dump(str, data[i], 3, new Vector());
         }
         return str.toString();
     }
 
-    private static void dump(StringBuffer str, Data data, int indent) {
+    private static void dump(StringBuffer str, Data data, int indent, Vector complete) {
         if (data == null) {
             str.append("null");
         } else if (data instanceof NullData) {
@@ -40,41 +42,54 @@ public class DistributionLogger extends Logger implements Distribution {
             ValueData valueData = ((ValueData) data);
             str.append("ValueData " + valueData.getType() + ":" + valueData.getValue());
         } else if (data instanceof ObjectData) {
-            ObjectData objectData = ((ObjectData) data);
-            str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
-                    + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
-            //NakedObjectField[] fs = NakedObjects.getSpecificationLoader().loadSpecification(objectData.getType()).getFields();
-            NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(objectData.getType());
-            NakedObjectField[] fs = dataStructure.getFields(specification);
-            Object[] fields = objectData.getFieldContent();
-            for (int i = 0; fields != null && i < fields.length; i++) {
-                str.append("\n");
-                str.append(padding(indent));
-                str.append(i + 1);
-                str.append(") ");
-                str.append(fs[i].getId());
-                str.append(": ");
-                dump(str, (Data) fields[i], indent + 1);
-            }
+            dumpObjectData(str, data, indent, complete);
         } else if (data instanceof CollectionData) {
-            CollectionData objectData = ((CollectionData) data);
-            str.append("CollectionData " + objectData.getType() + ":" + objectData.getOid() + ":"
-                    + (objectData.hasAllElements() ? "A" : "-") + ":" + objectData.getVersion());
-            Object[] elements = objectData.getElements();
-            for (int i = 0; elements != null && i < elements.length; i++) {
-                str.append("\n");
-                str.append(padding(indent));
-                str.append(i + 1);
-                str.append(") ");
-                dump(str, (Data) elements[i], indent + 1);
-            }
+            dumpCollectionData(str, data, indent, complete);
         } else if (data instanceof ReferenceData) {
             ReferenceData referenceData = (ReferenceData) data;
             str.append("ReferenceData " + referenceData.getType() + ":" + referenceData.getOid() + ":"
                     + referenceData.getVersion());
-
         } else {
             str.append("Unknown: " + data);
+        }
+    }
+
+    private static void dumpCollectionData(StringBuffer str, Data data, int indent, Vector complete) {
+        CollectionData objectData = ((CollectionData) data);
+        str.append("CollectionData " + objectData.getType() + ":" + objectData.getOid() + ":"
+                + (objectData.hasAllElements() ? "A" : "-") + ":" + objectData.getVersion());
+        Object[] elements = objectData.getElements();
+        for (int i = 0; elements != null && i < elements.length; i++) {
+            str.append("\n");
+            str.append(padding(indent));
+            str.append(i + 1);
+            str.append(") ");
+            dump(str, (Data) elements[i], indent + 1, complete);
+        }
+    }
+
+    private static void dumpObjectData(StringBuffer str, Data data, int indent, Vector complete) {
+        ObjectData objectData = ((ObjectData) data);
+        str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
+                + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
+
+        if(complete.contains(objectData)) {
+            str.append(" (already detailed)");
+            return;
+        }
+        
+        complete.addElement(objectData);
+        NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(objectData.getType());
+        NakedObjectField[] fs = dataStructure.getFields(specification);
+        Object[] fields = objectData.getFieldContent();
+        for (int i = 0; fields != null && i < fields.length; i++) {
+            str.append("\n");
+            str.append(padding(indent));
+            str.append(i + 1);
+            str.append(") ");
+            str.append(fs[i].getId());
+            str.append(": ");
+            dump(str, (Data) fields[i], indent + 1, complete);
         }
     }
 
@@ -110,7 +125,7 @@ public class DistributionLogger extends Logger implements Distribution {
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         log("all instances: " + fullName + (includeSubclasses ? "with subclasses" : ""));
         ObjectData[] allInstances = decorated.allInstances(session, fullName, includeSubclasses);
-        log("all instances: " + dump(allInstances));
+        log("  <-- instances: " + dump(allInstances));
         return allInstances;
     }
 
@@ -130,18 +145,27 @@ public class DistributionLogger extends Logger implements Distribution {
         decorated.endTransaction(session);
     }
 
-    public Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         log("execute action " + actionIdentifier + "/" + actionType + indentedNewLine() + "target: " + dump(target)
                 + indentedNewLine() + "parameters: " + dump(parameters));
-        Data result = decorated.executeAction(session, actionType, actionIdentifier, target, parameters);
-        log("action returned " + dump(result));
+        ResultData result;
+        try {
+            result = decorated.executeAction(session, actionType, actionIdentifier, target, parameters);
+            log("  <-- returns: " + dump(result.getReturn()));
+            log("  <-- persisted target: " + dump(result.getPersistedTarget()));
+            log("  <-- persisted parameters: " + dump(result.getPersistedParameters()));
+            log("  <-- updates: " + dump(result.getUpdates()));
+        } catch (RuntimeException e) {
+            log("  <-- exception: " +  e.getClass().getName() + " " + e.getMessage());
+            throw e;
+        }
         return result;
     }
 
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
         log("find instances " + criteria);
         ObjectData[] instances = decorated.findInstances(session, criteria);
-        log("found instances: " + dump(instances));
+        log(" <-- instances: " + dump(instances));
         return instances;
     }
 
@@ -157,35 +181,35 @@ public class DistributionLogger extends Logger implements Distribution {
     public boolean hasInstances(Session session, String fullName) {
         log("has instances " + fullName);
         boolean hasInstances = decorated.hasInstances(session, fullName);
-        log("has instances: " + (hasInstances ? "yes" : "no"));
+        log(" <-- instances: " + (hasInstances ? "yes" : "no"));
         return hasInstances;
     }
 
     public ObjectData makePersistent(Session session, ObjectData object) {
         log("make persistent " + dump(object));
         ObjectData result = decorated.makePersistent(session, object);
-        log("make persistent " + dump(result));
+        log(" <-- data: " + dump(result));
         return result;
     }
 
     public int numberOfInstances(Session sessionId, String fullName) {
         log("number of instances of " + fullName);
         int numberOfInstances = decorated.numberOfInstances(sessionId, fullName);
-        log("number of instances " + numberOfInstances);
+        log("  <-- instances: " + numberOfInstances);
         return numberOfInstances;
     }
     
     public Data resolveField(Session session, ReferenceData data, String name) {
         log("resolve field " + name + " - " + dump(data));
         Data result = decorated.resolveField(session, data, name);
-        log("resolve field " + dump(result));
+        log(" <-- data: " + dump(result));
         return result;
     }
 
     public ObjectData resolveImmediately(Session session, ReferenceData target) {
         log("resolve immediately" + dump(target));
         ObjectData result = decorated.resolveImmediately(session, target);
-        log("resolve immediately " + dump(result));
+        log("  <-- data: " + dump(result));
         return result;
         
     }

@@ -1,10 +1,12 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.CollectionData;
+import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.distribution.ResultData;
 import org.nakedobjects.distribution.ValueData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
@@ -30,6 +32,10 @@ public class JavaDataFactory extends DataFactory {
 
     public ValueData createValueData(String type, Object value) {
         return new JavaValueData(type, value);
+    }
+
+    protected ResultData createResult(Data result, ObjectData[] updatesData, ObjectData persistedTarget, ObjectData[] persistedParameters) {
+        return new JavaResult(result, updatesData, persistedTarget, persistedParameters);
     }
 }
 

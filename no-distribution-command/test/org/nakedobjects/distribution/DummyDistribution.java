@@ -20,7 +20,7 @@ public class DummyDistribution implements Distribution {
 
     public void endTransaction(Session session) {}
 
-    public Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         return null;
     }
 

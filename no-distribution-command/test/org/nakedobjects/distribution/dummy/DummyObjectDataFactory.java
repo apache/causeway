@@ -6,6 +6,7 @@ import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.distribution.ResultData;
 import org.nakedobjects.distribution.ValueData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
@@ -30,6 +31,10 @@ public class DummyObjectDataFactory extends DataFactory {
 
     protected CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version) {
         return new DummyCollectionData(oid, type, elements, version);
+    }
+
+    protected ResultData createResult(Data result, ObjectData[] updatesData, ObjectData persistedTarget, ObjectData[] persistedParameters) {
+        return new DummyResultData(result, updatesData, persistedTarget, persistedParameters);
     }
 }
 

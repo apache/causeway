@@ -17,7 +17,7 @@ public interface Distribution {
 
     void endTransaction(Session session);
 
-    Data executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
+    ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
 
     ObjectData[] findInstances(Session session, InstancesCriteria criteria);
 
@@ -29,6 +29,7 @@ public interface Distribution {
 
     boolean hasInstances(Session session, String fullName);
 
+    /** @deprecated */
     ObjectData makePersistent(Session session, ObjectData object);
 
     int numberOfInstances(Session sessionId, String fullName);

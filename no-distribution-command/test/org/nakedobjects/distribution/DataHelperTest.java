@@ -83,7 +83,7 @@ public class DataHelperTest extends TestCase {
 
     public void testRecreateObjectWithFieldData() {
         Data fields[] = new Data[2];
-        fields[0] = new DummyValueData(new Integer(13), "");
+        fields[1] = new DummyValueData(new Integer(13), "");
         DummyOid fieldOid = new DummyOid(345);
     //    fields[1] = new DummyObjectData(fieldOid, TestPojo.class.getName(),  false, new DummyVersion());
         
@@ -92,7 +92,7 @@ public class DataHelperTest extends TestCase {
         DummyOid rootOid = new DummyOid(123);
         ObjectData data = new DummyObjectData(rootOid, TestPojo.class.getName(), false, new DummyVersion(4));
         
-        fields[1] = data;
+        fields[0] = data;
         
         data.setFieldContent(fields);
         
@@ -108,7 +108,7 @@ public class DataHelperTest extends TestCase {
 
     public void testRecreateObjectWithFieldData2() {
         Data fields[] = new Data[3];
-        fields[0] = new DummyValueData(new Integer(13), "");
+        fields[1] = new DummyValueData(new Integer(13), "");
         DummyOid fieldOid = new DummyOid(345);
     //    fields[1] = new DummyObjectData(fieldOid, TestPojo.class.getName(),  false, new DummyVersion());
      //   fields[1] = fields[0];

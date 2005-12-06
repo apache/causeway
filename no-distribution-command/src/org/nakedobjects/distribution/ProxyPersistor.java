@@ -120,6 +120,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     public void init() {}
 
     public synchronized void makePersistent(NakedObject object) {
+        // TODO capture these and pass to server in one set
         LOG.debug("makePersistent " + object);
         ObjectData updates = connection.makePersistent(session, objectDataFactory.createMakePersistentGraph(object));
         madePersistent(object, updates);
