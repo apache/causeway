@@ -28,7 +28,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public Vector allInstances(Class cls, boolean includeSubclasses) {
-        TypedNakedCollection nakedObjectInstances = objectManager().allInstances(getSpecification(cls), includeSubclasses);
+        TypedNakedCollection nakedObjectInstances = objectPersistor().allInstances(getSpecification(cls), includeSubclasses);
         Vector objectInstances = new Vector(nakedObjectInstances.size());
         Enumeration e = nakedObjectInstances.elements();
         while (e.hasMoreElements()) {
@@ -45,7 +45,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
      */
     public Object createInstance(Class cls) {
         LOG.debug("creating new persistent instance of " + cls.getName());
-        NakedObject object = objectManager().createPersistentInstance(cls.getName());
+        NakedObject object = objectPersistor().createPersistentInstance(cls.getName());
         return object.getObject();
     }
 
@@ -55,13 +55,13 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
      */
     public Object createTransientInstance(Class cls) {
         LOG.debug("creating new tranisent instance of " + cls.getName());
-        NakedObject object = objectManager().createTransientInstance(cls.getName());
+        NakedObject object = objectPersistor().createTransientInstance(cls.getName());
         return object.getObject();
     }
 
     public void destroyObject(Object object) {
         //objectManager().destroyObject(NakedObjects.getPojoAdapterFactory().createNOAdapter(object));
-        objectManager().destroyObject(adapterFor(object));
+        objectPersistor().destroyObject(adapterFor(object));
     }
 
     protected void finalize() throws Throwable {
@@ -74,31 +74,37 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     }
 
     public boolean hasInstances(Class cls) {
-        return objectManager().hasInstances(getSpecification(cls), false);
+        return objectPersistor().hasInstances(getSpecification(cls), false);
     }
     
     public void init() {
     }
+    
+    public boolean isPersitent(Object object) {
+        NakedObject adapter = adapterFor(object);
+        return adapter.getOid() != null;
+    }
 
     public void makePersistent(Object transientObject) {
         NakedObject adapter = adapterFor(transientObject);
-        objectManager().startTransaction();
-        objectManager().makePersistent(adapter);
-        objectManager().endTransaction();
+        NakedObjectPersistor objectPersistor = objectPersistor();
+        objectPersistor.startTransaction();
+        objectPersistor.makePersistent(adapter);
+        objectPersistor.endTransaction();
     }
 
     public int numberOfInstances(Class cls) {
-        return objectManager().numberOfInstances(getSpecification(cls), false);
+        return objectPersistor().numberOfInstances(getSpecification(cls), false);
     }
 
     public void objectChanged(Object object) {
         if (object != null) {
             NakedObject adapter = adapterFor(object);
-            objectManager().objectChanged(adapter);
+            objectPersistor().objectChanged(adapter);
         }
     }
 
-    private NakedObjectPersistor objectManager() {
+    private NakedObjectPersistor objectPersistor() {
         return NakedObjects.getObjectPersistor();
     }
 
@@ -107,7 +113,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
             NakedObject adapter = adapterFor(parent);
             ResolveState resolveState = adapter.getResolveState();
             if (resolveState.isResolvable(ResolveState.RESOLVING)) {
-                objectManager().resolveImmediately(adapter);
+                objectPersistor().resolveImmediately(adapter);
             }
         }
     }
