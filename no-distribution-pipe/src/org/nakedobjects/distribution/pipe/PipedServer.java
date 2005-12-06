@@ -21,17 +21,16 @@ public class PipedServer {
 
  	            try {
 	                request.execute(facade);
-	                LOG.debug("server updates: " + server.updateList());
+//	                LOG.debug("server updates: " + server.updateList());
+	                Response response = new Response(request);
+	                LOG.debug("server response: " + response);
+	                communication.setResponse(response);
+                } catch (RuntimeException e) {
+                    communication.setException(e);
 	            } catch (Exception e) {
 	                LOG.error("failure during request", e);
 	            }
 
-                Response response = new Response(request);
-                LOG.debug("server response: " + response);
-
-                response.setUpdates(server.getUpdates());
-
-                communication.setResponse(response);
         }
 
     }

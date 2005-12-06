@@ -10,6 +10,7 @@ public class PipedConnection {
     private static final Logger LOG = Logger.getLogger(PipedConnection.class);
     private Request request;
     private Response response;
+    private RuntimeException exception;
 
     public synchronized void setRequest(Request request) {
         this.request = request;
@@ -35,9 +36,14 @@ public class PipedConnection {
         this.response = response;
         notify();
     }
+    
+    public synchronized void setException(RuntimeException exception) {
+        this.exception = exception;
+        notify();
+    }
 
     public synchronized Response getResponse() {
-        while (response == null) {
+        while (response == null && exception == null) {
             try {
                 wait();
             } catch (InterruptedException e) {
@@ -45,6 +51,12 @@ public class PipedConnection {
             }
         }
 
+        if(exception != null) {
+            RuntimeException toThrow = exception;
+            exception = null;
+            throw toThrow;
+        }
+        
         Response r = response;
         response = null;
         notify();
