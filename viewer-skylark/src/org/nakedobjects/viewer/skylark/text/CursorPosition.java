@@ -41,7 +41,8 @@ public class CursorPosition {
      * Move the cursor to the end of the line
      */
     public void end() {
-        character = textContent.getText(line).length();
+        String text = textContent.getText(line);
+        character =  text == null ? 0 : text.length();
     }
 
     /**
