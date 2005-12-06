@@ -226,6 +226,17 @@ public class Location implements Common {
     }
     public void setDerived(DerivedObject name) {}
     */
+    
+    public Location actionLocalClone() {
+        Location clone = (Location) container.createTransientInstance(Location.class);
+        clone.setCity(getCity());
+        clone.getKnownAs().setValue(getKnownAs());
+        clone.getStreetAddress().setValue(getStreetAddress());
+        
+        container.makePersistent(clone);
+        
+        return clone;
+    }
 }
 
 /*

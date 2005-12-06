@@ -72,6 +72,8 @@ public class Booking {
                  about.unmodifiableOnCondition(notInSameCity, "Location must be in " +  getCity());
              }
          }
+         
+         about.unmodifiableOnCondition(dropOff == null, "need drop off first");
      }
 
     public void aboutDropOff(FieldAbout about, Location newDropOff) {
@@ -358,6 +360,22 @@ public class Booking {
     
     public Title title() {
         return reference.title().append(status + "");
+    }
+    
+    public Booking actionLocalClone() {
+        Booking booking = (Booking) container.createTransientInstance(Booking.class);
+        booking.associateCustomer(getCustomer());
+        
+        
+        booking.setPaymentMethod(getPaymentMethod());
+        
+        booking.setPickUp(getPickUp().actionLocalClone());
+        booking.setDropOff(getDropOff().actionLocalClone());
+        booking.getReference().setValue(getReference());
+        booking.getDate().setValue(getDate());
+        
+        container.makePersistent(booking);
+        return booking;
     }
 }
 

@@ -382,6 +382,21 @@ public class Customer {
         super.finalize();
         Logger.getLogger("Customer").info("finalizing customer");
     }
+    
+    public Booking actionCreateBooking(Location from, Location to) {
+        if(from != null && !container.isPersitent(from)) {
+            container.makePersistent(from);
+        }
+        if(to != null && !container.isPersitent(to)) {
+            container.makePersistent(to);
+        }
+        Booking booking = (Booking) container.createInstance(Booking.class);
+        booking.setCustomer(this);
+        booking.setPickUp(from);
+        booking.setDropOff(to);
+        return booking;
+    }
+    
 }
 
 /*
