@@ -19,14 +19,16 @@ public interface BusinessObjectContainer {
 
     void init();
 
+    boolean isPersitent(Object object);
+
     void makePersistent(Object transientObject);
 
     int numberOfInstances(Class cls);
 
     void objectChanged(Object object);
-
-    void resolve(Object parent, Object object);
     
+    void resolve(Object parent, Object object);
+
     long serialNumber(String sequence);
 
     void userMessage(String text);
