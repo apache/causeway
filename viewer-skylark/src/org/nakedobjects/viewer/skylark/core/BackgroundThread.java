@@ -27,14 +27,15 @@ public final class BackgroundThread {
 	                    LOG.error(message, e);
                     }
 
-                    Naked error = NakedObjects.getObjectLoader().createAdapterForTransient(e);
+                    Naked error = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(e);
                     // TODO centre view
                     //  centre = view.getWorkspace().getAbsoluteLocation();
                     view.getWorkspace().addOpenViewFor(error, new Location(20, 20));
+                } finally {
+                    view.getState().setInactive();
+                    view.getViewManager().clearBusy(view);
+                    repaint(view);
                 }
-                view.getState().setInactive();
-                view.getViewManager().clearBusy(view);
-                repaint(view);
             }
         };
 
