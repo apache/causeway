@@ -1,7 +1,7 @@
 
 import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
-import org.nakedobjects.distribution.DataFactory;
+import org.nakedobjects.distribution.ObjectEncoder;
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ProxyPeerFactory;
@@ -135,7 +135,8 @@ public abstract class StandaloneClientServer {
 
 
                 ServerDistribution sd = new ServerDistribution();
-                DataFactory dataFactory = new JavaDataFactory();
+                ObjectEncoder dataFactory = new ObjectEncoder();
+                dataFactory.setDataFactory(new JavaDataFactory());
                 sd.setObjectDataFactory(dataFactory);
                 sd.setUpdateNotifier(updateNotifier);
                 
@@ -201,7 +202,8 @@ public abstract class StandaloneClientServer {
         objectFactory.setContainer(container);
 
 
-        JavaDataFactory objectDataFactory = new JavaDataFactory();
+        ObjectEncoder objectDataFactory = new ObjectEncoder();
+        objectDataFactory.setDataFactory(new JavaDataFactory());
 
         ProxyPersistor proxyObjectManager = new ProxyPersistor();
         proxyObjectManager.setConnection(clientLogger);
