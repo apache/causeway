@@ -55,7 +55,7 @@ public class TestSystem {
         nakedObjects.shutdown();
     }
 
-    public void setObjectManager(NakedObjectPersistor objectManager) {
+    public void setObjectPersistor(NakedObjectPersistor objectManager) {
         this.objectManager = objectManager;
     }
     
