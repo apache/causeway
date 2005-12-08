@@ -84,6 +84,11 @@ public interface Action extends NakedObjectMember {
      */
     boolean hasReturn();
 
+    /** 
+     * Returns true if this action is targeted on the instance, rather than the class.
+     */
+    public boolean isOnInstance();
+            
     NakedObjectSpecification[] getParameterTypes();
 
     Naked[] parameterStubs();
