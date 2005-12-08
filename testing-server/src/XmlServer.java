@@ -1,6 +1,6 @@
 
 import org.nakedobjects.application.system.SystemClock;
-import org.nakedobjects.distribution.DataFactory;
+import org.nakedobjects.distribution.ObjectEncoder;
 import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.SingleResponseUpdateNotifier;
 import org.nakedobjects.distribution.java.JavaDataFactory;
@@ -50,7 +50,8 @@ public class XmlServer {
 
         TransientObjectStore objectStore = new TransientObjectStore();
 
-        DataFactory objectDataFactory = new JavaDataFactory();
+        ObjectEncoder encoder = new ObjectEncoder();
+        encoder.setDataFactory(new JavaDataFactory());
 
         SingleResponseUpdateNotifier updateNotifier = new SingleResponseUpdateNotifier();
      //   updateNotifier.setFactory(objectDataFactory);
@@ -85,7 +86,7 @@ public class XmlServer {
         nakedObjects.setObjectLoader(objectLoader);
 
         ServerDistribution sd = new ServerDistribution();
-        sd.setObjectDataFactory(objectDataFactory);
+        sd.setObjectDataFactory(encoder);
         sd.setUpdateNotifier(updateNotifier);
 
         XServerListener serverListener = new XServerListener();
