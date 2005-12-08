@@ -88,9 +88,7 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
     public void makePersistent(Object transientObject) {
         NakedObject adapter = adapterFor(transientObject);
         NakedObjectPersistor objectPersistor = objectPersistor();
-        objectPersistor.startTransaction();
         objectPersistor.makePersistent(adapter);
-        objectPersistor.endTransaction();
     }
 
     public int numberOfInstances(Class cls) {
