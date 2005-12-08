@@ -144,7 +144,7 @@ public class ObjectLoaderImpl implements NakedObjectLoader {
     }
     
     public NakedObject recreateTransientInstance(NakedObjectSpecification specification) {
-        Assert.assertTrue("must be an object", specification.isObject());
+        Assert.assertTrue("must be an object", specification, specification.isObject());
         LOG.debug("recreating transient instance of for " + specification);
         Object object = objectFactory.createObject(specification);
         NakedObject adapter = createAdapterForTransient(object);
