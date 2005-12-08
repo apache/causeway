@@ -33,7 +33,7 @@ public class DataFactoryTest extends TestCase {
     }
 
     private DummyNakedObjectSpecification field4Specification;
-    private DummyObjectDataFactory factory;
+    private ObjectEncoder factory;
     private DummyNakedObject field1;
     private DummyNakedObject field1_1;
     private DummyNakedObjectSpecification field1_1Specification;
@@ -78,7 +78,8 @@ public class DataFactoryTest extends TestCase {
         system = new TestSystem();
         system.init();
 
-        factory = new DummyObjectDataFactory();
+        factory = new ObjectEncoder();
+        factory.setDataFactory(new DummyObjectDataFactory());
 
         // field 1 - reference to another object
         field1Specification = new DummyNakedObjectSpecification();
@@ -165,7 +166,7 @@ public class DataFactoryTest extends TestCase {
     }
 
     public void testCreateActionResultWithNull() {
-        ResultData data = factory.createActionResult(null, null, null, null);
+        ActionResultData data = factory.createActionResult(null, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof NullData);
     }
 
@@ -173,7 +174,7 @@ public class DataFactoryTest extends TestCase {
         DummyNakedCollection collection = new DummyNakedCollection();
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         collection.setupSpecification(type);
-        ResultData data = factory.createActionResult(collection, null, null, null);
+        ActionResultData data = factory.createActionResult(collection, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof CollectionData);
         assertEquals(type.getFullName(), data.getReturn().getType());
    }
@@ -183,7 +184,7 @@ public class DataFactoryTest extends TestCase {
         object.setupResolveState(ResolveState.PART_RESOLVED);
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         object.setupSpecification(type);
-        ResultData data = factory.createActionResult(object, null, null, null);
+        ActionResultData data = factory.createActionResult(object, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof ObjectData);
         assertEquals(type.getFullName(), data.getReturn().getType());
      }

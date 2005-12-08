@@ -1,12 +1,10 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Data;
-import org.nakedobjects.distribution.DataHelper;
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.distribution.ResultData;
+import org.nakedobjects.distribution.ActionResultData;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
@@ -31,12 +29,14 @@ public abstract class CommandClient implements Distribution {
         execute(request);
     }
 
-    public void destroyObject(Session session, ReferenceData target) {
-        throw new NotImplementedException();
-    }
-
-    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, target, parameters);
+        execute(request);
+        return request.getActionResult();
+    }
+    
+    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+        ExecuteClientAction request = new ExecuteClientAction(session, persisted, changed, deleted);
         execute(request);
         return request.getActionResult();
     }
@@ -73,17 +73,11 @@ public abstract class CommandClient implements Distribution {
         return request.getFlag();
     }
 
-    public ObjectData makePersistent(Session session, ObjectData data) {
-        MakePersistent request = new MakePersistent(session, data);
-        execute(request);
-        return request.getResults();
-    }
-
     public int numberOfInstances(Session session, String fullName) {
         throw new NotImplementedException();
     }
-
     private void execute(Request request) {
+
         Response response = executeRemotely(request);
 
         if (request.getId() != response.getId()) {
@@ -103,21 +97,6 @@ public abstract class CommandClient implements Distribution {
 
     public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {
         Request request = new SetValue(session, fieldIdentifier, target, associate);
-        execute(request);
-    }
-
-    public void abortTransaction(Session session) {
-        Request request = new AbortTransaction(session);
-        execute(request);
-    }
-
-    public void endTransaction(Session session) {
-        Request request = new EndTransaction(session);
-        execute(request);
-    }
-
-    public void startTransaction(Session session) {
-        Request request = new StartTransaction(session);
         execute(request);
     }
 }

@@ -35,7 +35,7 @@ public class DataHelperTest extends TestCase {
 
     protected void setUp() throws Exception {
         LogManager.getRootLogger().setLevel(Level.OFF);
-        DataHelper.setUpdateNotifer(new NullDirtyObjectSet());
+        ObjectDecoder.setUpdateNotifer(new NullDirtyObjectSet());
 
         system = new TestSystem();
         system.init();
@@ -67,7 +67,7 @@ public class DataHelperTest extends TestCase {
         ObjectData data = new DummyObjectData(oid, TestPojo.class.getName(), false, new DummyVersion());
         data.setFieldContent(fields);
 
-        NakedObject naked = (NakedObject) DataHelper.restore(data);
+        NakedObject naked = (NakedObject) ObjectDecoder.restore(data);
         assertEquals(ResolveState.PART_RESOLVED, ((NakedObject) naked).getResolveState());
     }
 
@@ -77,7 +77,7 @@ public class DataHelperTest extends TestCase {
         ObjectData data = new DummyObjectData(oid, TestPojo.class.getName(), true, new DummyVersion());
         data.setFieldContent(fields);
 
-        NakedObject naked = (NakedObject) DataHelper.restore(data);
+        NakedObject naked = (NakedObject) ObjectDecoder.restore(data);
         assertEquals(ResolveState.RESOLVED, ((NakedObject) naked).getResolveState());
     }
 
@@ -96,7 +96,7 @@ public class DataHelperTest extends TestCase {
         
         data.setFieldContent(fields);
         
-        DummyNakedObject restored = (DummyNakedObject) DataHelper.restore(data);
+        DummyNakedObject restored = (DummyNakedObject) ObjectDecoder.restore(data);
         assertEquals(new DummyVersion(4), restored.getVersion());
         assertEquals(rootOid, restored.getOid());
 
@@ -119,7 +119,7 @@ public class DataHelperTest extends TestCase {
         ObjectData data = new DummyObjectData(rootOid, TestPojo.class.getName(), false, new DummyVersion(4));
         data.setFieldContent(fields);
         
-        DummyNakedObject restored = (DummyNakedObject) DataHelper.restore(data);
+        DummyNakedObject restored = (DummyNakedObject) ObjectDecoder.restore(data);
         assertEquals(new DummyVersion(4), restored.getVersion());
         assertEquals(rootOid, restored.getOid());
 
@@ -134,7 +134,7 @@ public class DataHelperTest extends TestCase {
 
         Data data = new DummyObjectData(oid, TestPojo.class.getName(), false, new NullVersion());
 
-        NakedObject naked = (NakedObject) DataHelper.restore(data);
+        NakedObject naked = (NakedObject) ObjectDecoder.restore(data);
         assertEquals(rootObject.getPojo(), naked.getObject());
         assertEquals("no field data therefore only passing across reference", null, naked.getVersion());
         assertEquals(oid, naked.getOid());
@@ -148,7 +148,7 @@ public class DataHelperTest extends TestCase {
         adapter.setupObject(rootObject);
         system.addRecreatedTransient(adapter);
         
-        NakedObject naked = (NakedObject) DataHelper.restore(data);
+        NakedObject naked = (NakedObject) ObjectDecoder.restore(data);
         assertEquals(rootObject, naked.getObject());
         assertEquals("no field data therefore only passing across reference", null, naked.getVersion());
         assertNull(naked.getOid());
@@ -162,7 +162,7 @@ public class DataHelperTest extends TestCase {
         adapter.setupObject(rootObject);
         system.addRecreatedTransient(adapter);
         
-        NakedObject naked = (NakedObject) DataHelper.restore(data);
+        NakedObject naked = (NakedObject) ObjectDecoder.restore(data);
         assertEquals(rootObject, naked.getObject());
         assertEquals("transient objects have no version number", null, naked.getVersion());
         assertNull(naked.getOid());
@@ -173,7 +173,7 @@ public class DataHelperTest extends TestCase {
         DummyNakedValue nakedValue = new DummyNakedValue();
         system.addValue(new Integer(11), nakedValue);
 
-        Naked naked = DataHelper.restore(data);
+        Naked naked = ObjectDecoder.restore(data);
         assertEquals(nakedValue, naked);
         assertNull(naked.getOid());
     }

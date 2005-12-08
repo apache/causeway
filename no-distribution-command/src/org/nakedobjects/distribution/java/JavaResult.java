@@ -2,19 +2,23 @@ package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ResultData;
+import org.nakedobjects.distribution.ActionResultData;
 
-public class JavaResult  implements ResultData {
+public class JavaResult  implements ActionResultData {
     private final Data result;
     private final ObjectData[] updatesData;
     private final ObjectData persistedTarget;
     private final ObjectData[] persistedParameters;
+    private String[] warnings;
+    private String[] messages;
 
-    public JavaResult(Data result, ObjectData[] updatesData, ObjectData persistedTarget, ObjectData[] persistedParameters) {
+    public JavaResult(Data result, ObjectData[] updatesData, ObjectData persistedTarget, ObjectData[] persistedParameters, String[] messages, String[] warnings) {
         this.result = result;
         this.updatesData = updatesData;
         this.persistedTarget = persistedTarget;
         this.persistedParameters = persistedParameters;
+        this.messages = messages;
+        this.warnings = warnings;
     }
 
     public Data getReturn() {
@@ -31,6 +35,14 @@ public class JavaResult  implements ResultData {
 
     public ObjectData[] getUpdates() {
         return updatesData;
+    }
+
+    public String[] getMessages() {
+        return messages;
+    }
+
+    public String[] getWarnings() {
+        return warnings;
     }
 
 }

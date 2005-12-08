@@ -15,9 +15,9 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
     private final static Category LOG = Category.getInstance(ProxyOneToManyAssociation.class);
     private Distribution connection;
     private boolean fullProxy = false;
-    private final DataFactory objectDataFactory;
+    private final ObjectEncoder objectDataFactory;
 
-    public ProxyOneToManyAssociation(OneToManyPeer local, final Distribution connection, DataFactory objectDataFactory) {
+    public ProxyOneToManyAssociation(OneToManyPeer local, final Distribution connection, ObjectEncoder objectDataFactory) {
         super(local);
         this.connection = connection;
         this.objectDataFactory = objectDataFactory;

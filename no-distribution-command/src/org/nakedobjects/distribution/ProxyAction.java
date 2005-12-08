@@ -21,52 +21,57 @@ import org.apache.log4j.Logger;
 public final class ProxyAction extends AbstractActionPeer {
     private final static Logger LOG = Logger.getLogger(ProxyAction.class);
     private Distribution connection;
-    private final DataFactory dataFactory;
+    private final ObjectEncoder dataFactory;
 
-    public ProxyAction(final ActionPeer local, final Distribution connection, DataFactory objectDataFactory) {
+    public ProxyAction(final ActionPeer local, final Distribution connection, ObjectEncoder objectDataFactory) {
         super(local);
         this.connection = connection;
         this.dataFactory = objectDataFactory;
     }
 
     public Naked execute(NakedObject target, Naked[] parameters) throws ReflectiveActionException {
-        if (executeRemotely(target)) {
-            Data[] parameterObjectData = parameterValues(parameters);
-            LOG.debug(debug("execute remotely", getIdentifier(), target, parameters));
-            ObjectData targetReference = dataFactory.createDataForActionTarget(target);
-            ResultData result;
-            try {
-                result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), getIdentifier().getName(),
-	                    targetReference, parameterObjectData);
-            } catch (NakedObjectRuntimeException e) {
-                LOG.error("remote exception: " + e.getMessage(), e);
-                throw e;
-            }
-
-            // must deal with transient-now-persistent objects first
-            madePersistent(target, result.getPersistedTarget());
-            
-            for (int i = 0; i < parameters.length; i++) {
-                if(getParameterTypes()[i].isObject()) {
-                    madePersistent((NakedObject) parameters[i], result.getPersistedParameters()[i]);
-                }
-            }
-            
-            Data returned = result.getReturn();
-            Naked returnedObject;
-            returnedObject = returned instanceof NullData ? null : DataHelper.restore(returned);
-
-            ObjectData[] updates = result.getUpdates();
-            for (int i = 0; i < updates.length; i++) {
-                LOG.debug("update " + DistributionLogger.dump(updates[i]));
-                DataHelper.restore(updates[i]);
-            }
-
-            return returnedObject;
+        if (isToBeExecutedRemotely(target)) {
+            return executeRemotely(target, parameters);
         } else {
             LOG.debug(debug("execute locally", getIdentifier(), target, parameters));
             return super.execute(target, parameters);
         }
+    }
+
+    private Naked executeRemotely(NakedObject target, Naked[] parameters) {
+        Data[] parameterObjectData = parameterValues(parameters);
+        LOG.debug(debug("execute remotely", getIdentifier(), target, parameters));
+        ObjectData targetReference = dataFactory.createDataForActionTarget(target);
+        ActionResultData result;
+        try {
+            String name = getIdentifier().getClassName() + "#" + getIdentifier().getName();
+            result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), name,
+                    targetReference, parameterObjectData);
+        } catch (NakedObjectRuntimeException e) {
+            LOG.error("remote exception: " + e.getMessage(), e);
+            throw e;
+        }
+
+        // must deal with transient-now-persistent objects first
+        madePersistent(target, result.getPersistedTarget());
+        
+        for (int i = 0; i < parameters.length; i++) {
+            if(getParameterTypes()[i].isObject()) {
+                madePersistent((NakedObject) parameters[i], result.getPersistedParameters()[i]);
+            }
+        }
+        
+        Data returned = result.getReturn();
+        Naked returnedObject;
+        returnedObject = returned instanceof NullData ? null : ObjectDecoder.restore(returned);
+
+        ObjectData[] updates = result.getUpdates();
+        for (int i = 0; i < updates.length; i++) {
+            LOG.debug("update " + DistributionLogger.dump(updates[i]));
+            ObjectDecoder.restore(updates[i]);
+        }
+
+        return returnedObject;
     }
     
 
@@ -106,7 +111,7 @@ public final class ProxyAction extends AbstractActionPeer {
         }
     }
 
-    private boolean executeRemotely(NakedObject target) {
+    private boolean isToBeExecutedRemotely(NakedObject target) {
         boolean remoteOverride = getTarget() == Action.REMOTE;
         boolean localOverride = getTarget() == Action.LOCAL;
 
@@ -116,6 +121,11 @@ public final class ProxyAction extends AbstractActionPeer {
 
         if (remoteOverride) {
             return true;
+        }
+        
+        if(target == null) {
+            // for static methods there is no target
+            return false;
         }
 
         boolean remoteAsPersistent = target.getOid() != null;

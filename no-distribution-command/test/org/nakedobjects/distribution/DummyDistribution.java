@@ -6,9 +6,7 @@ import org.nakedobjects.object.control.Hint;
 
 public class DummyDistribution implements Distribution {
 
-    private ObjectData makePersistentResults;
-
-    public void abortTransaction(Session session) {}
+    private ObjectData[] makePersistentResults;
 
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         return null;
@@ -16,12 +14,12 @@ public class DummyDistribution implements Distribution {
 
     public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {}
 
-    public void destroyObject(Session session, ReferenceData object) {}
-
-    public void endTransaction(Session session) {}
-
-    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         return null;
+    }
+
+    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+        return makePersistentResults;
     }
 
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
@@ -32,35 +30,29 @@ public class DummyDistribution implements Distribution {
         return null;
     }
 
-    public ObjectData resolveImmediately(Session session, ReferenceData target) {
-        return null;
-    }
-
-    public Data resolveField(Session session, ReferenceData data, String name) {
-        return null;
-    }
-
     public boolean hasInstances(Session session, String fullName) {
         return false;
-    }
-
-    public ObjectData makePersistent(Session session, ObjectData object) {
-        return makePersistentResults;
     }
 
     public int numberOfInstances(Session sessionId, String fullName) {
         return 0;
     }
 
+    public Data resolveField(Session session, ReferenceData data, String name) {
+        return null;
+    }
+
+    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+        return null;
+    }
+
     public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {}
 
-    public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {}
-
-    public void startTransaction(Session session) {}
-
-    public void setupMakePersistentResults(ObjectData makePersistentResults) {
+    public void setupMakePersistentResults(ObjectData[] makePersistentResults) {
         this.makePersistentResults = makePersistentResults;
     }
+
+    public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {}
 }
 
 

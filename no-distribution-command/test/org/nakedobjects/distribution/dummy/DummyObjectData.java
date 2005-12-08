@@ -4,6 +4,7 @@ import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
+import org.nakedobjects.utility.ToString;
 
 
 public class DummyObjectData extends DummyReferenceData implements ObjectData {
@@ -25,6 +26,18 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
 
     public void setFieldContent(Data[] fieldContent) {
         this.fieldContent = fieldContent;        
+    }
+    
+    /*public String toString() {
+        ToString str = new ToString(this);
+        toString(str);  
+        return str.toString();
+    }
+*/
+    protected void toString(ToString str) {
+        super.toString(str);
+        str.append("fields", fieldContent == null ? 0  : fieldContent.length);
+        str.append("resolved", resolved);
     }
 }
 

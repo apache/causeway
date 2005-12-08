@@ -19,8 +19,8 @@ import java.util.Hashtable;
 import org.apache.log4j.Logger;
 
 
-public class DataHelper {
-    private static final Logger LOG = Logger.getLogger(DataHelper.class);
+public class ObjectDecoder {
+    private static final Logger LOG = Logger.getLogger(ObjectDecoder.class);
     private static DirtyObjectSet updateNotifier;
     private static DataStructure dataStructure = new DataStructure();
 
@@ -134,7 +134,7 @@ public class DataHelper {
     }
 
     public static void setUpdateNotifer(DirtyObjectSet updateNotifier) {
-        DataHelper.updateNotifier = updateNotifier;
+        ObjectDecoder.updateNotifier = updateNotifier;
     }
 
     private static void setupFields(ObjectData data, NakedObjectLoader objectLoader, NakedObject object, ResolveState state, Hashtable previous) {

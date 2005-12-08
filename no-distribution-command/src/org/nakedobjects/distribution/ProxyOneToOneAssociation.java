@@ -13,9 +13,9 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     private final static Logger LOG = Logger.getLogger(ProxyOneToOneAssociation.class);
     private final Distribution connection;
     private final boolean fullProxy = false;
-    private final DataFactory objectDataFactory;
+    private final ObjectEncoder objectDataFactory;
 
-    public ProxyOneToOneAssociation(OneToOnePeer local, final Distribution connection, DataFactory objectDataFactory) {
+    public ProxyOneToOneAssociation(OneToOnePeer local, final Distribution connection, ObjectEncoder objectDataFactory) {
         super(local);
         this.connection = connection;
         this.objectDataFactory = objectDataFactory;

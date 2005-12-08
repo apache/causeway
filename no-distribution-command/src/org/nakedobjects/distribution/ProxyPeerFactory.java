@@ -10,7 +10,7 @@ import junit.framework.Assert;
 
 public class ProxyPeerFactory implements ReflectionPeerFactory {
     private Distribution connection;
-    private DataFactory objectDataFactory;
+    private ObjectEncoder objectDataFactory;
 
     public ActionPeer createAction(ActionPeer peer) {
         return new ProxyAction(peer, connection, objectDataFactory);
@@ -39,14 +39,14 @@ public class ProxyPeerFactory implements ReflectionPeerFactory {
      * 
      * @property
      */
-    public void set_ObjectDataFactory(DataFactory objectDataFactory) {
+    public void set_ObjectDataFactory(ObjectEncoder objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
 
     public void setConnection(Distribution connection) {
         this.connection = connection;
     }
-    public void setObjectDataFactory(DataFactory objectDataFactory) {
+    public void setObjectDataFactory(ObjectEncoder objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
 

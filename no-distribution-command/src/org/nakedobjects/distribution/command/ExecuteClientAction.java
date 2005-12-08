@@ -1,45 +1,40 @@
-package org.nakedobjects.distribution.dummy;
+package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.Distribution;
+import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.Version;
+import org.nakedobjects.object.Session;
 import org.nakedobjects.utility.ToString;
 
-public class DummyReferenceData implements ReferenceData {
-    private final Oid oid;
-    private final String type;
-    private final Version version;
 
-    public DummyReferenceData(final Oid oid, final String type, final Version version) {
-        this.oid = oid;
-        this.type = type;
-        this.version = version;
+public class ExecuteClientAction extends AbstractRequest {
+
+    private final ObjectData[] persisted;
+    private final ObjectData[] changed;
+    private final ReferenceData[] deleted;
+
+    public ExecuteClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+        super(session);
+        this.persisted = persisted;
+        this.changed = changed;
+        this.deleted = deleted;
     }
 
-    public Oid getOid() {
-        return oid;
+    public void execute(Distribution distribution) {
+        setResponse(distribution.executeClientAction(session, persisted, changed, deleted));
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public Version getVersion() {
-        return version;
+    public ObjectData[] getActionResult() {
+        return (ObjectData[]) getResponse();
     }
 
     public String toString() {
         ToString str = new ToString(this);
-        toString(str);  
+        str.append("persisted", persisted.length);
+        str.append("changed", changed.length);
+        str.append("deleted", deleted.length);
         return str.toString();
     }
-
-    protected void toString(ToString str) {
-        str.append("oid", oid);
-        str.append("type", type);
-        str.append("version", version);
-    }
-
 }
 
 /*

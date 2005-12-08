@@ -1,18 +1,38 @@
 package org.nakedobjects.distribution;
 
-public interface ResultData {
+public interface ActionResultData {
 
+    /**
+     * Return the Data for the result from executing the action.
+     */
     Data getReturn();
 
+    /**
+     * Return the ObjectData for the target if it was persisited by the server.
+     */
     ObjectData getPersistedTarget();
 
+    /**
+     * Return the ObjectDatas for any of the parameters (in the same seqence as passed to the server) if they
+     * were was persisited by the server.
+     */
     ObjectData[] getPersistedParameters();
 
+    /**
+     * Return the ObjectDatas for any objects that where changed by the server while executing the action.
+     */
     ObjectData[] getUpdates();
 
-    // TODO pass across messages & warnings
-}
+    /**
+     * Return all messages created by the action.
+     */
+    String[] getMessages();
 
+    /**
+     * Return all warnings created by the action.
+     */
+    String[] getWarnings();
+}
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

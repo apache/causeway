@@ -10,6 +10,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.ObjectNotFoundException;
+import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
@@ -20,6 +21,7 @@ import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.defaults.AbstracObjectPersistor;
 import org.nakedobjects.object.defaults.InstanceCollectionVector;
 import org.nakedobjects.object.defaults.NakedClassImpl;
+import org.nakedobjects.object.transaction.TransactionException;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 
@@ -34,12 +36,16 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     final static Logger LOG = Logger.getLogger(ProxyPersistor.class);
     private Distribution connection;
     private final Hashtable nakedClasses = new Hashtable();
-    private DataFactory objectDataFactory;
+    private ObjectEncoder objectDataFactory;
     private Session session;
     private DirtyObjectSet updateNotifier;
+    private ClientSideTransaction clientSideTransaction;
 
     public void abortTransaction() {
-        connection.abortTransaction(session);
+        checkTransactionInProgress();
+        LOG.debug("abortTransaction");
+        clientSideTransaction.rollback();
+        clientSideTransaction = null;
     }
 
     public void addObjectChangedListener(DirtyObjectSet listener) {}
@@ -53,20 +59,64 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     private TypedNakedCollection convertToNakedObjects(NakedObjectSpecification specification, ObjectData[] data) {
         NakedObject[] instances = new NakedObject[data.length];
         for (int i = 0; i < data.length; i++) {
-            instances[i] = (NakedObject) DataHelper.restore(data[i]);
+            instances[i] = (NakedObject) ObjectDecoder.restore(data[i]);
         }
         return new InstanceCollectionVector(specification, instances);
     }
 
     public synchronized void destroyObject(NakedObject object) {
+        checkTransactionInProgress();
         LOG.debug("destroyObject " + object);
-        connection.destroyObject(session, objectDataFactory.createReference(object));
+        clientSideTransaction.addDestroyObject(object);
+
         // TODO need to do garbage collection instead
         //NakedObjects.getObjectLoader().unloaded(object);
     }
 
+    private void checkTransactionInProgress() {
+        if(clientSideTransaction == null) {
+            throw new TransactionException("No transaction in progress");
+        }
+    }
+
     public void endTransaction() {
-        connection.endTransaction(session);
+        checkTransactionInProgress();
+        LOG.debug("endTransaction");
+
+        if(clientSideTransaction.isEmpty()) {
+            LOG.debug("  no transaction commands to process");
+            clientSideTransaction = null;
+            return;
+        }
+        
+        NakedObject[] persistedObjects = clientSideTransaction.getPersisted();
+        ObjectData[] persisted = new ObjectData[persistedObjects.length];
+        for (int i = 0; i < persistedObjects.length; i++) {
+            persisted[i] = objectDataFactory.createMakePersistentGraph(persistedObjects[i]);
+        }
+        
+        NakedObject[] changedObjects = clientSideTransaction.getChanged();
+        ObjectData[] changed = new ObjectData[changedObjects.length];
+        for (int i = 0; i < changedObjects.length; i++) {
+            changed[i] = objectDataFactory.createDataForChangedObject(changedObjects[i]);
+            updateNotifier.addDirty(changedObjects[i]);
+        }
+        
+        
+        NakedObject[] deletedObjects = clientSideTransaction.getDeleted();
+        ReferenceData[] deleted = new ReferenceData[deletedObjects.length];
+        for (int i = 0; i < deletedObjects.length; i++) {
+            deleted[i] = objectDataFactory.createReference(deletedObjects[i]);
+        }
+
+        ObjectData[] data = connection.executeClientAction(session, persisted, changed, deleted);
+        if(data != null) {
+            for (int i = 0; i < data.length; i++) {
+                madePersistent(persistedObjects[i], data[i]);
+            }
+        }
+        
+        clientSideTransaction = null;
     }
 
     public TypedNakedCollection findInstances(InstancesCriteria criteria) throws UnsupportedFindException {
@@ -120,10 +170,9 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     public void init() {}
 
     public synchronized void makePersistent(NakedObject object) {
-        // TODO capture these and pass to server in one set
+        checkTransactionInProgress();
         LOG.debug("makePersistent " + object);
-        ObjectData updates = connection.makePersistent(session, objectDataFactory.createMakePersistentGraph(object));
-        madePersistent(object, updates);
+        clientSideTransaction.addMakePersistent(object);
     }
 
     private void madePersistent(NakedObject object, ObjectData updates) {
@@ -168,7 +217,9 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         if(object.getResolveState().isTransient()) {
             updateNotifier.addDirty(object);
         } else {
-            LOG.debug("objectChanged " + object + " - ignored by proxy manager as it is a persistent object");
+            checkTransactionInProgress();
+            //LOG.debug("objectChanged " + object + " - ignored by proxy manager as it is a persistent object");
+            clientSideTransaction.addObjectChanged(object);
         }
     }
 
@@ -176,7 +227,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
 
     public void reload(NakedObject object) {
         ObjectData update = connection.resolveImmediately(session, objectDataFactory.createReference(object));
-        DataHelper.restore(update);
+        ObjectDecoder.restore(update);
     }
     
     public synchronized void resolveImmediately(NakedObject object) {
@@ -185,7 +236,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
             Oid oid = object.getOid();
             LOG.debug("resolve object (remotely from server)" + oid);
             ObjectData data = connection.resolveImmediately(session, objectDataFactory.createReference(object));
-            DataHelper.restore(data);
+            ObjectDecoder.restore(data);
         }
     }
 
@@ -203,7 +254,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         
         LOG.info("resolve-eagerly on server " + object + "/" + field.getId());
         Data data = connection.resolveField(session, objectDataFactory.createReference(object), field.getId());
-        DataHelper.restore(data);
+        ObjectDecoder.restore(data);
     }
 
     public void saveChanges() {
@@ -224,7 +275,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
      * 
      * @property
      */
-    public void set_ObjectDataFactory(DataFactory factory) {
+    public void set_ObjectDataFactory(ObjectEncoder factory) {
         this.objectDataFactory = factory;
     }
 
@@ -234,7 +285,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
      * @property
      */
     public void set_UpdateNotifier(DirtyObjectSet updateNotifier) {
-        DataHelper.setUpdateNotifer(updateNotifier);
+        ObjectDecoder.setUpdateNotifer(updateNotifier);
         this.updateNotifier = updateNotifier;
     }
 
@@ -242,17 +293,24 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         this.connection = connection;
     }
 
-    public void setObjectDataFactory(DataFactory factory) {
+    public void setObjectDataFactory(ObjectEncoder factory) {
         this.objectDataFactory = factory;
     }
 
     public void setUpdateNotifier(DirtyObjectSet updateNotifier) {
-        DataHelper.setUpdateNotifer(updateNotifier);
+        ObjectDecoder.setUpdateNotifer(updateNotifier);
         this.updateNotifier = updateNotifier;
     }
 
     public void startTransaction() {
-        connection.startTransaction(session);
+        LOG.debug("startTransaction");
+        if(clientSideTransaction == null) {
+            clientSideTransaction = new ClientSideTransaction();
+        } else {
+            ClientSideTransaction transaction = clientSideTransaction;
+            clientSideTransaction = null;
+            throw new ObjectPerstsistenceException("Can't start transaction when one already started: " + transaction);
+        }
     }
 
     public void shutdown() {}

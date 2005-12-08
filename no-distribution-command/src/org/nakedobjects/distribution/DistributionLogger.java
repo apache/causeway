@@ -117,11 +117,6 @@ public class DistributionLogger extends Logger implements Distribution {
         this.decorated = decorated;
     }
 
-    public void abortTransaction(Session session) {
-        log("abort transaction");
-        decorated.abortTransaction(session);
-    }
-
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         log("all instances: " + fullName + (includeSubclasses ? "with subclasses" : ""));
         ObjectData[] allInstances = decorated.allInstances(session, fullName, includeSubclasses);
@@ -135,20 +130,10 @@ public class DistributionLogger extends Logger implements Distribution {
         decorated.clearAssociation(session, fieldIdentifier, target, associate);
     }
 
-    public void destroyObject(Session session, ReferenceData object) {
-        log("destroy object: " + dump(object));
-        decorated.destroyObject(session, object);
-    }
-
-    public void endTransaction(Session session) {
-        log("end transaction");
-        decorated.endTransaction(session);
-    }
-
-    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         log("execute action " + actionIdentifier + "/" + actionType + indentedNewLine() + "target: " + dump(target)
                 + indentedNewLine() + "parameters: " + dump(parameters));
-        ResultData result;
+        ActionResultData result;
         try {
             result = decorated.executeAction(session, actionType, actionIdentifier, target, parameters);
             log("  <-- returns: " + dump(result.getReturn()));
@@ -162,6 +147,15 @@ public class DistributionLogger extends Logger implements Distribution {
         return result;
     }
 
+    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+        log("execute client action "  + indentedNewLine() + "persisted: " + dump(persisted)
+                + indentedNewLine() + "changed: " + dump(changed)
+                + indentedNewLine() + "deleted: " + dump(deleted));
+        ObjectData[] data = decorated.executeClientAction(session, persisted, changed, deleted);
+        log(" <-- data: " + dump(data));
+        return data;
+    }
+    
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
         log("find instances " + criteria);
         ObjectData[] instances = decorated.findInstances(session, criteria);
@@ -183,13 +177,6 @@ public class DistributionLogger extends Logger implements Distribution {
         boolean hasInstances = decorated.hasInstances(session, fullName);
         log(" <-- instances: " + (hasInstances ? "yes" : "no"));
         return hasInstances;
-    }
-
-    public ObjectData makePersistent(Session session, ObjectData object) {
-        log("make persistent " + dump(object));
-        ObjectData result = decorated.makePersistent(session, object);
-        log(" <-- data: " + dump(result));
-        return result;
     }
 
     public int numberOfInstances(Session sessionId, String fullName) {
@@ -224,11 +211,6 @@ public class DistributionLogger extends Logger implements Distribution {
         log("set value " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine() + "value: "
                 + value);
         decorated.setValue(session, fieldIdentifier, target, value);
-    }
-
-    public void startTransaction(Session session) {
-        log("start transaction");
-        decorated.startTransaction(session);
     }
 }
 

@@ -6,39 +6,29 @@ import org.nakedobjects.object.control.Hint;
 
 
 public interface Distribution {
-
-    void abortTransaction(Session session);
-
     ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses);
 
     void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
 
-    void destroyObject(Session session, ReferenceData object);
+    ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
 
-    void endTransaction(Session session);
-
-    ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
+    ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted);
 
     ObjectData[] findInstances(Session session, InstancesCriteria criteria);
 
     Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
 
-    ObjectData resolveImmediately(Session session, ReferenceData target);
+    boolean hasInstances(Session session, String fullName);
+
+    int numberOfInstances(Session sessionId, String fullName);
 
     Data resolveField(Session session, ReferenceData data, String name);
 
-    boolean hasInstances(Session session, String fullName);
-
-    /** @deprecated */
-    ObjectData makePersistent(Session session, ObjectData object);
-
-    int numberOfInstances(Session sessionId, String fullName);
+    ObjectData resolveImmediately(Session session, ReferenceData target);
 
     void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
 
     void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate);
-
-    void startTransaction(Session session);
 }
 
 /*

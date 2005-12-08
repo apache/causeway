@@ -52,7 +52,7 @@ public class DataHelperCollectionTest extends TestCase {
         system.addSpecification(new DummyNakedObjectSpecification(Object.class.getName()));
   //      system.addNakedCollectionAdapter(new InternalCollectionVectorAdapter(collection, Object.class));
         
-        DataHelper.setUpdateNotifer(new NullDirtyObjectSet());
+        ObjectDecoder.setUpdateNotifer(new NullDirtyObjectSet());
     }
 
     protected void tearDown() throws Exception {
@@ -72,7 +72,7 @@ public class DataHelperCollectionTest extends TestCase {
    //     system.addLoadedIdentity(new DummyOid(345), testObject1);
    //     system.addLoadedIdentity(new DummyOid(678), testObject2);
         
-        NakedCollection naked = (NakedCollection) DataHelper.restore(data);
+        NakedCollection naked = (NakedCollection) ObjectDecoder.restore(data);
 
         Vector restoredCollection = (Vector) naked.getObject();
         assertEquals(2, restoredCollection.size());

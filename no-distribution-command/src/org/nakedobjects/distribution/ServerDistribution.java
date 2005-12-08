@@ -23,17 +23,24 @@ import org.apache.log4j.Logger;
 
 public class ServerDistribution implements Distribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
-    private DataFactory objectDataFactory;
+    private ObjectEncoder objectDataFactory;
     private SingleResponseUpdateNotifier updateNotifier;
 
     public ServerDistribution() {
-        DataHelper.setUpdateNotifer(new NullDirtyObjectSet());
+        ObjectDecoder.setUpdateNotifer(new NullDirtyObjectSet());
     }
     
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         LOG.debug("request allInstances of " + fullName  + (includeSubclasses ? "(including subclasses)" : "") + " from " + session);
-        TypedNakedCollection instances = objectManager().allInstances(getSpecification(fullName), includeSubclasses);
+        TypedNakedCollection instances = persistor().allInstances(getSpecification(fullName), includeSubclasses);
         return convertToNakedCollection(instances);
+    }
+
+    private void checkHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
+        Hint about = getActionHint(session, actionType, actionIdentifier, target, parameterData);
+        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
+            throw new NakedObjectRuntimeException();
+        }
     }
 
     public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
@@ -54,21 +61,17 @@ public class ServerDistribution implements Distribution {
         }
         return data;
     }
-
-    public void destroyObject(Session session, ReferenceData object) {
-        LOG.debug("request destroyObject " + object+ " for " + session);
-        NakedObject inObject = getPersistentNakedObject(session, object);
-        objectManager().destroyObject(inObject);
-    }
-
-    public ResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
+    
+    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
         LOG.debug("request executeAction " + actionIdentifier + " on " + target + " for " + session);
 
-        NakedObject object;// = getPersistentNakedObject(session, target);
+        NakedObject object;
         if (target instanceof ReferenceData && ((ReferenceData) target).getOid() != null) {
             object = getPersistentNakedObject(session, (ReferenceData) target);
         } else if (target instanceof ObjectData) {
-            object = (NakedObject) DataHelper.restore(target);
+            object = (NakedObject) ObjectDecoder.restore(target);
+        } else if(target == null) {
+            object = null;
         } else {
             throw new NakedObjectRuntimeException();
         }
@@ -76,18 +79,97 @@ public class ServerDistribution implements Distribution {
         Action action = getActionMethod(actionType, actionIdentifier, parameterData, object);
         checkHint(session, actionType, actionIdentifier, target, parameterData);
         Naked[] parameters = getParameters(session, parameterData);
-
-        Naked result = object.execute(action, parameters);
         
-        ObjectData persistedTarget = objectDataFactory.createMadePersistentGraph(target, object, updateNotifier);
+        if(action == null) {
+            throw new NakedObjectsRemoteException("Could not find method " + actionIdentifier);
+        }
+
+        Naked result = action.execute(object, parameters);//object.execute(action, parameters);
+        
+        ObjectData persistedTarget;
+        if(target == null) {
+            persistedTarget = null; 
+        } else {
+            persistedTarget = objectDataFactory.createMadePersistentGraph(target, object, updateNotifier);
+        }
+        
         ObjectData[] persistedParameters = new ObjectData[parameterData.length];
         for (int i = 0; i < persistedParameters.length; i++) {
             if(action.getParameterTypes()[i].isObject() && parameterData[i] instanceof ObjectData) {
                 persistedParameters[i] = objectDataFactory.createMadePersistentGraph((ObjectData) parameterData[i], (NakedObject) parameters[i], updateNotifier);
             }
         }
+        // TODO find messages/warnings
+        String[] messages = new String[0];
+        String[] warnings = new String[0];
+        
         // TODO for efficiency, need to remove the objects in the results graph from the updates set
-        return objectDataFactory.createActionResult(result, getUpdates(), persistedTarget, persistedParameters);
+        return objectDataFactory.createActionResult(result, getUpdates(), persistedTarget, persistedParameters, messages, warnings);
+    }
+    
+    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+        LOG.debug("execute client action for " + session);
+        LOG.debug("start transaction");
+        NakedObjectPersistor persistor = persistor();
+        persistor.startTransaction();
+        try {
+            ObjectData[] madePersistent = new ObjectData[persisted.length];
+            for (int i = 0; i < persisted.length; i++) {
+                LOG.debug("  makePersistent " + persisted[i]);
+                NakedObject object = (NakedObject) ObjectDecoder.restore(persisted[i]);
+                persistor.makePersistent(object);
+                madePersistent[i] = objectDataFactory.createMadePersistentGraph(persisted[i], object, updateNotifier);
+            }
+           for (int i = 0; i < changed.length; i++) {
+               LOG.debug("  objectChanged " + changed[i]);
+               NakedObject object = (NakedObject) ObjectDecoder.restore(changed[i]);
+               persistor.objectChanged(object);
+           }
+           for (int i = 0; i < deleted.length; i++) {            
+                LOG.debug("  destroyObject " + deleted[i] + " for " + session);
+                NakedObject inObject = getPersistentNakedObject(session, deleted[i]);
+                persistor.destroyObject(inObject);
+            }
+            LOG.debug("  end transaction");
+            persistor.endTransaction();
+            return madePersistent;
+        }catch (RuntimeException e) {
+            LOG.debug("abort transaction", e);
+            persistor.abortTransaction();
+            throw e;
+        }
+    }
+
+    public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
+        LOG.debug("request findInstances " + criteria + " for " + session);
+        TypedNakedCollection instances = persistor().findInstances(criteria);
+        return convertToNakedCollection(instances);
+    }
+
+    public Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+        LOG.debug("request getActionHint " + actionIdentifier + " for " + session);
+        return new DefaultHint();
+    }
+
+    private Action getActionMethod(String actionType, String actionIdentifier, Data[] parameterData, NakedObject object) {
+        NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterData.length];
+        for (int i = 0; i < parameterSpecifiactions.length; i++) {
+            parameterSpecifiactions[i] = getSpecification(parameterData[i].getType());
+        }
+        
+        Action.Type type = ActionImpl.getType(actionType);
+
+        int pos = actionIdentifier.indexOf('#');
+        String className = actionIdentifier.substring(0, pos);
+        String methodName = actionIdentifier.substring(pos + 1);
+        
+        Action action;
+        if(object ==  null) {
+            action = (Action) NakedObjects.getSpecificationLoader().loadSpecification(className).getClassAction(type, methodName, parameterSpecifiactions);
+        } else { 
+            action = (Action) object.getSpecification().getObjectAction(type, methodName, parameterSpecifiactions);
+        }
+        return action;
     }
 
     private Naked[] getParameters(Session session, Data[] parameterData) {
@@ -101,7 +183,7 @@ public class ServerDistribution implements Distribution {
             if (data instanceof ReferenceData && ((ReferenceData) data).getOid() != null) {
                 parameters[i] = getPersistentNakedObject(session, (ReferenceData) data);
             } else if (data instanceof ObjectData) {
-                parameters[i] = DataHelper.restore((ObjectData) data);
+                parameters[i] = ObjectDecoder.restore((ObjectData) data);
             } else if (data instanceof ValueData) {
                 ValueData valueData = (ValueData) data;
                 parameters[i] = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
@@ -112,34 +194,6 @@ public class ServerDistribution implements Distribution {
         return parameters;
     }
 
-    private void checkHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
-        Hint about = getActionHint(session, actionType, actionIdentifier, target, parameterData);
-        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
-            throw new NakedObjectRuntimeException();
-        }
-    }
-
-    private Action getActionMethod(String actionType, String actionIdentifier, Data[] parameterData, NakedObject object) {
-        NakedObjectSpecification[] parameterSpecifiactions = new NakedObjectSpecification[parameterData.length];
-        for (int i = 0; i < parameterSpecifiactions.length; i++) {
-            parameterSpecifiactions[i] = getSpecification(parameterData[i].getType());
-        }
-        Action.Type type = ActionImpl.getType(actionType);
-        Action action = (Action) object.getSpecification().getObjectAction(type, actionIdentifier, parameterSpecifiactions);
-        return action;
-    }
-
-    public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
-        LOG.debug("request findInstances " + criteria + " for " + session);
-        TypedNakedCollection instances = objectManager().findInstances(criteria);
-        return convertToNakedCollection(instances);
-    }
-
-    public Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
-        LOG.debug("request getActionHint " + actionIdentifier + " for " + session);
-        return new DefaultHint();
-    }
-
     private NakedObject getPersistentNakedObject(Session session, ReferenceData object) {
         LOG.debug("get object " + object + " for " + session);
         NakedObjectSpecification spec = getSpecification(object.getType());
@@ -148,13 +202,33 @@ public class ServerDistribution implements Distribution {
         return obj;
      }
 
-    public ObjectData resolveImmediately(Session session, ReferenceData target) {
-        LOG.debug("request resolveImmediately " + target +" for " + session);
-         
-        NakedObjectSpecification spec = getSpecification(target.getType());
-        NakedObject object = NakedObjects.getObjectPersistor().getObject(target.getOid(), spec);
+    private NakedObjectSpecification getSpecification(String fullName) {
+        return NakedObjects.getSpecificationLoader().loadSpecification(fullName);
+    }
 
-        return objectDataFactory.createCompletePersistentGraph(object);
+    private ObjectData[] getUpdates() {
+        NakedObject[] updateObjects = updateNotifier.getUpdates();
+        int noUpdates = updateObjects.length;
+        ObjectData[] updateData = new ObjectData[noUpdates];
+        for (int i = 0; i < noUpdates; i++) {
+            ObjectData objectData = objectDataFactory.createForUpdate(updateObjects[i]);
+            updateData[i] = objectData;
+        }
+        return updateData;
+    }
+
+    public boolean hasInstances(Session session, String objectType) {
+        LOG.debug("request hasInstances of " +  objectType + " for " + session);
+        return persistor().hasInstances(getSpecification(objectType), false);
+    }
+    
+    public int numberOfInstances(Session session, String objectType) {
+        LOG.debug("request numberOfInstances of " + objectType + " for " + session);
+        return persistor().numberOfInstances(getSpecification(objectType), false);
+    }
+
+    private NakedObjectPersistor persistor() {
+        return NakedObjects.getObjectPersistor();
     }
 
     public Data resolveField(Session session, ReferenceData target, String fieldName) {
@@ -168,36 +242,32 @@ public class ServerDistribution implements Distribution {
         return objectDataFactory.createForResolveField(object, fieldName);
     }
 
-    private NakedObjectSpecification getSpecification(String fullName) {
-        return NakedObjects.getSpecificationLoader().loadSpecification(fullName);
+    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+        LOG.debug("request resolveImmediately " + target +" for " + session);
+         
+        NakedObjectSpecification spec = getSpecification(target.getType());
+        NakedObject object = NakedObjects.getObjectPersistor().getObject(target.getOid(), spec);
+
+        return objectDataFactory.createCompletePersistentGraph(object);
     }
 
-    public boolean hasInstances(Session session, String objectType) {
-        LOG.debug("request hasInstances of " +  objectType + " for " + session);
-        return objectManager().hasInstances(getSpecification(objectType), false);
-    }
-
-    public ObjectData makePersistent(Session session, ObjectData data) {
-        LOG.debug("request makePersistent " + data +  " for " + session);
-        NakedObject object = (NakedObject) DataHelper.restore(data);
-        objectManager().startTransaction();
-        objectManager().makePersistent(object);
-        objectManager().endTransaction();
-        return objectDataFactory.createMadePersistentGraph(data, object, updateNotifier);
-    }
-
-    public int numberOfInstances(Session session, String objectType) {
-        LOG.debug("request numberOfInstances of " + objectType + " for " + session);
-        return objectManager().numberOfInstances(getSpecification(objectType), false);
-    }
-    
     /**
      * .NET property
      * 
      * @property
      */
-    public void set_ObjectDataFactory(DataFactory objectDataFactory) {
+    public void set_ObjectDataFactory(ObjectEncoder objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
+    }
+
+    /**
+     * .NET property
+     * 
+     * @property
+     * 
+     */
+    public void set_UpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
+        setUpdateNotifier(updateNotifier);
     }
 
     public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
@@ -215,10 +285,14 @@ public class ServerDistribution implements Distribution {
      * public void setLocalObjectManager(LocalObjectManager objectManager) {
      * this.objectManager = objectManager; }
      */
-    public void setObjectDataFactory(DataFactory objectDataFactory) {
+    public void setObjectDataFactory(ObjectEncoder objectDataFactory) {
         this.objectDataFactory = objectDataFactory;
     }
 
+    public void setUpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
+        this.updateNotifier = updateNotifier;
+    }
+    
     public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
         LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
@@ -234,50 +308,6 @@ public class ServerDistribution implements Distribution {
         }
 
         inObject.setValue(association, value);
-    }
-
-    public void abortTransaction(Session session) {
-        LOG.debug("request abort transaction for " + session);
-       objectManager().abortTransaction();
-    }
-
-    public void endTransaction(Session session) {
-        LOG.debug("request end transaction for " + session);
-        objectManager().endTransaction();
-    }
-
-    public void startTransaction(Session session) {
-        LOG.debug("request start transaction for " + session);
-        objectManager().startTransaction();
-    }
-
-    private NakedObjectPersistor objectManager() {
-        return NakedObjects.getObjectPersistor();
-    }
-
-    /**
-     * .NET property
-     * 
-     * @property
-     * 
-     */
-    public void set_UpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
-        setUpdateNotifier(updateNotifier);
-    }
-    
-    public void setUpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
-        this.updateNotifier = updateNotifier;
-    }
-
-    private ObjectData[] getUpdates() {
-        NakedObject[] updateObjects = updateNotifier.getUpdates();
-        int noUpdates = updateObjects.length;
-        ObjectData[] updateData = new ObjectData[noUpdates];
-        for (int i = 0; i < noUpdates; i++) {
-            ObjectData objectData = objectDataFactory.createForUpdate(updateObjects[i]);
-            updateData[i] = objectData;
-        }
-        return updateData;
     }
 
     public String updateList() {
