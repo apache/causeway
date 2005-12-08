@@ -69,7 +69,6 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
 	        float x = click.getLocation().getX() - 2;
 	        float boundary = getSize().getWidth() - right;
 	        if (x >= boundary) {
-                
                 BackgroundThread.run(this, new BackgroundTask() {
                     public void execute() {
         	            View overlay = createOverlay();
@@ -94,8 +93,11 @@ public abstract class OpenOptionFieldBorder extends AbstractBorder {
                         return "";
                     }
                 });
+                
+                return;
 	        }
         }
+        super.firstClick(click);
     }
     
     protected boolean isAvailable() {

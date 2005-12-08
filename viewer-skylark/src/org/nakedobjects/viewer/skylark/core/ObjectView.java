@@ -4,7 +4,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.CollectionContent;
@@ -26,6 +25,8 @@ import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
+import org.nakedobjects.viewer.skylark.basic.PanelBorder;
+import org.nakedobjects.viewer.skylark.tree.TreeBrowserFormSpecification;
 
 
 public abstract class ObjectView extends AbstractView {
@@ -116,12 +117,19 @@ public abstract class ObjectView extends AbstractView {
             subview.firstClick(click);
         } else {
             if (click.button2()) {
-                View view = getWorkspace().createSubviewFor(getContent().getNaked(), false);
+                // TODO tidy this up
+                View view;
+                Content content = Skylark.getContentFactory().createRootContent(getContent().getNaked());
+                ViewSpecification spec = new  TreeBrowserFormSpecification();
+                view = spec.createView(content, null);
+                
+                view = new PanelBorder(Color.RED, Color.LIGHT_GRAY, view);
                 Size size = view.getRequiredSize();
                 view.setSize(size);
                 Location location = new Location(click.getLocationWithinViewer());
                 location.subtract(size.getWidth() / 2, size.getHeight() / 2);
                 view.setLocation(location);
+                view.layout();
                 getViewManager().setOverlayView(view);
             }
         }
