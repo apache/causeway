@@ -37,7 +37,7 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.setObjectStore(objectStore);
         objectManager.setPersistAlgorithm(new DummyPersistAlgorithm());
 
-        system.setObjectManager(objectManager);
+        system.setObjectPersistor(objectManager);
         
         system.init();
         

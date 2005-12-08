@@ -29,7 +29,7 @@ public class DummyVersion implements Version {
     }
 
     public String toString() {
-        return "TestVersion#" + value;
+        return "DummyVersion#" + value;
     }
 
     public String getUser() {
