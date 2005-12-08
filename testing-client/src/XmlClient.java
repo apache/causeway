@@ -2,6 +2,7 @@
 import org.nakedobjects.application.system.SystemClock;
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.distribution.DistributionLogger;
+import org.nakedobjects.distribution.ObjectEncoder;
 import org.nakedobjects.distribution.ProxyPeerFactory;
 import org.nakedobjects.distribution.ProxyPersistor;
 import org.nakedobjects.distribution.java.JavaDataFactory;
@@ -68,11 +69,13 @@ public class XmlClient {
             JavaObjectFactory objectFactory = new JavaObjectFactory();
             objectFactory.setContainer(container);
 
-            JavaDataFactory objectDataFactory = new JavaDataFactory();    
+
+            ObjectEncoder encoder = new ObjectEncoder();
+            encoder.setDataFactory(new JavaDataFactory());    
 
             ProxyPersistor proxyObjectManager = new ProxyPersistor();
             proxyObjectManager.setConnection(connection);
-            proxyObjectManager.setObjectDataFactory(objectDataFactory);
+            proxyObjectManager.setObjectDataFactory(encoder);
 
             NakedObjectPersistor objectManager = new ObjectPersistorLogger(proxyObjectManager, "manager.log");
             nakedObjects.setObjectPersistor(objectManager);
@@ -87,7 +90,7 @@ public class XmlClient {
 
             ProxyPeerFactory reflectionFactory = new ProxyPeerFactory();
             reflectionFactory.setConnection(connection);
-            reflectionFactory.setObjectDataFactory(objectDataFactory);
+            reflectionFactory.setObjectDataFactory(encoder);
  
             ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
                     reflectionFactory,
