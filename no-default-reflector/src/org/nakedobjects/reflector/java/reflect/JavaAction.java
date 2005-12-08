@@ -22,8 +22,10 @@ import org.nakedobjects.reflector.java.control.SimpleActionAbout;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 import org.apache.log4j.Logger;
+
 
 /*
  * TODO (in all Java...Peer classes) make all methods throw ReflectiveActionException when 
@@ -35,18 +37,38 @@ import org.apache.log4j.Logger;
 public class JavaAction extends JavaMember implements ActionPeer {
     final static Logger LOG = Logger.getLogger(JavaAction.class);
     private final Method actionMethod;
+    private boolean isInstanceMethod;
     private final int paramCount;
-    private Action.Type type;
-    private Action.Target target;
     private final NakedObjectSpecification[] parameters;
+    private Action.Target target;
+    private Action.Type type;
 
-    public JavaAction(MemberIdentifier identifier, Action.Type type, NakedObjectSpecification[] parameters, Action.Target target, Method action, Method about) {
+    public JavaAction(
+            MemberIdentifier identifier,
+            Action.Type type,
+            NakedObjectSpecification[] parameters,
+            Action.Target target,
+            Method action,
+            Method about) {
         super(identifier, about);
         this.type = type;
         this.parameters = parameters;
         this.actionMethod = action;
         this.target = target;
         paramCount = action.getParameterTypes().length;
+        isInstanceMethod = !Modifier.isStatic(actionMethod.getModifiers());
+    }
+
+    public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
+        Hint hint = getHint(object, parameters);
+        if (hint instanceof SimpleActionAbout) {
+            SimpleActionAbout about = (SimpleActionAbout) hint;
+            return new ActionParameterSetImpl(about.getDefaultParameterValues(), about.getParameterLabels(), about.getRequired());
+        } else if (hint instanceof DefaultHint) {
+            return null;
+        } else {
+            throw new ReflectionException();
+        }
     }
 
     public Naked execute(NakedObject inObject, Naked[] parameters) throws ReflectiveActionException {
@@ -59,14 +81,16 @@ public class JavaAction extends JavaMember implements ActionPeer {
             for (int i = 0; i < parameters.length; i++) {
                 executionParameters[i] = parameters[i] == null ? null : parameters[i].getObject();
             }
-            Object result = actionMethod.invoke(inObject.getObject(), executionParameters);
+            // NOTE if the method is static then the first parameter is ignored
+            Object object = inObject == null ? null : inObject.getObject();
+            Object result = actionMethod.invoke(object, executionParameters);
             LOG.debug(" action result " + result);
             if (result != null) {
                 Naked adapter;
                 adapter = NakedObjects.getObjectLoader().createAdapterForCollection(result, null);
-                if(adapter == null) {
+                if (adapter == null) {
                     adapter = NakedObjects.getObjectLoader().getAdapterFor(result);
-                    if(adapter == null) {
+                    if (adapter == null) {
                         adapter = NakedObjects.getObjectLoader().createAdapterForTransient(result);
                     }
                 }
@@ -75,30 +99,31 @@ public class JavaAction extends JavaMember implements ActionPeer {
                 return null;
             }
 
-        } catch (InvocationTargetException e) { 
-            if(e.getTargetException() instanceof TransactionException) {
-        	    throw new ReflectiveActionException("TransactionException thrown while executing " + actionMethod + " " + e.getTargetException().getMessage(), e.getTargetException());
-        	} else {
-	            invocationException("Exception executing " + actionMethod, e);
-	            return null;
-        	}
-        	
+        } catch (InvocationTargetException e) {
+            if (e.getTargetException() instanceof TransactionException) {
+                throw new ReflectiveActionException("TransactionException thrown while executing " + actionMethod + " "
+                        + e.getTargetException().getMessage(), e.getTargetException());
+            } else {
+                invocationException("Exception executing " + actionMethod, e);
+                return null;
+            }
+
         } catch (IllegalAccessException e) {
             throw new ReflectiveActionException("Illegal access of " + actionMethod, e);
         }
 
     }
 
+    public String getDescription() {
+        return "";
+    }
+
     public Object getExtension(Class cls) {
         return null;
     }
 
-    public String getName() {
-        return null;
-    }
-    
     private Hint getHint(NakedObject object, Naked[] parameters) {
-        if(parameters == null) {
+        if (parameters == null) {
             parameters = new Naked[0];
         }
         if (parameters.length != paramCount) {
@@ -107,7 +132,9 @@ public class JavaAction extends JavaMember implements ActionPeer {
 
         Method aboutMethod = getAboutMethod();
 
-        if (aboutMethod == null) { return new DefaultHint(); }
+        if (aboutMethod == null) {
+            return new DefaultHint();
+        }
 
         try {
             SimpleActionAbout hint;
@@ -119,7 +146,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
                 Object[] longParams = new Object[parameters.length + 1];
                 longParams[0] = hint;
                 for (int i = 1; i < longParams.length; i++) {
-                        longParams[i] = parameters[i - 1] == null ? null : parameters[i - 1].getObject();
+                    longParams[i] = parameters[i - 1] == null ? null : parameters[i - 1].getObject();
                 }
                 aboutMethod.invoke(object.getObject(), longParams);
             }
@@ -128,7 +155,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
                 LOG.error("no about returned from " + aboutMethod + " allowing action by default.");
                 return new DefaultHint();
             }
-            if(hint.getDescription().equals("")) {
+            if (hint.getDescription().equals("")) {
                 hint.setDescription("Invoke action " + getIdentifier());
             }
 
@@ -142,20 +169,12 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return new DefaultHint();
     }
 
+    public String getName() {
+        return null;
+    }
+
     public int getParameterCount() {
         return paramCount;
-    }
-
-    public Action.Type getType() {
-        return type;
-    }
-    
-    public Action.Target getTarget() {
-        return target;
-    }
-
-    private NakedObjectSpecification specification(Class returnType) {
-        return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }
 
     public NakedObjectSpecification[] getParameterTypes() {
@@ -167,79 +186,71 @@ public class JavaAction extends JavaMember implements ActionPeer {
         boolean hasReturn = returnType != void.class && returnType != NakedError.class;
         return hasReturn ? specification(returnType) : null;
     }
-    
-    public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
-        Hint hint= getHint(object, parameters);
-        if(hint instanceof SimpleActionAbout) {
-            SimpleActionAbout about = (SimpleActionAbout) hint;
-            return new ActionParameterSetImpl(about.getDefaultParameterValues(), about.getParameterLabels(), about.getRequired());
-        }  else if (hint instanceof DefaultHint) {
-            return null;
-        }else {
-            throw new ReflectionException();
-        }
+
+    public Action.Target getTarget() {
+        return target;
     }
-    
-    public String toString() {
-        StringBuffer parameters = new StringBuffer();
-        Class[] types = actionMethod.getParameterTypes();
-        if(types.length == 0) {
-            parameters.append("none");
-        }
-        for (int i = 0; i < types.length; i++) {
-            if(i > 0) {
-                parameters.append("/");
-            }
-            parameters.append(types[i]);
-        }
-        return "JavaAction [name=" + actionMethod.getName()  + ",type=" + type.getName() + ",parameters=" + parameters + "]";
+
+    public Action.Type getType() {
+        return type;
+    }
+
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        return getHint(object, parameters).canUse();
+    }
+
+    public boolean isAuthorised(Session session) {
+        return true;
+    }
+
+    public boolean isOnInstance() {
+        return isInstanceMethod;
     }
 
     public Consent isUsable(NakedObject target) {
         return Allow.DEFAULT;
     }
 
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
-        return getHint(object, parameters).canUse();
-   }
-
-    public String getDescription() {
-        return "";
-    }
-
     public Consent isVisible(NakedObject target) {
         return Allow.DEFAULT;
     }
 
-    public boolean isAuthorised(Session session) {
-        return true;
+    private NakedObjectSpecification specification(Class returnType) {
+        return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }
-    
-    
-    
-    
+
+    public String toString() {
+        StringBuffer parameters = new StringBuffer();
+        Class[] types = actionMethod.getParameterTypes();
+        if (types.length == 0) {
+            parameters.append("none");
+        }
+        for (int i = 0; i < types.length; i++) {
+            if (i > 0) {
+                parameters.append("/");
+            }
+            parameters.append(types[i]);
+        }
+        return "JavaAction [name=" + actionMethod.getName() + ",type=" + type.getName() + ",parameters=" + parameters + "]";
+    }
+
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
