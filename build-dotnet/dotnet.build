@@ -324,6 +324,7 @@
 		</zip>
 		
 		<!-- TODO use variables and a properties file -->
+		<mkdir dir="${release-dir}"/>
 		<zip zipfile="${release-dir}/nakedobjects-${build.version}${build.number}-dotnet.zip">
 			<fileset basedir="build" prefix="nakedobjects-${build.version}${build.number}">
 				<include name="*.dll"/>
