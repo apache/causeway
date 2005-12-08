@@ -181,6 +181,10 @@ public class Booking {
         return customer.createBooking();
     }
    
+    public static Booking actionRemoteNewBookingOnServer(Customer customer) {
+        return customer.createBooking();
+    }
+
     
     public static Booking actionTestException(String name) {
         throw new RuntimeException("No way to test");

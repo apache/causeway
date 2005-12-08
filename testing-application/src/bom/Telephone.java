@@ -26,8 +26,15 @@ public class Telephone implements Common {
         if(temporary.isSet()) about.unusable();
         if(hide.isSet()) about.invisible();
     }
-    
+
     public void actionConvertToOffice() {
+        number.setValue(number.stringValue()+ " ext ");
+        knownAs.setValue("Office");
+        
+        container.objectChanged(this);
+    }
+
+    public void actionLocalConvertToOfficeOnClient() {
         number.setValue(number.stringValue()+ " ext ");
         knownAs.setValue("Office");
         
