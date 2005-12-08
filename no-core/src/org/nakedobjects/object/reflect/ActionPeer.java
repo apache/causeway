@@ -10,7 +10,11 @@ import org.nakedobjects.object.control.Consent;
 
 public interface ActionPeer extends MemberPeer {
     ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters);
-    
+
+    /**
+     * Execute this action on the specified instance (or null if for a class action) with the specifieds set
+     * of parameters.
+     */
     Naked execute(NakedObject object, Naked[] parameters) throws ReflectiveActionException;
 
     int getParameterCount();
@@ -24,6 +28,11 @@ public interface ActionPeer extends MemberPeer {
     Action.Type getType();
 
     Consent hasValidParameters(NakedObject object, Naked[] parameters);
+
+    /**
+     * Returns true if the action is invoked on the instance, rather than the class.
+     */
+    boolean isOnInstance();
 }
 
 /*

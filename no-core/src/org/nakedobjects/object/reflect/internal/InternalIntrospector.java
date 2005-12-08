@@ -538,7 +538,7 @@ public class InternalIntrospector {
     }
 
     public boolean isObject() {
-        return NakedObject.class.isAssignableFrom(cls);
+        return InternalNakedObject.class.isAssignableFrom(cls);
     }
 
     public boolean isPartOf() {

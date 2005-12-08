@@ -24,42 +24,46 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         throw new IllegalArgumentException();
     }
 
-    private ActionPeer reflectiveAdapter;
+    private ActionPeer peer;
 
     public ActionImpl(String className, String methodName, ActionPeer actionDelegate) {
         super(methodName);
-        this.reflectiveAdapter = actionDelegate;
+        this.peer = actionDelegate;
     }
 
     public NakedObjectSpecification[] getParameterTypes() {
-        return reflectiveAdapter.getParameterTypes();
+        return peer.getParameterTypes();
     }
 
     public Naked execute(final NakedObject object, final Naked[] parameters) {
         LOG.debug("execute action " + object + "." + getId());
         Naked[] params = parameters == null ? new Naked[0] : parameters;
-        Naked result = reflectiveAdapter.execute(object, params);
+        Naked result = peer.execute(isOnInstance() ? object : null, params);
         return result;
     }
 
+    public boolean isOnInstance() {
+        return peer.isOnInstance();
+    }
+
     public Action.Target getTarget() {
-        return reflectiveAdapter.getTarget();
+        return peer.getTarget();
     }
 
     public Action.Type getType() {
-        return reflectiveAdapter.getType();
+        return peer.getType();
     }
 
     public String getDescription() {
-        return reflectiveAdapter.getDescription();
+        return peer.getDescription();
     }
 
     public Object getExtension(Class cls) {
-        return reflectiveAdapter.getExtension(null);
+        return peer.getExtension(null);
     }
 
     public Class[] getExtensions() {
-        return reflectiveAdapter.getExtensions();
+        return peer.getExtensions();
     }
     
     /**
@@ -68,24 +72,24 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
      * @see #getId()
      */
     public String getName() {
-        String label = reflectiveAdapter.getName();
+        String label = peer.getName();
         return label == null ? defaultLabel : label;
     }
 
     public int getParameterCount() {
-        return reflectiveAdapter.getParameterCount();
+        return peer.getParameterCount();
     }
 
     public ActionParameterSet getParameterSet(NakedObject object) {
-        ActionParameterSet parameters = reflectiveAdapter.createParameterSet(object, parameterStubs());
+        ActionParameterSet parameters = peer.createParameterSet(object, parameterStubs());
         if (parameters != null) {
-            parameters.checkParameters(reflectiveAdapter.getIdentifier().toString(), getParameterTypes());
+            parameters.checkParameters(peer.getIdentifier().toString(), getParameterTypes());
         }
         return parameters;
     }
 
     public NakedObjectSpecification getReturnType() {
-        return reflectiveAdapter.getReturnType();
+        return peer.getReturnType();
     }
 
     /**
@@ -96,15 +100,15 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
     }
 
     public Consent isUsable(NakedObject target) {
-        return reflectiveAdapter.isUsable(target);
+        return peer.isUsable(target);
     }
 
     public boolean isAuthorised() {
-        return reflectiveAdapter.isAuthorised(NakedObjects.getCurrentSession());
+        return peer.isAuthorised(NakedObjects.getCurrentSession());
     }
 
     public Consent isVisible(NakedObject target) {
-        return reflectiveAdapter.isVisible(target);
+        return peer.isVisible(target);
     }
 
     public Naked[] parameterStubs() {
@@ -143,7 +147,7 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
     }
 
     public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
-        return reflectiveAdapter.hasValidParameters(object, parameters);
+        return peer.hasValidParameters(object, parameters);
     }
 }
 

@@ -7,57 +7,22 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 
+
 public class DummyAction implements Action {
-    public Object getExtension(Class cls) {
-        return null;
-    }
-    
-    public Class[] getExtensions() {
-        return new Class[0];
-    }
-
-    public int getParameterCount() {
-        return 0;
-    }
-
-    public Type getType() {
-        return null;
-    }
-
-    public Target getTarget() {
-        return null;
-    }
-
-    public boolean hasReturn() {
-        return false;
-    }
-
-    public NakedObjectSpecification[] getParameterTypes() {
-        return null;
-    }
-
-    public Naked[] parameterStubs() {
-        return null;
-    }
-
-    public NakedObjectSpecification getReturnType() {
-        return null;
-    }
-
     public Naked execute(NakedObject target, Naked[] parameters) {
-        return null;
-    }
-
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
-        return null;
-    }
-
-    public ActionParameterSet getParameterSet(NakedObject object) {
         return null;
     }
 
     public String getDescription() {
         return null;
+    }
+
+    public Object getExtension(Class cls) {
+        return null;
+    }
+
+    public Class[] getExtensions() {
+        return new Class[0];
     }
 
     public String getId() {
@@ -68,7 +33,43 @@ public class DummyAction implements Action {
         return null;
     }
 
+    public int getParameterCount() {
+        return 0;
+    }
+
+    public ActionParameterSet getParameterSet(NakedObject object) {
+        return null;
+    }
+
+    public NakedObjectSpecification[] getParameterTypes() {
+        return null;
+    }
+
+    public NakedObjectSpecification getReturnType() {
+        return null;
+    }
+
+    public Target getTarget() {
+        return null;
+    }
+
+    public Type getType() {
+        return null;
+    }
+
+    public boolean hasReturn() {
+        return false;
+    }
+
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        return null;
+    }
+
     public boolean isAuthorised() {
+        return true;
+    }
+
+    public boolean isOnInstance() {
         return true;
     }
 
@@ -80,9 +81,11 @@ public class DummyAction implements Action {
         return null;
     }
 
-    
-}
+    public Naked[] parameterStubs() {
+        return null;
+    }
 
+}
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

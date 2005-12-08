@@ -79,6 +79,10 @@ public abstract class AbstractActionPeer implements ActionPeer {
     public boolean isAuthorised(Session session) {
         return decorated.isAuthorised(session);
     }
+    
+    public boolean isOnInstance() {
+        return decorated.isOnInstance();
+    }
 }
 
 

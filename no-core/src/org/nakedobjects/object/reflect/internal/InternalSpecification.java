@@ -12,6 +12,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.ObjectTitle;
 import org.nakedobjects.object.reflect.ReflectionPeerBuilder;
+import org.nakedobjects.utility.ToString;
 
 import java.util.Vector;
 
@@ -350,6 +351,15 @@ public class InternalSpecification implements NakedObjectSpecification {
 
     public NakedObjectSpecification superclass() {
         return superclass;
+    }
+    
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("name", fullName);
+        str.append("object", isObject);
+        str.append("collection", isCollection);
+        str.append("value", isValue);
+        return str.toString();
     }
 
 }
