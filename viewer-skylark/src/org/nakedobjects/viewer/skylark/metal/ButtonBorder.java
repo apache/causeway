@@ -35,7 +35,7 @@ public class ButtonBorder extends AbstractBorder {
 
     public void keyPressed(final int keyCode, final int modifiers) {
     	if(keyCode == KeyEvent.VK_ENTER) {
-    	    if(defaultAction.disabled(getView()).isAllowed()) {
+    	    if(defaultAction != null && defaultAction.disabled(getView()).isAllowed()) {
     	        defaultAction.execute(getWorkspace(), getView(), getLocation());
     	    }
     	}

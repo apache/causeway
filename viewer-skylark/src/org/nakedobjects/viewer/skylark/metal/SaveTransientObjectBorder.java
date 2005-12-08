@@ -90,7 +90,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
 	            objectManager.makePersistent(transientObject);
 	            objectManager.endTransaction();
 	        } catch (RuntimeException e) {
-	            LOG.info("exception saving " + transientObject + ", aborting transaction");
+	            LOG.info("exception saving " + transientObject + ", aborting transaction", e);
 	            try {
 	                objectManager.abortTransaction();
 	            } catch (Exception e2) {
