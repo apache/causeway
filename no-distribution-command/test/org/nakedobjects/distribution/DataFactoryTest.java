@@ -166,7 +166,7 @@ public class DataFactoryTest extends TestCase {
     }
 
     public void testCreateActionResultWithNull() {
-        ActionResultData data = factory.createActionResult(null, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = factory.createActionResult(null, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof NullData);
     }
 
@@ -174,7 +174,7 @@ public class DataFactoryTest extends TestCase {
         DummyNakedCollection collection = new DummyNakedCollection();
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         collection.setupSpecification(type);
-        ActionResultData data = factory.createActionResult(collection, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = factory.createActionResult(collection, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof CollectionData);
         assertEquals(type.getFullName(), data.getReturn().getType());
    }
@@ -184,7 +184,7 @@ public class DataFactoryTest extends TestCase {
         object.setupResolveState(ResolveState.PART_RESOLVED);
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         object.setupSpecification(type);
-        ActionResultData data = factory.createActionResult(object, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = factory.createActionResult(object, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof ObjectData);
         assertEquals(type.getFullName(), data.getReturn().getType());
      }

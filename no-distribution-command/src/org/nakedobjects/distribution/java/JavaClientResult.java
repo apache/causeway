@@ -1,48 +1,28 @@
-package org.nakedobjects.distribution.dummy;
+package org.nakedobjects.distribution.java;
 
-import org.nakedobjects.distribution.ValueData;
-import org.nakedobjects.utility.ToString;
+import org.nakedobjects.distribution.ClientActionResultData;
+import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.object.Version;
 
+public class JavaClientResult implements ClientActionResultData {
+    private final ObjectData[] madePersistent;
+    private final Version[] changedVersion;
 
-public class DummyValueData implements ValueData {
-    public Object value;
-    public String type;
-
-    public DummyValueData(Object value, String type) {
-        super();
-        this.value = value;
-        this.type = type;
+    public JavaClientResult(ObjectData[] madePersistent, Version[] changedVersion) {
+        this.madePersistent = madePersistent;
+        this.changedVersion = changedVersion;
     }
 
-    public Object getValue() {
-        return value;
+    public ObjectData[] getPersisted() {
+        return madePersistent;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-
-        if (obj instanceof DummyValueData) {
-            DummyValueData ref = (DummyValueData) obj;
-            return (value == null ? ref.value == null : value.equals(ref.value))
-                    && (type == null ? ref.type == null : type.equals(ref.type));
-        }
-        return false;
-    }
-
-    public String toString() {
-        ToString str = new ToString(this);
-        str.append("type", type);
-        str.append("value", value);
-        return str.toString();
+    public Version[] getChanged() {
+        return changedVersion;
     }
 
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

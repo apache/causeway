@@ -28,9 +28,9 @@ public final class ObjectEncoder {
     private DataStructure dataStructure = new DataStructure();
     private int persistentGraphDepth = 100;
     private int updateGraphDepth = 1;
-    private DataFactory helper;
+    private DataFactory factory;
 
-    public ActionResultData createActionResult(
+    public ServerActionResultData createActionResult(
             Naked returns,
             ObjectData[] updatesData,
             ObjectData persistedTarget,
@@ -39,7 +39,7 @@ public final class ObjectEncoder {
             String[] warnings) {
         Data result;
         if (returns == null) {
-            result = helper.createNullData("");
+            result = factory.createNullData("");
         } else if (returns instanceof NakedCollection) {
             result = createCollectionData((NakedCollection) returns, true, persistentGraphDepth, new Hashtable());
         } else if (returns instanceof NakedObject) {
@@ -48,7 +48,7 @@ public final class ObjectEncoder {
             throw new NakedObjectRuntimeException();
         }
 
-        return helper.createResultData(result, updatesData, persistedTarget, persistedParameters, messages, warnings);
+        return factory.createActionResultData(result, updatesData, persistedTarget, persistedParameters, messages, warnings);
     }
 
     private CollectionData createCollectionData(
@@ -74,7 +74,7 @@ public final class ObjectEncoder {
             elements = new ObjectData[0];
         }
 
-        return helper.createCollectionData(oid, type, elements, hasAllElements, collection.getVersion());
+        return factory.createCollectionData(oid, type, elements, hasAllElements, collection.getVersion());
     }
 
     /**
@@ -96,7 +96,7 @@ public final class ObjectEncoder {
 
     private final Data createDataForParameter(String type, Naked object) {
         if (object == null) {
-            return helper.createNullData(type);
+            return factory.createNullData(type);
         }
 
         if (object.getSpecification().isObject()) {
@@ -136,7 +136,7 @@ public final class ObjectEncoder {
             if (fields[i].getId().equals(fieldName)) {
                 Naked field = object.getField(fields[i]);
                 if (field == null) {
-                    fieldContent[i] = helper.createNullData(fields[i].getSpecification().getFullName());
+                    fieldContent[i] = factory.createNullData(fields[i].getSpecification().getFullName());
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
                 } else if (fields[i].isCollection()) {
@@ -153,7 +153,7 @@ public final class ObjectEncoder {
         // resolving (is not a ghost) yet it has no version number
         // return createObjectData(oid, type, fieldContent, resolveState.isResolved(),
         // !resolveState.isGhost(), object.getVersion());
-        ObjectData data = helper.createObjectData(oid, type, resolveState.isResolved(), object.getVersion());
+        ObjectData data = factory.createObjectData(oid, type, resolveState.isResolved(), object.getVersion());
         data.setFieldContent(fieldContent);
         return data;
         // return createObjectData(oid, type, fieldContent, resolveState.isResolved(), object.getVersion());
@@ -206,7 +206,7 @@ public final class ObjectEncoder {
                         elements[j] = createMadePersistentGraph(element, el, updateNotifier);
                     }
                 }
-                fieldContent[i] = helper.createCollectionData(coll.getOid(), f.getType(), elements, f.hasAllElements(), coll
+                fieldContent[i] = factory.createCollectionData(coll.getOid(), f.getType(), elements, f.hasAllElements(), coll
                         .getVersion());
             } else {
                 Data f = data.getFieldContent()[i];
@@ -219,7 +219,7 @@ public final class ObjectEncoder {
         }
         NakedObjects.getObjectLoader().end(object);
 
-        ObjectData createReferenceData = helper.createObjectData(oid, type, true, version);
+        ObjectData createReferenceData = factory.createObjectData(oid, type, true, version);
         createReferenceData.setFieldContent(fieldContent);
         return createReferenceData;
     }
@@ -252,7 +252,7 @@ public final class ObjectEncoder {
         boolean isComplete = object.getResolveState() == ResolveState.TRANSIENT
                 || object.getResolveState() == ResolveState.RESOLVED;
 
-        ObjectData data = helper.createObjectData(oid, type, isComplete, object.getVersion());
+        ObjectData data = factory.createObjectData(oid, type, isComplete, object.getVersion());
         previous.put(object, data);
 
         Data[] fieldContent;
@@ -267,7 +267,7 @@ public final class ObjectEncoder {
                 if (fields[i].isDerived()) {
                     fieldContent[i] = null;
                 } else if (field == null && isComplete) {
-                    fieldContent[i] = helper.createNullData(fields[i].getSpecification().getFullName());
+                    fieldContent[i] = factory.createNullData(fields[i].getSpecification().getFullName());
                 } else if (field == null && !isComplete) {
                     fieldContent[i] = null;
                 } else if (fields[i].isValue()) {
@@ -275,7 +275,11 @@ public final class ObjectEncoder {
                 } else if (fields[i].isCollection()) {
                     fieldContent[i] = createCollectionData((NakedCollection) field, recursePersistentObjects, depth - 1, previous);
                 } else {
-                    fieldContent[i] = createObjectData((NakedObject) field, recursePersistentObjects, depth - 1, previous);
+                    if (recursePersistentObjects || field.getOid() == null) {
+                        fieldContent[i] = createObjectData((NakedObject) field, recursePersistentObjects, depth - 1, previous);
+                    } else {
+                        fieldContent[i] = createReference((NakedObject) field);
+                    }
                 }
             }
             NakedObjects.getObjectLoader().end(object);
@@ -292,11 +296,11 @@ public final class ObjectEncoder {
      */
     public final ReferenceData createReference(NakedObject object) {
         Assert.assertNotNull(object.getOid());
-        return helper.createReferenceData(object.getSpecification().getFullName(), object.getOid(), object.getVersion());
+        return factory.createReferenceData(object.getSpecification().getFullName(), object.getOid(), object.getVersion());
     }
-
+    
     private final ValueData createValueData(Naked object) {
-        return helper.createValueData(object.getSpecification().getFullName(), ((NakedValue) object).getObject());
+        return factory.createValueData(object.getSpecification().getFullName(), ((NakedValue) object).getObject());
     }
 
     private NakedObjectField[] getFields(NakedObjectSpecification specification) {
@@ -356,12 +360,16 @@ public final class ObjectEncoder {
         this.updateGraphDepth = updateGraphDepth;
     }
 
-    public void setDataFactory(DataFactory helper) {
-        this.helper = helper;
+    public void setDataFactory(DataFactory factory) {
+        this.factory = factory;
     }
 
-    public void set_DataFactory(DataFactory helper) {
-        setDataFactory(helper);
+    public void set_DataFactory(DataFactory factory) {
+        setDataFactory(factory);
+    }
+
+    public ClientActionResultData createClientActionResultData(ObjectData[] madePersistent, Version[] changedVersion) {
+        return factory.createActionResultData(madePersistent, changedVersion);
     }
 }
 

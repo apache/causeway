@@ -1,10 +1,11 @@
 package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.ClientActionResultData;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.distribution.ActionResultData;
+import org.nakedobjects.distribution.ServerActionResultData;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
@@ -29,13 +30,13 @@ public abstract class CommandClient implements Distribution {
         execute(request);
     }
 
-    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, target, parameters);
         execute(request);
         return request.getActionResult();
     }
     
-    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+    public ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
         ExecuteClientAction request = new ExecuteClientAction(session, persisted, changed, deleted);
         execute(request);
         return request.getActionResult();

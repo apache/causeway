@@ -1,32 +1,37 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.Version;
+public interface ServerActionResultData {
 
-/**
- * Create serializable objects that are used to carry messages across the network.  This assumes that 
- * the Oid and Version implementations are also serializable.
- */
-public interface DataFactory {
-    CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version);
+    /**
+     * Return the Data for the result from executing the action.
+     */
+    Data getReturn();
 
-    NullData createNullData(String type);
+    /**
+     * Return the ObjectData for the target if it was persisited by the server.
+     */
+    ObjectData getPersistedTarget();
 
-    ObjectData createObjectData(Oid oid, String type, boolean hasCompleteData, Version version);
+    /**
+     * Return the ObjectDatas for any of the parameters (in the same seqence as passed to the server) if they
+     * were was persisited by the server.
+     */
+    ObjectData[] getPersistedParameters();
 
-    ReferenceData createReferenceData(String type, Oid oid, Version version);
+    /**
+     * Return the ObjectDatas for any objects that where changed by the server while executing the action.
+     */
+    ObjectData[] getUpdates();
 
-    ServerActionResultData createActionResultData(
-            Data result,
-            ObjectData[] updatesData,
-            ObjectData persistedTarget,
-            ObjectData[] persistedParameters,
-            String[] messages,
-            String[] warnings);
+    /**
+     * Return all messages created by the action.
+     */
+    String[] getMessages();
 
-    ClientActionResultData createActionResultData(ObjectData[] madePersistent, Version[] changedVersion);
-
-    ValueData createValueData(String fullName, Object object);
+    /**
+     * Return all warnings created by the action.
+     */
+    String[] getWarnings();
 }
 
 /*

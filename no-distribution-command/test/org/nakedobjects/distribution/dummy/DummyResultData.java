@@ -2,10 +2,10 @@ package org.nakedobjects.distribution.dummy;
 
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ActionResultData;
+import org.nakedobjects.distribution.ServerActionResultData;
 
 
-public class DummyResultData implements ActionResultData {
+public class DummyResultData implements ServerActionResultData {
 
     private final Data result;
     private final ObjectData[] updatesData;

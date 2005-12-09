@@ -21,12 +21,12 @@ import org.apache.log4j.Logger;
 public final class ProxyAction extends AbstractActionPeer {
     private final static Logger LOG = Logger.getLogger(ProxyAction.class);
     private Distribution connection;
-    private final ObjectEncoder dataFactory;
+    private final ObjectEncoder encoder;
 
-    public ProxyAction(final ActionPeer local, final Distribution connection, ObjectEncoder objectDataFactory) {
+    public ProxyAction(final ActionPeer local, final Distribution connection, ObjectEncoder encoder) {
         super(local);
         this.connection = connection;
-        this.dataFactory = objectDataFactory;
+        this.encoder = encoder;
     }
 
     public Naked execute(NakedObject target, Naked[] parameters) throws ReflectiveActionException {
@@ -41,11 +41,11 @@ public final class ProxyAction extends AbstractActionPeer {
     private Naked executeRemotely(NakedObject target, Naked[] parameters) {
         Data[] parameterObjectData = parameterValues(parameters);
         LOG.debug(debug("execute remotely", getIdentifier(), target, parameters));
-        ObjectData targetReference = dataFactory.createDataForActionTarget(target);
-        ActionResultData result;
+        ObjectData targetReference = encoder.createDataForActionTarget(target);
+        ServerActionResultData result;
         try {
             String name = getIdentifier().getClassName() + "#" + getIdentifier().getName();
-            result = connection.executeAction(NakedObjects.getCurrentSession(), getType().getName(), name,
+            result = connection.executeServerAction(NakedObjects.getCurrentSession(), getType().getName(), name,
                     targetReference, parameterObjectData);
         } catch (NakedObjectRuntimeException e) {
             LOG.error("remote exception: " + e.getMessage(), e);
@@ -134,7 +134,7 @@ public final class ProxyAction extends AbstractActionPeer {
 
     private Data[] parameterValues(Naked[] parameters) {
         NakedObjectSpecification[] parameterTypes = getParameterTypes();
-        return dataFactory.createDataForParameters(parameterTypes, parameters);
+        return encoder.createDataForParameters(parameterTypes, parameters);
     }
 
     private String debug(String message, MemberIdentifier identifier, NakedObject target, Naked[] parameters) {

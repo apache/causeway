@@ -5,7 +5,7 @@ import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Session;
-import org.nakedobjects.object.control.Hint;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.utility.Logger;
 
 import java.util.Vector;
@@ -29,6 +29,17 @@ public class DistributionLogger extends Logger implements Distribution {
             str.append(i + 1);
             str.append("] ");
             dump(str, data[i], 3, new Vector());
+        }
+        return str.toString();
+    }
+    
+    private static String dump(Version[] versions) {
+        StringBuffer str = new StringBuffer();
+        for (int i = 0; i < versions.length; i++) {
+            str.append("\n    [");
+            str.append(i + 1);
+            str.append("] ");
+            str.append(versions);
         }
         return str.toString();
     }
@@ -130,12 +141,12 @@ public class DistributionLogger extends Logger implements Distribution {
         decorated.clearAssociation(session, fieldIdentifier, target, associate);
     }
 
-    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         log("execute action " + actionIdentifier + "/" + actionType + indentedNewLine() + "target: " + dump(target)
                 + indentedNewLine() + "parameters: " + dump(parameters));
-        ActionResultData result;
+        ServerActionResultData result;
         try {
-            result = decorated.executeAction(session, actionType, actionIdentifier, target, parameters);
+            result = decorated.executeServerAction(session, actionType, actionIdentifier, target, parameters);
             log("  <-- returns: " + dump(result.getReturn()));
             log("  <-- persisted target: " + dump(result.getPersistedTarget()));
             log("  <-- persisted parameters: " + dump(result.getPersistedParameters()));
@@ -147,12 +158,13 @@ public class DistributionLogger extends Logger implements Distribution {
         return result;
     }
 
-    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+    public ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
         log("execute client action "  + indentedNewLine() + "persisted: " + dump(persisted)
                 + indentedNewLine() + "changed: " + dump(changed)
                 + indentedNewLine() + "deleted: " + dump(deleted));
-        ObjectData[] data = decorated.executeClientAction(session, persisted, changed, deleted);
-        log(" <-- data: " + dump(data));
+        ClientActionResultData data = decorated.executeClientAction(session, persisted, changed, deleted);
+        log(" <-- persisted: " + dump(data.getPersisted()));
+        log(" <-- changed: " + dump(data.getChanged()));
         return data;
     }
     
@@ -161,11 +173,6 @@ public class DistributionLogger extends Logger implements Distribution {
         ObjectData[] instances = decorated.findInstances(session, criteria);
         log(" <-- instances: " + dump(instances));
         return instances;
-    }
-
-    public Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
-        log("action hint - no details yet");
-        return decorated.getActionHint(session, actionType, actionIdentifier, target, parameters);
     }
 
     protected Class getDecoratedClass() {

@@ -2,9 +2,9 @@ package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ActionResultData;
+import org.nakedobjects.distribution.ServerActionResultData;
 
-public class JavaResult  implements ActionResultData {
+public class JavaResult  implements ServerActionResultData {
     private final Data result;
     private final ObjectData[] updatesData;
     private final ObjectData persistedTarget;

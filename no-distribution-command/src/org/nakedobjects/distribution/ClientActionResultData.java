@@ -1,37 +1,19 @@
 package org.nakedobjects.distribution;
 
-public interface ActionResultData {
+import org.nakedobjects.object.Version;
+
+public interface ClientActionResultData {
+    /**
+     * Return the ObjectDatas for the persisted objects (in the same seqence as passed to the server).  This is
+     * used to update the client's copies with the new OIDs and Versions
+     */
+    ObjectData[] getPersisted();
 
     /**
-     * Return the Data for the result from executing the action.
+     * Return the Versions for the objects that were saved by the server for the action.  These are
+     * used to update the versions of the client's copies so they align with the servers copies.
      */
-    Data getReturn();
-
-    /**
-     * Return the ObjectData for the target if it was persisited by the server.
-     */
-    ObjectData getPersistedTarget();
-
-    /**
-     * Return the ObjectDatas for any of the parameters (in the same seqence as passed to the server) if they
-     * were was persisited by the server.
-     */
-    ObjectData[] getPersistedParameters();
-
-    /**
-     * Return the ObjectDatas for any objects that where changed by the server while executing the action.
-     */
-    ObjectData[] getUpdates();
-
-    /**
-     * Return all messages created by the action.
-     */
-    String[] getMessages();
-
-    /**
-     * Return all warnings created by the action.
-     */
-    String[] getWarnings();
+    Version[] getChanged();
 }
 
 /*

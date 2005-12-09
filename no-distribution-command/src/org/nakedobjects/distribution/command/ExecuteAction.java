@@ -3,7 +3,7 @@ package org.nakedobjects.distribution.command;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ActionResultData;
+import org.nakedobjects.distribution.ServerActionResultData;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.utility.ToString;
 
@@ -23,11 +23,11 @@ public class ExecuteAction extends AbstractRequest {
     }
 
     public void execute(Distribution distribution) {
-        setResponse(distribution.executeAction(session, actionType, actionIdentifier, target, parameters));
+        setResponse(distribution.executeServerAction(session, actionType, actionIdentifier, target, parameters));
     }
 
-    public ActionResultData getActionResult() {
-        return (ActionResultData) getResponse();
+    public ServerActionResultData getActionResult() {
+        return (ServerActionResultData) getResponse();
     }
 
     public String toString() {

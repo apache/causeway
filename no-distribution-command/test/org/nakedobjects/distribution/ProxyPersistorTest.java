@@ -1,26 +1,40 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.distribution.dummy.DummyClientResultData;
+import org.nakedobjects.distribution.dummy.DummyNullValue;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
+import org.nakedobjects.distribution.dummy.DummyObjectDataFactory;
+import org.nakedobjects.distribution.dummy.DummyReferenceData;
 import org.nakedobjects.distribution.dummy.DummyValueData;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.Session;
+import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.object.Version;
+import org.nakedobjects.object.defaults.NullDirtyObjectSet;
+import org.nakedobjects.object.loader.ObjectLoaderImpl;
+import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.security.NullSession;
 import org.nakedobjects.object.transaction.TransactionException;
 
 import junit.framework.TestCase;
 
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.easymock.MockControl;
 
 import test.org.nakedobjects.object.DummyOid;
-import test.org.nakedobjects.object.TestObjectBuilder;
-import test.org.nakedobjects.object.TestSystem;
 import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyVersion;
-import test.org.nakedobjects.object.reflect.TestPojo;
-import test.org.nakedobjects.object.reflect.TestPojoValuePeer;
-import test.org.nakedobjects.object.reflect.defaults.TestValue;
+import test.org.nakedobjects.objects.bom.Movie;
+import test.org.nakedobjects.objects.bom.Person;
+import test.org.nakedobjects.objects.specification.TestAdapterFactory;
+import test.org.nakedobjects.objects.specification.TestObjectFactory;
+import test.org.nakedobjects.objects.specification.TestSpecificationLoader;
+import test.org.nakedobjects.utility.configuration.TestConfiguration;
 
 
 public class ProxyPersistorTest extends TestCase {
@@ -32,85 +46,219 @@ public class ProxyPersistorTest extends TestCase {
     private Distribution distribution;
     private MockControl distributionControl;
     private ProxyPersistor persistor;
-    private MockControl dataFactoryControl;
-    private DataFactory dataFactoryHelper;
-    private TestSystem system;
+    private ObjectLoaderImpl loader;
+    private Session session;
 
     protected void setUp() throws Exception {
-        LogManager.getRootLogger().setLevel(Level.OFF);
+        BasicConfigurator.configure();
+        LogManager.getRootLogger().setLevel(Level.DEBUG);
 
         persistor = new ProxyPersistor();
-        
+
         distributionControl = MockControl.createControl(Distribution.class);
         distributionControl.setDefaultMatcher(MockControl.ARRAY_MATCHER);
         distribution = (Distribution) distributionControl.getMock();
-        
-        dataFactoryControl = MockControl.createControl(DataFactory.class);
-        dataFactoryHelper = (DataFactory) dataFactoryControl.getMock();
-        
+
         persistor.setConnection(distribution);
-        ObjectEncoder dataFactory = new ObjectEncoder();
-        dataFactory.setDataFactory(dataFactoryHelper);
-        
-        persistor.setObjectDataFactory(dataFactory);
-        
-        system = new TestSystem();
-        system.init();
+        ObjectEncoder encoder = new ObjectEncoder();
+        encoder.setDataFactory(new DummyObjectDataFactory());
+
+        persistor.setEncoder(encoder);
+
+        persistor.setUpdateNotifier(new NullDirtyObjectSet());
+
+        session = new NullSession();
+
+        NakedObjectsClient nakedObjects = new NakedObjectsClient();
+
+        loader = new ObjectLoaderImpl();
+        loader.setAdapterFactory(new TestAdapterFactory());
+        loader.setObjectFactory(new TestObjectFactory());
+
+        nakedObjects.setObjectLoader(loader);
+
+        nakedObjects.setConfiguration(new TestConfiguration());
+        nakedObjects.setSpecificationLoader(new TestSpecificationLoader());
+        nakedObjects.setObjectPersistor(persistor);
+        nakedObjects.setSession(session);
+
+        nakedObjects.init();
+
     }
 
     public void testMakePersistentOutsideTransaction() throws Exception {
         NakedObject transientObject = new DummyNakedObject();
         try {
-           persistor.makePersistent(transientObject);
+            persistor.makePersistent(transientObject);
             fail();
         } catch (TransactionException e) {}
     }
 
-    public void testMakePersistent() throws Exception {
-        TestObjectBuilder referencedObject;
-        referencedObject = new TestObjectBuilder(new TestPojo());
-        referencedObject.setResolveState(ResolveState.TRANSIENT);
-
-        TestValue value = new TestValue(new TestPojoValuePeer());
-
-        TestObjectBuilder obj;
-        obj = new TestObjectBuilder(new TestPojo());
-        obj.setResolveState(ResolveState.TRANSIENT);
-
-        obj.setValueField("value", value);
-        obj.setReferenceField("reference", referencedObject);
-        
-        obj.init(system);
-        
-
-        ObjectData field2 = new DummyObjectData(new DummyOid(345), "type", true, new DummyVersion(456));
-        field2.setFieldContent(new Data[] {});
-        DummyObjectData transientData = new DummyObjectData(new DummyOid(123), "type", true, new DummyVersion(456));
-        transientData.setFieldContent(new Data[] { null, field2 });
-        
-        DummyValueData dummyValueData = new DummyValueData("", "value type");
-
-        dataFactoryControl.expectAndReturn(
-                dataFactoryHelper.createObjectData(null, TestPojo.class.getName(), true, null), transientData);
-        dataFactoryControl.expectAndReturn(
-                dataFactoryHelper.createObjectData(null, TestPojo.class.getName(), true, null), transientData);
-        dataFactoryControl.expectAndDefaultReturn(
-                dataFactoryHelper.createValueData(value.toString(), null), dummyValueData);
-        dataFactoryControl.replay();
-        
-        DummyObjectData updateData = new DummyObjectData(new DummyOid(123), "type", true, new DummyVersion(456));
-        distributionControl.expectAndReturn(distribution.executeClientAction(null, new ObjectData[] {transientData}, new ObjectData[0],
-                new ReferenceData[0]), new ObjectData[] { updateData });
+    public void testClientSideActionWhereNothingDone() throws Exception {
         distributionControl.replay();
 
-        NakedObject transientObject = obj.getAdapter();
+        persistor.startTransaction();
+        persistor.endTransaction();
+
+        distributionControl.verify();
+    }
+
+    public void testAllInstances() throws Exception {
+        DummyObjectData instance1 = new DummyObjectData(new DummyOid(12), Movie.class.getName(), true, new DummyVersion(3));
+        DummyValueData name = new DummyValueData("ET", "java.lang.String");
+        instance1.setFieldContent(new Data[] { new DummyNullValue(Person.class.getName()), name });
+
+        distribution.allInstances(session, Movie.class.getName(), false);
+        distributionControl.setReturnValue(new ObjectData[] { instance1 });
+
+        distributionControl.replay();
+
+        TypedNakedCollection instances = persistor.allInstances(NakedObjects.getSpecificationLoader().loadSpecification(
+                Movie.class), false);
+
+        distributionControl.verify();
+
+        assertEquals(1, instances.size());
+        NakedObject object = instances.elementAt(0);
+        Movie movie = (Movie) object.getObject();
+        assertEquals("ET", movie.getName());
+        assertEquals(new DummyOid(12), object.getOid());
+        assertEquals(new DummyVersion(3), object.getVersion());
+    }
+
+    public void testResolveImmediately() throws Exception {
+        DummyObjectData instance1 = new DummyObjectData(new DummyOid(5), Movie.class.getName(), true, new DummyVersion(3));
+        DummyValueData name = new DummyValueData("ET", "java.lang.String");
+        instance1.setFieldContent(new Data[] { new DummyNullValue(Person.class.getName()), name });
+
+        DummyReferenceData ref = new DummyReferenceData(new DummyOid(5), Movie.class.getName(), null);
+        distribution.resolveImmediately(session, ref);
+        distributionControl.setReturnValue(instance1);
+
+        distributionControl.replay();
+
+        NakedObject object;
+        object = loader.recreateAdapterForPersistent(new DummyOid(5), NakedObjects.getSpecificationLoader().loadSpecification(
+                Movie.class));
+        Movie movie = (Movie) object.getObject();
+        assertEquals(null, movie.getName());
+
+        persistor.resolveImmediately(object);
+
+        distributionControl.verify();
+
+        assertEquals("ET", movie.getName());
+        assertEquals(new DummyOid(5), object.getOid());
+        assertEquals(new DummyVersion(3), object.getVersion());
+    }
+
+    public void testHasInstances() throws Exception {
+        distribution.hasInstances(session, Movie.class.getName());
+        distributionControl.setReturnValue(true);
+        distributionControl.setReturnValue(false);
+
+        distributionControl.replay();
+
+        NakedObjectSpecification type = NakedObjects.getSpecificationLoader().loadSpecification(Movie.class);
+        assertTrue(persistor.hasInstances(type, false));
+        assertFalse(persistor.hasInstances(type, false));
+
+        distributionControl.verify();
+    }
+
+    public void testNumberOfInstances() throws Exception {
+        distribution.numberOfInstances(session, Movie.class.getName());
+        distributionControl.setReturnValue(10);
+        distributionControl.setReturnValue(4);
+
+        distributionControl.replay();
+
+        NakedObjectSpecification type = NakedObjects.getSpecificationLoader().loadSpecification(Movie.class);
+        assertEquals(10, persistor.numberOfInstances(type, false));
+        assertEquals(4, persistor.numberOfInstances(type, false));
+
+        distributionControl.verify();
+    }
+
+    public void testAllInstancesButNoneFound() throws Exception {
+        distribution.allInstances(session, Movie.class.getName(), false);
+        distributionControl.setReturnValue(new ObjectData[0]);
+
+        distributionControl.replay();
+
+        persistor.allInstances(NakedObjects.getSpecificationLoader().loadSpecification(Movie.class), false);
+
+        distributionControl.verify();
+    }
+
+    public void testClientSideActionWhereObjectChanged() throws Exception {
+        DummyObjectData expectedMovie = new DummyObjectData(new DummyOid(12), Movie.class.getName(), true, new DummyVersion(4));
+        DummyValueData expectedMovieName = new DummyValueData("War of the Worlds", String.class.getName());
+        DummyReferenceData expectedDirectorRef = new DummyReferenceData(new DummyOid(14), Person.class.getName(),
+                new DummyVersion(8));
+        expectedMovie.setFieldContent(new Data[] { expectedDirectorRef, expectedMovieName });
+
+        DummyObjectData expectedDirector = new DummyObjectData(new DummyOid(14), Person.class.getName(), true,
+                new DummyVersion(8));
+        DummyValueData expectedDirectorName = new DummyValueData("Unknown", String.class.getName());
+        expectedDirector.setFieldContent(new Data[] { expectedDirectorName });
+
+        ObjectData[] changes = new ObjectData[] { expectedMovie, expectedDirector };
+        distribution.executeClientAction(session, new ObjectData[0], changes, new ReferenceData[0]);
+        Version[] versionUpdates = new Version[] { new DummyVersion(5), new DummyVersion(9) };
+        distributionControl.setReturnValue(new DummyClientResultData(null, versionUpdates));
+        distributionControl.replay();
+
+        Person director = new Person();
+        NakedObject directorAdapter = loader.createAdapterForTransient(director);
+        directorAdapter.persistedAs(new DummyOid(14));
+        directorAdapter.setOptimisticLock(new DummyVersion(8));
+
+        Movie movie = new Movie();
+        NakedObject movieAdapter = loader.createAdapterForTransient(movie);
+        movieAdapter.persistedAs(new DummyOid(12));
+        movieAdapter.setOptimisticLock(new DummyVersion(4));
+
+        director.setName("Unknown");
+        movie.setName("War of the Worlds");
+        movie.setDirector(director);
+
+        persistor.startTransaction();
+        persistor.objectChanged(movieAdapter);
+        persistor.objectChanged(directorAdapter);
+        persistor.endTransaction();
+
+        assertEquals(new DummyVersion(5), movieAdapter.getVersion());
+        assertEquals(new DummyVersion(9), directorAdapter.getVersion());
+        distributionControl.verify();
+    }
+
+    public void testClientSideActionWhereTransientObjectMadePersistent() throws Exception {
+        DummyObjectData movieData = new DummyObjectData(null, Movie.class.getName(), true, null);
+        NullData directorData = new DummyNullValue(Person.class.getName());
+        DummyValueData nameData = new DummyValueData("Star Wars", String.class.getName());
+        movieData.setFieldContent(new Data[] { directorData, nameData });
+
+        DummyObjectData updateData = new DummyObjectData(new DummyOid(123), "type", true, new DummyVersion(456));
+
+        distribution.executeClientAction(session, new ObjectData[] { movieData }, new ObjectData[0], new ReferenceData[0]);
+        distributionControl.setReturnValue(new DummyClientResultData(new ObjectData[] { updateData }, null));
+        distributionControl.replay();
+
+        Movie movie = new Movie();
+        movie.setName("Star Wars");
+
+        NakedObject transientObject = loader.createAdapterForTransient(movie);
+        assertEquals(null, transientObject.getOid());
+        assertEquals(null, transientObject.getVersion());
+
         persistor.startTransaction();
         persistor.makePersistent(transientObject);
         persistor.endTransaction();
 
         assertEquals(new DummyOid(123), transientObject.getOid());
-        assertEquals(new DummyOid(345), referencedObject.getAdapter().getOid());
-        
+        assertEquals(new DummyVersion(456), transientObject.getVersion());
+
         distributionControl.verify();
     }
 
@@ -123,38 +271,6 @@ public class ProxyPersistorTest extends TestCase {
         } catch (TransactionException e) {}
     }
 
-    public void testObjectChanged() throws Exception {
-        TestObjectBuilder referencedObject;
-        referencedObject = new TestObjectBuilder(new TestPojo());
-        referencedObject.setResolveState(ResolveState.RESOLVED);
-        referencedObject.setOid(new DummyOid(23));
-
-        TestValue value = new TestValue(new TestPojoValuePeer());
-
-        TestObjectBuilder obj;
-        obj = new TestObjectBuilder(new TestPojo());
-        obj.setResolveState(ResolveState.RESOLVED);
-        obj.setOid(new DummyOid(56));
-
-        obj.setValueField("value", value);
-        obj.setReferenceField("reference", referencedObject);
-
-//        obj.init(system);
-
-        ObjectData[] expectedChanges = new ObjectData[] {new DummyObjectData(new DummyOid(56), 
-                TestPojo.class.getName(), true, new DummyVersion())};
-        distributionControl.expectAndReturn(distribution.executeClientAction(null, new ObjectData[0], expectedChanges ,
-                new ObjectData[0]), new ObjectData[0]);
-        distributionControl.replay();
-
-        
-        NakedObject object = obj.getAdapter();
-        persistor.startTransaction();
-        persistor.objectChanged(object);
-        persistor.endTransaction();
-
-        distributionControl.verify();
-    }
 }
 
 /*

@@ -5,21 +5,18 @@ import org.nakedobjects.object.Session;
 import org.nakedobjects.object.control.Hint;
 
 public class DummyDistribution implements Distribution {
-
-    private ObjectData[] makePersistentResults;
-
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
         return null;
     }
 
     public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {}
 
-    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
         return null;
     }
 
-    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
-        return makePersistentResults;
+    public ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+        return null;
     }
 
     public ObjectData[] findInstances(Session session, InstancesCriteria criteria) {
@@ -47,10 +44,6 @@ public class DummyDistribution implements Distribution {
     }
 
     public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {}
-
-    public void setupMakePersistentResults(ObjectData[] makePersistentResults) {
-        this.makePersistentResults = makePersistentResults;
-    }
 
     public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {}
 }

@@ -1,12 +1,13 @@
 package org.nakedobjects.distribution.dummy;
 
+import org.nakedobjects.distribution.ClientActionResultData;
 import org.nakedobjects.distribution.CollectionData;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.distribution.ActionResultData;
+import org.nakedobjects.distribution.ServerActionResultData;
 import org.nakedobjects.distribution.ValueData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
@@ -38,7 +39,7 @@ public class DummyObjectDataFactory implements DataFactory {
         return new DummyCollectionData(oid, type, elements, version);
     }
 
-    public ActionResultData createResultData(
+    public ServerActionResultData createActionResultData(
             Data result,
             ObjectData[] updatesData,
             ObjectData persistedTarget,
@@ -46,6 +47,10 @@ public class DummyObjectDataFactory implements DataFactory {
             String[] messages,
             String[] warnings) {
         return new DummyResultData(result, updatesData, persistedTarget, persistedParameters, messages, warnings);
+    }
+    
+    public ClientActionResultData createActionResultData(ObjectData[] madePersistent, Version[] changedVersion) {
+        return new DummyClientResultData(madePersistent, changedVersion);
     }
 }
 

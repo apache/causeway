@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution.command;
 
+import org.nakedobjects.distribution.ClientActionResultData;
 import org.nakedobjects.distribution.Distribution;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
@@ -24,8 +25,8 @@ public class ExecuteClientAction extends AbstractRequest {
         setResponse(distribution.executeClientAction(session, persisted, changed, deleted));
     }
 
-    public ObjectData[] getActionResult() {
-        return (ObjectData[]) getResponse();
+    public ClientActionResultData getActionResult() {
+        return (ClientActionResultData) getResponse();
     }
 
     public String toString() {

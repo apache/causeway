@@ -2,7 +2,6 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Session;
-import org.nakedobjects.object.control.Hint;
 
 
 public interface Distribution {
@@ -10,13 +9,11 @@ public interface Distribution {
 
     void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
 
-    ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
+    ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
 
-    ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted);
+    ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted);
 
     ObjectData[] findInstances(Session session, InstancesCriteria criteria);
-
-    Hint getActionHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
 
     boolean hasInstances(Session session, String fullName);
 

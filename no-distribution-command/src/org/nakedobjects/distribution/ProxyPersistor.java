@@ -18,6 +18,7 @@ import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UnsupportedFindException;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.defaults.AbstracObjectPersistor;
 import org.nakedobjects.object.defaults.InstanceCollectionVector;
 import org.nakedobjects.object.defaults.NakedClassImpl;
@@ -36,7 +37,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     final static Logger LOG = Logger.getLogger(ProxyPersistor.class);
     private Distribution connection;
     private final Hashtable nakedClasses = new Hashtable();
-    private ObjectEncoder objectDataFactory;
+    private ObjectEncoder encoder;
     private Session session;
     private DirtyObjectSet updateNotifier;
     private ClientSideTransaction clientSideTransaction;
@@ -92,13 +93,13 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         NakedObject[] persistedObjects = clientSideTransaction.getPersisted();
         ObjectData[] persisted = new ObjectData[persistedObjects.length];
         for (int i = 0; i < persistedObjects.length; i++) {
-            persisted[i] = objectDataFactory.createMakePersistentGraph(persistedObjects[i]);
+            persisted[i] = encoder.createMakePersistentGraph(persistedObjects[i]);
         }
         
         NakedObject[] changedObjects = clientSideTransaction.getChanged();
         ObjectData[] changed = new ObjectData[changedObjects.length];
         for (int i = 0; i < changedObjects.length; i++) {
-            changed[i] = objectDataFactory.createDataForChangedObject(changedObjects[i]);
+            changed[i] = encoder.createDataForChangedObject(changedObjects[i]);
             updateNotifier.addDirty(changedObjects[i]);
         }
         
@@ -106,13 +107,22 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         NakedObject[] deletedObjects = clientSideTransaction.getDeleted();
         ReferenceData[] deleted = new ReferenceData[deletedObjects.length];
         for (int i = 0; i < deletedObjects.length; i++) {
-            deleted[i] = objectDataFactory.createReference(deletedObjects[i]);
+            deleted[i] = encoder.createReference(deletedObjects[i]);
         }
 
-        ObjectData[] data = connection.executeClientAction(session, persisted, changed, deleted);
-        if(data != null) {
-            for (int i = 0; i < data.length; i++) {
-                madePersistent(persistedObjects[i], data[i]);
+        ClientActionResultData results = connection.executeClientAction(session, persisted, changed, deleted);
+        if (results != null) {
+            ObjectData[] persistedUpdates = results.getPersisted();
+            if (persistedUpdates != null) {
+                for (int i = 0; i < persistedUpdates.length; i++) {
+                    madePersistent(persistedObjects[i], persistedUpdates[i]);
+                }
+            }
+            Version[] changedVersions = results.getChanged();
+            if (changedVersions != null) {
+                for (int i = 0; i < changedVersions.length; i++) {
+                    changedObjects[i].setOptimisticLock(changedVersions[i]);
+                }
             }
         }
         
@@ -167,7 +177,9 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         return connection.hasInstances(session, specification.getFullName());
     }
 
-    public void init() {}
+    public void init() {
+        session = NakedObjects.getCurrentSession();
+    }
 
     public synchronized void makePersistent(NakedObject object) {
         checkTransactionInProgress();
@@ -187,22 +199,24 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
 
         Data[] fieldData = updates.getFieldContent();
         NakedObjectField[] fields = object.getSpecification().getFields();
-        for (int i = 0; i < fieldData.length; i++) {
-            if(fieldData[i] == null) {
-                continue;
-            }
-            if(fields[i].isObject()) {
-                NakedObject field = object.getAssociation((OneToOneAssociation) fields[i]);
-                ObjectData fieldContent = (ObjectData) updates.getFieldContent()[i];
-                if(field != null) {
-                    madePersistent(field, fieldContent);
+        if(fieldData != null) {
+            for (int i = 0; i < fieldData.length; i++) {
+                if(fieldData[i] == null) {
+                    continue;
                 }
-            } else if(fields[i].isCollection()) {
-                CollectionData collectionData = (CollectionData) updates.getFieldContent()[i];
-                for (int j = 0; j < collectionData.getElements().length; j++) {
-                    NakedObject element = ((NakedCollection) object.getField(fields[i])).elementAt(j);
-                    ObjectData elementData = collectionData.getElements()[j];
-                    madePersistent(element, elementData);
+                if(fields[i].isObject()) {
+                    NakedObject field = object.getAssociation((OneToOneAssociation) fields[i]);
+                    ObjectData fieldContent = (ObjectData) updates.getFieldContent()[i];
+                    if(field != null) {
+                        madePersistent(field, fieldContent);
+                    }
+                } else if(fields[i].isCollection()) {
+                    CollectionData collectionData = (CollectionData) updates.getFieldContent()[i];
+                    for (int j = 0; j < collectionData.getElements().length; j++) {
+                        NakedObject element = ((NakedCollection) object.getField(fields[i])).elementAt(j);
+                        ObjectData elementData = collectionData.getElements()[j];
+                        madePersistent(element, elementData);
+                    }
                 }
             }
         }
@@ -226,7 +240,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     public void reset() {}
 
     public void reload(NakedObject object) {
-        ObjectData update = connection.resolveImmediately(session, objectDataFactory.createReference(object));
+        ObjectData update = connection.resolveImmediately(session, encoder.createReference(object));
         ObjectDecoder.restore(update);
     }
     
@@ -235,7 +249,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         if (resolveState.isResolvable(ResolveState.RESOLVING)) {
             Oid oid = object.getOid();
             LOG.debug("resolve object (remotely from server)" + oid);
-            ObjectData data = connection.resolveImmediately(session, objectDataFactory.createReference(object));
+            ObjectData data = connection.resolveImmediately(session, encoder.createReference(object));
             ObjectDecoder.restore(data);
         }
     }
@@ -253,7 +267,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         }
         
         LOG.info("resolve-eagerly on server " + object + "/" + field.getId());
-        Data data = connection.resolveField(session, objectDataFactory.createReference(object), field.getId());
+        Data data = connection.resolveField(session, encoder.createReference(object), field.getId());
         ObjectDecoder.restore(data);
     }
 
@@ -276,7 +290,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
      * @property
      */
     public void set_ObjectDataFactory(ObjectEncoder factory) {
-        this.objectDataFactory = factory;
+        this.encoder = factory;
     }
 
     /**
@@ -293,8 +307,8 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         this.connection = connection;
     }
 
-    public void setObjectDataFactory(ObjectEncoder factory) {
-        this.objectDataFactory = factory;
+    public void setEncoder(ObjectEncoder factory) {
+        this.encoder = factory;
     }
 
     public void setUpdateNotifier(DirtyObjectSet updateNotifier) {

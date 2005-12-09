@@ -12,6 +12,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.object.Version;
 import org.nakedobjects.object.control.DefaultHint;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.NullDirtyObjectSet;
@@ -23,7 +24,7 @@ import org.apache.log4j.Logger;
 
 public class ServerDistribution implements Distribution {
     private static final Logger LOG = Logger.getLogger(ServerDistribution.class);
-    private ObjectEncoder objectDataFactory;
+    private ObjectEncoder encoder;
     private SingleResponseUpdateNotifier updateNotifier;
 
     public ServerDistribution() {
@@ -57,12 +58,12 @@ public class ServerDistribution implements Distribution {
     private ObjectData[] convertToNakedCollection(TypedNakedCollection instances) {
         ObjectData[] data = new ObjectData[instances.size()];
         for (int i = 0; i < instances.size(); i++) {
-            data[i] = objectDataFactory.createCompletePersistentGraph(instances.elementAt(i));
+            data[i] = encoder.createCompletePersistentGraph(instances.elementAt(i));
         }
         return data;
     }
     
-    public ActionResultData executeAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
+    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
         LOG.debug("request executeAction " + actionIdentifier + " on " + target + " for " + session);
 
         NakedObject object;
@@ -90,13 +91,13 @@ public class ServerDistribution implements Distribution {
         if(target == null) {
             persistedTarget = null; 
         } else {
-            persistedTarget = objectDataFactory.createMadePersistentGraph(target, object, updateNotifier);
+            persistedTarget = encoder.createMadePersistentGraph(target, object, updateNotifier);
         }
         
         ObjectData[] persistedParameters = new ObjectData[parameterData.length];
         for (int i = 0; i < persistedParameters.length; i++) {
             if(action.getParameterTypes()[i].isObject() && parameterData[i] instanceof ObjectData) {
-                persistedParameters[i] = objectDataFactory.createMadePersistentGraph((ObjectData) parameterData[i], (NakedObject) parameters[i], updateNotifier);
+                persistedParameters[i] = encoder.createMadePersistentGraph((ObjectData) parameterData[i], (NakedObject) parameters[i], updateNotifier);
             }
         }
         // TODO find messages/warnings
@@ -104,10 +105,10 @@ public class ServerDistribution implements Distribution {
         String[] warnings = new String[0];
         
         // TODO for efficiency, need to remove the objects in the results graph from the updates set
-        return objectDataFactory.createActionResult(result, getUpdates(), persistedTarget, persistedParameters, messages, warnings);
+        return encoder.createActionResult(result, getUpdates(), persistedTarget, persistedParameters, messages, warnings);
     }
     
-    public ObjectData[] executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+    public ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
         LOG.debug("execute client action for " + session);
         LOG.debug("start transaction");
         NakedObjectPersistor persistor = persistor();
@@ -118,12 +119,14 @@ public class ServerDistribution implements Distribution {
                 LOG.debug("  makePersistent " + persisted[i]);
                 NakedObject object = (NakedObject) ObjectDecoder.restore(persisted[i]);
                 persistor.makePersistent(object);
-                madePersistent[i] = objectDataFactory.createMadePersistentGraph(persisted[i], object, updateNotifier);
+                madePersistent[i] = encoder.createMadePersistentGraph(persisted[i], object, updateNotifier);
             }
+           Version[] changedVersion = new Version[changed.length];
            for (int i = 0; i < changed.length; i++) {
                LOG.debug("  objectChanged " + changed[i]);
                NakedObject object = (NakedObject) ObjectDecoder.restore(changed[i]);
                persistor.objectChanged(object);
+               changedVersion[i] = object.getVersion();
            }
            for (int i = 0; i < deleted.length; i++) {            
                 LOG.debug("  destroyObject " + deleted[i] + " for " + session);
@@ -132,7 +135,8 @@ public class ServerDistribution implements Distribution {
             }
             LOG.debug("  end transaction");
             persistor.endTransaction();
-            return madePersistent;
+            
+            return encoder.createClientActionResultData(madePersistent, changedVersion);
         }catch (RuntimeException e) {
             LOG.debug("abort transaction", e);
             persistor.abortTransaction();
@@ -211,7 +215,7 @@ public class ServerDistribution implements Distribution {
         int noUpdates = updateObjects.length;
         ObjectData[] updateData = new ObjectData[noUpdates];
         for (int i = 0; i < noUpdates; i++) {
-            ObjectData objectData = objectDataFactory.createForUpdate(updateObjects[i]);
+            ObjectData objectData = encoder.createForUpdate(updateObjects[i]);
             updateData[i] = objectData;
         }
         return updateData;
@@ -239,7 +243,7 @@ public class ServerDistribution implements Distribution {
 //        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
         NakedObject object = NakedObjects.getObjectLoader().recreateAdapterForPersistent(target.getOid(), spec);
         NakedObjects.getObjectPersistor().resolveField(object, field);
-        return objectDataFactory.createForResolveField(object, fieldName);
+        return encoder.createForResolveField(object, fieldName);
     }
 
     public ObjectData resolveImmediately(Session session, ReferenceData target) {
@@ -248,7 +252,7 @@ public class ServerDistribution implements Distribution {
         NakedObjectSpecification spec = getSpecification(target.getType());
         NakedObject object = NakedObjects.getObjectPersistor().getObject(target.getOid(), spec);
 
-        return objectDataFactory.createCompletePersistentGraph(object);
+        return encoder.createCompletePersistentGraph(object);
     }
 
     /**
@@ -257,7 +261,7 @@ public class ServerDistribution implements Distribution {
      * @property
      */
     public void set_ObjectDataFactory(ObjectEncoder objectDataFactory) {
-        this.objectDataFactory = objectDataFactory;
+        this.encoder = objectDataFactory;
     }
 
     /**
@@ -285,8 +289,8 @@ public class ServerDistribution implements Distribution {
      * public void setLocalObjectManager(LocalObjectManager objectManager) {
      * this.objectManager = objectManager; }
      */
-    public void setObjectDataFactory(ObjectEncoder objectDataFactory) {
-        this.objectDataFactory = objectDataFactory;
+    public void setEncoder(ObjectEncoder objectDataFactory) {
+        this.encoder = objectDataFactory;
     }
 
     public void setUpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {

@@ -1,12 +1,13 @@
 package org.nakedobjects.distribution.java;
 
+import org.nakedobjects.distribution.ClientActionResultData;
 import org.nakedobjects.distribution.CollectionData;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataFactory;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
-import org.nakedobjects.distribution.ActionResultData;
+import org.nakedobjects.distribution.ServerActionResultData;
 import org.nakedobjects.distribution.ValueData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
@@ -35,7 +36,7 @@ public class JavaDataFactory implements DataFactory {
         return new JavaReferenceData(type, oid, version);
     }
 
-    public ActionResultData createResultData(
+    public ServerActionResultData createActionResultData(
             Data result,
             ObjectData[] updatesData,
             ObjectData persistedTarget,
@@ -47,6 +48,10 @@ public class JavaDataFactory implements DataFactory {
 
     public ValueData createValueData(String type, Object value) {
         return new JavaValueData(type, value);
+    }
+    
+    public ClientActionResultData createActionResultData(ObjectData[] madePersistent, Version[] changedVersion) {
+        return new JavaClientResult(madePersistent, changedVersion);
     }
 }
 

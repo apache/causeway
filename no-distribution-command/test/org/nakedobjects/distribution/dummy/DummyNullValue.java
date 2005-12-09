@@ -14,6 +14,18 @@ public class DummyNullValue implements NullData {
     public String getType() {
         return type;
     }
+
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (obj instanceof DummyNullValue) {
+            DummyNullValue ref = (DummyNullValue) obj;
+            return type == null ? ref.type == null : type.equals(ref.type);
+        }
+        return false;
+    }
 }
 
 /*

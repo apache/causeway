@@ -39,6 +39,36 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         str.append("fields", fieldContent == null ? 0  : fieldContent.length);
         str.append("resolved", resolved);
     }
+    
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        
+        if(super.equals(obj)) {
+            if (obj instanceof DummyObjectData) {
+                DummyObjectData ref = (DummyObjectData) obj;
+                if (resolved == ref.resolved) {
+                    if(fieldContent == null && ref.fieldContent == null) {
+                        return true;
+                    }
+                    
+                    if(ref.fieldContent == null) {
+                        return false;
+                    }
+                    
+                    for (int i = 0; i < fieldContent.length; i++) {
+                        if( !(fieldContent[i] == null ? ref.fieldContent[i] == null : fieldContent[i].equals(ref.fieldContent[i]))) {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
+
+    }
 }
 
 
