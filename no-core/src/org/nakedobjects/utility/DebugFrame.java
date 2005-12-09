@@ -264,6 +264,7 @@ class TabPane extends Panel {
             int maxWidth = size.width / info.length - 1;
             for (int i = 0; i < info.length; i++) {
                 String title = info[i].getDebugTitle();
+                title = title == null ? info[i].getClass().getName() : title;
                 int width = Math.min(maxWidth, fm.stringWidth(title) + 20);
                 
                 tabs[i] = new Rectangle(offset, 0, width, 20);

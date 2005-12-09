@@ -27,7 +27,9 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectField implements
 
     public void clearValue(NakedObject inObject) {
         NakedValue associate = (NakedValue) get(inObject);
-        associate.clear();
+        if(associate != null) {
+            associate.clear();
+        }
     }
 
     public Naked get(NakedObject fromObject) {
