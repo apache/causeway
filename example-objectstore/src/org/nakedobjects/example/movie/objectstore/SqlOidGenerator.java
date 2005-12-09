@@ -1,7 +1,5 @@
-package org.nakedobjects.example.movie.exploration;
+package org.nakedobjects.example.movie.objectstore;
 
-import org.nakedobjects.example.movie.objectstore.ObjectStoreException;
-import org.nakedobjects.example.movie.objectstore.SqlOid;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
@@ -50,7 +48,12 @@ public class SqlOidGenerator implements OidGenerator {
             
             lastInBlock = id + blockSize;
             
-            PreparedStatement s2 = connection.prepareStatement("insert into id_sequence values(?)");
+            PreparedStatement s2; 
+            if(id == 0) {
+                s2 = connection.prepareStatement("insert into id_sequence values(?)");
+            } else {
+                s2 = connection.prepareStatement("update id_sequence set id =  ?");
+            }
             s2.setInt(1, lastInBlock);
             s2.execute();
             s2.close();

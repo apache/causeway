@@ -5,9 +5,12 @@ import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.application.value.Date;
 import org.nakedobjects.example.movie.bom.Movie;
 import org.nakedobjects.example.movie.bom.Person;
+import org.nakedobjects.example.movie.bom.Role;
 import org.nakedobjects.example.movie.objectstore.MovieMapper;
 import org.nakedobjects.example.movie.objectstore.PersonMapper;
+import org.nakedobjects.example.movie.objectstore.RoleMapper;
 import org.nakedobjects.example.movie.objectstore.SqlObjectStore;
+import org.nakedobjects.example.movie.objectstore.SqlOidGenerator;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
@@ -23,6 +26,7 @@ public class MovieStandalone {
                 OidGenerator oidGenerator = new SqlOidGenerator();
                 objectStore.addMapper(Movie.class, new MovieMapper());
                 objectStore.addMapper(Person.class, new PersonMapper());
+                objectStore.addMapper(Role.class, new RoleMapper());
 
                 DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
                 persistAlgorithm.setOidGenerator(oidGenerator);

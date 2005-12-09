@@ -1,11 +1,13 @@
 package org.nakedobjects.example.movie.bom;
 
+import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.control.ActionAbout;
 
 import java.util.Vector;
 
 
 public class Movie {
+    private BusinessObjectContainer container;
     private Person director;
     private String name;
     private final Vector roles = new Vector();
@@ -36,10 +38,19 @@ public class Movie {
 
     public void setName(String name) {
         this.name = name;
+        setDirty();
+    }
+
+    private void setDirty() {
+        container.objectChanged(this);
     }
 
     public String title() {
         return name;
+    }
+    
+    public void setContainer(BusinessObjectContainer container) {
+        this.container = container;
     }
     
     public static void aboutActionFindMovie(ActionAbout about, String name, Person director, Person actor) {

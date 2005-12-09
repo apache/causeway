@@ -1,7 +1,7 @@
 package org.nakedobjects.example.movie.objectstore;
 
-import org.nakedobjects.application.value.Date;
 import org.nakedobjects.example.movie.bom.Person;
+import org.nakedobjects.example.movie.bom.Role;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Oid;
@@ -12,35 +12,54 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 
 import org.apache.log4j.Logger;
 
 
-public class PersonMapper implements SqlMapper {
-    private static final Logger LOG = Logger.getLogger(PersonMapper.class);
+/*
+ * NOTES
+ * 
+ * With a role table that relates both movie and person we run into a problem in this mapper as the Role
+ * object does not know the Movie it belongs to; only the Person. To make this mapper work we need to hold the
+ * movie in the role. This still requires us to create the internal collection in the movie that references
+ * all the roles.
+ * 
+ * To keep the Role as it is (without knowing the movie) then the table in the DB needs to have its own PK
+ * rather than a relationship to the movie. Then we would need a table between the movies and the roles to
+ * define the sets of roles for a collection.
+ * 
+ * Another alternative would be for the Role table to have both the FK to the movie and a PK to identify
+ * itself with. This would allow us to find the set of roles for a movie using the FK, and to update the role
+ * using the PK. The problem with dispensing with the PK and creating the OID from the movie and person FKs is
+ * we don't know the movie (or parent object) when making the role persistent. In fact the role could only be
+ * persisted if it is associated with a mover and a person - need valid objects here.
+ */
 
-    public PersonMapper() {
+public class RoleMapper implements SqlMapper {
+    private static final Logger LOG = Logger.getLogger(RoleMapper.class);
+
+    public RoleMapper() {
         super();
     }
 
     public NakedObject[] getInstances(Connection connection) throws SQLException {
         NakedObject[] instances = new NakedObject[45];
         int i = 0;
-        String query = "select * from person";
+        String query = "select * from role";
         Statement s = connection.createStatement();
         ResultSet rs = s.executeQuery(query);
         while (rs.next() && i < instances.length) {
             Oid oid = new SqlOid(rs.getInt(1));
-            Person person;
-            if(NakedObjects.getObjectLoader().isIdentityKnown(oid)) {
+            Person role;
+            if (NakedObjects.getObjectLoader().isIdentityKnown(oid)) {
                 instances[i++] = NakedObjects.getObjectLoader().getAdapterFor(oid);
-                person = (Person) NakedObjects.getObjectLoader().getAdapterFor(oid).getObject();
+                role = (Person) NakedObjects.getObjectLoader().getAdapterFor(oid).getObject();
             } else {
-                NakedObject instance = NakedObjects.getObjectLoader().recreateAdapterForPersistent(oid, NakedObjects.getSpecificationLoader().loadSpecification(Person.class));
+                NakedObject instance = NakedObjects.getObjectLoader().recreateAdapterForPersistent(oid,
+                        NakedObjects.getSpecificationLoader().loadSpecification(Person.class));
                 NakedObjects.getObjectLoader().start(instance, ResolveState.RESOLVING);
-                person = (Person) instance.getObject();
-                person.setName(rs.getString(2));
+                role = (Person) instance.getObject();
+                role.setName(rs.getString(2));
                 NakedObjects.getObjectLoader().end(instance);
                 instances[i++] = instance;
             }
@@ -52,29 +71,23 @@ public class PersonMapper implements SqlMapper {
         return results;
     }
 
-
     public void insert(Connection connection, NakedObject object, int id) throws SQLException {
-        PreparedStatement s = connection.prepareStatement("insert into person (name, dob, PKid) values(?, ?, ?)");
+        PreparedStatement s = connection.prepareStatement("insert into role (movieFK, name, personFK) values(?, ?, ?)");
         setParameters(object, id, s);
         execute(s);
     }
 
     private void setParameters(NakedObject object, int id, PreparedStatement s) throws SQLException {
-        Person person = (Person) object.getObject();
-        s.setString(1, person.getName());
-        Date date = person.getDate();
-        if(date == null) {
-            s.setNull(2, Types.DATE);
-        } else {
-            s.setDate(2, new java.sql.Date(date.longValue()));
-        }
-        s.setInt(3, id);
+        Role role = (Role) object.getObject();
+        s.setString(2, role.getName());
+        Person actor = role.getActor();
+        NakedObject actorAdapter = NakedObjects.getObjectLoader().getAdapterFor(actor);
+        int actorId = ((SqlOid) actorAdapter.getOid()).getPrimaryKey();
+        s.setInt(3, actorId);
     }
 
-
-
     public void update(Connection connection, NakedObject object, int id) throws SQLException {
-        PreparedStatement s = connection.prepareStatement("update person set name = ?, dob = ? where PKid = ?");
+        PreparedStatement s = connection.prepareStatement("update role set name = ?, dob = ? where PKid = ?");
         setParameters(object, id, s);
         execute(s);
     }
@@ -86,7 +99,7 @@ public class PersonMapper implements SqlMapper {
     }
 
     public void delete(Connection connection, int id) throws SQLException {
-        PreparedStatement s = connection.prepareStatement("delete from person where PKid= ?");
+        PreparedStatement s = connection.prepareStatement("delete from role where PKid= ?");
         s.setInt(1, id);
         execute(s);
     }

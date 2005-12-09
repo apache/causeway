@@ -5,6 +5,7 @@ import org.nakedobjects.example.movie.bom.Person;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.ResolveState;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,8 +14,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
 
+import org.apache.log4j.Logger;
+
 
 public class MovieMapper implements SqlMapper {
+    private static final Logger LOG = Logger.getLogger(MovieMapper.class);
 
     public MovieMapper() {
         super();
@@ -29,29 +33,38 @@ public class MovieMapper implements SqlMapper {
         while (rs.next() && i < instances.length) {
             Oid oid = new SqlOid(rs.getInt(1));
             Movie movie;
-            if(NakedObjects.getObjectLoader().isIdentityKnown(oid)) {
-                instances[i++] = NakedObjects.getObjectLoader().getAdapterFor(oid);
-                movie = (Movie) NakedObjects.getObjectLoader().getAdapterFor(oid).getObject();
+            NakedObject movieAdapter;
+            if (NakedObjects.getObjectLoader().isIdentityKnown(oid)) {
+                movieAdapter = NakedObjects.getObjectLoader().getAdapterFor(oid);
             } else {
-                movie = new Movie();
-                movie.setName(rs.getString(2));
-                instances[i++] = NakedObjects.getObjectLoader().recreateAdapterForPersistent(oid, movie);
-            }
-            
-            
+                movieAdapter = NakedObjects.getObjectLoader().recreateAdapterForPersistent(oid,
+                        NakedObjects.getSpecificationLoader().loadSpecification(Movie.class));
+            }                
+
+            NakedObjects.getObjectLoader().start(movieAdapter, ResolveState.RESOLVING);
+            movie = (Movie) movieAdapter.getObject();  
+            movie.setName(rs.getString(2));
+
             int directorId = rs.getInt(3);
             if (directorId != 0) {
                 Oid directorOid = new SqlOid(directorId);
                 Person director;
+                NakedObject directorAdapter;
                 if (NakedObjects.getObjectLoader().isIdentityKnown(directorOid)) {
-                    director = (Person) NakedObjects.getObjectLoader().getAdapterFor(directorOid);
+                    directorAdapter = NakedObjects.getObjectLoader().getAdapterFor(directorOid);
                 } else {
-                    director = new Person();
-                    NakedObjects.getObjectLoader().recreateAdapterForPersistent(directorOid, director);
+                    directorAdapter = NakedObjects.getObjectLoader().recreateAdapterForPersistent(directorOid,
+                            NakedObjects.getSpecificationLoader().loadSpecification(Person.class));
                 }
+                NakedObjects.getObjectLoader().start(directorAdapter, ResolveState.RESOLVING);
+                director = (Person) directorAdapter.getObject();
                 director.setName(rs.getString(5));
+                NakedObjects.getObjectLoader().end(directorAdapter);
+                
                 movie.setDirector(director);
             }
+            NakedObjects.getObjectLoader().end(movieAdapter);
+            instances[i++] = movieAdapter;
         }
         rs.close();
         s.close();
@@ -60,12 +73,10 @@ public class MovieMapper implements SqlMapper {
         return results;
     }
 
-
     public void insert(Connection connection, NakedObject object, int id) throws SQLException {
-        PreparedStatement s = connection.prepareStatement("insert into movie (name, director, pkid) values(?, ?, ?)");
+        PreparedStatement s = connection.prepareStatement("insert into movie (name, directorFK, PKid) values(?, ?, ?)");
         setParameters(object, id, s);
-        s.execute();
-        s.close();
+        execute(s);
     }
 
     private void setParameters(NakedObject object, int id, PreparedStatement s) throws SQLException {
@@ -80,22 +91,25 @@ public class MovieMapper implements SqlMapper {
             NakedObject adapter = NakedObjects.getObjectLoader().getAdapterFor(director);
             int fkId = ((SqlOid) adapter.getOid()).getPrimaryKey();
             s.setInt(2, fkId);
-
         }
     }
 
     public void update(Connection connection, NakedObject object, int id) throws SQLException {
-        PreparedStatement s = connection.prepareStatement("update movie set name = ?, director = ? where id = ?");
+        PreparedStatement s = connection.prepareStatement("update movie set name = ?, directorFK = ? where PKid = ?");
         setParameters(object, id, s);
+        execute(s);
+    }
+
+    private void execute(PreparedStatement s) throws SQLException {
+        LOG.debug(s);
         s.execute();
         s.close();
     }
 
     public void delete(Connection connection, int id) throws SQLException {
-        PreparedStatement s = connection.prepareStatement("delete from movie where id= ?");
+        PreparedStatement s = connection.prepareStatement("delete from movie where PKid= ?");
         s.setInt(1, id);
-        s.execute();
-        s.close();
+        execute(s);
     }
 }
 
