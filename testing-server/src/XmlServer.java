@@ -86,7 +86,7 @@ public class XmlServer {
         nakedObjects.setObjectLoader(objectLoader);
 
         ServerDistribution sd = new ServerDistribution();
-        sd.setObjectDataFactory(encoder);
+        sd.setEncoder(encoder);
         sd.setUpdateNotifier(updateNotifier);
 
         XServerListener serverListener = new XServerListener();
