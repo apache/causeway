@@ -137,7 +137,7 @@ public abstract class StandaloneClientServer {
                 ServerDistribution sd = new ServerDistribution();
                 ObjectEncoder dataFactory = new ObjectEncoder();
                 dataFactory.setDataFactory(new JavaDataFactory());
-                sd.setObjectDataFactory(dataFactory);
+                sd.setEncoder(dataFactory);
                 sd.setUpdateNotifier(updateNotifier);
                 
                 Distribution serverLogger = sd;
@@ -207,7 +207,7 @@ public abstract class StandaloneClientServer {
 
         ProxyPersistor proxyObjectManager = new ProxyPersistor();
         proxyObjectManager.setConnection(clientLogger);
-        proxyObjectManager.setObjectDataFactory(objectDataFactory);
+        proxyObjectManager.setEncoder(objectDataFactory);
 
         NakedObjectPersistor objectManager = proxyObjectManager; //new ObjectPersistorLogger(proxyObjectManager, "client-manager.log");
         nakedObjects.setObjectPersistor(objectManager);
