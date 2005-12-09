@@ -75,7 +75,7 @@ public class XmlClient {
 
             ProxyPersistor proxyObjectManager = new ProxyPersistor();
             proxyObjectManager.setConnection(connection);
-            proxyObjectManager.setObjectDataFactory(encoder);
+            proxyObjectManager.setEncoder(encoder);
 
             NakedObjectPersistor objectManager = new ObjectPersistorLogger(proxyObjectManager, "manager.log");
             nakedObjects.setObjectPersistor(objectManager);
