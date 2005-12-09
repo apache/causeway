@@ -127,6 +127,8 @@
 			<fileset dir="../no-xat/${test.dir}" />
 			<fileset dir="../os-file/${test.dir}" />
 
+			<fileset dir="../no-distribution-command/${test.dir}" />
+			<!--fileset dir="../no-distribution-pipe/${test.dir}" /-->
 			<!--fileset dir="../no-distribution-xml/${test.dir}" /-->
 			<fileset dir="../utility-memento/${test.dir}" />
 			<fileset dir="../utility-xmlsnapshot/${test.dir}" />
