@@ -42,7 +42,13 @@ public class TableSpecification extends AbstractCompositeViewSpecification imple
         if (content.isCollection()) {
             TypedNakedCollection coll = (TypedNakedCollection) ((CollectionContent) content).getCollection();
             NakedObjectSpecification elementSpecification = coll.getElementSpecification();
-            return elementSpecification.getAccessibleFields().length > 0;
+            NakedObjectField[] fields = elementSpecification.getAccessibleFields();
+            for (int i = 0; i < fields.length; i++) {
+                if(fields[i].isObject() || fields[i].isValue()) {
+                    return true;
+                }
+            }
+            return false;
         } else {
             return false;
         }
