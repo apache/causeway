@@ -1,7 +1,6 @@
 package org.nakedobjects.distribution.pipe;
 
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.ServerDistribution;
 import org.nakedobjects.distribution.command.Request;
 import org.nakedobjects.distribution.command.Response;
 
@@ -12,7 +11,6 @@ public class PipedServer {
     private static final Logger LOG = Logger.getLogger(PipedServer.class);
     private Distribution facade;
     private PipedConnection communication;
-    private ServerDistribution server;
     
     public synchronized void run() {
         while (true) {
@@ -41,10 +39,6 @@ public class PipedServer {
 
     public void setFacade(Distribution facade) {
         this.facade = facade;
-    }
-
-    public void setDistribution(ServerDistribution server) {
-        this.server = server;
     }
 }
 
