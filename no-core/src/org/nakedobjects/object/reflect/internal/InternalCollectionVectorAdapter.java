@@ -95,7 +95,10 @@ public class InternalCollectionVectorAdapter extends AbstractNakedReference impl
     public void sort() {}
 
     public String toString() {
-        return new ToString(this).toString();
+        ToString toString = new ToString(this);
+        toString.append("elements", elementSpecification.getFullName());
+        return toString.toString();
+
     }
     
     public String titleString() {

@@ -7,6 +7,7 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.ToString;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -100,6 +101,27 @@ public class InstanceCollectionVector extends AbstractNakedReference implements 
 
     public Persistable persistable() {
         return Persistable.TRANSIENT;
+    }
+    
+
+
+    public String toString() {
+        ToString s = new ToString(this);
+        toString(s);
+        s.append("elements", instanceSpecification.getFullName());
+
+        // title
+        String title;
+        try {
+            title = "'" + this.titleString() + "'";
+        } catch (NullPointerException e) {
+            title = "none";
+        }
+        s.append("title", title);
+
+        s.append("vector", instances);
+
+        return s.toString();
     }
 }
 
