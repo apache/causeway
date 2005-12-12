@@ -289,7 +289,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
      * 
      * @property
      */
-    public void set_ObjectDataFactory(ObjectEncoder factory) {
+    public void set_Encoder(ObjectEncoder factory) {
         this.encoder = factory;
     }
 

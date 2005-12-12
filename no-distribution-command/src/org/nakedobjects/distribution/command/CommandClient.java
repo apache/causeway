@@ -25,9 +25,10 @@ public abstract class CommandClient implements Distribution {
         return request.getInstances();
     }
 
-    public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
-        Request request = new ClearAssociation(session, fieldIdentifier, target, associate);
+    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+        ClearAssociation request = new ClearAssociation(session, fieldIdentifier, target, associate);
         execute(request);
+        return request.getChanges();
     }
 
     public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
@@ -91,14 +92,17 @@ public abstract class CommandClient implements Distribution {
 
     protected abstract Response executeRemotely(Request request);
 
-    public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
-        Request request = new SetAssociation(session, fieldIdentifier, target, associate);
+    public ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+        SetAssociation request = new SetAssociation(session, fieldIdentifier, target, associate);
         execute(request);
+        return request.getChanges();
+
     }
 
-    public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {
-        Request request = new SetValue(session, fieldIdentifier, target, associate);
+    public ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {
+        SetValue request = new SetValue(session, fieldIdentifier, target, associate);
         execute(request);
+        return request.getChanges();
     }
 }
 

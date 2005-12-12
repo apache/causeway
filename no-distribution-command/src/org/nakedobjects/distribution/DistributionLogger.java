@@ -135,10 +135,12 @@ public class DistributionLogger extends Logger implements Distribution {
         return allInstances;
     }
 
-    public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
         log("clear association " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
-                + "nassociate: " + dump(associate));
-        decorated.clearAssociation(session, fieldIdentifier, target, associate);
+                + "associate: " + dump(associate));
+        ObjectData[] changes = decorated.clearAssociation(session, fieldIdentifier, target, associate);
+        log("  <-- changes: " + dump(changes));
+        return changes;
     }
 
     public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
@@ -208,16 +210,20 @@ public class DistributionLogger extends Logger implements Distribution {
         
     }
 
-    public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
         log("set association " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
                 + "associate: " + dump(associate));
-        decorated.setAssociation(session, fieldIdentifier, target, associate);
+        ObjectData[] changes = decorated.setAssociation(session, fieldIdentifier, target, associate);
+        log("  <-- changes: " + dump(changes));
+        return changes;
     }
 
-    public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
+    public ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
         log("set value " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine() + "value: "
                 + value);
-        decorated.setValue(session, fieldIdentifier, target, value);
+        ObjectData[] changes = decorated.setValue(session, fieldIdentifier, target, value);
+        log("  <-- changes: " + dump(changes));
+        return changes;
     }
 }
 

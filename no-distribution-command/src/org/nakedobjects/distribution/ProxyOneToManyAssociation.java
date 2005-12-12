@@ -29,7 +29,9 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
             try {
                 ReferenceData targetReference = objectDataFactory.createReference(inObject);
                 ReferenceData associateReference = objectDataFactory.createReference(associate);
-                connection.setAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(), targetReference, associateReference);
+                ObjectData[] updates = connection.setAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(),
+                        targetReference, associateReference);
+                updateChangedObjects(updates);
             } catch (NakedObjectRuntimeException e) {
                 LOG.error("problem with distribution ", e.getCause());
                 throw (NakedObjectRuntimeException) e.getCause();
@@ -37,6 +39,13 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         } else {
             LOG.debug("set association locally " + getIdentifier() + " in " + inObject + " with " + associate);
             super.addAssociation(inObject, associate);
+        }
+    }
+
+    private void updateChangedObjects(ObjectData[] updates) {
+        for (int i = 0; i < updates.length; i++) {
+            LOG.debug("update " + DistributionLogger.dump(updates[i]));
+            ObjectDecoder.restore(updates[i]);
         }
     }
 
@@ -55,8 +64,8 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
     }
 
     /**
-     * Remove an associated object (the element) from the specified NakedObject in the association
-     * field represented by this object.
+     * Remove an associated object (the element) from the specified NakedObject in the association field
+     * represented by this object.
      */
     public void removeAssociation(NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
@@ -64,7 +73,9 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
             try {
                 ReferenceData targetReference = objectDataFactory.createReference(inObject);
                 ReferenceData associateReference = objectDataFactory.createReference(associate);
-                connection.clearAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(), targetReference, associateReference);
+                ObjectData[] updates = connection.clearAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(),
+                        targetReference, associateReference);
+                updateChangedObjects(updates);
             } catch (NakedObjectRuntimeException e) {
                 throw (NakedObjectRuntimeException) e.getCause();
             }
@@ -76,21 +87,20 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

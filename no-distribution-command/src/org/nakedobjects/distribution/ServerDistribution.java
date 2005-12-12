@@ -30,9 +30,10 @@ public class ServerDistribution implements Distribution {
     public ServerDistribution() {
         ObjectDecoder.setUpdateNotifer(new NullDirtyObjectSet());
     }
-    
+
     public ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses) {
-        LOG.debug("request allInstances of " + fullName  + (includeSubclasses ? "(including subclasses)" : "") + " from " + session);
+        LOG.debug("request allInstances of " + fullName + (includeSubclasses ? "(including subclasses)" : "") + " from "
+                + session);
         TypedNakedCollection instances = persistor().allInstances(getSpecification(fullName), includeSubclasses);
         return convertToNakedCollection(instances);
     }
@@ -44,15 +45,16 @@ public class ServerDistribution implements Distribution {
         }
     }
 
-    public void clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
-        LOG.debug("request clearAssociation " + fieldIdentifier + " on " + target + " of " + associated+ " for " + session);
+    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
+        LOG.debug("request clearAssociation " + fieldIdentifier + " on " + target + " of " + associated + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectField association = (NakedObjectField) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
+        if (!association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.clearAssociation(association, associate);
+        return getUpdates();
     }
 
     private ObjectData[] convertToNakedCollection(TypedNakedCollection instances) {
@@ -62,8 +64,13 @@ public class ServerDistribution implements Distribution {
         }
         return data;
     }
-    
-    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
+
+    public ServerActionResultData executeServerAction(
+            Session session,
+            String actionType,
+            String actionIdentifier,
+            ObjectData target,
+            Data[] parameterData) {
         LOG.debug("request executeAction " + actionIdentifier + " on " + target + " for " + session);
 
         NakedObject object;
@@ -71,73 +78,86 @@ public class ServerDistribution implements Distribution {
             object = getPersistentNakedObject(session, (ReferenceData) target);
         } else if (target instanceof ObjectData) {
             object = (NakedObject) ObjectDecoder.restore(target);
-        } else if(target == null) {
+        } else if (target == null) {
             object = null;
         } else {
             throw new NakedObjectRuntimeException();
         }
-        
+
         Action action = getActionMethod(actionType, actionIdentifier, parameterData, object);
         checkHint(session, actionType, actionIdentifier, target, parameterData);
         Naked[] parameters = getParameters(session, parameterData);
-        
-        if(action == null) {
+
+        if (action == null) {
             throw new NakedObjectsRemoteException("Could not find method " + actionIdentifier);
         }
 
-        Naked result = action.execute(object, parameters);//object.execute(action, parameters);
-        
+        Naked result = action.execute(object, parameters);// object.execute(action, parameters);
+
         ObjectData persistedTarget;
-        if(target == null) {
-            persistedTarget = null; 
+        if (target == null) {
+            persistedTarget = null;
         } else {
             persistedTarget = encoder.createMadePersistentGraph(target, object, updateNotifier);
         }
-        
+
         ObjectData[] persistedParameters = new ObjectData[parameterData.length];
         for (int i = 0; i < persistedParameters.length; i++) {
-            if(action.getParameterTypes()[i].isObject() && parameterData[i] instanceof ObjectData) {
-                persistedParameters[i] = encoder.createMadePersistentGraph((ObjectData) parameterData[i], (NakedObject) parameters[i], updateNotifier);
+            if (action.getParameterTypes()[i].isObject() && parameterData[i] instanceof ObjectData) {
+                persistedParameters[i] = encoder.createMadePersistentGraph((ObjectData) parameterData[i],
+                        (NakedObject) parameters[i], updateNotifier);
             }
         }
         // TODO find messages/warnings
         String[] messages = new String[0];
         String[] warnings = new String[0];
-        
+
         // TODO for efficiency, need to remove the objects in the results graph from the updates set
         return encoder.createActionResult(result, getUpdates(), persistedTarget, persistedParameters, messages, warnings);
     }
-    
-    public ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
+
+    public ClientActionResultData executeClientAction(
+            Session session,
+            ObjectData[] persisted,
+            ObjectData[] changed,
+            ReferenceData[] deleted) {
         LOG.debug("execute client action for " + session);
         LOG.debug("start transaction");
         NakedObjectPersistor persistor = persistor();
         persistor.startTransaction();
         try {
-            ObjectData[] madePersistent = new ObjectData[persisted.length];
+           NakedObject[] persistedObjects = new NakedObject[persisted.length];
             for (int i = 0; i < persisted.length; i++) {
                 LOG.debug("  makePersistent " + persisted[i]);
                 NakedObject object = (NakedObject) ObjectDecoder.restore(persisted[i]);
                 persistor.makePersistent(object);
-                madePersistent[i] = encoder.createMadePersistentGraph(persisted[i], object, updateNotifier);
+                persistedObjects[i] = object;
             }
-           Version[] changedVersion = new Version[changed.length];
-           for (int i = 0; i < changed.length; i++) {
-               LOG.debug("  objectChanged " + changed[i]);
-               NakedObject object = (NakedObject) ObjectDecoder.restore(changed[i]);
-               persistor.objectChanged(object);
-               changedVersion[i] = object.getVersion();
-           }
-           for (int i = 0; i < deleted.length; i++) {            
+            NakedObject[] changedObjects = new NakedObject[changed.length];
+            for (int i = 0; i < changed.length; i++) {
+                LOG.debug("  objectChanged " + changed[i]);
+                NakedObject object = (NakedObject) ObjectDecoder.restore(changed[i]);
+                persistor.objectChanged(object);
+                changedObjects[i] = object;
+            }
+            for (int i = 0; i < deleted.length; i++) {
                 LOG.debug("  destroyObject " + deleted[i] + " for " + session);
                 NakedObject inObject = getPersistentNakedObject(session, deleted[i]);
                 persistor.destroyObject(inObject);
             }
             LOG.debug("  end transaction");
             persistor.endTransaction();
-            
+
+            ObjectData[] madePersistent = new ObjectData[persisted.length];
+            for (int i = 0; i < persisted.length; i++) {
+                madePersistent[i] = encoder.createMadePersistentGraph(persisted[i], persistedObjects[i], updateNotifier);
+            }
+            Version[] changedVersion = new Version[changed.length];
+            for (int i = 0; i < changed.length; i++) {
+                changedVersion[i] = changedObjects[i].getVersion();
+            }
             return encoder.createClientActionResultData(madePersistent, changedVersion);
-        }catch (RuntimeException e) {
+        } catch (RuntimeException e) {
             LOG.debug("abort transaction", e);
             persistor.abortTransaction();
             throw e;
@@ -160,17 +180,18 @@ public class ServerDistribution implements Distribution {
         for (int i = 0; i < parameterSpecifiactions.length; i++) {
             parameterSpecifiactions[i] = getSpecification(parameterData[i].getType());
         }
-        
+
         Action.Type type = ActionImpl.getType(actionType);
 
         int pos = actionIdentifier.indexOf('#');
         String className = actionIdentifier.substring(0, pos);
         String methodName = actionIdentifier.substring(pos + 1);
-        
+
         Action action;
-        if(object ==  null) {
-            action = (Action) NakedObjects.getSpecificationLoader().loadSpecification(className).getClassAction(type, methodName, parameterSpecifiactions);
-        } else { 
+        if (object == null) {
+            action = (Action) NakedObjects.getSpecificationLoader().loadSpecification(className).getClassAction(type, methodName,
+                    parameterSpecifiactions);
+        } else {
             action = (Action) object.getSpecification().getObjectAction(type, methodName, parameterSpecifiactions);
         }
         return action;
@@ -183,7 +204,7 @@ public class ServerDistribution implements Distribution {
             if (data instanceof NullData) {
                 continue;
             }
-            
+
             if (data instanceof ReferenceData && ((ReferenceData) data).getOid() != null) {
                 parameters[i] = getPersistentNakedObject(session, (ReferenceData) data);
             } else if (data instanceof ObjectData) {
@@ -199,12 +220,12 @@ public class ServerDistribution implements Distribution {
     }
 
     private NakedObject getPersistentNakedObject(Session session, ReferenceData object) {
-        LOG.debug("get object " + object + " for " + session);
         NakedObjectSpecification spec = getSpecification(object.getType());
         NakedObject obj = NakedObjects.getObjectPersistor().getObject(object.getOid(), spec);
+        LOG.debug("get object " + object + " for " + session + " --> " + obj);
         obj.checkLock(object.getVersion());
         return obj;
-     }
+    }
 
     private NakedObjectSpecification getSpecification(String fullName) {
         return NakedObjects.getSpecificationLoader().loadSpecification(fullName);
@@ -222,10 +243,10 @@ public class ServerDistribution implements Distribution {
     }
 
     public boolean hasInstances(Session session, String objectType) {
-        LOG.debug("request hasInstances of " +  objectType + " for " + session);
+        LOG.debug("request hasInstances of " + objectType + " for " + session);
         return persistor().hasInstances(getSpecification(objectType), false);
     }
-    
+
     public int numberOfInstances(Session session, String objectType) {
         LOG.debug("request numberOfInstances of " + objectType + " for " + session);
         return persistor().numberOfInstances(getSpecification(objectType), false);
@@ -236,19 +257,19 @@ public class ServerDistribution implements Distribution {
     }
 
     public Data resolveField(Session session, ReferenceData target, String fieldName) {
-        LOG.debug("request resolveEagerly " + target + "/" + fieldName +" for " + session);
-         
+        LOG.debug("request resolveEagerly " + target + "/" + fieldName + " for " + session);
+
         NakedObjectSpecification spec = getSpecification(target.getType());
         NakedObjectField field = spec.getField(fieldName);
-//        NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
+        // NakedObject object = NakedObjects.getObjectManager().getObject(target.getOid(), spec);
         NakedObject object = NakedObjects.getObjectLoader().recreateAdapterForPersistent(target.getOid(), spec);
         NakedObjects.getObjectPersistor().resolveField(object, field);
         return encoder.createForResolveField(object, fieldName);
     }
 
     public ObjectData resolveImmediately(Session session, ReferenceData target) {
-        LOG.debug("request resolveImmediately " + target +" for " + session);
-         
+        LOG.debug("request resolveImmediately " + target + " for " + session);
+
         NakedObjectSpecification spec = getSpecification(target.getType());
         NakedObject object = NakedObjects.getObjectPersistor().getObject(target.getOid(), spec);
 
@@ -260,8 +281,8 @@ public class ServerDistribution implements Distribution {
      * 
      * @property
      */
-    public void set_ObjectDataFactory(ObjectEncoder objectDataFactory) {
-        this.encoder = objectDataFactory;
+    public void set_Encoder(ObjectEncoder encoder) {
+        this.encoder = encoder;
     }
 
     /**
@@ -274,20 +295,21 @@ public class ServerDistribution implements Distribution {
         setUpdateNotifier(updateNotifier);
     }
 
-    public void setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
-        LOG.debug("request setAssociation " + fieldIdentifier + " on " +target + " with " + associated + " for " + session);
+    public ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
+        LOG.debug("request setAssociation " + fieldIdentifier + " on " + target + " with " + associated + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectField association = (NakedObjectField) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
+        if (!association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.setAssociation(association, associate);
+        return getUpdates();
     }
 
     /*
-     * public void setLocalObjectManager(LocalObjectManager objectManager) {
-     * this.objectManager = objectManager; }
+     * public void setLocalObjectManager(LocalObjectManager objectManager) { this.objectManager =
+     * objectManager; }
      */
     public void setEncoder(ObjectEncoder objectDataFactory) {
         this.encoder = objectDataFactory;
@@ -296,12 +318,12 @@ public class ServerDistribution implements Distribution {
     public void setUpdateNotifier(SingleResponseUpdateNotifier updateNotifier) {
         this.updateNotifier = updateNotifier;
     }
-    
-    public void setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
+
+    public ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
         LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (! association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
+        if (!association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
 
@@ -312,6 +334,7 @@ public class ServerDistribution implements Distribution {
         }
 
         inObject.setValue(association, value);
+        return getUpdates();
     }
 
     public String updateList() {
@@ -321,25 +344,20 @@ public class ServerDistribution implements Distribution {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

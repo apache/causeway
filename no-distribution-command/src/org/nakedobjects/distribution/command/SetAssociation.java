@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Distribution;
+import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.Session;
 
@@ -17,11 +18,12 @@ public class SetAssociation extends AbstractRequest {
     }
     
     public void execute(Distribution distribution) {
-        distribution.setAssociation(session, fieldIdentifier, target, associate);
+        response = distribution.setAssociation(session, fieldIdentifier, target, associate);
     }
 
-
-
+    public ObjectData[] getChanges() {
+        return (ObjectData[]) response;
+    }
 }
 
 
