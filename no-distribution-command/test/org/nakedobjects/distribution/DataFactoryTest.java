@@ -33,7 +33,7 @@ public class DataFactoryTest extends TestCase {
     }
 
     private DummyNakedObjectSpecification field4Specification;
-    private ObjectEncoder factory;
+    private ObjectEncoder encoder;
     private DummyNakedObject field1;
     private DummyNakedObject field1_1;
     private DummyNakedObjectSpecification field1_1Specification;
@@ -78,8 +78,8 @@ public class DataFactoryTest extends TestCase {
         system = new TestSystem();
         system.init();
 
-        factory = new ObjectEncoder();
-        factory.setDataFactory(new DummyObjectDataFactory());
+        encoder = new ObjectEncoder();
+        encoder.setDataFactory(new DummyObjectDataFactory());
 
         // field 1 - reference to another object
         field1Specification = new DummyNakedObjectSpecification();
@@ -166,7 +166,7 @@ public class DataFactoryTest extends TestCase {
     }
 
     public void testCreateActionResultWithNull() {
-        ServerActionResultData data = factory.createActionResult(null, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = encoder.createActionResult(null, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof NullData);
     }
 
@@ -174,7 +174,7 @@ public class DataFactoryTest extends TestCase {
         DummyNakedCollection collection = new DummyNakedCollection();
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         collection.setupSpecification(type);
-        ServerActionResultData data = factory.createActionResult(collection, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = encoder.createActionResult(collection, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof CollectionData);
         assertEquals(type.getFullName(), data.getReturn().getType());
    }
@@ -184,7 +184,7 @@ public class DataFactoryTest extends TestCase {
         object.setupResolveState(ResolveState.PART_RESOLVED);
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         object.setupSpecification(type);
-        ServerActionResultData data = factory.createActionResult(object, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = encoder.createActionResult(object, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof ObjectData);
         assertEquals(type.getFullName(), data.getReturn().getType());
      }
@@ -199,7 +199,7 @@ public class DataFactoryTest extends TestCase {
         DummyOid referencedOid2 = new DummyOid(1);
         field1_1.setupOid(referencedOid2);
 
-        ObjectData rootData = (ObjectData) factory.createCompletePersistentGraph(rootObject);
+        ObjectData rootData = (ObjectData) encoder.createCompletePersistentGraph(rootObject);
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
         assertEquals(rootOid, rootData.getOid());
@@ -248,7 +248,7 @@ public class DataFactoryTest extends TestCase {
 
         field1.setupResolveState(ResolveState.GHOST);
 
-        ObjectData rootData = (ObjectData) factory.createCompletePersistentGraph(rootObject);
+        ObjectData rootData = (ObjectData) encoder.createCompletePersistentGraph(rootObject);
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
         assertEquals(rootOid, rootData.getOid());
@@ -274,7 +274,7 @@ public class DataFactoryTest extends TestCase {
      * For updates the whole object is passed across, but not any of its children.
      */
     public void testCreateForUpdate() {
-        ObjectData rootData = (ObjectData) factory.createForUpdate(rootObject);
+        ObjectData rootData = (ObjectData) encoder.createForUpdate(rootObject);
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
         assertEquals(null, rootData.getOid());
@@ -299,7 +299,7 @@ public class DataFactoryTest extends TestCase {
     public void testCreateMakePersistentGraphWhereAllReferencesArePersistent() {
         rootObject.setupResolveState(ResolveState.TRANSIENT);
 
-        ObjectData rootData = (ObjectData) factory.createMakePersistentGraph(rootObject);
+        ObjectData rootData = (ObjectData) encoder.createMakePersistentGraph(rootObject);
         assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
 
         assertEquals(null, rootData.getOid());
@@ -326,7 +326,7 @@ public class DataFactoryTest extends TestCase {
         field1_1.setupResolveState(ResolveState.TRANSIENT);
         element1.setupResolveState(ResolveState.TRANSIENT);
 
-        ObjectData rootData = (ObjectData) factory.createMakePersistentGraph(rootObject);
+        ObjectData rootData = (ObjectData) encoder.createMakePersistentGraph(rootObject);
         assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
 
         assertEquals(null, rootData.getOid());
@@ -402,7 +402,7 @@ public class DataFactoryTest extends TestCase {
         el1.setFieldContent(new Data[] {rootData});
 
         // test
-        ObjectData transientGraph = factory.createMadePersistentGraph(rootData, rootObject, new SingleResponseUpdateNotifier());
+        ObjectData transientGraph = encoder.createMadePersistentGraph(rootData, rootObject, new SingleResponseUpdateNotifier());
         assertEquals(new DummyOid(712), transientGraph.getOid());
         assertEquals(new DummyVersion(11), transientGraph.getVersion());
         assertEquals(4, transientGraph.getFieldContent().length);
@@ -479,7 +479,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupOid(new DummyOid(712));
         
         // test
-        ObjectData updates = factory.createMadePersistentGraph(data, rootObject, new SingleResponseUpdateNotifier());
+        ObjectData updates = encoder.createMadePersistentGraph(data, rootObject, new SingleResponseUpdateNotifier());
         assertEquals(new DummyOid(712), updates.getOid());
         assertEquals(new DummyVersion(11), updates.getVersion());
         assertEquals(4, updates.getFieldContent().length);
@@ -518,7 +518,7 @@ public class DataFactoryTest extends TestCase {
         DummyOid rootOid = new DummyOid(1);
         rootObject.setupOid(rootOid);
 
-        Data[] results = factory.createDataForParameters(new NakedObjectSpecification[] {new DummyNakedObjectSpecification()}, new Naked[] {rootObject});
+        Data[] results = encoder.createDataForParameters(new NakedObjectSpecification[] {new DummyNakedObjectSpecification()}, new Naked[] {rootObject});
         ObjectData rootData = (ObjectData) results[0];
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
@@ -533,7 +533,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupResolveState(ResolveState.GHOST);
         assertEquals(ResolveState.GHOST, rootObject.getResolveState());
 
-        ObjectData od = factory.createDataForActionTarget(rootObject);
+        ObjectData od = encoder.createDataForActionTarget(rootObject);
 
         assertEquals(false, od.hasCompleteData());
         assertEquals(ResolveState.GHOST, rootObject.getResolveState());
@@ -541,7 +541,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupResolveState(ResolveState.RESOLVED);
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
-        od = factory.createDataForActionTarget(rootObject);
+        od = encoder.createDataForActionTarget(rootObject);
 
         assertEquals(true, od.hasCompleteData());
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
@@ -551,7 +551,7 @@ public class DataFactoryTest extends TestCase {
         rootObject.setupResolveState(ResolveState.TRANSIENT);
         field1.setupResolveState(ResolveState.TRANSIENT);
 
-        Data[] results = factory.createDataForParameters(new NakedObjectSpecification[] {new DummyNakedObjectSpecification()}, new Naked[] {rootObject});
+        Data[] results = encoder.createDataForParameters(new NakedObjectSpecification[] {new DummyNakedObjectSpecification()}, new Naked[] {rootObject});
         ObjectData rootData = (ObjectData) results[0];
         assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
 
@@ -582,7 +582,7 @@ public class DataFactoryTest extends TestCase {
         DummyNakedValue dummyNakedValue = new DummyNakedValue();
         dummyNakedValue.setupObject(new Integer(123));
 
-        Data[] data = (Data[]) factory.createDataForParameters(new NakedObjectSpecification[] {new DummyNakedObjectSpecification()}, new Naked[] {dummyNakedValue});
+        Data[] data = (Data[]) encoder.createDataForParameters(new NakedObjectSpecification[] {new DummyNakedObjectSpecification()}, new Naked[] {dummyNakedValue});
 
         assertEquals(dummyNakedValue.getSpecification().getFullName(), data[0].getType());
         assertEquals(new Integer(123), ((ValueData) data[0]).getValue());
