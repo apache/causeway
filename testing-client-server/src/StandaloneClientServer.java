@@ -141,11 +141,8 @@ public abstract class StandaloneClientServer {
                 sd.setUpdateNotifier(updateNotifier);
                 
                 Distribution serverLogger = sd;
-                //serverLogger = new DistributionLogger(serverLogger, "server-connection.log");
                     
                 server.setFacade(serverLogger);
-                //server.setUpdateNotifier(updateNotifier);
-                server.setDistribution(sd);
 
                 persistor.addObjectChangedListener(updateNotifier);
 
