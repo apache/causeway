@@ -25,7 +25,7 @@ public class DummyVersion implements Version {
     }
     
     public boolean different(Version version) {
-        return true;
+        return value != ((DummyVersion)version).value;
     }
 
     public String toString() {
@@ -33,11 +33,11 @@ public class DummyVersion implements Version {
     }
 
     public String getUser() {
-        return null;
+        return "USER";
     }
 
     public Date getTime() {
-        return null;
+        return new Date(0);
     }
 
 }

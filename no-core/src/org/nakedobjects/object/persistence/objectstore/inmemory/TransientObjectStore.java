@@ -164,7 +164,6 @@ public class TransientObjectStore implements NakedObjectStore {
                 debug.append(": ");
                 Oid oid = (Oid) f.nextElement();
                 NakedObject object = (NakedObject) objects.get(oid);
-                debug.append(object);
                 debug.appendln(Dump.graph(object, dump));
             }
         }

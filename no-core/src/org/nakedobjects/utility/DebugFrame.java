@@ -171,6 +171,11 @@ public abstract class DebugFrame extends Frame {
     }
 
     public void refresh() {
+        /* WARNING - When refresh button is pressed it is in the AWT thread; if the naked objects repository
+         * is thread based then the wrong set of components will be used giving strange results, particularly in 
+         * the object persistor. 
+         */
+        // TODO run in correct thread
         DebugInfo[] infos = getInfo();
         tabPane.setInfo(infos);
         DebugInfo info = infos[panel];

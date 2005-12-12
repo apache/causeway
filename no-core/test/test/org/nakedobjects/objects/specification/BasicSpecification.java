@@ -48,7 +48,7 @@ abstract class BasicSpecification implements NakedObjectSpecification {
 
     public NakedObjectField getField(String name) {
         for (int i = 0; i < fields.length; i++) {
-            if(fields[i].getName().equals(name)) {
+            if(fields[i].getId().equals(name)) {
                 return fields[i];
             }
         }

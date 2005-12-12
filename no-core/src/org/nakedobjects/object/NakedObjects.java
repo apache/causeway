@@ -100,6 +100,7 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
         debug.appendln(0, "configuration", configuration().getClass().getName());
         debug.appendln(0, "session", currentSession() == null ? "null" : currentSession().getClass().getName());
         debug.appendln(0, "instance", specificationLoader().getClass().getName());
+        debug.appendln(0, "loader", objectLoader().getClass().getName());
         debug.appendln(0, "persistor", objectPersistor().getClass().getName());
         return debug.toString();
     }

@@ -71,8 +71,8 @@ class MovieDirectorField extends TestOneToOneAssociation {
     }
 
     public void clearAssociation(NakedObject inObject, NakedObject associate) {
-        if(getMovie(inObject).getDirector() != associate) {
-            throw new NakedObjectRuntimeException();
+        if(getMovie(inObject).getDirector() != associate.getObject()) {
+            throw new NakedObjectRuntimeException("clear value not set to " + getMovie(inObject).getDirector() + " but was " + associate.getObject());
         }
         getMovie(inObject).setDirector(null);
     }

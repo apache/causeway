@@ -158,7 +158,7 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public void setAssociation(NakedObjectField field, NakedObject associatedObject) {
-        LOG.debug("setAssociation " + field.getId() + " with " + associatedObject + " in " + this);
+        LOG.debug("setAssociation " + field.getId() + " of " + this + " with " + associatedObject);
         if (field instanceof OneToOneAssociation) {
             ((OneToOneAssociation) field).setAssociation(this, associatedObject);
         } else {
