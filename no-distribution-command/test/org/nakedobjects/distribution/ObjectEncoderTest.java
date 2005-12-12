@@ -26,10 +26,10 @@ import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyVersion;
 
 
-public class DataFactoryTest extends TestCase {
+public class ObjectEncoderTest extends TestCase {
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(DataFactoryTest.class);
+        junit.textui.TestRunner.run(ObjectEncoderTest.class);
     }
 
     private DummyNakedObjectSpecification field4Specification;

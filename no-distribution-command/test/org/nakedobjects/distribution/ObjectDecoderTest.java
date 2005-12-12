@@ -24,10 +24,10 @@ import test.org.nakedobjects.object.reflect.TestPojoValuePeer;
 import test.org.nakedobjects.object.reflect.defaults.TestValue;
 
 
-public class DataHelperTest extends TestCase {
+public class ObjectDecoderTest extends TestCase {
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(DataHelperTest.class);
+        junit.textui.TestRunner.run(ObjectDecoderTest.class);
     }
 
     private TestSystem system;

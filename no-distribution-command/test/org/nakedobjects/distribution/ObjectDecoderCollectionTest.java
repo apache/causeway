@@ -20,10 +20,10 @@ import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyVersion;
 
 
-public class DataHelperCollectionTest extends TestCase {
+public class ObjectDecoderCollectionTest extends TestCase {
 
     public static void main(String[] args) {
-        junit.textui.TestRunner.run(DataHelperCollectionTest.class);
+        junit.textui.TestRunner.run(ObjectDecoderCollectionTest.class);
     }
 
     private TestSystem system;
