@@ -92,6 +92,7 @@ public class VectorCollectionAdapter extends AbstractNakedReference implements I
     public String toString() {
         ToString s = new ToString(this);
         toString(s);
+        s.append("elements", elementSpecification.getFullName());
 
         // title
         String title;

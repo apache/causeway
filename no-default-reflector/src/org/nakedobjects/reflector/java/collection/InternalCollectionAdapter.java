@@ -87,7 +87,7 @@ public class InternalCollectionAdapter extends AbstractNakedReference implements
     public String toString() {
         ToString s = new ToString(this);
         toString(s);
-
+        s.append("elements", elementSpecification.getFullName());
         // title
         String title;
         try {
