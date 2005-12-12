@@ -12,8 +12,8 @@
     
     <head>
 		<!-- this tag is not being copied across with the closing slash ? -->
-        <link rel="STYLESHEET" href="./screen.css" media="screen"/>
-        <link rel="STYLESHEET" href="./print.css" media="print"/>
+        <link rel="STYLESHEET" href="../screen.css" media="screen"/>
+        <link rel="STYLESHEET" href="../print.css" media="print"/>
         <title>
             <xsl:value-of select="/section/title"/>
         </title>
@@ -235,6 +235,16 @@
     </ul>
   </xsl:template>
 
+  <xsl:template match="block">
+    <p class="block-label">
+        <xsl:apply-templates select="label"/>
+    </p>
+    
+    <div class="block">
+        <xsl:apply-templates select="para|commnad-listing|program-listing|screenshot"/>
+    </div>
+  </xsl:template>
+  
   <xsl:template match="list/para">
     <li>
         <xsl:apply-templates/>
@@ -287,7 +297,7 @@
   <xsl:template match ="comment">
   </xsl:template>
 
-  <xsl:template match ="command-listing|property-listing|program-listing">
+  <xsl:template match ="command-listing|property-listing|program-listing|output-listing">
     <pre>
         <xsl:attribute name="class">
             <xsl:value-of select="name()"/>

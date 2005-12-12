@@ -68,7 +68,7 @@
 
 
 	<target name="html">
-		<xslt in="${src.dir}/notebook.xml"
+		<xslt in="${src.dir}/manual.xml"
 		      out="${dest.dir}/index.html"
 		      style="html-set.xsl" />
 

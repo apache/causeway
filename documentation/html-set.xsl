@@ -21,7 +21,7 @@
     </html>
   </xsl:template>
 
-    <xsl:template match="section">
+    <xsl:template match="include">
         <p class="index">
             <a>
                 <xsl:attribute name="href">

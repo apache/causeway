@@ -41,7 +41,14 @@ path {
   color: #6600CC; font: monospaced;  
 }
 
+p.block-label {
+	font-size: 80%;  font-style: italic;
+	margin-bottom: -13px;	
+}
 
+div.block {
+	margin-left: 10px;
+}
 
 table { 		width: 100%;}
 
@@ -83,7 +90,9 @@ img.wrapped {	margin-right: 10px;  margin-bottom: 10px;  float: left;
 
 pre {	font-family: andale mono, lucida fixed, monospaced; 
         line-height: 100%;
-	color: #6600CC; margin-left: 0.25in; margin-right: 0.25in;
+	color: #6600CC; margin-left: 0.0in; margin-right: 0.25in;
+	padding: 8px;
+	border: 1px dashed #000000;
 	clear: both;}
 
 pre.b {	color:black;}
@@ -93,12 +102,17 @@ pre.property-listing {
 }
 
 pre.command-listing {
-    background: #ddffd;
+    background: #ddffdd;
 }
 
 pre.program-listing {
-    background: #ddffd;
+    background: #ddddff;
 }
+
+pre.output-listing {
+    background: #ffddff;
+}
+
 
 .code {	color: #6600CC; font: andale mono, lucida fixed, monospaced;}
 
