@@ -3,27 +3,28 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.OneToManyFieldElement;
+import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-public class RemoveOneToManyAssociationOption extends MenuOption {
-
-    public RemoveOneToManyAssociationOption() {
+public class ClearOneToOneAssociationOption extends MenuOption {
+    public ClearOneToOneAssociationOption() {
         super("Clear association");
     }
 
-    public Consent disabled(View view) {        
-        OneToManyFieldElement content = (OneToManyFieldElement) view.getContent();
+    public Consent disabled(View view) {
+        OneToOneField content = ((OneToOneField) view.getContent());
         return content.canClear();
     }
 
     public void execute(Workspace frame, View view, Location at) {
-        OneToManyFieldElement content = (OneToManyFieldElement) view.getContent();
+        OneToOneField content = ((OneToOneField) view.getContent());
         content.clear();
+        view.getParent().invalidateContent();
     }
 }
+
 
 /*
 Naked Objects - a framework that exposes behaviourally complete
