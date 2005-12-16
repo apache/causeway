@@ -3,21 +3,23 @@ package org.nakedobjects.object.reflect;
 import org.nakedobjects.object.NakedObjectSpecification;
 
 public class MemberIdentifierImpl implements MemberIdentifier {
-
     private final String className;
     private final String name;
     private final String[] parameters;
+    private final boolean isField;
     
     public MemberIdentifierImpl(String className) {
         this.className = className;
         name = "";
         parameters = new String[0];
+        isField = false;
     }
 
     public MemberIdentifierImpl(String className, String fieldName) {
         this.className = className;
         name = fieldName;
         parameters = new String[0];
+        isField = true;
     }
 
     public MemberIdentifierImpl(String className, String methodName, NakedObjectSpecification[] specifications) {
@@ -27,6 +29,7 @@ public class MemberIdentifierImpl implements MemberIdentifier {
         for (int i = 0; i < parameters.length; i++) {
             parameters[i] = specifications[i].getFullName();
         }
+        isField = false;
     }
     
     public boolean equals(Object obj) {
@@ -87,6 +90,10 @@ public class MemberIdentifierImpl implements MemberIdentifier {
     
     public String[] getParameters() {
         return parameters;
+    }
+    
+    public boolean isField() {
+        return isField;
     }
     
     public String toString() {

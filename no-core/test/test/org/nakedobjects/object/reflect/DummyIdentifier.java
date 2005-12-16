@@ -29,6 +29,10 @@ public class DummyIdentifier implements MemberIdentifier {
         return "#" + name;
     }
 
+    public boolean isField() {
+        return true;
+    }
+
 }
 
 

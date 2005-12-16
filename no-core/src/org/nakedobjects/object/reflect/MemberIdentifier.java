@@ -7,6 +7,11 @@ public interface MemberIdentifier {
     String getName();
     
     String[] getParameters();
+    
+    /**
+     * Returns true if the member is for a field/property; false if for an action.
+     */
+    boolean isField();
 }
 
 
