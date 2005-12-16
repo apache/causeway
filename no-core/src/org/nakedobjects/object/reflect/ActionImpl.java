@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 
 public class ActionImpl extends AbstractNakedObjectMember implements Action {
-    private final static Logger LOG = Logger.getLogger(Action.class);
+    private final static Logger LOG = Logger.getLogger(ActionImpl.class);
 
     public static Action.Type getType(String type) {
         Action.Type[] types = new Action.Type[] { Action.DEBUG, Action.EXPLORATION, Action.USER };

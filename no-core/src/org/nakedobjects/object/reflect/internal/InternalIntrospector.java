@@ -123,9 +123,7 @@ public class InternalIntrospector {
 
     public ActionPeer[] actionPeers(boolean forClass) {
         LOG.debug("  looking for action methods");
-        Method defaultAboutMethod = findMethod(forClass, "aboutActionDefault", null, new Class[] { InternalAbout.class });
-        LOG.debug(defaultAboutMethod == null ? "  no default about method for actions" : defaultAboutMethod.toString());
-
+       
         Vector validMethods = new Vector();
         Vector actions = new Vector();
         for (int i = 0; i < methods.length; i++) {
@@ -151,22 +149,7 @@ public class InternalIntrospector {
                 continue;
             }
 
-            /*
-             * Class returnType = method.getReturnType(); boolean returnIsValid = returnType == void.class ||
-             * NakedObject.class.isAssignableFrom(returnType);
-             * 
-             * if(! returnIsValid) { LOG.warn("action method " + method + " ignored as return type is not of
-             * type Naked" ); continue; }
-             */
-
             Class[] params = method.getParameterTypes();
-            /*
-             * boolean paramsAreValid = true; for (int j = 0; j < params.length; j++) { Class param =
-             * params[j]; if(! Naked.class.isAssignableFrom(param)) { paramsAreValid = false; } }
-             * 
-             * if(! paramsAreValid) { LOG.warn("action method " + method + " ignored as not all parameters are
-             * of type Naked" ); continue; }
-             */
             validMethods.addElement(method);
 
             LOG.info("  identified action " + method);
@@ -178,9 +161,9 @@ public class InternalIntrospector {
             longParams[0] = InternalAbout.class;
             System.arraycopy(params, 0, longParams, 1, params.length);
             String aboutName = "about" + methodName.substring(0, 1).toUpperCase() + methodName.substring(1);
+
             Method aboutMethod = findMethod(forClass, aboutName, null, longParams);
             if (aboutMethod == null) {
-                aboutMethod = defaultAboutMethod;
             } else {
                 LOG.debug("  with about method " + aboutMethod);
             }
