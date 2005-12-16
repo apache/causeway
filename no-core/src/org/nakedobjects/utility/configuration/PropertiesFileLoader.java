@@ -6,15 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.Properties;
 
 
 public class PropertiesFileLoader implements ConfigurationLoader {
-
     private Properties properties;
 
     public PropertiesFileLoader(String pathname, boolean ensureFileLoads) {
@@ -33,72 +28,9 @@ public class PropertiesFileLoader implements ConfigurationLoader {
         }
     }
 
-    private Properties loadProperties(URL resource, boolean mustLoadFile) throws ConfigurationException {
-        InputStream in;
-
-        try {
-            URLConnection connection = resource.openConnection();
-            in = connection.getInputStream();
-        } catch (FileNotFoundException e) {
-            if (mustLoadFile) {
-                throw new ConfigurationException("Could not find configuration resource: " + resource);
-            } else {
-                return new Properties();
-            }
-        } catch (IOException e) {
-            throw new ConfigurationException("Error reading configuration resource: " + resource, e);
-        }
-
-        try {
-            Properties p = new Properties();
-            p.load(in);
-
-            return p;
-        } catch (IOException e) {
-            throw new ConfigurationException("Error reading properties" + e.getMessage());
-        } finally {
-            try {
-                in.close();
-            } catch (IOException ignore) {}
-        }
-    }
-
-    private Properties loadProperties(String resource, boolean mustLoadFile) throws ConfigurationException {
-
-        try {
-            URL url = PropertiesFileLoader.class.getResource(resource);
-            if (url == null) {
-                if (mustLoadFile) {
-                    throw new ConfigurationException("Configuration resource not found: " + resource);
-                } else {
-                    return new Properties();
-                }
-            }
-            return loadProperties(url, mustLoadFile);
-
-        } catch (ConfigurationException e) {
-            try {
-                // try as if it is a file name
-                URL url = new URL("file:///" + new File(resource).getAbsolutePath());
-
-                return loadProperties(url, mustLoadFile);
-            } catch (SecurityException ee) {
-                throw new ConfigurationException("Access not granted to configuration resource: " + resource);
-            } catch (MalformedURLException ee) {
-                throw new ConfigurationException("Configuration resource not found: " + resource);
-            }
-        }
-    }
-
     public Properties getProperties() {
         return properties;
     }
-
-/*    public Configuration(String file, boolean mustLoadFile) throws ConfigurationException {
-        Properties p = loadProperties(file, mustLoadFile);
-        load(p);
-    }
-    */
 }
 
 /*

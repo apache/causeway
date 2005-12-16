@@ -104,7 +104,9 @@ public class DebugString {
     }
     
     public void blankLine() {
-        string.append('\n');
+        if(string.length() > 0) {
+            string.append('\n');
+        }
     }
 
     private void indent(int indent) {
