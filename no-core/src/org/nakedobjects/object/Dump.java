@@ -8,11 +8,6 @@ import java.util.Vector;
 
 
 public class Dump {
-
-    private static void aboutDetail(DebugString text, NakedObjectMember member) {
-        text.appendln(4, member.toString());
-    }
-
     private static void collectionGraph(
             final NakedCollection collection,
             final int level,
@@ -141,6 +136,8 @@ public class Dump {
     public static void specification(Naked naked, DebugString debug) {
         NakedObjectSpecification specification = naked.getSpecification();
 
+        debug.appendTitle(specification.getClass().getName());
+        
         debug.appendln(0, "Full Name", specification.getFullName());
         debug.appendln(0, "Short Name", specification.getShortName());
         debug.appendln(0, "Plural Name", specification.getPluralName());
@@ -189,13 +186,30 @@ public class Dump {
             debug.appendln(4, "none");
         } else {
             for (int i = 0; i < fields.length; i++) {
-                if (fields[i] instanceof OneToManyAssociation) {
-                    OneToManyAssociation f = (OneToManyAssociation) fields[i];
-                    aboutDetail(debug, f);
-                } else if (fields[i] instanceof OneToOneAssociation) {
-                    OneToOneAssociation f = (OneToOneAssociation) fields[i];
-                    aboutDetail(debug, f);
+
+                NakedObjectField f = (NakedObjectField) fields[i];
+                debug.appendln(4, f.getName());
+                if(f.getDescription() != null && ! f.getDescription().equals("") ) {
+                    debug.appendln(12, "Description", f.getDescription());
                 }
+                
+                debug.appendln(8, f.getClass().getName());
+
+                debug.appendln(8, "ID", f.getId());
+                debug.appendln(8, "Type", (f.isCollection() ? "Collection" : f.isObject() ? "Object" : f.isValue() ? "Value"
+                        : "Unknown") + " (" + f.getSpecification().getFullName() + ")");
+
+                debug.appendln(8, "Flags", (f.isAuthorised() ? "Authorised " : "") + (f.isDerived() ? "Derived " : "") + (f.isHidden() ? 
+                        "Hidden " : "") + (f.isMandatory() ? "Mandatory " : ""));
+                
+                Class[] extensions = f.getExtensions();
+                if(extensions.length > 0) {
+                    debug.appendln(12, "Extensions");
+                    for (int j = 0; j < extensions.length; j++) {
+                        debug.appendln(16, extensions[j].getName());
+                    }
+                }
+
             }
         }
     }
@@ -204,14 +218,46 @@ public class Dump {
         if (userActions.length == 0 && explActions.length == 0 && debActions.length == 0) {
             debug.append("    none\n");
         } else {
+            debug.appendln(4, "User actions");
             for (int i = 0; i < userActions.length; i++) {
-                aboutDetail(debug, userActions[i]);
+                actionDetails(debug, userActions[i]);
             }
+            debug.appendln(4, "Exploration actions");
             for (int i = 0; i < explActions.length; i++) {
-                aboutDetail(debug, explActions[i]);
+                actionDetails(debug, explActions[i]);
             }
+            debug.appendln(4, "Debug actions");
             for (int i = 0; i < debActions.length; i++) {
-                aboutDetail(debug, debActions[i]);
+                actionDetails(debug, debActions[i]);
+            }
+        }
+    }
+
+    private static void actionDetails(DebugString debug, Action f) {
+        debug.appendln(8, f.getName());
+        if(f.getDescription() != null && ! f.getDescription().equals("") ) {
+            debug.appendln(12, "Description", f.getDescription());
+        }
+        debug.appendln(12, f.getClass().getName());
+        debug.appendln(12, "ID", f.getId());
+//        debug.appendln(12, "Returns", f.getReturnType() == null ? "Nothing" : f.getReturnType().getFullName());
+        NakedObjectSpecification[] parameters = f.getParameterTypes();
+        if(parameters.length == 0) {
+            debug.appendln(12, "Parameters: none");
+        } else {
+            debug.appendln(12, "Parameters");
+        }
+        for (int j = 0; j < parameters.length; j++) {
+            debug.appendln(16, parameters[j].getFullName());
+        }
+        debug.appendln(12, "Target", f.getTarget());
+
+
+        Class[] extensions = f.getExtensions();
+        if(extensions.length > 0) {
+            debug.appendln(12, "Extensions");
+            for (int j = 0; j < extensions.length; j++) {
+                debug.appendln(16, extensions[j].getName());
             }
         }
     }
