@@ -5,6 +5,7 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.Assert;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -95,7 +96,7 @@ public abstract class AbstractView implements View {
      * Returns debug details about this view.
      */
     public String debugDetails() {
-        StringBuffer b = new StringBuffer();
+        DebugString b = new DebugString();
 
         b.append("View:      ");
         String name = getClass().getName();
@@ -106,6 +107,9 @@ public abstract class AbstractView implements View {
         b.append("\n           padding " + getPadding());
         b.append("\n           baseline " + getBaseline());
         b.append("\n");
+
+        b.append("\nChangable: " + canChangeValue());
+        b.append("\nFocus:     " + canFocus());
 
         b.append("\nSelf:      " + getView());
         b.append("\nAxis:      " + getViewAxis());
@@ -130,7 +134,6 @@ public abstract class AbstractView implements View {
         while (p != null) {
             p = p.getParent();
             b.append("\n           " + p);
-
         }
 
         b.append("\nWorkspace: " + getWorkspace());

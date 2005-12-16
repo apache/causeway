@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.object.Naked;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -55,17 +56,21 @@ public class CompositeView extends ObjectView {
     }
 
     public String debugDetails() {
-        StringBuffer b = new StringBuffer();
+        DebugString b = new DebugString();
         b.append(super.debugDetails());
-        b.append("\nBuilt:     " + (buildInvalid ? "no" : "yes") + ", " + buildCount + " builds");
-        b.append("\nLaid out:  " + (layoutInvalid ? "no" : "yes") + ", " + layoutCount + " layouts");
-        b.append("\nSubviews:  ");
-
+        b.appendTitle("Composite view");
+        b.appendln(0, "Built", (buildInvalid ? "no" : "yes") + ", " + buildCount + " builds");
+        b.appendln(0, "Laid out:  " + (layoutInvalid ? "no" : "yes") + ", " + layoutCount + " layouts");
+        b.appendln(0, "Subviews");
         View views[] = getSubviews();
-
         for (int i = 0; i < views.length; i++) {
             View subview = views[i];
-            b.append(subview.getBounds() + " " + subview + ": " + subview.getContent() + "\n           ");
+            b.appendln(4, subview.getSpecification().getName());
+         //   b.appendln(8, subview.getSpecification().getClass().getName());
+            b.appendln(8, "Bounds", subview.getBounds());
+            b.appendln(8, "Required size ", subview.getRequiredSize());
+            b.appendln(8, "Content", subview.getContent().getName());
+    //        b.appendln(subview.getBounds() + " " + subview + ": " + subview.getContent() + "\n           ");
         }
 
         b.append("\n");

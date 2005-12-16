@@ -26,13 +26,13 @@ public class DebugCanvas implements Canvas {
 
     public void clearBackground(View view, Color color) {
         indent();
-        buffer.append("Clear background of " + view + " to " + color);
+        buffer.appendln("Clear background of " + view + " to " + color);
     }
 
     public Canvas createSubcanvas() {
-        buffer.append("\n");
+        buffer.blankLine();
         indent();
-        buffer.append("Create subcanvas for same area");
+        buffer.appendln("Create subcanvas for same area");
         return new DebugCanvas(buffer, level + 1);
     }
 
@@ -41,96 +41,96 @@ public class DebugCanvas implements Canvas {
     }
 
     public Canvas createSubcanvas(int x, int y, int width, int height) {
-        buffer.append("\n");
+        buffer.blankLine();
         indent();
-        buffer.append("Create subcanvas for area " + x + "," + y + " " + width + "x" + height);
+        buffer.appendln("Create subcanvas for area " + x + "," + y + " " + width + "x" + height);
         return new DebugCanvas(buffer, level + 1);
     }
 
     public void draw3DRectangle(int x, int y, int width, int height, boolean raised) {
         indent();
-        buffer.append("3D rectangle " + x + "," + y + " " + width + "x" + height);
+        buffer.appendln("3D rectangle " + x + "," + y + " " + width + "x" + height);
     }
 
     public void drawIcon(Image icon, int x, int y) {
         indent();
-        buffer.append("Icon " + x + "," + y + " " + icon.getWidth() + "x" + icon.getHeight());
+        buffer.appendln("Icon " + x + "," + y + " " + icon.getWidth() + "x" + icon.getHeight());
     }
 
     public void drawIcon(Image icon, int x, int y, int width, int height) {
         indent();
-        buffer.append("Icon " + x + "," + y + " " + width + "x" + height);
+        buffer.appendln("Icon " + x + "," + y + " " + width + "x" + height);
     }
 
     public void drawLine(int x, int y, int x2, int y2, Color color) {
         indent();
-        buffer.append("Line from " + x + "," + y + " to " + x2 + "," + y2 + " " + color);
+        buffer.appendln("Line from " + x + "," + y + " to " + x2 + "," + y2 + " " + color);
     }
 
     public void drawLine(Location start, int xExtent, int yExtent, Color color) {
         indent();
-        buffer.append("Line from " + start.getX() + "," + start.getY() + " to " + (start.getX() + xExtent) + ","
+        buffer.appendln("Line from " + start.getX() + "," + start.getY() + " to " + (start.getX() + xExtent) + ","
                 + (start.getY() + yExtent) + " " + color);
     }
 
     public void drawOval(int x, int y, int width, int height, Color color) {
         indent();
-        buffer.append("Oval " + x + "," + y + " " + width + "x" + height + " " + color);
+        buffer.appendln("Oval " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
     public void drawRectangle(int x, int y, int width, int height, Color color) {
         indent();
-        buffer.append("Rectangle " + x + "," + y + " " + width + "x" + height + " " + color);
+        buffer.appendln("Rectangle " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
     public void drawRectangleAround(View view, Color color) {
         Bounds bounds = view.getBounds();
         indent();
-        buffer.append("Rectangle 0,0 " + bounds.getWidth() + "x" + bounds.getHeight() + " " + color);
+        buffer.appendln("Rectangle 0,0 " + bounds.getWidth() + "x" + bounds.getHeight() + " " + color);
     }
 
     public void drawRoundedRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color) {
         indent();
-        buffer.append("Rounded Rectangle " + x + "," + y + " " + (x + width) + "x" + (y + height) + " " + color);
+        buffer.appendln("Rounded Rectangle " + x + "," + y + " " + (x + width) + "x" + (y + height) + " " + color);
     }
 
     public void drawShape(Shape shape, Color color) {
         indent();
-        buffer.append("Shape " + shape + " " + color);
+        buffer.appendln("Shape " + shape + " " + color);
     }
 
     public void drawShape(Shape shape, int x, int y, Color color) {
         indent();
-        buffer.append("Shape " + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
+        buffer.appendln("Shape " + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
     }
 
     public void drawSolidOval(int x, int y, int width, int height, Color color) {
         indent();
-        buffer.append("Oval (full) " + x + "," + y + " " + width + "x" + height + " " + color);
+        buffer.appendln("Oval (full) " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
     public void drawSolidRectangle(int x, int y, int width, int height, Color color) {
         indent();
-        buffer.append("Rectangle (full) " + x + "," + y + " " + width + "x" + height + " " + color);
+        buffer.appendln("Rectangle (full) " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
     public void drawSolidShape(Shape shape, Color color) {
         indent();
-        buffer.append("Shape (filled) " + shape + " " + color);
+        buffer.appendln("Shape (filled) " + shape + " " + color);
     }
 
     public void drawSolidShape(Shape shape, int x, int y, Color color) {
         indent();
-        buffer.append("Shape (filled)" + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
+        buffer.appendln("Shape (filled)" + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
     }
 
     public void drawText(String text, int x, int y, Color color, Text style) {
         indent();
-        buffer.append("Text " + x + "," + y + " \"" + text + "\" " + style + " " + color);
+        buffer.appendln("Text " + x + "," + y + " \"" + text + "\" " + style + " " + color);
     }
 
     private void indent() {
-        buffer.append("\n");
+//        buffer.append("\n");
         for (int i = 0; i < level; i++) {
             buffer.append("   ");
         }
@@ -138,7 +138,7 @@ public class DebugCanvas implements Canvas {
 
     public void offset(int x, int y) {
         indent();
-        buffer.append("Offset by " + x + "/" + y + " (left, top)");
+        buffer.appendln("Offset by " + x + "/" + y + " (left, top)");
     }
 
     public boolean overlaps(Bounds bounds) {
