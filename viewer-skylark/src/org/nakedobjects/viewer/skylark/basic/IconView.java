@@ -46,7 +46,7 @@ public class IconView extends ObjectView {
     }
 
     public String toString() {
-        return "Icon" + getId();
+        return "IconView" + getId();
     }
     
     public void update(Naked object) {
