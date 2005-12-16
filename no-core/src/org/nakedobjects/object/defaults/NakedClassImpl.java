@@ -175,30 +175,16 @@ public class NakedClassImpl implements NakedClass {
     }
 
     public String title() {
-        return getPluralName();
+        return getSingularName();
     }
     
     public String toString() {
         StringBuffer s = new StringBuffer();
-
         s.append("NakedClass");
         s.append(" [");
-        /*
-         * // type of object - EO, Primitive, Collection, with Status etc //
-         * Persistent/transient & Resolved or not s.append(isPersistent() ? "P" :
-         * (isFinder() ? "F" : "T")); s.append(isResolved() ? "R" : "-");
-         *  // obect identifier if (getOid() != null) { s.append(":");
-         * s.append(getOid().toString().toUpperCase()); } else { s.append(":-"); }
-         */
-
-        // title
-        s.append(' ');
         s.append(className);
-
         s.append("]");
-
         s.append("  " + Long.toHexString(super.hashCode()).toUpperCase());
-
         return s.toString();
     }
 }
