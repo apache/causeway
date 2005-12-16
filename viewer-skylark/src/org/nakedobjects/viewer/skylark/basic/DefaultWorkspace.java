@@ -158,6 +158,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
     public void layout() {
         if (isLayoutInvalid()) {
+            getViewManager().showWaitCursor();
             super.layout();
 
             View[] subviews = getSubviews();
@@ -167,6 +168,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
 
             super.layout();
+            getViewManager().showDefaultCursor();
         }
     }
 
