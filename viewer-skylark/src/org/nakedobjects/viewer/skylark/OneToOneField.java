@@ -11,11 +11,11 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.basic.RemoveOneToOneAssociationOption;
+import org.nakedobjects.viewer.skylark.basic.ClearOneToOneAssociationOption;
 
 
 public class OneToOneField extends ObjectContent implements FieldContent {
-    private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToOneAssociationOption();
+    private static final UserAction CLEAR_ASSOCIATION = new ClearOneToOneAssociationOption();
     private final ObjectField field;
     private final NakedObject object;
 
@@ -150,7 +150,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
         */
         super.menuOptions(options);
         if (getObject() != null) {
-            options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
+            options.add(MenuOptionSet.OBJECT, CLEAR_ASSOCIATION);
         }
     }
 

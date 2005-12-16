@@ -9,14 +9,14 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
-import org.nakedobjects.viewer.skylark.basic.RemoveOneToManyAssociationOption;
+import org.nakedobjects.viewer.skylark.basic.ClearOneToManyAssociationOption;
 
 import org.apache.log4j.Logger;
 
 
 public class OneToManyFieldElement extends ObjectContent implements FieldContent {
     private static final Logger LOG = Logger.getLogger(OneToManyFieldElement.class);
-    private static final UserAction REMOVE_ASSOCIATION = new RemoveOneToManyAssociationOption();
+    private static final UserAction REMOVE_ASSOCIATION = new ClearOneToManyAssociationOption();
     private final NakedObject element;
     private final ObjectField field;
 
