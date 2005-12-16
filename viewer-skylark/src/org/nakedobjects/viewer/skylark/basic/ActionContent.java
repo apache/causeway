@@ -97,6 +97,10 @@ public class ActionContent extends ObjectContent {
         return false;
     }
 
+    public boolean isObject() {
+        return true;
+    }
+    
     public boolean isTransient() {
         return true;
     }
