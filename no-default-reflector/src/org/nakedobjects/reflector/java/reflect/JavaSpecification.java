@@ -67,6 +67,8 @@ public class JavaSpecification implements NakedObjectSpecification {
 
     private ObjectTitle title;
 
+    private NakedObjectField[] accessibleFields;
+
     public JavaSpecification(Class cls, ReflectionPeerBuilder builder) {
         introspector = new JavaIntrospector(cls, builder);
         subclasses = new SubclassList();
@@ -248,37 +250,35 @@ public class JavaSpecification implements NakedObjectSpecification {
     }
 
     public NakedObjectField[] getVisibleFields(NakedObject object) {
-        NakedObjectField[] viewFields = new NakedObjectField[fields.length];
+        getAccessibleFields();
+        NakedObjectField[] selectedFields = new NakedObjectField[accessibleFields.length];
         int v = 0;
-        for (int i = 0; i < fields.length; i++) {
-            boolean useField = !fields[i].isHidden() && fields[i].isAuthorised() && object.isVisible(fields[i]).isAllowed();
-            if (useField) {
-                viewFields[v++] = fields[i];
+        for (int i = 0; i < accessibleFields.length; i++) {
+            if (object.isVisible(accessibleFields[i]).isAllowed()) {
+                selectedFields[v++] = accessibleFields[i];
             }
         }
 
-        NakedObjectField[] selectedFields = new NakedObjectField[v];
-        for (int i = 0; i < selectedFields.length; i++) {
-            selectedFields[i] = viewFields[i];
-        }
-        return selectedFields;
+        NakedObjectField[] visibleFields = new NakedObjectField[v];
+        System.arraycopy(selectedFields, 0, visibleFields, 0, v);
+        return visibleFields;
     }
 
     public NakedObjectField[] getAccessibleFields() {
-        NakedObjectField[] viewFields = new NakedObjectField[fields.length];
-        int v = 0;
-        for (int i = 0; i < fields.length; i++) {
-            boolean useField = !fields[i].isHidden() && fields[i].isAuthorised();
-            if (useField) {
-                viewFields[v++] = fields[i];
+        if (accessibleFields == null) {
+            NakedObjectField[] selectedFields = new NakedObjectField[fields.length];
+            int v = 0;
+            for (int i = 0; i < fields.length; i++) {
+                boolean isAccessible = !fields[i].isHidden() && fields[i].isAuthorised();
+                if (isAccessible) {
+                    selectedFields[v++] = fields[i];
+                }
             }
-        }
 
-        NakedObjectField[] selectedFields = new NakedObjectField[v];
-        for (int i = 0; i < selectedFields.length; i++) {
-            selectedFields[i] = viewFields[i];
+            accessibleFields = new NakedObjectField[v];
+            System.arraycopy(selectedFields, 0, accessibleFields, 0, v);
         }
-        return selectedFields;
+        return accessibleFields;
     }
 
     public boolean hasSubclasses() {
