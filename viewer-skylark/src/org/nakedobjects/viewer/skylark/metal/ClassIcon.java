@@ -144,7 +144,6 @@ public class ClassIcon extends ObjectView {
                 NakedClass nakedClass = getNakedClass();
         
                 Naked object = null;
-     //          InternalAbout about = new InternalAbout();
                 if (click.isCtrl()) {
                     if (getViewManager().isRunningAsExploration()) {
                         Consent consent = nakedClass.useAllInstance();
@@ -154,13 +153,7 @@ public class ClassIcon extends ObjectView {
         
                         }
                     }
-/*                } else {
-                    nakedClass.aboutExplorationActionFind(about);
-                    if (about.canUse().isAllowed() && getViewManager().isRunningAsExploration()) {
-                        FastFinder finder = nakedClass.explorationActionFind();
-                        object = NakedObjects.getObjectLoader().createAdapterForTransient(finder);
-                    }
-   */             }
+                }
         
                 if (object != null) {
                     Location location = getView().getAbsoluteLocation();

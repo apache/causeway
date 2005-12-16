@@ -16,7 +16,7 @@ public class ClassTitleText extends TitleText {
 
     protected String title() {
         final NakedClass nakedClass = (NakedClass) content.getObject().getObject();
-        return nakedClass.getSingularName();
+        return nakedClass.title();
     }
 }
 
