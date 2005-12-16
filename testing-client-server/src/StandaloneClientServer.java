@@ -202,11 +202,12 @@ public abstract class StandaloneClientServer {
         ObjectEncoder objectDataFactory = new ObjectEncoder();
         objectDataFactory.setDataFactory(new JavaDataFactory());
 
-        ProxyPersistor proxyObjectManager = new ProxyPersistor();
-        proxyObjectManager.setConnection(clientLogger);
-        proxyObjectManager.setEncoder(objectDataFactory);
+        ProxyPersistor proxyPersistor = new ProxyPersistor();
+        proxyPersistor.setConnection(clientLogger);
+        proxyPersistor.setEncoder(objectDataFactory);
+        proxyPersistor.setCheckObjectsForDirtyFlag(true);
 
-        NakedObjectPersistor objectManager = proxyObjectManager; //new ObjectPersistorLogger(proxyObjectManager, "client-manager.log");
+        NakedObjectPersistor objectManager = proxyPersistor; //new ObjectPersistorLogger(proxyObjectManager, "client-manager.log");
         nakedObjects.setObjectPersistor(objectManager);
 
 
@@ -219,7 +220,7 @@ public abstract class StandaloneClientServer {
 
         ProxyPeerFactory proxyPeerFactory = new ProxyPeerFactory();
         proxyPeerFactory.setConnection(clientLogger);
-        proxyPeerFactory.setObjectDataFactory(objectDataFactory);
+        proxyPeerFactory.setEncoder(objectDataFactory);
 
         ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
                 proxyPeerFactory,
@@ -234,7 +235,7 @@ public abstract class StandaloneClientServer {
 
         ViewUpdateNotifier updateNotifier = new ViewUpdateNotifier();
 
-        proxyObjectManager.setUpdateNotifier(updateNotifier);
+        proxyPersistor.setUpdateNotifier(updateNotifier);
 
         SkylarkViewer skylark = new SkylarkViewer();
         skylark.setUpdateNotifier(updateNotifier);
