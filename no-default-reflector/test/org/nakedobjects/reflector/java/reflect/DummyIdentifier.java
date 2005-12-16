@@ -17,6 +17,10 @@ public class DummyIdentifier implements MemberIdentifier {
     public String[] getParameters() {
         return null;
     }
+
+    public boolean isField() {
+        return false;
+    }
 }
 
 
