@@ -57,8 +57,11 @@ public final class ResolveState {
      * Returns true while object is having its field set up.
      */
     public boolean isIgnoreChanges() {
-        return this == ResolveState.TRANSIENT || this == ResolveState.RESOLVING || this == ResolveState.RESOLVING_PART
-                || this == ResolveState.UPDATING;
+        return this == ResolveState.TRANSIENT || isResolving() || isUpdating() || isSerializing();
+    }
+
+    private boolean isUpdating() {
+        return this == ResolveState.UPDATING;
     }
 
     public boolean isPartlyResolved() {
@@ -66,14 +69,13 @@ public final class ResolveState {
     }
 
     public boolean isPersistent() {
-        return this == GHOST || this == PART_RESOLVED || this == RESOLVED || this == RESOLVING || this == RESOLVING_PART
-                || this == UPDATING || this == SERIALIZING_PART_RESOLVED || this == SERIALIZING_RESOLVED|| this == SERIALIZING_GHOST;
+        return this == GHOST || this == PART_RESOLVED || this == RESOLVED || isResolving() || isUpdating() || isSerializing();
     }
 
     /**
-     * Returns true if the state reflects some form of non-resolved state (GHOST, PART_RESOLVED) or
-     * is resolved and it needs to be updated. The spcified new state, which you intend to resolve
-     * at should be one of: RESOLVING_PART; RESOLVING; or UPDATING).
+     * Returns true if the state reflects some form of non-resolved state (GHOST, PART_RESOLVED) or is
+     * resolved and it needs to be updated. The spcified new state, which you intend to resolve at should be
+     * one of: RESOLVING_PART; RESOLVING; or UPDATING).
      */
     public boolean isResolvable(ResolveState newState) {
         Assert.assertNotNull("new state must be specified", newState);
@@ -88,11 +90,11 @@ public final class ResolveState {
     }
 
     /**
-     * Return true if the state reflects some kind of loading (RESOLVING_PART, RESOLVING or
-     * UPDATING), and hence can be changed to loaded (PART_RESOLVED OR RESOLVED).
+     * Return true if the state reflects some kind of loading (RESOLVING_PART, RESOLVING or UPDATING), and
+     * hence can be changed to loaded (PART_RESOLVED OR RESOLVED).
      */
     public boolean isResolving() {
-        return this == RESOLVING || this == RESOLVING_PART || this == UPDATING;
+        return this == RESOLVING || this == RESOLVING_PART;
     }
 
     public boolean isSerializing() {
@@ -108,8 +110,8 @@ public final class ResolveState {
     }
 
     /**
-     * Determines if the resolved state can be changed from this state to the specified state.
-     * Returns true if the change is valid.
+     * Determines if the resolved state can be changed from this state to the specified state. Returns true if
+     * the change is valid.
      */
     public boolean isValidToChangeTo(ResolveState nextState) {
         Assert.assertNotNull("new state must be specified", nextState);
@@ -174,21 +176,20 @@ public final class ResolveState {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
