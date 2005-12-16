@@ -17,7 +17,6 @@ import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.defaults.AbstracObjectPersistor;
-import org.nakedobjects.object.defaults.DirtyObjectSetImpl;
 import org.nakedobjects.object.defaults.NakedClassImpl;
 import org.nakedobjects.object.defaults.NullDirtyObjectSet;
 import org.nakedobjects.object.persistence.PersistAlgorithm;
@@ -39,7 +38,6 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
     private static final Logger LOG = Logger.getLogger(ObjectStorePersistor.class);
     private boolean checkObjectsForDirtyFlag;
     private final Hashtable nakedClasses = new Hashtable();
-    private final DirtyObjectSetImpl objectsToBeSaved = new DirtyObjectSetImpl();
     private NakedObjectStore objectStore;
     private DirtyObjectSet objectsToRefreshViewsFor = new NullDirtyObjectSet();
     private Transaction transaction;
@@ -132,7 +130,6 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         debug.appendTitle("Persistor");
         debug.appendln(0, "Check dirty flag", checkObjectsForDirtyFlag);
         debug.appendln(0, "Classes", nakedClasses);
-        debug.appendln(0, "To Save", objectsToBeSaved);
         debug.appendln(0, "To Refresh", objectsToRefreshViewsFor);
         debug.appendln(0, "Transaction", transaction);
         debug.appendln(0, "Persist Algorithm", persistAlgorithm);
@@ -254,26 +251,6 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         persistAlgorithm.makePersistent(object, this);
     }
 
-    /*
-     * private void persist(NakedObject object) { if(object.getResolveState().isPersistent() ||
-     * object.getSpecification().persistable() == Persistable.TRANSIENT) { return; }
-     * 
-     * LOG.info("persist " + object); loader().madePersistent(object, createOid(object));
-     * 
-     * 
-     * NakedObjectField[] fields = object.getFields(); for (int i = 0; i < fields.length; i++) {
-     * NakedObjectField field = fields[i]; if (field.isDerived()) { continue; } else if (field.isValue()) {
-     * continue; } else if (field instanceof OneToManyAssociation) { InternalCollection collection =
-     * (InternalCollection) object.getField(field); collection.setOid(createOid(collection));
-     * collection.setResolved(); for (int j = 0; j < collection.size(); j++) {
-     * persist(collection.elementAt(j)); } } else { Object fieldValue = object.getField(field); if (fieldValue ==
-     * null) { continue; } if (!(fieldValue instanceof NakedObject)) { throw new
-     * NakedObjectRuntimeException(); } persist((NakedObject) fieldValue); } }
-     * 
-     * try { createObject(object); } catch (ObjectStoreException e) { throw new
-     * NakedObjectRuntimeException(e); } }
-     */
-
     /**
      * A count of the number of instances matching the specified pattern.
      */
@@ -284,7 +261,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
 
     public void objectChanged(NakedObject object) {
         if (!object.getResolveState().isIgnoreChanges()) {
-            objectsToBeSaved.addDirty(object);
+            getTransaction().addCommand(objectStore.createSaveObjectCommand(object));
             objectsToRefreshViewsFor.addDirty(object);
         }
     }
@@ -323,16 +300,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
     }
 
     public void saveChanges() {
-        LOG.info("saving changed objects");
         collateChanges();
-        Enumeration e = objectsToBeSaved.dirtyObjects();
-        while (e.hasMoreElements()) {
-            NakedObject object = (NakedObject) e.nextElement();
-            LOG.debug("  changed " + object);
-            if (isPersistent(object)) {
-                getTransaction().addCommand(objectStore.createSaveObjectCommand(object));
-            }
-        }
     }
 
     private synchronized void collateChanges() {
@@ -388,7 +356,6 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
                 LOG.error("failure during abort", e2);
             }
         }
-        objectsToBeSaved.shutdown();
         objectsToRefreshViewsFor.shutdown();
         persistAlgorithm.shutdown();
         objectStore.shutdown();
@@ -427,11 +394,6 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
     public void setPersistAlgorithm(PersistAlgorithm persistAlgorithm) {
         this.persistAlgorithm = persistAlgorithm;
     }
-
-    public void tempResetDirty() {
-        objectsToBeSaved.dirtyObjects();
-    }
-
 }
 
 /*
