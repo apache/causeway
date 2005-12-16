@@ -77,8 +77,8 @@ public class XmlClient {
             proxyObjectManager.setConnection(connection);
             proxyObjectManager.setEncoder(encoder);
 
-            NakedObjectPersistor objectManager = new ObjectPersistorLogger(proxyObjectManager, "manager.log");
-            nakedObjects.setObjectPersistor(objectManager);
+            NakedObjectPersistor persistor = new ObjectPersistorLogger(proxyObjectManager, "manager.log");
+            nakedObjects.setObjectPersistor(persistor);
             
             ObjectLoaderImpl objectLoader = new ObjectLoaderImpl();
             objectLoader.setPojoAdapterMap(new PojoAdapterHashMap());
@@ -88,12 +88,12 @@ public class XmlClient {
             nakedObjects.setObjectLoader(objectLoader);
 
 
-            ProxyPeerFactory reflectionFactory = new ProxyPeerFactory();
-            reflectionFactory.setConnection(connection);
-            reflectionFactory.setObjectDataFactory(encoder);
+            ProxyPeerFactory peerFactory = new ProxyPeerFactory();
+            peerFactory.setConnection(connection);
+            peerFactory.setEncoder(encoder);
  
             ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
-                    reflectionFactory,
+                    peerFactory,
             };
 
             JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
