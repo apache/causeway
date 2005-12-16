@@ -368,7 +368,6 @@ public class Booking {
     
     public Booking actionLocalClone() {
         Booking booking = (Booking) container.createTransientInstance(Booking.class);
-        booking.associateCustomer(getCustomer());
         
         
         booking.setPaymentMethod(getPaymentMethod());
@@ -379,6 +378,8 @@ public class Booking {
         booking.getDate().setValue(getDate());
         
         container.makePersistent(booking);
+        
+        booking.associateCustomer(getCustomer());
         return booking;
     }
 }

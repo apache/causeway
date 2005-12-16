@@ -18,9 +18,9 @@ import org.nakedobjects.xat.TestValue;
 
 import java.util.Locale;
 
-import org.apache.log4j.PropertyConfigurator;
-
 import junit.framework.TestSuite;
+
+import org.apache.log4j.PropertyConfigurator;
 
 import bom.Booking;
 import bom.City;

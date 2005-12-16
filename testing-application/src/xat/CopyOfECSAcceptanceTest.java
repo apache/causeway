@@ -19,7 +19,6 @@ import org.nakedobjects.xat.TestValue;
 import java.util.Locale;
 
 import junit.framework.TestSuite;
-
 import bom.Booking;
 import bom.City;
 import bom.CreditCard;
