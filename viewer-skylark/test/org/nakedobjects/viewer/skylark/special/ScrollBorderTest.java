@@ -7,6 +7,9 @@ import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+
 import junit.framework.TestCase;
 
 public class ScrollBorderTest extends TestCase {
@@ -15,9 +18,13 @@ public class ScrollBorderTest extends TestCase {
         junit.textui.TestRunner.run(ScrollBorderTest.class);
     }
 
-    public void testScrollBar() {
-        new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
+    protected void setUp() throws Exception {
+        LogManager.getRootLogger().setLevel(Level.OFF);
         
+        new NakedObjectsClient().setConfiguration(new PropertiesConfiguration());
+    }
+    
+    public void testScrollBar() {
        View  view = new ScrollBorder(new MockView());
        view.setRequiredSize(new Size(100, 200));
        
@@ -26,7 +33,45 @@ public class ScrollBorderTest extends TestCase {
        
        type = view.viewAreaType(new Location(95, 20));
        assertEquals(ViewAreaType.INTERNAL, type);
+    }
+    
 
+    public void testSetSizeSetsUpContentAndHeaderSizes() {
+       MockView contentView = new MockView();
+       contentView.setRequiredSize(new Size(300, 400));
+       
+       MockView topHeader = new MockView();
+       topHeader.setRequiredSize(new Size(0, 20));
+      
+       MockView leftHeader = new MockView();
+       leftHeader.setRequiredSize(new Size(30, 0));
+       
+       View  scrollBorder = new ScrollBorder(contentView, leftHeader, topHeader);
+       
+       scrollBorder.setSize(new Size(100, 200));
+       
+
+       assertEquals(new Size(300, 400), contentView.getSize());
+       assertEquals(new Size(300, 20), topHeader.getSize());
+       assertEquals(new Size(30, 400), leftHeader.getSize());
+       
+    }
+    
+
+    public void testSetSizeSetsUpContentAndHeaderSizes2() {
+       MockView contentView = new MockView();
+       contentView.setRequiredSize(new Size(300, 400));
+       
+       MockView topHeader = new MockView();
+       topHeader.setRequiredSize(new Size(0, 20));
+      
+       MockView leftHeader = new MockView();
+       leftHeader.setRequiredSize(new Size(30, 0));
+       
+       View  scrollBorder = new ScrollBorder(contentView, leftHeader, topHeader);
+       
+       scrollBorder.setSize(new Size(100, 200));
+       
     }
 }
 

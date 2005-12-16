@@ -37,6 +37,8 @@ public class MockView implements View {
     private Content content;
 
     public boolean invalidateContentCalled;
+    private Size size;
+    private Size requiredSize;
 
     public void addView(View view) {
         addActual("add " + view);
@@ -136,11 +138,11 @@ public class MockView implements View {
     }
 
     public Size getRequiredSize() {
-        return new Size();
+        return requiredSize;
     }
 
     public Size getSize() {
-        return null;
+        return size;
     }
 
     public ViewSpecification getSpecification() {
@@ -233,7 +235,8 @@ public class MockView implements View {
 
     public void setParent(View view) {}
 
-    public void setSize(Size size) {}
+    public void setSize(Size size) {
+        this.size = size;}
 
     public void setView(View view) {}
 
@@ -245,7 +248,8 @@ public class MockView implements View {
         return null;
     }
 
-    public void setRequiredSize(Size size) {}
+    public void setRequiredSize(Size size) {
+        requiredSize = size;}
 
     public View subviewFor(Location location) {
         return null;
