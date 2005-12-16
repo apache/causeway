@@ -123,14 +123,15 @@ public class TreeNodeBorder extends AbstractBorder {
         canvas.drawLine(x, y, x + left, y, Style.SECONDARY2);
 
         boolean isOpen = getSpecification().isOpen();
-        boolean addBox = isOpen || canOpen() != NodeSpecification.CANT_OPEN;
+        int canOpen = canOpen();
+        boolean addBox = isOpen || canOpen != NodeSpecification.CANT_OPEN;
         if (addBox) {
             x += BOX_X_OFFSET;
             canvas.drawLine(x, y, x + BOX_SIZE, y, Style.SECONDARY3);
             canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.WHITE);
             canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.SECONDARY1);
 
-            if (canOpen() == NodeSpecification.UNKNOWN) {
+            if (canOpen == NodeSpecification.UNKNOWN) {
 
             } else {
                 canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.BLACK);
