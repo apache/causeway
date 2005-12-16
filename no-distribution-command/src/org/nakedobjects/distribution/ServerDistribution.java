@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution;
 
+import org.nakedobjects.distribution.ObjectDecoder.KnownTransients;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.Naked;
@@ -126,17 +127,18 @@ public class ServerDistribution implements Distribution {
         NakedObjectPersistor persistor = persistor();
         persistor.startTransaction();
         try {
-           NakedObject[] persistedObjects = new NakedObject[persisted.length];
+            KnownTransients knownObjects = ObjectDecoder.createKnownTransients();
+            NakedObject[] persistedObjects = new NakedObject[persisted.length];
             for (int i = 0; i < persisted.length; i++) {
                 LOG.debug("  makePersistent " + persisted[i]);
-                NakedObject object = (NakedObject) ObjectDecoder.restore(persisted[i]);
+                NakedObject object = (NakedObject) ObjectDecoder.restore(persisted[i], knownObjects);
                 persistor.makePersistent(object);
                 persistedObjects[i] = object;
             }
             NakedObject[] changedObjects = new NakedObject[changed.length];
             for (int i = 0; i < changed.length; i++) {
                 LOG.debug("  objectChanged " + changed[i]);
-                NakedObject object = (NakedObject) ObjectDecoder.restore(changed[i]);
+                NakedObject object = (NakedObject) ObjectDecoder.restore(changed[i], knownObjects);
                 persistor.objectChanged(object);
                 changedObjects[i] = object;
             }

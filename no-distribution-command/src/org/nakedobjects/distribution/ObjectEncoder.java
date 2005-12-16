@@ -24,6 +24,24 @@ import java.util.Hashtable;
  * SERIALIZING is skipped.
  */
 public final class ObjectEncoder {
+    public static class KnownTransients {
+        private Hashtable knownObjects = new Hashtable();
+
+        private KnownTransients() {}
+        
+        private boolean containsKey(NakedObject object) {
+            return knownObjects.containsKey(object);
+        }
+
+        private ObjectData get(NakedObject object) {
+            return (ObjectData) knownObjects.get(object);
+        }
+
+        private void put(NakedObject object, ObjectData data) {
+            knownObjects.put(object, data);
+        }
+    }
+    
     private int actionGraphDepth = 100;
     private DataStructure dataStructure = new DataStructure();
     private int persistentGraphDepth = 100;
@@ -41,7 +59,7 @@ public final class ObjectEncoder {
         if (returns == null) {
             result = factory.createNullData("");
         } else if (returns instanceof NakedCollection) {
-            result = createCollectionData((NakedCollection) returns, true, persistentGraphDepth, new Hashtable());
+            result = createCollectionData((NakedCollection) returns, true, persistentGraphDepth, new KnownTransients());
         } else if (returns instanceof NakedObject) {
             result = createCompletePersistentGraph((NakedObject) returns);
         } else {
@@ -55,7 +73,7 @@ public final class ObjectEncoder {
             NakedCollection collection,
             boolean recursePersistentObjects,
             int depth,
-            Hashtable previous) {
+            KnownTransients knownObjects) {
         Oid oid = collection.getOid();
         String type = collection.getSpecification().getFullName();
         boolean hasAllElements = collection.getResolveState() == ResolveState.TRANSIENT
@@ -68,7 +86,7 @@ public final class ObjectEncoder {
             int i = 0;
             while (e.hasMoreElements()) {
                 NakedObject element = (NakedObject) e.nextElement();
-                elements[i++] = createObjectData(element, recursePersistentObjects, depth, previous);
+                elements[i++] = createObjectData(element, recursePersistentObjects, depth, knownObjects);
             }
         } else {
             elements = new ObjectData[0];
@@ -83,15 +101,15 @@ public final class ObjectEncoder {
      * objects.
      */
     public final ObjectData createCompletePersistentGraph(NakedObject object) {
-        return createObjectData(object, true, persistentGraphDepth, new Hashtable());
+        return createObjectData(object, true, persistentGraphDepth, new KnownTransients());
     }
 
     public final ObjectData createDataForActionTarget(NakedObject object) {
-        return createObjectData(object, false, actionGraphDepth, new Hashtable());
+        return createObjectData(object, false, actionGraphDepth, new KnownTransients());
     }
 
-    public ObjectData createDataForChangedObject(NakedObject object) {
-        return createObjectData(object, true, 1, new Hashtable());
+    public ObjectData createDataForChangedObject(NakedObject object, KnownTransients knownObjects) {
+        return createObjectData(object, true, 1, knownObjects);
     }
 
     private final Data createDataForParameter(String type, Naked object) {
@@ -101,7 +119,7 @@ public final class ObjectEncoder {
 
         if (object.getSpecification().isObject()) {
             NakedObject nakedObject = (NakedObject) object;
-            return createObjectData(nakedObject, false, persistentGraphDepth, new Hashtable());
+            return createObjectData(nakedObject, false, persistentGraphDepth, new KnownTransients());
         } else if (object.getSpecification().isValue()) {
             return createValueData(object);
         } else {
@@ -131,7 +149,7 @@ public final class ObjectEncoder {
         fieldContent = new Data[fields.length];
 
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
-        Hashtable previous = new Hashtable();
+        KnownTransients knownObjects = new KnownTransients();
         for (int i = 0; i < fields.length; i++) {
             if (fields[i].getId().equals(fieldName)) {
                 Naked field = object.getField(fields[i]);
@@ -140,9 +158,9 @@ public final class ObjectEncoder {
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
                 } else if (fields[i].isCollection()) {
-                    fieldContent[i] = createCollectionData((NakedCollection) field, true, persistentGraphDepth, previous);
+                    fieldContent[i] = createCollectionData((NakedCollection) field, true, persistentGraphDepth, knownObjects);
                 } else {
-                    fieldContent[i] = createObjectData((NakedObject) field, true, persistentGraphDepth, previous);
+                    fieldContent[i] = createObjectData((NakedObject) field, true, persistentGraphDepth, knownObjects);
                 }
                 break;
             }
@@ -164,7 +182,7 @@ public final class ObjectEncoder {
      * referenced objects. For each referenced object only the reference is passed across.
      */
     public final ObjectData createForUpdate(NakedObject object) {
-        return createObjectData(object, true, updateGraphDepth, new Hashtable());
+        return createObjectData(object, true, updateGraphDepth, new KnownTransients());
     }
 
     /**
@@ -210,7 +228,7 @@ public final class ObjectEncoder {
                         .getVersion());
             } else {
                 Data f = data.getFieldContent()[i];
-                if (f != null && !(f instanceof NullData) && ((ObjectData) f).getOid() == null) {
+                if (f != null && !(f instanceof NullData) && ((ReferenceData) f).getOid() == null) {
                     NakedObject o = (NakedObject) object.getField(fields[i]);
                     fieldContent[i] = createMadePersistentGraph(((ObjectData) f), o, updateNotifier);
                 }
@@ -229,20 +247,20 @@ public final class ObjectEncoder {
      * transient object. For any referenced persistent object in the graph, only the reference is passed
      * across.
      */
-    public final ObjectData createMakePersistentGraph(NakedObject object) {
+    public final ObjectData createMakePersistentGraph(NakedObject object, KnownTransients knownObjects) {
         Assert.assertTrue("transient", object.getResolveState().isTransient());
-        return createObjectData(object, false, persistentGraphDepth, new Hashtable());
+        return createObjectData(object, false, persistentGraphDepth, knownObjects);
     }
 
-    private final ObjectData createObjectData(NakedObject object, boolean recursePersistentObjects, int depth, Hashtable previous) {
+    private final ObjectData createObjectData(NakedObject object, boolean recursePersistentObjects, int depth, KnownTransients knownObjects) {
         if (object == null) {
             return null;
         }
 
         boolean nextLevel = object.getResolveState().isTransient() || recursePersistentObjects;
 
-        if (previous.containsKey(object)) {
-            return (ObjectData) previous.get(object);
+        if (knownObjects.containsKey(object)) {
+            return (ObjectData) knownObjects.get(object);
         }
 
         Oid oid = object.getOid();
@@ -253,7 +271,7 @@ public final class ObjectEncoder {
                 || object.getResolveState() == ResolveState.RESOLVED;
 
         ObjectData data = factory.createObjectData(oid, type, isComplete, object.getVersion());
-        previous.put(object, data);
+        knownObjects.put(object, data);
 
         Data[] fieldContent;
         if (resolveState.isSerializing() || !nextLevel || depth == 0 || resolveState.isGhost()) {
@@ -273,10 +291,10 @@ public final class ObjectEncoder {
                 } else if (fields[i].isValue()) {
                     fieldContent[i] = createValueData(field);
                 } else if (fields[i].isCollection()) {
-                    fieldContent[i] = createCollectionData((NakedCollection) field, recursePersistentObjects, depth - 1, previous);
+                    fieldContent[i] = createCollectionData((NakedCollection) field, recursePersistentObjects, depth - 1, knownObjects);
                 } else {
-                    if (recursePersistentObjects || field.getOid() == null) {
-                        fieldContent[i] = createObjectData((NakedObject) field, recursePersistentObjects, depth - 1, previous);
+                    if ( recursePersistentObjects || field.getOid() == null) {
+                        fieldContent[i] = createObjectData((NakedObject) field, recursePersistentObjects, depth - 1, knownObjects);
                     } else {
                         fieldContent[i] = createReference((NakedObject) field);
                     }
@@ -363,13 +381,22 @@ public final class ObjectEncoder {
     public void setDataFactory(DataFactory factory) {
         this.factory = factory;
     }
-
+    
+    /**
+     * .NET property
+     * 
+     * @property
+     */
     public void set_DataFactory(DataFactory factory) {
         setDataFactory(factory);
     }
 
     public ClientActionResultData createClientActionResultData(ObjectData[] madePersistent, Version[] changedVersion) {
         return factory.createActionResultData(madePersistent, changedVersion);
+    }
+
+    public static KnownTransients createKnownTransients() {
+        return new KnownTransients();
     }
 }
 

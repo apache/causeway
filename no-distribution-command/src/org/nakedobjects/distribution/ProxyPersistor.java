@@ -26,6 +26,7 @@ import org.nakedobjects.object.transaction.TransactionException;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
@@ -41,6 +42,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     private Session session;
     private DirtyObjectSet updateNotifier;
     private ClientSideTransaction clientSideTransaction;
+    private boolean checkObjectsForDirtyFlag;
 
     public void abortTransaction() {
         checkTransactionInProgress();
@@ -54,7 +56,9 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     public TypedNakedCollection allInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.debug("getInstances of " + specification);
         ObjectData data[] = connection.allInstances(session, specification.getFullName(), false);
-        return convertToNakedObjects(specification, data);
+        TypedNakedCollection nakedObjects = convertToNakedObjects(specification, data);
+        clearChanges();
+        return nakedObjects;
     }
 
     private TypedNakedCollection convertToNakedObjects(NakedObjectSpecification specification, ObjectData[] data) {
@@ -90,16 +94,17 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
             return;
         }
         
+        ObjectEncoder.KnownTransients knownObjects = ObjectEncoder.createKnownTransients();
         NakedObject[] persistedObjects = clientSideTransaction.getPersisted();
         ObjectData[] persisted = new ObjectData[persistedObjects.length];
         for (int i = 0; i < persistedObjects.length; i++) {
-            persisted[i] = encoder.createMakePersistentGraph(persistedObjects[i]);
+            persisted[i] = encoder.createMakePersistentGraph(persistedObjects[i], knownObjects);
         }
         
         NakedObject[] changedObjects = clientSideTransaction.getChanged();
         ObjectData[] changed = new ObjectData[changedObjects.length];
         for (int i = 0; i < changedObjects.length; i++) {
-            changed[i] = encoder.createDataForChangedObject(changedObjects[i]);
+            changed[i] = encoder.createDataForChangedObject(changedObjects[i], knownObjects);
             updateNotifier.addDirty(changedObjects[i]);
         }
         
@@ -132,7 +137,9 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     public TypedNakedCollection findInstances(InstancesCriteria criteria) throws UnsupportedFindException {
         LOG.debug("getInstances of " + criteria.getSpecification() + " with " + criteria);
         ObjectData[] instances = connection.findInstances(session, criteria);
-        return convertToNakedObjects(criteria.getSpecification(), instances);
+        TypedNakedCollection nakedObjects = convertToNakedObjects(criteria.getSpecification(), instances);
+        clearChanges();
+        return nakedObjects;
     }
 
     public String getDebugData() {
@@ -228,6 +235,10 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     }
 
     public void objectChanged(NakedObject object) {
+        if (object.getResolveState().isIgnoreChanges()) {
+            return;
+        }
+        
         if(object.getResolveState().isTransient()) {
             updateNotifier.addDirty(object);
         } else {
@@ -272,9 +283,42 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     }
 
     public void saveChanges() {
-        LOG.debug("saveChanges - ignored by proxy manager");
+        if (checkObjectsForDirtyFlag) {
+            LOG.debug("collating changed objects");
+            Enumeration e = NakedObjects.getObjectLoader().getIdentifiedObjects();
+            while (e.hasMoreElements()) {
+                Object o = e.nextElement();
+                if (o instanceof NakedObject) {
+                    NakedObject object = (NakedObject) o;
+                    if (object.getSpecification().isDirty(object)) {
+                        LOG.debug("  found dirty object " + object);
+                        objectChanged(object);
+                        object.getSpecification().clearDirty(object);
+                    }
+                }
+            }
+        }
     }
 
+
+    private synchronized void clearChanges() {
+        if (checkObjectsForDirtyFlag) {
+            LOG.debug("clearing changed objects");
+            Enumeration e = NakedObjects.getObjectLoader().getIdentifiedObjects();
+            while (e.hasMoreElements()) {
+                Object o = e.nextElement();
+                if (o instanceof NakedObject) {
+                    NakedObject object = (NakedObject) o;
+                    if (object.getSpecification().isDirty(object)) {
+                        LOG.debug("  found dirty object " + object);
+                        object.getSpecification().clearDirty(object);
+                    }
+                }
+            }
+        }
+    }
+    
+    
     /**
      * .NET property
      * 
@@ -318,6 +362,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
 
     public void startTransaction() {
         LOG.debug("startTransaction");
+        clearChanges();
         if(clientSideTransaction == null) {
             clientSideTransaction = new ClientSideTransaction();
         } else {
@@ -328,6 +373,19 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     }
 
     public void shutdown() {}
+
+    /**
+     * Expose as a .NET property
+     * 
+     * @property
+     */
+    public void set_CheckObjectsForDirtyFlag(boolean checkObjectsForDirtyFlag) {
+        this.checkObjectsForDirtyFlag = checkObjectsForDirtyFlag;
+    }
+
+    public void setCheckObjectsForDirtyFlag(boolean checkObjectsForDirtyFlag) {
+        this.checkObjectsForDirtyFlag = checkObjectsForDirtyFlag;
+    }
 }
 
 /*

@@ -20,9 +20,29 @@ import org.apache.log4j.Logger;
 
 
 public class ObjectDecoder {
+    public static class KnownTransients {
+        private Hashtable knownObjects = new Hashtable();
+
+        private boolean containsKey(ObjectData data) {
+            return knownObjects.containsKey(data);
+        }
+
+        private NakedObject get(ObjectData data) {
+            return (NakedObject) knownObjects.get(data);
+        }
+
+        private void put(ObjectData data, NakedObject object) {
+            knownObjects.put(data, object);
+        }
+    }
+
+    private static DataStructure dataStructure = new DataStructure();
     private static final Logger LOG = Logger.getLogger(ObjectDecoder.class);
     private static DirtyObjectSet updateNotifier;
-    private static DataStructure dataStructure = new DataStructure();
+
+    public static KnownTransients createKnownTransients() {
+        return new KnownTransients();
+    }
 
     private static ResolveState nextState(ResolveState initialState, boolean complete) {
         ResolveState state = null;
@@ -42,13 +62,21 @@ public class ObjectDecoder {
         } else if (data instanceof NullData) {
             return null;
         } else if (data instanceof CollectionData) {
-            return restoreCollection((CollectionData) data, new Hashtable());
+            return restoreCollection((CollectionData) data, new KnownTransients());
         } else {
-            return restoreObject((ObjectData) data, new Hashtable());
+            return restoreObject((ObjectData) data, new KnownTransients());
         }
     }
 
-    private static Naked restoreCollection(CollectionData data, Hashtable previous) {
+    public static Naked restore(Data data, KnownTransients knownObjects) {
+        if (data instanceof CollectionData) {
+            return restoreCollection((CollectionData) data, knownObjects);
+        } else {
+            return restoreObject((ObjectData) data, knownObjects);
+        }
+    }
+
+    private static Naked restoreCollection(CollectionData data, KnownTransients knownTransients) {
         String type = data.getType();
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(type);
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
@@ -68,7 +96,7 @@ public class ObjectDecoder {
             LOG.debug("restoring collection " + elements.length + " elements");
             Object[] initData = new Object[elements.length];
             for (int i = 0; i < elements.length; i++) {
-                NakedObject element = restoreObject(elements[i], previous);
+                NakedObject element = restoreObject(elements[i], knownTransients);
                 LOG.debug("restoring collection element :" + element);
                 initData[i] = element.getObject();
             }
@@ -77,11 +105,11 @@ public class ObjectDecoder {
         }
     }
 
-    private static NakedObject restoreObject(ObjectData data, Hashtable previous) {
-        if(previous.containsKey(data)) {
-            return (NakedObject) previous.get(data);
+    private static NakedObject restoreObject(ObjectData data, KnownTransients knownTransients) {
+        if (knownTransients.containsKey(data)) {
+            return knownTransients.get(data);
         }
-        
+
         Oid oid = data.getOid();
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
 
@@ -91,17 +119,40 @@ public class ObjectDecoder {
          * object, or create new object and set it
          */
         if (oid == null) {
-            object = restoreTransient(data, objectLoader, previous);
+            object = restoreTransient(data, objectLoader, knownTransients);
         } else if (objectLoader.isIdentityKnown(oid)) {
-            object = updateLoadedObject(data, oid, objectLoader, previous);
+            object = updateLoadedObject(data, oid, objectLoader, knownTransients);
         } else {
-            object = restorePersistentObject(data, oid, objectLoader, previous);
+            object = restorePersistentObject(data, oid, objectLoader, knownTransients);
         }
-        
+
         return object;
     }
 
-    private static NakedObject restorePersistentObject(ObjectData data, Oid oid, NakedObjectLoader objectLoader, Hashtable previous) {
+    private static NakedObject restoreObject(ReferenceData data, KnownTransients knownTransients) {
+        Oid oid = data.getOid();
+        NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
+
+        NakedObject object;
+        /*
+         * either create a new transient object, get an existing object and update it if data is for resolved
+         * object, or create new object and set it
+         */
+        if (objectLoader.isIdentityKnown(oid)) {
+            object = objectLoader.getAdapterFor(oid);
+        } else {
+            NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(data.getType());
+            object = objectLoader.recreateAdapterForPersistent(oid, specification);
+        }
+
+        return object;
+    }
+
+    private static NakedObject restorePersistentObject(
+            ObjectData data,
+            Oid oid,
+            NakedObjectLoader objectLoader,
+            KnownTransients knownTransients) {
         // unknown object; create an instance
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(data.getType());
 
@@ -112,19 +163,19 @@ public class ObjectDecoder {
             ResolveState state;
             state = data.hasCompleteData() ? ResolveState.RESOLVING : ResolveState.RESOLVING_PART;
             LOG.debug("restoring existing object (" + state.name() + ") " + object);
-            setupFields(data, objectLoader, object, state, previous);
+            setupFields(data, objectLoader, object, state, knownTransients);
         }
         return object;
     }
 
-    private static NakedObject restoreTransient(ObjectData data, NakedObjectLoader objectLoader, Hashtable previous) {
+    private static NakedObject restoreTransient(ObjectData data, NakedObjectLoader objectLoader, KnownTransients knownTransients) {
         NakedObjectSpecification specification = NakedObjects.getSpecificationLoader().loadSpecification(data.getType());
 
         NakedObject object;
         object = objectLoader.recreateTransientInstance(specification);
         LOG.debug("restore transient object " + object);
-        previous.put(data, object);
-        setUpFields(data, object, previous);
+        knownTransients.put(data, object);
+        setUpFields(data, object, knownTransients);
         return object;
     }
 
@@ -133,65 +184,11 @@ public class ObjectDecoder {
         return value;
     }
 
-    public static void setUpdateNotifer(DirtyObjectSet updateNotifier) {
-        ObjectDecoder.updateNotifier = updateNotifier;
-    }
-
-    private static void setupFields(ObjectData data, NakedObjectLoader objectLoader, NakedObject object, ResolveState state, Hashtable previous) {
-        if (object.getResolveState().isResolvable(state)) {
-            objectLoader.start(object, state);
-            setUpFields(data, object, previous);
-            objectLoader.end(object);
-        }
-    }
-
-    private static void setUpFields(ObjectData data, NakedObject object, Hashtable previous) {
-        Data[] fieldContent = data.getFieldContent();
-        if (fieldContent != null && fieldContent.length > 0) {
-            //NakedObjectField[] fields = object.getSpecification().getFields();
-            NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
-            for (int i = 0; i < fields.length; i++) {
-                NakedObjectField field = fields[i];
-                Data fieldData = fieldContent[i];
-                if (fieldData == null || field.isDerived()) {
-                    LOG.debug("no data for field " + field.getId());
-                    continue;
-                }
-
-                if (field.isCollection()) {
-                    setUpCollectionField(object, field, (CollectionData) fieldData, previous);
-                } else if (field.isValue()) {
-                    setUpValueField(object, field, fieldData);
-                } else {
-                    setUpReferenceField(object, field, fieldData, previous);
-                }
-            }
-        }
-    }
-
-    private static void setUpReferenceField(NakedObject object, NakedObjectField field, Data data, Hashtable previous) {
-        NakedObject associate;
-        if (data instanceof NullData) {
-            associate = null;
-        } else {
-            associate = restoreObject((ObjectData) data, previous);
-        }
-        LOG.debug("setting association for field " + field.getId() + ": " + associate);
-        object.initAssociation(field, associate);
-    }
-
-    private static void setUpValueField(NakedObject object, NakedObjectField field, Data data) {
-        Object value;
-        if(data instanceof NullData) {
-            value = null;
-        } else {
-            value = ((ValueData) data).getValue();
-        }
-        LOG.debug("setting value for field " + field.getId() + ": " + value);
-        object.initValue((OneToOneAssociation) field, value);
-    }
-
-    private static void setUpCollectionField(NakedObject object, NakedObjectField field, CollectionData content, Hashtable previous) {
+    private static void setUpCollectionField(
+            NakedObject object,
+            NakedObjectField field,
+            CollectionData content,
+            KnownTransients knownTransients) {
         if (!content.hasAllElements()) {
             return;
         }
@@ -199,7 +196,7 @@ public class ObjectDecoder {
         int size = content.getElements().length;
         NakedObject[] elements = new NakedObject[size];
         for (int j = 0; j < elements.length; j++) {
-            elements[j] = restoreObject(((ObjectData) content.getElements()[j]), previous);
+            elements[j] = restoreObject(((ObjectData) content.getElements()[j]), knownTransients);
             LOG.debug("adding element to " + field.getId() + ": " + elements[j]);
         }
 
@@ -215,7 +212,76 @@ public class ObjectDecoder {
         }
     }
 
-    private static NakedObject updateLoadedObject(ObjectData data, Oid oid, NakedObjectLoader objectLoader, Hashtable previous) {
+    public static void setUpdateNotifer(DirtyObjectSet updateNotifier) {
+        ObjectDecoder.updateNotifier = updateNotifier;
+    }
+
+    private static void setupFields(
+            ObjectData data,
+            NakedObjectLoader objectLoader,
+            NakedObject object,
+            ResolveState state,
+            KnownTransients knownTransients) {
+        if (object.getResolveState().isResolvable(state)) {
+            objectLoader.start(object, state);
+            setUpFields(data, object, knownTransients);
+            objectLoader.end(object);
+        }
+    }
+
+    private static void setUpFields(ObjectData data, NakedObject object, KnownTransients knownTransients) {
+        Data[] fieldContent = data.getFieldContent();
+        if (fieldContent != null && fieldContent.length > 0) {
+            // NakedObjectField[] fields = object.getSpecification().getFields();
+            NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
+            for (int i = 0; i < fields.length; i++) {
+                NakedObjectField field = fields[i];
+                Data fieldData = fieldContent[i];
+                if (fieldData == null || field.isDerived()) {
+                    LOG.debug("no data for field " + field.getId());
+                    continue;
+                }
+
+                if (field.isCollection()) {
+                    setUpCollectionField(object, field, (CollectionData) fieldData, knownTransients);
+                } else if (field.isValue()) {
+                    setUpValueField(object, field, fieldData);
+                } else {
+                    setUpReferenceField(object, field, fieldData, knownTransients);
+                }
+            }
+        }
+    }
+
+    private static void setUpReferenceField(NakedObject object, NakedObjectField field, Data data, KnownTransients knownTransients) {
+        NakedObject associate;
+        if (data instanceof NullData) {
+            associate = null;
+        } else if (data instanceof ObjectData) {
+            associate = restoreObject((ObjectData) data, knownTransients);
+        } else {
+            associate = restoreObject((ReferenceData) data, knownTransients);
+        }
+        LOG.debug("setting association for field " + field.getId() + ": " + associate);
+        object.initAssociation(field, associate);
+    }
+
+    private static void setUpValueField(NakedObject object, NakedObjectField field, Data data) {
+        Object value;
+        if (data instanceof NullData) {
+            value = null;
+        } else {
+            value = ((ValueData) data).getValue();
+        }
+        LOG.debug("setting value for field " + field.getId() + ": " + value);
+        object.initValue((OneToOneAssociation) field, value);
+    }
+
+    private static NakedObject updateLoadedObject(
+            ObjectData data,
+            Oid oid,
+            NakedObjectLoader objectLoader,
+            KnownTransients knownTransients) {
         // object known and we have all the latetest data; update/resolve the object
         NakedObject object;
         object = objectLoader.getAdapterFor(oid);
@@ -224,7 +290,7 @@ public class ObjectDecoder {
             ResolveState state = nextState(object.getResolveState(), data.hasCompleteData());
             if (state != null) {
                 LOG.debug("updating existing object (" + state.name() + ") " + object);
-                setupFields(data, objectLoader, object, state, previous);
+                setupFields(data, objectLoader, object, state, knownTransients);
                 updateNotifier.addDirty(object);
             }
         } else {

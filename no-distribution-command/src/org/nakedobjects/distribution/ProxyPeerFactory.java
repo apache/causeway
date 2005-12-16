@@ -10,18 +10,18 @@ import junit.framework.Assert;
 
 public class ProxyPeerFactory implements ReflectionPeerFactory {
     private Distribution connection;
-    private ObjectEncoder objectDataFactory;
+    private ObjectEncoder encoder;
 
     public ActionPeer createAction(ActionPeer peer) {
-        return new ProxyAction(peer, connection, objectDataFactory);
+        return new ProxyAction(peer, connection, encoder);
     }
 
     public OneToManyPeer createField(OneToManyPeer peer) {
-        return new ProxyOneToManyAssociation(peer, connection, objectDataFactory);
+        return new ProxyOneToManyAssociation(peer, connection, encoder);
     }
 
     public OneToOnePeer createField(OneToOnePeer peer) {
-        return new ProxyOneToOneAssociation(peer, connection, objectDataFactory);
+        return new ProxyOneToOneAssociation(peer, connection, encoder);
      }
     
 
@@ -39,20 +39,20 @@ public class ProxyPeerFactory implements ReflectionPeerFactory {
      * 
      * @property
      */
-    public void set_ObjectDataFactory(ObjectEncoder objectDataFactory) {
-        this.objectDataFactory = objectDataFactory;
+    public void set_Encoder(ObjectEncoder encoder) {
+        this.encoder = encoder;
     }
 
     public void setConnection(Distribution connection) {
         this.connection = connection;
     }
-    public void setObjectDataFactory(ObjectEncoder objectDataFactory) {
-        this.objectDataFactory = objectDataFactory;
+    public void setEncoder(ObjectEncoder encoder) {
+        this.encoder = encoder;
     }
 
     public void init() {
         Assert.assertNotNull("Connection required", connection);
-        Assert.assertNotNull("Data Factory required", objectDataFactory);
+        Assert.assertNotNull("Object encoder required", encoder);
     }
 
     public void shutdown() {
