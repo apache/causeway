@@ -5,7 +5,6 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.undo.UndoStack;
-import org.nakedobjects.utility.DebugFileDump;
 import org.nakedobjects.utility.DebugFrame;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.InfoDebugFrame;
@@ -105,6 +104,13 @@ public class Viewer {
             }
             overlayView = null;
         }
+    }
+    
+    /**
+     * Removes the focus from the specified view; assuming the the specified view has the focus.
+     */
+    public void clearKeyboardFocus() {
+            keyboardFocus = null;
     }
 
     public void clearOverlayView(View view) {

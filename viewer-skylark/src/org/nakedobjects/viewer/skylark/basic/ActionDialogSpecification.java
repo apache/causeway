@@ -139,6 +139,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
         public void execute(Workspace workspace, View view, Location at) {
             super.execute(workspace, view, at);
+            view.getViewManager().clearKeyboardFocus();
             view.dispose();
         }
 
