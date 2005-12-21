@@ -163,7 +163,7 @@ public class ObjectEncoderTest extends TestCase {
     }
 
     public void testCreateActionResultWithNull() {
-        ServerActionResultData data = encoder.createActionResult(null, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = encoder.createServerActionResult(null, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof NullData);
     }
 
@@ -171,7 +171,7 @@ public class ObjectEncoderTest extends TestCase {
         DummyNakedCollection collection = new DummyNakedCollection();
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         collection.setupSpecification(type);
-        ServerActionResultData data = encoder.createActionResult(collection, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = encoder.createServerActionResult(collection, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof CollectionData);
         assertEquals(type.getFullName(), data.getReturn().getType());
     }
@@ -181,7 +181,7 @@ public class ObjectEncoderTest extends TestCase {
         object.setupResolveState(ResolveState.PART_RESOLVED);
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         object.setupSpecification(type);
-        ServerActionResultData data = encoder.createActionResult(object, null, null, null, new String[0], new String[0]);
+        ServerActionResultData data = encoder.createServerActionResult(object, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof ObjectData);
         assertEquals(type.getFullName(), data.getReturn().getType());
     }
@@ -228,7 +228,7 @@ public class ObjectEncoderTest extends TestCase {
 
         // check back references
         ObjectData fieldOfField = (ObjectData) referencedFieldData2.getFieldContent()[0];
-        assertSame(fieldOfField, rootData);
+        assertEquals(fieldOfField, rootData);
 
         ObjectData fieldOfElement = (ObjectData) collectionData.getElements()[0].getFieldContent()[0];
         assertSame(fieldOfElement, rootData);
@@ -506,7 +506,7 @@ public class ObjectEncoderTest extends TestCase {
         DummyOid rootOid = new DummyOid(1);
         rootObject.setupOid(rootOid);
 
-        Data[] results = encoder.createDataForParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification() },
+        Data[] results = encoder.createParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification() },
                 new Naked[] { rootObject });
         ObjectData rootData = (ObjectData) results[0];
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
@@ -522,7 +522,7 @@ public class ObjectEncoderTest extends TestCase {
         rootObject.setupResolveState(ResolveState.GHOST);
         assertEquals(ResolveState.GHOST, rootObject.getResolveState());
 
-        ObjectData od = encoder.createDataForActionTarget(rootObject);
+        ObjectData od = encoder.createActionTarget(rootObject);
 
         assertEquals(false, od.hasCompleteData());
         assertEquals(ResolveState.GHOST, rootObject.getResolveState());
@@ -530,7 +530,7 @@ public class ObjectEncoderTest extends TestCase {
         rootObject.setupResolveState(ResolveState.RESOLVED);
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
-        od = encoder.createDataForActionTarget(rootObject);
+        od = encoder.createActionTarget(rootObject);
 
         assertEquals(true, od.hasCompleteData());
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
@@ -540,7 +540,7 @@ public class ObjectEncoderTest extends TestCase {
         rootObject.setupResolveState(ResolveState.TRANSIENT);
         field1.setupResolveState(ResolveState.TRANSIENT);
 
-        Data[] results = encoder.createDataForParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification() },
+        Data[] results = encoder.createParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification() },
                 new Naked[] { rootObject });
         ObjectData rootData = (ObjectData) results[0];
         assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
@@ -572,7 +572,7 @@ public class ObjectEncoderTest extends TestCase {
         DummyNakedValue dummyNakedValue = new DummyNakedValue();
         dummyNakedValue.setupObject(new Integer(123));
 
-        Data[] data = (Data[]) encoder.createDataForParameters(
+        Data[] data = (Data[]) encoder.createParameters(
                 new NakedObjectSpecification[] { new DummyNakedObjectSpecification() }, new Naked[] { dummyNakedValue });
 
         assertEquals(dummyNakedValue.getSpecification().getFullName(), data[0].getType());
