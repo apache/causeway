@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution.xml;
 
 import org.nakedobjects.object.NakedObjects;
+import org.nakedobjects.object.NakedObjectsComponent;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
 import java.io.IOException;
@@ -14,7 +15,7 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public abstract class ServerListener implements Runnable {
+public abstract class ServerListener implements Runnable, NakedObjectsComponent {
 	private static final Logger LOG = Logger.getLogger(ServerListener.class);
     private static final int PORT = 9567;
     private static final String SERVER_PORT = "server.port";
@@ -70,6 +71,10 @@ public abstract class ServerListener implements Runnable {
     public String toString() {
 		return "Listener " + clients.size() + " connections  ";
 	}
+    
+    public void init() {
+        start();
+    }
 }
 
 
