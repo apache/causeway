@@ -1,17 +1,18 @@
-package org.nakedobjects.app;
+package org.nakedobjects.system;
 
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedObjectsComponent;
 import org.nakedobjects.utility.AboutNakedObjects;
-import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.configuration.PropertiesConfiguration;
 import org.nakedobjects.utility.configuration.PropertiesFileLoader;
 
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Enumeration;
+import java.util.Hashtable;
 import java.util.Properties;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -23,18 +24,19 @@ import org.apache.log4j.PropertyConfigurator;
 
 
 public class StartUp {
-    private static final Logger LOG = Logger.getLogger(StartUp.class);
-    private static final String CONTAINER = "container";
-//    private static final String VIEWER = "viewer";
+    private final static Logger LOG = Logger.getLogger(StartUp.class);
+    private final Hashtable components = new Hashtable();
 
     public static void main(String[] args) {
         String configurationFile = args.length > 0 ? args[0] : "nakedobjects.properties";
-        start(configurationFile);
+        StartUp startup = new StartUp();
+        startup.start(configurationFile);
     }
 
-    protected static void start(String name) {
+    protected void start(String name) {
         LogManager.getRootLogger().setLevel(Level.OFF);
         
+        // TODO the configuration should be used in the repository
         PropertiesConfiguration configuration = new PropertiesConfiguration(new PropertiesFileLoader(name, true));
 
         // set up logging immediately
@@ -43,23 +45,31 @@ public class StartUp {
         
 
         LOG.debug("Configuring system using " + name);
-        String componentNames = configuration.getString("components");
+        String componentNames = configuration.getString("nakedobjects.components");
         StringTokenizer st = new StringTokenizer(componentNames, ",;/:");
-        Properties properties = configuration.getProperties("nakedobjects.component");
+        Properties properties = configuration.getProperties("nakedobjects");
+        Vector components = new Vector();
         while (st.hasMoreTokens()) {
             String componentName = ((String) st.nextToken()).trim();
 
-            String componentClass = properties.getProperty("nakedobjects.component." + componentName);
+            String componentClass = properties.getProperty("nakedobjects." + componentName);
             LOG.debug("loading core component " + componentName + ": " + componentClass);
             if (componentClass == null) {
-                throw new StartupException("No component specified for nakedobjects.component." + componentName);
+                throw new StartupException("No component specified for nakedobjects." + componentName);
             }
             NakedObjectsComponent component = (NakedObjectsComponent) loadComponent(componentClass, NakedObjectsComponent.class);
-            setProperties(component, "nakedobjects." + "component." + componentName, properties);
-            
+            if(component instanceof NakedObjects) {
+                ((NakedObjects) component).setConfiguration(configuration);
+            }
+            setProperties(component, "nakedobjects." + componentName, properties);
+
             component.init();
+//            components.addElement(component);
         }
-        
+
+        for(Enumeration e = components.elements(); e.hasMoreElements();) {
+            ((NakedObjectsComponent) e.nextElement()).init();
+        }
         
         /*
         Vector components = new Vector();
@@ -123,7 +133,7 @@ public class StartUp {
         */
     }
 
-    private static void setProperties(Object object, String prefix, Properties properties) {
+    private void setProperties(Object object, String prefix, Properties properties) {
         LOG.debug("looking for properties starting with " + prefix);
         Enumeration e = properties.propertyNames();
         while (e.hasMoreElements()) {
@@ -133,19 +143,31 @@ public class StartUp {
                 String className = properties.getProperty(key).trim();
                 
                 Object value;
-                if(className.equalsIgnoreCase("true")) {
-                   value = Boolean.TRUE;
-                } else if (className.equalsIgnoreCase("false")) {
-                    value = Boolean.FALSE;
+                if(className.indexOf(',') > 0) {
+                    StringTokenizer st = new StringTokenizer(className, ",");
+                    Object[] elements = new Object[st.countTokens()];
+                    int i = 0;
+                    while (st.hasMoreTokens()) {
+                        String cls = st.nextToken();
+                        elements[i++] =  load(cls, key, properties);
+                    }
+                    value = elements;
                 } else {
-                    value = load(className, key, properties);
+                    if(className.equalsIgnoreCase("true")) {
+                        value = Boolean.TRUE;
+                    } else if (className.equalsIgnoreCase("false")) {
+                        value = Boolean.FALSE;
+                    } else {
+                        value = load(className, key, properties);
+                    }
                 }
                 setProperty(object, key, value);
+                
             }
         }
     }
 
-    private static void setProperty(Object object, String fieldName, Object value) {
+    private void setProperty(Object object, String fieldName, Object value) {
         String field = fieldName.substring(fieldName.lastIndexOf(".") + 1);
         field = Character.toUpperCase(field.charAt(0)) + field.substring(1);
         LOG.debug("    setting " + field + " on " + object);
@@ -156,9 +178,17 @@ public class StartUp {
         try {
             PropertyDescriptor property = new PropertyDescriptor(field, c, null, "set" + field);
             setter = property.getWriteMethod();
-            
-            //setter = c.getMethod("set" + field, new Class[] { value.getClass() });
-            setter.invoke(object, new Object[] { value });
+            Class cls = setter.getParameterTypes()[0];
+            if(cls.isArray()) {
+                int length = Array.getLength(value);
+                Object[] array = (Object[]) Array.newInstance(cls.getComponentType(), length);
+                System.arraycopy(value,0, array, 0, length);
+                //array[0] = value;
+                setter.invoke(object, new Object[] { array });
+                
+            } else {
+                setter.invoke(object, new Object[] { value });
+            }
             LOG.debug("  set " + field + " with " +  value.getClass());
         } catch (SecurityException e1) {
             // TODO Auto-generated catch block
@@ -176,25 +206,42 @@ public class StartUp {
         }
     }
 
-    private static Object load(String className, String prefix, Properties properties) {
-        LOG.debug("loading component " + className + " for " + prefix);
+    private Object load(String className, String name, Properties properties) {
+        if(className.startsWith("ref:")) {
+            String referencedName = className.substring(4);
+            if(components.containsKey(referencedName)) {
+                return components.get(referencedName);
+            } else {
+                throw new StartupException("Could not reference the object names " + referencedName);
+            }
+        }
+        LOG.debug("loading component " + className + " for " + name);
         Object object = loadComponent(className);
-        setProperties(object, prefix, properties);
+        components.put(name, object);
+        setProperties(object, name, properties);
         return object;
     }
 
-    private static Object loadComponent(String className) {
+/*
+    public static Object loadComponent(String name, PropertiesConfiguration configuration) {
+        String className = configuration.getString(name);
+        
+        LOG.debug("loading component " + className + " for " + name);
+        Object object = loadComponent(className);
+        setProperties(object, name, properties);
+        return object;
+    }
+   */ 
+    public static Object loadComponent(String className) {
         return loadNamedComponent(className, null, null);
     }
 
-    private static Object loadComponent(String className, Class requiredClass) {
+    public static Object loadComponent(String className, Class requiredClass) {
         return loadNamedComponent(className, null, requiredClass);
     }
 
-    private static Object loadNamedComponent(String className, Class defaultType, Class requiredClass) {
-
+    public static Object loadNamedComponent(String className, Class defaultType, Class requiredClass) {
         Class c = null;
-
         try {
             c = Class.forName(className);
 

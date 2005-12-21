@@ -1,14 +1,14 @@
-package org.nakedobjects.app;
+package org.nakedobjects.system;
 
 
 /**
- * Utility class to start a server, using the default configuration file: server.properties.
+ * Starts naked objects as a standalone application, using the XML object store for persistence.
  */
-public final class Server extends StartUp {
+public final class StandaloneSql extends AbstractSqlStoreSystem {
     public static void main(String[] args) {
-        String configurationFile = args.length > 0 ? args[0] : "server.properties";
-        start(configurationFile);
+        new StandaloneSql().init();
     }
+
 }
 
 

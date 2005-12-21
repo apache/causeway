@@ -1,12 +1,20 @@
-package org.nakedobjects.app;
+package org.nakedobjects.system;
+
 
 /**
- * Utility class to start a server, using the default configuration file: standalone.properties.
+ * Setups the XML object store with the objects created by the fixtures specified in the properties. 
  */
-public final class Standalone extends StartUp {
+public final class SetupXmlStore extends AbstractXmlStoreSystem {
     public static void main(String[] args) {
-        String configurationFile = args.length > 0 ? args[0] : "standalone.properties";
-        start(configurationFile);
+        new SetupXmlStore().init();
+    }
+    
+    protected void setupFixtures() {
+        installFixtures("nakedobjects.xmlos.fixtures");
+    }
+
+    protected void displayUserInterface() {
+        shutdown();
     }
 }
 

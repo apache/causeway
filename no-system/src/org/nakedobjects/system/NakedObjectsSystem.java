@@ -1,4 +1,4 @@
-package org.nakedobjects.app;
+package org.nakedobjects.system;
 
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.event.ObjectViewingMechanismListener;

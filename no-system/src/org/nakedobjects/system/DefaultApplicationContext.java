@@ -1,4 +1,4 @@
-package org.nakedobjects.app;
+package org.nakedobjects.system;
 
 import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedCollection;
