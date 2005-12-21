@@ -20,6 +20,7 @@ import org.nakedobjects.object.persistence.SerialOid;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.ExecutionContext;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 import org.nakedobjects.utility.Assert;
@@ -44,7 +45,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 LOG.debug("  create object " + object);
                 Data data = createObjectData(object, true);
                 dataManager.insert(data);
@@ -62,7 +63,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 LOG.debug("  destroy object " + object);
                 dataManager.remove((SerialOid) object.getOid());
             }
@@ -109,7 +110,7 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 LOG.debug("  save object " + object);
 
                 if (object instanceof InternalCollection) {
@@ -378,11 +379,11 @@ public class XmlObjectStore implements NakedObjectStore {
 
     public void reset() {}
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
+    public void execute(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
         LOG.info("start execution of transaction");
         for (int i = 0; i < commands.length; i++) {
             PersistenceCommand command = commands[i];
-            command.execute();
+            command.execute(null);
         }
         LOG.info("end execution");
     }
