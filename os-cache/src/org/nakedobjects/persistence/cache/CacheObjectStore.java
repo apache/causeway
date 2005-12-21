@@ -13,6 +13,7 @@ import org.nakedobjects.object.io.Memento;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.ExecutionContext;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 
@@ -33,7 +34,7 @@ public class CacheObjectStore implements NakedObjectStore {
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
 
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 journal.writeJournal("create", new Memento(object));
                 instances(object.getSpecification()).create(object);
             }
@@ -51,7 +52,7 @@ public class CacheObjectStore implements NakedObjectStore {
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
 
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 journal.writeJournal("delete", new Memento(object));
                 instances(object.getSpecification()).remove(object);
             }
@@ -68,7 +69,7 @@ public class CacheObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 journal.writeJournal("save", new Memento(object));
             }
 
@@ -217,11 +218,11 @@ public class CacheObjectStore implements NakedObjectStore {
 
     public void resolveImmediately(NakedObject object) {}
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
+    public void execute(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
         LOG.info("start execution of transaction");
         for (int i = 0; i < commands.length; i++) {
             PersistenceCommand command = commands[i];
-            command.execute();
+            command.execute(null);
         }
         LOG.info("end execution");
     }
