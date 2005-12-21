@@ -53,6 +53,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
             transaction.abort();
             transaction = null;
             transactionLevel = 0;
+            objectStore.abortTransaction();
         }
     }
 
@@ -147,14 +148,14 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
     protected NakedObject[] getInstances(InstancesCriteria criteria) {
         LOG.info("getInstances matching " + criteria);
         NakedObject[] instances = objectStore.getInstances(criteria);
-        collateChanges();
+        clearChanges();
         return instances;
     }
 
     protected NakedObject[] getInstances(NakedObjectSpecification specification, boolean includeSubclasses) {
         LOG.info("getInstances of " + specification.getShortName());
         NakedObject[] instances = objectStore.getInstances(specification, false);
-        collateChanges();
+        clearChanges();
         return instances;
     }
 
@@ -321,6 +322,24 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         }
     }
 
+
+    private synchronized void clearChanges() {
+        if (checkObjectsForDirtyFlag) {
+            LOG.debug("clearing changed objects");
+            Enumeration e = loader().getIdentifiedObjects();
+            while (e.hasMoreElements()) {
+                Object o = e.nextElement();
+                if (o instanceof NakedObject) {
+                    NakedObject object = (NakedObject) o;
+                    if (object.getSpecification().isDirty(object)) {
+                        LOG.debug("  found dirty object " + object);
+                        object.getSpecification().clearDirty(object);
+                    }
+                }
+            }
+        }
+    }
+    
     /**
      * Expose as a .NET property
      * 
@@ -367,6 +386,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         if (transaction == null) {
             transaction = new ObjectStoreTransaction(objectStore);
             transactionLevel = 0;
+            objectStore.startTransaction();
         }
         transactionLevel++;
     }
@@ -377,7 +397,7 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
             toString.append("objectStore", objectStore.name());
         }
         if (persistAlgorithm != null) {
-            toString.append("oidGenerator", persistAlgorithm.name());
+            toString.append("persistAlgorithm", persistAlgorithm.name());
         }
         return toString.toString();
     }

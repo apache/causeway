@@ -128,12 +128,12 @@ public class ObjectStoreLogger extends Logger implements NakedObjectStore {
         decorated.resolveImmediately(object);
     }
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
+    public void execute(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
         log("Run transactions");
         for (int i = 0; i < commands.length; i++) {
             log("  " + i + " " + commands[i]);
         }
-        decorated.runTransaction(commands);
+        decorated.execute(commands);
     }
 
     public void shutdown() throws ObjectPerstsistenceException {

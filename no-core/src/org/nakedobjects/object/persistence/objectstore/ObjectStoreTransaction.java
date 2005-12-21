@@ -1,7 +1,6 @@
 package org.nakedobjects.object.persistence.objectstore;
 
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
 import org.nakedobjects.object.transaction.PersistenceCommand;
@@ -19,8 +18,8 @@ public class ObjectStoreTransaction implements Transaction {
     private static final Logger LOG = Logger.getLogger(ObjectStoreTransaction.class);
     private final Vector commands = new Vector();
     private boolean complete;
-    private final Vector toNotify = new Vector();
-   private final  NakedObjectStore objectStore;
+    private final  NakedObjectStore objectStore;
+   private final Vector toNotify = new Vector();
    
     public ObjectStoreTransaction(NakedObjectStore objectStore) {
        this.objectStore= objectStore; 
@@ -35,7 +34,14 @@ public class ObjectStoreTransaction implements Transaction {
         complete = true;
     }
 
+    /**
+     * Add the non-null command to the list of commands to execute at the end of the transaction.
+     */
     public void addCommand(PersistenceCommand command) {
+        if(command == null) {
+            return;
+        }
+        
         NakedObject onObject = command.onObject();
         
         // Saves are ignored when preceded by another save, or a delete
@@ -70,19 +76,6 @@ public class ObjectStoreTransaction implements Transaction {
         commands.addElement(command);
     }
 
-    private void removeCreate(NakedObject onObject) {
-        removeCommand(CreateObjectCommand.class, onObject);
-    }
-
-    private void removeCommand(Class commandClass, NakedObject onObject) {
-        PersistenceCommand toDelete = getCommand(commandClass, onObject);
-        commands.removeElement(toDelete);
-    }
-
-    private void removeSave(NakedObject onObject) {
-        removeCommand(SaveObjectCommand.class, onObject);
-    }
-    
     void addNotify(NakedObject object) {
         LOG.debug("add notification for " + object);
         toNotify.addElement(object);
@@ -92,23 +85,10 @@ public class ObjectStoreTransaction implements Transaction {
         return getCommand(commandClass, onObject) != null;
     }
 
-    private PersistenceCommand getCommand(Class commandClass, NakedObject onObject) {
-        for (Enumeration e = commands.elements(); e.hasMoreElements();) {
-            PersistenceCommand command = (PersistenceCommand) e.nextElement();
-            if (command.onObject().equals(onObject)) {
-                if(commandClass.isAssignableFrom(command.getClass())) {
-                    return command;
-                }
-            }
-        }
-        return null;
-    }
-
-
     private boolean alreadyHasCreate(NakedObject onObject) {
         return alreadyHasCommand(CreateObjectCommand.class, onObject);
     }
-
+    
     private boolean alreadyHasDestroy(NakedObject onObject) {
         return alreadyHasCommand(DestroyObjectCommand.class, onObject);
     }
@@ -126,16 +106,36 @@ public class ObjectStoreTransaction implements Transaction {
         PersistenceCommand[] commandsArray = new PersistenceCommand[commands.size()];
         commands.copyInto(commandsArray);
         if (commandsArray.length > 0) {
-            objectStore.startTransaction();
-            try {
-                objectStore.runTransaction(commandsArray);
-                objectStore.endTransaction();
-            } catch (ObjectPerstsistenceException e) {
-                objectStore.abortTransaction();
-                throw e;
-            }
+            objectStore.endTransaction();
+            objectStore.execute(commandsArray);
         }
         complete = true;
+    }
+
+
+    private PersistenceCommand getCommand(Class commandClass, NakedObject onObject) {
+        for (Enumeration e = commands.elements(); e.hasMoreElements();) {
+            PersistenceCommand command = (PersistenceCommand) e.nextElement();
+            if (command.onObject().equals(onObject)) {
+                if(commandClass.isAssignableFrom(command.getClass())) {
+                    return command;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void removeCommand(Class commandClass, NakedObject onObject) {
+        PersistenceCommand toDelete = getCommand(commandClass, onObject);
+        commands.removeElement(toDelete);
+    }
+
+    private void removeCreate(NakedObject onObject) {
+        removeCommand(CreateObjectCommand.class, onObject);
+    }
+
+    private void removeSave(NakedObject onObject) {
+        removeCommand(SaveObjectCommand.class, onObject);
     }
 
     public String toString() {

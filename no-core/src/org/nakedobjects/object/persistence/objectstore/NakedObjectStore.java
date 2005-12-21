@@ -143,7 +143,7 @@ public interface NakedObjectStore extends NakedObjectsComponent, DebugInfo {
      */
     void resolveImmediately(NakedObject object);
 
-    public void runTransaction(PersistenceCommand[] commands);
+    public void execute(PersistenceCommand[] commands);
 
     public void startTransaction();
 
