@@ -41,7 +41,7 @@ public final class ProxyAction extends AbstractActionPeer {
     private Naked executeRemotely(NakedObject target, Naked[] parameters) {
         Data[] parameterObjectData = parameterValues(parameters);
         LOG.debug(debug("execute remotely", getIdentifier(), target, parameters));
-        ObjectData targetReference = encoder.createDataForActionTarget(target);
+        ObjectData targetReference = encoder.createActionTarget(target);
         ServerActionResultData result;
         try {
             String name = getIdentifier().getClassName() + "#" + getIdentifier().getName();
@@ -134,7 +134,7 @@ public final class ProxyAction extends AbstractActionPeer {
 
     private Data[] parameterValues(Naked[] parameters) {
         NakedObjectSpecification[] parameterTypes = getParameterTypes();
-        return encoder.createDataForParameters(parameterTypes, parameters);
+        return encoder.createParameters(parameterTypes, parameters);
     }
 
     private String debug(String message, MemberIdentifier identifier, NakedObject target, Naked[] parameters) {

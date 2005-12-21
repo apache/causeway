@@ -114,7 +114,7 @@ public class ServerDistribution implements Distribution {
         String[] warnings = new String[0];
 
         // TODO for efficiency, need to remove the objects in the results graph from the updates set
-        return encoder.createActionResult(result, getUpdates(), persistedTarget, persistedParameters, messages, warnings);
+        return encoder.createServerActionResult(result, getUpdates(), persistedTarget, persistedParameters, messages, warnings);
     }
 
     public ClientActionResultData executeClientAction(
@@ -158,7 +158,7 @@ public class ServerDistribution implements Distribution {
             for (int i = 0; i < changed.length; i++) {
                 changedVersion[i] = changedObjects[i].getVersion();
             }
-            return encoder.createClientActionResultData(madePersistent, changedVersion);
+            return encoder.createClientActionResult(madePersistent, changedVersion);
         } catch (RuntimeException e) {
             LOG.debug("abort transaction", e);
             persistor.abortTransaction();

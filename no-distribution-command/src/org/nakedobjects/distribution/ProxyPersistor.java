@@ -104,7 +104,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         NakedObject[] changedObjects = clientSideTransaction.getChanged();
         ObjectData[] changed = new ObjectData[changedObjects.length];
         for (int i = 0; i < changedObjects.length; i++) {
-            changed[i] = encoder.createDataForChangedObject(changedObjects[i], knownObjects);
+            changed[i] = encoder.createGraphForChangedObject(changedObjects[i], knownObjects);
             updateNotifier.addDirty(changedObjects[i]);
         }
         
