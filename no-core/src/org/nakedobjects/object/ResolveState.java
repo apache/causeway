@@ -106,7 +106,7 @@ public final class ResolveState {
      * Returns true when an object has not yet been made persistent.
      */
     public boolean isTransient() {
-        return this == ResolveState.TRANSIENT;
+        return this == ResolveState.TRANSIENT || this == SERIALIZING_TRANSIENT;
     }
 
     /**
