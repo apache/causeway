@@ -232,8 +232,11 @@ public class ObjectDecoder {
     private static void setUpFields(ObjectData data, NakedObject object, KnownTransients knownTransients) {
         Data[] fieldContent = data.getFieldContent();
         if (fieldContent != null && fieldContent.length > 0) {
-            // NakedObjectField[] fields = object.getSpecification().getFields();
             NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
+            if (fields.length != fieldContent.length) {
+                throw new NakedObjectsRemoteException("Data received for different number of fields; exprected " + fields.length
+                        + ", but was " + fieldContent.length);
+            }
             for (int i = 0; i < fields.length; i++) {
                 NakedObjectField field = fields[i];
                 Data fieldData = fieldContent[i];
