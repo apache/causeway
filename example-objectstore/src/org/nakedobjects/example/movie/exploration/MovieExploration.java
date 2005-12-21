@@ -1,9 +1,9 @@
 package org.nakedobjects.example.movie.exploration;
 
-import org.nakedobjects.app.JavaExploration;
 import org.nakedobjects.application.system.ExplorationClock;
 import org.nakedobjects.application.value.Date;
 import org.nakedobjects.example.movie.fixtures.ClassesFixture;
+import org.nakedobjects.system.JavaExploration;
 
 
 public class MovieExploration {

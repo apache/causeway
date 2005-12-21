@@ -11,6 +11,7 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.ExecutionContext;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 
@@ -45,7 +46,7 @@ public class SqlObjectStore implements NakedObjectStore {
             mapper.insert(connection, object, id);
         }
 
-        public void execute() throws ObjectPerstsistenceException {}
+        public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
 
         public NakedObject onObject() {
             return object;
@@ -66,7 +67,7 @@ public class SqlObjectStore implements NakedObjectStore {
             mapper.delete(connection, id);
         }
 
-        public void execute() throws ObjectPerstsistenceException {}
+        public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
 
         public NakedObject onObject() {
             return object;
@@ -95,7 +96,7 @@ public class SqlObjectStore implements NakedObjectStore {
             mapper.update(connection, object, id);
         }
 
-        public void execute() throws ObjectPerstsistenceException {}
+        public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
 
         public NakedObject onObject() {
             return object;
@@ -159,7 +160,7 @@ public class SqlObjectStore implements NakedObjectStore {
 
     public void resolveImmediately(NakedObject object) {}
 
-    public void runTransaction(PersistenceCommand[] commands) {
+    public void execute(PersistenceCommand[] commands) {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/movies", "rcm", "rcm");
