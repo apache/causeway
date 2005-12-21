@@ -111,7 +111,7 @@ public class TransientObjectStoreTest extends TestCase {
                 objectStore.createCreateObjectCommand(object4),
                 objectStore.createCreateObjectCommand(object5) };
         objectStore.startTransaction();
-        objectStore.runTransaction(commands);
+        objectStore.execute(commands);
         objectStore.endTransaction();
     }
 
@@ -125,7 +125,7 @@ public class TransientObjectStoreTest extends TestCase {
 
     public void testDestroyObject() throws Exception {
         PersistenceCommand[] commands = new PersistenceCommand[] { objectStore.createDestroyObjectCommand(object1) };
-        objectStore.runTransaction(commands);
+        objectStore.execute(commands);
 
         assertEquals(2, objectStore.numberOfInstances(objectSpec, false));
         assertEquals(object2, objectStore.getObject(object2.getOid(), objectSpec));
@@ -226,7 +226,7 @@ public class TransientObjectStoreTest extends TestCase {
         Version version = object3.getVersion();
         PersistenceCommand[] commands = new PersistenceCommand[] {objectStore.createSaveObjectCommand(object3)};
         objectStore.startTransaction();
-        objectStore.runTransaction(commands);
+        objectStore.execute(commands);
         objectStore.endTransaction();
         
         assertNotSame(version, object3.getVersion());

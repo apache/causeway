@@ -55,8 +55,10 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.destroyObject(testNakedObject);
         objectManager.abortTransaction();
 
-        objectStore.assertAction(0, "destroyObject " + testNakedObject);
-        objectStore.assertLastAction(0);
+        objectStore.assertAction(0, "startTransaction");
+        objectStore.assertAction(1, "destroyObject " + testNakedObject);
+        objectStore.assertAction(2, "abortTransaction");
+        objectStore.assertLastAction(2);
     }
 
     public void testEndTransaction() {
@@ -64,10 +66,10 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.destroyObject(testNakedObject);
         objectManager.endTransaction();
 
-        objectStore.assertAction(0, "destroyObject " + testNakedObject);
-        objectStore.assertAction(1, "startTransaction");
-        objectStore.assertAction(2, "run DestroyObjectCommand " + testNakedObject);
-        objectStore.assertAction(3, "endTransaction");
+        objectStore.assertAction(0, "startTransaction");
+        objectStore.assertAction(1, "destroyObject " + testNakedObject);
+        objectStore.assertAction(2, "endTransaction");
+        objectStore.assertAction(3, "run DestroyObjectCommand " + testNakedObject);
     }
 
     public void testDestroy() {
@@ -77,10 +79,10 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.destroyObject(testNakedObject);
         objectManager.endTransaction();
 
-        objectStore.assertAction(0, "destroyObject " + testNakedObject);
-        objectStore.assertAction(1, "startTransaction");
-        objectStore.assertAction(2, "run DestroyObjectCommand " + testNakedObject);
-        objectStore.assertAction(3, "endTransaction");
+        objectStore.assertAction(0, "startTransaction");
+        objectStore.assertAction(1, "destroyObject " + testNakedObject);
+        objectStore.assertAction(2, "endTransaction");
+        objectStore.assertAction(3, "run DestroyObjectCommand " + testNakedObject);
 
         assertEquals(4, objectStore.getActions().size());
     }
@@ -94,10 +96,10 @@ public class LocalObjectManagerTest extends TestCase {
         objectManager.makePersistent(testNakedObject);
         objectManager.endTransaction();
         
-        objectStore.assertAction(0, "createObject " + testNakedObject);
-        objectStore.assertAction(1, "startTransaction");
-        objectStore.assertAction(2, "run CreateObjectCommand " + testNakedObject);
-        objectStore.assertAction(3, "endTransaction");
+        objectStore.assertAction(0, "startTransaction");
+        objectStore.assertAction(1, "createObject " + testNakedObject);
+        objectStore.assertAction(2, "endTransaction");
+        objectStore.assertAction(3, "run CreateObjectCommand " + testNakedObject);
         
         assertEquals(4, objectStore.getActions().size());
    }

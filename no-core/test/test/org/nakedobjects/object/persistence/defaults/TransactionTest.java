@@ -5,6 +5,7 @@ import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.persistence.objectstore.ObjectStoreTransaction;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.ExecutionContext;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 import org.nakedobjects.object.transaction.Transaction;
 import org.nakedobjects.object.transaction.TransactionException;
@@ -32,7 +33,7 @@ public class TransactionTest extends TestCase {
     private CreateObjectCommand createCreateCommand(final NakedObject object, final String name) {
         return new CreateObjectCommand() {
 
-            public void execute() throws ObjectPerstsistenceException {}
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
 
             public NakedObject onObject() {
                 return object;
@@ -47,7 +48,7 @@ public class TransactionTest extends TestCase {
     private DestroyObjectCommand createDestroyCommand(final NakedObject object, final String name) {
         return new DestroyObjectCommand() {
 
-            public void execute() throws ObjectPerstsistenceException {}
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
 
             public NakedObject onObject() {
                 return object;
@@ -61,7 +62,7 @@ public class TransactionTest extends TestCase {
 
     private SaveObjectCommand createSaveCommand(final NakedObject object, final String name) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {}
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
 
             public NakedObject onObject() {
                 return object;
@@ -75,7 +76,7 @@ public class TransactionTest extends TestCase {
 
     private SaveObjectCommand createCommandThatAborts(final NakedObject object, final String name) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 throw new ObjectPerstsistenceException();
             }
 
@@ -123,10 +124,9 @@ public class TransactionTest extends TestCase {
             t.commit();
             fail();
         } catch (ObjectPerstsistenceException expected) {}
-        os.assertAction(0, "start");
+        os.assertAction(0, "endTransaction");
         os.assertAction(1, "run command 1");
         os.assertAction(2, "run command 2");
-        os.assertAction(3, "abort");
     }
 
     public void testAddCommands() throws Exception {
@@ -134,11 +134,10 @@ public class TransactionTest extends TestCase {
         t.addCommand(createSaveCommand(object2, "command 2"));
         t.commit();
 
-        os.assertAction(0, "start");
+        os.assertAction(0, "endTransaction");
         os.assertAction(1, "run command 1");
         os.assertAction(2, "run command 2");
-        os.assertAction(3, "end");
-        assertEquals(4, os.getActions().size());
+        assertEquals(3, os.getActions().size());
     }
 
     public void testAddCreateCommandsButIgnoreSaveForSameObject() throws Exception {
@@ -151,11 +150,10 @@ public class TransactionTest extends TestCase {
         t.addCommand(createSaveCommand(object2, "save object 2"));
         t.commit();
 
-        os.assertAction(0, "start");
+        os.assertAction(0, "endTransaction");
         os.assertAction(1, "run create object 1");
         os.assertAction(2, "run save object 2");
-        os.assertAction(3, "end");
-        assertEquals(4, os.getActions().size());
+        assertEquals(3, os.getActions().size());
     }
 
     public void testAddDestoryCommandsButRemovePreviousSaveForSameObject() throws Exception {
@@ -163,10 +161,9 @@ public class TransactionTest extends TestCase {
         t.addCommand(createDestroyCommand(object1, "destroy object 1"));
         t.commit();
 
-        os.assertAction(0, "start");
+        os.assertAction(0, "endTransaction");
         os.assertAction(1, "run destroy object 1");
-        os.assertAction(2, "end");
-        assertEquals(3, os.getActions().size());
+        assertEquals(2, os.getActions().size());
     }
 
     public void testIgnoreBothCreateAndDestroyCommandsWhenForSameObject() throws Exception {
@@ -175,10 +172,9 @@ public class TransactionTest extends TestCase {
         t.addCommand(createDestroyCommand(object2, "destroy object 2"));
         t.commit();
 
-        os.assertAction(0, "start");
+        os.assertAction(0, "endTransaction");
         os.assertAction(1, "run destroy object 2");
-        os.assertAction(2, "end");
-        assertEquals(3, os.getActions().size());
+        assertEquals(2, os.getActions().size());
     }
 
     public void testIgnoreSaveAfterDeleteForSameObject() throws Exception {
@@ -186,10 +182,9 @@ public class TransactionTest extends TestCase {
         t.addCommand(createSaveCommand(object1, "save object 1"));
         t.commit();
 
-        os.assertAction(0, "start");
+        os.assertAction(0, "endTransaction");
         os.assertAction(1, "run destroy object 1");
-        os.assertAction(2, "end");
-        assertEquals(3, os.getActions().size());
+        assertEquals(2, os.getActions().size());
     }
 
     public void testNoCommands() throws Exception {

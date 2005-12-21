@@ -12,6 +12,7 @@ import org.nakedobjects.object.UnsupportedFindException;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.ExecutionContext;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 import org.nakedobjects.utility.NotImplementedException;
@@ -151,7 +152,7 @@ public class MockObjectStore implements NakedObjectStore {
         actions.addElement("createObject " + object);
         return new CreateObjectCommand() {
 
-            public void execute() throws ObjectPerstsistenceException {}
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
 
             public String toString() {
                 return "CreateObjectCommand " + object.toString();
@@ -166,7 +167,7 @@ public class MockObjectStore implements NakedObjectStore {
         actions.addElement("destroyObject " + object);
         return new DestroyObjectCommand() {
 
-            public void execute() throws ObjectPerstsistenceException {}
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {}
         
             public String toString() {
                 return "DestroyObjectCommand " + object.toString();
@@ -183,11 +184,11 @@ public class MockObjectStore implements NakedObjectStore {
         return null;
     }
 
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
+    public void execute(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
         for (int i = 0; i < commands.length; i++) {
             actions.addElement("run " + commands[i]);
             
-            commands[i].execute();
+            commands[i].execute(null);
         }
     }
 }
