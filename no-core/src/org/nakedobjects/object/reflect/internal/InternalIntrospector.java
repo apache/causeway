@@ -152,7 +152,7 @@ public class InternalIntrospector {
             Class[] params = method.getParameterTypes();
             validMethods.addElement(method);
 
-            LOG.info("  identified action " + method);
+            LOG.debug("  identified action " + method);
             String methodName = method.getName();
             methods[i] = null;
 
@@ -224,7 +224,7 @@ public class InternalIntrospector {
 
         while (e.hasMoreElements()) {
             Method method = (Method) e.nextElement();
-            LOG.info("  identified derived value method " + method);
+            LOG.debug("  identified derived value method " + method);
             String name = method.getName();
 
             InternalOneToOneAssociation association = new InternalOneToOneAssociation(false, className(), name, method.getReturnType(),
@@ -562,7 +562,7 @@ public class InternalIntrospector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.info("  identified 1-many association method " + getMethod);
+            LOG.debug("  identified 1-many association method " + getMethod);
             String name = getMethod.getName().substring(GET_PREFIX.length());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { InternalAbout.class, null,
@@ -626,7 +626,7 @@ public class InternalIntrospector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.info("  identified 1-1 association method " + getMethod);
+            LOG.debug("  identified 1-1 association method " + getMethod);
 
             // ignore the getNakedClass method
             if (getMethod.getName().equals("getNakedClass")) {
@@ -659,7 +659,7 @@ public class InternalIntrospector {
                 continue;
             }
 
-            LOG.info("one-to-one association " + name + " ->" + addMethod);
+            LOG.debug("one-to-one association " + name + " ->" + addMethod);
             InternalOneToOneAssociation association = new InternalOneToOneAssociation(true, className(), name, getMethod.getReturnType(),
                     getMethod, setMethod, addMethod, removeMethod);
             associations.addElement(association);
@@ -735,7 +735,7 @@ public class InternalIntrospector {
             }
 
             // create Field
-            LOG.info("  value " + name + " ->" + getMethod);
+            LOG.debug("  value " + name + " ->" + getMethod);
             /*
              * ValueField attribute = createValueField(getMethod, setMethod, name, aboutMethod, validMethod);
              * fields.addElement(attribute);
