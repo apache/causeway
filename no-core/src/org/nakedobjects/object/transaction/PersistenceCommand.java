@@ -4,7 +4,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.ObjectPerstsistenceException;
 
 public interface PersistenceCommand {
-    void execute() throws ObjectPerstsistenceException;
+    void execute(ExecutionContext context) throws ObjectPerstsistenceException;
     
     NakedObject onObject();
 }
