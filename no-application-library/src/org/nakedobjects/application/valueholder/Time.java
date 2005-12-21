@@ -79,10 +79,10 @@ public class Time extends Magnitude {
         cal.set(Calendar.YEAR, 1970);
         zero = cal.getTime().getTime();
 
-        LOG.info("locale " + Locale.getDefault());
-        LOG.info("short fomat " + SHORT_FORMAT.format(new Date()));
-        LOG.info("medium fomat " + MEDIUM_FORMAT.format(new Date()));
-        LOG.info("long fomat " + LONG_FORMAT.format(new Date()));
+        LOG.debug("locale " + Locale.getDefault());
+        LOG.debug("short fomat " + SHORT_FORMAT.format(new Date()));
+        LOG.debug("medium fomat " + MEDIUM_FORMAT.format(new Date()));
+        LOG.debug("long fomat " + LONG_FORMAT.format(new Date()));
     }
 
     static long getZero() {
