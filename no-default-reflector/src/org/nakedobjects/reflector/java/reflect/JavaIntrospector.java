@@ -212,7 +212,7 @@ public class JavaIntrospector {
 
             Class[] params = method.getParameterTypes();
 
-            LOG.info("  identified action " + method);
+            LOG.debug("  identified action " + method);
             methods[i] = null;
 
             String actionName = fullMethodName.substring(prefixes[actionPrefix].length());
@@ -345,7 +345,7 @@ public class JavaIntrospector {
 
         while (e.hasMoreElements()) {
             Method method = (Method) e.nextElement();
-            LOG.info("  identified derived value method " + method);
+            LOG.debug("  identified derived value method " + method);
             String name = javaBaseName(method.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class });
@@ -404,7 +404,7 @@ public class JavaIntrospector {
 
     protected void finalize() throws Throwable {
         super.finalize();
-        LOG.info("finalizing reflector " + this);
+        LOG.debug("finalizing reflector " + this);
     }
 
     /**
@@ -612,7 +612,7 @@ public class JavaIntrospector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.info("  identified 1-many association method " + getMethod);
+            LOG.debug("  identified 1-many association method " + getMethod);
             String name = javaBaseName(getMethod.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
@@ -674,7 +674,7 @@ public class JavaIntrospector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.info("  identified 1-many association method " + getMethod);
+            LOG.debug("  identified 1-many association method " + getMethod);
             String name = javaBaseName(getMethod.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
@@ -744,7 +744,7 @@ public class JavaIntrospector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.info("  identified 1-many association method " + getMethod);
+            LOG.debug("  identified 1-many association method " + getMethod);
             String name = javaBaseName(getMethod.getName());
 
             Method aboutMethod = findMethod(OBJECT, ABOUT_PREFIX + name, null, new Class[] { FieldAbout.class, null,
@@ -824,7 +824,7 @@ public class JavaIntrospector {
 
         while (e.hasMoreElements()) {
             Method getMethod = (Method) e.nextElement();
-            LOG.info("  identified 1-1 association method " + getMethod);
+            LOG.debug("  identified 1-1 association method " + getMethod);
 
             // ignore the getNakedClass method
             if (getMethod.getName().equals("getNakedClass")) {
@@ -864,7 +864,7 @@ public class JavaIntrospector {
                 name = name.substring(HIDDEN_PREFIX.length());
             }
 
-            LOG.info("one-to-one association " + name + " ->" + addMethod);
+            LOG.debug("one-to-one association " + name + " ->" + addMethod);
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(true, identifier, getMethod.getReturnType(), getMethod,
                     setMethod, addMethod, removeMethod, aboutMethod, isHidden, setMethod == null);
@@ -1066,7 +1066,7 @@ public class JavaIntrospector {
             }
 
             // create Field
-            LOG.info("  identified value " + name + " -> " + getMethod);
+            LOG.debug("  identified value " + name + " -> " + getMethod);
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             JavaOneToOneAssociation association = new JavaOneToOneAssociation(false, identifier, getMethod.getReturnType(), getMethod,
                     setMethod, null, null, aboutMethod, isHidden, setMethod == null && !valueHolder);
