@@ -17,6 +17,7 @@ import org.nakedobjects.object.persistence.LongNumberVersion;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.ExecutionContext;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 import org.nakedobjects.utility.DebugString;
@@ -54,7 +55,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 LOG.debug("  create object " + object);
                 NakedObjectSpecification specification = object.getSpecification();
                 LOG.debug("   saving object " + object + " as instance of " + specification.getFullName());
@@ -77,7 +78,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 LOG.info("  delete object '" + object + "'");
                 objects.remove(object.getOid());
                 
@@ -102,7 +103,7 @@ public class TransientObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() throws ObjectPerstsistenceException {
+            public void execute(ExecutionContext context) throws ObjectPerstsistenceException {
                 NakedObjectSpecification specification = object.getSpecification();
                 LOG.debug("   saving object " + object + " as instance of " + specification.getFullName());
                 TransientObjectStoreInstances ins = instancesFor(specification);
@@ -294,10 +295,10 @@ public class TransientObjectStore implements NakedObjectStore {
     public void reset() {
     }
     
-    public void runTransaction(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
+    public void execute(PersistenceCommand[] commands) throws ObjectPerstsistenceException {
         LOG.info("start execution of transaction ");
         for (int i = 0; i < commands.length; i++) {
-            commands[i].execute();
+            commands[i].execute(null);
         }
         LOG.info("end execution");
     }
