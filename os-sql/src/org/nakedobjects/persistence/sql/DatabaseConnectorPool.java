@@ -28,7 +28,6 @@ public class DatabaseConnectorPool {
     private DatabaseConnector newConnector() throws SqlObjectStoreException {
         DatabaseConnector connector = factory.createConnector();
         connector.setConnectionPool(this);
-        connector.open();
         connectorPool.addElement(connector);
         return connector;
     }

@@ -18,8 +18,6 @@ public interface DatabaseConnector {
 
     void insert(String sql, Object oid) throws SqlObjectStoreException;
 
-    void open() throws SqlObjectStoreException;
-
     Results select(String sql);
 
     /**
@@ -35,15 +33,11 @@ public interface DatabaseConnector {
 
     void rollback()  throws SqlObjectStoreException;
 
-    void startTransaction();
-
-    void endTransaction();
-
-    boolean isTransactionComplete();
-
     void setConnectionPool(DatabaseConnectorPool pool) ;
     
     DatabaseConnectorPool getConnectionPool();
+
+    void begin();
 }
 
 /*

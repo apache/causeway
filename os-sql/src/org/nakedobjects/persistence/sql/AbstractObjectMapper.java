@@ -2,8 +2,10 @@ package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.persistence.LongNumberVersion;
 import org.nakedobjects.object.persistence.SerialOid;
 
+import java.util.Date;
 import java.util.Hashtable;
 
 public abstract class AbstractObjectMapper {
@@ -60,6 +62,10 @@ public abstract class AbstractObjectMapper {
 	protected void addPrimaryKeyMapper(String columnName, PrimaryKeyMapper mapper) {
 	    keyMapping.put(columnName, mapper);
 	}
+
+    protected LongNumberVersion createVersion(long versionSequence) {
+        return new LongNumberVersion(versionSequence, "", new Date());
+    }
 }
 
 /*

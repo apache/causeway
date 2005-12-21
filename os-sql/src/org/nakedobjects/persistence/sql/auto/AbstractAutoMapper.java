@@ -65,8 +65,8 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 			idColumn = "PK" + table + "ID";
 		}
 		
-		lastActivityDateColumn = "modified_by";
-		lastActivityUserColumn = "modifiied_on";
+		lastActivityDateColumn = "modified_on";
+		lastActivityUserColumn = "modifiied_by";
 		versionColumn = "version";
 		    
 
@@ -144,8 +144,9 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 			sql.append(quote(lastActivityDateColumn));
 			sql.append(" timestamp)");
 
+            connection.begin();
 			connection.update(sql.toString());
-
+			connection.commit();
 		}
 		for (int i = 0; collectionMappers != null && i < collectionMappers.length; i++) {
 			if (collectionMappers[i].needsTables(connection)) {

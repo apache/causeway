@@ -47,16 +47,20 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapper {
     public void createObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
         NakedObjectSpecification cls = object.getSpecification();
         String values = values(cls, object);
+        int versionSequence = 1;
+        LongNumberVersion version = createVersion(versionSequence);
         if (dbCreatesId) {
-            String statement = "insert into " + quote(table) + " (" + columnList() + ") values (" + values + ", 1, 'user', now)";
+            String statement = "insert into " + quote(table) + " (" + columnList() + ") values (" + values + ", "
+                    + versionSequence + ", 'user', now)";
 
             connector.insert(statement, object.getOid());
         } else {
             String id = primaryKey(object.getOid());
             String statement = "insert into " + quote(table) + " (" + quote(idColumn) + "," + columnList() + ") values (" + id
-                    + values + ", 1, 'user', now)";
+                    + values + ", " + versionSequence + ", 'user', now)";
             connector.insert(statement);
         }
+        object.setOptimisticLock(version);
         for (int i = 0; i < collectionMappers.length; i++) {
             collectionMappers[i].saveInternalCollection(connector, object);
         }
@@ -64,8 +68,8 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapper {
 
     public void destroyObject(DatabaseConnector connector, NakedObject object) throws SqlObjectStoreException {
         String id = primaryKey(object.getOid());
-        String statement = "delete from " + quote(table) + " where " + quote(idColumn) + " = " + id + " and " + quote(versionColumn) +
-            " = " + ((LongNumberVersion) object.getVersion()).getSequence();
+        String statement = "delete from " + quote(table) + " where " + quote(idColumn) + " = " + id + " and "
+                + quote(versionColumn) + " = " + ((LongNumberVersion) object.getVersion()).getSequence();
         connector.update(statement);
     }
 
@@ -98,10 +102,10 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapper {
         NakedObjects.getObjectLoader().start(object, ResolveState.RESOLVING);
 
         for (int i = 0; i < oneToOnefields.length; i++) {
-            if(oneToOnefields[i].isDerived()) {
+            if (oneToOnefields[i].isDerived()) {
                 continue;
             }
-            
+
             if (oneToOnefields[i].isValue()) {
                 ValueMapper mapper = ValueMapperLookup.getInstance().mapperFor(oneToOnefields[i].getSpecification());
                 mapper.setFromDBColumn(columnNames[i], oneToOnefields[i], object, rs);
@@ -235,7 +239,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapper {
                 assignments.append("NULL");
             }
         }
-        
+
         if (fld > 0) {
             assignments.append(", ");
         }
@@ -250,12 +254,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapper {
 
         if (updateCount == 0) {
             throw new ConcurrencyException();
-            // throw new NakedObjectRuntimeException(new NakedObjectRuntimeException("No update: " +
-            // statement));
-            // TODO replace with new ConcurrencyException();
         }
 
-        object.setOptimisticLock(new LongNumberVersion(versionSequence, "", new Date()));
+        object.setOptimisticLock(createVersion(versionSequence));
 
         // TODO update collections - change only when needed rather than reinserting from scratch
         for (int i = 0; i < collectionMappers.length; i++) {

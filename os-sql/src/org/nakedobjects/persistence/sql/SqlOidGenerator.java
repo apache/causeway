@@ -1,26 +1,31 @@
 package org.nakedobjects.persistence.sql;
 
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.persistence.OidGenerator;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
-import org.nakedobjects.utility.configuration.ComponentLoader;
 
 
 public class SqlOidGenerator implements OidGenerator {
     private static final String BASE_NAME = "nakedobjects.sql-object-store";
     private long number;
-    private DatabaseConnectorFactory connectorFactory;
+    private final DatabaseConnectorPool connectionPool;
+   // private DatabaseConnectorFactory connectorFactory;
+
+    public SqlOidGenerator(DatabaseConnectorPool connectionPool) {
+        this.connectionPool = connectionPool;}
 
     public void init() {
-        String connectorClass = NakedObjects.getConfiguration().getString(BASE_NAME + ".connector");
-        connectorFactory = (DatabaseConnectorFactory) ComponentLoader.loadComponent(connectorClass,
-                DatabaseConnectorFactory.class);
-        DatabaseConnector db = connectorFactory.createConnector();
+     //   String connectorClass = NakedObjects.getConfiguration().getString(BASE_NAME + ".connector");
+    //    connectorFactory = (DatabaseConnectorFactory) ComponentLoader.loadComponent(connectorClass,
+       //         DatabaseConnectorFactory.class);
+     //  DatabaseConnector db = connectorFactory.createConnector();
+       
+        DatabaseConnector db = connectionPool.acquire();
         try {
-            db.open();
+            //db.open();
+            db.begin();
             if (!db.hasTable("no_serial_id")) {
                 db.update("create table \"no_serial_id\" (\"number\" INTEGER)");
                 db.update("insert into \"no_serial_id\" values (1)");
@@ -30,9 +35,13 @@ public class SqlOidGenerator implements OidGenerator {
             rs.next();
             number = rs.getLong("number");
             rs.close();
-            db.close();
+            db.commit();
+            //db.close();
         } catch (ObjectPerstsistenceException e) {
+            db.rollback();
             throw new NakedObjectRuntimeException(e);
+        } finally {
+            connectionPool.release(db);            
         }
     }
 
@@ -47,16 +56,22 @@ public class SqlOidGenerator implements OidGenerator {
     }
 
     public void shutdown() {
-        DatabaseConnector db = connectorFactory.createConnector();
+   //     DatabaseConnector db = connectorFactory.createConnector();
+        
+        DatabaseConnector db = connectionPool.acquire();
         try {
-            db.open();
+           // db.open();
+            db.begin();
             db.update("update \"no_serial_id\" set \"number\" = " + number);
             db.commit();
         } catch (ObjectPerstsistenceException e) {
             throw new NakedObjectRuntimeException(e);
         } finally {
+            if(db != null) {
+                connectionPool.release(db);
+            }
             try {
-                db.close();
+//                db.close();
             } catch (SqlObjectStoreException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();

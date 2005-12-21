@@ -13,19 +13,8 @@ public abstract class AbstractDatabaseConnector implements DatabaseConnector {
         return isUsed;
     }
 
-    private int transactionLevel = 0;
     
-    public final  void startTransaction() {
-        transactionLevel ++;
-    }
-
-    public final void endTransaction() {
-        transactionLevel --;
-    }
-
-    public final boolean isTransactionComplete() {
-        return transactionLevel == 0;
-    }
+    
     
     private DatabaseConnectorPool pool;
     

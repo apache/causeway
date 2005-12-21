@@ -49,7 +49,9 @@ public class JdbcConnectorFactory implements DatabaseConnectorFactory {
     }
 
     public DatabaseConnector createConnector() {
-        return new JdbcConnector();
+        JdbcConnector connection = new JdbcConnector();
+        connection.open();
+        return connection;
     }
 
 }

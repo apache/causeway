@@ -19,12 +19,11 @@ import org.apache.log4j.Logger;
 public class JdbcConnector extends AbstractDatabaseConnector {
     private static final Logger LOG = Logger.getLogger(JdbcConnector.class);
     private Connection connection;
-   // private boolean isUsed;
 
     public void close() throws SqlObjectStoreException {
         try {
             if(connection != null) {
-                LOG.debug("close");
+                LOG.info("close");
                 connection.close();
             }
         } catch (SQLException e) {
@@ -76,11 +75,9 @@ public class JdbcConnector extends AbstractDatabaseConnector {
             Class.forName(driver);
             LOG.info("Connecting to " + url + " as " + user);
             connection = DriverManager.getConnection(url, user, password);
-            
             if(connection == null) {
                	throw new SqlObjectStoreException("No connection established to " + url);
             }
-    
         } catch (SQLException e) {
             throw new SqlObjectStoreException("Failed to start", e);
         } catch (ClassNotFoundException e) {
@@ -161,10 +158,10 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
-           return new JdbcResults(statement.executeQuery());
+            return new JdbcResults(statement.executeQuery());
         } catch (SQLException e) {
-           throw new NakedObjectRuntimeException(e);
-        }   
+            throw new NakedObjectRuntimeException(e);
+        }
     }
 
     public int update(String sql) throws SqlObjectStoreException {
@@ -180,10 +177,6 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         }
     }
 
- 
-    
-    
-    
     public boolean hasTable(String tableName) throws SqlObjectStoreException {
         try {
             ResultSet set = connection.getMetaData().getTables(null, null, tableName, null);
@@ -229,15 +222,27 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         try {
             LOG.debug("commit");
             connection.commit();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             throw new SqlObjectStoreException("Commit error", e);
         }
     }
 
+    public void begin() {
+        try {
+            LOG.debug("begin transaction");
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            throw new SqlObjectStoreException("Rollback error", e);
+        }
+
+    }
+
     public void rollback() throws SqlObjectStoreException {
         try {
-            LOG.debug("commit");
+            LOG.debug("rollback");
             connection.rollback();
+            connection.setAutoCommit(true);
         } catch (SQLException e) {
             throw new SqlObjectStoreException("Rollback error", e);
         }
@@ -246,25 +251,20 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

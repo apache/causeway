@@ -13,12 +13,11 @@ import org.nakedobjects.object.persistence.TitleCriteria;
 import org.nakedobjects.object.persistence.objectstore.NakedObjectStore;
 import org.nakedobjects.object.transaction.CreateObjectCommand;
 import org.nakedobjects.object.transaction.DestroyObjectCommand;
+import org.nakedobjects.object.transaction.ExecutionContext;
 import org.nakedobjects.object.transaction.PersistenceCommand;
 import org.nakedobjects.object.transaction.SaveObjectCommand;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.UnexpectedCallException;
-
-import java.util.Hashtable;
 
 import org.apache.log4j.Logger;
 
@@ -28,23 +27,15 @@ public final class SqlObjectStore implements NakedObjectStore {
     private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
     private DatabaseConnectorPool connectionPool;
     private ObjectMapperLookup mapperLookup;
-    private Hashtable transactionOrientedConnections;
 
-    public void abortTransaction() throws SqlObjectStoreException {
-        Thread thread = Thread.currentThread();
-        DatabaseConnector connector = (DatabaseConnector) transactionOrientedConnections.get(thread);
-        connector.rollback();
-        connectionPool.release(connector);
-        transactionOrientedConnections.remove(thread);
-    }
+    public void abortTransaction() {}
 
     public CreateObjectCommand createCreateObjectCommand(final NakedObject object) {
         return new CreateObjectCommand() {
-            public void execute() {
+            public void execute(ExecutionContext context) {
+                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
                 LOG.debug("  create object " + object);
-                DatabaseConnector connection = getDatabaseConnector();
                 mapperLookup.getMapper(connection, object).createObject(connection, object);
-                releaseConnectionIfNotInTransaction(connection);
             }
 
             public NakedObject onObject() {
@@ -59,11 +50,10 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public DestroyObjectCommand createDestroyObjectCommand(final NakedObject object) {
         return new DestroyObjectCommand() {
-            public void execute() {
+            public void execute(ExecutionContext context) {
+                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
                 LOG.debug("  destroy object " + object);
-                DatabaseConnector connection = getDatabaseConnector();
                 mapperLookup.getMapper(connection, object).destroyObject(connection, object);
-                releaseConnectionIfNotInTransaction(connection);
             }
 
             public NakedObject onObject() {
@@ -78,9 +68,9 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public SaveObjectCommand createSaveObjectCommand(final NakedObject object) {
         return new SaveObjectCommand() {
-            public void execute() {
+            public void execute(ExecutionContext context) {
+                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
                 LOG.debug("  save object " + object);
-                DatabaseConnector connection = getDatabaseConnector();
                 if (object instanceof InternalCollection) {
                     NakedObject parent = ((InternalCollection) object).parent();
                     LOG.debug("change to internal collection being persisted through parent");
@@ -88,11 +78,10 @@ public final class SqlObjectStore implements NakedObjectStore {
                     // TODO a better plan would be ask the mapper to save the collection
                     // - saveCollection(parent, collection)
 	                mapperLookup.getMapper(connection, parent).save(connection, parent);
-	                releaseConnectionIfNotInTransaction(connection);
-	                
+                    connectionPool.release(connection);	                
                 } else {
                     mapperLookup.getMapper(connection, object).save(connection, object);
-	                releaseConnectionIfNotInTransaction(connection);
+                    connectionPool.release(connection);
                 }
             }
 
@@ -107,24 +96,7 @@ public final class SqlObjectStore implements NakedObjectStore {
         };
     }
 
-    public void endTransaction() throws SqlObjectStoreException {
-        Thread thread = Thread.currentThread();
-        DatabaseConnector connector = (DatabaseConnector) transactionOrientedConnections.get(thread);
-        connector.endTransaction();
-        if (connector.isTransactionComplete()) {
-            connector.commit();
-            connectionPool.release(connector);
-            transactionOrientedConnections.remove(thread);
-        }
-    }
-
-    private DatabaseConnector getDatabaseConnector() throws SqlObjectStoreException {
-        Thread thread = Thread.currentThread();
-        if (transactionOrientedConnections.contains(thread)) {
-            return (DatabaseConnector) transactionOrientedConnections.get(thread);
-        } else {
-            return connectionPool.acquire();
-        }
+    public void endTransaction() {        
     }
 
     public String getDebugData() {
@@ -137,11 +109,11 @@ public final class SqlObjectStore implements NakedObjectStore {
 
     public NakedObject[] getInstances(InstancesCriteria criteria) {
         if (criteria instanceof TitleCriteria) {
-            DatabaseConnector connection = getDatabaseConnector();
+            DatabaseConnector connection = connectionPool.acquire();
             NakedObjectSpecification spec = criteria.getSpecification();
             ObjectMapper mapper = mapperLookup.getMapper(connection, spec);
             NakedObject[] instances = mapper.getInstances(connection, spec, ((TitleCriteria) criteria).getRequiredTitle());
-            releaseConnectionIfNotInTransaction(connection);
+            connectionPool.release(connection);
             return instances;
         }
 
@@ -149,40 +121,31 @@ public final class SqlObjectStore implements NakedObjectStore {
     }
 
     public NakedObject[] getInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
-        DatabaseConnector connection = getDatabaseConnector();
+        DatabaseConnector connection = connectionPool.acquire();
         NakedObject[] instances = mapperLookup.getMapper(connection, cls).getInstances(connection, cls);
-        releaseConnectionIfNotInTransaction(connection);
+        connectionPool.release(connection);
         return instances;
     }
 
     public NakedClass getNakedClass(String name) {
-  /*      DatabaseConnector connection = getDatabaseConnector();
-        NakedClass cls = mapperLookup.getNakedClassMapper(connection).getNakedClass(connection, name);
-        releaseConnectionIfNotInTransaction(connection);
-        return cls;
-        
-        */
-        
         throw new ObjectNotFoundException();
     }
 
     public NakedObject getObject(Oid oid, NakedObjectSpecification hint) {
-        DatabaseConnector connection = getDatabaseConnector();
+        DatabaseConnector connection = connectionPool.acquire();
         NakedObject object = mapperLookup.getMapper(connection, hint).getObject(connection, oid, hint);
-        releaseConnectionIfNotInTransaction(connection);
+        connectionPool.release(connection);
         return object;
     }
 
     public boolean hasInstances(NakedObjectSpecification cls, boolean includeSubclasses) {
-        DatabaseConnector connection = getDatabaseConnector();
+        DatabaseConnector connection = connectionPool.acquire();
         boolean hasInstances = mapperLookup.getMapper(connection, cls).hasInstances(connection, cls);
-        releaseConnectionIfNotInTransaction(connection);
+        connectionPool.release(connection);
         return hasInstances;
     }
 
     public void init() {
-        transactionOrientedConnections = new Hashtable();
-
  /*       DatabaseConnectorFactory connectorFactory = (DatabaseConnectorFactory) ComponentLoader.loadComponent(BASE_NAME
                 + ".connector", DatabaseConnectorFactory.class);
         connectionPool = new DatabaseConnectorPool(connectorFactory);
@@ -201,26 +164,17 @@ public final class SqlObjectStore implements NakedObjectStore {
     }
 
     public int numberOfInstances(NakedObjectSpecification cls, boolean includedSubclasses)  {
-        DatabaseConnector connection = getDatabaseConnector();
+        DatabaseConnector connection = connectionPool.acquire();
         int number = mapperLookup.getMapper(connection, cls).numberOfInstances(connection, cls);
-        releaseConnectionIfNotInTransaction(connection);
+        connectionPool.release(connection);
         return number;
-    }
-
-    private void releaseConnectionIfNotInTransaction(DatabaseConnector connection) {
-        Thread thread = Thread.currentThread();
-        if (!transactionOrientedConnections.contains(thread)) {
-            connectionPool.release(connection);
-        } else {
-            throw new NakedObjectRuntimeException();
-        }
     }
 
     public void reset() {}
 
     public void resolveField(NakedObject object, NakedObjectField field) {
         if(field.isCollection()) {
-            DatabaseConnector connection = getDatabaseConnector();
+            DatabaseConnector connection = connectionPool.acquire();
             NakedObjectSpecification spec = object.getSpecification();
             mapperLookup.getMapper(connection, spec).resolveCollection(connection, object, field);
         } else {
@@ -229,15 +183,27 @@ public final class SqlObjectStore implements NakedObjectStore {
     }
 
     public void resolveImmediately(NakedObject object) {
-        DatabaseConnector connection = getDatabaseConnector();
+        DatabaseConnector connection = connectionPool.acquire();
         mapperLookup.getMapper(connection, object).resolve(connection, object);
-        releaseConnectionIfNotInTransaction(connection);
+        connectionPool.release(connection);
     }
 
-    public void runTransaction(PersistenceCommand[] commands) {
-        for (int i = 0; i < commands.length; i++) {
-            PersistenceCommand command = commands[i];
-            command.execute();
+    public void execute(PersistenceCommand[] commands) {
+        DatabaseConnector connector = connectionPool.acquire();
+        connector.begin();
+        SqlExecutionContext context = new SqlExecutionContext(connector);
+        try {
+            for (int i = 0; i < commands.length; i++) {
+                PersistenceCommand command = commands[i];
+                command.execute(context);
+            }
+            connector.commit();
+        } catch (NakedObjectRuntimeException e) {
+            LOG.warn("Failure during execution", e);
+            connector.rollback();
+            throw e;
+        } finally {
+            connectionPool.release(connector);
         }
     }
 
@@ -251,19 +217,12 @@ public final class SqlObjectStore implements NakedObjectStore {
     
     public void shutdown() {
         mapperLookup.shutdown();
+//        DatabaseConnector connection = connectionPool.acquire();
+//        connection.update("SHUTDOWN");
         connectionPool.shutdown();
     }
 
-    public void startTransaction() throws SqlObjectStoreException {
-        Thread thread = Thread.currentThread();
-        DatabaseConnector connector;
-        if (transactionOrientedConnections.containsKey(thread)) {
-            connector = (DatabaseConnector) transactionOrientedConnections.get(thread);
-        } else {
-            connector = connectionPool.acquire();
-            transactionOrientedConnections.put(thread, connector);
-        }
-        connector.startTransaction();
+    public void startTransaction() {
     }
 
 }
