@@ -9,32 +9,27 @@ import bom.Customer;
 import bom.Location;
 import bom.Telephone;
 
+
 public class EcsFixture extends JavaFixture {
 
     public void install() {
-        setupClasses();  
-   /*     setupClock();
+        // setupClasses();
+        setupClock();
         City[] cities = setupCities();
-        setupObjects(cities);    
-    //    setUsers();
+        setupObjects(cities);
+        // setUsers();
         resetClock();
-        */
     }
 
-/*    private void setUsers() {
-        User joe = addUser("Joe");
-        addRole("entry", joe);
-        Role delete = addRole("delete", joe);
-        
-        User admin = addUser("Admin");
-        addRole(delete, admin);
-        addRole("admin", admin);
-        
-        User sysadmin = addUser("sysadmin");
-        addRole("sysadmin", sysadmin);
-    }
-*/
-    
+    /*
+     * private void setUsers() { User joe = addUser("Joe"); addRole("entry", joe); Role delete =
+     * addRole("delete", joe);
+     * 
+     * User admin = addUser("Admin"); addRole(delete, admin); addRole("admin", admin);
+     * 
+     * User sysadmin = addUser("sysadmin"); addRole("sysadmin", sysadmin); }
+     */
+
     private void setupObjects(City[] cities) {
         Customer newCustomer = (Customer) createInstance(Customer.class);
         newCustomer.getFirstName().setValue("Richard");
@@ -60,7 +55,7 @@ public class EcsFixture extends JavaFixture {
 
         l = (Location) createInstance(Location.class);
         l.setCity(cities[0]);
-//        l.getKnownAs().setValue("PPO Headquaters");
+        // l.getKnownAs().setValue("PPO Headquaters");
         l.getStreetAddress().setValue("234 E 42nd Street");
         newCustomer.addToLocations(l);
 
@@ -83,7 +78,7 @@ public class EcsFixture extends JavaFixture {
         t.getKnownAs().setValue("Mobile");
         t.getNumber().setValue("8777662671");
         newCustomer.getPhoneNumbers().addElement(t);
-        
+
         CreditCard cc = (CreditCard) createInstance(CreditCard.class);
         cc.getNumber().setValue("4525365234232233");
         cc.getExpires().setValue("12/06");
@@ -96,7 +91,7 @@ public class EcsFixture extends JavaFixture {
 
         Booking booking = (Booking) createInstance(Booking.class);
         booking.associateCustomer(newCustomer);
-  //          booking.getTime().setValue(14, 50);
+        // booking.getTime().setValue(14, 50);
 
         l = (Location) createInstance(Location.class);
         l.setCity(cities[5]);
@@ -137,10 +132,7 @@ public class EcsFixture extends JavaFixture {
     }
 
     private City[] setupCities() {
-        String[] cityNames = {
-            "New York", "Boston", "Washington", "Chicago", "Tampa",
-            "Seattle", "Atlanta"
-        };
+        String[] cityNames = { "New York", "Boston", "Washington", "Chicago", "Tampa", "Seattle", "Atlanta" };
 
         City[] cities = new City[cityNames.length];
 
@@ -162,34 +154,26 @@ public class EcsFixture extends JavaFixture {
         registerClass(Location.class);
         registerClass(CreditCard.class);
         registerClass(Customer.class);
-        registerClass(Telephone.class);  
+        registerClass(Telephone.class);
     }
-    
-    
+
 }
 
-
-
 /*
-Naked Objects - a framework that exposes behaviourally complete
-business objects directly to the user.
-Copyright (C) 2000 - 2005  Naked Objects Group Ltd
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-
-The authors can be contacted via www.nakedobjects.org (the
-registered address of Naked Objects Group is Kingsway House, 123 Goldworth
-Road, Woking GU21 1NR, UK).
-*/
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
+ * 
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * 
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ */
