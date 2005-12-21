@@ -101,6 +101,9 @@
 			<fileset dir="../no-distribution-xml/${src.dir}" />
 			<fileset dir="../utility-memento/${src.dir}" />
 			<fileset dir="../utility-xmlsnapshot/${src.dir}" />
+
+			<fileset dir="../no-system/${src.dir}" />
+
 		</copy>
 
 		<copy todir="${build.example.dir}">
@@ -333,6 +336,10 @@
 		<copy todir="${dist.dir}/lib/">
 			<fileset file="../lib/junit*.jar"/>
 			<fileset file="../lib/log4j*.jar"/>
+			<fileset file="../lib/xpp3*.jar"/>
+			<fileset file="../lib/xstream*.jar"/>
+			<fileset file="../lib/xerces.jar"/>
+			<fileset file="../lib/hsqldb*.jar"/>
 		</copy>
 
 		<!-- produce release zip -->
