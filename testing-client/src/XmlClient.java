@@ -14,6 +14,7 @@ import org.nakedobjects.object.loader.PojoAdapterHashMap;
 import org.nakedobjects.object.persistence.ObjectPersistorLogger;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.repository.NakedObjectsClient;
+import org.nakedobjects.object.transaction.TransactionPeerFactory;
 import org.nakedobjects.reflector.java.JavaBusinessObjectContainer;
 import org.nakedobjects.reflector.java.JavaObjectFactory;
 import org.nakedobjects.reflector.java.reflect.JavaAdapterFactory;
@@ -94,6 +95,7 @@ public class XmlClient {
  
             ReflectionPeerFactory[] factories = new ReflectionPeerFactory[] {
                     peerFactory,
+                    new TransactionPeerFactory()
             };
 
             JavaSpecificationLoader specificationLoader = new JavaSpecificationLoader();
