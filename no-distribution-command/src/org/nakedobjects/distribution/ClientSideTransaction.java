@@ -10,17 +10,25 @@ public class ClientSideTransaction {
     private final Vector deleted  = new Vector();
     
     public void addObjectChanged(NakedObject object) {
-        changed.addElement(object);
+        if(! changed.contains(object)) {
+            changed.addElement(object);
+        }
     }
 
-    public void rollback() {}
+    public void rollback() {
+        // TODO need to restore the state of all involved objects
+    }
 
     public void addDestroyObject(NakedObject object) {
-        deleted.addElement(object);
+        if(! deleted.contains(object)) {
+            deleted.addElement(object);
+        }
     }
 
     public void addMakePersistent(NakedObject object) {
-        persisted.addElement(object);
+        if(! persisted.contains(object)) {
+            persisted.addElement(object);
+        }
     }
 
     public NakedObject[] getDeleted() {
