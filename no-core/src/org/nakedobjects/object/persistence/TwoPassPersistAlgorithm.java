@@ -9,6 +9,7 @@ import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.ToString;
 
@@ -25,7 +26,10 @@ public class TwoPassPersistAlgorithm implements PersistAlgorithm {
         return oid;
     }
 
-    public void init() {}
+    public void init() {
+        Assert.assertNotNull("oid generator required", oidGenerator);
+        oidGenerator.init();
+    }
 
     public void makePersistent(NakedObject object, PersistedObjectAdder persistor) {
         if (object.getResolveState().isPersistent() || object.persistable() == Persistable.TRANSIENT) {
