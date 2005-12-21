@@ -107,13 +107,13 @@ public class ObjectDecoderTest extends TestCase {
     }
 
     public void testRecreateObjectWithFieldData2() {
-        Data fields[] = new Data[3];
+        Data fields[] = new Data[2];
         fields[1] = new DummyValueData(new Integer(13), "");
    //     DummyOid fieldOid = new DummyOid(345);
     //    fields[1] = new DummyObjectData(fieldOid, TestPojo.class.getName(),  false, new DummyVersion());
      //   fields[1] = fields[0];
         
-        // TODO test the one-to-many collection aswell
+        // TODO test the one-to-many collection as well
         
         DummyOid rootOid = new DummyOid(123);
         ObjectData data = new DummyObjectData(rootOid, TestPojo.class.getName(), false, new DummyVersion(4));

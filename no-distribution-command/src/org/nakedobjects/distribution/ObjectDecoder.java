@@ -234,7 +234,7 @@ public class ObjectDecoder {
         if (fieldContent != null && fieldContent.length > 0) {
             NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
             if (fields.length != fieldContent.length) {
-                throw new NakedObjectsRemoteException("Data received for different number of fields; exprected " + fields.length
+                throw new NakedObjectsRemoteException("Data received for different number of fields; expected " + fields.length
                         + ", but was " + fieldContent.length);
             }
             for (int i = 0; i < fields.length; i++) {
