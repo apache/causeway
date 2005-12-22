@@ -103,7 +103,7 @@
 			<fileset dir="../utility-xmlsnapshot/${src.dir}" />
 
 			<fileset dir="../no-system/${src.dir}" />
-
+			<fileset dir="../os-sql/${src.dir}" />
 		</copy>
 
 		<copy todir="${build.example.dir}">
