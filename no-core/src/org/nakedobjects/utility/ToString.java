@@ -9,6 +9,7 @@ public final class ToString {
     private static final DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-hhmmssSSS");
     private boolean addComma = false;
     private final StringBuffer string;
+    private boolean useLineBreaks;
 
     public ToString(final Object forObject, String text) {
         this(forObject);
@@ -85,6 +86,9 @@ public final class ToString {
     public ToString append(final String name, final String string) {
         if (addComma) {
             this.string.append(',');
+            if(useLineBreaks) {
+                this.string.append("\n\t");
+            }
         } else {
             addComma = true;
         }
@@ -120,6 +124,10 @@ public final class ToString {
 
     public void setAddComma() {
         this.addComma = true;
+    }
+    
+    public void setUseLineBreaks(boolean useLineBreaks) {
+        this.useLineBreaks = useLineBreaks;
     }
 
     public String toString() {
