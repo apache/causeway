@@ -1,6 +1,7 @@
 package org.nakedobjects.example.musicagent;
 
-import org.nakedobjects.example.exploration.JavaExploration;
+import org.nakedobjects.system.JavaExploration;
+
 
 
 public class MusicAgentExploration {
