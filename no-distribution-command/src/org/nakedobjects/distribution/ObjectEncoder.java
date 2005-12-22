@@ -94,7 +94,7 @@ public final class ObjectEncoder {
      * objects.
      */
     public final ObjectData createCompletePersistentGraph(NakedObject object) {
-        return (ObjectData) serializeObject(object, RECURSE_PERSISTENT_OBJECTS, persistentGraphDepth, new KnownTransients());
+        return (ObjectData) serializeObject(object, RECURSE_PERSISTENT_OBJECTS, persistentGraphDepth);
     }
 
     // TODO pass accross only the field within the object
@@ -263,14 +263,14 @@ public final class ObjectEncoder {
         if (isTransient) {
             knownTransients.put(object, data);
         }
-
+/*
         {
    //         if ( !(isTransient || recursePersistentObjects) || depth == 0 ) {
             if (depth <= 0 ) {
                 return data;
             }
         }
-
+*/
         NakedObjectField[] fields = getFields(object.getSpecification());
         Data[] fieldContent = new Data[fields.length];
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
