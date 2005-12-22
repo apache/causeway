@@ -91,7 +91,6 @@
 			<fileset dir="../no-application-library/${src.dir}" />
 			<fileset dir="../no-default-reflector/${src.dir}" />
 
-			<fileset dir="../example-base/${src.dir}" />
 			<fileset dir="../viewer-skylark/${src.dir}" />
 			<fileset dir="../no-xat/${src.dir}" />
 			<fileset dir="../os-file/${src.dir}" />
