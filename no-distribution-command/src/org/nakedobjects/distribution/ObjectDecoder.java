@@ -325,7 +325,7 @@ public class ObjectDecoder {
         if(fieldData == null) {
             return;
         }
-        NakedObjectField[] fields = object.getSpecification().getFields();
+        NakedObjectField[] fields = dataStructure.getFields(object.getSpecification());
         for (int i = 0; i < fieldData.length; i++) {
             if(fieldData[i] == null) {
                 continue;
