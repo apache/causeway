@@ -1,6 +1,0 @@
-The no-application-library project provides some helper classes for building applications by defining a BOM.
-
-The no-default-reflector project provides a reflective mechanism for linking the application code into the NOF.  Specifically, it provides a way to detect fields and methods in the business objects and to get and set those fields and invoke those methods.  In addition it provide non-reflective adapters that provide 'about' information to NOF when the controlling methods are invoked on the BOs.
-
-The no-core project uses the reflector to indirectly work on the BOs. 
-

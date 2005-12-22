@@ -1,7 +1,0 @@
-Back to HomePage
-
-----
-When using the canvas to draw bear in mind the following
-* Drawing a line within a Bounds requires you to take the left or top value as the x or y coordinate the first point, and the x + width -1 or y + height - 1as the x or y coordinate of the second point.
-* Drawing a rectangle is inclusive, therefore the left and top correspond to the x and y coordinates, while the width and height need to be specified as one pixel less than the width and height specified in the bounds, e.g. where b is a Bounds object:-
-  canvas.drawRectangle(b.getX(), b.getY(), b.getWidth() -1, b.getHeight() -1, color);
