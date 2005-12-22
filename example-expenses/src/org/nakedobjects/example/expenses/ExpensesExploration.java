@@ -1,8 +1,8 @@
 package org.nakedobjects.example.expenses;
 
 import org.nakedobjects.application.control.User;
-import org.nakedobjects.example.exploration.JavaExploration;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
+import org.nakedobjects.system.JavaExploration;
 
 
 public class ExpensesExploration {
