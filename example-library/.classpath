@@ -10,6 +10,6 @@
 	<classpathentry kind="src" path="/no-application-library"/>
 	<classpathentry kind="src" path="/viewer-skylark"/>
 	<classpathentry kind="src" path="/no-default-reflector"/>
-	<classpathentry kind="src" path="/example-base"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/no-system"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

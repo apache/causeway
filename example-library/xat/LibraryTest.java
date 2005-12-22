@@ -1,8 +1,8 @@
 import org.nakedobjects.example.library.Book;
 import org.nakedobjects.example.library.Loan;
 import org.nakedobjects.example.library.Member;
-import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
+import org.nakedobjects.system.JavaAcceptanceTestCase;
 
 
 public class LibraryTest extends JavaAcceptanceTestCase {

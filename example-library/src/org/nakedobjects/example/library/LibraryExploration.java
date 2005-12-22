@@ -1,6 +1,6 @@
 package org.nakedobjects.example.library;
 
-import org.nakedobjects.example.exploration.JavaExploration;
+import org.nakedobjects.system.JavaExploration;
 
 
 public class LibraryExploration{
