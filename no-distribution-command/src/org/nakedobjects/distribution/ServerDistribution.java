@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.OneToOneAssociation;
+import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.Version;
@@ -268,6 +269,10 @@ public class ServerDistribution implements Distribution {
 
         NakedObjectSpecification spec = getSpecification(target.getType());
         NakedObject object = NakedObjects.getObjectPersistor().getObject(target.getOid(), spec);
+        if(object.getResolveState().isResolvable(ResolveState.RESOLVING)) {
+            // this is need when the object store does not load the object fully in the getObject() above
+            NakedObjects.getObjectPersistor().resolveImmediately(object);
+        }
 
         return encoder.createCompletePersistentGraph(object);
     }
