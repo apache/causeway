@@ -3,7 +3,7 @@ package org.nakedobjects.example.ecs.exploration;
 import org.nakedobjects.example.ecs.fixtures.BookingsFixture;
 import org.nakedobjects.example.ecs.fixtures.CitiesFixture;
 import org.nakedobjects.example.ecs.fixtures.ClassesFixture;
-import org.nakedobjects.example.exploration.JavaExploration;
+import org.nakedobjects.system.JavaExploration;
 
 
 public class EcsExploration {

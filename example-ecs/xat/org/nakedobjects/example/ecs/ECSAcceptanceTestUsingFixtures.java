@@ -5,8 +5,8 @@ import org.nakedobjects.application.valueholder.Time;
 import org.nakedobjects.example.ecs.fixtures.BookingsFixture;
 import org.nakedobjects.example.ecs.fixtures.CitiesFixture;
 import org.nakedobjects.example.ecs.fixtures.ClassesFixture;
-import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
+import org.nakedobjects.system.JavaAcceptanceTestCase;
 import org.nakedobjects.xat.TestObject;
 
 
