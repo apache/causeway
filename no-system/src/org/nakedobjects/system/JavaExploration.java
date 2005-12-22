@@ -7,6 +7,7 @@ import org.nakedobjects.reflector.java.fixture.JavaFixtureBuilder;
 public class JavaExploration {
     private JavaFixtureBuilder builder;
     private NakedObjectsSystem system;
+    private String title;
 
     public JavaExploration() {
         system = new NakedObjectsSystem();
@@ -19,7 +20,7 @@ public class JavaExploration {
     public void display() {
         builder.installFixtures();
         String[] classes = builder.getClasses();
-        system.displayUserInterface(classes);
+        system.displayUserInterface(classes, title);
         system.clearSplash();
     }
 
@@ -34,7 +35,11 @@ public class JavaExploration {
     public Object createInstance(Class cls) {
         return builder.createInstance(cls.getName());
     }
+    
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
 }
 
 /*

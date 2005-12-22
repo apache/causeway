@@ -11,5 +11,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/no-distribution-command"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/no-distribution-xml"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/os-sql"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/no-xat"/>
+	<classpathentry sourcepath="JUNIT_SRC" kind="var" path="JUNIT"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

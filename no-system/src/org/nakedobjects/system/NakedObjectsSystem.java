@@ -158,8 +158,12 @@ public class NakedObjectsSystem {
         LOG.debug("locale is " + Locale.getDefault());
 
     }
-
+    
     public void displayUserInterface(String[] classes) {
+        displayUserInterface(classes, null);
+    }
+    
+    public void displayUserInterface(String[] classes, String title) {
         SkylarkViewer viewer = new SkylarkViewer();
         viewer.setUpdateNotifier(new ViewUpdateNotifier());
         viewer.setExploration(true);
@@ -169,7 +173,10 @@ public class NakedObjectsSystem {
                 System.exit(0);
             }
         });
-
+        if(title != null) {
+            viewer.setTitle(title);
+        }
+        
         DefaultApplicationContext context = new DefaultApplicationContext();
         for (int i = 0; i < classes.length; i++) {
             context.addClass(classes[i]);
