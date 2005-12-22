@@ -79,6 +79,7 @@ public final class ResolveState {
      */
     public boolean isResolvable(ResolveState newState) {
         Assert.assertNotNull("new state must be specified", newState);
+        Assert.assertTrue("state must be one of RESOLVING_PART; RESOLVING; or UPDATING", newState == RESOLVING_PART || newState == RESOLVING || newState == UPDATING);
         if (this == GHOST || this == PART_RESOLVED || this == RESOLVED) {
             return isValidToChangeTo(newState);
         }
