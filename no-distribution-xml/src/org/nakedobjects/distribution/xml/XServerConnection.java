@@ -88,7 +88,7 @@ class XServerConnection implements ServerConnection, Runnable {
         	LOG.debug("sending " + response);
         	responseData = xstream.toXML(response);
         } catch(Exception e) {
-            LOG.debug("sending exception " + e);
+            LOG.error("failure during request", e);
             responseData = xstream.toXML(e);
         }
         return responseData;
