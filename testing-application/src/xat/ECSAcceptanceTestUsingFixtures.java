@@ -2,8 +2,8 @@ package xat;
 
 import org.nakedobjects.application.valueholder.Date;
 import org.nakedobjects.application.valueholder.Time;
-import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
+import org.nakedobjects.system.JavaAcceptanceTestCase;
 import org.nakedobjects.xat.TestObject;
 
 import bom.Booking;

@@ -1,8 +1,8 @@
 package xat;
 
 import org.nakedobjects.application.system.ExplorationClock;
-import org.nakedobjects.example.xat.JavaAcceptanceTestCase;
 import org.nakedobjects.reflector.java.fixture.JavaFixture;
+import org.nakedobjects.system.JavaAcceptanceTestCase;
 import org.nakedobjects.xat.TestClass;
 import org.nakedobjects.xat.TestObject;
 

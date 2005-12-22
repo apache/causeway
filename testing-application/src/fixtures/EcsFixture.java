@@ -147,16 +147,6 @@ public class EcsFixture extends JavaFixture {
         setDate(2003, 10, 23);
         setTime(20, 15);
     }
-
-    private void setupClasses() {
-        registerClass(Booking.class);
-        registerClass(City.class);
-        registerClass(Location.class);
-        registerClass(CreditCard.class);
-        registerClass(Customer.class);
-        registerClass(Telephone.class);
-    }
-
 }
 
 /*

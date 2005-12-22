@@ -1,8 +1,8 @@
 package exploration;
 
-import org.nakedobjects.example.exploration.JavaExploration;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.persistence.objectstore.ObjectStorePersistor;
+import org.nakedobjects.system.JavaExploration;
 import org.nakedobjects.utility.AboutNakedObjects;
 
 import fixtures.BookingsFixture;
