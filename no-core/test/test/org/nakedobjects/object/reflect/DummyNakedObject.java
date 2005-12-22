@@ -215,6 +215,7 @@ public class DummyNakedObject implements NakedObject {
     public String toString() {
         ToString str = new ToString(this, id);
         str.append("title", titleString);
+        str.append("oid", oid);
         str.append("pojo", object);
         return str.toString();
     }
