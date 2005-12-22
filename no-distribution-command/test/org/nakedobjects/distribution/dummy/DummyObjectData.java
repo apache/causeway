@@ -9,11 +9,11 @@ import org.nakedobjects.utility.ToString;
 
 public class DummyObjectData extends DummyReferenceData implements ObjectData {
     private Data[] fieldContent;
-    private final boolean resolved;
+    private final boolean hasCompleteData;
 
-    public DummyObjectData(Oid oid, String type, boolean resolved, final Version version) {
+    public DummyObjectData(Oid oid, String type, boolean hasCompleteData, final Version version) {
         super(oid, type, version);
-        this.resolved = resolved;
+        this.hasCompleteData = hasCompleteData;
     }
 
     public Data[] getFieldContent() {
@@ -21,7 +21,7 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
     }
 
     public boolean hasCompleteData() {
-        return resolved;
+        return hasCompleteData;
     }
 
     public void setFieldContent(Data[] fieldContent) {
@@ -36,8 +36,15 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
 */
     protected void toString(ToString str) {
         super.toString(str);
+        str.append("resolved", hasCompleteData);
         str.append("fields", fieldContent == null ? 0  : fieldContent.length);
-        str.append("resolved", resolved);
+ /*       if(fieldContent == null) {
+            str.append("fields", "none");
+        } else {
+        for (int i = 0; i < fieldContent.length; i++) {
+            str.append("field" + i + ": " + fieldContent[i].);
+        }
+    */    
     }
     
     public boolean equals(Object obj) {
@@ -48,7 +55,7 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
         if(super.equals(obj)) {
             if (obj instanceof DummyObjectData) {
                 DummyObjectData ref = (DummyObjectData) obj;
-                if (resolved == ref.resolved) {
+                if (hasCompleteData == ref.hasCompleteData) {
                     if(fieldContent == null && ref.fieldContent == null) {
                         return true;
                     }
@@ -57,13 +64,14 @@ public class DummyObjectData extends DummyReferenceData implements ObjectData {
                         return false;
                     }
                     
-                    for (int i = 0; i < fieldContent.length; i++) {
+                    return fieldContent.length == ref.fieldContent.length;
+/*                    for (int i = 0; i < fieldContent.length; i++) {
                         if( !(fieldContent[i] == null ? ref.fieldContent[i] == null : fieldContent[i].equals(ref.fieldContent[i]))) {
                             return false;
                         }
                     }
                     return true;
-                }
+   */             }
             }
         }
         return false;

@@ -33,7 +33,7 @@ public class DummyObjectDataFactory implements DataFactory {
     public CollectionData createCollectionData(
             Oid oid,
             String type,
-            ObjectData[] elements,
+            ReferenceData[] elements,
             boolean hasAllElements,
             Version version) {
         return new DummyCollectionData(oid, type, elements, version);

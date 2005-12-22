@@ -1,20 +1,20 @@
 package org.nakedobjects.distribution.java;
 
 import org.nakedobjects.distribution.CollectionData;
-import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
 import org.nakedobjects.utility.ToString;
 
 
 public class JavaCollectionData implements CollectionData {
-    private final ObjectData elements[];
+    private final ReferenceData elements[];
     private final Oid oid;
     private final String type;
     private final Version version;
     private final boolean hasAllElements;
 
-    public JavaCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version) {
+    public JavaCollectionData(Oid oid, String type, ReferenceData[] elements, boolean hasAllElements, Version version) {
         this.oid = oid;
         this.type = type;
         this.elements = elements;
@@ -22,7 +22,7 @@ public class JavaCollectionData implements CollectionData {
         this.version = version;
     }
 
-    public ObjectData[] getElements() {
+    public ReferenceData[] getElements() {
         return elements;
     }
 

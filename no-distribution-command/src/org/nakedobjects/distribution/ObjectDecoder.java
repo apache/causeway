@@ -12,6 +12,7 @@ import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
+import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 
 import java.util.Hashtable;
@@ -92,7 +93,7 @@ public class ObjectDecoder {
             LOG.debug("restoring empty collection");
             return collection;
         } else {
-            ObjectData[] elements = data.getElements();
+            ReferenceData[] elements = data.getElements();
             LOG.debug("restoring collection " + elements.length + " elements");
             Object[] initData = new Object[elements.length];
             for (int i = 0; i < elements.length; i++) {
@@ -303,6 +304,51 @@ public class ObjectDecoder {
         }
         return object;
     }
+    
+    
+    
+    
+    
+
+
+    public static void madePersistent(NakedObject object, ObjectData updates) {
+        if(updates == null) {
+            return;
+        }
+
+        if(object.getOid() == null && object.persistable() != Persistable.TRANSIENT) {
+            NakedObjects.getObjectLoader().madePersistent(object, updates.getOid());
+            object.setOptimisticLock(updates.getVersion());
+        }
+
+        Data[] fieldData = updates.getFieldContent();
+        if(fieldData == null) {
+            return;
+        }
+        NakedObjectField[] fields = object.getSpecification().getFields();
+        for (int i = 0; i < fieldData.length; i++) {
+            if(fieldData[i] == null) {
+                continue;
+            }
+            if(fields[i].isObject()) {
+                NakedObject field = object.getAssociation((OneToOneAssociation) fields[i]);
+                ObjectData fieldContent = (ObjectData) updates.getFieldContent()[i];
+                if(field != null) {
+                    madePersistent(field, fieldContent);
+                }
+            } else if(fields[i].isCollection()) {
+                CollectionData collectionData = (CollectionData) updates.getFieldContent()[i];
+                for (int j = 0; j < collectionData.getElements().length; j++) {
+                    if(collectionData.getElements()[j] instanceof ObjectData) {
+                        NakedObject element = ((NakedCollection) object.getField(fields[i])).elementAt(j);
+                        ObjectData elementData = (ObjectData) collectionData.getElements()[j];
+                        madePersistent(element, elementData);
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 /*

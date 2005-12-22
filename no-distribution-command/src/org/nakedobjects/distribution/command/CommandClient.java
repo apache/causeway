@@ -31,7 +31,7 @@ public abstract class CommandClient implements Distribution {
         return request.getChanges();
     }
 
-    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ReferenceData target, Data[] parameters) {
         ExecuteAction request = new ExecuteAction(session, actionType, actionIdentifier, target, parameters);
         execute(request);
         return request.getActionResult();

@@ -8,7 +8,7 @@ import org.nakedobjects.object.Version;
  * the Oid and Version implementations are also serializable.
  */
 public interface DataFactory {
-    CollectionData createCollectionData(Oid oid, String type, ObjectData[] elements, boolean hasAllElements, Version version);
+    CollectionData createCollectionData(Oid oid, String type, ReferenceData[] elements, boolean hasAllElements, Version version);
 
     NullData createNullData(String type);
 

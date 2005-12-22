@@ -13,7 +13,7 @@ public class DummyDistribution implements Distribution {
         return null;
     }
 
-    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ReferenceData target, Data[] parameters) {
         return null;
     }
 

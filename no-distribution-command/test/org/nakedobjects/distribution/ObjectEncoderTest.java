@@ -3,11 +3,13 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.distribution.dummy.DummyCollectionData;
 import org.nakedobjects.distribution.dummy.DummyObjectData;
 import org.nakedobjects.distribution.dummy.DummyObjectDataFactory;
+import org.nakedobjects.distribution.dummy.DummyReferenceData;
 import org.nakedobjects.distribution.dummy.DummyValueData;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.Version;
 
 import java.util.Date;
 
@@ -27,6 +29,9 @@ import test.org.nakedobjects.object.reflect.DummyVersion;
 
 
 public class ObjectEncoderTest extends TestCase {
+
+    private static final boolean NOT_RESOLVED = false;
+    private static final boolean RESOLVED = true;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(ObjectEncoderTest.class);
@@ -162,158 +167,162 @@ public class ObjectEncoderTest extends TestCase {
         system.shutdown();
     }
 
-    public void testCreateActionResultWithNull() {
+    public void testCreateServerActionResultWithNull() {
         ServerActionResultData data = encoder.createServerActionResult(null, null, null, null, new String[0], new String[0]);
-        assertTrue(data.getReturn() instanceof NullData);
+        assertNullData(data.getReturn());
     }
 
-    public void testCreateActionResultWithCollection() {
+    public void testCreateServerActionResultWithCollection() {
         DummyNakedCollection collection = new DummyNakedCollection();
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         collection.setupSpecification(type);
+        
         ServerActionResultData data = encoder.createServerActionResult(collection, null, null, null, new String[0], new String[0]);
         assertTrue(data.getReturn() instanceof CollectionData);
         assertEquals(type.getFullName(), data.getReturn().getType());
     }
 
-    public void testCreateActionResultWithObject() {
+    public void testCreateServerActionResultWithObject() {
         DummyNakedObject object = new DummyNakedObject();
         object.setupResolveState(ResolveState.PART_RESOLVED);
         DummyNakedObjectSpecification type = new DummyNakedObjectSpecification();
         object.setupSpecification(type);
+        
         ServerActionResultData data = encoder.createServerActionResult(object, null, null, null, new String[0], new String[0]);
+        
+        assertObjectData(object, NOT_RESOLVED, data.getReturn());
+        
         assertTrue(data.getReturn() instanceof ObjectData);
         assertEquals(type.getFullName(), data.getReturn().getType());
     }
 
+    public void testCreateClientActionResultWithObject() {
+        ClientActionResultData data = encoder.createClientActionResult(new ObjectData[] {}, new Version[] {});
+        
+        assertEquals(0, data.getChanged().length);
+        assertEquals(0, data.getPersisted().length);
+    }
+
+
     public void testCreateCompletePersistentGraph() {
         DummyOid rootOid = new DummyOid(1);
         rootObject.setupOid(rootOid);
-
-        DummyOid referencedOid = new DummyOid(1);
+        DummyOid referencedOid = new DummyOid(3);
         field1.setupOid(referencedOid);
-
-        DummyOid referencedOid2 = new DummyOid(1);
+        DummyOid referencedOid2 = new DummyOid(5);
         field1_1.setupOid(referencedOid2);
 
         ObjectData rootData = (ObjectData) encoder.createCompletePersistentGraph(rootObject);
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
-
-        assertEquals(rootOid, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(new DummyVersion(11), rootData.getVersion());
-        assertEquals(4, rootData.getFieldContent().length);
+        assertObjectData(rootObject, RESOLVED, rootData);
+        assertHasFields(4, rootData);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(referencedOid, referencedFieldData.getOid());
-        assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(new DummyVersion(12), referencedFieldData.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
+        assertObjectData(field1, RESOLVED, referencedFieldData);
+        assertHasFields(1, referencedFieldData);
 
         ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
-        assertEquals(referencedOid2, referencedFieldData2.getOid());
-        assertEquals(1, referencedFieldData2.getFieldContent().length);
-        assertEquals(new DummyVersion(13), referencedFieldData2.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
+        assertObjectData(field1_1, RESOLVED, referencedFieldData2);
+        assertHasFields(1, referencedFieldData2);
 
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        NullData emptyFieldData = (NullData) rootData.getFieldContent()[3];
-        assertNotNull(emptyFieldData);
-
+        assertValueData(field2, rootData.getFieldContent()[1]);
+        assertNullData(rootData.getFieldContent()[3]);
+        
         CollectionData collectionData = (CollectionData) rootData.getFieldContent()[2];
         assertEquals(2, collectionData.getElements().length);
 
         // check back references
-        ObjectData fieldOfField = (ObjectData) referencedFieldData2.getFieldContent()[0];
+        ReferenceData fieldOfField = (ReferenceData) referencedFieldData2.getFieldContent()[0];
+        assertReferenceData(rootObject, fieldOfField);
         assertEquals(fieldOfField, rootData);
 
-        ObjectData fieldOfElement = (ObjectData) collectionData.getElements()[0].getFieldContent()[0];
-        assertSame(fieldOfElement, rootData);
-
+        ObjectData referenceData = (ObjectData) collectionData.getElements()[0];
+        ReferenceData fieldOfElement = (ReferenceData) referenceData.getFieldContent()[0];
+        assertReferenceData(rootObject, fieldOfElement);
     }
 
     public void testCreateCompletePersistentGraphWithGhosts() {
-        DummyOid rootOid = new DummyOid(1);
-        rootObject.setupOid(rootOid);
-
-        DummyOid referencedOid = new DummyOid(1);
-        field1.setupOid(referencedOid);
-
+        rootObject.setupOid(new DummyOid(9));
+        field1.setupOid(new DummyOid(11));
         field1.setupResolveState(ResolveState.GHOST);
-
+        element1.setupOid(new DummyOid(13));
+        element1.setupResolveState(ResolveState.GHOST);
+        element2.setupOid(new DummyOid(15));
+        element2.setupResolveState(ResolveState.GHOST);
+        
         ObjectData rootData = (ObjectData) encoder.createCompletePersistentGraph(rootObject);
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
-        assertEquals(rootOid, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(new DummyVersion(11), rootData.getVersion());
-        assertEquals(4, rootData.getFieldContent().length);
-
-        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(referencedOid, referencedFieldData.getOid());
-        assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(new DummyVersion(12), referencedFieldData.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        NullData emptyFieldData = (NullData) rootData.getFieldContent()[3];
-        assertNotNull(emptyFieldData);
+        assertObjectData(rootObject, NOT_RESOLVED, rootData);
+        assertHasFields(4, rootData);
+        
+        assertReferenceData(field1, rootData.getFieldContent()[0]);
+        assertValueData(field2, rootData.getFieldContent()[1]);
+        assertNullData(rootData.getFieldContent()[3]);
+        
+        CollectionData collectionData = (CollectionData) rootData.getFieldContent()[2];
+        assertReferenceData(element1, collectionData.getElements()[0]);
+        assertReferenceData(element2, collectionData.getElements()[1]);
+       
     }
 
     /**
      * For updates the whole object is passed across, but not any of its children.
      */
     public void testCreateForUpdate() {
+        field1.setupOid(new DummyOid(3));
+        element1.setupOid(new DummyOid(3));
+        element2.setupOid(new DummyOid(3));
+               
         ObjectData rootData = (ObjectData) encoder.createForUpdate(rootObject);
         assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(new DummyVersion(11), rootData.getVersion());
-        assertEquals(4, rootData.getFieldContent().length);
+        assertObjectData(rootObject, RESOLVED, rootData);
+        assertHasFields(4, rootData);
+        
+        assertReferenceData(field1, rootData.getFieldContent()[0]);
+        assertValueData(field2, rootData.getFieldContent()[1]);
+        assertNullData(rootData.getFieldContent()[3]);
+        
+        CollectionData collectionData = (CollectionData) rootData.getFieldContent()[2];
+        assertReferenceData(element1, collectionData.getElements()[0]);
+        assertReferenceData(element2, collectionData.getElements()[1]);
+    }
+    
+       public void testCreateForChangedObject() {
+        field1.setupOid(new DummyOid(3));
+        element1.setupOid(new DummyOid(3));
+        element2.setupOid(new DummyOid(3));
+               
+        ObjectData rootData = (ObjectData) encoder.createGraphForChangedObject(rootObject, ObjectEncoder.createKnownTransients());
+        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
 
-        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(new DummyVersion(12), referencedFieldData.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        NullData emptyFieldData = (NullData) rootData.getFieldContent()[3];
-        assertNotNull(emptyFieldData);
-
+        assertObjectData(rootObject, RESOLVED, rootData);
+        assertHasFields(4, rootData);
+        
+        assertReferenceData(field1, rootData.getFieldContent()[0]);
+        assertValueData(field2, rootData.getFieldContent()[1]);
+        assertNullData(rootData.getFieldContent()[3]);
+        
+        CollectionData collectionData = (CollectionData) rootData.getFieldContent()[2];
+        assertReferenceData(element1, collectionData.getElements()[0]);
+        assertReferenceData(element2, collectionData.getElements()[1]);
     }
 
     public void testCreateMakePersistentGraphWhereAllReferencesArePersistent() {
         rootObject.setupResolveState(ResolveState.TRANSIENT);
+        field1.setupOid(new DummyOid(194));
+        element1.setupOid(new DummyOid(198));
+        element2.setupOid(new DummyOid(196));
 
         ObjectData rootData = (ObjectData) encoder.createMakePersistentGraph(rootObject, ObjectEncoder.createKnownTransients());
-        assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
+        assertObjectData(rootObject, RESOLVED, rootData);
 
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(new DummyVersion(11), rootData.getVersion());
-        assertEquals(4, rootData.getFieldContent().length);
-
-        ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(null, referencedFieldData.getFieldContent());
-        assertEquals(new DummyVersion(12), referencedFieldData.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        NullData emptyFieldData = (NullData) rootData.getFieldContent()[3];
-        assertNotNull(emptyFieldData);
+        assertReferenceData(field1, rootData.getFieldContent()[0]);
+        assertValueData(field2, rootData.getFieldContent()[1]);
+        assertNullData(rootData.getFieldContent()[3]);
+        
+        CollectionData collectionData = (CollectionData) rootData.getFieldContent()[2];
+        assertReferenceData(element1, collectionData.getElements()[0]);
+        assertReferenceData(element2, collectionData.getElements()[1]);
     }
 
     public void testCreateMakePersistentGraphWhereAllTransient() {
@@ -321,40 +330,36 @@ public class ObjectEncoderTest extends TestCase {
         field1.setupResolveState(ResolveState.TRANSIENT);
         field1_1.setupResolveState(ResolveState.TRANSIENT);
         element1.setupResolveState(ResolveState.TRANSIENT);
+        element2.setupResolveState(ResolveState.TRANSIENT);
 
         ObjectData rootData = (ObjectData) encoder.createMakePersistentGraph(rootObject, ObjectEncoder.createKnownTransients());
-        assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
-
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(new DummyVersion(11), rootData.getVersion());
-        assertEquals(4, rootData.getFieldContent().length);
+        assertObjectData(rootObject, RESOLVED, rootData);
+        assertHasFields(4, rootData);
 
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(new DummyVersion(12), referencedFieldData.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
+        assertObjectData(field1, RESOLVED, referencedFieldData);
+        assertHasFields(1, referencedFieldData);
 
         ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
-        assertEquals(1, referencedFieldData2.getFieldContent().length);
-        assertEquals(new DummyVersion(13), referencedFieldData2.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
+        assertObjectData(field1_1, RESOLVED, referencedFieldData2);
+        assertHasFields(1, referencedFieldData2);
 
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
-
-        NullData emptyFieldData = (NullData) rootData.getFieldContent()[3];
-        assertNotNull(emptyFieldData);
-
+        assertValueData(field2, rootData.getFieldContent()[1]);
+        
+        assertNullData(rootData.getFieldContent()[3]);
+        
         CollectionData collectionData = (CollectionData) rootData.getFieldContent()[2];
         assertEquals(2, collectionData.getElements().length);
+        
+        assertObjectData(element1, RESOLVED, collectionData.getElements()[0]);
+        assertObjectData(element2, RESOLVED, collectionData.getElements()[1]);
 
         // check back references
         ObjectData fieldOfField = (ObjectData) referencedFieldData2.getFieldContent()[0];
         assertSame(fieldOfField, rootData);
 
-        ObjectData fieldOfElement = (ObjectData) collectionData.getElements()[0].getFieldContent()[0];
+        ObjectData referenceData = (ObjectData) collectionData.getElements()[0];
+        ObjectData fieldOfElement = (ObjectData) referenceData.getFieldContent()[0];
         assertSame(fieldOfElement, rootData);
     }
 
@@ -506,66 +511,91 @@ public class ObjectEncoderTest extends TestCase {
         DummyOid rootOid = new DummyOid(1);
         rootObject.setupOid(rootOid);
 
-        Data[] results = encoder.createParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification() },
-                new Naked[] { rootObject });
-        ObjectData rootData = (ObjectData) results[0];
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
+        Data[] results = encoder.createParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification(), new DummyNakedObjectSpecification() },
+                new Naked[] { rootObject, null });
+        
+        assertEquals(2, results.length);
+        assertReferenceData(rootObject, results[0]);
+        assertNullData(results[1]);
+    }
 
-        assertEquals(rootOid, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(new DummyVersion(11), rootData.getVersion());
-        assertNull(rootData.getFieldContent());
+    public void testResolvedCreatesObjectData() {
+        rootObject.setupResolveState(ResolveState.RESOLVED);
+        rootObject.setupOid(new DummyOid(2));
+        
+        Data od = encoder.createActionTarget(rootObject);
+        assertReferenceData(rootObject, od);
+    }
+
+    private void assertReferenceData(DummyNakedObject rootObject, Data od) {
+        ReferenceData data = (ReferenceData) od;
+        assertFalse("must be data for a reference, not an object", od instanceof ObjectData);
+        assertEquals(rootObject.getOid(), data.getOid());
+        assertEquals(rootObject.getVersion(), data.getVersion());
+        assertEquals(rootObject.getSpecification().getFullName(), data.getType());
 
     }
 
-    public void testResolveStateIsMirroredInObjectData() {
+    public void testGhostsCreateReferencetData() {
         rootObject.setupResolveState(ResolveState.GHOST);
+        rootObject.setupOid(new DummyOid(2));
+
+        ReferenceData rd = encoder.createActionTarget(rootObject);
         assertEquals(ResolveState.GHOST, rootObject.getResolveState());
-
-        ObjectData od = encoder.createActionTarget(rootObject);
-
-        assertEquals(false, od.hasCompleteData());
-        assertEquals(ResolveState.GHOST, rootObject.getResolveState());
-
-        rootObject.setupResolveState(ResolveState.RESOLVED);
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
-
-        od = encoder.createActionTarget(rootObject);
-
-        assertEquals(true, od.hasCompleteData());
-        assertEquals(ResolveState.RESOLVED, rootObject.getResolveState());
+        assertEquals(new DummyOid(2), rd.getOid());
+        assertEquals(DummyReferenceData.class, rd.getClass());
     }
 
     public void testTransientObjectParameter() {
         rootObject.setupResolveState(ResolveState.TRANSIENT);
         field1.setupResolveState(ResolveState.TRANSIENT);
-
-        Data[] results = encoder.createParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification() },
-                new Naked[] { rootObject });
-        ObjectData rootData = (ObjectData) results[0];
         assertEquals(ResolveState.TRANSIENT, rootObject.getResolveState());
 
-        assertEquals(null, rootData.getOid());
-        assertEquals(rootSpecification.getFullName(), rootData.getType());
-        assertEquals(new DummyVersion(11), rootData.getVersion());
-        assertEquals(4, rootData.getFieldContent().length);
+        field1_1.setupOid(new DummyOid(123));
+        element1.setupOid(new DummyOid(125));
+        element2.setupOid(new DummyOid(127));
+        
+        Data[] data = encoder.createParameters(new NakedObjectSpecification[] { new DummyNakedObjectSpecification() },
+                new Naked[] { rootObject });
 
+        
+        ObjectData rootData = (ObjectData) data[0];
+        assertObjectData(rootObject, RESOLVED, rootData);
+        assertHasFields(4, rootData);
+        
         ObjectData referencedFieldData = (ObjectData) rootData.getFieldContent()[0];
-        assertEquals(1, referencedFieldData.getFieldContent().length);
-        assertEquals(new DummyVersion(12), referencedFieldData.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
+        assertObjectData(field1, RESOLVED, referencedFieldData);
+        assertHasFields(1, referencedFieldData);
+       
+        assertReferenceData(field1_1, referencedFieldData.getFieldContent()[0]);
 
-        ObjectData referencedFieldData2 = (ObjectData) referencedFieldData.getFieldContent()[0];
-        assertEquals(null, referencedFieldData2.getFieldContent());
-        assertEquals(new DummyVersion(13), referencedFieldData2.getVersion());
-        assertEquals(field1Specification.getFullName(), referencedFieldData.getType());
-
-        ValueData valueData = (ValueData) rootData.getFieldContent()[1];
-        assertEquals(valueSpecification.getFullName(), valueData.getType());
-        assertEquals(value, valueData.getValue());
+        assertValueData(field2, rootData.getFieldContent()[1]);
 
         NullData emptyFieldData = (NullData) rootData.getFieldContent()[3];
-        assertNotNull(emptyFieldData);
+        assertNullData(emptyFieldData);
+    }
+
+    private void assertNullData(Data ref) {
+        assertTrue("instance of NullData", ref instanceof NullData);
+    }
+
+    private void assertValueData(DummyNakedValue value, Data data) {
+        ValueData valueData = (ValueData) data;
+        assertEquals(value.getSpecification().getFullName(), valueData.getType());
+        assertEquals(value.getObject(), valueData.getValue());
+
+    }
+
+    private void assertHasFields(int noOfFields, ObjectData rootData) {
+        assertEquals(noOfFields, rootData.getFieldContent().length);
+    }
+
+    private void assertObjectData(DummyNakedObject rootObject2, boolean b, Data data) {
+        assertTrue("must be data for an object", data instanceof ObjectData);
+        ObjectData objectData = (ObjectData) data;
+        assertEquals(rootObject2.getOid(), objectData.getOid());
+        assertEquals(rootObject2.getSpecification().getFullName(), objectData.getType());
+        assertEquals(rootObject2.getVersion(), objectData.getVersion());
     }
 
     public void testValueParameter() {
@@ -575,8 +605,16 @@ public class ObjectEncoderTest extends TestCase {
         Data[] data = (Data[]) encoder.createParameters(
                 new NakedObjectSpecification[] { new DummyNakedObjectSpecification() }, new Naked[] { dummyNakedValue });
 
-        assertEquals(dummyNakedValue.getSpecification().getFullName(), data[0].getType());
-        assertEquals(new Integer(123), ((ValueData) data[0]).getValue());
+        DummyValueData expected = new DummyValueData(new Integer(123), dummyNakedValue.getSpecification().getFullName());
+        assertEquals(expected, data[0]);
+    }
+    
+    public void testForResovleField() {
+        field1.setupOid(new DummyOid(7));
+        field1_1.setupOid(new DummyOid(11));
+        rootObject.setupOid(new DummyOid(13));
+        
+        encoder.createForResolveField(rootObject, "field1");
     }
 }
 

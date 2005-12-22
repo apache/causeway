@@ -2,7 +2,7 @@ package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ServerActionResultData;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.utility.ToString;
@@ -12,9 +12,9 @@ public class ExecuteAction extends AbstractRequest {
     private final String actionIdentifier;
     private final String actionType;
     private final Data[] parameters;
-    private final ObjectData target;
+    private final ReferenceData target;
 
-    public ExecuteAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ExecuteAction(Session session, String actionType, String actionIdentifier, ReferenceData target, Data[] parameters) {
         super(session);
         this.actionType = actionType;
         this.actionIdentifier = actionIdentifier;

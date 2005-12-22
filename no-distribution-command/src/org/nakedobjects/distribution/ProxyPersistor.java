@@ -3,7 +3,6 @@ package org.nakedobjects.distribution;
 import org.nakedobjects.object.DirtyObjectSet;
 import org.nakedobjects.object.InstancesCriteria;
 import org.nakedobjects.object.NakedClass;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
@@ -12,8 +11,6 @@ import org.nakedobjects.object.NakedReference;
 import org.nakedobjects.object.ObjectNotFoundException;
 import org.nakedobjects.object.ObjectPerstsistenceException;
 import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.OneToOneAssociation;
-import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.object.TypedNakedCollection;
@@ -120,7 +117,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
             ObjectData[] persistedUpdates = results.getPersisted();
             if (persistedUpdates != null) {
                 for (int i = 0; i < persistedUpdates.length; i++) {
-                    madePersistent(persistedObjects[i], persistedUpdates[i]);
+                    ObjectDecoder.madePersistent(persistedObjects[i], persistedUpdates[i]);
                 }
             }
             Version[] changedVersions = results.getChanged();
@@ -192,41 +189,6 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         checkTransactionInProgress();
         LOG.debug("makePersistent " + object);
         clientSideTransaction.addMakePersistent(object);
-    }
-
-    private void madePersistent(NakedObject object, ObjectData updates) {
-        if(updates == null) {
-            return;
-        }
-
-        if(object.getOid() == null && object.persistable() != Persistable.TRANSIENT) {
-            NakedObjects.getObjectLoader().madePersistent(object, updates.getOid());
-            object.setOptimisticLock(updates.getVersion());
-        }
-
-        Data[] fieldData = updates.getFieldContent();
-        NakedObjectField[] fields = object.getSpecification().getFields();
-        if(fieldData != null) {
-            for (int i = 0; i < fieldData.length; i++) {
-                if(fieldData[i] == null) {
-                    continue;
-                }
-                if(fields[i].isObject()) {
-                    NakedObject field = object.getAssociation((OneToOneAssociation) fields[i]);
-                    ObjectData fieldContent = (ObjectData) updates.getFieldContent()[i];
-                    if(field != null) {
-                        madePersistent(field, fieldContent);
-                    }
-                } else if(fields[i].isCollection()) {
-                    CollectionData collectionData = (CollectionData) updates.getFieldContent()[i];
-                    for (int j = 0; j < collectionData.getElements().length; j++) {
-                        NakedObject element = ((NakedCollection) object.getField(fields[i])).elementAt(j);
-                        ObjectData elementData = collectionData.getElements()[j];
-                        madePersistent(element, elementData);
-                    }
-                }
-            }
-        }
     }
 
     public int numberOfInstances(NakedObjectSpecification specification, boolean includeSubclasses) {

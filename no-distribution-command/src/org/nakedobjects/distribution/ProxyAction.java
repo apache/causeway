@@ -2,13 +2,9 @@ package org.nakedobjects.distribution;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
-import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
-import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.OneToOneAssociation;
-import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.reflect.AbstractActionPeer;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
@@ -41,7 +37,7 @@ public final class ProxyAction extends AbstractActionPeer {
     private Naked executeRemotely(NakedObject target, Naked[] parameters) {
         Data[] parameterObjectData = parameterValues(parameters);
         LOG.debug(debug("execute remotely", getIdentifier(), target, parameters));
-        ObjectData targetReference = encoder.createActionTarget(target);
+        ReferenceData targetReference = encoder.createActionTarget(target);
         ServerActionResultData result;
         try {
             String name = getIdentifier().getClassName() + "#" + getIdentifier().getName();
@@ -53,11 +49,11 @@ public final class ProxyAction extends AbstractActionPeer {
         }
 
         // must deal with transient-now-persistent objects first
-        madePersistent(target, result.getPersistedTarget());
+        ObjectDecoder.madePersistent(target, result.getPersistedTarget());
         
         for (int i = 0; i < parameters.length; i++) {
             if(getParameterTypes()[i].isObject()) {
-                madePersistent((NakedObject) parameters[i], result.getPersistedParameters()[i]);
+                ObjectDecoder.madePersistent((NakedObject) parameters[i], result.getPersistedParameters()[i]);
             }
         }
         
@@ -72,43 +68,6 @@ public final class ProxyAction extends AbstractActionPeer {
         }
 
         return returnedObject;
-    }
-    
-
-    private void madePersistent(NakedObject object, ObjectData updates) {
-        if(updates == null) {
-            return;
-        }
-
-        if(object.getOid() == null && object.persistable() != Persistable.TRANSIENT) {
-            NakedObjects.getObjectLoader().madePersistent(object, updates.getOid());
-            object.setOptimisticLock(updates.getVersion());
-        }
-
-        Data[] fieldData = updates.getFieldContent();
-        if(fieldData == null) {
-            return;
-        }
-        NakedObjectField[] fields = object.getSpecification().getFields();
-        for (int i = 0; i < fieldData.length; i++) {
-            if(fieldData[i] == null) {
-                continue;
-            }
-            if(fields[i].isObject()) {
-                NakedObject field = object.getAssociation((OneToOneAssociation) fields[i]);
-                ObjectData fieldContent = (ObjectData) updates.getFieldContent()[i];
-                if(field != null) {
-                    madePersistent(field, fieldContent);
-                }
-            } else if(fields[i].isCollection()) {
-                CollectionData collectionData = (CollectionData) updates.getFieldContent()[i];
-                for (int j = 0; j < collectionData.getElements().length; j++) {
-                    NakedObject element = ((NakedCollection) object.getField(fields[i])).elementAt(j);
-                    ObjectData elementData = collectionData.getElements()[j];
-                    madePersistent(element, elementData);
-                }
-            }
-        }
     }
 
     private boolean isToBeExecutedRemotely(NakedObject target) {

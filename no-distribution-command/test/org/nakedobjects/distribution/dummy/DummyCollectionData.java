@@ -1,20 +1,20 @@
 package org.nakedobjects.distribution.dummy;
 
 import org.nakedobjects.distribution.CollectionData;
-import org.nakedobjects.distribution.ObjectData;
+import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
 
 
 public class DummyCollectionData extends DummyReferenceData implements CollectionData {
-    private final ObjectData[] elements;
+    private final ReferenceData[] elements;
 
-    public DummyCollectionData(Oid oid, String type, ObjectData[] elements, Version version) {
+    public DummyCollectionData(Oid oid, String type, ReferenceData[] elements, Version version) {
         super(oid, type, version);
         this.elements = elements;
     }
 
-    public ObjectData[] getElements() {
+    public ReferenceData[] getElements() {
         return elements;
     }
     

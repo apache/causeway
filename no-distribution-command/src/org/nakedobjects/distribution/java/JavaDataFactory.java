@@ -18,7 +18,7 @@ public class JavaDataFactory implements DataFactory {
     public CollectionData createCollectionData(
             Oid oid,
             String type,
-            ObjectData[] elements,
+            ReferenceData[] elements,
             boolean hasAllElements,
             Version version) {
         return new JavaCollectionData(oid, type, elements, hasAllElements, version);

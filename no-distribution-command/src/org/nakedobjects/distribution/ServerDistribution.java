@@ -39,13 +39,6 @@ public class ServerDistribution implements Distribution {
         return convertToNakedCollection(instances);
     }
 
-    private void checkHint(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameterData) {
-        Hint about = getActionHint(session, actionType, actionIdentifier, target, parameterData);
-        if (about.canAccess().isVetoed() || about.canUse().isVetoed()) {
-            throw new NakedObjectRuntimeException();
-        }
-    }
-
     public ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
         LOG.debug("request clearAssociation " + fieldIdentifier + " on " + target + " of " + associated + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
@@ -70,7 +63,7 @@ public class ServerDistribution implements Distribution {
             Session session,
             String actionType,
             String actionIdentifier,
-            ObjectData target,
+            ReferenceData target,
             Data[] parameterData) {
         LOG.debug("request executeAction " + actionIdentifier + " on " + target + " for " + session);
 
@@ -86,7 +79,6 @@ public class ServerDistribution implements Distribution {
         }
 
         Action action = getActionMethod(actionType, actionIdentifier, parameterData, object);
-        checkHint(session, actionType, actionIdentifier, target, parameterData);
         Naked[] parameters = getParameters(session, parameterData);
 
         if (action == null) {
@@ -98,8 +90,10 @@ public class ServerDistribution implements Distribution {
         ObjectData persistedTarget;
         if (target == null) {
             persistedTarget = null;
+        } else if(target instanceof ObjectData) {
+            persistedTarget = encoder.createMadePersistentGraph((ObjectData) target, object, updateNotifier);
         } else {
-            persistedTarget = encoder.createMadePersistentGraph(target, object, updateNotifier);
+            persistedTarget = null;
         }
 
         ObjectData[] persistedParameters = new ObjectData[parameterData.length];

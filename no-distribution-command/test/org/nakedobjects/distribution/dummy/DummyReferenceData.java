@@ -1,5 +1,6 @@
 package org.nakedobjects.distribution.dummy;
 
+import org.nakedobjects.distribution.DistributionLogger;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
@@ -31,6 +32,7 @@ public class DummyReferenceData implements ReferenceData {
 
     public String toString() {
         ToString str = new ToString(this);
+        str.setUseLineBreaks(true);
         toString(str);
         return str.toString();
     }

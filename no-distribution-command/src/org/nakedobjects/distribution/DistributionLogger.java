@@ -143,7 +143,7 @@ public class DistributionLogger extends Logger implements Distribution {
         return changes;
     }
 
-    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters) {
+    public ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ReferenceData target, Data[] parameters) {
         log("execute action " + actionIdentifier + "/" + actionType + indentedNewLine() + "target: " + dump(target)
                 + indentedNewLine() + "parameters: " + dump(parameters));
         ServerActionResultData result;

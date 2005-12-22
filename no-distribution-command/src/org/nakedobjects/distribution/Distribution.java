@@ -9,7 +9,7 @@ public interface Distribution {
 
     ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
 
-    ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ObjectData target, Data[] parameters);
+    ServerActionResultData executeServerAction(Session session, String actionType, String actionIdentifier, ReferenceData target, Data[] parameters);
 
     ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted);
 
@@ -25,7 +25,7 @@ public interface Distribution {
 
     ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
 
-    ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate);
+    ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object value);
 }
 
 /*
