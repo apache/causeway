@@ -5,6 +5,8 @@ package org.nakedobjects.application.control;
 public interface ActionAbout {
     void changeNameIfUsable(String name);
 
+    Object[][] getOptions();
+    
     Object[] getDefaultParameterValues();
 
     String[] getParameterLabels();
@@ -22,6 +24,8 @@ public interface ActionAbout {
     void setName(String string);
 
     void setParameter(int index, Object defaultValue);
+
+    void setParameter(int index, Object[] options);
 
     void setParameter(int index, String label);
 
