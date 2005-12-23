@@ -7,12 +7,27 @@ package org.nakedobjects.object;
  * action method.
  */
 public interface ActionParameterSet {
+    /**
+     * Returns the defaults references/values to be used for the action. 
+     */
     public Object[] getDefaultParameterValues();
 
+    /**
+     * Resturns a list of possible references/values for each parameter, which the user can choose from. 
+     */
+    public Object[][] getOptions();
+
+    /**
+     * Returns the names to label each parameter with. 
+     */
     public String[] getParameterLabels();
     
+    /**
+     * Returns a flag for each parameter indicating if it must be set up before the action can be invoked.
+     */
     public boolean[] getRequiredParameters();
 
+    
     public void checkParameters(String name, NakedObjectSpecification requiredTypes[]);
 }
 
