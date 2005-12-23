@@ -13,6 +13,7 @@ import org.nakedobjects.persistence.sql.CollectionMapper;
 import org.nakedobjects.persistence.sql.DatabaseConnector;
 import org.nakedobjects.persistence.sql.Results;
 import org.nakedobjects.persistence.sql.SqlObjectStoreException;
+import org.nakedobjects.utility.NotImplementedException;
 
 import org.apache.log4j.Logger;
 
@@ -47,7 +48,11 @@ public class AutoAssociationMapper extends AbstractObjectMapper implements Colle
         }
     }
 
-	
+    public void createTables(DatabaseConnector connector) throws SqlObjectStoreException {
+        throw new NotImplementedException();
+    }
+
+
 
     public void loadInternalCollection(DatabaseConnector connector, NakedObject parent) {
         NakedCollection collection = (NakedCollection) parent.getField(field);

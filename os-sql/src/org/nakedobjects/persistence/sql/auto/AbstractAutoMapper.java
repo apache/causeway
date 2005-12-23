@@ -66,7 +66,7 @@ public abstract class AbstractAutoMapper extends AbstractObjectMapper {
 		}
 		
 		lastActivityDateColumn = "modified_on";
-		lastActivityUserColumn = "modifiied_by";
+		lastActivityUserColumn = "modified_by";
 		versionColumn = "version";
 		    
 
