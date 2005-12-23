@@ -1,6 +1,7 @@
 package bom;
 
 import org.nakedobjects.application.BusinessObjectContainer;
+import org.nakedobjects.application.Lookup;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
 import org.nakedobjects.application.control.FieldAbout;
@@ -10,7 +11,7 @@ import org.nakedobjects.application.valueholder.TextString;
 import java.util.Vector;
 
 
-public class Location implements Common {
+public class Location implements Common, Lookup {
     private final TextString streetAddress;
     private final TextString knownAs;
     private City city;
@@ -236,6 +237,14 @@ public class Location implements Common {
         container.makePersistent(clone);
         
         return clone;
+    }
+
+    public String lookupDescription() {
+        return null;
+    }
+
+    public boolean isSelected(String text) {
+        return false;
     }
 }
 

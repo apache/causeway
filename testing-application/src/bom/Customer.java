@@ -154,7 +154,10 @@ public class Customer {
         about.setParameter(1, true);
         about.setParameter(3, "Date");
         about.setParameter(4, "Return on");
-     //   about.setParameter(4, true);
+        
+        Location[] availableLocations = actionLocationsAsArray();
+        about.setParameter(0, availableLocations);
+        about.setParameter(1, availableLocations);
 
         /*
          * if (!getLocations().isEmpty()) { about.setParameter(0, getLocations().firstElement()); }
