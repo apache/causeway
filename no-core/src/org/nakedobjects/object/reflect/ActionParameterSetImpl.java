@@ -12,7 +12,13 @@ public class ActionParameterSetImpl implements org.nakedobjects.object.ActionPar
     private final Object[] defaultValues;
     private final String[] labels;
     private final boolean[] required;
+    private Object[][] options;
 
+    public ActionParameterSetImpl(final Object[] defaultValues, final Object[][] options, final String[] labels, final boolean[] required) {
+        this(defaultValues, labels, required);
+        this.options = options;
+    }
+    
     public ActionParameterSetImpl(final Object[] defaultValues, final String[] labels, final boolean[] required) {
         super();
         this.defaultValues = defaultValues;
@@ -24,6 +30,10 @@ public class ActionParameterSetImpl implements org.nakedobjects.object.ActionPar
         return defaultValues;
     }
 
+    public Object[][] getOptions() {
+        return options;
+    }
+    
     public String[] getParameterLabels() {
         return labels;
     }
