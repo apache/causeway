@@ -15,7 +15,6 @@ import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
 import org.nakedobjects.object.Version;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.reflect.ActionParameterSetImpl;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.utility.ToString;
 
@@ -115,7 +114,11 @@ public class DummyNakedObject implements NakedObject {
                 return new boolean[] {false};
             }
 
-            public void checkParameters(String name, NakedObjectSpecification[] requiredTypes) {}};
+            public void checkParameters(String name, NakedObjectSpecification[] requiredTypes) {}
+
+            public Object[][] getOptions() {
+                return new Object[0][0];
+            }};
     }
 
     public ResolveState getResolveState() {

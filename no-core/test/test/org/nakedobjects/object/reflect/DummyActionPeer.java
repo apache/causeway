@@ -25,7 +25,7 @@ public final class DummyActionPeer implements ActionPeer {
     private NakedObjectSpecification returnType;
 
     public ActionParameterSet createParameterSet(NakedObject object, Naked[] parameters) {
-        return new ActionParameterSetImpl(new Object[] { new String(), new Integer(123), new Vector() }, new String[] { "one",
+        return new ActionParameterSetImpl(new Object[] { new String(), new Integer(123), new Vector() }, new Object[][] {{"test", "the", "options"}, null, null},  new String[] { "one",
                 "two", "three" }, new boolean[3]);
     }
 

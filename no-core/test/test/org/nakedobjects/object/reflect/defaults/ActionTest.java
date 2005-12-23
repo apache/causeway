@@ -79,12 +79,7 @@ public class ActionTest extends NakedObjectTestCase {
 
     public void testLabel() {
         assertEquals(ACTION_NAME + "()", action.getName());
-        
         actionPeer.setupName(ACTION_LABEL);
-//        MockHint hint = new MockHint();
-//        hint.setupName(ACTION_LABEL);
-//        actionPeer.setupHint(hint);
-        
         assertEquals(ACTION_LABEL, action.getName());
     }
 
@@ -116,6 +111,13 @@ public class ActionTest extends NakedObjectTestCase {
         assertEquals(new String(), defaultParameterValues[0]);
         assertEquals(new Integer(123), defaultParameterValues[1]);
         assertEquals(new Vector(), defaultParameterValues[2]);
+        
+        Object[][] options = parameters.getOptions();
+        assertEquals("test", options[0][0]); 
+        assertEquals("the", options[0][1]); 
+        assertEquals("options", options[0][2]); 
+        assertEquals(null, options[1]);
+        assertEquals(null, options[2]);
     }
 }
 /*
