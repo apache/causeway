@@ -40,7 +40,7 @@ public class RootObject extends ObjectContent {
         return "";
     }
 
-    public String getName() {
+    public String getId() {
         return "";
     }
 

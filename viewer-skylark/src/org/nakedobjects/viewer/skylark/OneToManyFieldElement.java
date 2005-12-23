@@ -123,7 +123,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         return field.getName();
     }
     
-    public String getName() {
+    public String getId() {
         return getOneToManyAssociation().getName();
     }
 

@@ -72,7 +72,7 @@ public class ValueField extends ValueContent implements FieldContent {
         return object;
     }
 
-    public String getName() {
+    public String getId() {
         return field.getName();
     }
 

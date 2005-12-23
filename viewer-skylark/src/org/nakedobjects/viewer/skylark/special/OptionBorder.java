@@ -7,10 +7,10 @@ import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
 
 
-public class LookupBorder extends OpenOptionFieldBorder {
-    private static final LookupOverlaySpecification spec = new LookupOverlaySpecification();
+public class OptionBorder extends OpenOptionFieldBorder {
+    private static final OptionOverlaySpecification spec = new OptionOverlaySpecification();
 
-    public LookupBorder(View wrappedView) {
+    public OptionBorder(View wrappedView) {
         super(wrappedView);
     }
 
@@ -20,7 +20,16 @@ public class LookupBorder extends OpenOptionFieldBorder {
     }
     
     protected boolean isAvailable() {
-        return true;
+        Content content = getContent();
+        if(content instanceof OneToOneField) {
+            OneToOneField oneToOneField = ((OneToOneField) content);
+            return oneToOneField.isEditable().isAllowed();
+        } else if(content instanceof ParameterContent) {
+            return true;
+        } else {
+            return false;
+        }
+        
     }
 }
 

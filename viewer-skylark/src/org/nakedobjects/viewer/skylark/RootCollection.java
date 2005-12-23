@@ -56,7 +56,7 @@ public class RootCollection extends CollectionContent {
         return null;
     }
 
-    public String getName() {
+    public String getId() {
         return "";
     }
 

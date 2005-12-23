@@ -19,7 +19,7 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
         if (forView != null) {
 	        Content content = forView.getContent();
 	        description = content.getDescription();
-            name = content.getName();
+            name = content.getId();
 	        name =  name == null ? content.title() : name;
         }
         

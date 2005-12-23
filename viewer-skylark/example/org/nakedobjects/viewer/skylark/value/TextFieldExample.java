@@ -184,7 +184,7 @@ class DummyValue extends ValueContent {
         return null;
     }
 
-    public String getName() {
+    public String getId() {
         return null;
     }
 

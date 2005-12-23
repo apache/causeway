@@ -69,7 +69,7 @@ public class CompositeView extends ObjectView {
          //   b.appendln(8, subview.getSpecification().getClass().getName());
             b.appendln(8, "Bounds", subview.getBounds());
             b.appendln(8, "Required size ", subview.getRequiredSize());
-            b.appendln(8, "Content", subview.getContent().getName());
+            b.appendln(8, "Content", subview.getContent().getId());
     //        b.appendln(subview.getBounds() + " " + subview + ": " + subview.getContent() + "\n           ");
         }
 

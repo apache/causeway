@@ -156,7 +156,7 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         return ImageFactory.getInstance().loadObjectIcon(specification, "", iconHeight);
     }
 
-    public String getName() {
+    public String getId() {
         return getOneToManyAssociation().getId();
     }
     

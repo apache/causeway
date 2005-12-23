@@ -7,18 +7,24 @@ import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.special.LookupBorder;
+import org.nakedobjects.viewer.skylark.special.OptionBorder;
 
 public class SubviewIconSpecification extends IconSpecification {
 
     public View createView(Content content, ViewAxis axis) {
 	    ObjectContent c = (ObjectContent) content;
 	    NakedObjectSpecification type = c.getSpecification();
-        if(type != null && type.isLookup()) {
-	        return new ObjectBorder(new LookupBorder(new IconView(content, this, axis, Style.NORMAL)));
+        
+        IconView field = new IconView(content, this, axis, Style.NORMAL);
+        if (content instanceof ObjectParameter && ((ObjectParameter) content).getOptions().length > 0) {
+            return new ObjectBorder(new OptionBorder(field));
+        } else if (type.isLookup()) {
+//        if(type != null && type.isLookup()) {
+	        return new ObjectBorder(new LookupBorder(field));
 	    } else {
-	        return new ObjectBorder(new IconView(content, this, axis, Style.NORMAL));
+	        return new ObjectBorder(field);
 	    }
-	    }
+    }
 	
 }
 

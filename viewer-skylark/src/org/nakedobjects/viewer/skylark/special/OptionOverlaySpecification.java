@@ -1,27 +1,23 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.object.NakedObjectPersistor;
-import org.nakedobjects.object.NakedObjectSpecification;
-import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.object.TypedNakedCollection;
+import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.RootCollection;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.basic.IconView;
+import org.nakedobjects.viewer.skylark.basic.ObjectParameter;
 import org.nakedobjects.viewer.skylark.basic.PanelBorder;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
 
 
-class LookupOverlaySpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
-    public LookupOverlaySpecification() {
+class OptionOverlaySpecification extends AbstractCompositeViewSpecification implements SubviewSpec {
+    public OptionOverlaySpecification() {
         builder = new StackLayout(new CollectionElementBuilder(this, true), true);
     }
 
     public boolean canDisplay(Content content) {
-        return content.isCollection();
+        throw new UnexpectedCallException();
     }
 
     public View createSubview(Content content, ViewAxis lookupAxis) {
@@ -29,18 +25,13 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
     }
 
     public View createView(final Content content, final ViewAxis axis) {
-        TypedNakedCollection instances;
-        ObjectContent field = (ObjectContent) content;
-        NakedObjectSpecification type = field.getSpecification();
-        NakedObjectPersistor manager = NakedObjects.getObjectPersistor();
-        instances = manager.allInstances(type, true);
-        instances.sort();
-        RootCollection instanceContent = new RootCollection(instances);
-        return new PanelBorder(1, new ScrollBorder(super.createView(instanceContent, axis)));
+        ObjectParameter c = ((ObjectParameter) content);
+        OptionsCollection collectionContent = new OptionsCollection(c.getOptions());
+        return new PanelBorder(1, new ScrollBorder(super.createView(collectionContent, axis)));
     }
 
     public String getName() {
-        return "Lookup Overlay";
+        return "Option Overlay";
     }
 }
 

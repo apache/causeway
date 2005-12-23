@@ -7,6 +7,7 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
@@ -154,15 +155,34 @@ public abstract class ObjectContent extends AbstractContent {
             }
 
             public void execute(Workspace workspace, View view, Location at) {
-            /*
-             * TODO reimplement AbstractNakedObject clone =
-             * (AbstractNakedObject) createInstance(getClass());
-             * clone.copyObject(this); clone.objectChanged();
-             * 
-             * Skylark.getViewFactory().createInnerWorkspace(clone);
-             * newWorkspace.setLocation(at);
-             * getWorkspace().addView(newWorkspace); newWorkspace.markDamaged();
-             */
+                NakedObject original = getObject();
+                NakedObjectSpecification spec = original.getSpecification();
+                
+                NakedObject clone = NakedObjects.getObjectPersistor().createTransientInstance(spec);
+                NakedObjectField[] fields = spec.getFields();
+                for (int i = 0; i < fields.length; i++) {
+                    Naked fld = original.getField(fields[i]);
+                    
+                    if(fields[i].isObject()) {
+                        clone.setAssociation(fields[i], (NakedObject) fld);
+                    } else if(fields[i].isValue()) {
+                        clone.setValue((OneToOneAssociation) fields[i], fld.getObject());
+                    } else if(fields[i].isCollection()) {
+                        
+//                        clone.setValue((OneToOneAssociation) fields[i], fld.getObject());
+                    }
+                }
+                
+                //AbstractNakedObject clone = (AbstractNakedObject) createInstance(getClass());
+                //clone.copyObject(this);
+                //clone.objectChanged();
+                
+                Content content = Skylark.getContentFactory().createRootContent(clone);
+                View cloneView = Skylark.getViewFactory().createWindow(content);
+                cloneView.setLocation(at);
+                workspace.addView(cloneView);
+                //newWorkspace.markDamaged();
+             
             }
         });
 

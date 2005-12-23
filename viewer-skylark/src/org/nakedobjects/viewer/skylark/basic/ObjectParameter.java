@@ -17,18 +17,25 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-class ObjectParameter extends ObjectContent implements ParameterContent {
+public class ObjectParameter extends ObjectContent implements ParameterContent {
     private final NakedObject object;
     private final String name;
     private final NakedObjectSpecification specification;
     private final ActionHelper invocation;
     private final int i;
     private final boolean isRequired;
+    private final NakedObject[] options;
 
-    public ObjectParameter(String name, Naked naked, NakedObjectSpecification specification, boolean required, int i, ActionHelper invocation) {
+    public ObjectParameter(
+            String name,
+            Naked naked,
+            NakedObjectSpecification specification,
+            boolean required,
+            NakedObject[] options, int i, ActionHelper invocation) {
         this.name = name;
         this.specification = specification;
         this.isRequired = required;
+        this.options = options;
         this.i = i;
         this.invocation = invocation;
         object = (NakedObject) naked;
@@ -38,6 +45,7 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
         name = content.name;
         specification = content.specification;
         isRequired = content.isRequired;
+        options = content.options;
         i = content.i;
         invocation = content.invocation;
         this.object = object;
@@ -81,6 +89,10 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     public NakedObject getObject() {
         return object;
     }
+    
+    public NakedObject[] getOptions() {
+        return options;
+    }
 
     public boolean isObject() {
         return true;
@@ -115,7 +127,7 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
     }
 
     public String title() {
-        return object.titleString();
+        return object == null ? "" : object.titleString();
     }
 
     public String toString() {
@@ -139,7 +151,7 @@ class ObjectParameter extends ObjectContent implements ParameterContent {
         return null;
     }
 
-    public String getName() {
+    public String getId() {
         return null;
     }
 }

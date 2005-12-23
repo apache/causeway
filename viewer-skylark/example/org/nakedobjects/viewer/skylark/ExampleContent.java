@@ -98,7 +98,7 @@ public class ExampleContent implements Content {
         return "";
     }
     
-    public String getName() {
+    public String getId() {
         return "";
     }
 }

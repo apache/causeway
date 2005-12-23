@@ -101,7 +101,7 @@ public class DummyContent implements Content {
         return null;
     }
 
-    public String getName() {
+    public String getId() {
         return null;
     }
 }

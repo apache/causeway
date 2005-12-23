@@ -107,7 +107,7 @@ class ValueParameter extends ValueContent implements ParameterContent {
         return null;
     }
 
-    public String getName() {
+    public String getId() {
         return null;
     }
     

@@ -171,7 +171,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
     
     
-    public String getName() {
+    public String getId() {
         return getOneToOneAssociation().getName();
     }
 

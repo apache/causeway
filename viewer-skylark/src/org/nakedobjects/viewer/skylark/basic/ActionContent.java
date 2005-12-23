@@ -121,7 +121,7 @@ public class ActionContent extends ObjectContent {
         return getActionName();
     }
     
-    public String getName() {
+    public String getId() {
         return invocation.getName();
     }
     

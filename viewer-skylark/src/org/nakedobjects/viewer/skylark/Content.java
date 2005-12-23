@@ -86,7 +86,7 @@ public interface Content {
     
     String getDescription();
 
-    String getName();        
+    String getId();        
 }
 
 /*

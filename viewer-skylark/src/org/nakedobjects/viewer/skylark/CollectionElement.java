@@ -46,7 +46,7 @@ public class CollectionElement extends ObjectContent {
         return  ImageFactory.getInstance().loadIcon(specification, "", iconHeight);
     }
 */
-    public String getName() {
+    public String getId() {
         return "";
     }
 
