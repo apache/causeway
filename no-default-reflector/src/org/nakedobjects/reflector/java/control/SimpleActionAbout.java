@@ -15,6 +15,7 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
     private Object[] defaultValues;
     private String[] labels;
     private boolean[] required;
+    private Object[][] options;
 
     public SimpleActionAbout(Session session, Object object, Object[] parameters) {
         super(session, object);
@@ -23,6 +24,7 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
         labels = new String[noParams];
         defaultValues = new Object[noParams];
         required = new boolean[noParams];
+        options = new Object[noParams][];
     }
 
     public void changeNameIfUsable(String name) {
@@ -31,6 +33,10 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
         }
     }
 
+    public Object[][] getOptions() {
+        return options;
+    }
+    
     public Object[] getDefaultParameterValues() {
         return defaultValues;
     }
@@ -56,30 +62,33 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
     }
 
     public void setParameter(int index, Object defaultValue) {
-        if (index < 0 || index >= defaultValues.length) {
-            throw new IllegalArgumentException("No parameter index " + index);
-        }
+        checkParameter(index);
         defaultValues[index] = defaultValue;
     }
 
-    public void setParameter(int index, String label) {
+    public void setParameter(int index, Object[] options) {
+        checkParameter(index);
+        this.options[index] = options;
+    }
+
+    private void checkParameter(int index) {
         if (index < 0 || index >= defaultValues.length) {
             throw new IllegalArgumentException("No parameter index " + index);
         }
+    }
+
+    public void setParameter(int index, String label) {
+        checkParameter(index);
         labels[index] = label;
     }
 
     public void setParameter(int index, boolean required) {
-        if (index < 0 || index >= defaultValues.length) {
-            throw new IllegalArgumentException("No parameter index " + index);
-        }
+        checkParameter(index);
         this.required[index] = required;
     }
 
     public void setParameter(int index, String label, Object defaultValue, boolean required) {
-        if (index < 0 || index >= defaultValues.length) {
-            throw new IllegalArgumentException("No parameter index " + index);
-        }
+        checkParameter(index);
         labels[index] = label;
         defaultValues[index] = defaultValue;
         this.required[index] = required;

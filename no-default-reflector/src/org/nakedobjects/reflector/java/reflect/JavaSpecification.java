@@ -11,6 +11,7 @@ import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.ObjectTitle;
+import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ReflectionPeerBuilder;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 
@@ -290,6 +291,10 @@ public class JavaSpecification implements NakedObjectSpecification {
     }
 
     public void introspect() {
+        if(introspector == null) {
+            throw new  ReflectionException("Introspection already taken place, cannot introspect again");
+        }
+        
         introspector.introspect();
 
         classHint = introspector.classHint();
