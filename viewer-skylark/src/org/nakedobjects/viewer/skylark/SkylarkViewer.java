@@ -7,6 +7,9 @@ import org.nakedobjects.object.NakedObjectsComponent;
 import org.nakedobjects.object.UserContext;
 import org.nakedobjects.viewer.skylark.special.RootWorkspaceSpecification;
 
+import java.awt.Dimension;
+import java.util.StringTokenizer;
+
 public class SkylarkViewer implements NakedObjectsComponent {
     private ViewUpdateNotifier updateNotifier;
     private ViewerFrame frame;
@@ -27,11 +30,12 @@ public class SkylarkViewer implements NakedObjectsComponent {
         if(applicationContext == null) {
             throw new NullPointerException("No application context set for " + this);
         }
+        frame = new ViewerFrame();
+
         if(bounds == null) {
-            bounds = new Bounds(10, 10, 800, 600);
+            bounds = calculateBounds(frame.getToolkit().getScreenSize());
         }
         
-        frame = new ViewerFrame();
         frame.setBounds(bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
         
         viewer = new Viewer();
@@ -56,8 +60,37 @@ public class SkylarkViewer implements NakedObjectsComponent {
         frame.init();
         frame.show();    
 
-        
         viewer.sizeChange();
+    }
+
+    private Bounds calculateBounds( Dimension screenSize) {
+        int maxWidth = screenSize.width;
+        int maxHeight = screenSize.height;
+
+        int width = maxWidth - 20;
+        int height = maxHeight -20;
+        int x = 10;
+        int y = 10;
+
+        String initialSize = NakedObjects.getConfiguration().getString(Viewer.PROPERTY_BASE + "initial.size");
+        if(initialSize != null) {
+            StringTokenizer st = new StringTokenizer(initialSize, "x");
+            if(st.countTokens() == 2) {
+                width = Integer.valueOf(st.nextToken().trim()).intValue();
+                height = Integer.valueOf(st.nextToken().trim()).intValue();
+            }
+        }
+
+        String initialLocation = NakedObjects.getConfiguration().getString(Viewer.PROPERTY_BASE + "initial.location");
+        if(initialLocation != null) {
+            StringTokenizer st = new StringTokenizer(initialLocation, ",");
+            if(st.countTokens() == 2) {
+                x = Integer.valueOf(st.nextToken().trim()).intValue();
+                y = Integer.valueOf(st.nextToken().trim()).intValue();
+            }
+        }
+        
+        return new Bounds(x, y, width, height);
     }
 
     public void setApplication(UserContext applicationContext) {

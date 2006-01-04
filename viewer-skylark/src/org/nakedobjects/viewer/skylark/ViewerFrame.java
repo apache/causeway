@@ -84,7 +84,8 @@ public class ViewerFrame extends Frame implements RenderingArea {
     public void init() {
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
-                quit();
+                new ShutdownDialog(ViewerFrame.this);
+          //      quit();
             }
         });
 

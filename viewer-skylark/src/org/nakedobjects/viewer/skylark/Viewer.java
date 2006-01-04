@@ -30,7 +30,6 @@ import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.metal.WrappedTextFieldSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
 import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
-import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 import org.nakedobjects.viewer.skylark.value.CheckboxField;
