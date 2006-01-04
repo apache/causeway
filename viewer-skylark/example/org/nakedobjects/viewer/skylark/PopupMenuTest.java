@@ -19,6 +19,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
+import test.org.nakedobjects.object.TestSystem;
+
 import junit.framework.TestCase;
 
 public class PopupMenuTest extends TestCase {
@@ -113,7 +115,8 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	protected void setUp() throws Exception {
-	//    ConfigurationFactory.setConfiguration(new Configuration());
+        new TestSystem().init();
+        
 		Viewer viewer = new Viewer();
 		
 		viewer.setRenderingArea(new RenderingArea() {
@@ -156,26 +159,7 @@ public class PopupMenuTest extends TestCase {
 		
 		popup.init(view, view, new Location(0,0), true, false, false);
 	}
-	
-/*
-	private static class MockWorkspace extends Workspace {
-		Bounds bounds;
-		String status;
-
-		MockWorkspace() {
-			super(null);
-		}
-
-		public void setStatus(String status) {
-			this.status = status;
-		}
-
-		public void repaint(int x, int y, int width, int height) {
-			bounds = new Bounds(x, y, width, height);
-		}
-	}
-*/
-	
+		
 	private static class MockPopup extends DefaultPopupMenu{
 		String status;
 		protected Color normalColor() {
@@ -223,6 +207,10 @@ public class PopupMenuTest extends TestCase {
 		public Size getRequiredSize() {
 			return null;
 		}
+        
+        public ViewAreaType viewAreaType(Location location) {
+            return ViewAreaType.CONTENT;
+        }
 
 		public View makeView(Naked object, NakedObjectField field) throws CloneNotSupportedException {
 			return null;
@@ -312,7 +300,7 @@ public class PopupMenuTest extends TestCase {
                 public void focusReceived() {}
 
                 public Location getAbsoluteLocation() {
-                    return null;
+                    return new Location();
                 }
 
                 public int getBaseline() {
@@ -336,7 +324,7 @@ public class PopupMenuTest extends TestCase {
                 }
 
                 public Padding getPadding() {
-                    return null;
+                    return new Padding();
                 }
 
                 public View getParent() {
@@ -364,7 +352,7 @@ public class PopupMenuTest extends TestCase {
                 }
 
                 public View getView() {
-                    return null;
+                    return this;
                 }
 
                 public ViewAxis getViewAxis() {

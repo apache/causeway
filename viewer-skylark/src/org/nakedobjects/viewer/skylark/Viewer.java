@@ -30,6 +30,7 @@ import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.metal.WrappedTextFieldSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
 import org.nakedobjects.viewer.skylark.special.InnerWorkspaceSpecification;
+import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 import org.nakedobjects.viewer.skylark.special.WorkspaceSpecification;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
 import org.nakedobjects.viewer.skylark.value.CheckboxField;
@@ -70,7 +71,6 @@ public class Viewer {
     private View keyboardFocus;
     private ObjectViewingMechanismListener listener;
     private View overlayView;
-    private PopupMenu popup;
     private final Bounds redrawArea;
     private int redrawCount = 100000;
     private RenderingArea renderingArea;
@@ -222,7 +222,6 @@ public class Viewer {
         insets = new Insets(0, 0, 0, 0);
 
         spy = new InteractionSpy();
-        popup = new DefaultPopupMenu();
 
         InteractionHandler interactionHandler = new InteractionHandler(this, spy);
         renderingArea.addMouseMotionListener(interactionHandler);
@@ -477,6 +476,8 @@ public class Viewer {
     }
 
     protected void popupMenu(View over, Click click) {
+        saveCurrentFieldEntry();
+
         Location at = click.getLocation();
         boolean forView = rootView.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
 
@@ -484,13 +485,25 @@ public class Viewer {
         boolean includeExploration = runningAsExploration && (click.isCtrl() || showExplorationMenuByDefault);
         boolean includeDebug = click.isShift() && click.isCtrl();
 
+        DefaultPopupMenu popup = new DefaultPopupMenu();
         popup.init(over, rootView, at, forView, includeExploration, includeDebug);
         popupStatus(over, forView, includeExploration, includeDebug);
-        setOverlayView(popup);
 
-        makeFocus(popup);
+        DefaultPopupMenu overlay = popup;
+        
+        Size size = overlay.getRequiredSize();
+        overlay.setSize(size);
+        Location location = new Location(at);
+        location.move(-14, -10);
+        overlay.setLocation(location);
+        overlay.limitBoundsWithin(getOverlayBounds());
+        
+        setOverlayView(overlay);
+
+        makeFocus(overlay);
     }
 
+    
     private void popupStatus(View over, boolean forView, boolean includeExploration, boolean includeDebug) {
         StringBuffer status = new StringBuffer("Menu for ");
         if (forView) {
