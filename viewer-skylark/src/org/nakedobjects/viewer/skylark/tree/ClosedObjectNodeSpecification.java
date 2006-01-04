@@ -6,7 +6,6 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
 
 
 /**
@@ -45,7 +44,7 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
 
     protected View createNodeView(Content content, ViewAxis axis) {
         View treeLeafNode = new LeafNodeView(content, this, axis);
-        return new ObjectBorder(treeLeafNode);
+        return treeLeafNode;
     }
 }
 
