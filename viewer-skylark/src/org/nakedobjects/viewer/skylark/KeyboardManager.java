@@ -89,7 +89,18 @@ public class KeyboardManager {
         if (over != null) {
             viewer.clearStatus();
             viewer.clearOverlayView();
-            View helpView = new HelpView(over);
+            
+            String description = null;
+            String name = null;
+
+            if (over != null) {
+                Content content = over.getContent();
+                description = content.getDescription();
+                name = content.getId();
+                name =  name == null ? content.title() : name;
+            }
+            
+            View helpView = new HelpView(name, description);
             helpView.setSize(helpView.getRequiredSize());
             Location location = over.getAbsoluteLocation();
             location.add(20, 20);

@@ -1,10 +1,17 @@
 package org.nakedobjects.viewer.skylark.core;
 
+import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.object.control.Veto;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.Padding;
@@ -15,6 +22,7 @@ import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.basic.AbstractContent;
 
 import java.awt.event.KeyEvent;
 import java.util.Vector;
@@ -32,27 +40,84 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         String name;
         String reason;
 
-        Item() {
-            name = "no option";
-        }
-
-        Item(UserAction action, Workspace workspace, View view, Location at) {
-            if (action == null) {
-                isBlank = true;
-            } else {
-                isBlank = false;
-                this.action = action;
-                name = action.getName(view);
-                description = action.getDescription(view);
-                isDisabled = action.disabled(view).isVetoed();
-                reason = action.disabled(view).getReason();
-            }
+        private Item() {
         }
 
         public String toString() {
             return isBlank ? "NONE" : (name + " " + (isDisabled ? "DISABLED " : " " + action));
         }
+
+        public static Item createNoOption() {
+            Item item = new Item();
+            item.name = "no option";
+            return item;
+        }
+
+        public static Item createOption(UserAction action, Object object, View view, Location location) {
+            Item item = new Item();
+            if (action == null) {
+                item.isBlank = true;
+            } else {
+                item.isBlank = false;
+                item.action = action;
+                item.name = action.getName(view);
+                item.description = action.getDescription(view);
+                item.isDisabled = action.disabled(view).isVetoed();
+                item.reason = action.disabled(view).getReason();
+            }
+            return item;
+        }
     }
+    
+    private class PopupContent extends AbstractContent {
+
+        public PopupContent() {}
+        
+        public Consent canDrop(Content sourceContent) {
+            return Veto.DEFAULT;
+        }
+
+        public void debugDetails(DebugString debug) {}
+
+        public Naked drop(Content sourceContent) {
+            return null;
+        }
+
+        public String getIconName() {
+            return null;
+        }
+
+        public Image getIconPicture(int iconHeight) {
+            return null;
+        }
+
+        public Naked getNaked() {
+            return null;
+        }
+
+        public NakedObjectSpecification getSpecification() {
+            return null;
+        }
+
+        public boolean isTransient() {
+            return false;
+        }
+
+        public void parseTextEntry(String entryText) throws InvalidEntryException {}
+
+        public String title() {
+            int optionNo = getOption();
+            return items[optionNo].name;
+        }
+
+        public String getDescription() {
+            int optionNo = getOption();
+            return items[optionNo].description;
+        }
+
+        public String getId() {
+            return null;
+        }}
 
     private static final UserAction DEBUG_VIEW_OPTION = new DebugViewOption();
 
@@ -64,6 +129,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
     public DefaultPopupMenu() {
         super(null, null, null);
+        setContent(new PopupContent());
     }
 
     protected Color backgroundColor() {
@@ -195,24 +261,16 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         Vector options = optionSet.getMenuOptions(includeExploration, includeDebug);
         int len = options.size();
         if (len == 0) {
-            items = new Item[] { new Item() };
+            items = new Item[] { Item.createNoOption() };
         } else {
             items = new Item[len];
-
             for (int i = 0; i < len; i++) {
-                items[i] = new Item((UserAction) options.elementAt(i), null, over, getLocation());
+                items[i] = Item.createOption((UserAction) options.elementAt(i), null, over, getLocation());
             }
         }
-
-        Size size = getRequiredSize();
-        setSize(size);
-        Location location = new Location(mouseAt);
-        location.move(-14, -10);
-        setLocation(location);
-        limitBoundsWithin(getViewManager().getOverlayBounds());
     }
 
-    public void invoke() {
+    private void invoke() {
         int option = getOption();
 
         Workspace workspace = getWorkspace();
@@ -280,6 +338,10 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
     public View makeView(Naked object, NakedObjectField field) throws CloneNotSupportedException {
         throw new RuntimeException();
+    }
+    
+    public void markDamaged() {
+        super.markDamaged();
     }
 
     public void mouseMoved(Location at) {

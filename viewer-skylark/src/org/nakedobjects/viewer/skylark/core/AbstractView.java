@@ -57,6 +57,10 @@ public abstract class AbstractView implements View {
     private int x;
     private int y;
 
+    protected AbstractView() {
+        this(null, null, null);
+    }
+
     protected AbstractView(Content content, ViewSpecification specification, ViewAxis axis) {
         assignId();
         this.content = content;
@@ -65,7 +69,7 @@ public abstract class AbstractView implements View {
         state = new ViewState();
         view = this;
     }
-
+    
     public void addView(View view) {
         throw new NakedObjectRuntimeException("Can't add views to " + this);
     }
@@ -90,6 +94,16 @@ public abstract class AbstractView implements View {
             }
         }
         return false;
+    }
+
+    public void contentMenuOptions(MenuOptionSet options) {
+        options.setColor(Style.CONTENT_MENU);
+
+        Content content = getContent();
+        if (content != null) {
+            content.menuOptions(options);
+        }
+
     }
 
     /**
@@ -248,11 +262,11 @@ public abstract class AbstractView implements View {
     public int getId() {
         return id;
     }
-
+    
     public Location getLocation() {
         return new Location(x, y);
     }
-    
+
     public Padding getPadding() {
         return new Padding(0, 0, 0, 0);
     }
@@ -362,79 +376,6 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
-        options.setColor(Style.CONTENT_MENU);
-
-        Content content = getContent();
-        if (content != null) {
-            content.menuOptions(options);
-        }
-
-    }
-
-    public void viewMenuOptions(MenuOptionSet options) {
-        options.setColor(Style.VIEW_MENU);
-
-        if (getParent() != null) {
-            Enumeration possibleViews = Skylark.getViewFactory().openRootViews(content, null);
-            while (possibleViews.hasMoreElements()) {
-                ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
-                MenuOption viewAs = new OpenViewOption(specification);
-                options.add(MenuOptionSet.VIEW, viewAs);
-            }
-        }
-
-        if (view.getSpecification().isSubView()) {
-            if (view.getSpecification().isReplaceable()) {
-                replaceOptions(Skylark.getViewFactory().openSubviews(content, this), options);
-                replaceOptions(Skylark.getViewFactory().closedSubviews(content, this), options);
-            }
-        } else {
-            if (view.getSpecification().isReplaceable()) {
-                // offer other/alternative views
-                replaceOptions(Skylark.getViewFactory().openRootViews(content, this), options);
-            }
-            options.add(MenuOptionSet.VIEW, new PrintOption());
-            if (getParent() != null) {
-                options.add(MenuOptionSet.VIEW, CLOSE_OPTION);
-                options.add(MenuOptionSet.VIEW, CLOSE_ALL_OPTION);
-                options.add(MenuOptionSet.VIEW, CLOSE_VIEWS_FOR_OBJECT);
-            }
-        }
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Refresh view") {
-            public void execute(Workspace workspace, View view, Location at) {
-                refresh();
-            }
-        });
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate content") {
-            public void execute(Workspace workspace, View view, Location at) {
-                invalidateContent();
-            }
-        });
-
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate layout") {
-            public void execute(Workspace workspace, View view, Location at) {
-                invalidateLayout();
-            }
-        });
-
-        final UndoStack undoStack = getViewManager().getUndoStack();
-        if (!undoStack.isEmpty()) {
-            options.add(MenuOptionSet.VIEW, new MenuOption("Undo " + undoStack.getNameOfUndo()) {
-
-                public Consent disabled(View component) {
-                    return new Allow(undoStack.descriptionOfUndo());
-                }
-
-                public void execute(Workspace workspace, View view, Location at) {
-                    undoStack.undoLastCommand();
-                }
-            });
-        }
-    }
-
     public void mouseMoved(Location location) {
         View subview = subviewFor(location);
         if (subview != null) {
@@ -512,6 +453,10 @@ public abstract class AbstractView implements View {
         height = bounds.getHeight();
     }
 
+    protected void setContent(Content content) {
+        this.content = content;
+    }
+    
     public void setLocation(Location location) {
         x = location.getX();
         y = location.getY();
@@ -522,16 +467,24 @@ public abstract class AbstractView implements View {
 
         LOG.debug("set parent " + parent + " for " + this);
     }
-
+    
     public void setRequiredSize(Size size) {}
 
     public void setSize(Size size) {
         width = size.getWidth();
         height = size.getHeight();
     }
+    
+    protected void setSpecification(ViewSpecification specification) {
+        this.specification = specification;
+    }
 
     public final void setView(View view) {
         this.view = view;
+    }
+
+    protected void setViewAxis(ViewAxis viewAxis) {
+        this.viewAxis = viewAxis;
     }
 
     public View subviewFor(Location location) {
@@ -562,6 +515,69 @@ public abstract class AbstractView implements View {
             return subview.viewAreaType(location);
         } else {
             return ViewAreaType.CONTENT;
+        }
+    }
+
+    public void viewMenuOptions(MenuOptionSet options) {
+        options.setColor(Style.VIEW_MENU);
+
+        if (getParent() != null) {
+            Enumeration possibleViews = Skylark.getViewFactory().openRootViews(content, null);
+            while (possibleViews.hasMoreElements()) {
+                ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
+                MenuOption viewAs = new OpenViewOption(specification);
+                options.add(MenuOptionSet.VIEW, viewAs);
+            }
+        }
+
+        if (view.getSpecification().isSubView()) {
+            if (view.getSpecification().isReplaceable()) {
+                replaceOptions(Skylark.getViewFactory().openSubviews(content, this), options);
+                replaceOptions(Skylark.getViewFactory().closedSubviews(content, this), options);
+            }
+        } else {
+            if (view.getSpecification().isReplaceable()) {
+                // offer other/alternative views
+                replaceOptions(Skylark.getViewFactory().openRootViews(content, this), options);
+            }
+            options.add(MenuOptionSet.VIEW, new PrintOption());
+            if (getParent() != null) {
+                options.add(MenuOptionSet.VIEW, CLOSE_OPTION);
+                options.add(MenuOptionSet.VIEW, CLOSE_ALL_OPTION);
+                options.add(MenuOptionSet.VIEW, CLOSE_VIEWS_FOR_OBJECT);
+            }
+        }
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Refresh view") {
+            public void execute(Workspace workspace, View view, Location at) {
+                refresh();
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate content") {
+            public void execute(Workspace workspace, View view, Location at) {
+                invalidateContent();
+            }
+        });
+
+        options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate layout") {
+            public void execute(Workspace workspace, View view, Location at) {
+                invalidateLayout();
+            }
+        });
+
+        final UndoStack undoStack = getViewManager().getUndoStack();
+        if (!undoStack.isEmpty()) {
+            options.add(MenuOptionSet.VIEW, new MenuOption("Undo " + undoStack.getNameOfUndo()) {
+
+                public Consent disabled(View component) {
+                    return new Allow(undoStack.descriptionOfUndo());
+                }
+
+                public void execute(Workspace workspace, View view, Location at) {
+                    undoStack.undoLastCommand();
+                }
+            });
         }
     }
 }

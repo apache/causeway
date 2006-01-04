@@ -10,18 +10,8 @@ public class HelpView extends AbstractView implements View, TextBlockTarget {
     private static final int WIDTH = 400;
     private TextContent content;
 
-    protected HelpView(View forView) {
+    protected HelpView(String name, String description) {
         super(null, null, null);
-
-        String description = null;
-        String name = null;
-
-        if (forView != null) {
-	        Content content = forView.getContent();
-	        description = content.getDescription();
-            name = content.getId();
-	        name =  name == null ? content.title() : name;
-        }
         
         String text = (name == null ? "" : (name  + "\n\n")) + (description == null ? "" : description);
         content = new TextContent(this, 10, TextContent.WRAPPING);
