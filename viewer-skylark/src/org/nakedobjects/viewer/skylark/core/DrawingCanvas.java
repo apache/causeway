@@ -48,8 +48,8 @@ public class DrawingCanvas implements Canvas {
     }
 
     public void clearBackground(View view, Color color) {
-	        Bounds bounds = view.getBounds();
-	        drawSolidRectangle(0, 0, bounds.getWidth() - 1, bounds.getHeight() - 1, color);
+        Bounds bounds = view.getBounds();
+        drawSolidRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
     }
 
     public void drawIcon(Image icon, int x, int y) {
