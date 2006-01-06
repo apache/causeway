@@ -26,8 +26,7 @@ import java.util.Vector;
 
 
 /**
- * A specialised frame for displaying the details of an object and its display
- * mechanisms.
+ * A specialised frame for displaying the details of an object and its display mechanisms.
  */
 public abstract class DebugFrame extends Frame {
     private static Vector frames = new Vector();
@@ -35,7 +34,7 @@ public abstract class DebugFrame extends Frame {
 
     /**
      * Calls dispose on all the open debug frames
-     *  
+     * 
      */
     public static void disposeAll() {
         Frame[] f = new Frame[frames.size()];
@@ -60,11 +59,11 @@ public abstract class DebugFrame extends Frame {
                 closeDialog();
             }
         });
-        
+
         URL url = DebugFrame.class.getResource("/" + "images/debug.png");
         if (url != null) {
             Image image = Toolkit.getDefaultToolkit().getImage(url);
-            if(image != null) {
+            if (image != null) {
                 setIconImage(image);
             }
         }
@@ -80,7 +79,7 @@ public abstract class DebugFrame extends Frame {
             public void mouseClicked(MouseEvent e) {
                 Point point = e.getPoint();
                 panel = tabPane.select(point);
-                
+
                 DebugInfo info = tabPane.getInfo();
                 setTitle(info.getDebugTitle());
                 field.setText(info.getDebugData());
@@ -89,7 +88,6 @@ public abstract class DebugFrame extends Frame {
 
         tabPane.setLayout(new BorderLayout(7, 7));
 
-        
         TextArea textArea = new TextArea("", 60, 110, TextArea.SCROLLBARS_BOTH);
         textArea.setForeground(Color.black);
         textArea.setEditable(false);
@@ -144,7 +142,7 @@ public abstract class DebugFrame extends Frame {
                 closeDialog();
             }
         });
-        
+
         return tabPane;
     }
 
@@ -156,13 +154,13 @@ public abstract class DebugFrame extends Frame {
         insets.bottom += 10;
         return insets;
     }
-    
+
     private void closeDialog() {
         dialogClosing();
         hide();
         dispose();
     }
-    
+
     public void dialogClosing() {}
 
     public void dispose() {
@@ -171,17 +169,18 @@ public abstract class DebugFrame extends Frame {
     }
 
     public void refresh() {
-        /* WARNING - When refresh button is pressed it is in the AWT thread; if the naked objects repository
-         * is thread based then the wrong set of components will be used giving strange results, particularly in 
-         * the object persistor. 
+        /*
+         * WARNING - When refresh button is pressed it is in the AWT thread; if the naked objects repository
+         * is thread based then the wrong set of components will be used giving strange results, particularly
+         * in the object persistor.
          */
         // TODO run in correct thread
         DebugInfo[] infos = getInfo();
         tabPane.setInfo(infos);
         DebugInfo info = infos[panel];
-        if(info != null) {
-	        setTitle(info.getDebugTitle());
-	        field.setText(info.getDebugData());
+        if (info != null) {
+            setTitle(info.getDebugTitle());
+            field.setText(info.getDebugData());
         }
     }
 
@@ -204,65 +203,66 @@ public abstract class DebugFrame extends Frame {
 
         int width = getSize().width;
         int height = getSize().height;
-        
-        if(x + width > maxWidth) {
+
+        if (x + width > maxWidth) {
             x = 0;
-            if(x + width > maxWidth) {
+            if (x + width > maxWidth) {
                 width = maxWidth;
             }
         }
 
-        if(y + height > maxHeight) {
+        if (y + height > maxHeight) {
             y = 0;
-            if(y + height > maxHeight) {
+            if (y + height > maxHeight) {
                 height = maxHeight;
             }
         }
-        
+
         setSize(width, height);
         setLocation(x, y);
     }
 }
 
 class TabPane extends Panel {
-        private DebugInfo[] info;
-        private Rectangle[] tabs;
-        private int panel = 0;
+    private DebugInfo[] info;
+    private Rectangle[] tabs;
+    private int panel = 0;
 
-        public int select(Point point) {
-            for (int i = 0; i < tabs.length; i++) {
-                if(tabs[i] != null && tabs[i].contains(point)) {
-                    panel = i;
-                    repaint();
-                    break;
-                }
+    public int select(Point point) {
+        for (int i = 0; i < tabs.length; i++) {
+            if (tabs[i] != null && tabs[i].contains(point)) {
+                panel = i;
+                repaint();
+                break;
             }
-            return panel;
         }
-        
-        public DebugInfo getInfo() {
-            return info[panel];
-        }
+        return panel;
+    }
 
-        public void setInfo(DebugInfo[] info) {
-            this.info = info;
-            tabs = new Rectangle[info.length];
-        }
-        
-        public Insets getInsets() {
-            Insets insets = super.getInsets();
-            insets.left += 10;
-            insets.right += 10;
-            insets.top += 30;
-            insets.bottom += 10;
-            return insets;
-        }
-        
-        public void paint(Graphics g) {
+    public DebugInfo getInfo() {
+        return info[panel];
+    }
+
+    public void setInfo(DebugInfo[] info) {
+        this.info = info;
+        tabs = new Rectangle[info.length];
+    }
+
+    public Insets getInsets() {
+        Insets insets = super.getInsets();
+        insets.left += 10;
+        insets.right += 10;
+        insets.top += 30;
+        insets.bottom += 10;
+        return insets;
+    }
+
+    public void paint(Graphics g) {
+        if (info != null) {
             Dimension size = getSize();
             g.setColor(Color.gray);
-            g.drawRect(0, 20,size.width - 1, size.height - 21);
-            
+            g.drawRect(0, 20, size.width - 1, size.height - 21);
+
             FontMetrics fm;
             fm = g.getFontMetrics();
             int offset = 0;
@@ -271,14 +271,14 @@ class TabPane extends Panel {
                 String title = info[i].getDebugTitle();
                 title = title == null ? info[i].getClass().getName() : title;
                 int width = Math.min(maxWidth, fm.stringWidth(title) + 20);
-                
+
                 tabs[i] = new Rectangle(offset, 0, width, 20);
                 g.setColor(Color.gray);
                 g.drawRect(offset + 0, 0, width, 20);
-                if(i == panel) {
+                if (i == panel) {
                     g.setColor(Color.white);
                     g.fillRect(offset + 1, 1, width - 1, 20);
-                    //g.drawLine(offset + 1, 20, offset + width, 20);
+                    // g.drawLine(offset + 1, 20, offset + width, 20);
                     g.setColor(Color.black);
                 } else {
                     g.setColor(Color.lightGray);
@@ -287,35 +287,30 @@ class TabPane extends Panel {
                 }
 
                 g.drawString(title, offset + 9, 20 - 5);
-                
+
                 offset += width;
             }
             g.setColor(Color.white);
             g.fillRect(offset + 1, 1, size.width - offset, 20 - 1);
-
         }
-    
+    }
+
 }
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
