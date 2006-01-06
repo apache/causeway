@@ -23,7 +23,7 @@ import org.nakedobjects.viewer.skylark.Viewer;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-public class AbstractViewDecorator implements View {
+public abstract class AbstractViewDecorator implements View {
     protected View wrappedView;
 
     protected AbstractViewDecorator(View wrappedView) {
@@ -122,16 +122,8 @@ public class AbstractViewDecorator implements View {
         wrappedView.entered();
     }
 
-    public void enteredSubview() {
-        wrappedView.enteredSubview();
-    }
-
     public void exited() {
         wrappedView.exited();
-    }
-
-    public void exitedSubview() {
-        wrappedView.exitedSubview();
     }
 
     public void firstClick(Click click) {
@@ -258,10 +250,18 @@ public class AbstractViewDecorator implements View {
         wrappedView.markDamaged(bounds);
     }
 
+    public void mouseDown(Click click) {
+        wrappedView.mouseDown(click);
+    }
+    
     public void mouseMoved(Location at) {
         wrappedView.mouseMoved(at);
     }
 
+    public void mouseUp(Click click) {
+        wrappedView.mouseUp(click);
+    }
+    
     public void objectActionResult(Naked result, Location at) {
         wrappedView.objectActionResult(result, at);
     }

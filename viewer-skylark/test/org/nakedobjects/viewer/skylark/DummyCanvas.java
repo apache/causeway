@@ -20,7 +20,7 @@ public class DummyCanvas implements Canvas {
         return null;
     }
 
-    public void draw3DRectangle(int x, int y, int width, int height, boolean raised) {}
+    public void draw3DRectangle(int x, int y, int width, int height, Color color, boolean raised) {}
 
     public void drawIcon(Image icon, int x, int y) {}
 
@@ -57,6 +57,8 @@ public class DummyCanvas implements Canvas {
     public boolean overlaps(Bounds bounds) {
         return false;
     }
+
+    public void drawDebugOutline(Bounds bounds, int baseline, Color color) {}
 
 }
 

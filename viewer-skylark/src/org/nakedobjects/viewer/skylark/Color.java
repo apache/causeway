@@ -4,22 +4,23 @@ import org.nakedobjects.object.NakedObjects;
 
 
 public class Color {
-    public static Color DEBUG_BASELINE = new Color(java.awt.Color.magenta);
-    public static Color DEBUG_DRAW_BOUNDS = new Color(java.awt.Color.cyan);
-    public static Color DEBUG_VIEW_BOUNDS = new Color(java.awt.Color.orange);
-    public static Color DEBUG_REPAINT_BOUNDS = new Color(java.awt.Color.red);
+    public static final Color DEBUG_BASELINE = new Color(java.awt.Color.magenta);
+    public static final Color DEBUG_DRAW_BOUNDS = new Color(java.awt.Color.cyan);
+    public static final Color DEBUG_VIEW_BOUNDS = new Color(java.awt.Color.orange);
+    public static final Color DEBUG_REPAINT_BOUNDS = new Color(java.awt.Color.green);
+    public static final Color DEBUG_BORDER_BOUNDS =  new Color(java.awt.Color.pink);
     
-    public static Color RED = new Color(java.awt.Color.red);
-    public static Color GREEN = new Color(java.awt.Color.green);
-    public static Color BLUE = new Color(java.awt.Color.blue);
-    public static Color BLACK = new Color(java.awt.Color.black);
-    public static Color WHITE = new Color(java.awt.Color.white);
-    public static Color GRAY = new Color(java.awt.Color.gray);
-    public static Color LIGHT_GRAY = new Color(java.awt.Color.lightGray);
-    public static Color ORANGE = new Color(java.awt.Color.orange);
-    public static Color YELLOW = new Color(java.awt.Color.yellow);
+    public static final Color RED = new Color(java.awt.Color.red);
+    public static final Color GREEN = new Color(java.awt.Color.green);
+    public static final Color BLUE = new Color(java.awt.Color.blue);
+    public static final Color BLACK = new Color(java.awt.Color.black);
+    public static final Color WHITE = new Color(java.awt.Color.white);
+    public static final  Color GRAY = new Color(java.awt.Color.gray);
+    public static final Color LIGHT_GRAY = new Color(java.awt.Color.lightGray);
+    public static final Color ORANGE = new Color(java.awt.Color.orange);
+    public static final Color YELLOW = new Color(java.awt.Color.yellow);
     
-    protected static Color NULL = new Color(0);
+    protected static final Color NULL = new Color(0);
     private static final String PROPERTY_STEM = Viewer.PROPERTY_BASE + "color.";
     private java.awt.Color color;
     private String name;

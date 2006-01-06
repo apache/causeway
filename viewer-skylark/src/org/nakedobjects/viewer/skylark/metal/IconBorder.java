@@ -58,15 +58,16 @@ public class IconBorder extends AbstractBorder {
 	public void draw(Canvas canvas) {
 	    int x = left + HPADDING;
 		
+	    if(AbstractView.debug) {
+	        canvas.drawDebugOutline(new Bounds(getSize()), baseline, Color.DEBUG_DRAW_BOUNDS);
+	    }
+	    
 		// icon & title
 		icon.draw(canvas, x, baseline);
 		x += icon.getSize().getWidth();
+        x += View.HPADDING;
 		text.draw(canvas, x, baseline);
 
-		if(AbstractView.debug) {
-		    canvas.drawRectangle(0,0,getSize().getWidth() - 1, getSize().getHeight() - 1, Color.DEBUG_DRAW_BOUNDS);
-		}
-	    
 		// components
 		super.draw(canvas);
 	}
@@ -78,7 +79,7 @@ public class IconBorder extends AbstractBorder {
 	public Size getRequiredSize() {
 		Size size = super.getRequiredSize();
 		
-		size.ensureWidth(left + icon.getSize().getWidth() + text.getSize().getWidth() + 
+		size.ensureWidth(left + icon.getSize().getWidth() + View.HPADDING + text.getSize().getWidth() + 
 		        padding + right);
 		return size;
 	}

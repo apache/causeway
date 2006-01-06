@@ -52,6 +52,10 @@ public class TextBlockTest extends TestCase {
                         return null;
                     }
 
+                    public int getMidPoint() {
+                        return 7;
+                    }
+                    
                     public int getDescent() {
                         return 0;
                     }

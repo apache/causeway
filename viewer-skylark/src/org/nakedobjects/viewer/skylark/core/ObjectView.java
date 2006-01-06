@@ -4,7 +4,6 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Color;
@@ -74,17 +73,6 @@ public abstract class ObjectView extends AbstractView {
                 View dragOverlay = new DragContentIcon(getContent());
                 return new ContentDrag(this, drag.getLocation(), dragOverlay);
             }
-        }
-    }
-
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
-
-        if (AbstractView.debug) {
-            Size size = getSize();
-            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
-            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
-            canvas.drawLine(0, getBaseline(), size.getWidth() - 1, getBaseline(), Color.DEBUG_BASELINE);
         }
     }
 

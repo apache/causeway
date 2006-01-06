@@ -47,7 +47,7 @@ public class DebugCanvas implements Canvas {
         return new DebugCanvas(buffer, level + 1);
     }
 
-    public void draw3DRectangle(int x, int y, int width, int height, boolean raised) {
+    public void draw3DRectangle(int x, int y, int width, int height, Color color, boolean raised) {
         indent();
         buffer.appendln("3D rectangle " + x + "," + y + " " + width + "x" + height);
     }
@@ -148,6 +148,8 @@ public class DebugCanvas implements Canvas {
     public String toString() {
         return "Canvas";
     }
+
+    public void drawDebugOutline(Bounds bounds, int baseline, Color color) {}
 
 }
 

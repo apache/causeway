@@ -109,6 +109,9 @@ public class ContentDrag extends Drag {
     public Location getTargetLocation() {
         Location location = new Location(this.location);
         location.subtract(target.getAbsoluteLocation());
+        location.add(- getOffset().x, - getOffset().y);
+        location.add(- getOffset().x, - getOffset().y);
+        
         return location;
     }
     

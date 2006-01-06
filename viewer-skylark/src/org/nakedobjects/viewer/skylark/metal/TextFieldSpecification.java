@@ -10,6 +10,7 @@ public class TextFieldSpecification extends AbstractFieldSpecification {
     private static final int ORIGINAL_WIDTH = 20;
 
     public View createView(Content content, ViewAxis axis) {
+//        return new LineBorder(new SingleLineTextField(content, this, axis, true, ORIGINAL_WIDTH));
         return new TextFieldResizeBorder(new SingleLineTextField(content, this, axis, true, ORIGINAL_WIDTH));
     }
     

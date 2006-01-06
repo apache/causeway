@@ -38,8 +38,8 @@ public class IconizeWindowControl extends WindowControl {
         int x  = 0;
         int y = 0;
         
-        canvas.drawRectangle(x + 1, y + 1, WIDTH - 2, HEIGHT - 2, Style.WHITE);
-        canvas.drawRectangle(x, y, WIDTH - 2, HEIGHT - 2, Style.SECONDARY1);
+        canvas.drawRectangle(x + 1, y + 1, WIDTH - 1, HEIGHT - 1, Style.WHITE);
+        canvas.drawRectangle(x, y, WIDTH - 1, HEIGHT - 1, Style.SECONDARY1);
         canvas.drawLine(x + 3, y + 8, x + 8, y + 8, Style.BLACK);
         canvas.drawLine(x + 3, y + 9, x + 8, y + 9, Style.BLACK);
     }

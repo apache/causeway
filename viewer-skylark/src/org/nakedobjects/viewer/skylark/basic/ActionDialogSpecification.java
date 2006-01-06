@@ -20,6 +20,7 @@ import org.nakedobjects.viewer.skylark.metal.AbstractButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonAction;
 import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
 import org.nakedobjects.viewer.skylark.metal.DialogBorder;
+import org.nakedobjects.viewer.skylark.metal.IconBorder;
 import org.nakedobjects.viewer.skylark.special.StackLayout;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -159,7 +160,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
         // UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new
         // ExecuteAction(), };
         ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CancelAction() };
-        return new DialogBorder(new ButtonBorder(actions, super.createView(content, new LabelAxis())), false);
+        return new DialogBorder(new ButtonBorder(actions, new IconBorder(super.createView(content, new LabelAxis()))), false);
     }
 
     public String getName() {

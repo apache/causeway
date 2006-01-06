@@ -23,7 +23,7 @@ public class SingleLineTextField extends TextField {
         String line = textContent.getText(0);
         if(line != null) {
             int maxWidth = getMaxWidth();
-            int leftLimit = offset + LIMIT;
+            int leftLimit = offset + LIMIT; 
             int rightLimit = offset + maxWidth - LIMIT;
             
             if(cursor.getCharacter() > line.length()) {
@@ -57,7 +57,7 @@ public class SingleLineTextField extends TextField {
     }
 
     protected void drawLines(Canvas canvas, Color color, int width) {
-        int baseline = getBaseline() + 1;
+        int baseline = getBaseline();
         canvas.drawLine(HPADDING, baseline, HPADDING + width, baseline, color);
     }
 

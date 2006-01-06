@@ -40,7 +40,7 @@ public class ButtonExample extends TestViews {
         };
    
         
-        View view = new Button(action, 28, null);
+        View view = new Button(action, workspace);
         view.setLocation(new Location(100, 100));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
@@ -73,7 +73,7 @@ public class ButtonExample extends TestViews {
         };
 
                 
-                View view2 = new Button(action2, 28, null);
+                View view2 = new Button(action2, workspace);
                 view2.setLocation(new Location(200, 100));
                 view2.setSize(view2.getRequiredSize());
                 workspace.addView(view2);

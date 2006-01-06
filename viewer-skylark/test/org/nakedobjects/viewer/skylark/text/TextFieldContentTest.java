@@ -67,6 +67,10 @@ public class TextFieldContentTest extends TestCase {
 		                return 15;
 		            }
 
+                    public int getMidPoint() {
+                        return 7;
+                    }
+                    
                     public Font getAwtFont() {
                         return null;
                     }

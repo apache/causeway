@@ -2,46 +2,49 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
+import org.nakedobjects.viewer.skylark.Drag;
+import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Image;
+import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
+import org.nakedobjects.viewer.skylark.core.DragViewOutline;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 public class ObjectBorder extends AbstractBorder {
-	public ObjectBorder(View wrappedView) {
-		this(1, wrappedView);
-	}
-	
-	public ObjectBorder(int size, View wrappedView) {
+	private static final int BORDER = 13;
+
+    public ObjectBorder(int size, View wrappedView) {
 		super(wrappedView);
 		
 		top = size;
 		left = size;
 		bottom = size;
-		right = size + 13;
+		right = size + BORDER;
+	}
+	
+	public ObjectBorder(View wrappedView) {
+		this(1, wrappedView);
 	}
 
 	protected void debugDetails(StringBuffer b) {
 		b.append("ObjectBorder " + top + " pixels");
     }
 	
-	public void entered() {
-		getState().setObjectIdentified();
-		getState().setViewIdentified();
-		wrappedView.entered();
-		markDamaged();
-	}
-	
-	public void exited() {
-		getState().clearObjectIdentified();
-		getState().clearViewIdentified();
-		wrappedView.exited();
-		markDamaged();
-	}
-	
+
+    public Drag dragStart(DragStart drag) {
+        if (drag.getLocation().getX() > getSize().getWidth() - right) {
+            View dragOverlay = new DragViewOutline(getView());
+            return new ViewDrag(this, new Offset(drag.getLocation()), dragOverlay);
+        } else {
+            return super.dragStart(drag);
+        }
+    }
+
 	public void draw(Canvas canvas) {
 	    super.draw(canvas);
 	    
@@ -72,15 +75,32 @@ public class ObjectBorder extends AbstractBorder {
 		}
         
 		if(color != null) {
-			int xExtent = s.getWidth() - 1;
-			int yExtent = s.getHeight() - 1;
+			int xExtent = s.getWidth();
+			//int yExtent = s.getHeight();
 			
-			canvas.drawRectangle(0, 0, xExtent, yExtent, Color.GREEN);
+			//canvas.drawRectangle(0, 0, xExtent, yExtent, color);
 			
 			for (int i = 0; i < left; i++) {
-				canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 1 - 2 * i, color);
+				canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 2 * i, color);
 			}
+            
+            canvas.drawLine(xExtent - BORDER, left, xExtent - BORDER, left + s.getHeight(), color);
+            canvas.drawSolidRectangle(xExtent - BORDER + 1, left, BORDER - 2, s.getHeight() - 2 * left, Style.SECONDARY3);
 		}
+	}
+	
+	public void entered() {
+		getState().setObjectIdentified();
+		getState().setViewIdentified();
+		wrappedView.entered();
+		markDamaged();
+	}
+	
+	public void exited() {
+		getState().clearObjectIdentified();
+		getState().clearViewIdentified();
+		wrappedView.exited();
+		markDamaged();
 	}
 	
 	public String toString() {

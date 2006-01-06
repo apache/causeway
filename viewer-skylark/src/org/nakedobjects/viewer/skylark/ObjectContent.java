@@ -212,6 +212,9 @@ public abstract class ObjectContent extends AbstractContent {
     
     public Image getIconPicture(int iconHeight) {
         NakedObject nakedObject = getObject();
+        if (nakedObject == null) {
+            return  ImageFactory.getInstance().createIcon("emptyField", iconHeight, null);
+        }
         Object object = nakedObject.getObject();
         if( object instanceof NakedClass) {
             NakedObjectSpecification specification = ((NakedClass) object).forObjectType();

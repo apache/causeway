@@ -108,20 +108,10 @@ public interface View extends Cloneable {
     void entered();
 
     /**
-     * Called as the mouse moves into one of this view's contained views.
-     */
-    void enteredSubview();
-
-    /**
      * Called as the mouse crosses the bounds, and ends up outside, of this
      * view.
      */
     void exited();
-
-    /**
-     * Called as the mouse moves back into view from one its contained views.
-     */
-    void exitedSubview();
 
     /**
      * Called when the user clicks the mouse buttone within this view.
@@ -251,6 +241,13 @@ public interface View extends Cloneable {
     void markDamaged(Bounds bounds);
 
     /**
+     * Called as the mouse button is pressed down within this view. Does nothing;
+     * should be overriden when needed.
+     *                       the position relative to the top-left of this view
+     */
+    void mouseDown(Click click);
+    
+    /**
      * Called as the mouse is moved around within this view. Does nothing;
      * should be overriden when needed.
      * 
@@ -259,6 +256,12 @@ public interface View extends Cloneable {
      */
     void mouseMoved(Location location);
 
+    /**
+     * Called as the mouse button is released within this view (assuming that it was pressed in this view).
+     * Does nothing; should be overriden when needed.
+     */
+    void mouseUp(Click click);
+    
     /**
      * Called when an action generates a result, allowing this view to decide
      * what to do with it.

@@ -23,7 +23,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private Location downAt;
     private Drag drag;
     private final KeyboardManager keyboardManager;
-    private View previouslyIdentifiedView;
+    private View identifiedView;
     private InteractionSpy spy;
     private final Viewer viewer;
     private KeyEvent lastTyped;
@@ -60,7 +60,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             }
             drag.drag(viewer, new Location(me.getPoint()), me.getModifiers());
         }
-        previouslyIdentifiedView = null;
+        identifiedView = null;
     }
 
     /**
@@ -171,13 +171,13 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         }
         
         try {
-            Click click = new Click(previouslyIdentifiedView, downAt, me.getModifiers());
+            Click click = new Click(identifiedView, downAt, me.getModifiers());
             spy.addAction("Mouse clicked " + click.getLocation());
 
             if (click.button3() && viewer.getOverlayView() == null) {
-                if (previouslyIdentifiedView != null) {
-                    spy.addAction(" popup " + downAt + " over " + previouslyIdentifiedView);
-                    viewer.popupMenu(previouslyIdentifiedView, click);
+                if (identifiedView != null) {
+                    spy.addAction(" popup " + downAt + " over " + identifiedView);
+                    viewer.popupMenu(identifiedView, click);
                 }
 
             } else {
@@ -274,41 +274,29 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 View overView = viewer.identifyView(new Location(location), true);
                 spy.setOver(overView);
 
+                spy.addAction("moved " + location);
+                
                 if (overView != null) {
-                    if (previouslyIdentifiedView == null) {
-                        previouslyIdentifiedView = overView;
-                    } else {
-                        if (overView != previouslyIdentifiedView) {
-
-                            if (overView == previouslyIdentifiedView) {
-                                spy.addAction("moved into subview from " + previouslyIdentifiedView);
-                                previouslyIdentifiedView.enteredSubview();
-                            } else {
-                                spy.addAction("exited " + previouslyIdentifiedView);
-                                if(!isBusy(previouslyIdentifiedView)) {
-                                   // viewer.showDefaultCursor();
-                                }
-                                previouslyIdentifiedView.exited();
+                    if (overView != identifiedView) {
+                        if(identifiedView != null) {
+                            if (!isBusy(identifiedView)) {
+                                // viewer.showDefaultCursor();
                             }
-
-                            View previouslyIdentified = previouslyIdentifiedView;
-                            previouslyIdentifiedView = overView;
-
-                            if (overView != null) {
-                                if (overView == previouslyIdentified) {
-                                    spy.addAction("moved back to from " + previouslyIdentified);
-                                    overView.exitedSubview();
-                                } else {
-                                    spy.addAction("entered " + overView);
-                                    if(isBusy(overView)) {
-                                      //  viewer.showWaitCursor();
-                                    }
-                                    overView.entered();
-                                }
-                            }
-                            redraw();
+                            spy.addAction("exited " + identifiedView);
+                            identifiedView.exited();
                         }
+                        
+                        if (overView != null) {
+                            spy.addAction("entered " + overView);
+                            if (isBusy(overView)) {
+                                // viewer.showWaitCursor();
+                            }
+                            overView.entered();
+                        }
+                        
+                        redraw();
                     }
+                    identifiedView = overView;
 
                     spy.addTrace("--> mouse moved");
                     viewer.mouseMoved(location);
@@ -365,9 +353,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 viewer.disposeOverlayView();
             }
             viewer.makeFocus(overView);
+            Click click = new Click(null, downAt, me.getModifiers());
+            viewer.mouseDown(click);
             // drag should not be valid after double/triple click
             canDrag = overView != null && me.getClickCount() == 1;
-            previouslyIdentifiedView = overView;
+            identifiedView = overView;
+            redraw();
         } catch (Exception e) {
             log("mousePressed", e);
         }
@@ -398,7 +389,11 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 redraw();
 
                 drag = null;
-            }
+            }             
+            
+            Click click = new Click(identifiedView, downAt, me.getModifiers());
+            viewer.mouseUp(click);
+            redraw();
         } catch (Exception e) {
             log("mouseReleased", e);
         }

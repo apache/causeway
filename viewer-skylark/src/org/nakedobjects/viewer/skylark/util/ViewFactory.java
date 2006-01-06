@@ -278,11 +278,7 @@ public class ViewFactory implements DebugInfo {
     }
 
     public Enumeration openRootViews(Content forContent, View replacingView) {
-    //    if (forContent instanceof ObjectContent) {
-            return viewSpecifications(rootViews, forContent);
-  //      }
-
-     //   return new Vector().elements();
+        return viewSpecifications(rootViews, forContent);
     }
 
     public Enumeration openSubviews(Content forContent, View replacingView) {

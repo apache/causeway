@@ -16,7 +16,7 @@ public class WrappedTextFieldSpecification extends AbstractFieldSpecification {
 
     public View createView(Content content, ViewAxis axis) {
         WrappedTextField wrappedTextField = new WrappedTextField(content, this, axis, true, ORIGINAL_WIDTH);
-        //wrappedTextField.setNoLines(3);
+        wrappedTextField.setNoLines(4);
         return new TextFieldResizeBorder(wrappedTextField);
     }
     

@@ -13,40 +13,32 @@ import java.awt.event.KeyEvent;
 
 
 public class ButtonBorder extends AbstractBorder {
-    private final Button[] buttons;
     private static final int BUTTON_SPACING = 5;
+    private final Button[] buttons;
     private ButtonAction defaultAction;
 
     public ButtonBorder(ButtonAction[] actions, View view) {
         super(view);
 
-        int buttonHeight = VPADDING + Style.NORMAL.getTextHeight() + VPADDING;
         buttons = new Button[actions.length];
         for (int i = 0; i < actions.length; i++) {
             ButtonAction action = actions[i];
-            if(action.isDefault()) {
+            buttons[i] = new Button(action, view);
+            if (action.isDefault()) {
                 defaultAction = action;
             }
-            buttons[i] = new Button(action, buttonHeight, view);
         }
+        // space for: line & button with whitspace
+        bottom = 1 + VPADDING + buttons[0].getRequiredSize().getHeight() + VPADDING;
 
-        bottom = VPADDING + 2 + buttonHeight;
     }
 
-    public void keyPressed(final int keyCode, final int modifiers) {
-    	if(keyCode == KeyEvent.VK_ENTER) {
-    	    if(defaultAction != null && defaultAction.disabled(getView()).isAllowed()) {
-    	        defaultAction.execute(getWorkspace(), getView(), getLocation());
-    	    }
-    	}
-    	
-    	super.keyPressed(keyCode, modifiers);
-    }
-    
     public void draw(Canvas canvas) {
         int width = getSize().getWidth();
         int y = getSize().getHeight() - bottom;
 
+   //     canvas.clearBackground(this, Style.SECONDARY3);
+        
         // draw dividing line
         canvas.drawLine(0, y, width, y, Style.SECONDARY1);
 
@@ -57,33 +49,10 @@ public class ButtonBorder extends AbstractBorder {
             int buttonWidth = buttons[i].getSize().getWidth();
             buttonCanvas.offset(BUTTON_SPACING + buttonWidth, 0);
         }
-
+        
         // draw rest
         super.draw(canvas);
     }
-
-    public void layout(int width ) {
-            int x = width / 2 - totalButtonWidth() / 2;
-            int y = getSize().getHeight() - bottom + VPADDING + 2;
-
-            for (int i = 0; i < buttons.length; i++) {
-                buttons[i] = buttons[i];
-                buttons[i].setSize(buttons[i].getRequiredSize());
-                buttons[i].setLocation(new Location(x, y));
-
-                x += buttons[i].getSize().getWidth();
-            }
-    }
-    
-    public void setSize(Size size) {
-        super.setSize(size);
-        layout(size.getWidth());
-    }
-    
-	public void setBounds(Bounds bounds) {
-	    super.setBounds(bounds);
-	    layout(bounds.getWidth());
-	}   
 
     public void firstClick(Click click) {
         View button = overButton(click.getLocation());
@@ -94,33 +63,10 @@ public class ButtonBorder extends AbstractBorder {
         }
     }
 
-    public void secondClick(Click click) {
-        View button = overButton(click.getLocation());
-        if (button == null) {
-            super.secondClick(click);
-        }
-    }
-
-    public void thirdClick(Click click) {
-        View button = overButton(click.getLocation());
-        if (button == null) {
-            super.thirdClick(click);
-        }
-    }
-
     public Size getRequiredSize() {
         Size size = super.getRequiredSize();
         size.ensureWidth(totalButtonWidth());
         return size;
-    }
-
-    private int totalButtonWidth() {
-        int totalButtonWidth = BUTTON_SPACING;
-        for (int i = 0; i < buttons.length; i++) {
-            int buttonWidth = buttons[i].getRequiredSize().getWidth();
-            totalButtonWidth += BUTTON_SPACING + buttonWidth;
-        }
-        return totalButtonWidth;
     }
 
     public View identify(Location location) {
@@ -131,6 +77,48 @@ public class ButtonBorder extends AbstractBorder {
             }
         }
         return super.identify(location);
+    }
+
+    public void keyPressed(final int keyCode, final int modifiers) {
+        if (keyCode == KeyEvent.VK_ENTER) {
+            if (defaultAction != null && defaultAction.disabled(getView()).isAllowed()) {
+                defaultAction.execute(getWorkspace(), getView(), getLocation());
+            }
+        }
+
+        super.keyPressed(keyCode, modifiers);
+    }
+
+    public void layout(int width) {
+        int x = width / 2 - totalButtonWidth() / 2;
+        int y = getSize().getHeight() - VPADDING - buttons[0].getRequiredSize().getHeight();
+
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i] = buttons[i];
+            buttons[i].setSize(buttons[i].getRequiredSize());
+            buttons[i].setLocation(new Location(x, y));
+
+            x += buttons[i].getSize().getWidth();
+            x += BUTTON_SPACING;
+        }
+    }
+
+    public void mouseDown(Click click) {
+        View button = overButton(click.getLocation());
+        if (button == null) {
+            super.mouseDown(click);
+        } else {
+            button.mouseDown(click);
+        }
+    }
+
+    public void mouseUp(Click click) {
+        View button = overButton(click.getLocation());
+        if (button == null) {
+            super.mouseUp(click);
+        } else {
+            button.mouseUp(click);
+        }
     }
 
     /**
@@ -147,24 +135,57 @@ public class ButtonBorder extends AbstractBorder {
         return null;
     }
 
+    public void secondClick(Click click) {
+        View button = overButton(click.getLocation());
+        if (button == null) {
+            super.secondClick(click);
+        }
+    }
+
+    public void setBounds(Bounds bounds) {
+        super.setBounds(bounds);
+        layout(bounds.getWidth());
+    }
+
+    public void setSize(Size size) {
+        super.setSize(size);
+        layout(size.getWidth());
+    }
+
+    public void thirdClick(Click click) {
+        View button = overButton(click.getLocation());
+        if (button == null) {
+            super.thirdClick(click);
+        }
+    }
+
+    private int totalButtonWidth() {
+        int totalButtonWidth = 0;
+        for (int i = 0; i < buttons.length; i++) {
+            int buttonWidth = buttons[i].getRequiredSize().getWidth();
+            totalButtonWidth += i > 0 ? BUTTON_SPACING : 0;
+            totalButtonWidth += buttonWidth;
+        }
+        return totalButtonWidth;
+    }
+
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

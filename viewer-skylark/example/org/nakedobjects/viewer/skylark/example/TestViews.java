@@ -1,6 +1,8 @@
 package org.nakedobjects.viewer.skylark.example;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.utility.InfoDebugFrame;
+import org.nakedobjects.utility.NakedObjectConfiguration;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -39,6 +41,7 @@ public class TestViews {
        system = new TestSystem();
        system.init();
         
+       configure(NakedObjects.getConfiguration());
         
         Viewer viewer = new Viewer();
         ViewerFrame frame = new ViewerFrame();
@@ -69,6 +72,8 @@ public class TestViews {
 
         debug.refresh();
     }
+
+    protected void configure(NakedObjectConfiguration configuration) {}
 
     protected void views(Workspace workspace) {
         Content content = null;

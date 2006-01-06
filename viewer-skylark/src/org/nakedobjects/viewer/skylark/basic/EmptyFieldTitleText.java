@@ -1,31 +1,21 @@
 package org.nakedobjects.viewer.skylark.basic;
 
-import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneField;
-import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.ViewAxis;
-import org.nakedobjects.viewer.skylark.special.LookupBorder;
-import org.nakedobjects.viewer.skylark.special.OptionBorder;
 
 
-public class SubviewIconSpecification extends IconSpecification {
+class EmptyFieldTitleText extends TitleText {
+    private Content content;
 
-    public View createView(Content content, ViewAxis axis) {
-        ObjectContent c = (ObjectContent) content;
-        NakedObjectSpecification type = c.getSpecification();
+    public EmptyFieldTitleText(View view, Text style) {
+        super(view, style);
+        content = view.getContent();
+    }
 
-        IconView field = new IconView(content, this, axis, Style.NORMAL);
-        if (content instanceof ObjectParameter && ((ObjectParameter) content).getOptions() != null
-                && ((ObjectParameter) content).getOptions().length > 0) {
-            return new ObjectBorder(new OptionBorder(field));
-        } else if (content instanceof OneToOneField && type.isLookup() && ((OneToOneField) content).isEditable().isAllowed()) {
-            return new ObjectBorder(new LookupBorder(field));
-        } else {
-            return new ObjectBorder(field);
-        }
+    protected String title() {
+        return ((ObjectContent) content).getSpecification().getSingularName();
     }
 
 }

@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.utility.ToString;
+import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Size;
@@ -12,9 +13,10 @@ import org.nakedobjects.viewer.skylark.core.AbstractView;
 
 
 public abstract class TitleText {
-    private final View view;
-    private final Text style;
+    private static final int NO_MAX_WIDTH = -1;
     private final int ellipsisWidth;
+    private final Text style;
+    private final View view;
 
     public TitleText(final View view, final Text style) {
         this.view = view;
@@ -23,27 +25,19 @@ public abstract class TitleText {
         ellipsisWidth = style.stringWidth("...");
     }
 
-    public Size getSize() {
-        int height = View.VPADDING + style.getTextHeight() + View.VPADDING;
-        int width = View.HPADDING + style.stringWidth(title()) + View.HPADDING;
-        return new Size(width, height);
-    }
-
     /**
-     * Draw this TitleText's text stating from the specified x coordination and on the specified
-     * baseline.
+     * Draw this TitleText's text stating from the specified x coordination and on the specified baseline.
      */
     public void draw(final Canvas canvas, final int x, final int baseline) {
-        draw(canvas, x, baseline, -1);
+        draw(canvas, x, baseline, NO_MAX_WIDTH);
     }
 
     /**
-     * Draw this TitleText's text stating from the specified x coordination and on the specified
-     * baseline. If a maximum width is specified (ie it is positive) then the text drawn will not
-     * extend past that width.
+     * Draw this TitleText's text stating from the specified x coordination and on the specified baseline. If
+     * a maximum width is specified (ie it is positive) then the text drawn will not extend past that width.
      * 
      * @param maxWidth
-     *                 the maximum width to display the text within; if negative no limit is imposed
+     *            the maximum width to display the text within; if negative no limit is imposed
      */
     public void draw(final Canvas canvas, final int x, final int baseline, final int maxWidth) {
         Color color;
@@ -58,28 +52,28 @@ public abstract class TitleText {
             color = Style.BLACK;
         }
 
-        final int xt = x + View.HPADDING;
+        final int xt = x;
         final int yt = baseline;
 
         String text = title();
         if (maxWidth > 0 && style.stringWidth(text) > maxWidth) {
             int lastCharacterWithinAllowedWidth = 0;
-            for(int textWidth = ellipsisWidth; textWidth <= maxWidth;) {
+            for (int textWidth = ellipsisWidth; textWidth <= maxWidth;) {
                 char character = text.charAt(lastCharacterWithinAllowedWidth);
                 textWidth += style.charWidth(character);
                 lastCharacterWithinAllowedWidth++;
             }
-            
+
             int space = text.lastIndexOf(' ', lastCharacterWithinAllowedWidth - 1);
-            if(space > 0) {
-	            while (space >= 0) {
-	                char character = text.charAt(space - 1);
-	                if(Character.isLetterOrDigit(character)) {
-	                    break;
-	                }
-	                space --;
-	            }
-	            
+            if (space > 0) {
+                while (space >= 0) {
+                    char character = text.charAt(space - 1);
+                    if (Character.isLetterOrDigit(character)) {
+                        break;
+                    }
+                    space--;
+                }
+
                 text = text.substring(0, space);
             } else {
                 text = text.substring(0, lastCharacterWithinAllowedWidth - 1);
@@ -87,19 +81,23 @@ public abstract class TitleText {
             text += "...";
         }
 
+        if (AbstractView.debug) {
+            int x2 = style.stringWidth(text);
+            canvas.drawDebugOutline(new Bounds(xt, yt - style.getAscent(), x2, style.getTextHeight()), baseline, Color.DEBUG_DRAW_BOUNDS);
+        }
+
         canvas.drawText(text, xt, yt, color, style);
 
-        if (AbstractView.debug) {
-            int x2 = style.stringWidth(text) - 1;
-            canvas.drawRectangle(xt, yt - style.getAscent(), x2, style.getTextHeight() - 1, Color.DEBUG_DRAW_BOUNDS);
-            canvas.drawLine(xt, yt - style.getAscent() - style.getTextHeight() / 2, xt + x2, yt - style.getAscent()
-                    - style.getTextHeight() / 2, Color.DEBUG_DRAW_BOUNDS);
-            canvas.drawLine(xt, baseline, xt + x2, baseline, Color.DEBUG_BASELINE);
-        }
+    }
+
+    public Size getSize() {
+        int height = style.getTextHeight();
+        int width = style.stringWidth(title());
+        return new Size(width, height);
     }
 
     protected abstract String title();
-    
+
     public String toString() {
         ToString str = new ToString(this);
         str.append("style", style);
@@ -108,21 +106,20 @@ public abstract class TitleText {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

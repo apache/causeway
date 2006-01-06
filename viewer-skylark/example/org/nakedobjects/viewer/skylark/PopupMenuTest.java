@@ -442,6 +442,10 @@ public class PopupMenuTest extends TestCase {
                 }
 
                 public void viewMenuOptions(MenuOptionSet menuOptions) {}
+
+                public void mouseDown(Click click) {}
+
+                public void mouseUp(Click click) {}
             };
         }
 	}

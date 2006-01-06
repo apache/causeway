@@ -101,15 +101,11 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
                     }
                 }
                 newView = createSubviewFor(source, true);
-                //newView =
-                // Skylark.getInstance().getViewFactory().createIcon(content);
-                //newView =
-                // Skylark.getViewFactory().createWorkspaceIcon(source);
             }
         }
         newView.setSize(newView.getRequiredSize());
         Location location = drag.getTargetLocation();
-        location.add(40, -40);
+   //     location.add(40, -40);
         newView.setLocation(location);
         drag.getTargetView().addView(newView);
 

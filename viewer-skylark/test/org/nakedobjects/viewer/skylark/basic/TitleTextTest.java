@@ -145,8 +145,8 @@ public class TitleTextTest extends TestCase {
     public void testGetSize() {
         title = "abcde";
 
-        assertEquals(View.HPADDING + 10 * 5 + View.HPADDING, titleText.getSize().getWidth());
-        assertEquals(View.VPADDING + 8 + View.VPADDING, titleText.getSize().getHeight());
+        assertEquals(10 * 5, titleText.getSize().getWidth());
+        assertEquals(8, titleText.getSize().getHeight());
     }
 
 }

@@ -17,13 +17,8 @@ public class IconView extends ObjectView {
 
 	public IconView(Content content, ViewSpecification specification, ViewAxis axis, Text style) {
         super(content, specification, axis);
-        
         icon = new IconGraphic(this, style);
         text = new ObjectTitleText(this, style);
-    }
-
-    public boolean isOpen() {
-        return false;
     }
 
     public void draw(Canvas canvas) {
@@ -32,6 +27,7 @@ public class IconView extends ObjectView {
         int y = icon.getBaseline();
         icon.draw(canvas, x, y);
         x += icon.getSize().getWidth();
+        x += View.HPADDING;
         text.draw(canvas, x, y);
     }
 
@@ -41,6 +37,7 @@ public class IconView extends ObjectView {
 
     public Size getRequiredSize() {
         Size size = icon.getSize();
+        size.extendWidth(View.HPADDING);
         size.extendWidth(text.getSize().getWidth());
         return size;
     }

@@ -30,6 +30,11 @@ public interface Text {
     int getDescent();
 
     /**
+     * Returns the mid point, in pixels, between the baseline and the top of the characters.
+     */
+    int getMidPoint();
+    
+    /**
      * Returns the height, in pixels, for a normal line of text - where there is
      * some space between two lines of text.
      */

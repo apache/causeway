@@ -35,7 +35,6 @@ import org.nakedobjects.viewer.skylark.util.ViewFactory;
 import org.nakedobjects.viewer.skylark.value.CheckboxField;
 import org.nakedobjects.viewer.skylark.value.ColorField;
 
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -83,6 +82,7 @@ public class Viewer {
     protected ViewUpdateNotifier updateNotifier;
     private String userStatus;
     private Vector busy = new Vector();
+    private boolean showRepaintArea;
 
     public Viewer() {
         instance = this;
@@ -315,6 +315,22 @@ public class Viewer {
         options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
         options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
 
+        String showExplorationMenu = "Always show exploration menu " + (showExplorationMenuByDefault  ? "off" : "on");
+        options.add(MenuOptionSet.DEBUG, new MenuOption(showExplorationMenu) {
+            public void execute(Workspace workspace, View view, Location at) {
+                showExplorationMenuByDefault = !showExplorationMenuByDefault;
+                view.markDamaged();
+            }
+        });
+
+        String repaint = "Show painting area  " + (showRepaintArea  ? "off" : "on");
+        options.add(MenuOptionSet.DEBUG, new MenuOption(repaint) {
+            public void execute(Workspace workspace, View view, Location at) {
+                showRepaintArea = !showRepaintArea;
+                view.markDamaged();
+            }
+        });
+
         String debug = "Debug graphics " + (AbstractView.debug ? "off" : "on");
         options.add(MenuOptionSet.DEBUG, new MenuOption(debug) {
             public void execute(Workspace workspace, View view, Location at) {
@@ -366,6 +382,15 @@ public class Viewer {
    
         options.add(MenuOptionSet.DEBUG, new DebugDumpSnapshotOption());
     }
+    
+    public void mouseDown(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.mouseDown(click);
+        } else {
+            rootView.mouseDown(click);
+        }
+    }
 
     public void mouseMoved(Location location) {
         if (onOverlay(location)) {
@@ -375,7 +400,16 @@ public class Viewer {
             rootView.mouseMoved(location);
         }
     }
-
+    
+    public void mouseUp(Click click) {
+        if (onOverlay(click.getLocation())) {
+            click.subtract(overlayView.getLocation());
+            overlayView.mouseUp(click);
+        } else {
+            rootView.mouseUp(click);
+        }
+    }
+    
     private boolean onOverlay(Location mouse) {
         return overlayView != null && overlayView.getBounds().contains(mouse);
     }
@@ -432,8 +466,8 @@ public class Viewer {
         if (doubleBuffering) {
             g.drawImage(doubleBuffer, 0, 0, null);
         }
-        if (AbstractView.debug) {
-            g.setColor(Color.green);
+        if (showRepaintArea ) {
+            g.setColor(Color.DEBUG_REPAINT_BOUNDS.getAwtColor());
             g.drawRect(r.x, r.y, r.width - 1, r.height - 1);
             g.drawString("#" + redrawCount, r.x + 3, r.y + 15);
         }
@@ -441,7 +475,7 @@ public class Viewer {
 
     private void paintUserStatus(Graphics bufferCanvas) {
         int top = internalDisplaySize.getHeight() - statusBarHeight;
-        bufferCanvas.setColor(Color.lightGray);
+        bufferCanvas.setColor(Style.SECONDARY3.getAwtColor());
         paintStatus(bufferCanvas, top, userStatus);
     }
 
@@ -449,10 +483,11 @@ public class Viewer {
         bufferCanvas.setFont(Style.STATUS.getAwtFont());
         int baseline = top + Style.STATUS.getAscent();
         bufferCanvas.fillRect(0, top, internalDisplaySize.getWidth(), statusBarHeight);
-        bufferCanvas.setColor(Color.darkGray);
+        bufferCanvas.setColor(Style.SECONDARY1.getAwtColor());
         bufferCanvas.drawLine(0, top, internalDisplaySize.getWidth(), top);
+        bufferCanvas.setColor(Style.BLACK.getAwtColor());
         if (text != null) {
-            bufferCanvas.drawString(text, 5, baseline);
+            bufferCanvas.drawString(text, 5, baseline + View.VPADDING);
         }
     }
 
@@ -753,7 +788,7 @@ public class Viewer {
         LOG.debug("  internal " + internalDisplaySize);
 
         Size rootViewSize = new Size(internalDisplaySize);
-        statusBarHeight = 2 + Style.STATUS.getLineHeight() + 2;
+        statusBarHeight = Style.STATUS.getLineHeight();
         rootViewSize.contractHeight(statusBarHeight);
         statusBarArea = new Bounds(insets.left, insets.top + rootViewSize.height, rootViewSize.width, statusBarHeight);
         ((WorkspaceSpecification) rootView.getSpecification()).setRequiredSize(rootViewSize);

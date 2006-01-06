@@ -42,7 +42,7 @@ import org.apache.log4j.Logger;
 
 public class TreeNodeBorder extends AbstractBorder {
     private static final int BOX_PADDING = 2;
-    private static final int BOX_SIZE = 8;
+    private static final int BOX_SIZE = 9;
     private static final int BOX_X_OFFSET = 5;
     private final static Text LABEL_STYLE = Style.NORMAL;
     private static final Logger LOG = Logger.getLogger(TreeNodeBorder.class);
@@ -60,11 +60,11 @@ public class TreeNodeBorder extends AbstractBorder {
         text = new ObjectTitleText(this, LABEL_STYLE);
         int height = icon.getSize().getHeight();
 
-        baseline = icon.getBaseline();
+        baseline = icon.getBaseline() + 1;
 
         left = 22;
         right = 0;
-        top = height;
+        top = height + 2;
         bottom = 0;
     }
 
@@ -111,10 +111,10 @@ public class TreeNodeBorder extends AbstractBorder {
 
     public void draw(Canvas canvas) {
         if (((TreeBrowserFrame) getViewAxis()).getSelectedNode() == getView()) {
-            canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.PRIMARY2);
+            canvas.drawSolidRectangle(left, 0, getSize().getWidth() - left, top, Style.PRIMARY2);
         }
         if (getState().isObjectIdentified()) {
-            canvas.drawRectangle(left, 0, getSize().getWidth() - left - 1, top - 1, Style.SECONDARY2);
+            canvas.drawRectangle(left, 0, getSize().getWidth() - left, top, Style.SECONDARY2);
         }
 
         // lines
@@ -127,14 +127,14 @@ public class TreeNodeBorder extends AbstractBorder {
         boolean addBox = isOpen || canOpen != NodeSpecification.CANT_OPEN;
         if (addBox) {
             x += BOX_X_OFFSET;
-            canvas.drawLine(x, y, x + BOX_SIZE, y, Style.SECONDARY3);
+            canvas.drawLine(x, y, x + BOX_SIZE - 1, y, Style.SECONDARY3);
             canvas.drawSolidRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.WHITE);
             canvas.drawRectangle(x, y - BOX_SIZE / 2, BOX_SIZE, BOX_SIZE, Style.SECONDARY1);
 
             if (canOpen == NodeSpecification.UNKNOWN) {
 
             } else {
-                canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - BOX_PADDING, y, Style.BLACK);
+                canvas.drawLine(x + BOX_PADDING, y, x + BOX_SIZE - 1 - BOX_PADDING, y, Style.BLACK);
                 if (!isOpen) {
                     x += BOX_SIZE / 2;
                     canvas.drawLine(x, y - BOX_SIZE / 2 + BOX_PADDING, x, y + BOX_SIZE / 2 - BOX_PADDING, Style.BLACK);
@@ -151,7 +151,7 @@ public class TreeNodeBorder extends AbstractBorder {
         }
 
         // icon & title
-        x = left;
+        x = left + 1;
         icon.draw(canvas, x, baseline);
         x += icon.getSize().getWidth();
         text.draw(canvas, x, baseline);
@@ -203,7 +203,8 @@ public class TreeNodeBorder extends AbstractBorder {
 
     public Size getRequiredSize() {
         Size size = super.getRequiredSize();
-        size.ensureWidth(left + icon.getSize().getWidth() + text.getSize().getWidth() + right);
+//        size.extendHeight(2 * VPADDING);
+        size.ensureWidth(left + HPADDING + icon.getSize().getWidth() + text.getSize().getWidth() + HPADDING + right);
         return size;
     }
 

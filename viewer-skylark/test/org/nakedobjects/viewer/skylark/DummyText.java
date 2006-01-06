@@ -24,6 +24,10 @@ public class DummyText implements Text {
         return 4;
     }
 
+    public int getMidPoint() {
+        return 1;
+    }
+    
     public int getTextHeight() {
         return 8;
     }

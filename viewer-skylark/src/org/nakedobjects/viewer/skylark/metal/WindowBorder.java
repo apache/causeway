@@ -40,13 +40,14 @@ public class WindowBorder extends AbstractWindowBorder {
         super.draw(canvas);
 
         if (isTransient()) {
-            int height = top - 2;
-            int x = 100;
+            int height = top - LINE_THICKNESS - 2;
+            int x = getSize().getWidth() - 50;
             Image icon = ImageFactory.getInstance().createIcon("transient", height, null);
             if (icon == null) {
                 canvas.drawText("*", x, getBaseline(), Style.BLACK, Style.NORMAL);
             } else {
-                canvas.drawIcon(icon, x, 1, height, height);
+                canvas.drawIcon(icon, x, LINE_THICKNESS + 1, height, height);
+              //  canvas.drawRectangle(x, LINE_THICKNESS + 1, height, height, Color.RED);
             }
         }
     }

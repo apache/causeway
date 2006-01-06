@@ -7,10 +7,8 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
-import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -23,7 +21,6 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.special.LookupBorder;
 import org.nakedobjects.viewer.skylark.special.OptionBorder;
-import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public class EmptyField extends AbstractView {
@@ -34,10 +31,11 @@ public class EmptyField extends AbstractView {
         }
 
         public View createView(Content content, ViewAxis axis) {
-            EmptyField emptyField = new EmptyField(content, this, axis);
+            EmptyField emptyField = new EmptyField(content, this, axis, Style.NORMAL);
             NakedObjectSpecification contentType = content.getSpecification();
-            
-            if (content instanceof ObjectParameter && ((ObjectParameter) content).getOptions().length > 0) {
+
+            if (content instanceof ObjectParameter && ((ObjectParameter) content).getOptions() != null
+                    && ((ObjectParameter) content).getOptions().length > 0) {
                 return new ObjectBorder(new OptionBorder(emptyField));
             } else if (contentType.isLookup()) {
                 return new ObjectBorder(new LookupBorder(emptyField));
@@ -63,9 +61,10 @@ public class EmptyField extends AbstractView {
         }
     }
 
-    private static Text style = Style.NORMAL;
+    private IconGraphic icon;
+    private TitleText text;
 
-    public EmptyField(Content content, ViewSpecification specification, ViewAxis axis) {
+    public EmptyField(Content content, ViewSpecification specification, ViewAxis axis, Text style) {
         super(content, specification, axis);
         if (((ObjectContent) content).getObject() != null) {
             throw new IllegalArgumentException("Content for EmptyField must be null: " + content);
@@ -74,6 +73,29 @@ public class EmptyField extends AbstractView {
         if (object != null) {
             throw new IllegalArgumentException("Content for EmptyField must be null: " + object);
         }
+        icon = new IconGraphic(this, style);
+        text = new EmptyFieldTitleText(this, style);
+    }
+
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+        int x = 0;
+        int y = icon.getBaseline();
+        icon.draw(canvas, x, y);
+        x += icon.getSize().getWidth();
+        x += View.HPADDING;
+        text.draw(canvas, x, y);
+    }
+
+    public int getBaseline() {
+        return icon.getBaseline();
+    }
+
+    public Size getRequiredSize() {
+        Size size = icon.getSize();
+        size.extendWidth(View.HPADDING);
+        size.extendWidth(text.getSize().getWidth());
+        return size;
     }
 
     private Consent canDrop(NakedObject dragSource) {
@@ -107,81 +129,15 @@ public class EmptyField extends AbstractView {
         markDamaged();
     }
 
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
-
-        Color color;
-
-        if (getState().canDrop()) {
-            color = Style.VALID;
-        } else if (getState().cantDrop()) {
-            color = Style.INVALID;
-        } else if (getState().isViewIdentified()) {
-            color = Style.PRIMARY1;
-        } else {
-            color = Style.SECONDARY1;
-        }
-
-        int iconHeight = (style.getTextHeight() * 120) / 100;
-        int iconWidth = (iconHeight * 80) / 100;
-        int containerHeight = getSize().getHeight();
-        int iconCentre = containerHeight / 2;
-
-        int xt = iconWidth + (HPADDING * 2);
-        int yt = getBaseline();
-
-        int xi = getPadding().getLeft() + HPADDING;
-        int yi = iconCentre - (iconHeight / 2);
-
-        Image icon = ImageFactory.getInstance().createIcon("emptyField", iconHeight, null);
-        if (icon == null) {
-            canvas.drawSolidOval(xi, yi, iconWidth, iconHeight, color);
-        } else {
-            canvas.drawIcon(icon, xi, yi, iconWidth, iconHeight);
-        }
-
-        canvas.drawText(name(), xt, yt, color, style);
-
-        if (AbstractView.debug) {
-            Size size = getSize();
-            canvas.drawRectangle(0, 0, size.getWidth() - 1, size.getHeight() - 1, Color.DEBUG_VIEW_BOUNDS);
-            canvas.drawLine(0, size.getHeight() / 2, size.getWidth() - 1, size.getHeight() / 2, Color.DEBUG_VIEW_BOUNDS);
-            canvas.drawLine(0, getBaseline(), size.getWidth() - 1, getBaseline(), Color.DEBUG_BASELINE);
-        }
-    }
-
     public void drop(ContentDrag drag) {
         NakedObject target = ((ObjectContent) getParent().getContent()).getObject();
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
         setField(target, source);
     }
 
-    /**
-     * @see View#getBaseline()
-     */
-    public int getBaseline() {
-        return style.getAscent() + VPADDING;
-    }
-
-    public Size getRequiredSize() {
-        Size size = new Size(0, 0);
-        int iconHeight = (style.getTextHeight() * 120) / 100;
-        size.extendWidth((iconHeight * 80) / 100);
-        size.extendWidth(HPADDING * 3);
-        size.extendWidth(style.stringWidth(name()));
-
-        size.setHeight(iconHeight);
-        size.extendHeight(VPADDING * 2);
-        return size;
-    }
-
     public void contentMenuOptions(MenuOptionSet options) {
         getContent().menuOptions(options);
         options.setColor(Style.CONTENT_MENU);
-    }
-
-    private String name() {
-        return ((ObjectContent) getContent()).getSpecification().getSingularName();
     }
 
     /**
@@ -205,10 +161,6 @@ public class EmptyField extends AbstractView {
             ((ObjectContent) getContent()).setObject(object);
             getParent().invalidateContent();
         }
-    }
-
-    protected String title() {
-        return name();
     }
 
     public String toString() {

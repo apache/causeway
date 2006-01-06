@@ -210,12 +210,35 @@ public abstract class AbstractControlView implements View {
 
     public void limitBoundsWithin(Bounds bounds) {}
 
-    public void markDamaged() {}
+    public void markDamaged() {
+        markDamaged(getView().getBounds());
+    }
 
-    public void markDamaged(Bounds bounds) {}
+    public void markDamaged(Bounds bounds) {
+        if (parent == null) {
+            getViewManager().markDamaged(bounds);
+        } else {
+            Location pos = parent.getLocation();
+            bounds.translate(pos.getX(), pos.getY());
+            Padding pad = parent.getPadding();
+            bounds.translate(pad.getLeft(), pad.getTop());
+            parent.markDamaged(bounds);
+        }
+    }
 
+    public void mouseDown(Click click) {
+        View target = getParent().getView();
+        if (action.disabled(target).isAllowed()) {
+            markDamaged();
+            getViewManager().saveCurrentFieldEntry();
+            action.execute(target.getWorkspace(), target, getLocation());
+        }
+    }
+    
     public void mouseMoved(Location location) {}
 
+    public void mouseUp(Click click) {}
+    
     public void objectActionResult(Naked result, Location at) {}
 
     public View pickupContent(Location location) {

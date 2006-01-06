@@ -20,13 +20,13 @@ public class Style {
     public static final Color INVALID = new Color("invalid", "#ffc4c4");
     public static final Text LABEL = new AwtText("label", "SansSerif--10");
     public static final Text MENU = new AwtText("menu", "SansSerif--12");
-    public static final Text NORMAL = new AwtText("normal", "SansSerif--12");
+    public static final Text NORMAL = new AwtText("normal", "SansSerif-plain-14");
     public static final Color NORMAL_MENU = new Color("menu.normal", "#000000");
     public static final Color PRIMARY1 = new Color("primary1", "#666699"); //"#0066cc"
     public static final Color PRIMARY2 = new Color("primary2", "#9999cc");
     public static final Color PRIMARY3 = new Color("primary3", "#ccccff");
     public static final Color ACTIVE = new Color("active", "#ff0000");
-    public static final Color TEXT_EDIT = new Color("textedit", "#669966");
+    public static final Color TEXT_EDIT = new Color("textedit", "#009933");
     public static final Color REVERSE_MENU = new Color("menu.reversed", "#FFFFFF");
     public static final Color SECONDARY1 = new Color("secondary1", "#666666");
     public static final Color SECONDARY2 = new Color("secondary2", "#999999");
@@ -57,8 +57,7 @@ public class Style {
 
     public static int defaultFieldHeight() {
         if(defaultFieldHeight == 0) {
-        int iconSize = Style.NORMAL.getTextHeight() * 120 / 100;
-        defaultFieldHeight = View.VPADDING * 2 + iconSize;
+            defaultFieldHeight = Style.NORMAL.getTextHeight();
         }
         return defaultFieldHeight;
     }

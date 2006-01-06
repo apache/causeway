@@ -38,8 +38,8 @@ public class CloseWindowControl extends WindowControl {
         int x = 0;
         int y = 0;
 
-        canvas.drawRectangle(x + 1, y + 1, WIDTH - 2, HEIGHT - 2, Style.WHITE);
-        canvas.drawRectangle(x, y, WIDTH - 2, HEIGHT - 2, Style.SECONDARY1);
+        canvas.drawRectangle(x + 1, y + 1, WIDTH - 1, HEIGHT - 1, Style.WHITE);
+        canvas.drawRectangle(x, y, WIDTH - 1, HEIGHT - 1, Style.SECONDARY1);
         Color crossColor = Style.BLACK;
         canvas.drawLine(x + 4, y + 3, x + 10, y + 9, crossColor);
         canvas.drawLine(x + 5, y + 3, x + 11, y + 9, crossColor);

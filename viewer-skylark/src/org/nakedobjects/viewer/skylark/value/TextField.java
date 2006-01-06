@@ -174,7 +174,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     }
 
     public void draw(Canvas canvas) {
-        super.draw(canvas);
+    //    super.draw(canvas);
 
         int width = getMaxWidth();
 
@@ -328,7 +328,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     }
 
     public int getBaseline() {
-        return style.getAscent() + VPADDING;
+        return getText().getAscent() + 2;
     }
     
     public int getMaxWidth() {
@@ -337,9 +337,13 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 
     public Size getRequiredSize() {
         int width = HPADDING + maxTextWidth + HPADDING;
-        int height = textContent.getNoDisplayLines() * getText().getLineHeight() + VPADDING * 2;
+        int height;
+        if(textContent.getNoDisplayLines() == 1) {
+            height = getText().getTextHeight();
+        } else {
+            height =textContent.getNoDisplayLines() * getText().getLineHeight();
+        }
         height = Math.max(height, Style.defaultFieldHeight());
-
         return new Size(width, height);
     }
 

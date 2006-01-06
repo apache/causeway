@@ -290,6 +290,10 @@ public class MockView implements View {
     public String toString() {
         return "MockView" + id;
     }
+
+    public void mouseDown(Click click) {}
+
+    public void mouseUp(Click click) {}
 }
 
 /*

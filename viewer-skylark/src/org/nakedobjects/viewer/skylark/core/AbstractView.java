@@ -10,6 +10,7 @@ import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
@@ -197,7 +198,11 @@ public abstract class AbstractView implements View {
 
     public void dragTo(InternalDrag drag) {}
 
-    public void draw(Canvas canvas) {}
+    public void draw(Canvas canvas) {
+        if (AbstractView.debug) {
+            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(), Color.DEBUG_VIEW_BOUNDS);
+        }
+    }
 
     public void drop(ContentDrag drag) {}
 
@@ -210,11 +215,7 @@ public abstract class AbstractView implements View {
 
     public void entered() {}
 
-    public void enteredSubview() {}
-
     public void exited() {}
-
-    public void exitedSubview() {}
 
     public void firstClick(Click click) {
         View subview = subviewFor(click.getLocation());
@@ -376,6 +377,14 @@ public abstract class AbstractView implements View {
         }
     }
 
+    public void mouseDown(Click click) {
+        View subview = subviewFor(click.getLocation());
+        if (subview != null) {
+            click.subtract(subview.getLocation());
+            subview.mouseDown(click);
+        }
+    }
+    
     public void mouseMoved(Location location) {
         View subview = subviewFor(location);
         if (subview != null) {
@@ -384,6 +393,14 @@ public abstract class AbstractView implements View {
         }
     }
 
+    public void mouseUp(Click click) {
+        View subview = subviewFor(click.getLocation());
+        if (subview != null) {
+            click.subtract(subview.getLocation());
+            subview.mouseUp(click);
+        }
+    }
+    
     public void objectActionResult(Naked result, Location at) {
         getWorkspace().addOpenViewFor(result, at);
     }

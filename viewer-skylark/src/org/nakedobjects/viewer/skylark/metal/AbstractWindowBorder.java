@@ -19,7 +19,7 @@ import org.nakedobjects.viewer.skylark.core.DragViewOutline;
 
 
 public abstract class AbstractWindowBorder extends AbstractBorder {
-    private final static int LINE_THICKNESS = 5;
+    final protected static int LINE_THICKNESS = 5;
     private final static Text TITLE_STYLE = Style.TITLE;
     private final int baseline;
     private final int padding = 2;
@@ -91,17 +91,17 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
         canvas.drawSolidRectangle(3, 3, bounds.getWidth() - 6, bounds.getHeight() - 6, Style.background(getSpecification()));
 
         // slightly rounded grey border
-        canvas.drawRectangle(1, 0, width - 3, height - 1, Style.SECONDARY1);
-        canvas.drawRectangle(0, 1, width - 1, height - 3, Style.SECONDARY1);
+        canvas.drawRectangle(1, 0, width - 2, height, Style.SECONDARY1);
+        canvas.drawRectangle(0, 1, width, height - 2, Style.SECONDARY1);
 
         for (int i = 2; i < left; i++) {
-            canvas.drawRectangle(i, i, width - 2 * i - 1, height - 2 * i - 1, Style.SECONDARY1);
+            canvas.drawRectangle(i, i, width - 2 * i, height - 2 * i, Style.SECONDARY1);
         }
 
         ViewState state = getState();
         if (state.isActive()) {
             int i = left;
-            canvas.drawRectangle(i, top, width - 2 * i - 1, height - 2 * i - 1 - top, Style.ACTIVE);
+            canvas.drawRectangle(i, top, width - 2 * i, height - 2 * i - top, Style.ACTIVE);
         }
 
         // vertical lines within border
@@ -118,7 +118,8 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
 
         canvas.drawSolidRectangle(left, LINE_THICKNESS, width - left - right, titlebarHeight,
                 getState().isRootViewIdentified() ? Style.PRIMARY2 : Style.SECONDARY2);
-        canvas.drawLine(x, top - 1, width - right - 1, top - 1, Style.SECONDARY1);
+        int y = LINE_THICKNESS + titlebarHeight - 1;
+        canvas.drawLine(x, y, width - right - 1, y, Style.SECONDARY1);
 
         canvas.drawText(title(), x + HPADDING, baseline, Style.BLACK, TITLE_STYLE);
 

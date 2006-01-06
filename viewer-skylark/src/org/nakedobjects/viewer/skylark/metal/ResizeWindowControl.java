@@ -35,8 +35,8 @@ public class ResizeWindowControl extends WindowControl {
         int x  = 0;
         int y = 0;
         
-        canvas.drawRectangle(x + 1, y + 1, WIDTH - 2, HEIGHT - 2, Style.WHITE);
-        canvas.drawRectangle(x, y, WIDTH - 2, HEIGHT - 2, Style.SECONDARY1);
+        canvas.drawRectangle(x + 1, y + 1, WIDTH - 1, HEIGHT - 1, Style.WHITE);
+        canvas.drawRectangle(x, y, WIDTH - 1, HEIGHT - 1, Style.SECONDARY1);
         canvas.drawRectangle(x + 3, y + 2, 8, 8, Style.SECONDARY2);
         canvas.drawLine(x + 3, y + 3, x + 10, y + 3, Style.SECONDARY2);
     }

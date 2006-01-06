@@ -20,11 +20,6 @@ public class OverlayDebugFrame extends DebugFrame {
     }
     
     class EmptyView extends AbstractView {
-
-        protected EmptyView() {
-            super(null, null, null);
-        }
-        
     }
 
 }

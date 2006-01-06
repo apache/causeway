@@ -40,8 +40,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         String name;
         String reason;
 
-        private Item() {
-        }
+        private Item() {}
 
         public String toString() {
             return isBlank ? "NONE" : (name + " " + (isDisabled ? "DISABLED " : " " + action));
@@ -68,11 +67,11 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
             return item;
         }
     }
-    
+
     private class PopupContent extends AbstractContent {
 
         public PopupContent() {}
-        
+
         public Consent canDrop(Content sourceContent) {
             return Veto.DEFAULT;
         }
@@ -117,7 +116,8 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
         public String getId() {
             return null;
-        }}
+        }
+    }
 
     private static final UserAction DEBUG_VIEW_OPTION = new DebugViewOption();
 
@@ -154,16 +154,14 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
      * @see java.awt.Component#paint(java.awt.Graphics)
      */
     public void draw(Canvas canvas) {
-        super.draw(canvas);
-    
         int width = getSize().getWidth();
         int height = getSize().getHeight();
-        canvas.drawSolidRectangle(0, 0, width - 1, height - 1, backgroundColor);
-        canvas.draw3DRectangle(0, 0, width - 1, height - 1, true);
-    
-        int baseLine = style().getAscent() + VPADDING;
+        canvas.drawSolidRectangle(0, 0, width, height, backgroundColor);
+        canvas.draw3DRectangle(0, 0, width, height, backgroundColor, true);
+
+        int itemHeight = style().getLineHeight() + VPADDING;
+        int baseLine = itemHeight / 2 + style().getAscent() / 2 +getPadding().getTop();
         int left = getPadding().getLeft();
-    
         for (int i = 0; i < items.length; i++) {
             if (items[i].isBlank) {
                 int y = baseLine - (style().getAscent() / 2);
@@ -171,21 +169,20 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
                 canvas.drawLine(1, y - 1, width - 2, y - 1, backgroundColor.darker());
             } else {
                 Color color;
-    
                 if (items[i].isDisabled || items[i].action == null) {
                     color = disabledColor();
                 } else if (getOption() == i) {
-                    canvas.drawSolidRectangle(2, baseLine - style().getAscent(), width - 4, style().getTextHeight() + 2,
-                            backgroundColor.darker());
+                    int top = getPadding().getTop() + i * itemHeight;
+                    int depth = style().getLineHeight() + 2;
+                    canvas.drawSolidRectangle(2, top, width - 4, depth, backgroundColor.darker());
                     color = reversedColor();
                 } else {
                     color = normalColor();
                 }
-    
                 canvas.drawText(items[i].name, left, baseLine, color, style());
             }
-    
-            baseLine += style().getTextHeight() + VPADDING;
+
+            baseLine += itemHeight;
         }
     }
 
@@ -226,7 +223,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         for (int i = 0; i < items.length; i++) {
             int itemWidth = items[i].isBlank ? 0 : style().stringWidth(items[i].name);
             size.ensureWidth(itemWidth);
-            size.extendHeight(style().getTextHeight() + VPADDING);
+            size.extendHeight(style().getLineHeight() + VPADDING);
         }
 
         size.extend(getPadding());
@@ -284,10 +281,10 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
         dispose();
         if (!item.isBlank && item.action != null && item.action.disabled(forView).isAllowed()) {
-		    showStatus("Executing " + item);
-		    LOG.debug("execute " + item.name + " on " + forView + " in " + workspace);
+            showStatus("Executing " + item);
+            LOG.debug("execute " + item.name + " on " + forView + " in " + workspace);
             item.action.execute(workspace, forView, location);
-	        showStatus("");
+            showStatus("");
         }
     }
 
@@ -339,13 +336,13 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     public View makeView(Naked object, NakedObjectField field) throws CloneNotSupportedException {
         throw new RuntimeException();
     }
-    
+
     public void markDamaged() {
         super.markDamaged();
     }
 
     public void mouseMoved(Location at) {
-        int option = at.getY() / (style().getTextHeight() + VPADDING);
+        int option = (at.getY() - getPadding().getTop()) / (style().getLineHeight() + VPADDING);
         option = Math.max(option, 0);
         option = Math.min(option, items.length - 1);
         if (option >= 0 && optionIdentified != option) {
@@ -401,25 +398,20 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

@@ -50,9 +50,6 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
 
     private void newBuild(View view, ActionContent actionContent) {
         LOG.debug("build new view " + view + " for " + actionContent);
-    //    view.addView(new TextView( "ACTION: " + actionContent.getActionName()));
-        view.addView(new SubviewIconSpecification().createView(actionContent, null));
-        
         int noParameters = actionContent.getNoParameters();
         View focusOn = null;
         for (int f = 0; f < noParameters; f++) {
@@ -76,9 +73,8 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
         LOG.debug("rebuild view " + view + " for " + actionContent);
         View[] subviews = view.getSubviews();
 
-        for (int i = 0; i < subviews.length - 1; i++) {
-            // Note the first view is the text field, hence we get the i+1 subview for the parameter i
-            View subview = subviews[i + 1];
+        for (int i = 0; i < subviews.length; i++) {
+            View subview = subviews[i];
             Content content = subview.getContent();
 
             Naked subviewsObject = subview.getContent().getNaked();

@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
@@ -55,6 +56,9 @@ public class AbstractBorder extends AbstractViewDecorator {
     }
     
     public void draw(Canvas canvas) {
+        if (AbstractView.debug) {
+            canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(), Color.DEBUG_BORDER_BOUNDS);
+        }
         wrappedView.draw(canvas.createSubcanvas(getLeft(), getTop(), getSize().getWidth() - getRight(), getSize().getHeight() - getBottom()));
     }
 
@@ -152,6 +156,13 @@ public class AbstractBorder extends AbstractViewDecorator {
         
     }
 
+    public void mouseDown(Click click) {
+        if(overContent(click.getLocation())) {
+            click.subtract(getLeft(), getTop());
+            wrappedView.mouseDown(click);
+        }
+    }
+
     public void mouseMoved(Location at) {
         boolean on = overBorder(at);
         if (onBorder != on) {
@@ -162,6 +173,13 @@ public class AbstractBorder extends AbstractViewDecorator {
         if(!on) {
 	        at.move(-getLeft(), -getTop());
 	        wrappedView.mouseMoved(at);
+        }
+    }
+    
+    public void mouseUp(Click click) {
+        if(overContent(click.getLocation())) {
+            click.subtract(getLeft(), getTop());
+            wrappedView.mouseUp(click);
         }
     }
     

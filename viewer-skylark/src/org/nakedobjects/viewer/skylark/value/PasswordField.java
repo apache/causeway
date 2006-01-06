@@ -20,6 +20,7 @@ public class PasswordField extends AbstractField {
     private int maxTextWidth;
     private String password;
     private int width;
+    private boolean identified;
 
     public PasswordField(Content content, ViewSpecification design, ViewAxis axis, int width) {
         super(content, design, axis);
@@ -51,16 +52,26 @@ public class PasswordField extends AbstractField {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+        Color color = identified ? Style.IDENTIFIED : Style.SECONDARY2;
+        color = hasFocus() ? Style.PRIMARY1 : color;
+        int baseline = getBaseline();
+        canvas.drawLine(HPADDING, baseline , HPADDING + getSize().getWidth(), baseline, color);
+        
         int length = password.length();
-        int x = 0;
+        int x = 3;
         for (int i = 0; i < length; i++) {
-            canvas.drawSolidOval(x, 0 + VPADDING + 2, width, width, hasFocus() ? Color.YELLOW : Color.LIGHT_GRAY);
+            canvas.drawSolidOval(x, 1, width, width, hasFocus() ? Color.YELLOW : Color.LIGHT_GRAY);
             x += width + 2;
         }
-        x = 0;
-        for (int i = 0; i < length + 1; i++) {
-            canvas.drawOval(0 + i * (width + 2), 0 + VPADDING + 2, width, width, hasFocus() ? Color.BLACK : Color.GRAY);
+        x = 3;
+        for (int i = 0; i < length; i++) {
+            canvas.drawOval(x, 1 , width, width, hasFocus() ? Color.BLACK : Color.GRAY);
             x += width + 2;
+        }
+        
+        if (hasFocus() && canChangeValue()) {
+            canvas.drawLine(x, (baseline + style.getDescent()), x, 0,
+                    Style.PRIMARY1);
         }
     }
 
@@ -77,6 +88,24 @@ public class PasswordField extends AbstractField {
         markDamaged();
     }
 
+
+
+    public void entered() {
+        if(canChangeValue()) {
+            getViewManager().showTextCursor();
+            identified = true;
+            markDamaged();
+        }
+    }
+
+    public void exited() {
+        if (canChangeValue()) {
+            getViewManager().showArrowCursor();
+            identified = false;
+            markDamaged();
+        }
+    }
+    
     public void focusLost() {
         editComplete();
     }

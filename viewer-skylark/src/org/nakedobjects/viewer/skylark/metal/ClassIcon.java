@@ -9,7 +9,6 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
@@ -107,10 +106,6 @@ public class ClassIcon extends ObjectView {
 
     public void draw(Canvas canvas) {
         super.draw(canvas);
-
-        if (debug) {
-            canvas.drawRectangleAround(this, Color.DEBUG_BASELINE);
-        }
 
         int x = 0;
         int y = icon.getBaseline();

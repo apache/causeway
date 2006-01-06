@@ -11,6 +11,7 @@ import org.nakedobjects.viewer.skylark.View;
 
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 
 
@@ -28,6 +29,25 @@ public class DrawingCanvas implements Canvas {
         graphics.clipRect(x, y, width, height);
     }
 
+    public void clearBackground(View view, Color color) {
+        Bounds bounds = view.getBounds();
+        drawSolidRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
+    }
+
+    private Polygon createPolygon(int x, int y, int width, int height) {
+        int points = 40;
+        int xPoints[] = new int[points];
+        int yPoints[] = new int[points];
+        double radians = 0.0;
+        for (int i = 0; i < points; i++) {
+            xPoints[i] = x + (int) (width / 2.0) + (int) (width / 2.0 * Math.cos(radians));
+            yPoints[i] = y + (int) (height / 2.0) + (int) (height / 2.0 * Math.sin(radians));
+            radians += (2.0 * Math.PI) / points;
+        }
+        Polygon p = new Polygon(xPoints, yPoints, points);
+        return p;
+    }
+
     public Canvas createSubcanvas() {
         return new DrawingCanvas(graphics.create());
     }
@@ -43,21 +63,28 @@ public class DrawingCanvas implements Canvas {
         return new DrawingCanvas(g, 0, 0, width, height);
     }
 
-    public void draw3DRectangle(int x, int y, int width, int height, boolean raised) {
-        graphics.draw3DRect(x, y, width, height, raised);
+    public void draw3DRectangle(int x, int y, int width, int height, Color color, boolean raised) {
+        useColor(color);
+        graphics.draw3DRect(x, y, width - 1, height - 1, raised);
     }
 
-    public void clearBackground(View view, Color color) {
-        Bounds bounds = view.getBounds();
-        drawSolidRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
+    public void drawDebugOutline(Bounds bounds, int baseline, Color color) {
+        int width = bounds.getWidth();
+        int height = bounds.getHeight();
+        drawRectangle(bounds.getX(), bounds.getY(), width, height, color);
+        int midpoint = bounds.getY() + height / 2;
+        drawLine(bounds.getX(), midpoint, width - 2, midpoint, color);
+        if(baseline > 0) {
+            drawLine(bounds.getX() , baseline, width - 1, baseline, Color.DEBUG_BASELINE);
+        }
     }
-
+    
     public void drawIcon(Image icon, int x, int y) {
         graphics.drawImage(((AwtImage) icon).getAwtImage(), x, y, null);
     }
 
     public void drawIcon(Image icon, int x, int y, int width, int height) {
-        graphics.drawImage(((AwtImage) icon).getAwtImage(), x, y, width, height, null);
+        graphics.drawImage(((AwtImage) icon).getAwtImage(), x, y, width - 1, height - 1, null);
     }
 
     public void drawLine(int x, int y, int x2, int y2, Color color) {
@@ -71,33 +98,23 @@ public class DrawingCanvas implements Canvas {
 
     public void drawOval(int x, int y, int width, int height, Color color) {
         useColor(color);
-        
-        int points = 50;
-        int xPoints[] = new int[points];
-        int yPoints[] = new int[points];
-        double radians = 0.0;
-        for (int i = 0; i <points; i++) {
-            xPoints[i] = x + width / 2  + (int) (width /2 * Math.cos(radians));
-            yPoints[i] = y + height / 2  + (int) (height / 2 * Math.sin(radians));
-            radians += (2.0 * Math.PI) / points;
-        }
-        graphics.drawPolygon(xPoints, yPoints, points);
-     //   graphics.drawOval(x, y, width, height);
+        Polygon p = createPolygon(x, y, width - 1, height - 1);
+        graphics.drawPolygon(p);
     }
-    
+
     public void drawRectangle(int x, int y, int width, int height, Color color) {
         useColor(color);
-        graphics.drawRect(x, y, width, height);
+        graphics.drawRect(x, y, width - 1, height - 1);
     }
 
     public void drawRectangleAround(View view, Color color) {
         Bounds bounds = view.getBounds();
-        drawRectangle(0, 0, bounds.getWidth() - 1, bounds.getHeight() - 1, color);
+        drawRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
     }
 
     public void drawRoundedRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color) {
         useColor(color);
-        graphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+        graphics.drawRoundRect(x, y, width - 1, height - 1, arcWidth, arcHeight);
     }
 
     public void drawShape(Shape shape, Color color) {
@@ -113,19 +130,8 @@ public class DrawingCanvas implements Canvas {
 
     public void drawSolidOval(int x, int y, int width, int height, Color color) {
         useColor(color);
-        
-        int points = 50;
-        int xPoints[] = new int[points];
-        int yPoints[] = new int[points];
-        double radians = 0.0;
-        for (int i = 0; i <points; i++) {
-            xPoints[i] = x + width / 2  + (int) (width /2 * Math.cos(radians));
-            yPoints[i] = y + height / 2  + (int) (height / 2 * Math.sin(radians));
-            radians += (2.0 * Math.PI) / points;
-        }
-        graphics.fillPolygon(xPoints, yPoints, points);
-
-//        graphics.fillOval(x, y, width, height);
+        Polygon p = createPolygon(x, y, width, height);
+        graphics.fillPolygon(p);
     }
 
     public void drawSolidRectangle(int x, int y, int width, int height, Color color) {
@@ -147,7 +153,7 @@ public class DrawingCanvas implements Canvas {
     public void drawText(String text, int x, int y, Color color, Text style) {
         useColor(color);
         useFont(style);
-        graphics.drawString(text, x, y + 1);
+        graphics.drawString(text, x, y);
     }
 
     public void offset(int x, int y) {
@@ -185,25 +191,20 @@ public class DrawingCanvas implements Canvas {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */
