@@ -29,7 +29,7 @@ import org.xml.sax.helpers.XMLReaderFactory;
 
 public class XmlDataManager implements DataManager {
     public static String directory() {
-        return NakedObjects.getConfiguration().getString("xml-object-store.directory", "xml");
+        return NakedObjects.getConfiguration().getString("nakedobjects.xmlos.dir", "xml");
     }
 
     public String getDebugData() {
@@ -135,7 +135,7 @@ public class XmlDataManager implements DataManager {
     }
 
     public static final String DEFAULT_ENCODING = "ISO-8859-1";
-    private static final String ENCODING_PROPERTY = "xml-object-store.encoding";
+    private static final String ENCODING_PROPERTY = "nakedobjects.xmlos.encoding";
     private static final String[] escapeString = { "&amp;", "&lt;", "&gt;", "&quot;", "&apos;" };
 
     private static final String[] specialChars = { "&", "<", ">", "\"", "'" };
