@@ -18,7 +18,7 @@ import org.apache.log4j.Logger;
 
 
 public class SplashWindow extends Window implements Runnable {
-    private static final String DIRECTORY = "images" + File.separator;
+    private static final String IMAGE_DIRECTORY = "images";
     private static final String LOGO_FILE = "logo.jpg";
     final static Logger LOG = Logger.getLogger(SplashWindow.class);
     private static final String LOGO_TEXT = "Naked Objects";
@@ -27,11 +27,9 @@ public class SplashWindow extends Window implements Runnable {
      * Get an Image object from the specified file path on the file system.
      */
     private static Image loadAsFile(String filename) {
-        File file = new File(DIRECTORY + filename);
-
+        File file = new File(IMAGE_DIRECTORY + File.separator + filename);
         if (!file.exists()) {
             LOG.error("could not find image file: " + file.getAbsolutePath());
-
             return null;
         } else {
             Toolkit t = Toolkit.getDefaultToolkit();
@@ -40,13 +38,11 @@ public class SplashWindow extends Window implements Runnable {
             MediaTracker mt = new MediaTracker(new Canvas());
             if (image != null) {
                 mt.addImage(image, 0);
-
                 try {
                     mt.waitForAll();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 if (mt.isErrorAny()) {
                     LOG.error("failed to load image from file: " + file.getAbsolutePath());
                     mt.removeImage(image);
@@ -65,11 +61,12 @@ public class SplashWindow extends Window implements Runnable {
      * Get an Image object from the jar/zip file that this class was loaded from.
      */
     private static Image loadAsResource(String ref) {
-        URL url = SplashWindow.class.getResource("/" + DIRECTORY + ref);
-        LOG.debug("image from " + url);
+        URL url = SplashWindow.class.getResource("/" + IMAGE_DIRECTORY + "/"+ ref);
         if (url == null) {
+            LOG.debug("image not found for resource named " + ref);
             return null;
         }
+        LOG.debug("image available from resource " + url);
         Image image = Toolkit.getDefaultToolkit().getImage(url);
         MediaTracker mt = new MediaTracker(new Canvas());
         if (image != null) {
