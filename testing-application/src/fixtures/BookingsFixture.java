@@ -23,6 +23,8 @@ public class BookingsFixture extends JavaFixture {
         Customer newCustomer = (Customer) createInstance(Customer.class);
         newCustomer.getFirstName().setValue("Richard");
         newCustomer.getLastName().setValue("Pawson");
+        newCustomer.getNotes().setValue("This fields contains notes about the customer in mutliline field./n" +
+                "This means the text can have line breaks and will wrap when displayed.");
 
         City boston = cities.boston;
         City newYork = cities.newYork;

@@ -236,6 +236,12 @@ public class Location implements Common, Lookup {
         
         container.makePersistent(clone);
         
+       Booking b = ((Booking) getCustomer().getBookings().elementAt(0));
+       
+       if(b != null) {
+           b.associateDropOff(clone);
+       }
+       
         return clone;
     }
 
