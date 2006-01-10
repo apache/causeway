@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.value.MultilineStringValue;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -8,6 +9,10 @@ import org.nakedobjects.viewer.skylark.value.SingleLineTextField;
 
 public class TextFieldSpecification extends AbstractFieldSpecification {
     private static final int ORIGINAL_WIDTH = 20;
+    
+    public boolean canDisplay(Content content) {
+        return content.isValue() && !(content.getNaked() instanceof MultilineStringValue);
+    }
 
     public View createView(Content content, ViewAxis axis) {
 //        return new LineBorder(new SingleLineTextField(content, this, axis, true, ORIGINAL_WIDTH));
@@ -15,7 +20,7 @@ public class TextFieldSpecification extends AbstractFieldSpecification {
     }
     
     public String getName() {
-        return "Text Field";
+        return "Single Line Text Field";
     }
 }
 

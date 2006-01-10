@@ -112,7 +112,7 @@ public class PasswordField extends AbstractField {
 
     public Size getRequiredSize() {
         int width = HPADDING + maxTextWidth + HPADDING;
-        int height = style.getLineHeight() + VPADDING * 2;
+        int height = style.getTextHeight() + VPADDING;
         height = Math.max(height, Style.defaultFieldHeight());
 
         return new Size(width, height);

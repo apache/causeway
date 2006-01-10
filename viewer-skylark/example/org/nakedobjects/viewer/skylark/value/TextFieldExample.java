@@ -5,6 +5,7 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedValue;
 import org.nakedobjects.object.Oid;
+import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
@@ -191,7 +192,7 @@ class DummyValue extends ValueContent {
     public void parseTextEntry(String entryText) throws InvalidEntryException {}
 
     public Consent isEditable() {
-        return null;
+        return Allow.DEFAULT;
     }
 
 }

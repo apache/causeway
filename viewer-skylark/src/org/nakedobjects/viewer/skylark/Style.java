@@ -49,7 +49,7 @@ public class Style {
     
     public static int defaultBaseline() {
         if(defaultBaseline == 0) {
-	        int iconSize = Style.NORMAL.getAscent() * 120 / 100;
+	        int iconSize = Style.NORMAL.getAscent();
 	        defaultBaseline = View.VPADDING + iconSize;
         }
         return defaultBaseline;

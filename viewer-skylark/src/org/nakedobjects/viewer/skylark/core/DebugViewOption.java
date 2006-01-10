@@ -22,7 +22,7 @@ public class DebugViewOption extends MenuOption {
         Naked object = view.getContent().getNaked();
         f.setInfo(new DebugInfo[] { new DebugObjectDetail(object), new DebugObjectGraph(object),
                 new DebugObjectSpecification(object), new DebugViewStructure(view), new DebugContent(view),
-                new DebugDrawing(view), new DebugView(view) });
+                new DebugDrawing(view), new DebugDrawingAbsolute(view)});
         f.show(at.getX() + 50, at.getY() + 6);
     }
 

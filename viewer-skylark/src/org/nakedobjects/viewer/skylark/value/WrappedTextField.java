@@ -34,7 +34,7 @@ public class WrappedTextField extends TextField {
     }
 
     protected void drawLines(Canvas canvas, Color color, int width) {
-        int baseline = getBaseline() + 1;
+        int baseline = getBaseline();
           int noDisplayLines = textContent.getNoDisplayLines();
           for (int line = 0; line < noDisplayLines; line++) {
               canvas.drawLine(HPADDING, baseline, HPADDING + width, baseline, color);
@@ -127,6 +127,11 @@ public class WrappedTextField extends TextField {
      */
     public void setNoLines(int noLines) {
         textContent.setNoDisplayLines(noLines);
+    }
+
+    public void setSize(Size size) {
+        super.setSize(size);
+        textContent.setNoDisplayLines(size.getHeight() / style.getTextHeight());
     }
 
     

@@ -49,7 +49,7 @@ public class DebugCanvas implements Canvas {
 
     public void draw3DRectangle(int x, int y, int width, int height, Color color, boolean raised) {
         indent();
-        buffer.appendln("3D rectangle " + x + "," + y + " " + width + "x" + height);
+        buffer.appendln("Rectangle (3D) " + x + "," + y + " " + width + "x" + height);
     }
 
     public void drawIcon(Image icon, int x, int y) {
@@ -106,22 +106,22 @@ public class DebugCanvas implements Canvas {
 
     public void drawSolidOval(int x, int y, int width, int height, Color color) {
         indent();
-        buffer.appendln("Oval (full) " + x + "," + y + " " + width + "x" + height + " " + color);
+        buffer.appendln("Oval (solid) " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
     public void drawSolidRectangle(int x, int y, int width, int height, Color color) {
         indent();
-        buffer.appendln("Rectangle (full) " + x + "," + y + " " + width + "x" + height + " " + color);
+        buffer.appendln("Rectangle (solid) " + x + "," + y + " " + width + "x" + height + " " + color);
     }
 
     public void drawSolidShape(Shape shape, Color color) {
         indent();
-        buffer.appendln("Shape (filled) " + shape + " " + color);
+        buffer.appendln("Shape (solid) " + shape + " " + color);
     }
 
     public void drawSolidShape(Shape shape, int x, int y, Color color) {
         indent();
-        buffer.appendln("Shape (filled)" + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
+        buffer.appendln("Shape (solid)" + shape + " at " + x + "/" + y + " (left, top)" + " " + color);
     }
 
     public void drawText(String text, int x, int y, Color color, Text style) {

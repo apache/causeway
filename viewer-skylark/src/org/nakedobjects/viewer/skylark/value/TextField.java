@@ -83,9 +83,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 
     public void setSize(Size size) {
         super.setSize(size);
-        
         setMaxWidth(size.getWidth() - 2 * HPADDING);
-        textContent.setNoDisplayLines(size.getHeight() / style.getTextHeight());
     }
     
     public boolean canFocus() {

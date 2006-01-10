@@ -21,7 +21,7 @@ public class WrappedTextFieldSpecification extends AbstractFieldSpecification {
     }
     
     public String getName() {
-        return "Text Field";
+        return "Wrapped Text Field";
     }
 }
 
