@@ -197,7 +197,7 @@ public class ObjectDecoder {
         int size = content.getElements().length;
         NakedObject[] elements = new NakedObject[size];
         for (int j = 0; j < elements.length; j++) {
-            elements[j] = restoreObject(((ObjectData) content.getElements()[j]), knownTransients);
+            elements[j] = restoreObject(((ReferenceData) content.getElements()[j]), knownTransients);
             LOG.debug("adding element to " + field.getId() + ": " + elements[j]);
         }
 
