@@ -76,7 +76,7 @@ public abstract class AbstractSystem {
         AboutNakedObjects.logVersion();
 
         SplashWindow splash = null;
-        boolean noSplash = configuration.getBoolean("nosplash", false);
+        boolean noSplash = configuration.getBoolean("nakedobject.nosplash", false);
         if (!noSplash) {
             splash = new SplashWindow();
         }
