@@ -21,6 +21,24 @@ public class DistributionLogger extends Logger implements Distribution {
         dump(str, data, 1, new Vector());
         return str.toString();
     }
+/*
+    private static String dump(Data data, Vector v) {
+        StringBuffer str = new StringBuffer();
+        dump(str, data, 1, v);
+        return str.toString();
+    }
+*/
+    private static String dump(Data[] data, Vector v) {
+        StringBuffer str = new StringBuffer();
+        for (int i = 0; i < data.length; i++) {
+            str.append("\n    [");
+            str.append(i + 1);
+            str.append("] ");
+            dump(str, data[i], 3, v);
+        }
+        return str.toString();
+    }
+
 
     public static String dump(Data[] data) {
         StringBuffer str = new StringBuffer();
@@ -161,9 +179,10 @@ public class DistributionLogger extends Logger implements Distribution {
     }
 
     public ClientActionResultData executeClientAction(Session session, ObjectData[] persisted, ObjectData[] changed, ReferenceData[] deleted) {
-        log("execute client action "  + indentedNewLine() + "persisted: " + dump(persisted)
-                + indentedNewLine() + "changed: " + dump(changed)
-                + indentedNewLine() + "deleted: " + dump(deleted));
+        Vector complete = new Vector();
+        log("execute client action "  + indentedNewLine() + "persisted: " + dump(persisted, complete)
+                + indentedNewLine() + "changed: " + dump(changed, complete)
+                + indentedNewLine() + "deleted: " + dump(deleted, complete));
         ClientActionResultData data = decorated.executeClientAction(session, persisted, changed, deleted);
         log(" <-- persisted: " + dump(data.getPersisted()));
         log(" <-- changed: " + dump(data.getChanged()));
