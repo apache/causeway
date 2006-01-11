@@ -2,7 +2,6 @@ package org.nakedobjects.reflector.java.reflect;
 
 import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.object.NakedObjectApplicationException;
-import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.ReflectiveActionException;
 
@@ -14,7 +13,6 @@ import org.apache.log4j.Logger;
 
 public abstract class JavaMember {
     private final static Logger LOG = Logger.getLogger(JavaMember.class);
-    private final static boolean STRICT = NakedObjects.getConfiguration().getBoolean("reflection.strict", true);
     private final MemberIdentifier identifier;
     private Method aboutMethod;
 
@@ -45,9 +43,6 @@ public abstract class JavaMember {
         }
         
         LOG.error(error, e.getTargetException());
-        if (STRICT) {
-            new ReflectionErrorDialog(error, e);
-        }
         
         if (e.getTargetException() instanceof RuntimeException) {
             throw (RuntimeException) e.getTargetException();

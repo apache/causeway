@@ -1,9 +1,6 @@
 package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectApplicationException;
-import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 
 import org.apache.log4j.Logger;
@@ -27,11 +24,13 @@ public final class BackgroundThread {
 	                    LOG.error(message, e);
                     }
 
+                    view.getViewManager().showException(e);
+/*                    
                     Naked error = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(e);
                     // TODO centre view
                     //  centre = view.getWorkspace().getAbsoluteLocation();
                     view.getWorkspace().addOpenViewFor(error, new Location(20, 20));
-                } finally {
+   */             } finally {
                     view.getState().setInactive();
                     view.getViewManager().clearBusy(view);
                     repaint(view);

@@ -22,6 +22,9 @@ public class ErrorViewExample extends TestViews {
 
     protected void views(Workspace workspace) {
         system.addSpecification(new DummyNakedObjectSpecification());
+        system.addSpecification(new DummyNakedObjectSpecification());
+        system.addSpecification(new DummyNakedObjectSpecification());
+        system.addSpecification(new DummyNakedObjectSpecification());
 
         Object object = new NakedObjectRuntimeException("The test exception message");
         NakedObject adapter = NakedObjects.getObjectLoader().createAdapterForTransient(object);

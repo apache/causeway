@@ -72,6 +72,7 @@ public class FindFormSpecification  extends AbstractCompositeViewSpecification {
                 Naked result = target.execute(action, null);
                 at.move(30, 60);
                 workspace.addOpenViewFor(result, at);
+                view.getViewManager().showMessages();
             }
         };
         actions[1] = new AbstractButtonAction("Close") {

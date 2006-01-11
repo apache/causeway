@@ -63,6 +63,7 @@ class ImmediateObjectOption extends MenuOption {
                 if (returnedObject != null) {
                     view.objectActionResult(returnedObject, at);
                 }
+                view.getViewManager().showMessages();
             }
             
             public String getName() {

@@ -17,6 +17,8 @@ public interface BusinessObjectContainer {
 
     boolean hasInstances(Class cls);
 
+    void informUser(String message);
+
     void init();
 
     boolean isPersitent(Object object);
@@ -24,14 +26,16 @@ public interface BusinessObjectContainer {
     void makePersistent(Object transientObject);
 
     int numberOfInstances(Class cls);
-
+    
     void objectChanged(Object object);
+
+    void raiseError(String message);
     
     void resolve(Object parent, Object object);
 
     long serialNumber(String sequence);
 
-    void userMessage(String text);
+    void warnUser(String message);
 }
 
 /*

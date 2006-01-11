@@ -1,5 +1,6 @@
 package org.nakedobjects.reflector.java;
 
+import org.nakedobjects.application.ApplicationException;
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectPersistor;
@@ -141,7 +142,17 @@ public class JavaBusinessObjectContainer implements BusinessObjectContainer {
         return number.getSerialNumber().longValue();
     }
 
-    public void userMessage(String text) {}
+    public void informUser(String message) {
+        NakedObjects.getMessageBroker().addMessage(message);
+    }
+    
+    public void warnUser(String message) {
+        NakedObjects.getMessageBroker().addWarning(message);
+    }
+    
+    public void raiseError(String message) {
+        throw new ApplicationException(message);
+    }
 }
 
 /*

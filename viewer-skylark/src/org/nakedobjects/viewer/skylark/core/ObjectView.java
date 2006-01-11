@@ -92,6 +92,7 @@ public abstract class ObjectView extends AbstractView {
                 view.setLocation(location);
                 getWorkspace().addView(view);
             }
+            getViewManager().showMessages();
 
             markDamaged();
         }

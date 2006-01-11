@@ -49,6 +49,9 @@ abstract class AbstractTestObject {
 
         Naked[] parameterObjects = nakedObjects(parameters);
         Naked result = ((NakedObject) getForNaked()).execute(action, parameterObjects);
+
+        // TODO could check for messages/warnings for user
+
         if (result == null) {
             return null;
         } else if(result instanceof NakedCollection) {

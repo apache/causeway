@@ -5,7 +5,6 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
-import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
 
@@ -34,13 +33,13 @@ public class ButtonBorder extends AbstractBorder {
     }
 
     public void draw(Canvas canvas) {
-        int width = getSize().getWidth();
-        int y = getSize().getHeight() - bottom;
+  //      int width = getSize().getWidth();
+  //      int y = getSize().getHeight() - bottom;
 
    //     canvas.clearBackground(this, Style.SECONDARY3);
         
         // draw dividing line
-        canvas.drawLine(0, y, width, y, Style.SECONDARY1);
+//        canvas.drawLine(0, y, width, y, Style.SECONDARY1);
 
         // draw buttons
         for (int i = 0; i < buttons.length; i++) {

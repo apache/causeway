@@ -1,5 +1,6 @@
 package org.nakedobjects.object.repository;
 
+import org.nakedobjects.object.MessageBroker;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -14,6 +15,7 @@ public class NakedObjectsClient extends NakedObjects {
     protected NakedObjectPersistor objectManager;
     protected NakedObjectSpecificationLoader specificationLoader;
     protected Session session;
+    private MessageBroker messages = new SimpleMessageBroker();
 
     protected NakedObjectConfiguration configuration() {
         return configuration;
@@ -27,6 +29,10 @@ public class NakedObjectsClient extends NakedObjects {
         return "Naked Objects Client Repository";
     }
 
+    protected MessageBroker messageBroker() {
+        return messages ;
+    }
+    
     protected NakedObjectPersistor objectPersistor() {
         return objectManager;
     }

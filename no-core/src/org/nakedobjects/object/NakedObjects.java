@@ -38,6 +38,10 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
         return singleton;
     }
 
+    public static MessageBroker getMessageBroker() {
+        return getInstance().messageBroker();
+    }
+    
     /**
      * Return the object loader.
      */
@@ -116,6 +120,9 @@ public abstract class NakedObjects implements NakedObjectsComponent, DebugInfo {
         getObjectLoader().init();
         getObjectPersistor().init();
     }
+
+
+    protected abstract MessageBroker messageBroker();
 
     protected abstract NakedObjectLoader objectLoader();
 

@@ -100,6 +100,7 @@ public class SaveTransientObjectBorder extends ButtonBorder {
 	        }
         } else {
             transientObject.execute(action, new Naked[0]);
+            view.getViewManager().showMessages();
         }
         return transientObject;
     }

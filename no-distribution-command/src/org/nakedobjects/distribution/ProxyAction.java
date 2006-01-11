@@ -67,6 +67,16 @@ public final class ProxyAction extends AbstractActionPeer {
             ObjectDecoder.restore(updates[i]);
         }
 
+        String[] messages = result.getMessages();
+        for (int i = 0; i < messages.length; i++) {
+            NakedObjects.getMessageBroker().addMessage(messages[i]);
+        }
+        
+        messages = result.getWarnings();
+        for (int i = 0; i < messages.length; i++) {
+            NakedObjects.getMessageBroker().addWarning(messages[i]);
+        }
+        
         return returnedObject;
     }
 

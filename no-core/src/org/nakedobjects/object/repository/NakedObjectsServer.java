@@ -1,5 +1,6 @@
 package org.nakedobjects.object.repository;
 
+import org.nakedobjects.object.MessageBroker;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -30,6 +31,10 @@ public abstract class NakedObjectsServer extends NakedObjects {
         return getLocal().objectLoader;
     }
 
+    protected MessageBroker messageBroker() {
+        return getLocal().messageBroker;
+    }
+    
     /**
      * Expose as a .NET property
      * 

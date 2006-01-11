@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.event.ObjectViewingMechanismListener;
+import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
@@ -854,6 +855,33 @@ public class Viewer {
     public boolean isBusy(View view) {
         // return busy.contains(view);
         return busy.size() > 0;
+    }
+
+    public void showMessages() {
+        String[] messages = NakedObjects.getMessageBroker().getMessages();
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < messages.length; i++) {
+            if(i > 0) {
+                buf.append("; ");
+            }
+            buf.append(messages[i]);
+        }
+        setStatus(buf.toString());
+
+        String[] warnings = NakedObjects.getMessageBroker().getWarnings();
+        for (int i = 0; i < warnings.length; i++) {
+            rootView.getWorkspace().addOpenViewFor(NakedObjects.getObjectLoader().createAdapterForTransient(warnings[i]), new Location(20, 20));
+        }
+        
+    }
+
+    public void showException(Throwable e) {
+        Naked error = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(e);
+        // TODO centre view
+        //  centre = view.getWorkspace().getAbsoluteLocation();
+        //rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
+        
+        rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
     }
 }
 

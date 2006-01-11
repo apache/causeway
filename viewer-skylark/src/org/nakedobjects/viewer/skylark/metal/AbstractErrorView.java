@@ -1,6 +1,6 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.defaults.PojoAdapter;
+import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.utility.ExceptionHelper;
 import org.nakedobjects.viewer.skylark.Content;
@@ -18,7 +18,9 @@ public class AbstractErrorView extends AbstractView {
     protected AbstractErrorView(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
 
-        Exception error = (Exception) ((PojoAdapter) ((ObjectContent) getContent()).getObject()).getObject();
+        ObjectContent objectCotent = (ObjectContent) getContent();
+        NakedObject adapter = objectCotent.getObject();
+        Exception error = (Exception) adapter.getObject();
         
         String name = error.getClass().getName();
         name = name.substring(name.lastIndexOf('.') + 1);

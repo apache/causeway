@@ -116,6 +116,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                         move(at);
                         workspace.addOpenViewFor(result, at);
                     }
+                    view.getViewManager().showMessages();
                 }
 
                 public String getName() {

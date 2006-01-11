@@ -105,8 +105,8 @@ public class ServerDistribution implements Distribution {
             }
         }
         // TODO find messages/warnings
-        String[] messages = new String[0];
-        String[] warnings = new String[0];
+        String[] messages = NakedObjects.getMessageBroker().getMessages();
+        String[] warnings = NakedObjects.getMessageBroker().getWarnings();
 
         // TODO for efficiency, need to remove the objects in the results graph from the updates set
         return encoder.createServerActionResult(result, getUpdates(), persistedTarget, persistedParameters, messages, warnings);

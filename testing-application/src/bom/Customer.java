@@ -228,6 +228,20 @@ public class Customer {
         return booking;
     }
 
+    public void actionShowInformUsage() throws SocketException {
+        container.informUser("Message from within method");
+        container.informUser("2nd message from within method");
+    }
+
+    public void actionShowWarnUsage() throws SocketException {
+        container.warnUser("Warning from within method");
+        container.warnUser("2nd warning from within method");
+    }
+    
+    public void actionShowRaiseError() throws SocketException {
+        container.raiseError("example exception via raise error");
+    }
+
     public void actionShowFailureOfSystem() throws SocketException {
         throw new SocketException("example exception for system failure");
     }

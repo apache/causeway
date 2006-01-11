@@ -1,5 +1,6 @@
 package org.nakedobjects.object.repository;
 
+import org.nakedobjects.object.MessageBroker;
 import org.nakedobjects.object.NakedObjectLoader;
 import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
@@ -12,14 +13,15 @@ public class NakedObjectsData {
     protected NakedObjectConfiguration configuration;
     protected NakedObjectPersistor objectPersistor;
     protected NakedObjectSpecificationLoader specificationLoader;
+    protected MessageBroker messageBroker = new SimpleMessageBroker();
     protected Session session;
-
     
     public String toString() {
         ToString toString = new ToString(this);
         toString.append("thread", Thread.currentThread());
         toString.append("objectPersistor", objectPersistor);
         toString.append("session", session);
+        toString.append("messageBroker", messageBroker);
         toString.append("objectLoader", objectLoader);
         return toString.toString();
     }
