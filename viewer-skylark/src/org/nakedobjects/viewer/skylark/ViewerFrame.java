@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.utility.AboutNakedObjects;
+
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -85,7 +87,6 @@ public class ViewerFrame extends Frame implements RenderingArea {
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 new ShutdownDialog(ViewerFrame.this);
-          //      quit();
             }
         });
 
@@ -113,7 +114,9 @@ public class ViewerFrame extends Frame implements RenderingArea {
 	}
     
     public void setTitle(String title) {
-        super.setTitle(title == null ? DEFAULT_TITLE : title);
+        String application = AboutNakedObjects.getApplicationName();
+        String str = title == null ?( application == null ? DEFAULT_TITLE : application ): title;
+        super.setTitle(str);
     }
 }
 
