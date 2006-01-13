@@ -83,8 +83,6 @@ public class VectorCollectionAdapter extends AbstractNakedReference implements I
         return collection.size();
     }
 
-    public void sort() {}
-
     public String titleString() {
         return "Vector";
     }

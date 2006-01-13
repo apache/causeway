@@ -78,8 +78,6 @@ public class InternalCollectionAdapter extends AbstractNakedReference implements
         return collection.size();
     }
 
-    public void sort() {}
-
     public String titleString() {
         return "vector...";
     }
