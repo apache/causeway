@@ -17,12 +17,12 @@ public class ClassOption {
         Action[] actions;
         actions = specificaton.getClassActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
-            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
+            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.USER);
         }
 
         actions = classAdapter.getSpecification().getObjectActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
-            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.OBJECT);
+            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.USER);
         }
 
         actions = specificaton.getClassActions(Action.EXPLORATION);

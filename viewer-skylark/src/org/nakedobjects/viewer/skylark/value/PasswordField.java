@@ -38,7 +38,7 @@ public class PasswordField extends AbstractField {
     }
 
     public void contentMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.OBJECT, new ClearValueOption());
+        options.add(MenuOptionSet.USER, new ClearValueOption());
         super.contentMenuOptions((options));
         options.setColor(Style.VALUE_MENU);
     }

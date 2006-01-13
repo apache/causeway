@@ -579,7 +579,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     }
 
     public void contentMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.OBJECT, new MenuOption("Refresh") {
+        options.add(MenuOptionSet.USER, new MenuOption("Refresh") {
             public void execute(Workspace workspace, View view, Location at) {
                 invalidReason = null;
                 refresh();

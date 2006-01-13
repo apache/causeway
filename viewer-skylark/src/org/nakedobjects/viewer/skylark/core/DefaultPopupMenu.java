@@ -13,6 +13,7 @@ import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.PopupMenu;
@@ -119,7 +120,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         }
     }
 
-    private static final UserAction DEBUG_VIEW_OPTION = new DebugViewOption();
+    private static final MenuOption DEBUG_OPTION = new DebugOption();
 
     private static final Logger LOG = Logger.getLogger(DefaultPopupMenu.class);
     private Color backgroundColor;
@@ -251,7 +252,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         } else {
             over.contentMenuOptions(optionSet);
         }
-        optionSet.add(MenuOptionSet.DEBUG, DEBUG_VIEW_OPTION);
+        optionSet.add(MenuOptionSet.DEBUG, DEBUG_OPTION);
         optionIdentified = 0;
         backgroundColor = optionSet.getColor();
 
@@ -393,7 +394,7 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     }
 
     public void viewMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.DEBUG, DEBUG_VIEW_OPTION);
+        options.add(MenuOptionSet.DEBUG, DEBUG_OPTION);
     }
 }
 

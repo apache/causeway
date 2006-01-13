@@ -102,9 +102,8 @@ public abstract class AbstractView implements View {
 
         Content content = getContent();
         if (content != null) {
-            content.menuOptions(options);
+            content.contentMenuOptions(options);
         }
-
     }
 
     /**
@@ -446,7 +445,7 @@ public abstract class AbstractView implements View {
 
             if (specification != getSpecification() && view.getClass() != getClass()) {
                 MenuOption viewAs = new ReplaceViewOption(specification);
-                options.add(MenuOptionSet.VIEW, viewAs);
+                options.add(MenuOptionSet.USER, viewAs);
             }
         }
     }
@@ -538,12 +537,18 @@ public abstract class AbstractView implements View {
     public void viewMenuOptions(MenuOptionSet options) {
         options.setColor(Style.VIEW_MENU);
 
+
+        Content content = getContent();
+        if (content != null) {
+            content.viewMenuOptions(options);
+        }
+
         if (getParent() != null) {
             Enumeration possibleViews = Skylark.getViewFactory().openRootViews(content, null);
             while (possibleViews.hasMoreElements()) {
                 ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
                 MenuOption viewAs = new OpenViewOption(specification);
-                options.add(MenuOptionSet.VIEW, viewAs);
+                options.add(MenuOptionSet.USER, viewAs);
             }
         }
 
@@ -557,11 +562,11 @@ public abstract class AbstractView implements View {
                 // offer other/alternative views
                 replaceOptions(Skylark.getViewFactory().openRootViews(content, this), options);
             }
-            options.add(MenuOptionSet.VIEW, new PrintOption());
+            options.add(MenuOptionSet.USER, new PrintOption());
             if (getParent() != null) {
-                options.add(MenuOptionSet.VIEW, CLOSE_OPTION);
-                options.add(MenuOptionSet.VIEW, CLOSE_ALL_OPTION);
-                options.add(MenuOptionSet.VIEW, CLOSE_VIEWS_FOR_OBJECT);
+                options.add(MenuOptionSet.USER, CLOSE_OPTION);
+                options.add(MenuOptionSet.USER, CLOSE_ALL_OPTION);
+                options.add(MenuOptionSet.USER, CLOSE_VIEWS_FOR_OBJECT);
             }
         }
 
@@ -585,7 +590,7 @@ public abstract class AbstractView implements View {
 
         final UndoStack undoStack = getViewManager().getUndoStack();
         if (!undoStack.isEmpty()) {
-            options.add(MenuOptionSet.VIEW, new MenuOption("Undo " + undoStack.getNameOfUndo()) {
+            options.add(MenuOptionSet.USER, new MenuOption("Undo " + undoStack.getNameOfUndo()) {
 
                 public Consent disabled(View component) {
                     return new Allow(undoStack.descriptionOfUndo());

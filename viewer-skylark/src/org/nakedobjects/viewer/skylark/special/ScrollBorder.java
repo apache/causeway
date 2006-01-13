@@ -131,6 +131,9 @@ public class ScrollBorder extends AbstractViewDecorator {
 
     protected void debugDetails(StringBuffer b) {
         super.debugDetails(b);
+        b.append("\n           Top header: " + topHeader == null ? "none" : topHeader.toString());
+        b.append("\n           Left header: " + leftHeader == null ? "none" : leftHeader.toString());
+
         b.append("\n           Vertical scrollbar ");
         b.append("\n             offset " + top);
         b.append("\n             position " + verticalScrollBar.getPosition());
@@ -717,7 +720,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     public void viewMenuOptions(MenuOptionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
-        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Reset scroll border") {
+        menuOptions.add(MenuOptionSet.USER, new MenuOption("Reset scroll border") {
 
             public void execute(Workspace workspace, View view, Location at) {
                 reset();

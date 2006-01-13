@@ -16,10 +16,10 @@ public class ObjectOption {
     public static void menuOptions(final NakedObject object, MenuOptionSet options) {
         if (object != null) {
             if (object.getObject() instanceof FastFinder) {
-                options.add(MenuOptionSet.OBJECT, new FindFirstOption());
-                options.add(MenuOptionSet.OBJECT, new FindAllOption());
+                options.add(MenuOptionSet.USER, new FindFirstOption());
+                options.add(MenuOptionSet.USER, new FindAllOption());
             } else {
-                menuOption(object, options, Action.USER, MenuOptionSet.OBJECT);
+                menuOption(object, options, Action.USER, MenuOptionSet.USER);
                 menuOption(object, options, Action.EXPLORATION, MenuOptionSet.EXPLORATION);
                 menuOption(object, options, Action.DEBUG, MenuOptionSet.DEBUG);
             }

@@ -11,28 +11,18 @@ import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
-
-import java.util.Enumeration;
+import org.nakedobjects.viewer.skylark.basic.TitleComparator;
 
 public class OptionsCollection extends CollectionContent {
     private final NakedObject[] objects;
-
+    
     public OptionsCollection(NakedObject[] objects) {
         this.objects = objects;
+        setOrder(new TitleComparator());
     }
-
-    public Enumeration allElements() {
-        return new Enumeration() {
-            int index = 0;
-            
-            public boolean hasMoreElements() {
-                return index < objects.length;
-            }
-
-            public Object nextElement() {
-                return objects[index++];
-            }
-        };
+    
+    public NakedObject[] elements() {
+        return objects;
     }
 
     public NakedCollection getCollection() {
@@ -48,6 +38,7 @@ public class OptionsCollection extends CollectionContent {
         for (int i = 0; i < objects.length; i++) {
             debug.appendln(2,  objects[i].toString());            
         }
+        super.debugDetails(debug); 
     }
 
     public Naked drop(Content sourceContent) {

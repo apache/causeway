@@ -6,7 +6,7 @@ import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.core.AbstractBorder;
-import org.nakedobjects.viewer.skylark.core.DebugViewOption;
+import org.nakedobjects.viewer.skylark.core.DebugOption;
 
 public class DebugBorder extends AbstractBorder {
 	public DebugBorder(View wrappedView) {
@@ -33,7 +33,7 @@ public class DebugBorder extends AbstractBorder {
 	}
 	
 	public void firstClick(Click click) {
-		new DebugViewOption().execute(getWorkspace(), getView(), click.getLocation());
+		new DebugOption().execute(getWorkspace(), getView(), click.getLocation());
 	}
 }
 

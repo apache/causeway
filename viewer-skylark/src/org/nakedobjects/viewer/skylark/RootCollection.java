@@ -10,8 +10,6 @@ import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
-import java.util.Enumeration;
-
 
 public class RootCollection extends CollectionContent {
     private final NakedCollection collection;
@@ -20,10 +18,16 @@ public class RootCollection extends CollectionContent {
         this.collection = collection;
     }
 
-    public Enumeration allElements() {
-        return getCollection().elements();
+    public NakedObject[] elements() {
+        final NakedObject[] elements;
+        final int size = getCollection().size();
+        elements = new NakedObject[size];
+        for (int i = 0; i < size; i++) {
+            elements[i] = getCollection().elementAt(i);
+        }
+        return elements;
     }
-
+        
     public Consent canClear() {
         return Veto.DEFAULT;
     }
@@ -38,6 +42,7 @@ public class RootCollection extends CollectionContent {
 
     public void debugDetails(DebugString debug) {
         debug.appendln(4, "collection", collection);
+        super.debugDetails(debug); 
     }
 
     public NakedCollection getCollection() {
@@ -75,7 +80,7 @@ public class RootCollection extends CollectionContent {
     public void setObject(NakedObject object) {
         throw new NakedObjectRuntimeException("Invalid call");
     }
-
+    
     public String title() {
         return collection.titleString();
     }

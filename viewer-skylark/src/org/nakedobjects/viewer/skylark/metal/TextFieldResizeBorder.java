@@ -21,9 +21,9 @@ public class TextFieldResizeBorder extends ResizeBorder {
         if (resizing) {
             Shape shape = new Shape(0, 0);
             int resizeMarkerSize = 10;
-            shape.addLine(resizeMarkerSize, 0);
-            shape.addLine(0, resizeMarkerSize);
-            shape.addLine(-resizeMarkerSize, -resizeMarkerSize);
+            shape.extendsLine(resizeMarkerSize, 0);
+            shape.extendsLine(0, resizeMarkerSize);
+            shape.extendsLine(-resizeMarkerSize, -resizeMarkerSize);
             canvas.drawSolidShape(shape, size.getWidth() - resizeMarkerSize, size.getHeight(), Style.RESIZE);
             canvas.drawRectangle(0, 0, size.getWidth(), size.getHeight(), Style.RESIZE);
         }

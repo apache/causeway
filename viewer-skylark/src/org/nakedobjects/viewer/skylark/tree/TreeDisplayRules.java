@@ -38,7 +38,7 @@ public class TreeDisplayRules {
                 return "This option makes the system only show collections within the trees, and not single elements";
             }
         };
-        options.add(MenuOptionSet.VIEW, option);
+        options.add(MenuOptionSet.USER, option);
     }
     
     public static boolean isCollectionsOnly() {

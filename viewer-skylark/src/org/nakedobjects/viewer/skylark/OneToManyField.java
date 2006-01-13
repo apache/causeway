@@ -15,8 +15,6 @@ import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
-import java.util.Enumeration;
-
 
 public class OneToManyField extends CollectionContent implements FieldContent {
     private final NakedCollection collection;
@@ -63,8 +61,14 @@ public class OneToManyField extends CollectionContent implements FieldContent {
         this.collection = (NakedCollection) object;
     }
 
-    public Enumeration allElements() {
-        return getCollection().elements();
+    public NakedObject[] elements() {
+        final NakedObject[] elements;
+        final int size = getCollection().size();
+        elements = new NakedObject[size];
+        for (int i = 0; i < size; i++) {
+            elements[i] = getCollection().elementAt(i);
+        }
+        return elements;
     }
 
     public Consent canClear() {
@@ -82,6 +86,7 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     public void debugDetails(DebugString debug) {
         field.debugDetails(debug);
         debug.appendln(4, "collection",  collection);
+        super.debugDetails(debug); 
     }
 
     public NakedCollection getCollection() {
@@ -146,8 +151,8 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     }
 
 
-    public void menuOptions(MenuOptionSet options) {
-        super.menuOptions(options);
+    public void contentMenuOptions(MenuOptionSet options) {
+        super.contentMenuOptions(options);
         ClassOption.menuOptions(getOneToManyAssociation().getSpecification(), options);
     }
     

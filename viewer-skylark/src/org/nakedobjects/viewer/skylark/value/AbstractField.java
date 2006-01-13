@@ -155,9 +155,9 @@ public abstract class AbstractField extends AbstractView {
     public void keyTyped(char keyCode) {}
 
     public void contentMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.OBJECT, new ClearValueOption());
-        options.add(MenuOptionSet.OBJECT, new CopyValueOption());
-        options.add(MenuOptionSet.OBJECT, new PasteValueOption());
+        options.add(MenuOptionSet.USER, new ClearValueOption());
+        options.add(MenuOptionSet.USER, new CopyValueOption());
+        options.add(MenuOptionSet.USER, new PasteValueOption());
         if (getView().getSpecification().isReplaceable()) {
             replaceOptions(Skylark.getViewFactory().valueViews(getContent(), this), options);
         }

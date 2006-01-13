@@ -94,10 +94,10 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         return false;
     }
 
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         //ObjectOption.menuOptions(element, options);
-        super.menuOptions(options);
-        options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
+        super.contentMenuOptions(options);
+        options.add(MenuOptionSet.USER, REMOVE_ASSOCIATION);
     }
 
     public void setObject(NakedObject object) {

@@ -70,7 +70,7 @@ public class ExampleContent implements Content {
         return false;
     }
 
-    public void menuOptions(MenuOptionSet options) {}
+    public void contentMenuOptions(MenuOptionSet options) {}
 
     public void parseTextEntry(String entryText) throws InvalidEntryException {}
 
@@ -101,6 +101,8 @@ public class ExampleContent implements Content {
     public String getId() {
         return "";
     }
+
+    public void viewMenuOptions(MenuOptionSet options) {}
 }
 
 /*

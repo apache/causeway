@@ -36,6 +36,7 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         instances = manager.allInstances(type, true);
         instances.sort();
         RootCollection instanceContent = new RootCollection(instances);
+        instanceContent.setOrderByElement();
         return new PanelBorder(1, new ScrollBorder(super.createView(instanceContent, axis)));
     }
 

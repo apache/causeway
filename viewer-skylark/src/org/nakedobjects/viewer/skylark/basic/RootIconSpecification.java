@@ -24,13 +24,13 @@ class IconOpenAction extends AbstractViewDecorator {
     public void viewMenuOptions(MenuOptionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
-        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Open") {
+        menuOptions.add(MenuOptionSet.USER, new MenuOption("Open") {
             public void execute(Workspace workspace, View view, Location at) {
                 openIcon();
             }
         });
 
-        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Close") {
+        menuOptions.add(MenuOptionSet.USER, new MenuOption("Close") {
             public void execute(Workspace workspace, View view, Location at) {
                 closeIcon();
             }

@@ -224,7 +224,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
 
         getViewManager().menuOptions(options);
 
-        options.add(MenuOptionSet.VIEW, new MenuOption("About...") {
+        options.add(MenuOptionSet.USER, new MenuOption("About...") {
             public void execute(Workspace workspace, View view, Location at) {
                 AboutView aboutView = new AboutView();
 
@@ -258,7 +258,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.VIEW, new MenuOption("Close all") {
+        options.add(MenuOptionSet.USER, new MenuOption("Close all") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
                 for (int i = 0; i < views.length; i++) {
@@ -271,7 +271,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.VIEW, new MenuOption("Tidy up views") {
+        options.add(MenuOptionSet.USER, new MenuOption("Tidy up views") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
 
@@ -287,7 +287,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.VIEW, new MenuOption("Tidy up icons") {
+        options.add(MenuOptionSet.USER, new MenuOption("Tidy up icons") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
 
@@ -303,7 +303,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.VIEW, new MenuOption("Tidy up all") {
+        options.add(MenuOptionSet.USER, new MenuOption("Tidy up all") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
 

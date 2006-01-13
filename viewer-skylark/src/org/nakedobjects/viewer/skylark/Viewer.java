@@ -304,7 +304,7 @@ public class Viewer {
     }
 
     public void menuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.VIEW, new MenuOption("Quit") {
+        options.add(MenuOptionSet.USER, new MenuOption("Quit") {
             public void execute(Workspace workspace, View view, Location at) {
                 Viewer.this.close();
             }
@@ -547,7 +547,9 @@ public class Viewer {
         } else {
             status.append("object: ");
             Content content = over.getContent();
-            status.append(content.title());
+            if(content != null) {
+                status.append(content.title());
+            }
         }
         if (includeDebug || includeExploration) {
             status.append(" (includes ");

@@ -110,9 +110,9 @@ public class ObjectParameter extends ObjectContent implements ParameterContent {
         return object != null && object.getResolveState().isTransient();
     }
 
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         if (object != null) {
-            options.add(MenuOptionSet.VIEW, new MenuOption("Clear parameter") {
+            options.add(MenuOptionSet.USER, new MenuOption("Clear parameter") {
 
                 public void execute(Workspace workspace, View view, Location at) {
                     clear();

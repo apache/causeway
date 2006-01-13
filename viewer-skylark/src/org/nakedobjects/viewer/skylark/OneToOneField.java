@@ -139,7 +139,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
         return object != null && object.getResolveState().isTransient();
     }
 
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         /*
         if (getObject() == null) {
             ClassOption.menuOptions(getOneToOneAssociation().getSpecification(), options);
@@ -148,9 +148,9 @@ public class OneToOneField extends ObjectContent implements FieldContent {
             options.add(MenuOptionSet.OBJECT, REMOVE_ASSOCIATION);
         }
         */
-        super.menuOptions(options);
+        super.contentMenuOptions(options);
         if (getObject() != null) {
-            options.add(MenuOptionSet.OBJECT, CLEAR_ASSOCIATION);
+            options.add(MenuOptionSet.USER, CLEAR_ASSOCIATION);
         }
     }
 

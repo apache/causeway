@@ -76,20 +76,6 @@ public class TreeNodeBorder extends AbstractBorder {
         return new Bounds(getLeft(), getTop(), wrappedView.getSize().getWidth(), wrappedView.getSize().getHeight());
     }
 
-    public void contentMenuOptions(MenuOptionSet menuOptions) {
-        super.contentMenuOptions(menuOptions);
-
-        Naked object = getView().getContent().getNaked();
-        ResolveState resolveState = ((NakedReference) object).getResolveState();
-        if(object instanceof NakedReference && (resolveState.isGhost() || resolveState.isPartlyResolved())) {
-            menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Load object") {
-                public void execute(Workspace workspace, View view, Location at) {
-                    resolveContent();
-                }
-            });
-        }
-    }
-
     public void debugDetails(StringBuffer b) {
         b.append("TreeNodeBorder " + left + " pixels\n");
         b.append("           titlebar " + (top) + " pixels\n");
@@ -264,7 +250,7 @@ public class TreeNodeBorder extends AbstractBorder {
         super.viewMenuOptions(options);
         TreeDisplayRules.menuOptions(options);
         
-        options.add(MenuOptionSet.VIEW, new MenuOption("Select node") {
+        options.add(MenuOptionSet.USER, new MenuOption("Select node") {
             public void execute(Workspace workspace, View view, Location at) {
                 selectNode();
             }
@@ -273,6 +259,16 @@ public class TreeNodeBorder extends AbstractBorder {
                 return "Show this node in the right-hand pane";
             }
         });
+        
+        Naked object = getView().getContent().getNaked();
+        ResolveState resolveState = ((NakedReference) object).getResolveState();
+        if(object instanceof NakedReference && (resolveState.isGhost() || resolveState.isPartlyResolved())) {
+            options.add(MenuOptionSet.USER, new MenuOption("Load object") {
+                public void execute(Workspace workspace, View view, Location at) {
+                    resolveContent();
+                }
+            });
+        }
     }
 
     private boolean withinBox(int x, int y) {

@@ -11,6 +11,7 @@ import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.UserContext;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Allow;
@@ -111,7 +112,7 @@ public abstract class ObjectContent extends AbstractContent {
         return getObject().persistable() == Persistable.USER_PERSISTABLE;
     }
 
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         final NakedObject object = getObject();
         ObjectOption.menuOptions(object, options);
 
@@ -119,37 +120,36 @@ public abstract class ObjectContent extends AbstractContent {
             ClassOption.menuOptions(getSpecification(), options);
         }
 
-        if (object instanceof UserContext) {
-            options.add(MenuOptionSet.VIEW, new MenuOption("New Workspace") {
-                public Consent disabled(View component) {
-                    return AbstractConsent.allow(object instanceof UserContext);
-                }
-
-                public void execute(Workspace workspace, View view, Location at) {
-                    View newWorkspace;
-                    Content content = Skylark.getContentFactory().createRootContent(object);
-                    newWorkspace = Skylark.getViewFactory().createInnerWorkspace(content);
-                    newWorkspace.setLocation(at);
-                    workspace.addView(newWorkspace);
-                    newWorkspace.markDamaged();
-                }
-            });
-        }
-
-        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Class...") {
+        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Instances") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
-
+            
             public void execute(Workspace workspace, View view, Location at) {
-            /*
-             * TODO reimplement return
-             * getObjectManager().getNakedClass(getObject().getSpecification());
-             */
+                NakedObjectSpecification spec = getObject().getSpecification();
+                TypedNakedCollection instances = NakedObjects.getObjectPersistor().allInstances(spec, false);
+                
+                Content content = Skylark.getContentFactory().createRootContent(instances);
+                View cloneView = Skylark.getViewFactory().createWindow(content);
+                cloneView.setLocation(at);
+                workspace.addView(cloneView);
             }
         });
 
-        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Clone...") {
+        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Class") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(object != null);
+            }
+            
+            public void execute(Workspace workspace, View view, Location at) {
+                /*
+                 * TODO reimplement return
+                 * getObjectManager().getNakedClass(getObject().getSpecification());
+                 */
+            }
+        });
+
+        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Clone") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
@@ -222,6 +222,27 @@ public abstract class ObjectContent extends AbstractContent {
         } else {
 	        NakedObjectSpecification specification = nakedObject.getSpecification();
 	        return ImageFactory.getInstance().loadObjectIcon(specification, "", iconHeight);
+        }
+    }
+    
+    public void viewMenuOptions(MenuOptionSet options) {
+        final NakedObject object = getObject();
+        
+        if (object instanceof UserContext) {
+            options.add(MenuOptionSet.USER, new MenuOption("New Workspace") {
+                public Consent disabled(View component) {
+                    return AbstractConsent.allow(object instanceof UserContext);
+                }
+
+                public void execute(Workspace workspace, View view, Location at) {
+                    View newWorkspace;
+                    Content content = Skylark.getContentFactory().createRootContent(object);
+                    newWorkspace = Skylark.getViewFactory().createInnerWorkspace(content);
+                    newWorkspace.setLocation(at);
+                    workspace.addView(newWorkspace);
+                    newWorkspace.markDamaged();
+                }
+            });
         }
     }
 

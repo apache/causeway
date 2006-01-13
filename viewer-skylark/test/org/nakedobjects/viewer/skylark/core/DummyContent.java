@@ -73,7 +73,7 @@ public class DummyContent implements Content {
         return false;
     }
 
-    public void menuOptions(MenuOptionSet options) {}
+    public void contentMenuOptions(MenuOptionSet options) {}
 
     public void parseTextEntry(String entryText) throws InvalidEntryException {}
 
@@ -104,6 +104,8 @@ public class DummyContent implements Content {
     public String getId() {
         return null;
     }
+
+    public void viewMenuOptions(MenuOptionSet options) {}
 }
 
 /*

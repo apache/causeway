@@ -73,7 +73,7 @@ public class RootObject extends ObjectContent {
     }
 
     public String windowTitle() {
-        return (isTransient() ? "Transient " : "") + getSpecification().getShortName();
+        return (isTransient() ? "UNSAVED " : "") + getSpecification().getShortName();
     }
 }
 

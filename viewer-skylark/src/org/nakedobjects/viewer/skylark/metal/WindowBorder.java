@@ -65,7 +65,7 @@ public class WindowBorder extends AbstractWindowBorder {
     public void viewMenuOptions(MenuOptionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
-        menuOptions.add(MenuOptionSet.VIEW, new MenuOption("Iconize") {
+        menuOptions.add(MenuOptionSet.USER, new MenuOption("Iconize") {
             public void execute(Workspace workspace, View view, Location at) {
                 iconize(workspace, view);
             }

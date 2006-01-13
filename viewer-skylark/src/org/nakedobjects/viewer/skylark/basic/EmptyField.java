@@ -10,7 +10,6 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -134,12 +133,12 @@ public class EmptyField extends AbstractView {
         NakedObject source = ((ObjectContent) drag.getSourceContent()).getObject();
         setField(target, source);
     }
-
+/*
     public void contentMenuOptions(MenuOptionSet options) {
-        getContent().menuOptions(options);
+        getContent().contentMenuOptions(options);
         options.setColor(Style.CONTENT_MENU);
     }
-
+*/
     /**
      * Objects returned by menus are used to set this field before passing the call on to the parent.
      */

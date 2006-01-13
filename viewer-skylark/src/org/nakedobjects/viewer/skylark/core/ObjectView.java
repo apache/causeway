@@ -150,7 +150,7 @@ public abstract class ObjectView extends AbstractView {
     public void contentMenuOptions(MenuOptionSet options) {
         super.contentMenuOptions(options);
 
-        options.add(MenuOptionSet.OBJECT, new MenuOption("Reload") {
+        options.add(MenuOptionSet.USER, new MenuOption("Reload") {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObject object = (NakedObject) getContent().getNaked();
                 NakedObjects.getObjectPersistor().reload(object);

@@ -12,17 +12,28 @@ import org.nakedobjects.viewer.skylark.Workspace;
 /**
  * Display debug window
  */
-public class DebugViewOption extends MenuOption {
-    public DebugViewOption() {
-        super("Debug view...");
+public class DebugOption extends MenuOption {
+    public DebugOption() {
+        super("Debug...");
     }
 
     public void execute(Workspace workspace, View view, Location at) {
         InfoDebugFrame f = new InfoDebugFrame();
         Naked object = view.getContent().getNaked();
-        f.setInfo(new DebugInfo[] { new DebugObjectDetail(object), new DebugObjectGraph(object),
-                new DebugObjectSpecification(object), new DebugViewStructure(view), new DebugContent(view),
-                new DebugDrawing(view), new DebugDrawingAbsolute(view)});
+
+        DebugInfo[] objectPanes = object == null ? new DebugInfo[0] : new DebugInfo[] { new DebugObjectDetail(object),
+                new DebugObjectGraph(object), new DebugObjectSpecification(object) };
+
+        DebugInfo[] viewPanes = new DebugInfo[] { new DebugViewStructure(view), new DebugContent(view), new DebugDrawing(view),
+                new DebugDrawingAbsolute(view) };
+        
+        int noObjectPanes = objectPanes.length;
+        int noViewPanes = viewPanes.length;
+        DebugInfo[] panes = new DebugInfo[noObjectPanes + noViewPanes];
+        System.arraycopy(objectPanes, 0, panes, 0, noObjectPanes);
+        System.arraycopy(viewPanes, 0, panes, noObjectPanes, noViewPanes);
+
+        f.setInfo(panes);
         f.show(at.getX() + 50, at.getY() + 6);
     }
 
