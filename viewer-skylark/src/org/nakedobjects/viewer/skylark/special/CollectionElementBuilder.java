@@ -34,7 +34,6 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
 		Assert.assertEquals(view.getView(), view);
 
 		Content content = view.getContent();
-		//NakedCollection collection = (NakedCollection) ((ObjectContent) content).getObject();
 		OneToManyAssociation field = content instanceof OneToManyField ? ((OneToManyField) content).getOneToManyAssociation() : null;
 
         LOG.debug("rebuild view " + view + " for " + content);
@@ -55,7 +54,6 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
         View[] subviews = view.getSubviews();
         Naked[] existingElements = new NakedObject[subviews.length];
         for (int i = 0; i < subviews.length; i++) {
-//			subviews[i].dispose();
             view.removeView(subviews[i]);
 			existingElements[i] = subviews[i].getContent().getNaked();
 		}
