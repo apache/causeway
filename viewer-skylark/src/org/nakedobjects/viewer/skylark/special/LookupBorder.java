@@ -1,9 +1,6 @@
 package org.nakedobjects.viewer.skylark.special;
 
-import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
-import org.nakedobjects.viewer.skylark.OneToOneField;
-import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
 
 
