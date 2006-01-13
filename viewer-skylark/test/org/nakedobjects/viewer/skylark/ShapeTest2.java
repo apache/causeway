@@ -46,18 +46,18 @@ public class ShapeTest2 extends TestCase {
 	}
 	
 	public void testAddLine() {
-		shape.addLine(5, 10);
+		shape.extendsLine(5, 10);
 		assertEquals(2, shape.count());
 		assertEquals(15, shape.getX()[1]);
-		assertEquals(10, shape.getY()[1]);
+		assertEquals(30, shape.getY()[1]);
 	}
 	
 	public void testAddTwoLines() {
-		shape.addLine(5, 10);
-		shape.addLine(-8, -5);
+		shape.extendsLine(5, 10);
+		shape.extendsLine(-8, -5);
 		assertEquals(3, shape.count());
 		assertEquals(7, shape.getX()[2]);
-		assertEquals(15, shape.getY()[2]);
+		assertEquals(25, shape.getY()[2]);
 	}
 	
 }

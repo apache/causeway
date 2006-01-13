@@ -6,11 +6,11 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 
 
 public class TableAxis implements ViewAxis {
+    private final NakedObjectField[] fields;
     private final String[] names;
     private int rowHeaderOffet;
     private View table;
     private final int[] widths;
-    private final NakedObjectField[] fields;
 
     public TableAxis(NakedObjectField[] fields) {
         this.fields = fields;
@@ -26,20 +26,41 @@ public class TableAxis implements ViewAxis {
     }
 
     /**
-     * Returns 0 for left side of first column, 1 for right side of first
-     * column, 2 for right side of second column, etc.
+     * Returns the number of the column found at the specificied position, ignoring the columns two borders.
+     * Returns 0 for the first column, 1 for second column, etc.
+     * 
+     * If over the column border then returns -1.
+     */
+    public int getColumnAt(int xPosition) {
+        int edge = getHeaderOffset();
+        for (int i = 0, cols = getColumnCount() + 1; i < cols; i++) {
+            if (xPosition >= edge - 1 && xPosition <= edge + 1) {
+                return -1;
+            }
+            if (xPosition < edge - 1) {
+                return i;
+            }
+            edge += getColumnWidth(i);
+        }
+
+        return -1;
+    }
+
+    /**
+     * Returns 0 for left side of first column, 1 for right side of first column, 2 for right side of second
+     * column, etc.
      * 
      * If no column border is identified then returns -1.
      */
     public int getColumnBorderAt(int xPosition) {
-        int width = getHeaderOffset();
+        int edge = getHeaderOffset();
         for (int i = 0, cols = getColumnCount(); i < cols; i++) {
-            if (xPosition >= width - 1 && xPosition <= width + 1) {
+            if (xPosition >= edge - 1 && xPosition <= edge + 1) {
                 return i;
             }
-            width += getColumnWidth(i);
+            edge += getColumnWidth(i);
         }
-        if (xPosition >= width - 1 && xPosition <= width + 1) {
+        if (xPosition >= edge - 1 && xPosition <= edge + 1) {
             return getColumnCount();
         }
 
@@ -56,6 +77,10 @@ public class TableAxis implements ViewAxis {
 
     public int getColumnWidth(int column) {
         return widths[column];
+    }
+
+    public NakedObjectField getFieldForColumn(int column) {
+        return fields[column];
     }
 
     public int getHeaderOffset() {
@@ -86,39 +111,33 @@ public class TableAxis implements ViewAxis {
         table = view;
     }
 
-    public void setWidth(int index, int width) {
-        widths[index] = width;
-    }
-
     public void setupColumnWidths(ColumnWidthStrategy strategy) {
         for (int i = 0; i < widths.length; i++) {
             widths[i] = strategy.getPreferredWidth(i, fields[i]);
         }
 
-        
+    }
+
+    public void setWidth(int index, int width) {
+        widths[index] = width;
     }
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business
- * objects directly to the user. Copyright (C) 2000 - 2005 Naked Objects Group
- * Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
- * Place, Suite 330, Boston, MA 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address
- * of Naked Objects Group is Kingsway House, 123 Goldworth Road, Woking GU21
- * 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

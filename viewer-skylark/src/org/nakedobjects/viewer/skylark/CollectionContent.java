@@ -3,22 +3,60 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.NakedCollection;
+import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.object.TypedNakedCollection;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
+import org.nakedobjects.viewer.skylark.basic.FieldComparator;
+import org.nakedobjects.viewer.skylark.basic.TitleComparator;
+import org.nakedobjects.viewer.skylark.basic.TypeComparator;
 
 import java.util.Enumeration;
 
 
 public abstract class CollectionContent extends AbstractContent implements Content {
+    private static final TypeComparator TYPE_COMPARATOR = new TypeComparator();
+    private static final TitleComparator TITLE_COMPARATOR = new TitleComparator();
+    private final static CollectionSorter sorter = new SimpleCollectionSorter();
+    private Comparator order;
+    private boolean reverse;
 
-    public abstract Enumeration allElements();
 
+    public final Enumeration allElements() {
+        final NakedObject[] elements = elements();
+        
+        sorter.sort(elements, order, reverse);
+        
+        return new Enumeration() {
+            int i = 0;
+            int size = elements.length;
+            
+            public boolean hasMoreElements() {
+                return i < size;
+            }
+
+            public Object nextElement() {
+                return elements[i++];
+            }
+        };
+    }
+    
+    public void debugDetails(DebugString debug) {
+        debug.appendln(4, "order", order);
+        debug.appendln(4, "reverse order", reverse);
+    }
+
+    public abstract NakedObject[] elements();
+  
     public abstract NakedCollection getCollection();
 
-    public void menuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(MenuOptionSet options) {
         final NakedCollection collection = getCollection();
         
   		// TODO find all collection actions, and make them available
@@ -34,7 +72,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
             };
             
             if (option != null) {
-                options.add(MenuOptionSet.OBJECT, option);
+                options.add(MenuOptionSet.USER, option);
             }
         }
         
@@ -51,10 +89,123 @@ public abstract class CollectionContent extends AbstractContent implements Conte
 
     }
     
+    public void viewMenuOptions(MenuOptionSet options) {
+        options.add(MenuOptionSet.USER, new MenuOption("Clear sort") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(order != null);
+            }
+            
+            public void execute(Workspace workspace, View view, Location at) {
+                order = null;
+                view.invalidateContent();
+            }
+        });
+        
+        if(reverse) {
+            options.add(MenuOptionSet.USER, new MenuOption("Normal sort order") {
+                public Consent disabled(View component) {
+                    return AbstractConsent.allow(order != null);
+                }
+                
+                public void execute(Workspace workspace, View view, Location at) {
+                    reverse = false;
+                    view.invalidateContent();
+                }
+            });
+        } else {
+            options.add(MenuOptionSet.USER, new MenuOption("Reverse sort order") {
+                public Consent disabled(View component) {
+                    return AbstractConsent.allow(order != null);
+                }
+                
+                public void execute(Workspace workspace, View view, Location at) {
+                    reverse = true;
+                    view.invalidateContent();
+                }
+            });
+        }
+        
+        options.add(MenuOptionSet.USER, new MenuOption("Sort by title") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(order != TITLE_COMPARATOR);
+            }
+            
+            public void execute(Workspace workspace, View view, Location at) {
+                order = TITLE_COMPARATOR;
+                view.invalidateContent();
+            }
+        });
+        
+        
+        options.add(MenuOptionSet.USER, new MenuOption("Sort by type") {
+            public Consent disabled(View component) {
+                return AbstractConsent.allow(order != TYPE_COMPARATOR);
+            }
+            
+            public void execute(Workspace workspace, View view, Location at) {
+                order = TYPE_COMPARATOR;
+                view.invalidateContent();
+            }
+        });
+        
+        NakedCollection c = getCollection();
+        if(c instanceof TypedNakedCollection) {
+            NakedObjectSpecification spec = ((TypedNakedCollection) c).getElementSpecification();
+            NakedObjectField[] fields = spec.getFields();
+            for (int i = 0; i < fields.length; i++) {
+                final NakedObjectField field = fields[i];
+                
+                options.add(MenuOptionSet.USER, new MenuOption("Sort by " + field.getName()) {
+                    public void execute(Workspace workspace, View view, Location at) {
+                        order = new FieldComparator(field);
+                        view.invalidateContent();
+                    }
+                });
+            }
+        }
+    }
+    
     public void parseTextEntry(String entryText) throws InvalidEntryException {
         throw new UnexpectedCallException();
     }
 
+    public void setOrder(Comparator order) {
+        this.order = order;
+    }
+    
+    public void setOrderByField(NakedObjectField field) {
+        if(order  instanceof FieldComparator && ((FieldComparator) order).getField() == field) {
+            reverse = !reverse;
+        } else {
+            order = new FieldComparator(field);
+            reverse = false;
+        }
+    }
+
+    public void setOrderByElement() {
+        if(order == TITLE_COMPARATOR) {
+            reverse = !reverse;
+        } else {
+            order = TITLE_COMPARATOR;
+            reverse = false;
+        }
+    }
+    
+    public NakedObjectField getFieldSortOrder() {
+        if(order  instanceof FieldComparator) {
+            return ((FieldComparator) order).getField();
+        } else {
+            return null;
+        }
+    }
+    
+    public boolean getOrderByElement() {
+        return order == TITLE_COMPARATOR;
+    }
+    
+    public boolean getReverseSortOrder() {
+        return reverse;
+    }
 }
 
 /*

@@ -21,7 +21,7 @@ public class TableSpecification extends org.nakedobjects.viewer.skylark.table.Ta
         WindowBorder viewWithWindowBorder = new WindowBorder(scrollingView, false);
         // note - the next call needs to be after the creation of the window border so that it exists when the
         // header is set up
-        scrollingView.setTopHeader(new TableHeader(view.getViewAxis()));
+        scrollingView.setTopHeader(new TableHeader(content, view.getViewAxis()));
         return viewWithWindowBorder;
     }
 

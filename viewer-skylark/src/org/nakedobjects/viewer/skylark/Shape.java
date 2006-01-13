@@ -48,9 +48,9 @@ public class Shape {
         }
     }
 
-    public void addLine(int width, int height) {
+    public void extendsLine(int width, int height) {
         int x = this.x[count - 1] + width;
-        int y = this.y[count - 1] - height;
+        int y = this.y[count - 1] + height;
         addVertex(x, y);
     }
 
