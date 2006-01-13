@@ -157,7 +157,6 @@ public class ViewFactory implements DebugInfo {
         Enumeration fields = availableViews.elements();
         while (fields.hasMoreElements()) {
             ViewSpecification spec = (ViewSpecification) fields.nextElement();
-            // TODO convert canDisplay to take a content
             if (spec.canDisplay(content)) {
                 return spec;
             }

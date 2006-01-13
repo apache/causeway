@@ -10,6 +10,7 @@ public interface Workspace extends View {
 
     View addOpenViewFor(Naked object, Location at);
 
+    // TODO this can probably be replace with two methods: createIcon and createView 
     View createSubviewFor(Naked object, boolean asIcon);
 
     /**
