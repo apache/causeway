@@ -34,7 +34,6 @@ class LookupOverlaySpecification extends AbstractCompositeViewSpecification impl
         NakedObjectSpecification type = field.getSpecification();
         NakedObjectPersistor manager = NakedObjects.getObjectPersistor();
         instances = manager.allInstances(type, true);
-        instances.sort();
         RootCollection instanceContent = new RootCollection(instances);
         instanceContent.setOrderByElement();
         return new PanelBorder(1, new ScrollBorder(super.createView(instanceContent, axis)));
