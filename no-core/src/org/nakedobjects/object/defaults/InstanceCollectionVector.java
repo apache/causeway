@@ -76,29 +76,6 @@ public class InstanceCollectionVector extends AbstractNakedReference implements 
         }
     }
 
-    public void sort() {
-        Vector sorted = new Vector(instances.size());
-
-        outer: for (Enumeration e = instances.elements(); e.hasMoreElements();) {
-            NakedObject element = (NakedObject) e.nextElement();
-            String title = element.titleString();
-
-            int i = 0;
-            for (Enumeration f = sorted.elements(); f.hasMoreElements();) {
-                NakedObject sortedElement = (NakedObject) f.nextElement();
-                String sortedTitle = sortedElement.titleString();
-                if (sortedTitle.compareTo(title) > 0) {
-                    sorted.insertElementAt(element, i);
-                    continue outer;
-                }
-                i++;
-            }
-            sorted.addElement(element);
-        }
-
-        instances = sorted;
-    }
-
     public Persistable persistable() {
         return Persistable.TRANSIENT;
     }

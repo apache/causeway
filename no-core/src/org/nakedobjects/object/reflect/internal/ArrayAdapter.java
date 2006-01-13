@@ -86,8 +86,6 @@ public class ArrayAdapter extends AbstractNakedReference implements InternalColl
         return array.length;
     }
 
-    public void sort() {}
-
     public String titleString() {
         return "Vector";
     }
