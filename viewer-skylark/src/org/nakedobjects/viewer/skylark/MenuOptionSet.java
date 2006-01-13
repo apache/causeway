@@ -4,14 +4,12 @@ import java.util.Vector;
 
 
 public class MenuOptionSet {
-    public static final int VIEW = 1;
-    public static final int OBJECT = 2;
-    public static final int CLASS = 3;
-    public static final int EXPLORATION = 4;
-    public static final int DEBUG = 5;
+    public static final int USER = 1;
+    public static final int EXPLORATION = 2;
+    public static final int DEBUG = 3;
     private static final int LAST = DEBUG;
     private Color backgroundColor = Color.DEBUG_BASELINE;
-    private Vector[] set = new Vector[LAST + 1];
+    private Vector[] options = new Vector[LAST + 1];
     private boolean forView;
 
     public MenuOptionSet(boolean forView) {
@@ -43,10 +41,8 @@ public class MenuOptionSet {
     public Vector getMenuOptions(boolean includeExploration, boolean includeDebug) {
         Vector v = new Vector();
 
-        createMenu(v, VIEW);
-        createMenu(v, OBJECT);
-        createMenu(v, CLASS);
-
+        createMenu(v, USER);
+ 
         if (includeExploration) {
         	createMenu(v, EXPLORATION);
         }
@@ -67,11 +63,11 @@ public class MenuOptionSet {
             throw new IllegalArgumentException("Section number out of range!");
         }
 
-        Vector v = set[section];
+        Vector v = options[section];
 
         if (v == null) {
             v = new Vector();
-            set[section] = v;
+            options[section] = v;
         }
 
         v.addElement(option);
@@ -91,9 +87,9 @@ public class MenuOptionSet {
     }
 
     private void createMenu(Vector v, int type) {
-        if (set[type] != null) {
-            for (int j = 0; j < set[type].size(); j++) {
-                v.addElement(set[type].elementAt(j));
+        if (options[type] != null) {
+            for (int j = 0; j < options[type].size(); j++) {
+                v.addElement(options[type].elementAt(j));
             }
 
             v.addElement(null);
