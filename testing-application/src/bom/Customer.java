@@ -23,6 +23,15 @@ public class Customer {
         return "firstname, LAST name, phone numbers, locations, bOOkings";
     }
 
+    public static String actionOrder() {
+        return "Create transient graph, " +
+                "(Show errors: show failure of system, show raise error), (Show messages: show warn usage, ShowInformUsage), " +
+                "(New bookings: new booking, new booking no return, create booking), " +
+                "new location, " +
+                "new locations, " +
+                "locations as array";
+    }
+
     private final Vector bookings;
     private transient BusinessObjectContainer container;
     private final TextString firstName;
@@ -228,17 +237,17 @@ public class Customer {
         return booking;
     }
 
-    public void actionShowInformUsage() throws SocketException {
+    public void actionShowInformUsage() {
         container.informUser("Message from within method");
         container.informUser("2nd message from within method");
     }
 
-    public void actionShowWarnUsage() throws SocketException {
+    public void actionShowWarnUsage()  {
         container.warnUser("Warning from within method");
-        container.warnUser("2nd warning from within method");
+        container.warnUser("Another warning: 2nd warning from within method");
     }
     
-    public void actionShowRaiseError() throws SocketException {
+    public void actionShowRaiseError() {
         container.raiseError("example exception via raise error");
     }
 
