@@ -98,6 +98,10 @@ class DummyAction implements Action {
         return null;
     }
 
+    public Action[] getActions() {
+        return null;
+    }
+
 }
 
 /*

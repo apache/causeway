@@ -12,13 +12,13 @@ import org.nakedobjects.application.valueholder.BusinessValueHolder;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
-import org.nakedobjects.object.NakedObjectMember;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.ActionPeer;
+import org.nakedobjects.object.reflect.ActionSet;
 import org.nakedobjects.object.reflect.FieldPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
 import org.nakedobjects.object.reflect.MemberIdentifierImpl;
@@ -30,13 +30,14 @@ import org.nakedobjects.object.reflect.ReflectionException;
 import org.nakedobjects.object.reflect.ReflectionPeerBuilder;
 import org.nakedobjects.reflector.java.control.SimpleClassAbout;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
+import org.nakedobjects.utility.UnknownTypeException;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.StringTokenizer;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
@@ -63,9 +64,9 @@ public class JavaIntrospector {
      * Calling this method with the following Java names will produce these results:
      * 
      * <pre>
-     *          getCarRegistration        -&gt; CarRegistration
-     *          CityMayor -&gt; CityMayor
-     *          isReady -&gt; Ready
+     *             getCarRegistration        -&gt; CarRegistration
+     *             CityMayor -&gt; CityMayor
+     *             isReady -&gt; Ready
      * </pre>
      * 
      */
@@ -130,11 +131,95 @@ public class JavaIntrospector {
                 } else {
                     LOG.warn("method " + aClass.getName() + "." + type + "Order() must be decared as static");
                 }
-            }
-            catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
+            } catch (IllegalAccessException ignore) {} catch (InvocationTargetException ignore) {}
 
             return null;
         }
+    }
+
+    /**
+     * Invokes, by reflection, the Order method prefixed by the specified type name. The returned string is
+     * tokenized - broken on the commas - and returned in the array.
+     */
+    private Set readSortOrder2(Class aClass, String type) {
+        Method method = findMethod(true, type + "Order", String.class, null);
+        if (method == null) {
+            return null;
+        }
+
+        String s;
+        try {
+            if (Modifier.isStatic(method.getModifiers())) {
+                s = (String) method.invoke(null, NO_PARAMETERS);
+                if (s.trim().length() == 0) {
+                    return null;
+                }
+            } else {
+                LOG.warn("method " + aClass.getName() + "." + type + "Order() must be decared as static");
+                return null;
+            }
+        } catch (IllegalAccessException ignore) {
+            LOG.warn("method " + aClass.getName() + "." + type + "Order() must be decared as public");
+            return null;
+        } catch (InvocationTargetException e) {
+            throw new ReflectionException(e);
+        }
+
+        return extractOrder(s);
+    }
+
+    private Set extractOrder(String s) {
+        Set set = new Set();
+        StringTokenizer st = new StringTokenizer(s, ",");
+        while (st.hasMoreTokens()) {
+            String element = st.nextToken().trim();
+            
+            boolean ends;
+            if(ends = element.endsWith(")")) {
+                element = element.substring(0, element.length() - 1).trim();
+            }
+            
+            if(element.startsWith("(")) {
+                int colon = element.indexOf(':');
+                String groupName = element.substring(1, colon).trim();
+                element = element.substring(colon + 1).trim();
+                set = new Set(set, groupName, element);
+            } else {
+                set.add(element);
+            }
+            
+            if(ends) {
+                set = set.getParent();
+            }
+        }
+        return set;
+    }
+    
+    private static class Set {
+        final Vector elements = new Vector();
+        final Set parent;
+        final String groupName;
+        
+        public Set() {
+            parent = null;
+            groupName = "";
+        }
+
+        public Set(Set set, String groupName, String element) {
+            parent = set;
+            parent. elements.addElement(this);
+            this.groupName = groupName;
+            add(element);
+        }
+
+        Set getParent() {
+            return parent;
+        }
+
+        void add(String element) {
+            elements.addElement(element);
+        }
+        
     }
 
     /**
@@ -166,10 +251,10 @@ public class JavaIntrospector {
         }
         this.cls = cls;
         methods = cls.getMethods();
-        
+
         for (int i = 0; i < methods.length; i++) {
             LOG.debug("  " + methods[i]);
-            
+
         }
         LOG.debug("");
 
@@ -246,14 +331,14 @@ public class JavaIntrospector {
         return convertToArray(actions);
     }
 
-    private String[] actionSortOrder() {
+    private Set actionSortOrder() {
         LOG.debug("  looking for action sort order");
-        return readSortOrder(cls, "action");
+        return readSortOrder2(cls, "action");
     }
 
-    private String[] classActionSortOrder() {
+    private Set classActionSortOrder() {
         LOG.debug("  looking for class action sort order");
-        return readSortOrder(cls, "classAction");
+        return readSortOrder2(cls, "classAction");
     }
 
     public Hint classHint() {
@@ -284,13 +369,13 @@ public class JavaIntrospector {
         return (ActionPeer[]) results;
     }
 
-    ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action, Action.Target target) {
+    private ActionPeer createAction(Method method, String name, Method aboutMethod, Action.Type action, Action.Target target) {
         Class[] cls = method.getParameterTypes();
         NakedObjectSpecification[] parameters = new NakedObjectSpecification[cls.length];
         for (int i = 0; i < cls.length; i++) {
             parameters[i] = specification(cls[i]);
         }
- 
+
         MemberIdentifier identifier = new MemberIdentifierImpl(className, name, parameters);
         return new JavaAction(identifier, action, parameters, target, method, aboutMethod);
     }
@@ -298,23 +383,29 @@ public class JavaIntrospector {
     private NakedObjectSpecification specification(Class returnType) {
         return NakedObjects.getSpecificationLoader().loadSpecification(returnType.getName());
     }
-    
-    private Action[] createActions(ReflectionPeerBuilder builder, ActionPeer[] actions) {
-        Action actionChains[] = new Action[actions.length];
 
-        for (int i = 0; i < actions.length; i++) {
-            actionChains[i] = builder.createAction(className, actions[i]);
+    private Action[] createActions(ReflectionPeerBuilder builder, ActionPeer[] delegates, Set order) {
+        Action actions[] = new Action[delegates.length];
+        for (int i = 0; i < delegates.length; i++) {
+            actions[i] = builder.createAction(className, delegates[i]);
         }
-
-        return actionChains;
+        
+        Action[] orderedActions = extractedOrderedActions(actions, order);
+        
+        Vector completeList = new Vector();
+        for (int i = 0; i < orderedActions.length; i++) {
+            completeList.addElement(orderedActions[i]);
+        }
+        for (int i = 0; i < actions.length; i++) {
+            if(actions[i] != null) {
+                completeList.addElement(actions[i]);
+            }
+        }
+        
+        Action[] completeActions = new Action[completeList.size()];
+        completeList.copyInto(completeActions);
+        return completeActions;
     }
-
-    private Action[] createActions(ReflectionPeerBuilder builder, ActionPeer[] delegates, String[] order) {
-        return createActions(builder, delegates);
-        /*
-         * Action[] actions = createActions(builder, delegates); Action[] objectActions = (Action[])
-         * orderArray(Action.class, actions, order); return objectActions;
-         */}
 
     private NakedObjectField[] createFields(ReflectionPeerBuilder builder, FieldPeer fieldPeers[]) {
         NakedObjectField[] fields = new NakedObjectField[fieldPeers.length];
@@ -354,8 +445,8 @@ public class JavaIntrospector {
             }
 
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
-            JavaOneToOneAssociation association = new JavaOneToOneAssociation(false, identifier , method.getReturnType(), method, null,
-                    null, null, aboutMethod, false, true);
+            JavaOneToOneAssociation association = new JavaOneToOneAssociation(false, identifier, method.getReturnType(), method,
+                    null, null, null, aboutMethod, false, true);
             fields.addElement(association);
 
         }
@@ -569,7 +660,7 @@ public class JavaIntrospector {
         LOG.info("introspecting " + cls.getName());
 
         ActionPeer delegates[] = actionPeers(OBJECT);
-        String[] order = actionSortOrder();
+        Set order = actionSortOrder();
         objectActions = createActions(builder, delegates, order);
 
         delegates = actionPeers(CLASS);
@@ -578,8 +669,6 @@ public class JavaIntrospector {
 
         FieldPeer fieldDelegates[] = fields();
         fieldDelegates = orderArray(fieldDelegates, fieldSortOrder());
-        // NakedObjectField[] fieldVector = createFields(builder, fieldDelegates);
-        // fields = (NakedObjectField[]) orderArray(NakedObjectField.class, fieldVector, fieldSortOrder());
         fields = createFields(builder, fieldDelegates);
     }
 
@@ -653,9 +742,9 @@ public class JavaIntrospector {
                 LOG.error("The add/remove/associate/dissociate/about methods in " + className() + " must "
                         + "all deal with same type of object.  There are at least two different " + "types");
             }
-            
+
             boolean isHidden = false;
-            if(name.startsWith(HIDDEN_PREFIX)) {
+            if (name.startsWith(HIDDEN_PREFIX)) {
                 isHidden = true;
                 name = name.substring(HIDDEN_PREFIX.length());
             }
@@ -719,14 +808,14 @@ public class JavaIntrospector {
             }
 
             boolean isHidden = false;
-            if(name.startsWith(HIDDEN_PREFIX)) {
+            if (name.startsWith(HIDDEN_PREFIX)) {
                 isHidden = true;
                 name = name.substring(HIDDEN_PREFIX.length());
             }
 
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
-            associations
-                    .addElement(new JavaInternalCollection(identifier, elementType, getMethod, addMethod, removeMethod, aboutMethod, isHidden));
+            associations.addElement(new JavaInternalCollection(identifier, elementType, getMethod, addMethod, removeMethod,
+                    aboutMethod, isHidden));
         }
     }
 
@@ -800,12 +889,12 @@ public class JavaIntrospector {
             }
 
             boolean isHidden = false;
-            if(name.startsWith(HIDDEN_PREFIX)) {
+            if (name.startsWith(HIDDEN_PREFIX)) {
                 isHidden = true;
                 name = name.substring(HIDDEN_PREFIX.length());
             }
 
-         MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
+            MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
             associations.addElement(new JavaOneToManyAssociation(identifier, elementType, getMethod, addMethod, removeMethod,
                     aboutMethod, isHidden));
         }
@@ -859,15 +948,15 @@ public class JavaIntrospector {
             Method setMethod = findMethod(OBJECT, SET_PREFIX + name, void.class, params);
 
             boolean isHidden = false;
-            if(name.startsWith(HIDDEN_PREFIX)) {
+            if (name.startsWith(HIDDEN_PREFIX)) {
                 isHidden = true;
                 name = name.substring(HIDDEN_PREFIX.length());
             }
 
             LOG.debug("one-to-one association " + name + " ->" + addMethod);
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
-            JavaOneToOneAssociation association = new JavaOneToOneAssociation(true, identifier, getMethod.getReturnType(), getMethod,
-                    setMethod, addMethod, removeMethod, aboutMethod, isHidden, setMethod == null);
+            JavaOneToOneAssociation association = new JavaOneToOneAssociation(true, identifier, getMethod.getReturnType(),
+                    getMethod, setMethod, addMethod, removeMethod, aboutMethod, isHidden, setMethod == null);
             associations.addElement(association);
         }
     }
@@ -875,14 +964,14 @@ public class JavaIntrospector {
     protected FieldPeer[] orderArray(FieldPeer[] original, String[] order) {
         if (order == null) {
             return original;
-
+    
         } else {
             for (int i = 0; i < order.length; i++) {
                 order[i] = NameConvertor.simpleName(order[i]);
             }
-
+    
             FieldPeer[] ordered = new FieldPeer[original.length];
-
+    
             // work through each order element and find, if there is one, a
             // matching member.
             int orderedIndex = 0;
@@ -895,16 +984,16 @@ public class JavaIntrospector {
                     if (member.getIdentifier().getName().equalsIgnoreCase(order[orderIndex])) {
                         ordered[orderedIndex++] = original[memberIndex];
                         original[memberIndex] = null;
-
+    
                         continue ordering;
                     }
                 }
-
+    
                 if (!order[orderIndex].trim().equals("")) {
                     LOG.warn("invalid ordering element '" + order[orderIndex] + "' in " + className);
                 }
             }
-
+    
             FieldPeer[] results = new FieldPeer[original.length];
             int index = 0;
             for (int i = 0; i < ordered.length; i++) {
@@ -919,61 +1008,44 @@ public class JavaIntrospector {
                     results[index++] = member;
                 }
             }
-
+    
             return results;
         }
     }
 
-    protected NakedObjectMember[] orderArray(Class memberType, NakedObjectMember[] original, String[] order) {
+    private Action getAction(Action[] actions, String name) {
+        for (int i = 0; i < actions.length; i++) {
+            Action action = actions[i];
+            if(action != null && action.getId().equals(name)) {
+                actions[i] = null;
+                return action;
+            }
+        }
+        
+        throw new NakedObjectRuntimeException("No field " + name);
+    }
+    
+    protected Action[] extractedOrderedActions(Action[] original, Set order) {
         if (order == null) {
             return original;
-
-        } else {
-            for (int i = 0; i < order.length; i++) {
-                order[i] = NameConvertor.simpleName(order[i]);
-            }
-
-            NakedObjectMember[] ordered = (NakedObjectMember[]) Array.newInstance(memberType, original.length);
-
-            // work through each order element and find, if there is one, a
-            // matching member.
-            int orderedIndex = 0;
-            ordering: for (int orderIndex = 0; orderIndex < order.length; orderIndex++) {
-                for (int memberIndex = 0; memberIndex < original.length; memberIndex++) {
-                    NakedObjectMember member = original[memberIndex];
-                    if (member == null) {
-                        continue;
-                    }
-                    if (member.getId().equalsIgnoreCase(order[orderIndex])) {
-                        ordered[orderedIndex++] = original[memberIndex];
-                        original[memberIndex] = null;
-
-                        continue ordering;
-                    }
-                }
-
-                if (!order[orderIndex].trim().equals("")) {
-                    LOG.warn("invalid ordering element '" + order[orderIndex] + "' in " + className);
-                }
-            }
-
-            NakedObjectMember[] results = (NakedObjectMember[]) Array.newInstance(memberType, original.length);
-            int index = 0;
-            for (int i = 0; i < ordered.length; i++) {
-                NakedObjectMember member = ordered[i];
-                if (member != null) {
-                    results[index++] = member;
-                }
-            }
-            for (int i = 0; i < original.length; i++) {
-                NakedObjectMember member = original[i];
-                if (member != null) {
-                    results[index++] = member;
-                }
-            }
-
-            return results;
         }
+        
+        Action[] actions = new Action[order.elements.size()];
+        
+        Enumeration elements = order.elements.elements();
+        int i = 0;
+        while (elements.hasMoreElements()) {
+            Object name =  elements.nextElement();
+            if(name instanceof String) {
+                actions[i++] = getAction(original, NameConvertor.simpleName(name.toString()));
+            } else if (name instanceof Set) {
+                actions[i++] = new ActionSet("", ((Set) name).groupName, extractedOrderedActions(original, (Set) name));
+            } else {
+                throw new UnknownTypeException(name);
+            }
+        }
+                
+        return actions;
     }
 
     public Persistable persistable() {
@@ -1058,9 +1130,9 @@ public class JavaIntrospector {
             if (findMethod(OBJECT, "associate" + name, void.class, params) != null) {
                 LOG.error("the method associate" + name + " is not needed for the NakedValue class " + className());
             }
-            
+
             boolean isHidden = false;
-            if(name.startsWith(HIDDEN_PREFIX)) {
+            if (name.startsWith(HIDDEN_PREFIX)) {
                 isHidden = true;
                 name = name.substring(HIDDEN_PREFIX.length());
             }
@@ -1068,8 +1140,8 @@ public class JavaIntrospector {
             // create Field
             LOG.debug("  identified value " + name + " -> " + getMethod);
             MemberIdentifier identifier = new MemberIdentifierImpl(className, name);
-            JavaOneToOneAssociation association = new JavaOneToOneAssociation(false, identifier, getMethod.getReturnType(), getMethod,
-                    setMethod, null, null, aboutMethod, isHidden, setMethod == null && !valueHolder);
+            JavaOneToOneAssociation association = new JavaOneToOneAssociation(false, identifier, getMethod.getReturnType(),
+                    getMethod, setMethod, null, null, aboutMethod, isHidden, setMethod == null && !valueHolder);
             fields.addElement(association);
         }
 

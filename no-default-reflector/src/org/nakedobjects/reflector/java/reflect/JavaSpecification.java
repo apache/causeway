@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjectSpecificationException;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.Persistable;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.reflect.NameConvertor;
 import org.nakedobjects.object.reflect.ObjectTitle;
@@ -128,7 +129,8 @@ public class JavaSpecification implements NakedObjectSpecification {
         Vector actions = new Vector();
         for (int i = 0; i < availableActions.length; i++) {
             Action action = availableActions[i];
-            if (action.getType().equals(type) && (noParameters == -1 || action.getParameterTypes().length == noParameters)) {
+            Type type2 = action.getType();
+            if (type2 == Action.SET || type2.equals(type) && (noParameters == -1 || action.getParameterTypes().length == noParameters)) {
                 actions.addElement(action);
             }
         }
