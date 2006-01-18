@@ -18,7 +18,6 @@ import org.apache.log4j.LogManager;
 
 import test.org.nakedobjects.object.DummyOid;
 import test.org.nakedobjects.object.defaults.MockObjectPersistor;
-import test.org.nakedobjects.object.reflect.DummyNakedObject;
 import test.org.nakedobjects.object.reflect.DummyVersion;
 import test.org.nakedobjects.objects.bom.Movie;
 import test.org.nakedobjects.objects.bom.Person;

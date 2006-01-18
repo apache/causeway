@@ -1,13 +1,12 @@
 package org.nakedobjects.distribution.dummy;
 
-import org.nakedobjects.distribution.DistributionLogger;
-import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.distribution.IdentityData;
 import org.nakedobjects.object.Oid;
 import org.nakedobjects.object.Version;
 import org.nakedobjects.utility.ToString;
 
 
-public class DummyReferenceData implements ReferenceData {
+public class DummyReferenceData implements IdentityData {
     private final Oid oid;
     private final String type;
     private final Version version;

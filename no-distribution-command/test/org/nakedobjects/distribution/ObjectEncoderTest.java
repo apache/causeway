@@ -528,7 +528,7 @@ public class ObjectEncoderTest extends TestCase {
     }
 
     private void assertReferenceData(DummyNakedObject rootObject, Data od) {
-        ReferenceData data = (ReferenceData) od;
+        IdentityData data = (IdentityData) od;
         assertFalse("must be data for a reference, not an object", od instanceof ObjectData);
         assertEquals(rootObject.getOid(), data.getOid());
         assertEquals(rootObject.getVersion(), data.getVersion());

@@ -60,7 +60,7 @@ public class ObjectDecoderCollectionTest extends TestCase {
     }
 
     public void testRecreateCollection() {
-        ObjectData elements[] = new ObjectData[2];
+        ReferenceData elements[] = new ObjectData[2];
         DummyOid fieldOid = new DummyOid(345);
         elements[0] = new DummyObjectData(fieldOid, "type.1", false, new DummyVersion());
         fieldOid = new DummyOid(678);

@@ -9,7 +9,7 @@ public class DummyDistribution implements Distribution {
         return null;
     }
 
-    public ObjectData[]  clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[]  clearAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate) {
         return null;
     }
 
@@ -37,19 +37,19 @@ public class DummyDistribution implements Distribution {
         return 0;
     }
 
-    public Data resolveField(Session session, ReferenceData data, String name) {
+    public Data resolveField(Session session, IdentityData data, String name) {
         return null;
     }
 
-    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+    public ObjectData resolveImmediately(Session session, IdentityData target) {
         return null;
     }
 
-    public ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[] setAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate) {
         return null;
     }
 
-    public ObjectData[]  setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {
+    public ObjectData[]  setValue(Session session, String fieldIdentifier, IdentityData target, Object associate) {
         return null;
     }
 }
