@@ -7,7 +7,7 @@ import org.nakedobjects.example.movie.bom.Person;
 import org.nakedobjects.example.movie.bom.Role;
 import org.nakedobjects.example.movie.objectstore.MovieMapper;
 import org.nakedobjects.example.movie.objectstore.PersonMapper;
-import org.nakedobjects.example.movie.objectstore.RoleMapper;
+import org.nakedobjects.example.movie.objectstore.RoleMapper2;
 import org.nakedobjects.example.movie.objectstore.SqlObjectStore;
 import org.nakedobjects.example.movie.objectstore.SqlOidGenerator;
 import org.nakedobjects.object.persistence.DefaultPersistAlgorithm;
@@ -26,7 +26,7 @@ public class MovieStandalone {
                 OidGenerator oidGenerator = new SqlOidGenerator();
                 objectStore.addMapper(Movie.class, new MovieMapper());
                 objectStore.addMapper(Person.class, new PersonMapper());
-                objectStore.addMapper(Role.class, new RoleMapper());
+                objectStore.addMapper(Role.class, new RoleMapper2());
 
                 DefaultPersistAlgorithm persistAlgorithm = new DefaultPersistAlgorithm();
                 persistAlgorithm.setOidGenerator(oidGenerator);
@@ -45,7 +45,7 @@ public class MovieStandalone {
         
         Date.setClock(new ExplorationClock());
         
-        e.system.displayUserInterface( new String[] {Movie.class.getName(), Person.class.getName()});
+        e.system.displayUserInterface( new String[] {Movie.class.getName(), Person.class.getName(), Role.class.getName()});
     }
 }
 

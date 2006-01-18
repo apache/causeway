@@ -14,6 +14,7 @@ public class Movie {
 
     public void addToRoles(Role role) {
         roles.addElement(role);
+        setDirty();
     }
 
     public Person getDirector() {
@@ -30,10 +31,12 @@ public class Movie {
 
     public void removeFromRoles(Role role) {
         roles.removeElement(role);
+        setDirty();
     }
 
     public void setDirector(Person director) {
         this.director = director;
+        setDirty();
     }
 
     public void setName(String name) {

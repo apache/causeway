@@ -1,9 +1,11 @@
 package org.nakedobjects.example.movie.bom;
 
+import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.value.Date;
 
 
 public class Person {
+    private BusinessObjectContainer container;
     private Date date;
     private String name;
 
@@ -17,14 +19,20 @@ public class Person {
 
     public void setDate(Date date) {
         this.date = date;
+        container.objectChanged(this);
     }
 
     public void setName(String name) {
         this.name = name;
+        container.objectChanged(this);
     }
 
     public String title() {
         return name;
+    }
+
+    public void setContainer(BusinessObjectContainer container) {
+        this.container = container;
     }
 }
 
