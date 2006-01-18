@@ -54,6 +54,10 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         return peer.getType();
     }
 
+    public Action[] getActions() {
+        return new Action[0];
+    }
+
     public String getDescription() {
         return peer.getDescription();
     }

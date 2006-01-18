@@ -1,5 +1,6 @@
 package org.nakedobjects.object;
 
+import org.nakedobjects.object.reflect.ActionSet;
 import org.nakedobjects.utility.Debug;
 import org.nakedobjects.utility.DebugString;
 
@@ -49,17 +50,17 @@ public class Dump {
             info.blankLine();
             if (object instanceof NakedCollection) {
                 collectionGraph((NakedCollection) object, level, ignoreObjects, info);
-            } else  if (object instanceof NakedObject) {
+            } else if (object instanceof NakedObject) {
                 objectGraph((NakedObject) object, level, ignoreObjects, info);
             } else {
-            //    info.append("??? " + object);
+                // info.append("??? " + object);
             }
         }
     }
 
     /**
-     * Creates an ascii object graph diagram for the specified object, up to three levels deep, and
-     * not expanding any of the objects in the excludedObjects vector.
+     * Creates an ascii object graph diagram for the specified object, up to three levels deep, and not
+     * expanding any of the objects in the excludedObjects vector.
      */
     public static String graph(Naked object, Vector excludedObjects) {
         DebugString s = new DebugString();
@@ -80,7 +81,7 @@ public class Dump {
         object(object, s);
         return s.toString();
     }
-    
+
     public static void object(Naked object, DebugString string) {
         string.appendln(0, "Specification", object.getSpecification().getFullName());
         string.appendln(0, "Class", object.getObject() == null ? "none" : object.getObject().getClass().getName());
@@ -132,26 +133,25 @@ public class Dump {
         specification(object, s);
         return s.toString();
     }
-      
+
     public static void specification(Naked naked, DebugString debug) {
         NakedObjectSpecification specification = naked.getSpecification();
 
         debug.appendTitle(specification.getClass().getName());
-        
+
         debug.appendln(0, "Full Name", specification.getFullName());
         debug.appendln(0, "Short Name", specification.getShortName());
         debug.appendln(0, "Plural Name", specification.getPluralName());
         debug.appendln(0, "Singular Name", specification.getSingularName());
-     
+
         debug.blankLine();
-        
+
         debug.appendln(0, "Abstract", specification.isAbstract());
         debug.appendln(0, "Lookup", specification.isLookup());
         debug.appendln(0, "Object", specification.isObject());
         debug.appendln(0, "Value", specification.isValue());
         debug.appendln(0, "Persistable", specification.persistable());
 
-        
         if (specification.superclass() != null) {
             debug.appendln(0, "Superclass", specification.superclass().getFullName());
         }
@@ -178,7 +178,7 @@ public class Dump {
         Action[] explActions = specification.getClassActions(Action.EXPLORATION);
         Action[] debActions = specification.getClassActions(Action.DEBUG);
         specificationMethods(userActions, explActions, debActions, debug);
-     }
+    }
 
     private static void specificationFields(NakedObjectSpecification specification, DebugString debug) {
         NakedObjectField[] fields = specification.getFields();
@@ -189,21 +189,22 @@ public class Dump {
 
                 NakedObjectField f = (NakedObjectField) fields[i];
                 debug.appendln(4, f.getName());
-                if(f.getDescription() != null && ! f.getDescription().equals("") ) {
+                if (f.getDescription() != null && !f.getDescription().equals("")) {
                     debug.appendln(12, "Description", f.getDescription());
                 }
-                
+
                 debug.appendln(8, f.getClass().getName());
 
                 debug.appendln(8, "ID", f.getId());
                 debug.appendln(8, "Type", (f.isCollection() ? "Collection" : f.isObject() ? "Object" : f.isValue() ? "Value"
-                        : "Unknown") + " (" + f.getSpecification().getFullName() + ")");
+                        : "Unknown")
+                        + " (" + f.getSpecification().getFullName() + ")");
 
-                debug.appendln(8, "Flags", (f.isAuthorised() ? "Authorised " : "") + (f.isDerived() ? "Derived " : "") + (f.isHidden() ? 
-                        "Hidden " : "") + (f.isMandatory() ? "Mandatory " : ""));
-                
+                debug.appendln(8, "Flags", (f.isAuthorised() ? "Authorised " : "") + (f.isDerived() ? "Derived " : "")
+                        + (f.isHidden() ? "Hidden " : "") + (f.isMandatory() ? "Mandatory " : ""));
+
                 Class[] extensions = f.getExtensions();
-                if(extensions.length > 0) {
+                if (extensions.length > 0) {
                     debug.appendln(12, "Extensions");
                     for (int j = 0; j < extensions.length; j++) {
                         debug.appendln(16, extensions[j].getName());
@@ -220,44 +221,53 @@ public class Dump {
         } else {
             debug.appendln(4, "User actions");
             for (int i = 0; i < userActions.length; i++) {
-                actionDetails(debug, userActions[i]);
+                actionDetails(debug, userActions[i], 8);
             }
             debug.appendln(4, "Exploration actions");
             for (int i = 0; i < explActions.length; i++) {
-                actionDetails(debug, explActions[i]);
+                actionDetails(debug, explActions[i], 8);
             }
             debug.appendln(4, "Debug actions");
             for (int i = 0; i < debActions.length; i++) {
-                actionDetails(debug, debActions[i]);
+                actionDetails(debug, debActions[i], 8);
             }
         }
     }
 
-    private static void actionDetails(DebugString debug, Action f) {
-        debug.appendln(8, f.getName());
-        if(f.getDescription() != null && ! f.getDescription().equals("") ) {
-            debug.appendln(12, "Description", f.getDescription());
-        }
-        debug.appendln(12, f.getClass().getName());
-        debug.appendln(12, "ID", f.getId());
-//        debug.appendln(12, "Returns", f.getReturnType() == null ? "Nothing" : f.getReturnType().getFullName());
-        NakedObjectSpecification[] parameters = f.getParameterTypes();
-        if(parameters.length == 0) {
-            debug.appendln(12, "Parameters: none");
+    private static void actionDetails(DebugString debug, Action f, int indent) {
+        debug.appendln(indent, f.getName());
+        indent += 4;
+        if (f instanceof ActionSet) {
+            Action[] debActions = f.getActions();
+            for (int i = 0; i < debActions.length; i++) {
+                actionDetails(debug, debActions[i], indent);
+            }
+
         } else {
-            debug.appendln(12, "Parameters");
-        }
-        for (int j = 0; j < parameters.length; j++) {
-            debug.appendln(16, parameters[j].getFullName());
-        }
-        debug.appendln(12, "Target", f.getTarget());
+            if (f.getDescription() != null && !f.getDescription().equals("")) {
+                debug.appendln(indent, "Description", f.getDescription());
+            }
+            debug.appendln(indent, f.getClass().getName());
+            debug.appendln(indent, "ID", f.getId());
+            // debug.appendln(12, "Returns", f.getReturnType() == null ? "Nothing" :
+            // f.getReturnType().getFullName());
+            NakedObjectSpecification[] parameters = f.getParameterTypes();
+            if (parameters.length == 0) {
+                debug.appendln(indent, "Parameters: none");
+            } else {
+                debug.appendln(indent, "Parameters");
+            }
+            for (int j = 0; j < parameters.length; j++) {
+                debug.appendln(16, parameters[j].getFullName());
+            }
+            debug.appendln(indent, "Target", f.getTarget());
 
-
-        Class[] extensions = f.getExtensions();
-        if(extensions.length > 0) {
-            debug.appendln(12, "Extensions");
-            for (int j = 0; j < extensions.length; j++) {
-                debug.appendln(16, extensions[j].getName());
+            Class[] extensions = f.getExtensions();
+            if (extensions.length > 0) {
+                debug.appendln(indent, "Extensions");
+                for (int j = 0; j < extensions.length; j++) {
+                    debug.appendln(16, extensions[j].getName());
+                }
             }
         }
     }
@@ -273,21 +283,20 @@ public class Dump {
 }
 
 /*
- * Naked Objects - a framework that exposes behaviourally complete business objects directly to the
- * user. Copyright (C) 2000 - 2005 Naked Objects Group Ltd
+ * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
+ * Copyright (C) 2000 - 2005 Naked Objects Group Ltd
  * 
- * This program is free software; you can redistribute it and/or modify it under the terms of the
- * GNU General Public License as published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU General
+ * Public License as published by the Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
  * 
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
- * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the
+ * implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+ * for more details.
  * 
- * You should have received a copy of the GNU General Public License along with this program; if
- * not, write to the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307 USA
+ * You should have received a copy of the GNU General Public License along with this program; if not, write to
+ * the Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * 
- * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects
- * Group is Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
+ * The authors can be contacted via www.nakedobjects.org (the registered address of Naked Objects Group is
+ * Kingsway House, 123 Goldworth Road, Woking GU21 1NR, UK).
  */

@@ -9,6 +9,7 @@ public interface Action extends NakedObjectMember {
     public final static Type DEBUG = new Type("DEBUG");
     public final static Type EXPLORATION = new Type("EXPLORATION");
     public final static Type USER = new Type("USER");
+    public final static Type SET = new Type("SET");
     public final static Target LOCAL = new Target("LOCAL");
     public final static Target REMOTE = new Target("REMOTE");
     public final static Target DEFAULT = new Target("DEFAULT");
@@ -71,7 +72,9 @@ public interface Action extends NakedObjectMember {
             return name;
         }
     }
-
+    
+    Action[] getActions();
+    
     int getParameterCount();
 
     Action.Type getType();

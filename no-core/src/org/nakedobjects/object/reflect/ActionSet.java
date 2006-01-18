@@ -1,20 +1,75 @@
-package test.org.nakedobjects.object;
+package org.nakedobjects.object.reflect;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.ActionParameterSet;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.utility.UnexpectedCallException;
 
+public class ActionSet implements Action {
+    private final String name;
+    private final String id;
+    private final Action[] actions;
 
-public class DummyAction implements Action {
-    public Naked execute(NakedObject target, Naked[] parameters) {
+    public ActionSet(String id, String name, Action[] actions) {
+        this.id = id;
+        this.name = name;
+        this.actions = actions;
+    }
+    
+    public int getParameterCount() {
+        return 0;
+    }
+
+    public Type getType() {
+        return SET;
+    }
+
+    public Target getTarget() {
+        return DEFAULT;
+    }
+
+    public boolean hasReturn() {
+        return false;
+    }
+
+    public boolean isOnInstance() {
+        return false;
+    }
+
+    public NakedObjectSpecification[] getParameterTypes() {
+        return new NakedObjectSpecification[0];
+    }
+
+    public Naked[] parameterStubs() {
+        return new Naked[0];
+    }
+
+    public NakedObjectSpecification getReturnType() {
         return null;
     }
 
+    public Naked execute(NakedObject target, Naked[] parameters) {
+        throw new UnexpectedCallException();
+    }
+
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        throw new UnexpectedCallException();
+         }
+
+    public ActionParameterSet getParameterSet(NakedObject object) {
+        throw new UnexpectedCallException();
+    }
+
+    public Action[] getActions() {
+        return actions;
+    }
+    
     public String getDescription() {
-        return null;
+        return "";
     }
 
     public Object getExtension(Class cls) {
@@ -26,70 +81,27 @@ public class DummyAction implements Action {
     }
 
     public String getId() {
-        return null;
+        return id;
     }
 
     public String getName() {
-        return null;
-    }
-
-    public int getParameterCount() {
-        return 0;
-    }
-
-    public ActionParameterSet getParameterSet(NakedObject object) {
-        return null;
-    }
-
-    public NakedObjectSpecification[] getParameterTypes() {
-        return null;
-    }
-
-    public NakedObjectSpecification getReturnType() {
-        return null;
-    }
-
-    public Target getTarget() {
-        return null;
-    }
-
-    public Type getType() {
-        return null;
-    }
-
-    public boolean hasReturn() {
-        return false;
-    }
-
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
-        return null;
+        return name;
     }
 
     public boolean isAuthorised() {
         return true;
     }
 
-    public boolean isOnInstance() {
-        return true;
-    }
-
     public Consent isUsable(NakedObject target) {
-        return null;
+        return Allow.DEFAULT;
     }
 
     public Consent isVisible(NakedObject target) {
-        return null;
-    }
-
-    public Naked[] parameterStubs() {
-        return null;
-    }
-
-    public Action[] getActions() {
-        return null;
+        return Allow.DEFAULT;
     }
 
 }
+
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.
