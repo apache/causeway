@@ -1022,7 +1022,7 @@ public class JavaIntrospector {
             }
         }
         
-        throw new NakedObjectRuntimeException("No field " + name);
+        throw new NakedObjectRuntimeException("No action " + name + "()");
     }
     
     protected Action[] extractedOrderedActions(Action[] original, Set order) {

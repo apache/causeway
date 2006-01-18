@@ -40,12 +40,12 @@ public class JavaReflectorActionsTest extends TestCase {
     }
 
     public void testNumberOfActions() throws Exception {
-        assertEquals(5, actions.length);
+        assertEquals(10, actions.length);
     }
 
     public void testObjectDefaultActionsWithOneParameter() throws Exception {
         Action action = actions[4];
-        assertEquals("Two", action.getId());
+        assertEquals("two", action.getId());
         assertEquals(Action.DEFAULT, action.getTarget());
         assertEquals(Action.DEBUG, action.getType());
         assertEquals(0, action.getParameterCount());
@@ -55,7 +55,7 @@ public class JavaReflectorActionsTest extends TestCase {
 
     public void testObjectDefaultActionsWithZeroParameters() throws Exception {
         Action action = actions[1];
-        assertEquals("One", action.getId());
+        assertEquals("one", action.getId());
         assertEquals(Action.DEFAULT, action.getTarget());
         assertEquals(Action.USER, action.getType());
         assertEquals(null, action.getReturnType());
@@ -64,13 +64,13 @@ public class JavaReflectorActionsTest extends TestCase {
 
     public void testObjectLocalAction() throws NakedObjectSpecificationException {
         Action action = actions[0];
-        assertEquals("RunOnClient", action.getId());
+        assertEquals("runonclient", action.getId());
         assertEquals(Action.LOCAL, action.getTarget());
     }
 
     public void testObjectRemoteAction() throws NakedObjectSpecificationException {
         Action action = actions[2];
-        assertEquals("RunOnServer", action.getId());
+        assertEquals("runonserver", action.getId());
         assertEquals(Action.REMOTE, action.getTarget());
     }
 

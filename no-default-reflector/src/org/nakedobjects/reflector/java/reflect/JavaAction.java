@@ -231,7 +231,7 @@ public class JavaAction extends JavaMember implements ActionPeer {
             }
             parameters.append(types[i]);
         }
-        return "JavaAction [name=" + actionMethod.getName() + ",type=" + type.getName() + ",parameters=" + parameters + "]";
+        return "JavaAction [method=" + actionMethod.getName() + ",type=" + type.getName() + ",parameters=" + parameters + "]";
     }
 
 }

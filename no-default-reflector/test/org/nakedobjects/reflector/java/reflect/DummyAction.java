@@ -8,6 +8,7 @@ import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.reflect.ActionPeer;
 import org.nakedobjects.object.reflect.MemberIdentifier;
+import org.nakedobjects.object.reflect.NameConvertor;
 
 
 class DummyAction implements Action {
@@ -35,7 +36,7 @@ class DummyAction implements Action {
     }
 
     public String getId() {
-        return peer.getIdentifier().getName();
+        return NameConvertor.simpleName(peer.getIdentifier().getName());
     }
 
     public MemberIdentifier getIdentifier() {

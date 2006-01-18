@@ -42,17 +42,15 @@ public class JavaReflectorTest extends TestCase {
         system.shutdown();
     }
 
-    public void testObjectActions() throws NakedObjectSpecificationException {
+    public void testActionSortOrder() throws NakedObjectSpecificationException {
          Action[] actions = reflector.getObjectActions();
          assertEquals(2, actions.length);
          
-         Action member = actions[0];
-         assertEquals("Stop", member.getId());
+         assertEquals("start", actions[0].getId());
+         assertEquals("stop", actions[1].getId());
      }
     
     public void testFieldSortOrder() throws NakedObjectSpecificationException {
-
-
         NakedObjectField[] fields = reflector.getFields();
         
         assertEquals(3, fields.length);
@@ -62,20 +60,12 @@ public class JavaReflectorTest extends TestCase {
         
     }
     
-    public void testActionSortOrder() throws NakedObjectSpecificationException {
-        Action[] actions = reflector.getObjectActions();
-        
-        assertEquals(2, actions.length);
-        assertEquals("Stop", actions[0].getId());
-        assertEquals("Start", actions[1].getId());
-    }
-    
     public void testClassActionSortOrder() throws NakedObjectSpecificationException {
         Action[] actions = reflector.getClassActions();
 
         assertEquals(2, actions.length);
-        assertEquals("Top", actions[0].getId());
-        assertEquals("Bottom", actions[1].getId());
+        assertEquals("top", actions[0].getId());
+        assertEquals("bottom", actions[1].getId());
     }
     
    public void testShortName() {
