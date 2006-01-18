@@ -144,9 +144,16 @@
 			</fileset>
 		</copy>
 
-        <copy todir="${build.src.dir}\">
-			<fileset basedir="${java.sources}/example-base/src">
+		 <copy todir="${build.src.dir}\">
+			<fileset basedir="${java.sources}/no-system/src">
 				<include name="**/*.java" />
+				
+				<exclude name="**/AbstractSqlStoreSystem.java"/>
+				<exclude name="**/Client.java"/>
+				<exclude name="**/Server.java"/>
+				<exclude name="**/ServerXml.java"/>
+				<exclude name="**/SetupSqlStore.java"/>
+				<exclude name="**/StandaloneSql.java"/>
 			</fileset>
 		</copy>
 		<copy todir="${build.src.dir}\">
