@@ -22,15 +22,14 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
     final protected static int LINE_THICKNESS = 5;
     private final static Text TITLE_STYLE = Style.TITLE;
     private final int baseline;
-    private final int padding = 2;
     private final int titlebarHeight;
     private WindowControl controls[];
 
     public AbstractWindowBorder(View enclosedView) {
         super(enclosedView);
 
-        titlebarHeight = Math.max(WindowControl.HEIGHT + 2 * VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getTextHeight());
-        baseline = LINE_THICKNESS + padding + WindowControl.HEIGHT;
+        titlebarHeight = Math.max(WindowControl.HEIGHT + VPADDING + TITLE_STYLE.getDescent(), TITLE_STYLE.getTextHeight());
+        baseline = LINE_THICKNESS + WindowControl.HEIGHT;
 
         left = LINE_THICKNESS;
         right = LINE_THICKNESS;
