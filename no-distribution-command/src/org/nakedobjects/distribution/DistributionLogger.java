@@ -69,15 +69,15 @@ public class DistributionLogger extends Logger implements Distribution {
             str.append("NULL (NullData object)");
         } else if (data instanceof ValueData) {
             ValueData valueData = ((ValueData) data);
-            str.append("ValueData " + valueData.getType() + ":" + valueData.getValue());
+            str.append("ValueData@" + Integer.toHexString(valueData.hashCode()) + " " + valueData.getType() + ":" + valueData.getValue());
+        } else if (data instanceof IdentityData) {
+            IdentityData referenceData = (IdentityData) data;
+            str.append("ReferenceData@" + Integer.toHexString(referenceData.hashCode()) + " " + referenceData.getType() + ":" + referenceData.getOid() + ":"
+                    + referenceData.getVersion());
         } else if (data instanceof ObjectData) {
             dumpObjectData(str, data, indent, complete);
         } else if (data instanceof CollectionData) {
             dumpCollectionData(str, data, indent, complete);
-        } else if (data instanceof ReferenceData) {
-            ReferenceData referenceData = (ReferenceData) data;
-            str.append("ReferenceData " + referenceData.getType() + ":" + referenceData.getOid() + ":"
-                    + referenceData.getVersion());
         } else {
             str.append("Unknown: " + data);
         }
@@ -85,7 +85,7 @@ public class DistributionLogger extends Logger implements Distribution {
 
     private static void dumpCollectionData(StringBuffer str, Data data, int indent, Vector complete) {
         CollectionData objectData = ((CollectionData) data);
-        str.append("CollectionData " + objectData.getType() + ":" + objectData.getOid() + ":"
+        str.append("CollectionData@" + Integer.toHexString(objectData.hashCode()) + " " + objectData.getType() + ":" + objectData.getOid() + ":"
                 + (objectData.hasAllElements() ? "A" : "-") + ":" + objectData.getVersion());
         Object[] elements = objectData.getElements();
         for (int i = 0; elements != null && i < elements.length; i++) {
@@ -99,7 +99,7 @@ public class DistributionLogger extends Logger implements Distribution {
 
     private static void dumpObjectData(StringBuffer str, Data data, int indent, Vector complete) {
         ObjectData objectData = ((ObjectData) data);
-        str.append("ObjectData " + objectData.getType() + ":" + objectData.getOid() + ":"
+        str.append("ObjectData@" + Integer.toHexString(objectData.hashCode()) + " " + objectData.getType() + ":" + objectData.getOid() + ":"
                 + (objectData.hasCompleteData() ? "C" : "-") + ":" + objectData.getVersion());
 
         if(complete.contains(objectData)) {
@@ -153,7 +153,7 @@ public class DistributionLogger extends Logger implements Distribution {
         return allInstances;
     }
 
-    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate) {
         log("clear association " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
                 + "associate: " + dump(associate));
         ObjectData[] changes = decorated.clearAssociation(session, fieldIdentifier, target, associate);
@@ -214,14 +214,14 @@ public class DistributionLogger extends Logger implements Distribution {
         return numberOfInstances;
     }
     
-    public Data resolveField(Session session, ReferenceData data, String name) {
+    public Data resolveField(Session session, IdentityData data, String name) {
         log("resolve field " + name + " - " + dump(data));
         Data result = decorated.resolveField(session, data, name);
         log(" <-- data: " + dump(result));
         return result;
     }
 
-    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+    public ObjectData resolveImmediately(Session session, IdentityData target) {
         log("resolve immediately" + dump(target));
         ObjectData result = decorated.resolveImmediately(session, target);
         log("  <-- data: " + dump(result));
@@ -229,7 +229,7 @@ public class DistributionLogger extends Logger implements Distribution {
         
     }
 
-    public ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[] setAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate) {
         log("set association " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine()
                 + "associate: " + dump(associate));
         ObjectData[] changes = decorated.setAssociation(session, fieldIdentifier, target, associate);
@@ -237,7 +237,7 @@ public class DistributionLogger extends Logger implements Distribution {
         return changes;
     }
 
-    public ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
+    public ObjectData[] setValue(Session session, String fieldIdentifier, IdentityData target, Object value) {
         log("set value " + fieldIdentifier + indentedNewLine() + "target: " + dump(target) + indentedNewLine() + "value: "
                 + value);
         ObjectData[] changes = decorated.setValue(session, fieldIdentifier, target, value);

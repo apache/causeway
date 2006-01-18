@@ -14,7 +14,7 @@ public interface DataFactory {
 
     ObjectData createObjectData(Oid oid, String type, boolean hasCompleteData, Version version);
 
-    ReferenceData createReferenceData(String type, Oid oid, Version version);
+    IdentityData createIdentityData(String type, Oid oid, Version version);
 
     ServerActionResultData createActionResultData(
             Data result,

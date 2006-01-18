@@ -3,6 +3,7 @@ package org.nakedobjects.distribution.command;
 import org.nakedobjects.distribution.ClientActionResultData;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.Distribution;
+import org.nakedobjects.distribution.IdentityData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.distribution.ServerActionResultData;
@@ -25,7 +26,7 @@ public abstract class CommandClient implements Distribution {
         return request.getInstances();
     }
 
-    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate) {
         ClearAssociation request = new ClearAssociation(session, fieldIdentifier, target, associate);
         execute(request);
         return request.getChanges();
@@ -57,13 +58,13 @@ public abstract class CommandClient implements Distribution {
         throw new NotImplementedException();
     }
 
-    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+    public ObjectData resolveImmediately(Session session, IdentityData target) {
         Resolve request = new Resolve(session, target);
         execute(request);
         return request.getUpdateData();
     }
 
-    public Data resolveField(Session session, ReferenceData target, String name) {
+    public Data resolveField(Session session, IdentityData target, String name) {
         ResolveField request = new ResolveField(session, target, name);
         execute(request);
         return request.getUpdateData();
@@ -92,14 +93,14 @@ public abstract class CommandClient implements Distribution {
 
     protected abstract Response executeRemotely(Request request);
 
-    public ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ObjectData[] setAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate) {
         SetAssociation request = new SetAssociation(session, fieldIdentifier, target, associate);
         execute(request);
         return request.getChanges();
 
     }
 
-    public ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {
+    public ObjectData[] setValue(Session session, String fieldIdentifier, IdentityData target, Object associate) {
         SetValue request = new SetValue(session, fieldIdentifier, target, associate);
         execute(request);
         return request.getChanges();

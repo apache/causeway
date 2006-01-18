@@ -7,7 +7,7 @@ import org.nakedobjects.object.Session;
 public interface Distribution {
     ObjectData[] allInstances(Session session, String fullName, boolean includeSubclasses);
 
-    ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
+    ObjectData[] clearAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate);
 
     ServerActionResultData executeServerAction(
             Session session,
@@ -28,13 +28,13 @@ public interface Distribution {
 
     int numberOfInstances(Session sessionId, String fullName);
 
-    Data resolveField(Session session, ReferenceData data, String name);
+    Data resolveField(Session session, IdentityData data, String name);
 
-    ObjectData resolveImmediately(Session session, ReferenceData target);
+    ObjectData resolveImmediately(Session session, IdentityData target);
 
-    ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate);
+    ObjectData[] setAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate);
 
-    ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object value);
+    ObjectData[] setValue(Session session, String fieldIdentifier, IdentityData target, Object value);
 }
 
 /*

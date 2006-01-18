@@ -14,6 +14,7 @@ import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.OneToOneAssociation;
 import org.nakedobjects.object.Persistable;
 import org.nakedobjects.object.ResolveState;
+import org.nakedobjects.utility.UnknownTypeException;
 
 import java.util.Hashtable;
 
@@ -60,12 +61,10 @@ public class ObjectDecoder {
     public static Naked restore(Data data) {
         if (data instanceof ValueData) {
             return restoreValue((ValueData) data);
-        } else if (data instanceof NullData) {
-            return null;
         } else if (data instanceof CollectionData) {
             return restoreCollection((CollectionData) data, new KnownTransients());
         } else {
-            return restoreObject((ObjectData) data, new KnownTransients());
+            return restoreObject(data, new KnownTransients());
         }
     }
 
@@ -73,7 +72,7 @@ public class ObjectDecoder {
         if (data instanceof CollectionData) {
             return restoreCollection((CollectionData) data, knownObjects);
         } else {
-            return restoreObject((ObjectData) data, knownObjects);
+            return restoreObject(data, knownObjects);
         }
     }
 
@@ -106,7 +105,20 @@ public class ObjectDecoder {
         }
     }
 
-    private static NakedObject restoreObject(ObjectData data, KnownTransients knownTransients) {
+    private static NakedObject restoreObject(Data data, KnownTransients knownTransients) {
+        if (data instanceof NullData) {
+            return null;
+        } else if (data instanceof ObjectData) {
+            return restoreObjectFromObject((ObjectData) data, knownTransients);
+        } else if (data instanceof ObjectData) {
+            return restoreObjectFromIdentity((IdentityData) data, knownTransients);
+        } else {
+            throw new UnknownTypeException(data);
+        }
+    }
+    
+    
+    private static NakedObject restoreObjectFromObject(ObjectData data, KnownTransients knownTransients) {
         if (knownTransients.containsKey(data)) {
             return knownTransients.get(data);
         }
@@ -130,7 +142,7 @@ public class ObjectDecoder {
         return object;
     }
 
-    private static NakedObject restoreObject(ReferenceData data, KnownTransients knownTransients) {
+    private static NakedObject restoreObjectFromIdentity(IdentityData data, KnownTransients knownTransients) {
         Oid oid = data.getOid();
         NakedObjectLoader objectLoader = NakedObjects.getObjectLoader();
 
@@ -197,7 +209,7 @@ public class ObjectDecoder {
         int size = content.getElements().length;
         NakedObject[] elements = new NakedObject[size];
         for (int j = 0; j < elements.length; j++) {
-            elements[j] = restoreObject(((ReferenceData) content.getElements()[j]), knownTransients);
+            elements[j] = restoreObject(content.getElements()[j], knownTransients);
             LOG.debug("adding element to " + field.getId() + ": " + elements[j]);
         }
 
@@ -259,13 +271,7 @@ public class ObjectDecoder {
 
     private static void setUpReferenceField(NakedObject object, NakedObjectField field, Data data, KnownTransients knownTransients) {
         NakedObject associate;
-        if (data instanceof NullData) {
-            associate = null;
-        } else if (data instanceof ObjectData) {
-            associate = restoreObject((ObjectData) data, knownTransients);
-        } else {
-            associate = restoreObject((ReferenceData) data, knownTransients);
-        }
+        associate = restoreObject(data, knownTransients);
         LOG.debug("setting association for field " + field.getId() + ": " + associate);
         object.initAssociation(field, associate);
     }

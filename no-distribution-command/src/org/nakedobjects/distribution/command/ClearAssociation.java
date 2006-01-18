@@ -1,16 +1,16 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Distribution;
+import org.nakedobjects.distribution.IdentityData;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.Session;
 
 public class ClearAssociation extends AbstractRequest {
     private final String fieldIdentifier;
-    private final ReferenceData target;
-    private final ReferenceData associate;
+    private final IdentityData target;
+    private final IdentityData associate;
 
-    public ClearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associate) {
+    public ClearAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associate) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;

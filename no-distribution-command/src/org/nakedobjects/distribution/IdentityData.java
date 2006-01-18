@@ -1,13 +1,7 @@
 package org.nakedobjects.distribution;
 
-import org.nakedobjects.object.Oid;
-import org.nakedobjects.object.Version;
 
-
-public interface ReferenceData extends Data {
-    Oid getOid();
-    
-    Version getVersion();
+public interface IdentityData extends ReferenceData {
 }
 
 

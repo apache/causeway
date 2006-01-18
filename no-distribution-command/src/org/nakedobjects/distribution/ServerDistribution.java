@@ -20,6 +20,7 @@ import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.object.defaults.NullDirtyObjectSet;
 import org.nakedobjects.object.reflect.ActionImpl;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
+import org.nakedobjects.utility.UnknownTypeException;
 
 import org.apache.log4j.Logger;
 
@@ -40,7 +41,7 @@ public class ServerDistribution implements Distribution {
         return convertToNakedCollection(instances);
     }
 
-    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
+    public ObjectData[] clearAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associated) {
         LOG.debug("request clearAssociation " + fieldIdentifier + " on " + target + " of " + associated + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
@@ -69,8 +70,8 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request executeAction " + actionIdentifier + " on " + target + " for " + session);
 
         NakedObject object;
-        if (target instanceof ReferenceData && ((ReferenceData) target).getOid() != null) {
-            object = getPersistentNakedObject(session, (ReferenceData) target);
+        if (target instanceof IdentityData) {
+            object = getPersistentNakedObject(session, (IdentityData) target);
         } else if (target instanceof ObjectData) {
             object = (NakedObject) ObjectDecoder.restore(target);
         } else if (target == null) {
@@ -125,10 +126,12 @@ public class ServerDistribution implements Distribution {
             KnownTransients knownObjects = ObjectDecoder.createKnownTransients();
             NakedObject[] persistedObjects = new NakedObject[persisted.length];
             for (int i = 0; i < persisted.length; i++) {
-                LOG.debug("  makePersistent " + persisted[i]);
                 NakedObject object = (NakedObject) ObjectDecoder.restore(persisted[i], knownObjects);
-                persistor.makePersistent(object);
                 persistedObjects[i] = object;
+                if(object.getOid() == null) { // confirm that the graph has not been made persistent ealier in this loop
+                    LOG.debug("  makePersistent " + persisted[i]);
+                    persistor.makePersistent(object);
+                }
             }
             NakedObject[] changedObjects = new NakedObject[changed.length];
             for (int i = 0; i < changed.length; i++) {
@@ -139,7 +142,7 @@ public class ServerDistribution implements Distribution {
             }
             for (int i = 0; i < deleted.length; i++) {
                 LOG.debug("  destroyObject " + deleted[i] + " for " + session);
-                NakedObject inObject = getPersistentNakedObject(session, deleted[i]);
+                NakedObject inObject = getPersistentNakedObject(session, (IdentityData) deleted[i]);
                 persistor.destroyObject(inObject);
             }
             LOG.debug("  end transaction");
@@ -155,7 +158,7 @@ public class ServerDistribution implements Distribution {
             }
             return encoder.createClientActionResult(madePersistent, changedVersion);
         } catch (RuntimeException e) {
-            LOG.debug("abort transaction", e);
+            LOG.info("abort transaction", e);
             persistor.abortTransaction();
             throw e;
         }
@@ -202,21 +205,21 @@ public class ServerDistribution implements Distribution {
                 continue;
             }
 
-            if (data instanceof ReferenceData && ((ReferenceData) data).getOid() != null) {
-                parameters[i] = getPersistentNakedObject(session, (ReferenceData) data);
+            if (data instanceof IdentityData) {
+                parameters[i] = getPersistentNakedObject(session, (IdentityData) data);
             } else if (data instanceof ObjectData) {
                 parameters[i] = ObjectDecoder.restore((ObjectData) data);
             } else if (data instanceof ValueData) {
                 ValueData valueData = (ValueData) data;
                 parameters[i] = NakedObjects.getObjectLoader().createAdapterForValue(valueData.getValue());
             } else {
-                throw new NakedObjectRuntimeException();
+                throw new UnknownTypeException(data);
             }
         }
         return parameters;
     }
 
-    private NakedObject getPersistentNakedObject(Session session, ReferenceData object) {
+    private NakedObject getPersistentNakedObject(Session session, IdentityData object) {
         NakedObjectSpecification spec = getSpecification(object.getType());
         NakedObject obj = NakedObjects.getObjectPersistor().getObject(object.getOid(), spec);
         LOG.debug("get object " + object + " for " + session + " --> " + obj);
@@ -253,7 +256,7 @@ public class ServerDistribution implements Distribution {
         return NakedObjects.getObjectPersistor();
     }
 
-    public Data resolveField(Session session, ReferenceData target, String fieldName) {
+    public Data resolveField(Session session, IdentityData target, String fieldName) {
         LOG.debug("request resolveEagerly " + target + "/" + fieldName + " for " + session);
 
         NakedObjectSpecification spec = getSpecification(target.getType());
@@ -264,7 +267,7 @@ public class ServerDistribution implements Distribution {
         return encoder.createForResolveField(object, fieldName);
     }
 
-    public ObjectData resolveImmediately(Session session, ReferenceData target) {
+    public ObjectData resolveImmediately(Session session, IdentityData target) {
         LOG.debug("request resolveImmediately " + target + " for " + session);
 
         NakedObjectSpecification spec = getSpecification(target.getType());
@@ -296,7 +299,7 @@ public class ServerDistribution implements Distribution {
         setUpdateNotifier(updateNotifier);
     }
 
-    public ObjectData[] setAssociation(Session session, String fieldIdentifier, ReferenceData target, ReferenceData associated) {
+    public ObjectData[] setAssociation(Session session, String fieldIdentifier, IdentityData target, IdentityData associated) {
         LOG.debug("request setAssociation " + fieldIdentifier + " on " + target + " with " + associated + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
@@ -320,7 +323,7 @@ public class ServerDistribution implements Distribution {
         this.updateNotifier = updateNotifier;
     }
 
-    public ObjectData[] setValue(Session session, String fieldIdentifier, ReferenceData target, Object value) {
+    public ObjectData[] setValue(Session session, String fieldIdentifier, IdentityData target, Object value) {
         LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);

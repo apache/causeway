@@ -1,16 +1,16 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Distribution;
+import org.nakedobjects.distribution.IdentityData;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.utility.ToString;
 
 
 public class Resolve extends AbstractRequest {
-    private final ReferenceData target;
+    private final IdentityData target;
 
-    public Resolve(Session session, ReferenceData target) {
+    public Resolve(Session session, IdentityData target) {
         super(session);
         this.target = target;
     }

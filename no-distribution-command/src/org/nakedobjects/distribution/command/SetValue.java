@@ -1,16 +1,16 @@
 package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Distribution;
+import org.nakedobjects.distribution.IdentityData;
 import org.nakedobjects.distribution.ObjectData;
-import org.nakedobjects.distribution.ReferenceData;
 import org.nakedobjects.object.Session;
 
 public class SetValue extends AbstractRequest {
     private final String fieldIdentifier;
     private final Object associate;
-    private final ReferenceData target;
+    private final IdentityData target;
 
-    public SetValue(Session session, String fieldIdentifier, ReferenceData target, Object associate) {
+    public SetValue(Session session, String fieldIdentifier, IdentityData target, Object associate) {
         super(session);
         this.fieldIdentifier = fieldIdentifier;
         this.target = target;

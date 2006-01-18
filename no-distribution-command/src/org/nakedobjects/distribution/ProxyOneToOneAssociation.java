@@ -24,8 +24,8 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     public void clearAssociation(NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
             LOG.debug("clear association remotely " + inObject + "/" + associate);
-            ReferenceData targetReference = encoder.createReference(inObject);
-            ReferenceData associateReference = encoder.createReference(associate);
+            IdentityData targetReference = encoder.createIdentityData(inObject);
+            IdentityData associateReference = encoder.createIdentityData(associate);
             ObjectData[] updates = connection.clearAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(),
                     targetReference, associateReference);
             updateChangedObjects(updates);
@@ -53,8 +53,8 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     public void setAssociation(NakedObject inObject, NakedObject associate) {
         if (isPersistent(inObject)) {
             LOG.debug("set association remotely " + getIdentifier() + " in " + inObject + " with " + associate);
-            ReferenceData targetReference = encoder.createReference(inObject);
-            ReferenceData associateReference = encoder.createReference(associate);
+            IdentityData targetReference = encoder.createIdentityData(inObject);
+            IdentityData associateReference = encoder.createIdentityData(associate);
             ObjectData[] updates = connection.setAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(),
                     targetReference, associateReference);
             updateChangedObjects(updates);
@@ -67,7 +67,7 @@ public final class ProxyOneToOneAssociation extends AbstractOneToOnePeer {
     public void setValue(NakedObject inObject, Object value) {
         if (isPersistent(inObject)) {
             LOG.debug("set value remotely " + getIdentifier() + " in " + inObject + " with " + value);
-            ReferenceData targetReference = encoder.createReference(inObject);
+            IdentityData targetReference = encoder.createIdentityData(inObject);
             ObjectData[] updates = connection.setValue(NakedObjects.getCurrentSession(), getIdentifier().getName(),
                     targetReference, value);
             updateChangedObjects(updates);

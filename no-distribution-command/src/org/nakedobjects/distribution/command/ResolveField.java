@@ -2,16 +2,16 @@ package org.nakedobjects.distribution.command;
 
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.Distribution;
-import org.nakedobjects.distribution.ReferenceData;
+import org.nakedobjects.distribution.IdentityData;
 import org.nakedobjects.object.Session;
 import org.nakedobjects.utility.ToString;
 
 
 public class ResolveField extends AbstractRequest {
-    private final ReferenceData target;
+    private final IdentityData target;
     private final String field;
     
-    public ResolveField(Session session, ReferenceData target, String field) {
+    public ResolveField(Session session, IdentityData target, String field) {
         super(session);
         this.target = target;
         this.field = field;

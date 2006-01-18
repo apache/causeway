@@ -109,7 +109,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         NakedObject[] deletedObjects = clientSideTransaction.getDeleted();
         ReferenceData[] deleted = new ReferenceData[deletedObjects.length];
         for (int i = 0; i < deletedObjects.length; i++) {
-            deleted[i] = encoder.createReference(deletedObjects[i]);
+            deleted[i] = encoder.createIdentityData(deletedObjects[i]);
         }
 
         ClientActionResultData results = connection.executeClientAction(session, persisted, changed, deleted);
@@ -213,7 +213,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
     public void reset() {}
 
     public void reload(NakedObject object) {
-        ObjectData update = connection.resolveImmediately(session, encoder.createReference(object));
+        ObjectData update = connection.resolveImmediately(session, encoder.createIdentityData(object));
         ObjectDecoder.restore(update);
     }
     
@@ -222,7 +222,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         if (resolveState.isResolvable(ResolveState.RESOLVING)) {
             Oid oid = object.getOid();
             LOG.debug("resolve object (remotely from server)" + oid);
-            ObjectData data = connection.resolveImmediately(session, encoder.createReference(object));
+            ObjectData data = connection.resolveImmediately(session, encoder.createIdentityData(object));
             ObjectDecoder.restore(data);
         }
     }
@@ -240,7 +240,7 @@ public final class ProxyPersistor extends AbstracObjectPersistor {
         }
         
         LOG.info("resolve-eagerly on server " + object + "/" + field.getId());
-        Data data = connection.resolveField(session, encoder.createReference(object), field.getId());
+        Data data = connection.resolveField(session, encoder.createIdentityData(object), field.getId());
         ObjectDecoder.restore(data);
     }
 

@@ -1,6 +1,7 @@
 package org.nakedobjects.distribution;
 
 
+
 public interface CollectionData extends ReferenceData {
     ReferenceData[] getElements();
     

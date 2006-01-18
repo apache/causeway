@@ -150,7 +150,7 @@ public final class ObjectEncoder {
      */
     public ObjectData createMadePersistentGraph(ObjectData data, NakedObject object, SingleResponseUpdateNotifier updateNotifier) {
         if (object.getResolveState().isSerializing()) {
-            return data;
+            return null;
         }
 
         if (data == null || data.getOid() != null) {
@@ -176,7 +176,6 @@ public final class ObjectEncoder {
                 NakedCollection coll = (NakedCollection) object.getField(fields[i]);
                 for (int j = 0; j < f.getElements().length; j++) {
                     ReferenceData element = f.getElements()[j];
-                    // if (element != null && element.getOid() == null) {
                     if (element instanceof ObjectData) {
                         NakedObject el = coll.elementAt(j);
                         elements[j] = createMadePersistentGraph((ObjectData) element, el, updateNotifier);
@@ -184,12 +183,14 @@ public final class ObjectEncoder {
                 }
                 fieldContent[i] = factory.createCollectionData(coll.getOid(), f.getType(), elements, f.hasAllElements(), coll
                         .getVersion());
-            } else {
+            } else if (fields[i].isObject()) {
                 Data f = data.getFieldContent()[i];
                 if (f != null && !(f instanceof NullData) && ((ReferenceData) f).getOid() == null) {
                     NakedObject o = (NakedObject) object.getField(fields[i]);
                     fieldContent[i] = createMadePersistentGraph(((ObjectData) f), o, updateNotifier);
                 }
+            } else {
+                throw new UnknownTypeException();
             }
 
         }
@@ -239,9 +240,9 @@ public final class ObjectEncoder {
      * Creates a ReferenceData that contains the type, version and OID for the specified object. This can only
      * be used for peristent objects.
      */
-    public final ReferenceData createReference(NakedObject object) {
+    public final IdentityData createIdentityData(NakedObject object) {
         Assert.assertNotNull("OID needed for reference", object, object.getOid());
-        return factory.createReferenceData(object.getSpecification().getFullName(), object.getOid(), object.getVersion());
+        return factory.createIdentityData(object.getSpecification().getFullName(), object.getOid(), object.getVersion());
     }
 
     public ServerActionResultData createServerActionResult(
@@ -293,7 +294,7 @@ public final class ObjectEncoder {
         boolean isTransient = resolveState.isTransient();
 
         if (!isTransient && (resolveState.isSerializing() || resolveState.isGhost() || graphDepth <= 0)) {
-            return createReference(object);
+            return createIdentityData(object);
         }
         /*
          * if (!isTransient && (resolveState.isSerializing() || resolveState.isGhost() ||

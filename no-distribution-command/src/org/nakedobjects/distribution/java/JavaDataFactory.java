@@ -4,6 +4,7 @@ import org.nakedobjects.distribution.ClientActionResultData;
 import org.nakedobjects.distribution.CollectionData;
 import org.nakedobjects.distribution.Data;
 import org.nakedobjects.distribution.DataFactory;
+import org.nakedobjects.distribution.IdentityData;
 import org.nakedobjects.distribution.NullData;
 import org.nakedobjects.distribution.ObjectData;
 import org.nakedobjects.distribution.ReferenceData;
@@ -32,7 +33,7 @@ public class JavaDataFactory implements DataFactory {
         return new JavaObjectData(oid, type, hasCompleteData, version);
     }
 
-    public ReferenceData createReferenceData(String type, Oid oid, Version version) {
+    public IdentityData createIdentityData(String type, Oid oid, Version version) {
         return new JavaReferenceData(type, oid, version);
     }
 

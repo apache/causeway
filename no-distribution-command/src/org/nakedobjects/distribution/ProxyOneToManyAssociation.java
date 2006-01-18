@@ -27,8 +27,8 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         if (isPersistent(inObject)) {
             LOG.debug("set association remotely " + getIdentifier() + " in " + inObject + " with " + associate);
             try {
-                ReferenceData targetReference = objectDataFactory.createReference(inObject);
-                ReferenceData associateReference = objectDataFactory.createReference(associate);
+                IdentityData targetReference = objectDataFactory.createIdentityData(inObject);
+                IdentityData associateReference = objectDataFactory.createIdentityData(associate);
                 ObjectData[] updates = connection.setAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(),
                         targetReference, associateReference);
                 updateChangedObjects(updates);
@@ -71,8 +71,8 @@ public final class ProxyOneToManyAssociation extends AbstractOneToManyPeer {
         if (isPersistent(inObject)) {
             LOG.debug("clear association remotely " + inObject + "/" + associate);
             try {
-                ReferenceData targetReference = objectDataFactory.createReference(inObject);
-                ReferenceData associateReference = objectDataFactory.createReference(associate);
+                IdentityData targetReference = objectDataFactory.createIdentityData(inObject);
+                IdentityData associateReference = objectDataFactory.createIdentityData(associate);
                 ObjectData[] updates = connection.clearAssociation(NakedObjects.getCurrentSession(), getIdentifier().getName(),
                         targetReference, associateReference);
                 updateChangedObjects(updates);
