@@ -1,7 +1,6 @@
 package org.nakedobjects.viewer.skylark;
 
 import org.nakedobjects.event.ObjectViewingMechanismListener;
-import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.control.AbstractConsent;
 import org.nakedobjects.object.control.Consent;
@@ -14,19 +13,25 @@ import org.nakedobjects.utility.configuration.ComponentException;
 import org.nakedobjects.utility.configuration.ComponentLoader;
 import org.nakedobjects.utility.configuration.ConfigurationException;
 import org.nakedobjects.viewer.skylark.basic.EmptyField;
+import org.nakedobjects.viewer.skylark.basic.NullView;
 import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 import org.nakedobjects.viewer.skylark.basic.SubviewIconSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.core.DebugDumpSnapshotOption;
+import org.nakedobjects.viewer.skylark.core.DebugOption;
 import org.nakedobjects.viewer.skylark.core.DefaultPopupMenu;
 import org.nakedobjects.viewer.skylark.core.DrawingCanvas;
 import org.nakedobjects.viewer.skylark.core.OverlayDebugFrame;
 import org.nakedobjects.viewer.skylark.metal.ClassIcon;
+import org.nakedobjects.viewer.skylark.metal.DetailedMessageViewSpecification;
+import org.nakedobjects.viewer.skylark.metal.ExceptionMessageContent;
 import org.nakedobjects.viewer.skylark.metal.FormSpecification;
 import org.nakedobjects.viewer.skylark.metal.ListSpecification;
+import org.nakedobjects.viewer.skylark.metal.MessageDialogSpecification;
 import org.nakedobjects.viewer.skylark.metal.PasswordFieldSpecification;
 import org.nakedobjects.viewer.skylark.metal.TableSpecification;
 import org.nakedobjects.viewer.skylark.metal.TextFieldSpecification;
+import org.nakedobjects.viewer.skylark.metal.TextMessageContent;
 import org.nakedobjects.viewer.skylark.metal.TreeBrowserSpecification;
 import org.nakedobjects.viewer.skylark.metal.WrappedTextFieldSpecification;
 import org.nakedobjects.viewer.skylark.special.DataFormSpecification;
@@ -51,18 +56,22 @@ import org.apache.log4j.Logger;
 
 
 public class Viewer {
+    private static final NullView CLEAR_OVERLAY = new NullView();
+    private static final AbstractUserAction DEBUG_OPTION = new DebugOption();
     private static Viewer instance;
     private static final Logger LOG = Logger.getLogger(Viewer.class);
-    private static final Logger UI_LOG = Logger.getLogger("ui." + Viewer.class.getName());
     private static final Bounds NO_REDRAW = new Bounds();
     public static final String PROPERTY_BASE = "nakedobjects.viewer.skylark.";
     private static final String SPECIFICATION_BASE = PROPERTY_BASE + "specification.";
+
+    private static final Logger UI_LOG = Logger.getLogger("ui." + Viewer.class.getName());
 
     public static Viewer getInstance() {
         return instance;
     }
 
     private Graphics bufferGraphics;
+    private Vector busy = new Vector();
     private Image doubleBuffer;
     private boolean doubleBuffering = false;
     private Insets insets;
@@ -76,41 +85,51 @@ public class Viewer {
     private View rootView;
     private boolean runningAsExploration;
     private boolean showExplorationMenuByDefault;
+    private boolean showRepaintArea;
     private InteractionSpy spy;
     private Bounds statusBarArea;
     private int statusBarHeight;
     private final UndoStack undoStack = new UndoStack();
     protected ViewUpdateNotifier updateNotifier;
+
     private String userStatus;
-    private Vector busy = new Vector();
-    private boolean showRepaintArea;
 
     public Viewer() {
         instance = this;
         doubleBuffering = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "doublebuffering", true);
         showExplorationMenuByDefault = NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-exploration", true);
+        overlayView = CLEAR_OVERLAY;
         redrawArea = new Bounds();
+    }
+
+    public void addSpyAction(String actionMessage) {
+        if (spy != null) {
+            spy.addAction(actionMessage);
+        }
     }
 
     public void addToNotificationList(View view) {
         updateNotifier.add(view);
     }
 
-    public void clearOverlayView() {
-        if (overlayView != null) {
-            overlayView.markDamaged();
-            if (overlayView == keyboardFocus) {
-                keyboardFocus = null;
-            }
-            overlayView = null;
-        }
+    public void clearBusy(View view) {
+        showDefaultCursor();
+        busy.removeElement(view);
     }
-    
+
     /**
      * Removes the focus from the specified view; assuming the the specified view has the focus.
      */
     public void clearKeyboardFocus() {
+        keyboardFocus = null;
+    }
+
+    public void clearOverlayView() {
+        overlayView.markDamaged();
+        if (overlayView == keyboardFocus) {
             keyboardFocus = null;
+        }
+        overlayView = CLEAR_OVERLAY;
     }
 
     public void clearOverlayView(View view) {
@@ -235,6 +254,11 @@ public class Viewer {
         }
     }
 
+    public boolean isBusy(View view) {
+        // return busy.contains(view);
+        return busy.size() > 0;
+    }
+
     public boolean isRunningAsExploration() {
         return runningAsExploration;
     }
@@ -254,8 +278,8 @@ public class Viewer {
         return spec;
     }
 
-    private MenuOption loggingOption(String name, final Level level) {
-        return new MenuOption("Log level " + level) {
+    private AbstractUserAction loggingOption(String name, final Level level) {
+        return new AbstractUserAction("Log level " + level, UserAction.DEBUG) {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(LogManager.getRootLogger().getLevel() != level);
             }
@@ -303,29 +327,29 @@ public class Viewer {
         }
     }
 
-    public void menuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.USER, new MenuOption("Quit") {
+    public void menuOptions(UserActionSet options) {
+        options.add(new AbstractUserAction("Quit") {
             public void execute(Workspace workspace, View view, Location at) {
                 Viewer.this.close();
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, loggingOption("Off", Level.OFF));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Error", Level.ERROR));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Warn", Level.WARN));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Info", Level.INFO));
-        options.add(MenuOptionSet.DEBUG, loggingOption("Debug", Level.DEBUG));
+        options.add(loggingOption("Off", Level.OFF));
+        options.add(loggingOption("Error", Level.ERROR));
+        options.add(loggingOption("Warn", Level.WARN));
+        options.add(loggingOption("Info", Level.INFO));
+        options.add(loggingOption("Debug", Level.DEBUG));
 
-        String showExplorationMenu = "Always show exploration menu " + (showExplorationMenuByDefault  ? "off" : "on");
-        options.add(MenuOptionSet.DEBUG, new MenuOption(showExplorationMenu) {
+        String showExplorationMenu = "Always show exploration menu " + (showExplorationMenuByDefault ? "off" : "on");
+        options.add(new AbstractUserAction(showExplorationMenu, UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 showExplorationMenuByDefault = !showExplorationMenuByDefault;
                 view.markDamaged();
             }
         });
 
-        String repaint = "Show painting area  " + (showRepaintArea  ? "off" : "on");
-        options.add(MenuOptionSet.DEBUG, new MenuOption(repaint) {
+        String repaint = "Show painting area  " + (showRepaintArea ? "off" : "on");
+        options.add(new AbstractUserAction(repaint, UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 showRepaintArea = !showRepaintArea;
                 view.markDamaged();
@@ -333,7 +357,7 @@ public class Viewer {
         });
 
         String debug = "Debug graphics " + (AbstractView.debug ? "off" : "on");
-        options.add(MenuOptionSet.DEBUG, new MenuOption(debug) {
+        options.add(new AbstractUserAction(debug, UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 AbstractView.debug = !AbstractView.debug;
                 view.markDamaged();
@@ -341,20 +365,20 @@ public class Viewer {
         });
 
         String action = this.isShowingMouseSpy() ? "Hide" : "Show";
-        options.add(MenuOptionSet.DEBUG, new MenuOption(action + " mouse spy") {
+        options.add(new AbstractUserAction(action + " mouse spy", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 Viewer.this.setShowMouseSpy(!Viewer.this.isShowingMouseSpy());
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Restart object loader/persistor") {
+        options.add(new AbstractUserAction("Restart object loader/persistor", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObjects.getObjectPersistor().reset();
                 NakedObjects.getObjectLoader().reset();
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug system...") {
+        options.add(new AbstractUserAction("Debug system...", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 InfoDebugFrame f = new InfoDebugFrame();
                 f.setInfo(new DebugInfo[] { NakedObjects.debug(), NakedObjects.getObjectPersistor(),
@@ -363,27 +387,25 @@ public class Viewer {
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
-        
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug viewer...") {
+        options.add(new AbstractUserAction("Debug viewer...", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(new DebugInfo[] { Skylark.getViewFactory(),
-                        updateNotifier });
+                f.setInfo(new DebugInfo[] { Skylark.getViewFactory(), updateNotifier });
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
-        
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Debug overlay...") {
+
+        options.add(new AbstractUserAction("Debug overlay...", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 DebugFrame f = new OverlayDebugFrame(Viewer.this);
                 f.show(at.x + 50, workspace.getBounds().y + 6);
             }
         });
-   
-        options.add(MenuOptionSet.DEBUG, new DebugDumpSnapshotOption());
+
+        options.add(new DebugDumpSnapshotOption());
     }
-    
+
     public void mouseDown(Click click) {
         if (onOverlay(click.getLocation())) {
             click.subtract(overlayView.getLocation());
@@ -401,7 +423,7 @@ public class Viewer {
             rootView.mouseMoved(location);
         }
     }
-    
+
     public void mouseUp(Click click) {
         if (onOverlay(click.getLocation())) {
             click.subtract(overlayView.getLocation());
@@ -410,9 +432,9 @@ public class Viewer {
             rootView.mouseUp(click);
         }
     }
-    
+
     private boolean onOverlay(Location mouse) {
-        return overlayView != null && overlayView.getBounds().contains(mouse);
+        return overlayView.getBounds().contains(mouse);
     }
 
     public void paint(Graphics g) {
@@ -456,9 +478,7 @@ public class Viewer {
         }
 
         // paint overlay
-        if (overlayView != null) {
-            overlayView.draw(c.createSubcanvas(overlayView.getBounds()));
-        }
+        overlayView.draw(c.createSubcanvas(overlayView.getBounds()));
 
         // paint status
         paintUserStatus(bufferGraphics);
@@ -467,17 +487,11 @@ public class Viewer {
         if (doubleBuffering) {
             g.drawImage(doubleBuffer, 0, 0, null);
         }
-        if (showRepaintArea ) {
+        if (showRepaintArea) {
             g.setColor(Color.DEBUG_REPAINT_BOUNDS.getAwtColor());
             g.drawRect(r.x, r.y, r.width - 1, r.height - 1);
             g.drawString("#" + redrawCount, r.x + 3, r.y + 15);
         }
-    }
-
-    private void paintUserStatus(Graphics bufferCanvas) {
-        int top = internalDisplaySize.getHeight() - statusBarHeight;
-        bufferCanvas.setColor(Style.SECONDARY3.getAwtColor());
-        paintStatus(bufferCanvas, top, userStatus);
     }
 
     private void paintStatus(Graphics bufferCanvas, int top, String text) {
@@ -490,6 +504,12 @@ public class Viewer {
         if (text != null) {
             bufferCanvas.drawString(text, 5, baseline + View.VPADDING);
         }
+    }
+
+    private void paintUserStatus(Graphics bufferCanvas) {
+        int top = internalDisplaySize.getHeight() - statusBarHeight;
+        bufferCanvas.setColor(Style.SECONDARY3.getAwtColor());
+        paintStatus(bufferCanvas, top, userStatus);
     }
 
     public View pickupContent(Location location) {
@@ -520,25 +540,72 @@ public class Viewer {
         boolean includeExploration = runningAsExploration && (click.isCtrl() || showExplorationMenuByDefault);
         boolean includeDebug = click.isShift() && click.isCtrl();
 
-        DefaultPopupMenu popup = new DefaultPopupMenu();
-        popup.init(over, rootView, at, forView, includeExploration, includeDebug);
         popupStatus(over, forView, includeExploration, includeDebug);
 
-        DefaultPopupMenu overlay = popup;
-        
-        Size size = overlay.getRequiredSize();
-        overlay.setSize(size);
+        UserActionSet optionSet = new UserActionSet(includeExploration, includeDebug, UserAction.USER);
+        if (forView) {
+            over.viewMenuOptions(optionSet);
+        } else {
+            over.contentMenuOptions(optionSet);
+        }
+        optionSet.add(DEBUG_OPTION);
+
+        // MenuContainer menuContainer = new MenuContainer(over);
+        // setOverlayView(menuContainer);
+
+        /*
+         * menuContainer.add(optionSet, new Location()); menuContainer.layout();
+         */
+        DefaultPopupMenu menuContainer = new DefaultPopupMenu();
+        setOverlayView(menuContainer);
+        menuContainer.init(over, optionSet.getMenuOptions(), optionSet.getColor());
+        // menuContainer.layout();
+
+        Size size = menuContainer.getRequiredSize();
+        menuContainer.setSize(size);
         Location location = new Location(at);
         location.move(-14, -10);
-        overlay.setLocation(location);
-        overlay.limitBoundsWithin(getOverlayBounds());
-        
-        setOverlayView(overlay);
+        menuContainer.setLocation(location);
+        menuContainer.limitBoundsWithin(getOverlayBounds());
 
-        makeFocus(overlay);
+        makeFocus(menuContainer);
     }
 
-    
+    /*
+     * protected void popupMenu2(View over, Click click) { saveCurrentFieldEntry();
+     * 
+     * Location at = click.getLocation(); boolean forView = rootView.viewAreaType(new
+     * Location(click.getLocation())) == ViewAreaType.VIEW;
+     * 
+     * forView = click.isAlt() ^ forView; boolean includeExploration = runningAsExploration && (click.isCtrl() ||
+     * showExplorationMenuByDefault); boolean includeDebug = click.isShift() && click.isCtrl();
+     * 
+     * 
+     * MenuOptionSet optionSet = new MenuOptionSet(includeExploration, includeDebug); if (forView) {
+     * over.viewMenuOptions(optionSet); } else { over.contentMenuOptions(optionSet); }
+     * optionSet.add(MenuOptionSet.DEBUG, DEBUG_OPTION);
+     * 
+     * popupStatus(over, forView, includeExploration, includeDebug);
+     * 
+     * 
+     * 
+     * 
+     * 
+     * popupMenu(optionSet, at, over, includeExploration, includeDebug); } /* public void
+     * popupMenu(MenuOptionSet optionSet, Location at, View over, boolean includeExploration, boolean
+     * includeDebug) { DefaultPopupMenu popup = new DefaultPopupMenu(); popup.init(over, includeExploration,
+     * includeDebug, optionSet);
+     * 
+     * DefaultPopupMenu overlay = popup;
+     * 
+     * Size size = overlay.getRequiredSize(); overlay.setSize(size); Location location = new Location(at);
+     * location.move(-14, -10); overlay.setLocation(location); overlay.limitBoundsWithin(getOverlayBounds());
+     * 
+     * setOverlayView(overlay);
+     * 
+     * makeFocus(overlay); }
+     * 
+     */
     private void popupStatus(View over, boolean forView, boolean includeExploration, boolean includeDebug) {
         StringBuffer status = new StringBuffer("Menu for ");
         if (forView) {
@@ -547,7 +614,7 @@ public class Viewer {
         } else {
             status.append("object: ");
             Content content = over.getContent();
-            if(content != null) {
+            if (content != null) {
                 status.append(content.title());
             }
         }
@@ -575,6 +642,7 @@ public class Viewer {
         updateNotifier.invalidateViewsForChangedObjects();
         synchronized (redrawArea) {
             rootView.layout();
+            overlayView.layout();
             if (!redrawArea.equals(NO_REDRAW)) {
                 UI_LOG.debug("repaint viewer " + redrawArea);
                 Bounds area = new Bounds(redrawArea);
@@ -599,6 +667,11 @@ public class Viewer {
         } else {
             rootView.secondClick(click);
         }
+    }
+
+    public void setBusy(View view) {
+        showWaitCursor();
+        busy.addElement(view);
     }
 
     public void setCursor(Cursor cursor) {
@@ -678,12 +751,17 @@ public class Viewer {
             viewFactory.addCompositeRootViewSpecification(new DataFormSpecification());
             viewFactory.addCompositeRootViewSpecification(new ListSpecification());
             viewFactory.addCompositeRootViewSpecification(new TableSpecification());
+            
+
             // viewFactory.addCompositeRootViewSpecification(new
             // BarchartSpecification());
             // viewFactory.addCompositeRootViewSpecification(new
             // GridSpecification());
             viewFactory.addCompositeRootViewSpecification(new TreeBrowserSpecification());
         }
+
+        viewFactory.addCompositeRootViewSpecification(new MessageDialogSpecification());
+        viewFactory.addCompositeRootViewSpecification(new DetailedMessageViewSpecification());
 
         viewFactory.addEmptyFieldSpecification(loadSpecification("field.empty", EmptyField.Specification.class));
 
@@ -731,8 +809,41 @@ public class Viewer {
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
+    public void showException(Throwable e) {
+        //Naked error = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(e);
+        // TODO centre view
+        // centre = view.getWorkspace().getAbsoluteLocation();
+        // rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
+        ExceptionMessageContent content = new ExceptionMessageContent(e);
+        View view = Skylark.getViewFactory().createWindow(content);
+    //    rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
+        view.setLocation( new Location(20, 20));
+        rootView.getWorkspace().addView(view);
+    }
+
     public void showHandCursor() {
         setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
+
+    public void showMessages() {
+        String[] messages = NakedObjects.getMessageBroker().getMessages();
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < messages.length; i++) {
+            if (i > 0) {
+                buf.append("; ");
+            }
+            buf.append(messages[i]);
+        }
+        setStatus(buf.toString());
+
+        String[] warnings = NakedObjects.getMessageBroker().getWarnings();
+        for (int i = 0; i < warnings.length; i++) {
+            TextMessageContent content = new TextMessageContent("Warning", warnings[i]);
+            View view = Skylark.getViewFactory().createWindow(content);
+            view.setLocation( new Location(20, 20));
+            rootView.getWorkspace().addView(view);
+       }
+
     }
 
     public void showMoveCursor() {
@@ -838,52 +949,8 @@ public class Viewer {
         }
     }
 
-    public void addSpyAction(String actionMessage) {
-        if (spy != null) {
-            spy.addAction(actionMessage);
-        }
-    }
-
-    public void setBusy(View view) {
-        showWaitCursor();
-        busy.addElement(view);
-    }
-
-    public void clearBusy(View view) {
-        showDefaultCursor();
-        busy.removeElement(view);
-    }
-
-    public boolean isBusy(View view) {
-        // return busy.contains(view);
-        return busy.size() > 0;
-    }
-
-    public void showMessages() {
-        String[] messages = NakedObjects.getMessageBroker().getMessages();
-        StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < messages.length; i++) {
-            if(i > 0) {
-                buf.append("; ");
-            }
-            buf.append(messages[i]);
-        }
-        setStatus(buf.toString());
-
-        String[] warnings = NakedObjects.getMessageBroker().getWarnings();
-        for (int i = 0; i < warnings.length; i++) {
-            rootView.getWorkspace().addOpenViewFor(NakedObjects.getObjectLoader().createAdapterForTransient(warnings[i]), new Location(20, 20));
-        }
-        
-    }
-
-    public void showException(Throwable e) {
-        Naked error = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(e);
-        // TODO centre view
-        //  centre = view.getWorkspace().getAbsoluteLocation();
-        //rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
-        
-        rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
+    public boolean isOverlayAvailable() {
+        return overlayView == CLEAR_OVERLAY;
     }
 }
 

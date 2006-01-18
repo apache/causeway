@@ -31,12 +31,12 @@ public class ErrorViewExample extends TestViews {
         Content content = new RootObject(adapter);
         ViewAxis axis = null;
 
-        View view = new NakedErrorSmallViewSpecification().createView(content, axis);
+        View view = new MessageDialogSpecification().createView(content, axis);
         view.setLocation(new Location(100, 30));
         view.setSize(view.getRequiredSize());
         workspace.addView(view);
 
-        View view2 = new NakedErrorViewSpecification().createView(content, axis);
+        View view2 = new DetailedMessageViewSpecification().createView(content, axis);
         view2.setLocation(new Location(100, 260));
         view2.setSize(view2.getRequiredSize());
         workspace.addView(view2);

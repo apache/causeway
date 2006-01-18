@@ -1,6 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.defaults.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -12,26 +11,27 @@ import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.basic.ActionDialogSpecification;
+import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 
 import java.util.StringTokenizer;
 
 
-public class NakedErrorViewSpecification implements ViewSpecification {
+public class DetailedMessageViewSpecification implements ViewSpecification {
 
     public boolean canDisplay(Content content) {
-        return content.isObject() && content.getNaked() instanceof PojoAdapter && ((PojoAdapter) content.getNaked()).getObject() instanceof Exception;
+        return content instanceof MessageContent && ((MessageContent) content).getDetail() != null;
     }
 
     public String getName() {
-        return "Detailed Naked Error";
+        return "Detailed Message";
     }
 
     public View createView(Content content, ViewAxis axis) {
         ButtonAction actions[] = new ButtonAction[] {
                 new ActionDialogSpecification.CancelAction()
          };
-        return new DialogBorder(new ButtonBorder(actions,new ScrollBorder(new ErrorView(content, this, null))), true);
+        return new DialogBorder(new ButtonBorder(actions,new ScrollBorder(new DetailedMessageView(content, this, null))), true);
     }
 
     public boolean isOpen() {
@@ -47,8 +47,8 @@ public class NakedErrorViewSpecification implements ViewSpecification {
     }
 }
 
-class ErrorView extends AbstractErrorView {
-    protected ErrorView(Content content, ViewSpecification specification, ViewAxis axis) {
+class DetailedMessageView extends AbstractView {
+    protected DetailedMessageView(Content content, ViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
     }
 
@@ -57,19 +57,13 @@ class ErrorView extends AbstractErrorView {
         size.extendHeight(Style.TITLE.getTextHeight());
         size.extendHeight(30);
 
+        String message = ((MessageContent) getContent()).getMessage();
         size.ensureWidth(Style.NORMAL.stringWidth(message));
         size.extendHeight(Style.NORMAL.getTextHeight());
         size.extendHeight(30);
        
-   /*    if(error.getException() != null) {
-           size.ensureWidth(Style.NORMAL.stringWidth(error.getException()));
-       }
-       size.extendHeight(Style.NORMAL.getTextHeight());
-       size.extendHeight(30);
-*/
-
-       //String trace = error.getTrace();
-        StringTokenizer st = new StringTokenizer(trace, "\n\r");
+        String detail = ((MessageContent) getContent()).getDetail();
+        StringTokenizer st = new StringTokenizer(detail, "\n\r");
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
             size.ensureWidth((line.startsWith("\t") ? 20 : 0) + Style.NORMAL.stringWidth(line));
@@ -95,12 +89,16 @@ class ErrorView extends AbstractErrorView {
         left = 20;
         top += Style.TITLE.getTextHeight();
         
-        canvas.drawText(name, left, top, Color.RED, Style.TITLE);
+        String message = ((MessageContent) getContent()).getMessage();
+        String heading = ((MessageContent) getContent()).title();
+        String detail = ((MessageContent) getContent()).getDetail();
+
+        canvas.drawText(heading, left, top, Color.RED, Style.TITLE);
         top += 30;
         canvas.drawText(message ,left, top, Color.RED, Style.NORMAL);
 
         top += 30;
-        StringTokenizer st = new StringTokenizer(trace, "\n\r");
+        StringTokenizer st = new StringTokenizer(detail, "\n\r");
         while (st.hasMoreTokens()) {
             String line = st.nextToken();
             canvas.drawText(line,left + (line.startsWith("\t") ? 20 : 00), top, Color.BLACK, Style.NORMAL);

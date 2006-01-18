@@ -1,8 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.ConcurrencyException;
-import org.nakedobjects.object.NakedObjectApplicationException;
-import org.nakedobjects.object.defaults.PojoAdapter;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
@@ -15,25 +12,24 @@ import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.core.AbstractView;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
-public class NakedErrorSmallViewSpecification implements ViewSpecification {
+public class MessageDialogSpecification implements ViewSpecification {
 
     public boolean canDisplay(Content content) {
-        return content.isObject() && content.getNaked() instanceof PojoAdapter
-                && ((PojoAdapter) content.getNaked()).getObject() instanceof Exception;
+        return content instanceof MessageContent;
     }
 
     public String getName() {
-        return "Compact Naked Error";
+        return "Message Dialog";
     }
 
     public View createView(Content content, ViewAxis axis) {
-        // TODO extract the 'close window' action
-        ButtonAction actions[] = new ButtonAction[] { new CloseAction() };
-        return new ExceptionDialogBorder(new ButtonBorder(actions, new SmallErrorView(content, this, null)), false);
+        ButtonAction actions[] = new ButtonAction[] { new CloseViewAction() };
+        return new ExceptionDialogBorder(new ButtonBorder(actions, new MessageDialogView((MessageContent) content, this, null)), false);
     }
 
     public boolean isOpen() {
@@ -48,8 +44,8 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
         return false;
     }
 
-    public static class CloseAction extends AbstractButtonAction {
-        public CloseAction() {
+    public static class CloseViewAction extends AbstractButtonAction {
+        public CloseViewAction() {
             super("Close");
         }
 
@@ -59,26 +55,26 @@ public class NakedErrorSmallViewSpecification implements ViewSpecification {
     }
 }
 
-class SmallErrorView extends AbstractErrorView {
+class MessageDialogView extends AbstractView {
     private static final int left = 20;
     private static final int top = 15;
     private static final int PADDING = 10;
+    private Image errorIcon;
 
-    private static Image errorIcon;
-    {
-        errorIcon = ImageFactory.getInstance().createIcon("error", 32, null);
+    protected MessageDialogView(MessageContent content, ViewSpecification specification, ViewAxis axis) {
+        super(content, specification, axis);
+        String iconName = ((MessageContent) getContent()).getIconName();
+           errorIcon = ImageFactory.getInstance().createIcon(iconName, 32, null);
         if (errorIcon == null) {
             errorIcon = ImageFactory.getInstance().createFallbackIcon(32, null);
         }
     }
 
-    protected SmallErrorView(Content content, ViewSpecification specification, ViewAxis axis) {
-        super(content, specification, axis);
-    }
-
     public Size getRequiredSize() {
         Size size = new Size();
 
+        String message = ((MessageContent) getContent()).getMessage();
+        
         size.extendWidth(errorIcon.getWidth());
         size.extendWidth(PADDING);
         size.extendWidth(Style.NORMAL.stringWidth(message));
@@ -93,12 +89,19 @@ class SmallErrorView extends AbstractErrorView {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
+        String message = ((MessageContent) getContent()).getMessage();
+        String heading = ((MessageContent) getContent()).title();
+
         canvas.clearBackground(this, Style.WHITE);
 
         canvas.drawIcon(errorIcon, left, top);
 
         int x = left + errorIcon.getWidth() + PADDING;
-        int y = top + Style.NORMAL.getAscent();
+        int y = top + 3 + Style.NORMAL.getAscent();
+        if(!heading.equals("")) {
+            canvas.drawText(heading, x, y, Color.BLACK, Style.TITLE);
+            y += Style.TITLE.getLineHeight();
+        }
         canvas.drawText(message, x, y, Color.BLACK, Style.NORMAL);
     }
 
@@ -116,15 +119,7 @@ class ExceptionDialogBorder extends AbstractWindowBorder {
     }
 
     protected String title() {
-        Object exception = getContent().getNaked().getObject();
-        if (exception instanceof NakedObjectApplicationException) {
-            return "Application Exception";
-        } else if (exception instanceof ConcurrencyException) {
-            return "Concurrency Exception";
-        } else {
-            return "System Error";
-        }
-
+        return getContent().windowTitle();
     }
 
     public String toString() {
