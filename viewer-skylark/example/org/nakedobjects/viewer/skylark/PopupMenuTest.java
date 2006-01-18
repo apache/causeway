@@ -4,6 +4,7 @@ package org.nakedobjects.viewer.skylark;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectField;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.core.AbstractView;
@@ -19,14 +20,13 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import test.org.nakedobjects.object.TestSystem;
-
 import junit.framework.TestCase;
+import test.org.nakedobjects.object.TestSystem;
 
 public class PopupMenuTest extends TestCase {
 //	private MockWorkspace workspace;
 	private MockPopup popup;
-	private MockView view;
+	private PopupTargetView view;
 	
 	public static void main(String[] args) {
 		junit.textui.TestRunner.run(PopupMenuTest.class);
@@ -37,8 +37,8 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	public void testClickFirstOption() {
-	//	assertFalse(view.action1.executed);
-		popup.firstClick(click(10, 8));
+		assertFalse(view.action1.executed);
+		popup.firstClick(click(10, 6));
 		assertTrue(view.action1.executed);
 	}
 
@@ -81,7 +81,7 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	public void testKeyUpDown() {
-		popup.keyPressed(KeyEvent.VK_DOWN, 0);
+        popup.keyPressed(KeyEvent.VK_DOWN, 0);
 		assertEquals(2, popup.getOption());
 
 		popup.keyPressed(KeyEvent.VK_DOWN, 0);
@@ -152,12 +152,23 @@ public class PopupMenuTest extends TestCase {
             public void addKeyListener(KeyListener interactionHandler) {}}
 		);
 		
-		
-		
 		popup = new MockPopup();
-		view = new MockView(null);
+		view = new PopupTargetView(null);
+        
+
+        UserActionSet options = new UserActionSet(false, false, UserAction.USER);
+       
+        
+        view.action1 = new MockUserAction("option 1", UserAction.DEBUG);
+        options.add(view.action1);
+        view.action3 = new MockUserAction("option 3", UserAction.USER);
+        options.add(view.action3);
+        view.action4 = new MockUserAction("option 4", UserAction.USER);
+        options.add(view.action4);
 		
-		popup.init(view, view, new Location(0,0), true, false, false);
+		popup.init(view, new UserAction[] {view.action1, view.action3, view.action4}, null);
+        
+        popup.layout();
 	}
 		
 	private static class MockPopup extends DefaultPopupMenu{
@@ -185,8 +196,8 @@ public class PopupMenuTest extends TestCase {
         }
 	}
 	
-	private static class MockView extends AbstractView {
-		protected MockView(Content content) {
+	private static class PopupTargetView extends AbstractView {
+		protected PopupTargetView(Content content) {
 			super(content, new DummyViewSpecification(), null);
 		}
 
@@ -194,14 +205,8 @@ public class PopupMenuTest extends TestCase {
 		MockUserAction action3;
 		MockUserAction action4;
 
-		public void contentMenuOptions(MenuOptionSet options) {
-			action1 = new MockUserAction("option 1");
-			options.add(MenuOptionSet.USER, action1);
-			options.add(MenuOptionSet.USER, null); // effectively action 2
-			action3 = new MockUserAction("option 3");
-			options.add(MenuOptionSet.USER, action3);
-			action4 = new MockUserAction("option 4");
-			options.add(MenuOptionSet.USER, action4);
+		public void contentMenuOptions(UserActionSet options) {
+			
 		}
 
 		public Size getRequiredSize() {
@@ -251,7 +256,7 @@ public class PopupMenuTest extends TestCase {
                     return false;
                 }
 
-                public void contentMenuOptions(MenuOptionSet menuOptions) {}
+                public void contentMenuOptions(UserActionSet menuOptions) {}
 
                 public String debugDetails() {
                     return null;
@@ -287,11 +292,7 @@ public class PopupMenuTest extends TestCase {
 
                 public void entered() {}
 
-                public void enteredSubview() {}
-
                 public void exited() {}
-
-                public void exitedSubview() {}
 
                 public void firstClick(Click click) {}
 
@@ -441,7 +442,7 @@ public class PopupMenuTest extends TestCase {
                     return null;
                 }
 
-                public void viewMenuOptions(MenuOptionSet menuOptions) {}
+                public void viewMenuOptions(UserActionSet menuOptions) {}
 
                 public void mouseDown(Click click) {}
 
@@ -454,9 +455,11 @@ public class PopupMenuTest extends TestCase {
 	private static class MockUserAction implements UserAction {
 		String name;
 		boolean executed = false;
+        private final Type type;
 
-		MockUserAction(String name) {
+		MockUserAction(String name, Type type) {
 			this.name = name;
+            this.type = type;
 		}
 
 		public String getName(View view) {
@@ -470,6 +473,10 @@ public class PopupMenuTest extends TestCase {
 		public void execute(Workspace workspace, View view, Location at) {
 			executed = true;
 		}
+        
+        public Type getType() {
+            return type;
+        }
 
         public String getDescription(View view) {
             return null;

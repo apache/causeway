@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
@@ -37,8 +37,8 @@ public class PasswordField extends AbstractField {
         return canChangeValue();
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.USER, new ClearValueOption());
+    public void contentMenuOptions(UserActionSet options) {
+        options.add(new ClearValueOption());
         super.contentMenuOptions((options));
         options.setColor(Style.VALUE_MENU);
     }

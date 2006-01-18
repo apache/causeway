@@ -1,38 +1,32 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.core;
 
-import org.nakedobjects.object.Action;
+import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 
 
-public interface UserAction {
-    public static final Action.Type USER = Action.USER;
-    public static final Action.Type DEBUG = Action.DEBUG;
-    public static final Action.Type EXPLORATION = Action.EXPLORATION;
+public class IconizeViewOption extends AbstractUserAction {
+    public IconizeViewOption() {
+        super("Iconize");
+    }
     
-    /**
-     * Returns the type of action: user, exploration, debug, or a set.
-     */
-    Action.Type getType();
+    public Consent disabled(View view) {
+        return Allow.DEFAULT;
+    }
 
-    /**
-     * Indicate that this action is disabled
-     */
-    Consent disabled(View view);
+    public void execute(Workspace workspace, View view, Location at) {
+        View iconView = new RootIconSpecification().createView(view.getContent(), null);
+        iconView.setLocation(view.getLocation());
+        workspace.replaceView(view, iconView);
+    }
 
-    /**
-     * Invoke this action.
-     */
-    void execute(Workspace workspace, View view, Location at);
-
-    /**
-     * Returns the description of the action.
-     */
-    String getDescription(View view);
-
-    /**
-     * Returns the name of the action as the user will refer to it.
-     */
-    String getName(View view);
+    public String getDescription(View view) {
+        return "Show this object as an icon on the workspace";
+    }
 }
 
 /*

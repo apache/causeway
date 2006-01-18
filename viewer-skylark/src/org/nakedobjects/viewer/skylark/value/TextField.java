@@ -16,8 +16,8 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.SimpleInternalDrag;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -578,8 +578,8 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         }
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.USER, new MenuOption("Refresh") {
+    public void contentMenuOptions(UserActionSet options) {
+        options.add(new AbstractUserAction("Refresh") {
             public void execute(Workspace workspace, View view, Location at) {
                 invalidReason = null;
                 refresh();

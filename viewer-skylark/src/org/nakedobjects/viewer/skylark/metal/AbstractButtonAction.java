@@ -1,5 +1,7 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.Action;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.View;
@@ -30,6 +32,10 @@ public abstract class AbstractButtonAction implements ButtonAction {
         return name;
     }
 
+    public Type getType() {
+        return Action.USER;
+    }
+    
     public boolean isDefault() {
         return defaultButton;
     }

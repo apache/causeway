@@ -1,11 +1,11 @@
 package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.viewer.skylark.Content;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 
 
 public abstract class AbstractContent implements Content {
-    public void contentMenuOptions(MenuOptionSet options) {}
+    public void contentMenuOptions(UserActionSet options) {}
 
     public boolean isCollection() {
         return false;
@@ -27,7 +27,7 @@ public abstract class AbstractContent implements Content {
         return false;
     }
 
-    public void viewMenuOptions(MenuOptionSet options) {}
+    public void viewMenuOptions(UserActionSet options) {}
 
     public String windowTitle() {
         return "";

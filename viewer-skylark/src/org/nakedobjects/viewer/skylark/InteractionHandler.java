@@ -174,11 +174,9 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             Click click = new Click(identifiedView, downAt, me.getModifiers());
             spy.addAction("Mouse clicked " + click.getLocation());
 
-            if (click.button3() && viewer.getOverlayView() == null) {
-                if (identifiedView != null) {
+            if (click.button3() && viewer.isOverlayAvailable() && identifiedView != null) {
                     spy.addAction(" popup " + downAt + " over " + identifiedView);
                     viewer.popupMenu(identifiedView, click);
-                }
 
             } else {
                 switch (me.getClickCount()) {
@@ -348,7 +346,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
 
             // hide an overlay view when not being pointed to
             View overlayView = viewer.getOverlayView();
-            if (overlayView != null && overlayView != overView && !overlayView.contains(overView)) {
+            if (overlayView != overView && !overlayView.contains(overView)) {
                 viewer.clearStatus();
                 viewer.disposeOverlayView();
             }

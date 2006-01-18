@@ -2,13 +2,13 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-public class ClearOneToOneAssociationOption extends MenuOption {
+public class ClearOneToOneAssociationOption extends AbstractUserAction {
     public ClearOneToOneAssociationOption() {
         super("Clear association");
     }

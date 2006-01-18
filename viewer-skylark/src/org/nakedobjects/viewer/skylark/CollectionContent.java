@@ -56,7 +56,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
   
     public abstract NakedCollection getCollection();
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         final NakedCollection collection = getCollection();
         
   		// TODO find all collection actions, and make them available
@@ -66,17 +66,17 @@ public abstract class CollectionContent extends AbstractContent implements Conte
 
         for (int i = 0; i < actions.length; i++) {
             
-            MenuOption option;
-            option = new MenuOption(actions[i].getId()) {
+            AbstractUserAction option;
+            option = new AbstractUserAction(actions[i].getId()) {
                 public void execute(Workspace workspace, View view, Location at) {}
             };
             
             if (option != null) {
-                options.add(MenuOptionSet.USER, option);
+                options.add(option);
             }
         }
         
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Clear resolved") {
+        options.add(new AbstractUserAction("Clear resolved", UserAction.DEBUG) {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(collection == null ||  collection.getResolveState() != ResolveState.TRANSIENT || 
                         collection.getResolveState() == ResolveState.GHOST);
@@ -89,8 +89,11 @@ public abstract class CollectionContent extends AbstractContent implements Conte
 
     }
     
-    public void viewMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.USER, new MenuOption("Clear sort") {
+    public void viewMenuOptions(UserActionSet options) {
+        UserActionSet sortOptions = new UserActionSet("Sort", options);
+        options.add(sortOptions);
+        
+        sortOptions.add(new AbstractUserAction("Clear") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(order != null);
             }
@@ -102,7 +105,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
         });
         
         if(reverse) {
-            options.add(MenuOptionSet.USER, new MenuOption("Normal sort order") {
+            sortOptions.add(new AbstractUserAction("Normal sort order") {
                 public Consent disabled(View component) {
                     return AbstractConsent.allow(order != null);
                 }
@@ -113,7 +116,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
                 }
             });
         } else {
-            options.add(MenuOptionSet.USER, new MenuOption("Reverse sort order") {
+            sortOptions.add(new AbstractUserAction("Reverse sort order") {
                 public Consent disabled(View component) {
                     return AbstractConsent.allow(order != null);
                 }
@@ -125,7 +128,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
             });
         }
         
-        options.add(MenuOptionSet.USER, new MenuOption("Sort by title") {
+        sortOptions.add(new AbstractUserAction("Sort by title") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(order != TITLE_COMPARATOR);
             }
@@ -137,7 +140,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
         });
         
         
-        options.add(MenuOptionSet.USER, new MenuOption("Sort by type") {
+        sortOptions.add(new AbstractUserAction("Sort by type") {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(order != TYPE_COMPARATOR);
             }
@@ -155,7 +158,7 @@ public abstract class CollectionContent extends AbstractContent implements Conte
             for (int i = 0; i < fields.length; i++) {
                 final NakedObjectField field = fields[i];
                 
-                options.add(MenuOptionSet.USER, new MenuOption("Sort by " + field.getName()) {
+                sortOptions.add(new AbstractUserAction("Sort by " + field.getName()) {
                     public void execute(Workspace workspace, View view, Location at) {
                         order = new FieldComparator(field);
                         view.invalidateContent();

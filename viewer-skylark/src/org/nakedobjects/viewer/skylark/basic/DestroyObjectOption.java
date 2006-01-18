@@ -5,7 +5,7 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
@@ -14,9 +14,9 @@ import org.nakedobjects.viewer.skylark.Workspace;
 /**
    Destroy this object
  */
-public class DestroyObjectOption extends MenuOption {
+public class DestroyObjectOption extends AbstractUserAction {
 	public DestroyObjectOption() {
-		super("Destroy Object");
+		super("Destroy Object", EXPLORATION);
 	}
 
 	public void execute(Workspace workspace, View view, Location at) {

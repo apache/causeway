@@ -14,7 +14,7 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
@@ -24,11 +24,11 @@ import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Viewer;
-import org.nakedobjects.viewer.skylark.basic.ClassOption;
 import org.nakedobjects.viewer.skylark.basic.ClassTitleText;
 import org.nakedobjects.viewer.skylark.basic.DragContentIcon;
 import org.nakedobjects.viewer.skylark.basic.IconGraphic;
 import org.nakedobjects.viewer.skylark.basic.ObjectBorder;
+import org.nakedobjects.viewer.skylark.basic.OptionFactory;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
 import org.nakedobjects.viewer.skylark.core.BackgroundThread;
 import org.nakedobjects.viewer.skylark.core.DragViewOutline;
@@ -174,9 +174,9 @@ public class ClassIcon extends ObjectView {
         return (NakedClass) object.getObject();
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         NakedObjectSpecification spec = getNakedClass().forObjectType();
-        ClassOption.menuOptions(spec, options);
+        OptionFactory.addClassMenuOptions(spec, options);
         options.setColor(Style.CONTENT_MENU);
     }
 

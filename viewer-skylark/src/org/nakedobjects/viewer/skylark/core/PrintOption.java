@@ -3,7 +3,7 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -14,7 +14,7 @@ import java.awt.PrintJob;
 import java.awt.Toolkit;
 
 
-public class PrintOption extends MenuOption {
+public class PrintOption extends AbstractUserAction {
     private final int HEIGHT = 60;
     private final int LEFT = 60;
 

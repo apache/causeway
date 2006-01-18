@@ -34,7 +34,7 @@ public class DrawingCanvas implements Canvas {
         drawSolidRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
     }
 
-    private Polygon createPolygon(int x, int y, int width, int height) {
+    private Polygon createOval(int x, int y, int width, int height) {
         int points = 40;
         int xPoints[] = new int[points];
         int yPoints[] = new int[points];
@@ -98,7 +98,7 @@ public class DrawingCanvas implements Canvas {
 
     public void drawOval(int x, int y, int width, int height, Color color) {
         useColor(color);
-        Polygon p = createPolygon(x, y, width - 1, height - 1);
+        Polygon p = createOval(x, y, width - 1, height - 1);
         graphics.drawPolygon(p);
     }
 
@@ -130,7 +130,7 @@ public class DrawingCanvas implements Canvas {
 
     public void drawSolidOval(int x, int y, int width, int height, Color color) {
         useColor(color);
-        Polygon p = createPolygon(x, y, width, height);
+        Polygon p = createOval(x, y, width, height);
         graphics.fillPolygon(p);
     }
 

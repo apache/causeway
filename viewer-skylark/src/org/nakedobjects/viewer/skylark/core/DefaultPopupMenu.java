@@ -4,26 +4,30 @@ import org.nakedobjects.object.InvalidEntryException;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObjectField;
 import org.nakedobjects.object.NakedObjectSpecification;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
+import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
-import org.nakedobjects.viewer.skylark.PopupMenu;
+import org.nakedobjects.viewer.skylark.Shape;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.Text;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewAxis;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
+import org.nakedobjects.viewer.skylark.basic.NullView;
 
 import java.awt.event.KeyEvent;
 import java.util.Vector;
@@ -31,25 +35,17 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 
 
-public class DefaultPopupMenu extends AbstractView implements PopupMenu {
-
+public class DefaultPopupMenu extends AbstractView {
     private static class Item {
-        UserAction action;
-        String description;
-        boolean isBlank;
-        boolean isDisabled;
-        String name;
-        String reason;
-
-        private Item() {}
-
-        public String toString() {
-            return isBlank ? "NONE" : (name + " " + (isDisabled ? "DISABLED " : " " + action));
+        public static Item createDivider() {
+            Item item = new Item();
+            item.isBlank = true;
+            return item;
         }
 
         public static Item createNoOption() {
             Item item = new Item();
-            item.name = "no option";
+            item.name = "no options";
             return item;
         }
 
@@ -67,6 +63,21 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
             }
             return item;
         }
+
+        UserAction action;
+        String description;
+        boolean isBlank;
+        boolean isDisabled;
+
+        String name;
+
+        String reason;
+
+        private Item() {}
+
+        public String toString() {
+            return isBlank ? "NONE" : (name + " " + (isDisabled ? "DISABLED " : " " + action));
+        }
     }
 
     private class PopupContent extends AbstractContent {
@@ -83,11 +94,20 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
             return null;
         }
 
+        public String getDescription() {
+            int optionNo = getOption();
+            return items[optionNo].description;
+        }
+
         public String getIconName() {
             return null;
         }
 
         public Image getIconPicture(int iconHeight) {
+            return null;
+        }
+
+        public String getId() {
             return null;
         }
 
@@ -109,28 +129,57 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
             int optionNo = getOption();
             return items[optionNo].name;
         }
+    }
 
-        public String getDescription() {
-            int optionNo = getOption();
-            return items[optionNo].description;
+    private static class PopupSpecification implements ViewSpecification {
+        public boolean canDisplay(Content content) {
+            return false;
         }
 
-        public String getId() {
+        public View createView(Content content, ViewAxis axis) {
             return null;
+        }
+
+        public String getName() {
+            return "Popup Menu";
+        }
+
+        public boolean isOpen() {
+            return true;
+        }
+
+        public boolean isReplaceable() {
+            return false;
+        }
+
+        public boolean isSubView() {
+            return false;
         }
     }
 
-    private static final MenuOption DEBUG_OPTION = new DebugOption();
-
     private static final Logger LOG = Logger.getLogger(DefaultPopupMenu.class);
     private Color backgroundColor;
+    private Bounds coreSize;
     private View forView;
     private Item[] items = new Item[0];
     private int optionIdentified;
+    private View submenu = new NullView();
 
     public DefaultPopupMenu() {
-        super(null, null, null);
+        super(null, new PopupSpecification(), null);
         setContent(new PopupContent());
+    }
+
+    private void addItems(View target, UserAction[] options, int len, Vector list, Type type) {
+        int initialSize = list.size();
+        for (int i = 0; i < len; i++) {
+            if (options[i].getType() == type) {
+                if (initialSize > 0 && list.size() == initialSize) {
+                    list.addElement(Item.createDivider());
+                }
+                list.addElement(Item.createOption(options[i], null, target, getLocation()));
+            }
+        }
     }
 
     protected Color backgroundColor() {
@@ -145,6 +194,16 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         return true;
     }
 
+    public String debugDetails() {
+        DebugString b = new DebugString();
+        b.append(super.debugDetails());
+        b.appendTitle("Submenu");
+        b.append(submenu);
+        b.append("\n");
+
+        return b.toString();
+    }
+
     protected Color disabledColor() {
         return Style.DISABLED_MENU;
     }
@@ -155,13 +214,14 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
      * @see java.awt.Component#paint(java.awt.Graphics)
      */
     public void draw(Canvas canvas) {
-        int width = getSize().getWidth();
-        int height = getSize().getHeight();
+        // canvas.drawRectangleAround(this, Color.DEBUG_VIEW_BOUNDS);
+        int width = coreSize.getWidth();
+        int height = coreSize.getHeight();
         canvas.drawSolidRectangle(0, 0, width, height, backgroundColor);
         canvas.draw3DRectangle(0, 0, width, height, backgroundColor, true);
 
         int itemHeight = style().getLineHeight() + VPADDING;
-        int baseLine = itemHeight / 2 + style().getAscent() / 2 +getPadding().getTop();
+        int baseLine = itemHeight / 2 + style().getAscent() / 2 + getPadding().getTop();
         int left = getPadding().getLeft();
         for (int i = 0; i < items.length; i++) {
             if (items[i].isBlank) {
@@ -181,24 +241,56 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
                     color = normalColor();
                 }
                 canvas.drawText(items[i].name, left, baseLine, color, style());
+                if (items[i].action instanceof UserActionSet) {
+                    // canvas.drawRectangle(width - 10, 2, 6, 6, Style.SECONDARY2);
+
+                    Shape arrow;
+                    arrow = new Shape(0, 0);
+                    arrow.extendsLine(4, 4);
+                    arrow.extendsLine(-4, 4);
+                    canvas.drawSolidShape(arrow, width - 10, baseLine - 8, color);
+                }
             }
 
             baseLine += itemHeight;
         }
+
+        Canvas submenuCanvas = canvas.createSubcanvas(submenu.getBounds());
+        LOG.debug(submenu.getBounds());
+        submenu.draw(submenuCanvas);
     }
 
     public void editComplete() {}
 
     public void firstClick(Click click) {
-        if (click.button1()) {
-            mouseMoved(click.getLocation());
-            invoke();
+        if (coreSize.contains(click.getLocation())) {
+            if (click.button1()) {
+                mouseMoved(click.getLocation());
+                invoke();
+            }
+        } else {
+            click.subtract(submenu.getLocation());
+            submenu.firstClick(click);
         }
     }
 
     public void focusLost() {}
 
     public void focusReceived() {}
+
+    private Size getCoreRequiredSize() {
+        Size size = new Size();
+
+        for (int i = 0; i < items.length; i++) {
+            int itemWidth = items[i].isBlank ? 0 : style().stringWidth(items[i].name);
+            size.ensureWidth(itemWidth);
+            size.extendHeight(style().getLineHeight() + VPADDING);
+        }
+
+        size.extend(getPadding());
+        size.extendWidth(HPADDING * 2);
+        return size;
+    }
 
     public int getOption() {
         return optionIdentified;
@@ -219,16 +311,11 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     }
 
     public Size getRequiredSize() {
-        Size size = new Size();
+        Size size = getCoreRequiredSize();
 
-        for (int i = 0; i < items.length; i++) {
-            int itemWidth = items[i].isBlank ? 0 : style().stringWidth(items[i].name);
-            size.ensureWidth(itemWidth);
-            size.extendHeight(style().getLineHeight() + VPADDING);
-        }
-
-        size.extend(getPadding());
-        size.extendWidth(HPADDING * 2);
+        Size subviewSize = submenu.getRequiredSize();
+        size.extendWidth(subviewSize.getWidth());
+        size.ensureHeight(subviewSize.getHeight());
 
         return size;
     }
@@ -241,51 +328,54 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
         return false;
     }
 
-    public void init(View over, View parent, Location mouseAt, boolean forView, boolean includeExploration, boolean includeDebug) {
-        this.forView = over;
+    public void init(View target, UserAction[] options, Color color) {
+        this.forView = target;
 
-        getViewManager().saveCurrentFieldEntry();
-
-        MenuOptionSet optionSet = new MenuOptionSet(forView);
-        if (forView) {
-            over.viewMenuOptions(optionSet);
-        } else {
-            over.contentMenuOptions(optionSet);
-        }
-        optionSet.add(MenuOptionSet.DEBUG, DEBUG_OPTION);
         optionIdentified = 0;
-        backgroundColor = optionSet.getColor();
+        backgroundColor = color;
 
-        Vector options = optionSet.getMenuOptions(includeExploration, includeDebug);
-        int len = options.size();
+        int len = options.length;
         if (len == 0) {
             items = new Item[] { Item.createNoOption() };
         } else {
-            items = new Item[len];
-            for (int i = 0; i < len; i++) {
-                items[i] = Item.createOption((UserAction) options.elementAt(i), null, over, getLocation());
-            }
+            Vector list = new Vector();
+            addItems(target, options, len, list, UserAction.USER);
+            addItems(target, options, len, list, UserAction.EXPLORATION);
+            addItems(target, options, len, list, UserAction.DEBUG);
+            items = new Item[list.size()];
+            list.copyInto(items);
         }
     }
 
     private void invoke() {
         int option = getOption();
-
-        Workspace workspace = getWorkspace();
         Item item = items[option];
+        if (item.isBlank || item.action == null || item.action.disabled(forView).isVetoed()) {
+            return;
 
-        Location location = new Location(getAbsoluteLocation());
-        location.subtract(workspace.getView().getAbsoluteLocation());
-        Padding padding = workspace.getView().getPadding();
-        location.move(-padding.getLeft(), -padding.getTop());
-        location.move(30, 0);
+        } else if (item.action instanceof UserActionSet) {
+            /*
+             * MenuContainer menuContainer = (MenuContainer) getParent(); int itemHeight =
+             * style().getLineHeight() + VPADDING; Location at = new Location(getSize().getWidth() - 8,
+             * itemHeight * option); menuContainer.add((MenuOptionSet) item.action, at );
+             */
+        } else {
+            Workspace workspace = getWorkspace();
 
-        dispose();
-        if (!item.isBlank && item.action != null && item.action.disabled(forView).isAllowed()) {
-            showStatus("Executing " + item);
-            LOG.debug("execute " + item.name + " on " + forView + " in " + workspace);
-            item.action.execute(workspace, forView, location);
-            showStatus("");
+            Location location = new Location(getAbsoluteLocation());
+            location.subtract(workspace.getView().getAbsoluteLocation());
+            Padding padding = workspace.getView().getPadding();
+            location.move(-padding.getLeft(), -padding.getTop());
+            location.move(30, 0);
+
+            dispose();
+            // TODO this if is superflous; see first if in this method
+            if (!item.isBlank && item.action != null && item.action.disabled(forView).isAllowed()) {
+                showStatus("Executing " + item);
+                LOG.debug("execute " + item.name + " on " + forView + " in " + workspace);
+                item.action.execute(workspace, forView, location);
+                showStatus("");
+            }
         }
     }
 
@@ -334,6 +424,12 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
     public void keyTyped(char keyCode) {}
 
+    public void layout() {
+        submenu.layout();
+        coreSize = new Bounds(getCoreRequiredSize());
+        setSize(getRequiredSize());
+    }
+
     public View makeView(Naked object, NakedObjectField field) throws CloneNotSupportedException {
         throw new RuntimeException();
     }
@@ -343,13 +439,31 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
     }
 
     public void mouseMoved(Location at) {
-        int option = (at.getY() - getPadding().getTop()) / (style().getLineHeight() + VPADDING);
-        option = Math.max(option, 0);
-        option = Math.min(option, items.length - 1);
-        if (option >= 0 && optionIdentified != option) {
-            setOption(option);
-            getViewManager().forceRepaint();
-            markDamaged();
+        if (coreSize.contains(at)) {
+            int option = (at.getY() - getPadding().getTop()) / (style().getLineHeight() + VPADDING);
+            option = Math.max(option, 0);
+            option = Math.min(option, items.length - 1);
+            if (option >= 0 && optionIdentified != option) {
+                setOption(option);
+
+                Item item = items[option];
+                if (item.action instanceof UserActionSet) {
+                    int itemHeight = style().getLineHeight() + VPADDING;
+                    Location menuLocation = new Location(coreSize.getWidth() - 8, itemHeight * option);
+                    submenu = new DefaultPopupMenu();
+                    ((DefaultPopupMenu) submenu).init(forView, ((UserActionSet) item.action).getMenuOptions(), backgroundColor);
+                    submenu.setLocation(menuLocation);
+                    invalidateLayout();
+                } else {
+                    submenu = new NullView();
+                }
+
+                getViewManager().forceRepaint();
+                markDamaged();
+            }
+        } else {
+            at.subtract(submenu.getLocation());
+            submenu.mouseMoved(at);
         }
     }
 
@@ -391,10 +505,6 @@ public class DefaultPopupMenu extends AbstractView implements PopupMenu {
 
     protected boolean transparentBackground() {
         return false;
-    }
-
-    public void viewMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.DEBUG, DEBUG_OPTION);
     }
 }
 

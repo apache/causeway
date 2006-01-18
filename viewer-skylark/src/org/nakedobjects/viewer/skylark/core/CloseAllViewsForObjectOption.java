@@ -3,12 +3,12 @@ package org.nakedobjects.viewer.skylark.core;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-public class CloseAllViewsForObjectOption extends MenuOption {
+public class CloseAllViewsForObjectOption extends AbstractUserAction {
     public CloseAllViewsForObjectOption() {
         super("Close all views for this object");
     }
@@ -18,7 +18,7 @@ public class CloseAllViewsForObjectOption extends MenuOption {
     }
 
     public String getDescription(View view) {
-        return "Close all views for " + view.getContent().getNaked().titleString();
+        return "Close all views for " + view.getContent().title();
     }
 
     public String toString() {

@@ -2,11 +2,12 @@ package org.nakedobjects.viewer.skylark.basic;
 
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -14,7 +15,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
    Options for an underlying object determined dynamically by looking for methods starting with action, veto and option for
    specifying the action, vetoing the option and giving the option an name respectively.
  */
-class DialogedObjectOption extends MenuOption {
+class DialogedObjectOption extends AbstractUserAction {
     private ActionDialogSpecification dialogSpec = new ActionDialogSpecification();
     
     public static DialogedObjectOption createOption(Action action, NakedObject object) {
@@ -24,20 +25,23 @@ class DialogedObjectOption extends MenuOption {
     		return null;
     	}
 
-    	String label =  action.getName() + "...";
-    	DialogedObjectOption option = new DialogedObjectOption(label, action, object);
+    	DialogedObjectOption option = new DialogedObjectOption(action, object);
     	return option;
     }
 	
 	private final Action action;
-	private final NakedObject object ;
+	private final NakedObject target ;
 	
-	private DialogedObjectOption(final String name, final Action action, NakedObject object) {
-		super(name);
+	private DialogedObjectOption(final Action action, NakedObject object) {
+		super(action.getName() + "...");
 		this.action = action;
-		this.object = object;
+		this.target = object;
 	}
 
+    public Type getType() {
+        return action.getType();
+    }
+    
     public Consent disabled(View view) {
         // ignore the details from the About about useablility this will be
         // checked in the dialog
@@ -49,7 +53,7 @@ class DialogedObjectOption extends MenuOption {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
-        ActionHelper ai = ActionHelper.createInstance(object, action);
+        ActionHelper ai = ActionHelper.createInstance(target, action);
         ActionContent content = new ActionContent(ai);
         View dialog = dialogSpec.createView(content, null);
         dialog.setLocation(at);

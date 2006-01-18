@@ -11,7 +11,7 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.UserAction;
@@ -51,7 +51,7 @@ public abstract class AbstractControlView implements View {
         return false;
     }
 
-    public void contentMenuOptions(MenuOptionSet menuOptions) {}
+    public void contentMenuOptions(UserActionSet menuOptions) {}
 
     public String debugDetails() {
         return null;
@@ -289,7 +289,7 @@ public abstract class AbstractControlView implements View {
         return null;
     }
 
-    public void viewMenuOptions(MenuOptionSet menuOptions) {}
+    public void viewMenuOptions(UserActionSet menuOptions) {}
 
 }
 

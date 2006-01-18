@@ -30,7 +30,7 @@ public interface View extends Cloneable {
      * options that need to appear on the menu should be added to the
      * <code>menuOptions</code> object.
      */
-    void contentMenuOptions(MenuOptionSet menuOptions);
+    void contentMenuOptions(UserActionSet menuOptions);
 
     String debugDetails();
 
@@ -350,7 +350,7 @@ public interface View extends Cloneable {
      * options that need to appear on the menu should be added to the
      * <code>menuOptions</code> object.
      */
-    void viewMenuOptions(MenuOptionSet menuOptions);
+    void viewMenuOptions(UserActionSet menuOptions);
 }
 
 /*

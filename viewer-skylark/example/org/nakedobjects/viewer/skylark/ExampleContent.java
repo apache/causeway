@@ -70,7 +70,7 @@ public class ExampleContent implements Content {
         return false;
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {}
+    public void contentMenuOptions(UserActionSet options) {}
 
     public void parseTextEntry(String entryText) throws InvalidEntryException {}
 
@@ -102,7 +102,7 @@ public class ExampleContent implements Content {
         return "";
     }
 
-    public void viewMenuOptions(MenuOptionSet options) {}
+    public void viewMenuOptions(UserActionSet options) {}
 }
 
 /*

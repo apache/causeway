@@ -9,7 +9,7 @@ import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Skylark;
@@ -154,10 +154,10 @@ public abstract class AbstractField extends AbstractView {
      */
     public void keyTyped(char keyCode) {}
 
-    public void contentMenuOptions(MenuOptionSet options) {
-        options.add(MenuOptionSet.USER, new ClearValueOption());
-        options.add(MenuOptionSet.USER, new CopyValueOption());
-        options.add(MenuOptionSet.USER, new PasteValueOption());
+    public void contentMenuOptions(UserActionSet options) {
+        options.add(new ClearValueOption());
+        options.add(new CopyValueOption());
+        options.add(new PasteValueOption());
         if (getView().getSpecification().isReplaceable()) {
             replaceOptions(Skylark.getViewFactory().valueViews(getContent(), this), options);
         }

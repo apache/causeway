@@ -10,7 +10,7 @@ import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NotImplementedException;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 
 
 public class DummyContent implements Content {
@@ -73,7 +73,7 @@ public class DummyContent implements Content {
         return false;
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {}
+    public void contentMenuOptions(UserActionSet options) {}
 
     public void parseTextEntry(String entryText) throws InvalidEntryException {}
 
@@ -105,7 +105,7 @@ public class DummyContent implements Content {
         return null;
     }
 
-    public void viewMenuOptions(MenuOptionSet options) {}
+    public void viewMenuOptions(UserActionSet options) {}
 }
 
 /*

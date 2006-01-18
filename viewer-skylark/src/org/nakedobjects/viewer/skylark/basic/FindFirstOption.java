@@ -7,13 +7,13 @@ import org.nakedobjects.object.NakedObjectPersistor;
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.persistence.PatternObjectCriteria;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-public class FindFirstOption extends MenuOption {
+public class FindFirstOption extends AbstractUserAction {
     public FindFirstOption() {
         super("Find First Matching Object");
     }

@@ -2,16 +2,12 @@ package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.NakedObjects;
 import org.nakedobjects.object.NakedValue;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.ValueContent;
 import org.nakedobjects.viewer.skylark.View;
 
 
-public abstract class AbstractValueOption extends MenuOption {
-	AbstractValueOption() {
-		super();
-	}
-	
+public abstract class AbstractValueOption extends AbstractUserAction {
 	AbstractValueOption(String name) {
 		super(name);
 	}

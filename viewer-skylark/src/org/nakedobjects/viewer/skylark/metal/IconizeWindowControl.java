@@ -1,37 +1,14 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.control.Allow;
-import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Canvas;
-import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
+import org.nakedobjects.viewer.skylark.core.IconizeViewOption;
 
 public class IconizeWindowControl extends WindowControl {
 
     public IconizeWindowControl(View target) {
-        super(new UserAction() {
-
-            public Consent disabled(View view) {
-                return Allow.DEFAULT;
-            }
-
-            public void execute(Workspace workspace, View view, Location at) {
-                View iconView = new RootIconSpecification().createView(view.getContent(), null);
-                iconView.setLocation(view.getLocation());
-                workspace.replaceView(view, iconView);
-            }
-
-            public String getDescription(View view) {
-                return "Show this object as an icon on the workspace";
-            }
-
-            public String getName(View view) {
-                return "Iconize";
-            }}, target);
+        super(new IconizeViewOption(), target);
     }
 
     public void draw(Canvas canvas) {

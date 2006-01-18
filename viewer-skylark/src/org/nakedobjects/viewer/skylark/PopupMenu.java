@@ -1,7 +1,7 @@
 package org.nakedobjects.viewer.skylark;
 
 public interface PopupMenu extends View {
-    void init(View over, View parent, Location mouseAt, boolean type, boolean includeExploration, boolean includeDebug);
+    void init(View over, boolean includeExploration, boolean includeDebug, UserActionSet options);
 }
 /*
  * Naked Objects - a framework that exposes behaviourally complete business

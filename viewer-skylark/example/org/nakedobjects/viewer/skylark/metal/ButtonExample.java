@@ -1,4 +1,5 @@
 package org.nakedobjects.viewer.skylark.metal;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
@@ -28,6 +29,10 @@ public class ButtonExample extends TestViews {
 
                     public String getDescription(View view) {
                         return "Button that can be pressed";
+                    }
+                    
+                    public Type getType() {
+                        return USER;
                     }
 
                     public String getName(View view) {
@@ -60,11 +65,14 @@ public class ButtonExample extends TestViews {
                 public String getDescription(View view) {
                     return "Button that can't be pressed";
                 }
+                
+                public Type getType() {
+                    return USER;
+                }
 
                 public String getName(View view) {
                     return "Press Me Now!";
                 }
-                
 
                 public boolean isDefault() {
                     return false;

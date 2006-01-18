@@ -3,8 +3,8 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -21,16 +21,16 @@ class IconOpenAction extends AbstractViewDecorator {
         getView().dispose();
     }
 
-    public void viewMenuOptions(MenuOptionSet menuOptions) {
+    public void viewMenuOptions(UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
-        menuOptions.add(MenuOptionSet.USER, new MenuOption("Open") {
+        menuOptions.add(new AbstractUserAction("Open") {
             public void execute(Workspace workspace, View view, Location at) {
                 openIcon();
             }
         });
 
-        menuOptions.add(MenuOptionSet.USER, new MenuOption("Close") {
+        menuOptions.add(new AbstractUserAction("Close") {
             public void execute(Workspace workspace, View view, Location at) {
                 closeIcon();
             }

@@ -5,8 +5,8 @@ import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
@@ -62,10 +62,10 @@ public class WindowBorder extends AbstractWindowBorder {
         workspace.addIconFor(getContent().getNaked(), getLocation());
     }
 
-    public void viewMenuOptions(MenuOptionSet menuOptions) {
+    public void viewMenuOptions(UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
-        menuOptions.add(MenuOptionSet.USER, new MenuOption("Iconize") {
+        menuOptions.add(new AbstractUserAction("Iconize") {
             public void execute(Workspace workspace, View view, Location at) {
                 iconize(workspace, view);
             }

@@ -17,9 +17,9 @@ public interface Content {
     /**
      * Allows this content to add menu options to the set of menu options the user will see for this content.
      * 
-     * @see #viewMenuOptions(MenuOptionSet)
+     * @see #viewMenuOptions(UserActionSet)
      */
-    void contentMenuOptions(MenuOptionSet options);
+    void contentMenuOptions(UserActionSet options);
 
     void debugDetails(DebugString debug);
 
@@ -89,9 +89,9 @@ public interface Content {
     /**
      * Allows this content to add menu options to the set of menu options the user will see for this view.
      * 
-     * @see #contentMenuOptions(MenuOptionSet)
+     * @see #contentMenuOptions(UserActionSet)
      */
-    void viewMenuOptions(MenuOptionSet options);
+    void viewMenuOptions(UserActionSet options);
 
     String windowTitle();
 }

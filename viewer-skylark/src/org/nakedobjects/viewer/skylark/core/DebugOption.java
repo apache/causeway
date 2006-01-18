@@ -4,7 +4,8 @@ import org.nakedobjects.object.Naked;
 import org.nakedobjects.utility.DebugInfo;
 import org.nakedobjects.utility.InfoDebugFrame;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -12,9 +13,9 @@ import org.nakedobjects.viewer.skylark.Workspace;
 /**
  * Display debug window
  */
-public class DebugOption extends MenuOption {
+public class DebugOption extends AbstractUserAction {
     public DebugOption() {
-        super("Debug...");
+        super("Debug...", UserAction.DEBUG);
     }
 
     public void execute(Workspace workspace, View view, Location at) {

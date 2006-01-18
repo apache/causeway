@@ -6,11 +6,10 @@ import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.OneToManyAssociation;
 import org.nakedobjects.object.control.Consent;
-import org.nakedobjects.object.control.Hint;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CollectionContent;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.Size;
@@ -59,10 +58,10 @@ public class InternalCollectionBorder extends AbstractBorder {
 	}
 	
 	
-	public void contentMenuOptions(MenuOptionSet options) {
+	public void contentMenuOptions(UserActionSet options) {
         super.contentMenuOptions(options);
         NakedObjectSpecification nakedClass = ((OneToManyField) getContent()).getSpecification();
-        ClassOption.menuOptions(nakedClass, options);
+        OptionFactory.addClassMenuOptions(nakedClass, options);
     }
 	
     public void objectActionResult(Naked result, Location at) {

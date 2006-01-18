@@ -12,7 +12,7 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
-import org.nakedobjects.viewer.skylark.basic.ClassOption;
+import org.nakedobjects.viewer.skylark.basic.OptionFactory;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
@@ -151,9 +151,9 @@ public class OneToManyField extends CollectionContent implements FieldContent {
     }
 
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         super.contentMenuOptions(options);
-        ClassOption.menuOptions(getOneToManyAssociation().getSpecification(), options);
+        OptionFactory.addClassMenuOptions(getOneToManyAssociation().getSpecification(), options);
     }
     
     public Image getIconPicture(int iconHeight) {

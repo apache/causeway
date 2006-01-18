@@ -6,7 +6,7 @@ import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Style;
 import org.nakedobjects.viewer.skylark.View;
@@ -35,10 +35,10 @@ public class ClassIconBackground extends AbstractViewDecorator {
 		workspace.addView(view);
 	}
 	
-	public void contentMenuOptions(MenuOptionSet options) {
+	public void contentMenuOptions(UserActionSet options) {
     	NakedObject object = ((ObjectContent) getContent()).getObject();
 		NakedClass cls = (NakedClass) object.getObject();
-		ClassOption.menuOptions(cls.forObjectType(), options);
+		OptionFactory.addClassMenuOptions(cls.forObjectType(), options);
 	}
 }
 

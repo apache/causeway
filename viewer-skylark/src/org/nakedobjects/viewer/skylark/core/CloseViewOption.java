@@ -1,13 +1,13 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.utility.ToString;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-public class CloseViewOption extends MenuOption {
+public class CloseViewOption extends AbstractUserAction {
     public CloseViewOption() {
         super("Close");
     }

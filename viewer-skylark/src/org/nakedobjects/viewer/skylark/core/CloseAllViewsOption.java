@@ -2,12 +2,12 @@ package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 
-public class CloseAllViewsOption extends MenuOption {
+public class CloseAllViewsOption extends AbstractUserAction {
     public CloseAllViewsOption() {
         super("Close all others");
     }

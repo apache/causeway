@@ -13,13 +13,14 @@ import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Skylark;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewDrag;
@@ -219,12 +220,12 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
         return "Workspace" + getId();
     }
 
-    public void viewMenuOptions(MenuOptionSet options) {
+    public void viewMenuOptions(UserActionSet options) {
         options.setColor(Style.WORKSPACE_MENU);
 
         getViewManager().menuOptions(options);
 
-        options.add(MenuOptionSet.USER, new MenuOption("About...") {
+        options.add(new AbstractUserAction("About...") {
             public void execute(Workspace workspace, View view, Location at) {
                 AboutView aboutView = new AboutView();
 
@@ -239,7 +240,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Naked Classes...") {
+        options.add(new AbstractUserAction("Naked Classes...", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObjectSpecification[] specs = NakedObjects.getSpecificationLoader().allSpecifications();
                 //ArbitraryCollectionVector classCollection = new
@@ -258,7 +259,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.USER, new MenuOption("Close all") {
+        options.add(new AbstractUserAction("Close all") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
                 for (int i = 0; i < views.length; i++) {
@@ -271,7 +272,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.USER, new MenuOption("Tidy up views") {
+        options.add(new AbstractUserAction("Tidy up views") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
 
@@ -287,7 +288,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.USER, new MenuOption("Tidy up icons") {
+        options.add(new AbstractUserAction("Tidy up icons") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
 
@@ -303,7 +304,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
             }
         });
 
-        options.add(MenuOptionSet.USER, new MenuOption("Tidy up all") {
+        options.add(new AbstractUserAction("Tidy up all") {
             public void execute(Workspace workspace, View view, Location at) {
                 View views[] = getSubviews();
 

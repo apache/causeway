@@ -10,7 +10,7 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -47,7 +47,7 @@ public abstract class AbstractViewDecorator implements View {
         return wrappedView.contains(view);
     }
 
-    public void contentMenuOptions(MenuOptionSet menuOptions) {
+    public void contentMenuOptions(UserActionSet menuOptions) {
         wrappedView.contentMenuOptions(menuOptions);
     }
 
@@ -343,7 +343,7 @@ public abstract class AbstractViewDecorator implements View {
         return wrappedView.viewAreaType(mouseLocation);
     }
 
-    public void viewMenuOptions(MenuOptionSet menuOptions) {
+    public void viewMenuOptions(UserActionSet menuOptions) {
         wrappedView.viewMenuOptions(menuOptions);
     }
 

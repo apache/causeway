@@ -12,8 +12,8 @@ import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.Size;
@@ -147,10 +147,10 @@ public abstract class ObjectView extends AbstractView {
     }
 
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         super.contentMenuOptions(options);
 
-        options.add(MenuOptionSet.USER, new MenuOption("Reload") {
+        options.add(new AbstractUserAction("Reload") {
             public void execute(Workspace workspace, View view, Location at) {
                 NakedObject object = (NakedObject) getContent().getNaked();
                 NakedObjects.getObjectPersistor().reload(object);

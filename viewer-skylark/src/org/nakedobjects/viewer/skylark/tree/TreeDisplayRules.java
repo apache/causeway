@@ -3,10 +3,11 @@ package org.nakedobjects.viewer.skylark.tree;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedCollection;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
@@ -17,7 +18,7 @@ public class TreeDisplayRules {
 
     private TreeDisplayRules() {}
 
-    public static void menuOptions(MenuOptionSet options) {
+    public static void menuOptions(UserActionSet options) {
         // TODO fix and remove  following line
         if(true) return;
         
@@ -37,8 +38,12 @@ public class TreeDisplayRules {
             public String getDescription(View view) {
                 return "This option makes the system only show collections within the trees, and not single elements";
             }
+            
+            public Type getType() {
+                return USER;
+            }
         };
-        options.add(MenuOptionSet.USER, option);
+        options.add(option);
     }
     
     public static boolean isCollectionsOnly() {

@@ -9,8 +9,8 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Offset;
 import org.nakedobjects.viewer.skylark.SimpleInternalDrag;
 import org.nakedobjects.viewer.skylark.Size;
@@ -717,10 +717,10 @@ public class ScrollBorder extends AbstractViewDecorator {
         }
     }
     
-    public void viewMenuOptions(MenuOptionSet menuOptions) {
+    public void viewMenuOptions(UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
-        menuOptions.add(MenuOptionSet.USER, new MenuOption("Reset scroll border") {
+        menuOptions.add(new AbstractUserAction("Reset scroll border") {
 
             public void execute(Workspace workspace, View view, Location at) {
                 reset();

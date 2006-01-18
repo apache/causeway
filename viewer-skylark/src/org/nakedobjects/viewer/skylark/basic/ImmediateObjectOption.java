@@ -3,11 +3,12 @@ package org.nakedobjects.viewer.skylark.basic;
 import org.nakedobjects.object.Action;
 import org.nakedobjects.object.Naked;
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.core.BackgroundTask;
@@ -19,30 +20,29 @@ import org.nakedobjects.viewer.skylark.core.BackgroundThread;
  * methods starting with action, veto and option for specifying the action,
  * vetoing the option and giving the option an name respectively.
  */
-class ImmediateObjectOption extends MenuOption {
+class ImmediateObjectOption extends AbstractUserAction {
 
     public static ImmediateObjectOption createOption(Action action, NakedObject object) {
         Assert.assertTrue("Only suitable for 0 param methods", action.getParameterTypes().length == 0);
         if (! action.isAuthorised() || object.isVisible(action).isVetoed()) {
             return null;
         }
-        String labelName = action.getName();
-        ImmediateObjectOption option = new ImmediateObjectOption(labelName, object, action);
+        ImmediateObjectOption option = new ImmediateObjectOption(object, action);
 
 	    return option;
     }
 
     private final Action action;
-    private final NakedObject object;
+    private final NakedObject target;
 
-    private ImmediateObjectOption(String name, NakedObject object, Action action) {
-        super(name);
-        this.object = object;
+    private ImmediateObjectOption(NakedObject object, Action action) {
+        super(action.getName());
+        this.target = object;
         this.action = action;
     }
 
     public Consent disabled(View view) {
-        Consent valid = object.isValid(action, null);
+        Consent valid = target.isValid(action, null);
         if (valid.isAllowed()) {
             String description = getName(view) + ": " + action.getDescription();
             if (action.hasReturn()) {
@@ -54,12 +54,16 @@ class ImmediateObjectOption extends MenuOption {
         }
     }
 
+    public Type getType() {
+        return action.getType();
+    }
+    
     // TODO this method is very similar to ActionDialogSpecification.execute()
     public void execute(final Workspace workspace, final View view, final Location at) {
         BackgroundThread.run(view, new BackgroundTask() {
             public void execute() {
                 Naked returnedObject;
-                returnedObject = object.execute(action, null);
+                returnedObject = target.execute(action, null);
                 if (returnedObject != null) {
                     view.objectActionResult(returnedObject, at);
                 }

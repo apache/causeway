@@ -21,8 +21,7 @@ import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.basic.AbstractContent;
-import org.nakedobjects.viewer.skylark.basic.ClassOption;
-import org.nakedobjects.viewer.skylark.basic.ObjectOption;
+import org.nakedobjects.viewer.skylark.basic.OptionFactory;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
@@ -112,15 +111,15 @@ public abstract class ObjectContent extends AbstractContent {
         return getObject().persistable() == Persistable.USER_PERSISTABLE;
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         final NakedObject object = getObject();
-        ObjectOption.menuOptions(object, options);
+        OptionFactory.addObjectMenuOptions(object, options);
 
         if (getObject() == null) {
-            ClassOption.menuOptions(getSpecification(), options);
+            OptionFactory.addClassMenuOptions(getSpecification(), options);
         }
 
-        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Instances") {
+        options.add(new AbstractUserAction("Instances", UserAction.EXPLORATION) {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
@@ -136,7 +135,7 @@ public abstract class ObjectContent extends AbstractContent {
             }
         });
 
-        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Class") {
+        options.add(new AbstractUserAction("Class", UserAction.EXPLORATION) {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
@@ -149,7 +148,7 @@ public abstract class ObjectContent extends AbstractContent {
             }
         });
 
-        options.add(MenuOptionSet.EXPLORATION, new MenuOption("Clone") {
+        options.add(new AbstractUserAction("Clone", UserAction.EXPLORATION) {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object != null);
             }
@@ -186,7 +185,7 @@ public abstract class ObjectContent extends AbstractContent {
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Clear resolved") {
+        options.add(new AbstractUserAction("Clear resolved", UserAction.DEBUG) {
             public Consent disabled(View component) {
                 return AbstractConsent.allow(object == null ||  object.getResolveState() != ResolveState.TRANSIENT || 
                         object.getResolveState() == ResolveState.GHOST);
@@ -225,11 +224,11 @@ public abstract class ObjectContent extends AbstractContent {
         }
     }
     
-    public void viewMenuOptions(MenuOptionSet options) {
+    public void viewMenuOptions(UserActionSet options) {
         final NakedObject object = getObject();
         
         if (object instanceof UserContext) {
-            options.add(MenuOptionSet.USER, new MenuOption("New Workspace") {
+            options.add(new AbstractUserAction("New Workspace") {
                 public Consent disabled(View component) {
                     return AbstractConsent.allow(object instanceof UserContext);
                 }

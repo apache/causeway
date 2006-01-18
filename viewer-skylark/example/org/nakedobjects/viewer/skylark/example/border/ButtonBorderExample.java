@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.example.border;
 
 import org.nakedobjects.object.NakedObject;
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
@@ -43,6 +44,10 @@ public class ButtonBorderExample extends TestViews {
                 return "Action";
             }
             
+            public Type getType() {
+                return USER;
+            }
+            
             public boolean isDefault() {
                 return true;
             }
@@ -64,6 +69,10 @@ public class ButtonBorderExample extends TestViews {
 
             public String getName(View view) {
                 return "Disabled";
+            }
+            
+            public Type getType() {
+                return USER;
             }
             
             public boolean isDefault() {

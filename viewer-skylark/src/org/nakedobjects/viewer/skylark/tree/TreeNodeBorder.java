@@ -19,8 +19,8 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.FieldContent;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.OneToManyField;
 import org.nakedobjects.viewer.skylark.Size;
@@ -246,11 +246,11 @@ public class TreeNodeBorder extends AbstractBorder {
         }
     }
 
-    public void viewMenuOptions(MenuOptionSet options) {
+    public void viewMenuOptions(UserActionSet options) {
         super.viewMenuOptions(options);
         TreeDisplayRules.menuOptions(options);
         
-        options.add(MenuOptionSet.USER, new MenuOption("Select node") {
+        options.add(new AbstractUserAction("Select node") {
             public void execute(Workspace workspace, View view, Location at) {
                 selectNode();
             }
@@ -263,7 +263,7 @@ public class TreeNodeBorder extends AbstractBorder {
         Naked object = getView().getContent().getNaked();
         ResolveState resolveState = ((NakedReference) object).getResolveState();
         if(object instanceof NakedReference && (resolveState.isGhost() || resolveState.isPartlyResolved())) {
-            options.add(MenuOptionSet.USER, new MenuOption("Load object") {
+            options.add(new AbstractUserAction("Load object") {
                 public void execute(Workspace workspace, View view, Location at) {
                     resolveContent();
                 }

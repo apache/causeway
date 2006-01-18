@@ -94,10 +94,10 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
         return false;
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         //ObjectOption.menuOptions(element, options);
         super.contentMenuOptions(options);
-        options.add(MenuOptionSet.USER, REMOVE_ASSOCIATION);
+        options.add(REMOVE_ASSOCIATION);
     }
 
     public void setObject(NakedObject object) {
@@ -120,7 +120,7 @@ public class OneToManyFieldElement extends ObjectContent implements FieldContent
     }
     
     public String windowTitle() {
-        return field.getName();
+        return field.getName() + " element" + " for " + field.getParent().titleString();
     }
     
     public String getId() {

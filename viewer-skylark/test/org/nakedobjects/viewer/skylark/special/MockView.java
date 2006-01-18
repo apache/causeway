@@ -11,7 +11,7 @@ import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InteractionSpy;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -203,7 +203,7 @@ public class MockView implements View {
 
     public void markDamaged(Bounds bounds) {}
 
-    public void contentMenuOptions(MenuOptionSet menuOptions) {}
+    public void contentMenuOptions(UserActionSet menuOptions) {}
 
     public void mouseMoved(Location at) {}
 
@@ -275,7 +275,7 @@ public class MockView implements View {
 
     public void updateView() {}
 
-    public void viewMenuOptions(MenuOptionSet menuOptions) {}
+    public void viewMenuOptions(UserActionSet menuOptions) {}
 
     public void verify() {
         if (expected.size() != addNo) {

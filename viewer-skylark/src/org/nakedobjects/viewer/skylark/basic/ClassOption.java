@@ -5,50 +5,50 @@ import org.nakedobjects.object.NakedClass;
 import org.nakedobjects.object.NakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjects;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 
 
 public class ClassOption {
-    public static void menuOptions(NakedObjectSpecification specificaton, MenuOptionSet menuOptionSet) {
+    public static void xxmenuOptions(NakedObjectSpecification specificaton, UserActionSet menuOptionSet) {
         NakedClass nakedClass = NakedObjects.getObjectPersistor().getNakedClass(specificaton);
         NakedObject classAdapter = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(nakedClass);
 
         Action[] actions;
         actions = specificaton.getClassActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
-            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.USER);
+            addOption(classAdapter, menuOptionSet, actions[i]);
         }
 
         actions = classAdapter.getSpecification().getObjectActions(Action.USER);
         for (int i = 0; i < actions.length; i++) {
-            addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.USER);
+            addOption(classAdapter, menuOptionSet, actions[i]);
         }
 
         actions = specificaton.getClassActions(Action.EXPLORATION);
         if (actions.length > 0) {
             for (int i = 0; i < actions.length; i++) {
-                addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
+                addOption(classAdapter, menuOptionSet, actions[i]);
             }
         }
 
         actions = classAdapter.getSpecification().getObjectActions(Action.EXPLORATION);
         if (actions.length > 0) {
             for (int i = 0; i < actions.length; i++) {
-                addOption(classAdapter, menuOptionSet, actions[i], MenuOptionSet.EXPLORATION);
+                addOption(classAdapter, menuOptionSet, actions[i]);
             }
         }
     }
 
-    private static void addOption(NakedObject cls, MenuOptionSet menuOptionSet, Action action, int type) {
-        MenuOption option;
+    private static void addOption(NakedObject cls, UserActionSet menuOptionSet, Action action) {
+        AbstractUserAction option;
         if (action.getParameterTypes().length == 0) {
             option = ImmediateObjectOption.createOption(action, cls);
         } else {
             option = DialogedObjectOption.createOption(action, cls);
         }
         if (option != null) {
-            menuOptionSet.add(type, option);
+            menuOptionSet.add(option);
         }
     }
 }

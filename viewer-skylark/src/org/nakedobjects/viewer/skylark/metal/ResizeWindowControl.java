@@ -1,5 +1,6 @@
 package org.nakedobjects.viewer.skylark.metal;
 
+import org.nakedobjects.object.Action.Type;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.viewer.skylark.Canvas;
@@ -15,7 +16,6 @@ public class ResizeWindowControl extends WindowControl {
         super(new UserAction() {
 
             public Consent disabled(View view) {
-                //return Allow.DEFAULT;
                 return Veto.DEFAULT;
             }
 
@@ -23,12 +23,17 @@ public class ResizeWindowControl extends WindowControl {
             }
 
             public String getDescription(View view) {
-                return "Show this object as an icon on the workspace";
+                return "";
+            }
+            
+            public Type getType() {
+                return USER;
             }
 
             public String getName(View view) {
-                return "Iconize";
+                return "Resize";
             }}, target);
+        
     }
 
     public void draw(Canvas canvas) {

@@ -5,7 +5,8 @@ import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.logging.SnapshotAppender;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
 
@@ -18,9 +19,9 @@ import org.apache.log4j.Logger;
 /**
  * Display debug window
  */
-public class DebugDumpSnapshotOption extends MenuOption {
+public class DebugDumpSnapshotOption extends AbstractUserAction {
     public DebugDumpSnapshotOption() {
-        super("Dump log snapshot");
+        super("Dump log snapshot", UserAction.DEBUG);
     }
 
     public Consent disabled(View component) {

@@ -2,7 +2,7 @@
 package org.nakedobjects.viewer.skylark.core;
 
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
@@ -10,7 +10,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.apache.log4j.Logger;
 
 
-public class OpenViewOption extends MenuOption {
+public class OpenViewOption extends AbstractUserAction {
     private static final Logger LOG = Logger.getLogger(OpenViewOption.class);
     private ViewSpecification specification;
 

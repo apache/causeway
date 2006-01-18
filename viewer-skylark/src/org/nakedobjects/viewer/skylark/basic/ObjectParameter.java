@@ -9,8 +9,8 @@ import org.nakedobjects.object.control.Veto;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.ParameterContent;
 import org.nakedobjects.viewer.skylark.View;
@@ -110,9 +110,9 @@ public class ObjectParameter extends ObjectContent implements ParameterContent {
         return object != null && object.getResolveState().isTransient();
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         if (object != null) {
-            options.add(MenuOptionSet.USER, new MenuOption("Clear parameter") {
+            options.add(new AbstractUserAction("Clear parameter") {
 
                 public void execute(Workspace workspace, View view, Location at) {
                     clear();

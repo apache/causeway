@@ -17,8 +17,8 @@ import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.MenuOption;
-import org.nakedobjects.viewer.skylark.MenuOptionSet;
+import org.nakedobjects.viewer.skylark.AbstractUserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Skylark;
@@ -97,7 +97,7 @@ public abstract class AbstractView implements View {
         return false;
     }
 
-    public void contentMenuOptions(MenuOptionSet options) {
+    public void contentMenuOptions(UserActionSet options) {
         options.setColor(Style.CONTENT_MENU);
 
         Content content = getContent();
@@ -439,13 +439,13 @@ public abstract class AbstractView implements View {
         throw new NakedObjectRuntimeException();
     }
 
-    protected void replaceOptions(Enumeration possibleViews, MenuOptionSet options) {
+    protected void replaceOptions(Enumeration possibleViews, UserActionSet options) {
         while (possibleViews.hasMoreElements()) {
             ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
 
             if (specification != getSpecification() && view.getClass() != getClass()) {
-                MenuOption viewAs = new ReplaceViewOption(specification);
-                options.add(MenuOptionSet.USER, viewAs);
+                AbstractUserAction viewAs = new ReplaceViewOption(specification);
+                options.add(viewAs);
             }
         }
     }
@@ -480,7 +480,6 @@ public abstract class AbstractView implements View {
     
     public final void setParent(View view) {
         parent = view.getView();
-
         LOG.debug("set parent " + parent + " for " + this);
     }
     
@@ -534,7 +533,7 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void viewMenuOptions(MenuOptionSet options) {
+    public void viewMenuOptions(UserActionSet options) {
         options.setColor(Style.VIEW_MENU);
 
 
@@ -547,8 +546,8 @@ public abstract class AbstractView implements View {
             Enumeration possibleViews = Skylark.getViewFactory().openRootViews(content, null);
             while (possibleViews.hasMoreElements()) {
                 ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
-                MenuOption viewAs = new OpenViewOption(specification);
-                options.add(MenuOptionSet.USER, viewAs);
+                AbstractUserAction viewAs = new OpenViewOption(specification);
+                options.add(viewAs);
             }
         }
 
@@ -562,27 +561,27 @@ public abstract class AbstractView implements View {
                 // offer other/alternative views
                 replaceOptions(Skylark.getViewFactory().openRootViews(content, this), options);
             }
-            options.add(MenuOptionSet.USER, new PrintOption());
+            options.add(new PrintOption());
             if (getParent() != null) {
-                options.add(MenuOptionSet.USER, CLOSE_OPTION);
-                options.add(MenuOptionSet.USER, CLOSE_ALL_OPTION);
-                options.add(MenuOptionSet.USER, CLOSE_VIEWS_FOR_OBJECT);
+                options.add(CLOSE_OPTION);
+                options.add(CLOSE_ALL_OPTION);
+                options.add(CLOSE_VIEWS_FOR_OBJECT);
             }
         }
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Refresh view") {
+        options.add(new AbstractUserAction("Refresh view", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 refresh();
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate content") {
+        options.add(new AbstractUserAction("Invalidate content", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 invalidateContent();
             }
         });
 
-        options.add(MenuOptionSet.DEBUG, new MenuOption("Invalidate layout") {
+        options.add(new AbstractUserAction("Invalidate layout", UserAction.DEBUG) {
             public void execute(Workspace workspace, View view, Location at) {
                 invalidateLayout();
             }
@@ -590,7 +589,7 @@ public abstract class AbstractView implements View {
 
         final UndoStack undoStack = getViewManager().getUndoStack();
         if (!undoStack.isEmpty()) {
-            options.add(MenuOptionSet.USER, new MenuOption("Undo " + undoStack.getNameOfUndo()) {
+            options.add(new AbstractUserAction("Undo " + undoStack.getNameOfUndo()) {
 
                 public Consent disabled(View component) {
                     return new Allow(undoStack.descriptionOfUndo());

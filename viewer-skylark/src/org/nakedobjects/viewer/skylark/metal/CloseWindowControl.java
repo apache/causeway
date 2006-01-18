@@ -1,37 +1,16 @@
 package org.nakedobjects.viewer.skylark.metal;
 
-import org.nakedobjects.object.control.Allow;
-import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
-import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Style;
-import org.nakedobjects.viewer.skylark.UserAction;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.core.CloseViewOption;
 
 
 public class CloseWindowControl extends WindowControl {
 
     public CloseWindowControl(View target) {
-        super(new UserAction() {
-
-            public Consent disabled(View view) {
-                return Allow.DEFAULT;
-            }
-
-            public void execute(Workspace workspace, View view, Location at) {
-                view.dispose();
-            }
-
-            public String getDescription(View view) {
-                return "Close this window";
-            }
-
-            public String getName(View view) {
-                return "Close";
-            }
-        }, target);
+        super(new CloseViewOption(), target);
     }
 
     public void draw(Canvas canvas) {
