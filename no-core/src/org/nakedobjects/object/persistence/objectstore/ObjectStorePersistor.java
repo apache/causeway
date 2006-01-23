@@ -72,6 +72,10 @@ public class ObjectStorePersistor extends AbstracObjectPersistor implements Pers
         for (int i = 0; i < fields.length; i++) {
             NakedObjectField field = fields[i];
 
+            if (field.isDerived()) {
+                continue;
+            }
+
             if (field.isCollection()) {
                 object.clearCollection((OneToManyAssociation) field);
             } else if (field.isValue()) {
