@@ -110,10 +110,7 @@ public class JavaOneToOneAssociation extends JavaField implements OneToOnePeer {
 
         if (aboutMethod == null) {
             DefaultHint hint = new DefaultHint();
-/*            if(hint.getDescription().equals("") && associate != null) {
-                hint.setDescription("Set field " + getName() + " to " + associate.getObject());
-            }
-   */         return hint;
+            return hint;
         }
 
         try {

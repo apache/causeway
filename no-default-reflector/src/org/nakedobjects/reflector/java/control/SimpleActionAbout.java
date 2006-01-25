@@ -27,12 +27,6 @@ public class SimpleActionAbout extends AbstractAbout implements ActionAbout {
         options = new Object[noParams][];
     }
 
-    public void changeNameIfUsable(String name) {
-        if (canUse().isAllowed()) {
-            setName(name);
-        }
-    }
-
     public Object[][] getOptions() {
         return options;
     }
