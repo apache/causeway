@@ -4,17 +4,16 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Image;
-import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.AbstractUserAction;
-import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Style;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.View;
-import org.nakedobjects.viewer.skylark.Workspace;
+import org.nakedobjects.viewer.skylark.core.IconizeViewOption;
 import org.nakedobjects.viewer.skylark.special.ScrollBorder;
 import org.nakedobjects.viewer.skylark.util.ImageFactory;
 
 
 public class WindowBorder extends AbstractWindowBorder {
+    private static final IconizeViewOption iconizeOption = new IconizeViewOption();
 
     public WindowBorder(View wrappedView, boolean scrollable) {
         super(addTransientBorderIfNeccessary(scrollable ? new ScrollBorder(wrappedView) : wrappedView));
@@ -57,24 +56,14 @@ public class WindowBorder extends AbstractWindowBorder {
         return content.isPersistable() && content.isTransient();
     }
 
-    private void iconize(Workspace workspace, View view) {
-        view.dispose();
-        workspace.addIconFor(getContent().getNaked(), getLocation());
-    }
-
     public void viewMenuOptions(UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
-
-        menuOptions.add(new AbstractUserAction("Iconize") {
-            public void execute(Workspace workspace, View view, Location at) {
-                iconize(workspace, view);
-            }
-        });
+        menuOptions.add(iconizeOption);
     }
 
     public void secondClick(Click click) {
         if (overBorder(click.getLocation())) {
-            iconize(getWorkspace(), getView());
+            iconizeOption.execute(getWorkspace(), getView(), getAbsoluteLocation());
         } else {
             super.secondClick(click);
         }

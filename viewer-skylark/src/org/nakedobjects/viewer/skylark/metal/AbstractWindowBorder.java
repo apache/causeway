@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.Location;
@@ -89,12 +90,16 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
         Bounds bounds = getBounds();
         canvas.drawSolidRectangle(3, 3, bounds.getWidth() - 6, bounds.getHeight() - 6, Style.background(getSpecification()));
 
+        boolean hasFocus = containsFocus();
+        Color lightColor =hasFocus ? Style.SECONDARY1 : Style.SECONDARY2;
+        Color darkColor = hasFocus ? Style.BLACK:  Style.SECONDARY1;
+
         // slightly rounded grey border
-        canvas.drawRectangle(1, 0, width - 2, height, Style.SECONDARY1);
-        canvas.drawRectangle(0, 1, width, height - 2, Style.SECONDARY1);
+        canvas.drawRectangle(1, 0, width - 2, height, lightColor);
+        canvas.drawRectangle(0, 1, width, height - 2, lightColor);
 
         for (int i = 2; i < left; i++) {
-            canvas.drawRectangle(i, i, width - 2 * i, height - 2 * i, Style.SECONDARY1);
+            canvas.drawRectangle(i, i, width - 2 * i, height - 2 * i, lightColor);
         }
 
         ViewState state = getState();
@@ -104,23 +109,24 @@ public abstract class AbstractWindowBorder extends AbstractBorder {
         }
 
         // vertical lines within border
-        canvas.drawLine(2, 15, 2, height - 15, Style.BLACK);
+        canvas.drawLine(2, 15, 2, height - 15, darkColor);
         canvas.drawLine(3, 16, 3, height - 14, Style.PRIMARY1);
-        canvas.drawLine(width - 3, 15, width - 3, height - 15, Style.BLACK);
+        canvas.drawLine(width - 3, 15, width - 3, height - 15, darkColor);
         canvas.drawLine(width - 2, 16, width - 2, height - 14, Style.PRIMARY1);
 
         // horizontal lines within border
-        canvas.drawLine(15, 2, width - 15, 2, Style.BLACK);
+        canvas.drawLine(15, 2, width - 15, 2, darkColor);
         canvas.drawLine(16, 3, width - 14, 3, Style.PRIMARY1);
-        canvas.drawLine(15, height - 3, width - 15, height - 3, Style.BLACK);
+        canvas.drawLine(15, height - 3, width - 15, height - 3, darkColor);
         canvas.drawLine(16, height - 2, width - 14, height - 2, Style.PRIMARY1);
 
+        Color titleBarColor = hasFocus ? Style.SECONDARY2 : Style.SECONDARY3;
         canvas.drawSolidRectangle(left, LINE_THICKNESS, width - left - right, titlebarHeight,
-                getState().isRootViewIdentified() ? Style.PRIMARY2 : Style.SECONDARY2);
+               titleBarColor);
         int y = LINE_THICKNESS + titlebarHeight - 1;
-        canvas.drawLine(x, y, width - right - 1, y, Style.SECONDARY1);
+        canvas.drawLine(x, y, width - right - 1, y, lightColor);
 
-        canvas.drawText(title(), x + HPADDING, baseline, Style.BLACK, TITLE_STYLE);
+        canvas.drawText(title(), x + HPADDING, baseline, darkColor, TITLE_STYLE);
 
         for (int i = 0; controls != null && i < controls.length; i++) {
             Canvas controlCanvas = canvas.createSubcanvas(controls[i].getBounds());

@@ -6,7 +6,6 @@ import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.Workspace;
-import org.nakedobjects.viewer.skylark.basic.RootIconSpecification;
 
 
 public class IconizeViewOption extends AbstractUserAction {
@@ -19,9 +18,29 @@ public class IconizeViewOption extends AbstractUserAction {
     }
 
     public void execute(Workspace workspace, View view, Location at) {
+        MinimizedView minimizedView = new MinimizedView(view);
+        minimizedView.setLocation(view.getLocation());
+        //workspace.replaceView(view, minimizedView);
+        
+        
+        View[] views = workspace.getSubviews();
+        for (int i = 0; i < views.length; i++) {
+            if (views[i] == view) {
+                minimizedView.setParent(workspace);
+                minimizedView.setLocation(view.getLocation());
+                workspace.removeView(view);
+                workspace.addView(minimizedView);
+                workspace.invalidateLayout();
+                return;
+            }
+        }
+        
+        /*
+        // TODO change so that an iconsized version of the window is created and displayed, which holds the original view.
         View iconView = new RootIconSpecification().createView(view.getContent(), null);
         iconView.setLocation(view.getLocation());
         workspace.replaceView(view, iconView);
+        */
     }
 
     public String getDescription(View view) {
