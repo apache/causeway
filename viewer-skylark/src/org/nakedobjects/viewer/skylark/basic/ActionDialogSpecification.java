@@ -114,7 +114,8 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
                     Naked result = actionContent.execute();
                     if (result != null) {
                         move(at);
-                        workspace.addOpenViewFor(result, at);
+                        View newView = workspace.addOpenViewFor(result, at);
+                        view.getViewManager().setKeyboardFocus(newView);
                     }
                     view.getViewManager().showMessages();
                 }
@@ -141,7 +142,7 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
         public void execute(Workspace workspace, View view, Location at) {
             super.execute(workspace, view, at);
-            view.getViewManager().clearKeyboardFocus();
+      //      view.getViewManager().clearKeyboardFocus();
             view.dispose();
         }
 

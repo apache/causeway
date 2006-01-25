@@ -50,16 +50,15 @@ public class ObjectBorder extends AbstractBorder {
 	    
 		Color color = null;
 		ViewState state = getState();
-        if(state.isActive()) {
-	//	    color = Style.ACTIVE;
-        } else if(state.canDrop()) {
+		boolean hasFocus = getViewManager().hasFocus(getView());
+        if(state.canDrop()) {
 		    color = Style.VALID;
 		} else if(state.cantDrop()) {
             color = Style.INVALID;
+		}  else if(hasFocus) {
+		    color = Style.IDENTIFIED;
 		} else if(state.isObjectIdentified()) {
             color = Style.SECONDARY2;
-		}  else if(getViewManager().hasFocus(getView())) {
-            color = Style.IDENTIFIED;
 		}
 		Size s  = getSize();
 		
@@ -75,17 +74,19 @@ public class ObjectBorder extends AbstractBorder {
 		}
         
 		if(color != null) {
-			int xExtent = s.getWidth();
-			//int yExtent = s.getHeight();
-			
-			//canvas.drawRectangle(0, 0, xExtent, yExtent, color);
-			
-			for (int i = 0; i < left; i++) {
-				canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 2 * i, color);
-			}
-            
-            canvas.drawLine(xExtent - BORDER, left, xExtent - BORDER, left + s.getHeight(), color);
-            canvas.drawSolidRectangle(xExtent - BORDER + 1, left, BORDER - 2, s.getHeight() - 2 * left, Style.SECONDARY3);
+            if(hasFocus) {
+                int xExtent = s.getWidth() - left;
+                for (int i = 0; i < left; i++) {
+                    canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 2 * i, color);
+                }
+            } else {
+    			int xExtent = s.getWidth();
+    			for (int i = 0; i < left; i++) {
+    				canvas.drawRectangle(i, i, xExtent - 2 * i, s.getHeight() - 2 * i, color);
+    			}
+                canvas.drawLine(xExtent - BORDER, left, xExtent - BORDER, left + s.getHeight(), color);
+                canvas.drawSolidRectangle(xExtent - BORDER + 1, left, BORDER - 2, s.getHeight() - 2 * left, Style.SECONDARY3);
+            }
 		}
 	}
 	

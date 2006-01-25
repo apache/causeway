@@ -76,7 +76,6 @@ public class Viewer {
     private boolean doubleBuffering = false;
     private Insets insets;
     private Size internalDisplaySize = new Size(1, 1);
-    private View keyboardFocus;
     private ObjectViewingMechanismListener listener;
     private View overlayView;
     private final Bounds redrawArea;
@@ -87,12 +86,13 @@ public class Viewer {
     private boolean showExplorationMenuByDefault;
     private boolean showRepaintArea;
     private InteractionSpy spy;
-    private Bounds statusBarArea;
+    private Bounds statusBarArea = new Bounds();
     private int statusBarHeight;
     private final UndoStack undoStack = new UndoStack();
     protected ViewUpdateNotifier updateNotifier;
 
     private String userStatus;
+    private KeyboardManager keyboardManager;
 
     public Viewer() {
         instance = this;
@@ -121,14 +121,34 @@ public class Viewer {
      * Removes the focus from the specified view; assuming the the specified view has the focus.
      */
     public void clearKeyboardFocus() {
-        keyboardFocus = null;
+  //      setKeyboardFocus(null);
+    }
+
+    public void setKeyboardFocus(View view) {
+        if(view == null) {
+            throw new NullPointerException();
+        }
+        
+        if(keyboardManager.getFocusManager() != null &&  keyboardManager.getFocusManager().getFocus() != null &&  keyboardManager.getFocusManager().getFocus().getParent() != null) {
+            keyboardManager.getFocusManager().getFocus().getParent().markDamaged();
+        }
+        
+        FocusManager focusManager = view.getFocusManager();
+        if(focusManager != null) {
+            focusManager.setFocus(view);
+            if(view.getParent() != null) {
+                view.getParent().markDamaged();
+            }
+        }
+        keyboardManager.setFocusManager(focusManager);
+     //   keyboardFocus = view == null ? rootView : view;
     }
 
     public void clearOverlayView() {
         overlayView.markDamaged();
-        if (overlayView == keyboardFocus) {
-            keyboardFocus = null;
-        }
+   //     if (overlayView == keyboardFocus) {
+       //     clearKeyboardFocus();
+     //   }
         overlayView = CLEAR_OVERLAY;
     }
 
@@ -193,8 +213,8 @@ public class Viewer {
         this.repaint();
     }
 
-    protected View getFocus() {
-        return keyboardFocus;
+    private FocusManager getFocusManager() {
+        return overlayView == CLEAR_OVERLAY ?  keyboardManager.getFocusManager(): overlayView.getFocusManager();
     }
 
     public Bounds getOverlayBounds() {
@@ -218,7 +238,8 @@ public class Viewer {
     }
 
     public boolean hasFocus(View view) {
-        return keyboardFocus == view;
+        FocusManager focusManager = keyboardManager.getFocusManager();
+        return focusManager  != null && focusManager.getFocus() == view;
     }
 
     public View identifyView(Location location, boolean includeOverlay) {
@@ -242,7 +263,8 @@ public class Viewer {
 
         spy = new InteractionSpy();
 
-        InteractionHandler interactionHandler = new InteractionHandler(this, spy);
+        keyboardManager = new KeyboardManager(this);
+        InteractionHandler interactionHandler = new InteractionHandler(this, keyboardManager, spy);
         renderingArea.addMouseMotionListener(interactionHandler);
         renderingArea.addMouseListener(interactionHandler);
         renderingArea.addKeyListener(interactionHandler);
@@ -252,6 +274,8 @@ public class Viewer {
         if (NakedObjects.getConfiguration().getBoolean(PROPERTY_BASE + "show-mouse-spy", false)) {
             spy.open();
         }
+        
+        setKeyboardFocus(rootView);
     }
 
     public boolean isBusy(View view) {
@@ -289,29 +313,22 @@ public class Viewer {
             }
         };
     }
-
+/*
     public void makeFocus(View view) {
         if (view != null && view.canFocus()) {
-            if ((keyboardFocus != null) && (keyboardFocus != view)) {
-                keyboardFocus.focusLost();
-                keyboardFocus.markDamaged();
+            View focus = getFocus();
+            if ((focus != null) && (focus != view)) {
+                focus.focusLost();
+                focus.markDamaged();
             }
 
-            keyboardFocus = view;
-            keyboardFocus.focusReceived();
+            setKeyboardFocus(view);
+            focus.focusReceived();
 
             view.markDamaged();
         }
     }
-
-    public void makeWindowFocus(View view) {
-        if (view != null && view.canFocus()) {
-            // windowFocus = view;
-            keyboardFocus.focusLost();
-            keyboardFocus = null;
-        }
-    }
-
+*/
     public void markDamaged(Bounds bounds) {
         if (spy != null) {
             spy.addDamagedArea(bounds);
@@ -530,16 +547,11 @@ public class Viewer {
         }
     }
 
-    protected void popupMenu(View over, Click click) {
+    protected void popupMenu(View over, Location at, boolean forView, boolean includeExploration, boolean includeDebug) {
         saveCurrentFieldEntry();
 
-        Location at = click.getLocation();
-        boolean forView = rootView.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
-
-        forView = click.isAlt() ^ forView;
-        boolean includeExploration = runningAsExploration && (click.isCtrl() || showExplorationMenuByDefault);
-        boolean includeDebug = click.isShift() && click.isCtrl();
-
+        includeExploration = runningAsExploration && (includeExploration || showExplorationMenuByDefault);
+        
         popupStatus(over, forView, includeExploration, includeDebug);
 
         UserActionSet optionSet = new UserActionSet(includeExploration, includeDebug, UserAction.USER);
@@ -568,7 +580,7 @@ public class Viewer {
         menuContainer.setLocation(location);
         menuContainer.limitBoundsWithin(getOverlayBounds());
 
-        makeFocus(menuContainer);
+//        makeFocus(menuContainer);
     }
 
     /*
@@ -610,7 +622,7 @@ public class Viewer {
         StringBuffer status = new StringBuffer("Menu for ");
         if (forView) {
             status.append("view ");
-            status.append(over.getSpecification().getName());
+            status.append(AbstractView.name(over));
         } else {
             status.append("object: ");
             Content content = over.getContent();
@@ -654,9 +666,10 @@ public class Viewer {
     }
 
     public void saveCurrentFieldEntry() {
-        if (keyboardFocus != null) {
-            keyboardFocus.editComplete();
-            keyboardFocus.markDamaged();
+        View focus = getFocusManager().getFocus();
+        if (focus  != null) {
+            focus.editComplete();
+            focus.markDamaged();
         }
     }
 
@@ -689,6 +702,10 @@ public class Viewer {
     public void setOverlayView(View view) {
         disposeOverlayView();
         overlayView = view;
+        FocusManager focusManager = view.getFocusManager();
+        if(focusManager != null) {
+            keyboardManager.setFocusManager(focusManager);
+        }
         view.limitBoundsWithin(rootView.getBounds());
         overlayView.markDamaged();
     }
@@ -810,15 +827,20 @@ public class Viewer {
     }
 
     public void showException(Throwable e) {
-        //Naked error = NakedObjects.getObjectLoader().getAdapterForElseCreateAdapterForTransient(e);
-        // TODO centre view
-        // centre = view.getWorkspace().getAbsoluteLocation();
-        // rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
         ExceptionMessageContent content = new ExceptionMessageContent(e);
         View view = Skylark.getViewFactory().createWindow(content);
-    //    rootView.getWorkspace().addOpenViewFor(error, new Location(20, 20));
-        view.setLocation( new Location(20, 20));
+        
+        locateInCentre(view);
         rootView.getWorkspace().addView(view);
+    }
+
+    private void locateInCentre(View view) {
+        Size rootSize = rootView.getSize();
+        Location location = new Location(rootSize.getWidth() / 2, rootSize.getHeight() / 2);
+        Size dialogSize = view.getRequiredSize();
+        location.subtract(dialogSize.getWidth() / 2, dialogSize.getHeight() / 2);
+        
+        view.setLocation(location);
     }
 
     public void showHandCursor() {
@@ -840,7 +862,7 @@ public class Viewer {
         for (int i = 0; i < warnings.length; i++) {
             TextMessageContent content = new TextMessageContent("Warning", warnings[i]);
             View view = Skylark.getViewFactory().createWindow(content);
-            view.setLocation( new Location(20, 20));
+            locateInCentre(view);
             rootView.getWorkspace().addView(view);
        }
 
@@ -950,7 +972,11 @@ public class Viewer {
     }
 
     public boolean isOverlayAvailable() {
-        return overlayView == CLEAR_OVERLAY;
+        return overlayView != CLEAR_OVERLAY;
+    }
+
+    public void makeRootFocus() {
+   //     makeFocus(rootView);
     }
 }
 

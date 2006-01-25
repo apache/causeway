@@ -20,6 +20,10 @@ public class Button extends AbstractControlView {
         this.buttonHeight = 4 + Style.NORMAL.getTextHeight() + 4;
     }
 
+    public boolean containsFocus() {
+        return hasFocus();
+    }
+    
     public void draw(Canvas canvas) {
         int x = 0;
         int y = 0;
@@ -54,7 +58,7 @@ public class Button extends AbstractControlView {
         markDamaged();
         super.exited();
     }
-
+    
     public Size getRequiredSize() {
         String text = action.getName(getView());
         int buttonWidth = TEXT_PADDING + Style.NORMAL.stringWidth(text) + TEXT_PADDING;

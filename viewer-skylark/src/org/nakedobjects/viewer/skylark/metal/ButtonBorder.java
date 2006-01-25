@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
@@ -78,14 +79,15 @@ public class ButtonBorder extends AbstractBorder {
         return super.identify(location);
     }
 
-    public void keyPressed(final int keyCode, final int modifiers) {
-        if (keyCode == KeyEvent.VK_ENTER) {
+    public void keyPressed(KeyboardAction key) {
+        if (key.getKeyCode() == KeyEvent.VK_ENTER) {
             if (defaultAction != null && defaultAction.disabled(getView()).isAllowed()) {
+                key.consume();
                 defaultAction.execute(getWorkspace(), getView(), getLocation());
             }
         }
 
-        super.keyPressed(keyCode, modifiers);
+        super.keyPressed(key);
     }
 
     public void layout(int width) {

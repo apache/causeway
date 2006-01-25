@@ -15,7 +15,6 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -81,28 +80,32 @@ public class PopupMenuTest extends TestCase {
 	}
 
 	public void testKeyUpDown() {
-        popup.keyPressed(KeyEvent.VK_DOWN, 0);
+        KeyboardAction action = new KeyboardAction(0, 0);
+        
+        popup.keyPressed(action);
 		assertEquals(2, popup.getOption());
 
-		popup.keyPressed(KeyEvent.VK_DOWN, 0);
+		popup.keyPressed(action);
 		assertEquals(3, popup.getOption());
 
-		popup.keyPressed(KeyEvent.VK_DOWN, 0);
+		popup.keyPressed(action);
 		assertEquals(3, popup.getOption());
 
-		popup.keyPressed(KeyEvent.VK_UP, 0);
+		popup.keyPressed(action);
 		assertEquals(2, popup.getOption());
 
-		popup.keyPressed(KeyEvent.VK_UP, 0);
+		popup.keyPressed(action);
 		assertEquals(0, popup.getOption());
 
-		popup.keyPressed(KeyEvent.VK_UP, 0);
+		popup.keyPressed(action);
 		assertEquals(0, popup.getOption());
 	}
 
 	public void testKeyInvoke() {
-		popup.keyPressed(KeyEvent.VK_DOWN, 0);
-		popup.keyPressed(KeyEvent.VK_ENTER, 0);
+        KeyboardAction action = new KeyboardAction(0, 0);
+
+        popup.keyPressed(action);
+		popup.keyPressed(action);
 
 		assertFalse(view.action1.executed);
 		assertTrue(view.action3.executed);
@@ -380,7 +383,7 @@ public class PopupMenuTest extends TestCase {
 
                 public void invalidateLayout() {}
 
-                public void keyPressed(int keyCode, int modifiers) {}
+                public void keyPressed(KeyboardAction key) {}
 
                 public void keyReleased(int keyCode, int modifiers) {}
 
@@ -447,6 +450,14 @@ public class PopupMenuTest extends TestCase {
                 public void mouseDown(Click click) {}
 
                 public void mouseUp(Click click) {}
+
+                public boolean containsFocus() {
+                    return false;
+                }
+
+                public FocusManager getFocusManager() {
+                    return null;
+                }
             };
         }
 	}

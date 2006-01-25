@@ -42,7 +42,13 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     }
 
     public View addOpenViewFor(Naked object, Location at) {
-        return openViewFor(object, at, false);
+        View window = openViewFor(object, at, false);
+        
+        getViewManager().setKeyboardFocus(window);
+        window.layout();
+        window.getFocusManager().focusFirstChildView();
+        
+        return window;
     }
 
     private View openViewFor(Naked object, Location at, boolean asIcon) {
@@ -115,7 +121,6 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
     public View createSubviewFor(Naked object, boolean asIcon) {
         View view;
         Content content = Skylark.getContentFactory().createRootContent(object);
-        // newView = getSpecification().createViewView(content, getViewAxis());
         if (asIcon) {
             view = Skylark.getViewFactory().createIcon(content);
         } else {
@@ -128,7 +133,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
         getViewManager().showDefaultCursor();
 
         View view = drag.getSourceView();
-        if (view.getSpecification().isSubView()) {
+        if (view.getSpecification() != null && view.getSpecification().isSubView()) {
             if (view.getSpecification().isOpen()) {
                 // TODO remove the open view from the container and place on
                 // workspace; replace the internal view with an icon

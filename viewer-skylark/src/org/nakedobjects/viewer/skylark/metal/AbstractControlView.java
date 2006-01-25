@@ -9,7 +9,9 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.InternalDrag;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
@@ -51,6 +53,10 @@ public abstract class AbstractControlView implements View {
         return false;
     }
 
+    public boolean containsFocus() {
+        return false;
+    }
+    
     public void contentMenuOptions(UserActionSet menuOptions) {}
 
     public String debugDetails() {
@@ -144,6 +150,10 @@ public abstract class AbstractControlView implements View {
         return 0;
     }
 
+    public FocusManager getFocusManager() {
+        return getParent() == null ? null : getParent().getFocusManager();
+    }
+    
     public Location getLocation() {
         return new Location(location);
     }
@@ -200,7 +210,7 @@ public abstract class AbstractControlView implements View {
 
     public void invalidateLayout() {}
 
-    public void keyPressed(int keyCode, int modifiers) {}
+    public void keyPressed(KeyboardAction key) {}
 
     public void keyReleased(int keyCode, int modifiers) {}
 

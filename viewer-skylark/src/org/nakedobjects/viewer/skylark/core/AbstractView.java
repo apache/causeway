@@ -15,7 +15,9 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.InternalDrag;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.UserActionSet;
@@ -58,6 +60,18 @@ public abstract class AbstractView implements View {
     private int x;
     private int y;
 
+    
+    // TODO remove this, as all views should have a spec
+    public static String name(View view) {
+        ViewSpecification specification = view.getSpecification();
+        if(specification == null) {
+            String name = view.getClass().getName();
+            return name.substring(name.lastIndexOf('.') + 1);
+        } else {
+            return specification.getName();
+        }
+    }
+    
     protected AbstractView() {
         this(null, null, null);
     }
@@ -97,6 +111,20 @@ public abstract class AbstractView implements View {
         return false;
     }
 
+    public boolean containsFocus() {
+        if(hasFocus()) {
+            return true;
+        }
+        
+        View[] subviews = getSubviews();
+        for (int i = 0; i < subviews.length; i++) {
+            if (subviews[i].containsFocus()) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
     public void contentMenuOptions(UserActionSet options) {
         options.setColor(Style.CONTENT_MENU);
 
@@ -259,6 +287,10 @@ public abstract class AbstractView implements View {
         return content;
     }
 
+    public FocusManager getFocusManager() {
+        return getParent() == null ? null : getParent().getFocusManager();
+    }
+    
     public int getId() {
         return id;
     }
@@ -266,7 +298,7 @@ public abstract class AbstractView implements View {
     public Location getLocation() {
         return new Location(x, y);
     }
-
+    
     public Padding getPadding() {
         return new Padding(0, 0, 0, 0);
     }
@@ -286,6 +318,9 @@ public abstract class AbstractView implements View {
     }
 
     public ViewSpecification getSpecification() {
+        if(specification == null) {
+            specification = new NonBuildingSpecification(this);
+        }
         return specification;
     }
 
@@ -306,7 +341,6 @@ public abstract class AbstractView implements View {
     }
 
     public Viewer getViewManager() {
-        //        return viewer;
         return Viewer.getInstance();
     }
 
@@ -341,7 +375,7 @@ public abstract class AbstractView implements View {
         }
     }
 
-    public void keyPressed(int keyCode, int modifiers) {}
+    public void keyPressed(KeyboardAction key) {}
 
     public void keyReleased(int keyCode, int modifiers) {}
 
@@ -551,13 +585,13 @@ public abstract class AbstractView implements View {
             }
         }
 
-        if (view.getSpecification().isSubView()) {
+        if (view.getSpecification() != null && view.getSpecification().isSubView()) {
             if (view.getSpecification().isReplaceable()) {
                 replaceOptions(Skylark.getViewFactory().openSubviews(content, this), options);
                 replaceOptions(Skylark.getViewFactory().closedSubviews(content, this), options);
             }
         } else {
-            if (view.getSpecification().isReplaceable()) {
+            if (view.getSpecification() != null && view.getSpecification().isReplaceable()) {
                 // offer other/alternative views
                 replaceOptions(Skylark.getViewFactory().openRootViews(content, this), options);
             }

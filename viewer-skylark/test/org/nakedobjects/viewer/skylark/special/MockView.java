@@ -8,8 +8,10 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ContentDrag;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
+import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.InteractionSpy;
 import org.nakedobjects.viewer.skylark.InternalDrag;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
@@ -191,7 +193,7 @@ public class MockView implements View {
 
     public void invalidateLayout() {}
 
-    public void keyPressed(int keyCode, int modifiers) {}
+    public void keyPressed(KeyboardAction key) {}
 
     public void keyReleased(int keyCode, int modifiers) {}
 
@@ -294,6 +296,14 @@ public class MockView implements View {
     public void mouseDown(Click click) {}
 
     public void mouseUp(Click click) {}
+
+    public boolean containsFocus() {
+        return false;
+    }
+
+    public FocusManager getFocusManager() {
+        return null;
+    }
 }
 
 /*

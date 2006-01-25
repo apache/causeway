@@ -13,8 +13,11 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.Image;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
+import org.nakedobjects.viewer.skylark.SimpleFocusManager;
 import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Shape;
@@ -164,10 +167,13 @@ public class DefaultPopupMenu extends AbstractView {
     private Item[] items = new Item[0];
     private int optionIdentified;
     private View submenu = new NullView();
+    private SimpleFocusManager simpleFocusManager;
 
     public DefaultPopupMenu() {
         super(null, new PopupSpecification(), null);
         setContent(new PopupContent());
+        simpleFocusManager = new SimpleFocusManager();
+        simpleFocusManager.setFocus(this);
     }
 
     private void addItems(View target, UserAction[] options, int len, Vector list, Type type) {
@@ -324,6 +330,10 @@ public class DefaultPopupMenu extends AbstractView {
         return forView.getWorkspace();
     }
 
+    public FocusManager getFocusManager() {
+        return simpleFocusManager;
+    }
+    
     public boolean hasFocus() {
         return false;
     }
@@ -379,14 +389,19 @@ public class DefaultPopupMenu extends AbstractView {
         }
     }
 
-    public void keyPressed(int keyCode, int modifiers) {
+    public void keyPressed(KeyboardAction key) {
+        int keyCode = key.getKeyCode();
+        
         if (keyCode == KeyEvent.VK_ESCAPE) {
+            key.consume();
             dispose();
 
         } else if (keyCode == KeyEvent.VK_ENTER) {
+            key.consume();
             invoke();
 
         } else if (keyCode == KeyEvent.VK_UP) {
+            key.consume();
             if (optionIdentified == 0) {
                 optionIdentified = items.length;
             }
@@ -403,6 +418,7 @@ public class DefaultPopupMenu extends AbstractView {
             }
 
         } else if (keyCode == KeyEvent.VK_DOWN) {
+            key.consume();
             if (optionIdentified == items.length - 1) {
                 optionIdentified = -1;
             }

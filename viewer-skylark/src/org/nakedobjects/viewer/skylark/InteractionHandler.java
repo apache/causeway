@@ -28,10 +28,10 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
     private final Viewer viewer;
     private KeyEvent lastTyped;
 
-    InteractionHandler(Viewer viewer, InteractionSpy spy) {
+    InteractionHandler(Viewer viewer, KeyboardManager keyboardManager, InteractionSpy spy) {
         this.viewer = viewer;
         this.spy = spy;
-        keyboardManager = new KeyboardManager(viewer);
+        this.keyboardManager = keyboardManager;
     }
 
     private void drag(MouseEvent me) {
@@ -86,22 +86,26 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             return;
         }
         
-       // LOG.debug("pressed " + KeyEvent.getKeyText(ke.getKeyCode()));
         lastTyped = null;
         try {
-            if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) {
+            if (ke.getKeyCode() == KeyEvent.VK_ESCAPE && drag != null) {
                 if (drag != null) {
                     drag.cancel(viewer);
                     drag = null;
                 }
                 viewer.clearStatus();
                 viewer.clearOverlayView();
+            } else if (ke.getKeyCode() == KeyEvent.VK_ESCAPE && viewer.isOverlayAvailable()) {
+                viewer.clearStatus();
+                viewer.clearOverlayView();
+            } else {
+                keyboardManager.pressed(ke.getKeyCode(), ke.getModifiers());
             }
-            keyboardManager.pressed(ke.getKeyCode(), ke.getModifiers());
-
+            //ke.consume();
+            
             redraw();
         } catch (Exception e) {
-            log("keyPressed", e);
+            interactionException("keyPressed", e);
         }
     }
 
@@ -114,6 +118,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
         if(isBusy(null)) {
             return;
         }
+     //   LOG.debug("key " + KeyEvent.getKeyText(ke.getKeyCode()) + " released\n");
         
         try {
             if (lastTyped == null && ke.getKeyCode() != KeyEvent.VK_SHIFT && ke.getKeyCode() != KeyEvent.VK_ALT
@@ -122,10 +127,12 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     LOG.error("no type event for '" + KeyEvent.getKeyText(ke.getKeyCode()) + "':  " + ke);
                 }
             }
+        
             keyboardManager.released(ke.getKeyCode(), ke.getModifiers());
+            ke.consume();
             redraw();
         } catch (Exception e) {
-            log("keyReleased", e);
+            interactionException("keyReleased", e);
         }
 
     }
@@ -141,22 +148,22 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             return;
         }
         
-        lastTyped = ke;
-        if (!ke.isActionKey()) {
-            LOG.debug("typed '" + ke.getKeyChar() + "':  " + ke);
-            keyboardManager.typed(ke.getKeyChar());
+        char keyChar = ke.getKeyChar();
+        if (!Character.isISOControl(keyChar)) { 
+            // ignoring control keys and the delete key
+     //       LOG.debug("typed '" + keyChar + "':  " + ke);
+       //     LOG.debug("typed " + (int) keyChar); 
+            keyboardManager.typed(keyChar);
+            ke.consume();
+            lastTyped = ke;
             redraw();
-        } else {
-            LOG.debug("typed (ignored) " + ke.getKeyChar());
         }
     }
 
-    private void log(String action, Exception e) {
+    private void interactionException(String action, Exception e) {
         LOG.error("error during user interaction: " + action  , e);
-        
-        // TODO create an exception layer (within Viewer) that displays dialog to user and allows them to abort or continue
-        viewer.setStatus("error during interaction, see log");
-//        getWorkspace().addOpenViewFor(result, at);
+        // viewer.setStatus("error during interaction, see log");
+        viewer.showException(e);
     }
 
     /**
@@ -174,9 +181,18 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             Click click = new Click(identifiedView, downAt, me.getModifiers());
             spy.addAction("Mouse clicked " + click.getLocation());
 
-            if (click.button3() && viewer.isOverlayAvailable() && identifiedView != null) {
+            if (click.button3() && ! viewer.isOverlayAvailable() && identifiedView != null) {
                     spy.addAction(" popup " + downAt + " over " + identifiedView);
-                    viewer.popupMenu(identifiedView, click);
+                    
+
+                    Location at = click.getLocation();
+                    boolean forView = viewer.viewAreaType(new Location(click.getLocation())) == ViewAreaType.VIEW;
+
+                    forView = click.isAlt() ^ forView;
+                    boolean includeExploration = click.isCtrl();
+                    boolean includeDebug = click.isShift() && click.isCtrl();
+
+                    viewer.popupMenu(identifiedView, at, forView, includeExploration, includeDebug);
 
             } else {
                 switch (me.getClickCount()) {
@@ -198,7 +214,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             }
             redraw();
         } catch (Exception e) {
-            log("mouseClicked", e);
+            interactionException("mouseClicked", e);
         }
     }
 
@@ -230,7 +246,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 }
             }
         } catch (Exception e) {
-            log("mouseDragged", e);
+            interactionException("mouseDragged", e);
         }
 
     }
@@ -308,7 +324,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 }
             }
         } catch (Exception e) {
-            log("mouseMoved", e);
+            interactionException("mouseMoved", e);
         }
 
     }
@@ -350,7 +366,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 viewer.clearStatus();
                 viewer.disposeOverlayView();
             }
-            viewer.makeFocus(overView);
+            viewer.setKeyboardFocus(overView);
             Click click = new Click(null, downAt, me.getModifiers());
             viewer.mouseDown(click);
             // drag should not be valid after double/triple click
@@ -358,7 +374,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             identifiedView = overView;
             redraw();
         } catch (Exception e) {
-            log("mousePressed", e);
+            interactionException("mousePressed", e);
         }
 
     }
@@ -393,7 +409,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
             viewer.mouseUp(click);
             redraw();
         } catch (Exception e) {
-            log("mouseReleased", e);
+            interactionException("mouseReleased", e);
         }
     }
 

@@ -8,8 +8,10 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.CompositeViewBuilder;
 import org.nakedobjects.viewer.skylark.CompositeViewSpecification;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Padding;
+import org.nakedobjects.viewer.skylark.SimpleFocusManager;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
@@ -29,6 +31,7 @@ public class CompositeView extends ObjectView {
     private int layoutCount = 0;
     private boolean layoutInvalid = true;
     protected Vector views;
+    private FocusManager focusManager = new SimpleFocusManager();
 
     public CompositeView(Content content, CompositeViewSpecification specification, ViewAxis axis) {
         super(content, specification, axis);
@@ -65,7 +68,7 @@ public class CompositeView extends ObjectView {
         View views[] = getSubviews();
         for (int i = 0; i < views.length; i++) {
             View subview = views[i];
-            b.appendln(4, subview.getSpecification().getName());
+            b.appendln(4, AbstractView.name(subview));
             b.appendln(8, "Bounds", subview.getBounds());
             b.appendln(8, "Required size ", subview.getRequiredSize());
             b.appendln(8, "Content", subview.getContent().getId());
@@ -118,6 +121,10 @@ public class CompositeView extends ObjectView {
         }
     }
 
+    public FocusManager getFocusManager() {
+        return focusManager ;
+    }
+    
     public Size getRequiredSize() {
         Size size = builder.getRequiredSize(this);
         size.extend(getPadding());

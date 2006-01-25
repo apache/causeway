@@ -5,26 +5,111 @@ import org.nakedobjects.utility.NakedObjectRuntimeException;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import org.apache.log4j.Logger;
+
 
 public class KeyboardManager {
+    private static final Logger LOG = Logger.getLogger(KeyboardManager.class);
     private final Viewer viewer;
-
+    private FocusManager focusManager;
+    
+    
     public KeyboardManager(Viewer viewer) {
         this.viewer = viewer;
     }
 
     private View getFocus() {
-        View focus = viewer.getFocus();
-        return focus == null ? null : focus.getView();
+        return focusManager == null ? null : focusManager.getFocus();
+//        View focus = viewer.getFocus();
+//        return focus == null ? null : focus.getView();
     }
 
     /*
      * At the moment, as a fudge, the text field is calling its parent's keyPressed method for enter presses.
      */
     public void pressed(final int keyCode, final int modifiers) {
+        LOG.debug("key " + KeyEvent.getKeyModifiersText(modifiers) + " '" + KeyEvent.getKeyText(keyCode) + "' pressed");
+
+        
         View keyboardFocus = getFocus();
-        if (keyboardFocus != null) {
-            keyboardFocus.keyPressed(keyCode, modifiers);
+
+        if (keyboardFocus == null) {
+            throw new NakedObjectRuntimeException("No focus set");
+        }
+        
+        KeyboardAction keyboardAction = new KeyboardAction(keyCode, modifiers);
+        
+        keyboardFocus.keyPressed(keyboardAction);
+
+        if(keyboardAction.isConsumed()) {
+            return;
+        }
+        
+        if((modifiers & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK && keyCode == KeyEvent.VK_X) {
+            viewer.close();
+            return;
+        }
+       
+
+        if((modifiers & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK && keyCode == KeyEvent.VK_F10) {
+            Location location = keyboardFocus.getAbsoluteLocation();
+            location.add(20, 14);
+            viewer.popupMenu(keyboardFocus, location, true, false, false);
+            return;
+        }
+
+        // this should really check the modifiers to ensure there are none in use.
+        if(keyCode == KeyEvent.VK_F10) {
+            Location location = keyboardFocus.getAbsoluteLocation();
+            location.add(20, 14);
+            viewer.popupMenu(keyboardFocus, location, false, false, false);
+            return;
+        }
+
+        if(keyCode == KeyEvent.VK_ENTER) {
+            //viewer.firstClick(new Click(keyboardFocus, keyboardFocus.getLocation(), modifiers));
+            Location location = keyboardFocus.getAbsoluteLocation();
+            location.add(1, 1);
+          viewer.secondClick(new Click(keyboardFocus, location, modifiers));
+            //viewer.thirdClick(new Click(keyboardFocus, keyboardFocus.getLocation(), modifiers));
+            return;
+        }
+        
+
+        if(keyCode == KeyEvent.VK_F4 && (modifiers & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
+            // TODO close window
+            return;
+        }
+        
+        
+        
+        if(keyCode == KeyEvent.VK_DOWN) {
+            focusManager.focusFirstChildView();
+    //        focusNextSubview(keyboardFocus);
+            return;
+        }
+        
+        if(keyCode == KeyEvent.VK_UP) {
+            focusManager.focusParentView();
+//            focusPreviousSubview(keyboardFocus);
+            return;
+        }
+        
+        if(keyCode == KeyEvent.VK_HOME) {
+            viewer.makeRootFocus();
+            return;
+        }
+        
+        if(keyCode == KeyEvent.VK_RIGHT) {
+            focusManager.focusNextView();
+            //            focusNextPeerView(keyboardFocus);
+            return;
+        }
+        
+        if(keyCode == KeyEvent.VK_LEFT) {
+            focusManager.focusPreviousView();
+            // focusPreviousPeerView(keyboardFocus);
+            return;
         }
 
         int action = 0;
@@ -37,15 +122,19 @@ public class KeyboardManager {
 
         switch (action) {
         case KeyboardAction.NEXT_VIEW:
-            focusNextSubview(keyboardFocus);
+            focusManager.focusNextView();
+            //focusNextSubview(keyboardFocus);
             break;
         case KeyboardAction.PREVIOUS_VIEW:
-            focusPreviousSubview(keyboardFocus);
+            focusManager.focusPreviousView();
+            //  focusPreviousSubview(keyboardFocus);
             break;
         case KeyboardAction.NEXT_WINDOW:
-            focusNextRootView(keyboardFocus);
+            focusManager.focusParentView();
+            //  focusNextRootView(keyboardFocus);
             break;
         case KeyboardAction.PREVIOUS_WINDOW:
+            focusManager.focusFirstChildView();
             break;
         }
     }
@@ -69,14 +158,17 @@ public class KeyboardManager {
     }
 
     public void released(final int keyCode, final int modifiers) {
+        LOG.debug("key " + KeyEvent.getKeyText(keyCode) + " released\n");
+        
         View keyboardFocus = getFocus();
         if (keyboardFocus != null) {
-            //LOG.debug("released " + keyCode);
             keyboardFocus.keyReleased(keyCode, modifiers);
         }
     }
 
-    public void typed(final char keyChar) {
+    public void typed(char keyChar) {
+        LOG.debug("typed '" + keyChar + "'");
+        
         View keyboardFocus = getFocus();
         if (keyboardFocus != null) {
             if (!Character.isISOControl(keyChar)) {
@@ -109,7 +201,7 @@ public class KeyboardManager {
             viewer.setOverlayView(helpView);
         }
     }
-
+/*
     private void focusNextRootView(final View focus) {
         View parent = focus.getParent();
         if (parent == null) {
@@ -168,8 +260,36 @@ public class KeyboardManager {
         throw new NakedObjectRuntimeException();
     }
 
+
+    private void focusPreviousPeerView(final View focus) {
+        View parent = focus.getParent();
+        if (parent == null) {
+            return;
+        }
+        
+        viewer.makeFocus(parent);
+    }
+    
+    private void focusNextPeerView(final View focus) {
+        View[] views = focus.getSubviews();
+        for (int j = 0; j < views.length; j++) {
+            if (views[j].canFocus()) {
+                viewer.makeFocus(views[j]);
+                return;
+            }
+        }
+       
+        // no other focusable view; stick with the view we've got
+        return;
+    }
+    
     private void focusPreviousSubview(final View focus) {
-        View[] views = focus.getParent().getSubviews();
+        View parent = focus.getParent();
+        if(parent == null) {
+            return;
+        }
+        
+        View[] views = parent.getSubviews();
 
         for (int i = 0; i < views.length; i++) {
             if (views[i] == focus) {
@@ -190,9 +310,20 @@ public class KeyboardManager {
             }
         }
 
-        throw new NakedObjectRuntimeException();
+        throw new NakedObjectRuntimeException("Can't move to previous peer from " + focus);
+    }
+*/
+
+    public FocusManager getFocusManager() {
+        return focusManager;
     }
 
+    public void setFocusManager(FocusManager focusManager) {
+        if (focusManager == null) {
+            throw new NakedObjectRuntimeException("No focus manager set up");
+        }
+          this.focusManager = focusManager;
+    }
 }
 
 /*

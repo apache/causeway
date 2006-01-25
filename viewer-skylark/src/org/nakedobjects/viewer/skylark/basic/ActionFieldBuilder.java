@@ -65,7 +65,7 @@ public class ActionFieldBuilder extends AbstractViewBuilder {
         }
         
         if(focusOn != null) {
-            view.getViewManager().makeFocus(focusOn);
+            view.getViewManager().setKeyboardFocus(focusOn);
         }
     }
 
