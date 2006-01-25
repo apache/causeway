@@ -12,9 +12,13 @@ import org.nakedobjects.viewer.skylark.Workspace;
 
 public class ClearValueOption extends AbstractValueOption {
     public ClearValueOption() {
-        super("Clear");
+        super("Reset");
     }
 
+    public String getDescription(View view) {
+        return "Reset this field to its default value";
+    }
+    
     public Consent disabled(View view) {
         NakedValue value = getValue(view);
         if (!view.canChangeValue()) {

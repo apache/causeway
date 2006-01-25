@@ -15,6 +15,7 @@ import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.Drag;
 import org.nakedobjects.viewer.skylark.DragStart;
 import org.nakedobjects.viewer.skylark.InternalDrag;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.AbstractUserAction;
 import org.nakedobjects.viewer.skylark.UserActionSet;
@@ -398,66 +399,83 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     /**
      * Called when the user presses any key on the keyboard while this view has the focus.
      */
-    public void keyPressed(final int keyCode, final int modifiers) {
+    public void keyPressed(KeyboardAction key) {
         if (!canChangeValue()) { return; }
 
+        int keyCode = key.getKeyCode();
         if (keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT) { return; }
 
+        int modifiers = key.getModifiers();
         // modifiers
-        final boolean alt = (modifiers & InputEvent.ALT_MASK) > 0;
+        final boolean alt = (modifiers  & InputEvent.ALT_MASK) > 0;
         final boolean shift = (modifiers & InputEvent.SHIFT_MASK) > 0;
         final boolean ctrl = (modifiers & InputEvent.CTRL_MASK) > 0;
 
         switch (keyCode) {
         case KeyEvent.VK_PAGE_UP:
+            key.consume();
             pageUp(ctrl);
             break;
         case KeyEvent.VK_PAGE_DOWN:
+            key.consume();
             pageDown(ctrl);
             break;
         case KeyEvent.VK_V:
             if (ctrl) {
+                key.consume();
                 paste();
                 highlight(false);
             }
             break;
         case KeyEvent.VK_C:
             if (ctrl) {
+                key.consume();
                 copy();
             }
             break;
         case KeyEvent.VK_DOWN:
+            key.consume();
             down(shift);
             break;
         case KeyEvent.VK_UP:
+            key.consume();
             up(shift);
             break;
         case KeyEvent.VK_HOME:
+            key.consume();
             home(alt, shift);
             break;
         case KeyEvent.VK_END:
+            key.consume();
             end(alt, shift);
             break;
         case KeyEvent.VK_LEFT:
+            key.consume();
             left(alt, shift);
             break;
         case KeyEvent.VK_RIGHT:
+            key.consume();
             right(alt, shift);
             break;
         case KeyEvent.VK_DELETE:
+            key.consume();
             deleteForward();
             break;
         case KeyEvent.VK_BACK_SPACE:
+            key.consume();
             delete();
             break;
         case KeyEvent.VK_TAB:
+            // key.consume();
             tab();
             break;
         case KeyEvent.VK_ENTER:
+            key.consume();
             enter();
-        	getParent().keyPressed(keyCode, modifiers);
+        	getParent().keyPressed(key);
         	break;
         case KeyEvent.VK_ESCAPE:
+            key.consume();
             escape();
             break;
 
@@ -549,9 +567,15 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     }
 
     protected void escape() {
-        invalidReason = null;
-        refresh();
-        markDamaged();
+        if(isSaved) {
+            textContent.setText("");
+            isSaved = false;
+            markDamaged();
+        } else {
+            invalidReason = null;
+            refresh();
+            markDamaged();
+        }
     }
 
     protected void tab() {
@@ -616,6 +640,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
 	        maximumLength = object.getMaximumLength();
 	        minumumLength = object.getMinumumLength();
         }
+        isSaved = true;
     }
 
     private void resetSelection() {

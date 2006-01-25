@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.value;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.Style;
@@ -118,33 +119,40 @@ public class PasswordField extends AbstractField {
         return new Size(width, height);
     }
 
-    public void keyPressed(final int keyCode, final int modifiers) {
+    public void keyPressed(KeyboardAction key) {
         if (!canChangeValue()) {
             return;
         }
 
-        if (keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT) {
+        int keyCode = key.getKeyCode();
+        if (keyCode  == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_ALT) {
             return;
         }
 
         switch (keyCode) {
         case KeyEvent.VK_LEFT:
+            key.consume();
             delete();
             break;
         case KeyEvent.VK_DELETE:
+            key.consume();
             delete();
             break;
         case KeyEvent.VK_BACK_SPACE:
+            key.consume();
             delete();
             break;
         case KeyEvent.VK_TAB:
+            key.consume();
             editComplete();
             break;
         case KeyEvent.VK_ENTER:
+            key.consume();
             editComplete();
-            getParent().keyPressed(keyCode, modifiers);
+            getParent().keyPressed(key);
             break;
         case KeyEvent.VK_ESCAPE:
+            key.consume();
             escape();
             break;
 

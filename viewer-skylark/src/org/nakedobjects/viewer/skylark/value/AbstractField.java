@@ -8,6 +8,7 @@ import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.InternalDrag;
+import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
@@ -131,11 +132,8 @@ public abstract class AbstractField extends AbstractView {
     /**
      * Called when the user presses any key on the keyboard while this view has
      * the focus.
-     * 
-     * @param keyCode
-     * @param modifiers
      */
-    public void keyPressed(final int keyCode, final int modifiers) {}
+    public void keyPressed(KeyboardAction key) {}
 
     /**
      * Called when the user releases any key on the keyboard while this view has
