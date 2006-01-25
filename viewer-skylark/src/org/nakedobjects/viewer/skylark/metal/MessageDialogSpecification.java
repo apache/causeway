@@ -74,10 +74,13 @@ class MessageDialogView extends AbstractView {
         Size size = new Size();
 
         String message = ((MessageContent) getContent()).getMessage();
-        
+        String heading = ((MessageContent) getContent()).title();
+       
+        size.setWidth(Style.TITLE.stringWidth(heading));
+        size.ensureWidth(Style.NORMAL.stringWidth(message));
+
         size.extendWidth(errorIcon.getWidth());
         size.extendWidth(PADDING);
-        size.extendWidth(Style.NORMAL.stringWidth(message));
 
         size.ensureHeight(errorIcon.getHeight());
         size.ensureHeight(Style.NORMAL.getLineHeight());
