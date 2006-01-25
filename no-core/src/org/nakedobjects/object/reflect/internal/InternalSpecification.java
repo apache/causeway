@@ -64,6 +64,7 @@ public class InternalSpecification implements NakedObjectSpecification {
     public InternalSpecification(Class cls, ReflectionPeerBuilder builder) {
         introspector = new InternalIntrospector(cls, builder);
         subclasses = new SubclassList();
+        persistable = Persistable.TRANSIENT;
     }
 
     public void addSubclass(NakedObjectSpecification subclass) {
