@@ -53,12 +53,6 @@ public class Booking {
 
         about.unusableOnCondition(getPickUp() == null, "Pick Up location required");
         about.unusableOnCondition(getDropOff() == null, "Drop Off location required");
-
-        /* If the About is still allowing the action then the action's
-         * name will be changed. */
-        if(getPickUp() != null) { 
-        	about.changeNameIfUsable("Return booking to " + getPickUp().title());
-        } 
     }
 
     public void aboutPickUp(FieldAbout about, Location newPickup) {

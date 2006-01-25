@@ -3,7 +3,6 @@ package org.nakedobjects.example.ecs;
 import org.nakedobjects.application.BusinessObjectContainer;
 import org.nakedobjects.application.Title;
 import org.nakedobjects.application.control.ActionAbout;
-import org.nakedobjects.application.control.FieldAbout;
 import org.nakedobjects.application.valueholder.Option;
 import org.nakedobjects.application.valueholder.TextString;
 
@@ -37,8 +36,6 @@ public class Location {
         boolean sameCity = getCity() != null && location != null && getCity().equals(location.getCity());
 
         about.unusableOnCondition(! sameCity, "Locations must be in the same city");
-        about.changeNameIfUsable("New booking from " + location + 
-                                " to " + title());
     }
     
 
@@ -103,11 +100,6 @@ public class Location {
         return booking;
     }
 
-    public void aboutCity(FieldAbout  about, City city) {
-        about.setName("City for this location");
-   //     about.unmodifiable();
-    }
-    
     public void setContainer(BusinessObjectContainer container) {
         this.container = container;
     }
