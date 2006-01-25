@@ -20,8 +20,8 @@ public class ReplaceViewOption extends AbstractUserAction {
     }
 
     public String getDescription(View view) {
-        return "Replace this " + view.getSpecification().getName().toLowerCase() + " view with a "
-                + specification.getName().toLowerCase() + " view";
+        return "Replace this " + view.getSpecification().getName() + " view with a "
+                + specification.getName() + " view";
     }
 
     public void execute(Workspace workspace, View view, Location at) {

@@ -28,7 +28,7 @@ public class OpenViewOption extends AbstractUserAction {
     }
 
     public String getDescription(View view) {
-        return "Open '" + view + "' in a " + specification.getName().toLowerCase() + " window";
+        return "Open '" + view + "' in a " + specification.getName() + " window";
     }
 
     public String toString() {

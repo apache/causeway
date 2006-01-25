@@ -17,7 +17,7 @@ public class CloseViewOption extends AbstractUserAction {
     }
 
     public String getDescription(View view) {
-        return "Close this " + view.getSpecification().getName().toLowerCase();
+        return "Close this " + view.getSpecification().getName();
     }
 
     public String toString() {
