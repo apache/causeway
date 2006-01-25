@@ -27,8 +27,6 @@ public interface FieldAbout {
 
     void setDescription(String string);
 
-    void setName(String string);
-
     void unmodifiable();
 
     void unmodifiable(String reason);

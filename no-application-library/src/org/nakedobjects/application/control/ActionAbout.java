@@ -3,8 +3,6 @@ package org.nakedobjects.application.control;
 
 
 public interface ActionAbout {
-    void changeNameIfUsable(String name);
-
     Object[][] getOptions();
     
     Object[] getDefaultParameterValues();
