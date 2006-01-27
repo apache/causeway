@@ -46,7 +46,7 @@ public class ServerDistribution implements Distribution {
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectField association = (NakedObjectField) inObject.getSpecification().getField(fieldIdentifier);
-        if (!association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
+        if (!association.isAuthorised() || association.isAvailable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.clearAssociation(association, associate);
@@ -105,7 +105,6 @@ public class ServerDistribution implements Distribution {
                         (NakedObject) parameters[i], updateNotifier);
             }
         }
-        // TODO find messages/warnings
         String[] messages = NakedObjects.getMessageBroker().getMessages();
         String[] warnings = NakedObjects.getMessageBroker().getWarnings();
 
@@ -304,7 +303,7 @@ public class ServerDistribution implements Distribution {
         NakedObject inObject = getPersistentNakedObject(session, target);
         NakedObject associate = getPersistentNakedObject(session, associated);
         NakedObjectField association = (NakedObjectField) inObject.getSpecification().getField(fieldIdentifier);
-        if (!association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
+        if (!association.isAuthorised() || association.isAvailable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
         inObject.setAssociation(association, associate);
@@ -327,7 +326,7 @@ public class ServerDistribution implements Distribution {
         LOG.debug("request setValue " + fieldIdentifier + " on " + target + " with " + value + " for " + session);
         NakedObject inObject = getPersistentNakedObject(session, target);
         OneToOneAssociation association = (OneToOneAssociation) inObject.getSpecification().getField(fieldIdentifier);
-        if (!association.isAuthorised() || association.isUsable(inObject).isVetoed()) {
+        if (!association.isAuthorised() || association.isAvailable(inObject).isVetoed()) {
             throw new IllegalRequestException("can't modify field as not visible or editable");
         }
 
