@@ -113,6 +113,10 @@ public class TreeExample extends TestViews {
                 return null;
             }
 
+            public Consent isAvailable(NakedObject target) {
+                return null;
+            }
+            
             public Consent isUsable(NakedObject inObject) {
                 return null;
             }

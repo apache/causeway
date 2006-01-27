@@ -83,7 +83,7 @@ public class OneToOneField extends ObjectContent implements FieldContent {
     }
     
     public Consent isEditable() {
-        return getField().isUsable(getParent());
+        return getField().isAvailable(getParent());
     }
 
     /*public String getIconName() {

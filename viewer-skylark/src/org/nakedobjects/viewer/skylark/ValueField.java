@@ -97,7 +97,7 @@ public class ValueField extends ValueContent implements FieldContent {
     }
 
     public Consent isEditable() {
-        return getOneToOneAssociation().isUsable(getParent());
+        return getOneToOneAssociation().isAvailable(getParent());
     }
     
     public boolean isEmpty() {
