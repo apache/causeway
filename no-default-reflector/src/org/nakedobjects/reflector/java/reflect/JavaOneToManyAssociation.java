@@ -223,11 +223,15 @@ public class JavaOneToManyAssociation extends JavaField implements OneToManyPeer
     }
     
     
-    
-
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return getHint(target, null, true).canUse();
     }
+    
+    /** @deprecated */
+    public Consent isUsable(NakedObject target) {
+        return isUsable(target);
+    }
+
     public Consent isRemoveValid(NakedObject container, NakedObject element) {
       Hint about = getHint(container, element, false);
       Consent edit = about.canUse();

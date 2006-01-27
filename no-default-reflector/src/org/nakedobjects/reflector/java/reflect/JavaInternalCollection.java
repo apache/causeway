@@ -191,8 +191,13 @@ public class JavaInternalCollection extends JavaField implements OneToManyPeer {
         }
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return getHint(target, null, true).canUse();
+    }
+
+    /** @deprecated */
+    public Consent isUsable(NakedObject target) {
+        return isAvailable(target);
     }
 
     public void initOneToManyAssociation(NakedObject fromObject, NakedObject[] instances) {

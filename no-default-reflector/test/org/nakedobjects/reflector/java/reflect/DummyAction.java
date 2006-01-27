@@ -75,7 +75,7 @@ class DummyAction implements Action {
         return false;
     }
 
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+    public Consent isParameterSetValid(NakedObject object, Naked[] parameters) {
         return null;
     }
 
@@ -87,7 +87,7 @@ class DummyAction implements Action {
         return true;
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return null;
     }
 

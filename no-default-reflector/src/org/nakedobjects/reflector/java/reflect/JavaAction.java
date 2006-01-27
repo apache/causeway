@@ -195,16 +195,24 @@ public class JavaAction extends JavaMember implements ActionPeer {
         return type;
     }
 
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+    public Consent isParameterSetValid(NakedObject object, Naked[] parameters) {
         return getHint(object, parameters).canUse();
     }
 
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        return isParameterSetValid(object, parameters);
+    }
+    
     public boolean isAuthorised(Session session) {
         return true;
     }
 
     public boolean isOnInstance() {
         return isInstanceMethod;
+    }
+
+    public Consent isAvailable(NakedObject target) {
+        return Allow.DEFAULT;
     }
 
     public Consent isUsable(NakedObject target) {
