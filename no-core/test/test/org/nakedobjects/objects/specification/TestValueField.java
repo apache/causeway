@@ -60,7 +60,7 @@ public abstract class TestValueField implements OneToOneAssociation {
         return false;
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return Allow.DEFAULT;
     }
 

@@ -31,27 +31,11 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         this.peer = actionDelegate;
     }
 
-    public NakedObjectSpecification[] getParameterTypes() {
-        return peer.getParameterTypes();
-    }
-
     public Naked execute(final NakedObject object, final Naked[] parameters) {
         LOG.debug("execute action " + object + "." + getId());
         Naked[] params = parameters == null ? new Naked[0] : parameters;
         Naked result = peer.execute(isOnInstance() ? object : null, params);
         return result;
-    }
-
-    public boolean isOnInstance() {
-        return peer.isOnInstance();
-    }
-
-    public Action.Target getTarget() {
-        return peer.getTarget();
-    }
-
-    public Action.Type getType() {
-        return peer.getType();
     }
 
     public Action[] getActions() {
@@ -69,7 +53,7 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
     public Class[] getExtensions() {
         return peer.getExtensions();
     }
-    
+
     /**
      * Return the default label for this member. This is based on the name of this member.
      * 
@@ -92,8 +76,20 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         return parameters;
     }
 
+    public NakedObjectSpecification[] getParameterTypes() {
+        return peer.getParameterTypes();
+    }
+    
     public NakedObjectSpecification getReturnType() {
         return peer.getReturnType();
+    }
+
+    public Action.Target getTarget() {
+        return peer.getTarget();
+    }
+
+    public Action.Type getType() {
+        return peer.getType();
     }
 
     /**
@@ -103,12 +99,20 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         return getReturnType() != null;
     }
 
-    public Consent isUsable(NakedObject target) {
-        return peer.isUsable(target);
-    }
-
     public boolean isAuthorised() {
         return peer.isAuthorised(NakedObjects.getCurrentSession());
+    }
+
+    public Consent isAvailable(NakedObject target) {
+        return peer.isAvailable(target);
+    }
+
+    public boolean isOnInstance() {
+        return peer.isOnInstance();
+    }
+
+    public Consent isParameterSetValid(NakedObject object, Naked[] parameters) {
+        return peer.isParameterSetValid(object, parameters);
     }
 
     public Consent isVisible(NakedObject target) {
@@ -148,10 +152,6 @@ public class ActionImpl extends AbstractNakedObjectMember implements Action {
         }
         sb.append("}]");
         return sb.toString();
-    }
-
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
-        return peer.hasValidParameters(object, parameters);
     }
 }
 

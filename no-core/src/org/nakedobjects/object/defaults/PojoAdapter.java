@@ -103,7 +103,7 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
 
     public Consent isValid(Action action, Naked[] parameters) {
-        return action.hasValidParameters(this, parameters);
+        return action.isParameterSetValid(this, parameters);
     }
 
     public Consent isVisible(Action action) {
@@ -216,11 +216,11 @@ public class PojoAdapter extends AbstractNakedReference implements NakedObject {
     }
     
     public Consent isUsable(Action action) {
-        return action.isUsable(this);
+        return action.isAvailable(this);
     }
     
     public Consent isUsable(NakedObjectField field) {
-        return field.isUsable(this);
+        return field.isAvailable(this);
     }
 
 }

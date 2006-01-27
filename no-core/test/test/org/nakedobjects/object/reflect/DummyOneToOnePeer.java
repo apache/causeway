@@ -118,6 +118,10 @@ public class DummyOneToOnePeer implements OneToOnePeer {
         return true;
     }
 
+    public Consent isAvailable(NakedObject target) {
+        return null;
+    }
+    
     public Consent isUsable(NakedObject target) {
         return null;
     }

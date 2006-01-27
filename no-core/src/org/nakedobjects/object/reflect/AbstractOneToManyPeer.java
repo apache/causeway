@@ -74,10 +74,15 @@ public abstract class AbstractOneToManyPeer implements OneToManyPeer {
         return decorated.isMandatory();
     }
 
+    /** @deprecated */
     public Consent isUsable(NakedObject target) {
         return decorated.isUsable(target);
     }
 
+    public Consent isAvailable(NakedObject target) {
+        return decorated.isAvailable(target);
+    }
+    
     public Consent isVisible(NakedObject target) {
         return decorated.isVisible(target);
     }

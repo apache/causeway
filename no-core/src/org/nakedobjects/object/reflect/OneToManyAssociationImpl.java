@@ -126,7 +126,7 @@ public class OneToManyAssociationImpl extends AbstractNakedObjectField implement
         return reflectiveAdapter.isAddValid(container, element);
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return reflectiveAdapter.isUsable(target);
     }
 

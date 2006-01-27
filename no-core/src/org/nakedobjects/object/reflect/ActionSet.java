@@ -56,7 +56,7 @@ public class ActionSet implements Action {
         throw new UnexpectedCallException();
     }
 
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+    public Consent isParameterSetValid(NakedObject object, Naked[] parameters) {
         throw new UnexpectedCallException();
          }
 
@@ -92,7 +92,7 @@ public class ActionSet implements Action {
         return true;
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return Allow.DEFAULT;
     }
 

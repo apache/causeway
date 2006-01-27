@@ -104,8 +104,12 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return type;
     }
 
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+    public Consent isParameterSetValid(NakedObject object, Naked[] parameters) {
         return Allow.DEFAULT;
+    }
+    
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        return isParameterSetValid(object, parameters);
     }
 
     public boolean isAuthorised(Session session) {
@@ -116,6 +120,10 @@ public class InternalAction extends InternalMember implements ActionPeer {
         return !Modifier.isStatic(actionMethod.getModifiers());
     }
 
+    public Consent isAvailable(NakedObject target) {
+        return Allow.DEFAULT;
+    }
+    
     public Consent isUsable(NakedObject target) {
         return Allow.DEFAULT;
     }

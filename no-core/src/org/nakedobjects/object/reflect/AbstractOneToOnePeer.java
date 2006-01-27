@@ -79,8 +79,13 @@ public abstract class AbstractOneToOnePeer implements OneToOnePeer {
         return decorated.isObject();
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return decorated.isUsable(target);
+    }
+    
+    /** @deprecated */
+    public Consent isUsable(NakedObject target) {
+        return isAvailable(target);
     }
 
     public Consent isVisible(NakedObject target) {

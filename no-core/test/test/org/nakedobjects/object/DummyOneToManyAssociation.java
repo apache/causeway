@@ -86,7 +86,7 @@ public class DummyOneToManyAssociation implements NakedObjectField {
         return false;
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return null;
     }
 

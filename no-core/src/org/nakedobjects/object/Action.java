@@ -100,7 +100,7 @@ public interface Action extends NakedObjectMember {
 
     Naked execute(final NakedObject target, final Naked[] parameters);
         
-    Consent hasValidParameters(NakedObject object, Naked[] parameters);
+    Consent isParameterSetValid(NakedObject object, Naked[] parameters);
     
     ActionParameterSet getParameterSet(NakedObject object);
 }

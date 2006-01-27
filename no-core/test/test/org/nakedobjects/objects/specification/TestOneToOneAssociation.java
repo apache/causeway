@@ -69,7 +69,7 @@ public abstract class TestOneToOneAssociation implements OneToOneAssociation {
         return true;
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return Allow.DEFAULT;
     }
 

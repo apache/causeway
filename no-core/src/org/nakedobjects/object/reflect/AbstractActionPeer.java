@@ -60,12 +60,20 @@ public abstract class AbstractActionPeer implements ActionPeer {
         return decorated.getTarget();
     }
 
+    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
+        return decorated.hasValidParameters(object, parameters);
+    }
+    
+    public Consent isAvailable(NakedObject target) {
+        return decorated.isAvailable(target);
+    }
+    
     public Consent isUsable(NakedObject target) {
         return decorated.isUsable(target);
     }
 
-    public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
-        return decorated.hasValidParameters(object, parameters);
+    public Consent isParameterSetValid(NakedObject object, Naked[] parameters) {
+        return decorated.isParameterSetValid(object, parameters);
     }
 
     public String getDescription() {

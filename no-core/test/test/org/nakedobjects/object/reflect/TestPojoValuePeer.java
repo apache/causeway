@@ -108,6 +108,10 @@ public class TestPojoValuePeer implements OneToOnePeer {
         return false;
     }
 
+    public Consent isAvailable(NakedObject target) {
+        return null;
+    }
+    
     public Consent isUsable(NakedObject target) {
         return null;
     }

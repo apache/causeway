@@ -128,7 +128,7 @@ public class OneToOneAssociationImpl extends AbstractNakedObjectField implements
         return reflectiveAdapter.isAssociationValid(inObject, value);
     }
 
-    public Consent isUsable(NakedObject inObject) {
+    public Consent isAvailable(NakedObject inObject) {
         return reflectiveAdapter.isUsable(inObject);
     }
 

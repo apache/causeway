@@ -69,7 +69,7 @@ public class DummyField extends AbstractNakedObjectField {
         return true;
     }
 
-    public Consent isUsable(NakedObject target) {
+    public Consent isAvailable(NakedObject target) {
         return null;
     }
 

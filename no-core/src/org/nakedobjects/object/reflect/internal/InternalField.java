@@ -73,6 +73,11 @@ public abstract class InternalField extends InternalMember {
         return false;
     }
 
+    public Consent isAvailable(NakedObject target) {
+        return Allow.DEFAULT;
+    }
+    
+    /** @deprecated */
     public Consent isUsable(NakedObject target) {
         return Allow.DEFAULT;
     }

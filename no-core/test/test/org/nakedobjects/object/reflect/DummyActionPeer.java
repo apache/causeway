@@ -81,6 +81,10 @@ public final class DummyActionPeer implements ActionPeer {
     public Consent hasValidParameters(NakedObject object, Naked[] parameters) {
         return null;
     }
+    
+    public Consent isParameterSetValid(NakedObject object, Naked[] parameters) {
+        return null;
+    }
 
     public boolean isAuthorised(Session session) {
         return true;
@@ -88,6 +92,10 @@ public final class DummyActionPeer implements ActionPeer {
 
     public boolean isOnInstance() {
         return true;
+    }
+
+    public Consent isAvailable(NakedObject target) {
+        return Allow.DEFAULT;
     }
 
     public Consent isUsable(NakedObject target) {

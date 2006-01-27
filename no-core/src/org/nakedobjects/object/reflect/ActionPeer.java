@@ -27,6 +27,13 @@ public interface ActionPeer extends MemberPeer {
 
     Action.Type getType();
 
+    Consent isParameterSetValid(NakedObject object, Naked[] parameters);
+
+    /**
+     * @deprecated replaced by isParameterSetValid
+     * 
+     * @see #isParameterSetValid(NakedObject, Naked[])
+     */
     Consent hasValidParameters(NakedObject object, Naked[] parameters);
 
     /**

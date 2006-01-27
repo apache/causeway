@@ -38,7 +38,7 @@ public interface NakedObjectMember {
     /**
      * Detemines whether this method is usable on, or the field is editable witin, the specified object.
      */
-    Consent isUsable(NakedObject target);
+    Consent isAvailable(NakedObject target);
 
     /**
      * Determines if this member is visible according to the current state of the object.

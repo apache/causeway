@@ -19,7 +19,12 @@ public interface MemberPeer {
 
     boolean isAuthorised(Session session);
 
+    /**
+     *  @deprecated replaced by @see #isAvailable(NakedObject)
+     */
     Consent isUsable(NakedObject target);
+
+    Consent isAvailable(NakedObject target);
 
     Consent isVisible(NakedObject target);
 }
