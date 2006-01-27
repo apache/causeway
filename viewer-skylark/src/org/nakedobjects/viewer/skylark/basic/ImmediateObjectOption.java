@@ -71,7 +71,7 @@ class ImmediateObjectOption extends AbstractUserAction {
             }
             
             public String getName() {
-                return "Action " + action.getId();
+                return "Action " + action.getName();
             }
 
             public String getDescription() {

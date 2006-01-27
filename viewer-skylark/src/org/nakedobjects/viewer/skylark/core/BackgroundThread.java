@@ -13,7 +13,7 @@ public final class BackgroundThread {
     public static void run(final View view, final BackgroundTask task) {
         Thread t = new Thread("nofBackground") {
             public void run() {
-                view.getState().setActive();
+                view.getState().setActive();    
                 view.getViewManager().setBusy(view);
                 repaint(view);
                 try {

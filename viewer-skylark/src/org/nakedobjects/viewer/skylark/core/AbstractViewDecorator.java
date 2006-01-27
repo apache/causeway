@@ -308,6 +308,10 @@ public abstract class AbstractViewDecorator implements View {
         wrappedView.setBounds(bounds);
     }
 
+    public void setFocusManager(FocusManager focusManager) {
+        wrappedView.setFocusManager(focusManager);
+    }
+    
     public void setLocation(Location point) {
         wrappedView.setLocation(point);
     }

@@ -143,7 +143,6 @@ public class PasswordField extends AbstractField {
             delete();
             break;
         case KeyEvent.VK_TAB:
-            key.consume();
             editComplete();
             break;
         case KeyEvent.VK_ENTER:

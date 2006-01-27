@@ -1,37 +1,82 @@
 package org.nakedobjects.viewer.skylark;
 
+import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
+import org.nakedobjects.utility.ToString;
 
-/** @deprecated */
-public class SimpleFocusManager implements FocusManager {
-    private View focus;
+/**
+ * Abstract focus manager that uses the set of views to move focus between from the concrete subclass.
+ * 
+ * @see #getChildViews()
+ */
+public abstract class AbstractFocusManager implements FocusManager {
+    // TODO container to go in subclass ??
+    protected View container;
+    protected View focus;
+    private View initialFocus;
 
+    public AbstractFocusManager(View container) {
+        this(container, null);
+    }
 
-    public View firstView() {
-        return null;
+    public AbstractFocusManager(View container, View initalFocus) {
+        Assert.assertNotNull(container);
+        this.container = container;
+        this.initialFocus = initalFocus;
+        focus = initalFocus;
+    }
+
+    /**
+     * Throws a NakedObjectRuntimeException if the specified view is available to this focus manager.
+     */
+    private void checkCanFocusOn(View view) {
+        View[] views = getChildViews();
+        boolean valid = view == container;
+        for (int j = 0; valid == false && j < views.length; j++) {
+            if (views[j] == view) {
+                valid = true;
+            }
+        }
+
+        if (!valid) {
+            throw new NakedObjectRuntimeException("No view " + view + " to focus on");
+        }
     }
 
     public void focusFirstChildView() {
-        View[] views = focus.getSubviews();
+        View[] views = getChildViews();
         for (int j = 0; j < views.length; j++) {
             if (views[j].canFocus()) {
                 setFocus(views[j]);
                 return;
             }
         }
-
         // no other focusable view; stick with the view we've got
         return;
     }
 
+    public void focusInitialChildView() {
+        if (initialFocus == null) {
+            focusFirstChildView();
+        } else {
+            setFocus(initialFocus);
+        }
+    }
+
+    public void focusLastChildView() {
+        View[] views = getChildViews();
+        for (int j = views.length - 1; j > 0; j--) {
+            if (views[j].canFocus()) {
+                setFocus(views[j]);
+                return;
+            }
+        }
+        // no other focusable view; stick with the view we've got
+        return;
+    }
 
     public void focusNextView() {
-        View parent = focus.getParent();
-        if (parent == null) {
-            return;
-        }
-
-        View[] views = parent.getSubviews();
+        View[] views = getChildViews();
         for (int i = 0; i < views.length; i++) {
             if (views[i] == focus) {
                 for (int j = i + 1; j < views.length; j++) {
@@ -55,22 +100,11 @@ public class SimpleFocusManager implements FocusManager {
     }
 
     public void focusParentView() {
-        View parent = focus.getParent();
-        if (parent == null) {
-            return;
-        }
-
-        setFocus(parent);
+        container.getFocusManager().setFocus(container.getFocusManager().getFocus());
     }
 
     public void focusPreviousView() {
-        View parent = focus.getParent();
-        if (parent == null) {
-            return;
-        }
-
-        View[] views = parent.getSubviews();
-
+        View[] views = getChildViews();
         for (int i = 0; i < views.length; i++) {
             if (views[i] == focus) {
                 for (int j = i - 1; j >= 0; j--) {
@@ -93,19 +127,15 @@ public class SimpleFocusManager implements FocusManager {
         throw new NakedObjectRuntimeException("Can't move to previous peer from " + focus);
     }
 
+    protected abstract View[] getChildViews();
+
     public View getFocus() {
         return focus;
     }
 
-    public View initialView() {
-        return null;
-    }
-
-    public View lastView() {
-        return null;
-    }
-
     public void setFocus(View view) {
+        checkCanFocusOn(view);
+
         if (view != null && view.canFocus()) {
             if ((focus != null) && (focus != view)) {
                 focus.focusLost();
@@ -119,9 +149,13 @@ public class SimpleFocusManager implements FocusManager {
         }
     }
 
-    public void focusLastChildView() {}
-
-    public void focusInitialChildView() {}
+    public String toString() {
+        ToString str = new ToString(this);
+        str.append("container", container);
+        str.append("initialFocus", initialFocus);
+        str.append("focus", focus);
+        return str.toString();
+    }
 
 }
 

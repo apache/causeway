@@ -42,6 +42,9 @@ public class Button extends AbstractControlView {
         if (((ButtonAction) action).isDefault()) {
             canvas.drawRectangle(x + 3, y + 3, buttonWidth - 6, buttonHeight - 6, border);
         }
+        if (hasFocus()) {
+            canvas.drawRectangle(x + 3, y + 3, buttonWidth - 6, buttonHeight - 6, Style.WHITE);
+        }
         canvas.drawText(text, x + TEXT_PADDING, y + buttonHeight / 2 + style.getMidPoint(), color, style);
     }
 

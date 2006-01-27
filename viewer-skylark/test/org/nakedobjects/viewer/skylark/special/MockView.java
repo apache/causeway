@@ -304,6 +304,8 @@ public class MockView implements View {
     public FocusManager getFocusManager() {
         return null;
     }
+
+    public void setFocusManager(FocusManager focusManager) {}
 }
 
 /*

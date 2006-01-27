@@ -141,9 +141,9 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
         }
 
         public void execute(Workspace workspace, View view, Location at) {
+            view.dispose();
             super.execute(workspace, view, at);
       //      view.getViewManager().clearKeyboardFocus();
-            view.dispose();
         }
 
         protected void move(Location at) {}
@@ -159,10 +159,12 @@ public class ActionDialogSpecification extends AbstractCompositeViewSpecificatio
 
     public View createView(Content content, ViewAxis axis) {
         // TODO reintroduce the 'Apply' notion, but under control from the method declaration
-        // UserAction[] actions = new UserAction[] { new ExecuteAndCloseAction(), new CloseAction(), new
-        // ExecuteAction(), };
         ButtonAction[] actions = new ButtonAction[] { new ExecuteAndCloseAction(), new CancelAction() };
-        return new DialogBorder(new ButtonBorder(actions, new IconBorder(super.createView(content, new LabelAxis()))), false);
+        View container = super.createView(content, new LabelAxis());
+        ButtonBorder buttonBorder = new ButtonBorder(actions, new IconBorder(container));
+        DialogBorder dialog = new DialogBorder(buttonBorder, false);
+        dialog.setFocusManager(new ActionDialogFocusManager(buttonBorder));
+        return dialog;
     }
 
     public String getName() {

@@ -34,14 +34,6 @@ public class ButtonBorder extends AbstractBorder {
     }
 
     public void draw(Canvas canvas) {
-  //      int width = getSize().getWidth();
-  //      int y = getSize().getHeight() - bottom;
-
-   //     canvas.clearBackground(this, Style.SECONDARY3);
-        
-        // draw dividing line
-//        canvas.drawLine(0, y, width, y, Style.SECONDARY1);
-
         // draw buttons
         for (int i = 0; i < buttons.length; i++) {
             Canvas buttonCanvas = canvas.createSubcanvas(buttons[i].getBounds());
@@ -63,6 +55,10 @@ public class ButtonBorder extends AbstractBorder {
         }
     }
 
+    public Button[] getButtons() {
+        return buttons;
+    }
+    
     public Size getRequiredSize() {
         Size size = super.getRequiredSize();
         size.ensureWidth(totalButtonWidth());
@@ -132,7 +128,6 @@ public class ButtonBorder extends AbstractBorder {
                 return button;
             }
         }
-
         return null;
     }
 

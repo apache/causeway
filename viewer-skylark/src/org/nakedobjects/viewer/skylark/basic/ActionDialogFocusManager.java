@@ -1,38 +1,29 @@
-package org.nakedobjects.viewer.skylark;
+package org.nakedobjects.viewer.skylark.basic;
 
-/**
- * Details where to move the focus to.
- */
-public interface FocusManager {
-    /**
-     * The next view within the container to move the focus to; move to next field.
-     */
-    void focusNextView();
-    
-    /**
-     * The previous view within the container to move the focus to; move to previous field.
-     */
-    void focusPreviousView();
-    
-    /**
-     * The parent view within the container to move the focus to; move up to containing view in the hierachy.
-     */
-    void focusParentView();
-    
-    /**
-     * The first child view within the container to move the focus to; move down to the first view within the current view.
-     */
-    void focusFirstChildView();
-    
-    void focusLastChildView();
-    
-    void focusInitialChildView();
-    
-    View getFocus();
+import org.nakedobjects.viewer.skylark.AbstractFocusManager;
+import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.metal.ButtonBorder;
 
-    void setFocus(View view);
+
+public class ActionDialogFocusManager extends AbstractFocusManager {
+    private final ButtonBorder buttonBorder;
+
+    public ActionDialogFocusManager(ButtonBorder buttonBorder) {
+        super(buttonBorder.getView());
+        this.buttonBorder = buttonBorder;
+        
+    }
+
+    protected View[] getChildViews() {
+        View[] subviews = container.getSubviews();
+        View[] buttons = buttonBorder.getButtons();
+        
+        View[] views = new View[subviews.length + buttons.length];
+        System.arraycopy(subviews, 0, views, 0, subviews.length);
+        System.arraycopy(buttons, 0, views, subviews.length, buttons.length);
+        return views;
+    }
 }
-
 
 /*
  * Naked Objects - a framework that exposes behaviourally complete business objects directly to the user.

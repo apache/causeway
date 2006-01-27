@@ -291,6 +291,8 @@ public interface View extends Cloneable {
 
     void setBounds(Bounds bounds);
 
+    void setFocusManager(FocusManager focusManager);
+            
     /**
      * Specifies the location of this view, relative to its enclosing view.
      */

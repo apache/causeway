@@ -7,6 +7,7 @@ import org.nakedobjects.object.undo.UndoStack;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.DebugString;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
+import org.nakedobjects.utility.UnexpectedCallException;
 import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Click;
@@ -140,33 +141,45 @@ public abstract class AbstractView implements View {
     public String debugDetails() {
         DebugString b = new DebugString();
 
-        b.append("View:      ");
         String name = getClass().getName();
-        b.append(name.substring(name.lastIndexOf('.') + 1) + getId());
-
+        b.append("Root:      " + name.substring(name.lastIndexOf('.') + 1) + getId());
+        
         b.append("\n           size " + getSize());
         b.append("\n           req'd " + getRequiredSize());
         b.append("\n           padding " + getPadding());
         b.append("\n           baseline " + getBaseline());
+        b.appendln();
+        b.appendln();
+        
+        b.appendTitle("Specification");
+        if (specification == null) {
+            b.append("\nnone");
+        } else {
+            b.appendln(specification.getName());
+            b.appendln("  " + specification.getClass().getName());
+            b.appendln("  " + (specification.isOpen() ? "open" : "closed"));
+            b.appendln("  " + (specification.isReplaceable() ? "replaceable" : "non-replaceable"));
+            b.appendln("  " + (specification.isSubView() ? "subview" : "main view"));
+        }
+        
+
         b.append("\n");
+        b.appendTitle("View");
+        
+        b.append("Changable: " + canChangeValue());
+        
+        b.append("\n");
+        b.append("\nFocus:     " + (canFocus() ? "focusable" : "non-focusable"));
+        b.append("\nHas focus:     " + hasFocus());
+        b.append("\nContains focus:     " + containsFocus());
+        b.append("\nFocus manager:     " + getFocusManager());
 
-        b.append("\nChangable: " + canChangeValue());
-        b.append("\nFocus:     " + canFocus());
-
+        b.append("\n");
         b.append("\nSelf:      " + getView());
         b.append("\nAxis:      " + getViewAxis());
         b.append("\nState:     " + getState());
         b.append("\nLocation:  " + getLocation());
-        if (specification == null) {
-            b.append("\nSpec:      none");
-        } else {
-            b.append("\nSpec:      " + specification.getName() + " (" + specification + ")");
-            b.append("\n           " + (specification.isOpen() ? "open" : "closed"));
-            b.append("\n           " + (specification.isReplaceable() ? "replaceable" : "non-replaceable"));
-            b.append("\n           " + (specification.isSubView() ? "subview" : "main view"));
-        }
-        b.append("\n           " + (canFocus() ? "focusable" : "non-focusable"));
-
+       
         b.append("\nParent:    ");
 
         View p = getParent();
@@ -180,7 +193,7 @@ public abstract class AbstractView implements View {
 
         b.append("\nWorkspace: " + getWorkspace());
 
-        b.append("\n\n");
+        b.append("\n\n\n");
 
         return b.toString();
     }
@@ -503,6 +516,10 @@ public abstract class AbstractView implements View {
         height = bounds.getHeight();
     }
 
+    public void setFocusManager(FocusManager focusManager) {
+        throw new UnexpectedCallException();
+    }
+    
     protected void setContent(Content content) {
         this.content = content;
     }

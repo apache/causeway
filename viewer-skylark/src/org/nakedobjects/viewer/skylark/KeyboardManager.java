@@ -28,11 +28,12 @@ public class KeyboardManager {
      * At the moment, as a fudge, the text field is calling its parent's keyPressed method for enter presses.
      */
     public void pressed(final int keyCode, final int modifiers) {
-        LOG.debug("key " + KeyEvent.getKeyModifiersText(modifiers) + " '" + KeyEvent.getKeyText(keyCode) + "' pressed");
-
+        if(ignoreKey(keyCode)) {
+            return;
+        }
         
+        LOG.debug("key " + KeyEvent.getKeyModifiersText(modifiers) + " '" + KeyEvent.getKeyText(keyCode) + "' pressed");
         View keyboardFocus = getFocus();
-
         if (keyboardFocus == null) {
             throw new NakedObjectRuntimeException("No focus set");
         }
@@ -139,6 +140,10 @@ public class KeyboardManager {
         }
     }
 
+    private boolean ignoreKey(final int keyCode) {
+        return keyCode == KeyEvent.VK_SHIFT || keyCode == KeyEvent.VK_CONTROL || keyCode == KeyEvent.VK_ALT;
+    }
+
     private int tab(final int modifiers) {
         int action;
         if ((modifiers & InputEvent.CTRL_MASK) == InputEvent.CTRL_MASK) {
@@ -158,8 +163,11 @@ public class KeyboardManager {
     }
 
     public void released(final int keyCode, final int modifiers) {
-        LOG.debug("key " + KeyEvent.getKeyText(keyCode) + " released\n");
+        if(ignoreKey(keyCode)) {
+            return;
+        }
         
+        LOG.debug("key " + KeyEvent.getKeyText(keyCode) + " released\n");
         View keyboardFocus = getFocus();
         if (keyboardFocus != null) {
             keyboardFocus.keyReleased(keyCode, modifiers);

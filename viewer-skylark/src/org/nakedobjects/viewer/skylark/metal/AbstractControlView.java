@@ -13,10 +13,10 @@ import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.InternalDrag;
 import org.nakedobjects.viewer.skylark.KeyboardAction;
 import org.nakedobjects.viewer.skylark.Location;
-import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.UserAction;
+import org.nakedobjects.viewer.skylark.UserActionSet;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAreaType;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -26,17 +26,20 @@ import org.nakedobjects.viewer.skylark.ViewState;
 import org.nakedobjects.viewer.skylark.Viewer;
 import org.nakedobjects.viewer.skylark.Workspace;
 
+import java.awt.event.KeyEvent;
+
 
 public abstract class AbstractControlView implements View {
     protected final UserAction action;
-    private Location location;
     private final View parent;
-    private Size size;
+    private int width;
+    private int x;
+    private int y;
+    private int height;
 
     public AbstractControlView(UserAction action, View target) {
         this.action = action;
         this.parent = target;
-
     }
 
     public void addView(View view) {}
@@ -46,7 +49,7 @@ public abstract class AbstractControlView implements View {
     }
 
     public boolean canFocus() {
-        return true;
+        return action.disabled(parent).isAllowed();
     }
 
     public boolean contains(View view) {
@@ -111,6 +114,10 @@ public abstract class AbstractControlView implements View {
     public void exitedSubview() {}
 
     public void firstClick(Click click) {
+        executeAction();
+    }
+
+    private void executeAction() {
         View target = getParent().getView();
         if (action.disabled(target).isAllowed()) {
             markDamaged();
@@ -126,7 +133,7 @@ public abstract class AbstractControlView implements View {
     public Location getAbsoluteLocation() {
         Location location = parent.getAbsoluteLocation();
         getViewManager().getSpy().addTrace(this, "parent location", location);
-        location.add(this.location.getX(), this.location.getY());
+        location.add(x, y);
         getViewManager().getSpy().addTrace(this, "plus view's location", location);
         Padding pad = parent.getPadding();
         location.add(pad.getLeft(), pad.getTop());
@@ -139,7 +146,7 @@ public abstract class AbstractControlView implements View {
     }
 
     public Bounds getBounds() {
-        return new Bounds(location, size);
+        return new Bounds(x, y, width, height);
     }
 
     public Content getContent() {
@@ -155,7 +162,7 @@ public abstract class AbstractControlView implements View {
     }
     
     public Location getLocation() {
-        return new Location(location);
+        return new Location(x, y);
     }
     
     public Padding getPadding() {
@@ -167,7 +174,7 @@ public abstract class AbstractControlView implements View {
     }
 
     public Size getSize() {
-        return new Size(size);
+        return new Size(width, height);
     }
 
     public ViewSpecification getSpecification() {
@@ -199,7 +206,7 @@ public abstract class AbstractControlView implements View {
     }
 
     public boolean hasFocus() {
-        return false;
+        return getViewManager().hasFocus(getView());
     }
 
     public View identify(Location location) {
@@ -210,8 +217,12 @@ public abstract class AbstractControlView implements View {
 
     public void invalidateLayout() {}
 
-    public void keyPressed(KeyboardAction key) {}
-
+    public void keyPressed(KeyboardAction key) {
+        if(key.getKeyCode() == KeyEvent.VK_ENTER) {
+            executeAction();
+        }
+    }
+    
     public void keyReleased(int keyCode, int modifiers) {}
 
     public void keyTyped(char keyCode) {}
@@ -271,8 +282,11 @@ public abstract class AbstractControlView implements View {
 
     public void setBounds(Bounds bounds) {}
 
+    public void setFocusManager(FocusManager focusManager) {}
+    
     public void setLocation(Location point) {
-        this.location = point;
+        x = point.getX();
+        y = point.getY();
     }
     
     public void setParent(View view) {}
@@ -280,7 +294,8 @@ public abstract class AbstractControlView implements View {
     public void setRequiredSize(Size size) {}
 
     public void setSize(Size size) {
-        this.size = size;
+        width = size.getWidth();
+        height = size.getHeight();
     }
 
     public void setView(View view) {}

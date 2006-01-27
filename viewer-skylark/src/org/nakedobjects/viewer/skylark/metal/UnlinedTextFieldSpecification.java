@@ -8,9 +8,9 @@ import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.value.SingleLineTextField;
 
 /**
- * Creates a single line text field with the baseline drawn.
+ * Creates a single line text field without the baseline being drawn.
  */
-public class TextFieldSpecification extends AbstractFieldSpecification {
+public class UnlinedTextFieldSpecification extends AbstractFieldSpecification {
     private static final int ORIGINAL_WIDTH = 30;
     
     public boolean canDisplay(Content content) {
@@ -18,7 +18,7 @@ public class TextFieldSpecification extends AbstractFieldSpecification {
     }
 
     public View createView(Content content, ViewAxis axis) {
-        return new TextFieldResizeBorder(new SingleLineTextField(content, this, axis, true, ORIGINAL_WIDTH));
+        return new TextFieldResizeBorder(new SingleLineTextField(content, this, axis, false, ORIGINAL_WIDTH));
     }
     
     public String getName() {

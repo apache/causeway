@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.table;
 
 import org.nakedobjects.object.value.MultilineStringValue;
+import org.nakedobjects.object.value.StringValue;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
@@ -11,7 +12,7 @@ import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.AbstractCompositeViewSpecification;
-import org.nakedobjects.viewer.skylark.metal.TextFieldSpecification;
+import org.nakedobjects.viewer.skylark.metal.UnlinedTextFieldSpecification;
 import org.nakedobjects.viewer.skylark.special.ObjectFieldBuilder;
 import org.nakedobjects.viewer.skylark.special.SubviewSpec;
 import org.nakedobjects.viewer.skylark.util.ViewFactory;
@@ -28,12 +29,12 @@ public class TableRowSpecification extends AbstractCompositeViewSpecification {
             if (content instanceof OneToManyField) {
                 return null;
             } else if (content instanceof ValueContent) {
-                if (content.getNaked() instanceof MultilineStringValue) {
+                if (content.getNaked() instanceof MultilineStringValue || content.getNaked() instanceof StringValue) {
                     /*
                      * TODO remove this after introducing constraints into view specs that allow the parent
                      * view to specify what kind of subviews it can deal
                      */
-                    cellSpec = new TextFieldSpecification();
+                    cellSpec = new UnlinedTextFieldSpecification();
                 } else {
                     cellSpec = factory.getValueFieldSpecification((ValueContent) content);
                 }
