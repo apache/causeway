@@ -488,7 +488,7 @@ public class TestObjectImpl extends AbstractTestObject implements TestObject {
     public void assertFieldUnmodifiable(final String fieldName) {
         NakedObjectField field = fieldAccessorFor(fieldName);
         //boolean canUse = getForNaked().canUse(session, field);
-        boolean canUse = field.isUsable(getForNakedObject()).isAllowed();
+        boolean canUse = field.isAvailable(getForNakedObject()).isAllowed();
         assertFalse("Field '" + fieldName + "' is modifiable", canUse);
     }
 
