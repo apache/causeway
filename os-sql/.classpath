@@ -6,8 +6,8 @@
 	<classpathentry kind="src" path="/no-core"/>
 	<classpathentry kind="var" path="JUNIT"/>
 	<classpathentry kind="var" path="LOG4J"/>
-	<classpathentry kind="lib" path="/lib/hsqldb.jar"/>
 	<classpathentry kind="src" path="/utility-memento"/>
 	<classpathentry kind="src" path="/no-application-library"/>
+	<classpathentry kind="var" path="HSQLDB"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
