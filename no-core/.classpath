@@ -5,7 +5,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="var" path="LOG4J"/>
 	<classpathentry sourcepath="JUNIT_SRC" kind="var" path="JUNIT"/>
-	<classpathentry kind="var" path="EASYMOCK"/>
 	<classpathentry kind="src" path="example"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

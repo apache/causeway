@@ -4,6 +4,7 @@ import org.nakedobjects.object.InternalNakedObject;
 import org.nakedobjects.object.NakedObjectSpecification;
 import org.nakedobjects.object.NakedObjectSpecificationLoader;
 import org.nakedobjects.object.reflect.NoMemberSpecification;
+import org.nakedobjects.object.reflect.PrimitiveSpecification;
 import org.nakedobjects.object.reflect.ReflectionPeerBuilder;
 import org.nakedobjects.object.reflect.ReflectionPeerFactory;
 import org.nakedobjects.object.reflect.SimpleSpecificationCache;
@@ -33,7 +34,7 @@ public abstract class AbstractSpecificationLoader implements NakedObjectSpecific
         
         if (cls.isPrimitive()) {
             synchronized (cache) {
-                spec = new NoMemberSpecification(cls.getName());
+                spec = new PrimitiveSpecification(cls.getName());
                 cache.cache(cls, spec);
             }
             return spec;
