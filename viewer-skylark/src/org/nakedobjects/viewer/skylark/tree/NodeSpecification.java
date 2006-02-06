@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.NullFocusManager;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -18,7 +19,9 @@ abstract class NodeSpecification implements ViewSpecification {
 
     public final View createView(final Content content, final ViewAxis axis) {
         View view = createNodeView(content, axis);
-        return new TreeNodeBorder(view, replacementNodeSpecification);
+        TreeNodeBorder newView = new TreeNodeBorder(view, replacementNodeSpecification);
+        newView.setFocusManager(new NullFocusManager());
+        return newView;
     }
 
     public String getName() {

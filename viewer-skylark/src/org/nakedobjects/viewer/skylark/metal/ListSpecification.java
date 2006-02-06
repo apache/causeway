@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.metal;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.ObjectContent;
 import org.nakedobjects.viewer.skylark.Skylark;
+import org.nakedobjects.viewer.skylark.SubviewFocusManager;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
@@ -18,12 +19,14 @@ public class ListSpecification extends AbstractCompositeViewSpecification implem
 	}
 	
     public View createView(Content content, ViewAxis axis) {
-        return new WindowBorder(super.createView(content, axis), true);
+        WindowBorder newView = new WindowBorder(super.createView(content, axis), true);
+        newView.setFocusManager(new SubviewFocusManager(newView));
+        return newView;
     }
 	
     public View createSubview(Content content, ViewAxis axis) {
 		ViewSpecification specification = Skylark.getViewFactory().getIconizedSubViewSpecification((ObjectContent) content);
-		return specification.createView(content, axis);
+        return specification.createView(content, axis);
 	}
 
 	public String getName() {

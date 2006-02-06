@@ -1,14 +1,25 @@
 package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.ViewAxis;
 import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.core.ObjectView;
 
 class LeafNodeView extends ObjectView {
 
+    private FocusManager focusManager;
+
     public LeafNodeView(Content content, ViewSpecification design, ViewAxis axis) {
         super(content, design, axis);
+    }
+    
+    public FocusManager getFocusManager() {
+        return focusManager;
+    }
+    
+    public void setFocusManager(FocusManager focusManager) {
+        this.focusManager = focusManager;
     }
 }
 

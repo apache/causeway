@@ -31,14 +31,20 @@ public class KeyboardManager {
         if(ignoreKey(keyCode)) {
             return;
         }
-        
         LOG.debug("key " + KeyEvent.getKeyModifiersText(modifiers) + " '" + KeyEvent.getKeyText(keyCode) + "' pressed");
+        
+        KeyboardAction keyboardAction = new KeyboardAction(keyCode, modifiers);
+
+        if(viewer.isOverlayAvailable()) {
+            viewer.getOverlayView().keyPressed(keyboardAction);
+            return;
+        }
+        
         View keyboardFocus = getFocus();
         if (keyboardFocus == null) {
             throw new NakedObjectRuntimeException("No focus set");
         }
         
-        KeyboardAction keyboardAction = new KeyboardAction(keyCode, modifiers);
         
         keyboardFocus.keyPressed(keyboardAction);
 

@@ -8,6 +8,7 @@ import org.nakedobjects.viewer.skylark.Bounds;
 import org.nakedobjects.viewer.skylark.Canvas;
 import org.nakedobjects.viewer.skylark.Color;
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.FocusManager;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.Padding;
 import org.nakedobjects.viewer.skylark.Size;
@@ -30,6 +31,7 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
     private View left;
     private View right;
     private View selectedNode;
+    private FocusManager focusManager;
 
     protected TreeBrowserFrame(Content content, ViewSpecification specification) {
         super(content, specification, null);
@@ -106,6 +108,10 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
             }
             right.draw(subCanvas);
         }
+    }
+    
+    public FocusManager getFocusManager() {
+        return focusManager;
     }
 
     public Size getRequiredSize() {
@@ -232,6 +238,10 @@ class TreeBrowserFrame extends AbstractView implements ViewAxis {
         invalidateLayout();
     }
 
+    public void setFocusManager(FocusManager focusManager) {
+        this.focusManager = focusManager;
+    }
+    
     public void setSelectedNode(View view) {
         Content content = view.getContent();
         Naked object = content.getNaked();

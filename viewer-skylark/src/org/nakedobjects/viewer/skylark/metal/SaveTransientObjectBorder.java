@@ -9,6 +9,7 @@ import org.nakedobjects.object.control.Allow;
 import org.nakedobjects.object.control.Consent;
 import org.nakedobjects.viewer.skylark.Location;
 import org.nakedobjects.viewer.skylark.View;
+import org.nakedobjects.viewer.skylark.ViewSpecification;
 import org.nakedobjects.viewer.skylark.Workspace;
 
 import org.apache.log4j.Logger;
@@ -38,10 +39,11 @@ public class SaveTransientObjectBorder extends ButtonBorder {
         
 
         public void execute(Workspace workspace, View view, Location at) {
-            NakedObject transientObject = save(view);
-            Location location = view.getLocation();
-            view.dispose();
-            workspace.addOpenViewFor(transientObject, location);
+            save(view);
+            // by recreating the view the transient border is removed
+            ViewSpecification spec = view.getSpecification();
+            View newView = spec.createView(view.getContent(), null);
+            workspace.replaceView(view, newView );
         }
     }
 

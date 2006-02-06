@@ -276,7 +276,7 @@ public class Viewer {
         }
         
         setKeyboardFocus(rootView);
-    }
+   }
 
     public boolean isBusy(View view) {
         // return busy.contains(view);
@@ -702,10 +702,13 @@ public class Viewer {
     public void setOverlayView(View view) {
         disposeOverlayView();
         overlayView = view;
-        FocusManager focusManager = view.getFocusManager();
+/*     
+ * overlays don't get focus explicitly
+    FocusManager focusManager = view.getFocusManager();
         if(focusManager != null) {
             keyboardManager.setFocusManager(focusManager);
         }
+   */
         view.limitBoundsWithin(rootView.getBounds());
         overlayView.markDamaged();
     }

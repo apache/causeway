@@ -41,13 +41,18 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
         super(content, specification, axis);
     }
 
+    public void addView(View view) {
+        super.addView(view);
+
+        getViewManager().setKeyboardFocus(view);
+        view.layout();
+        view.getFocusManager().focusFirstChildView();
+    }
+    
     public View addOpenViewFor(Naked object, Location at) {
         View window = openViewFor(object, at, false);
         
-        getViewManager().setKeyboardFocus(window);
         window.layout();
-        window.getFocusManager().focusFirstChildView();
-        
         return window;
     }
 
@@ -55,7 +60,7 @@ public class DefaultWorkspace extends CompositeView implements Workspace {
         View view = createSubviewFor(object, asIcon);
         view.setLocation(at);
         view.setSize(view.getRequiredSize());
-        getWorkspace().addView(view);
+        addView(view);
         return view;
     }
 

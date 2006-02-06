@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.tree;
 import org.nakedobjects.viewer.skylark.Content;
 import org.nakedobjects.viewer.skylark.OneToOneField;
 import org.nakedobjects.viewer.skylark.Skylark;
+import org.nakedobjects.viewer.skylark.SubviewFocusManager;
 import org.nakedobjects.viewer.skylark.ValueField;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -50,7 +51,9 @@ public class TreeBrowserFormSpecification extends AbstractCompositeViewSpecifica
     public View createView(Content content, ViewAxis axis) {
         resolveObject(content);
         View form = super.createView(content, new LabelAxis());
-        return new ScrollBorder(form);
+        ScrollBorder newView = new ScrollBorder(form);
+        newView.setFocusManager(new SubviewFocusManager(newView));
+        return newView;
     }
 
     public String getName() {

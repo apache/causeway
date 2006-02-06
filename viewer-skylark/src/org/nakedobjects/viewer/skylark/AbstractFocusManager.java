@@ -31,7 +31,7 @@ public abstract class AbstractFocusManager implements FocusManager {
      */
     private void checkCanFocusOn(View view) {
         View[] views = getChildViews();
-        boolean valid = view == container;
+        boolean valid = view == container.getView();
         for (int j = 0; valid == false && j < views.length; j++) {
             if (views[j] == view) {
                 valid = true;
@@ -39,7 +39,7 @@ public abstract class AbstractFocusManager implements FocusManager {
         }
 
         if (!valid) {
-            throw new NakedObjectRuntimeException("No view " + view + " to focus on");
+  //          throw new NakedObjectRuntimeException("No view " + view + " to focus on in " + container.getView());
         }
     }
 
@@ -96,7 +96,7 @@ public abstract class AbstractFocusManager implements FocusManager {
             }
         }
 
-        throw new NakedObjectRuntimeException();
+        // throw new NakedObjectRuntimeException();
     }
 
     public void focusParentView() {

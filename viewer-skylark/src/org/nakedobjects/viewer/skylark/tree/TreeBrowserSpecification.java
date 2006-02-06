@@ -1,6 +1,7 @@
 package org.nakedobjects.viewer.skylark.tree;
 
 import org.nakedobjects.viewer.skylark.Content;
+import org.nakedobjects.viewer.skylark.NullFocusManager;
 import org.nakedobjects.viewer.skylark.Size;
 import org.nakedobjects.viewer.skylark.View;
 import org.nakedobjects.viewer.skylark.ViewAxis;
@@ -62,6 +63,8 @@ public class TreeBrowserSpecification implements ViewSpecification {
         Size size = leftPane.getRequiredSize();
         size.setWidth(220);
         leftPane.setRequiredSize(size);
+
+        view.setFocusManager(new NullFocusManager());
 
         return view;
     }

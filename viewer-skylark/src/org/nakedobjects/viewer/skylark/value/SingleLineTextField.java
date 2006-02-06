@@ -82,8 +82,9 @@ public class SingleLineTextField extends TextField {
         if (hasFocus() && canChangeValue()) {
             int at = Math.min(cursor.getCharacter(), chars.length());
             int pos =  style.stringWidth(chars.substring(0, at)) - offset;
-            canvas.drawLine(pos + (HPADDING), (baseline + style.getDescent()), pos + (HPADDING), baseline - style.getAscent(),
-                    Style.PRIMARY1);
+            
+            canvas.drawLine(pos + (HPADDING), (baseline + style.getDescent()), pos + (HPADDING), 
+                    baseline - style.getAscent(), Style.PRIMARY1);
         }
 
         // draw text

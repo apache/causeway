@@ -12,6 +12,7 @@ import org.nakedobjects.viewer.skylark.Workspace;
 import org.nakedobjects.viewer.skylark.basic.DefaultWorkspace;
 import org.nakedobjects.viewer.skylark.basic.RootWorkspaceBuilder;
 import org.nakedobjects.viewer.skylark.basic.UserContextWorkspace;
+import org.nakedobjects.viewer.skylark.basic.WorkspaceFocusManager;
 
 public class RootWorkspaceSpecification implements WorkspaceSpecification {
 	RootWorkspaceBuilder builder = new RootWorkspaceBuilder();
@@ -23,6 +24,7 @@ public class RootWorkspaceSpecification implements WorkspaceSpecification {
 				workspace = new UserContextWorkspace(content, this, axis);
 			} else {
 				workspace = new DefaultWorkspace(content, this, axis);
+                workspace.setFocusManager(new WorkspaceFocusManager());
 			}
 			return workspace;
 		}
