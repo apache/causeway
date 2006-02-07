@@ -59,6 +59,7 @@ public class SkylarkViewer implements NakedObjectsComponent {
         frame.setTitle(title == null ? applicationContext.getName() : title);
         frame.init();
         frame.show();    
+        frame.toFront();
 
         viewer.sizeChange();
     }

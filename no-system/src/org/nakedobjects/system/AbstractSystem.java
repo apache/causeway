@@ -76,7 +76,7 @@ public abstract class AbstractSystem {
         AboutNakedObjects.logVersion();
 
         SplashWindow splash = null;
-        boolean noSplash = configuration.getBoolean("nakedobject.nosplash", false);
+        boolean noSplash = configuration.getBoolean("nakedobjects.nosplash", false);
         if (!noSplash) {
             splash = new SplashWindow();
         }
@@ -112,6 +112,7 @@ public abstract class AbstractSystem {
             LOG.error("startup problem", e);
         } finally {
             if (splash != null) {
+                splash.toFront();
                 splash.removeAfterDelay(6);
             }
         }
