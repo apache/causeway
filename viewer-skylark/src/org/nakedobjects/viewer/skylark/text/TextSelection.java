@@ -6,9 +6,9 @@ public class TextSelection {
     private final CursorPosition cursor;
     private final CursorPosition start; // = new CursorPosition(TextField.this, 0, 0);
     
-    public TextSelection(CursorPosition cursor, CursorPosition start) {
+    public TextSelection(TextContent content, CursorPosition cursor) {
         this.cursor = cursor;
-        this.start = start;
+        this.start = new CursorPosition(content, 0, 0);
     }
 
     /**

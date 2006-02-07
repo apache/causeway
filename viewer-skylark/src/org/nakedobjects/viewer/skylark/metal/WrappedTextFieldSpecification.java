@@ -8,14 +8,12 @@ import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.value.WrappedTextField;
 
 public class WrappedTextFieldSpecification extends AbstractFieldSpecification {
-    private static final int ORIGINAL_WIDTH = 20;
-
     public boolean canDisplay(Content content) {
         return content.isValue() && content.getNaked() instanceof MultilineStringValue;
     }
 
     public View createView(Content content, ViewAxis axis) {
-        WrappedTextField wrappedTextField = new WrappedTextField(content, this, axis, true, ORIGINAL_WIDTH);
+        WrappedTextField wrappedTextField = new WrappedTextField(content, this, axis, true, TEXT_WIDTH);
         wrappedTextField.setNoLines(4);
         return new TextFieldResizeBorder(wrappedTextField);
     }

@@ -25,7 +25,7 @@ public class CopyValueOption extends AbstractValueOption {
     	if(isEmpty(view)) {
     		return new Veto("Field is empty");
     	} else {
-			return new Allow("Copy value " + value.titleString() + " to clipboard");
+			return new Allow("Copy value '" + value.titleString() + "' to clipboard");
     	}
     }
 

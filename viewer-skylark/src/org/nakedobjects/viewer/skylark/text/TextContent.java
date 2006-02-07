@@ -3,6 +3,7 @@ package org.nakedobjects.viewer.skylark.text;
 import org.nakedobjects.utility.Assert;
 import org.nakedobjects.utility.NakedObjectRuntimeException;
 import org.nakedobjects.utility.NotImplementedException;
+import org.nakedobjects.utility.ToString;
 import org.nakedobjects.viewer.skylark.Location;
 
 import java.util.Enumeration;
@@ -59,14 +60,14 @@ public class TextContent {
         int lastLine = noContentLines - 1;
 
         int displayToLine = Math.min(displayFromLine + noDisplayLines, noContentLines);
-        if (noContentLines < noDisplayLines) {
+        if (noContentLines <=noDisplayLines) {
             displayFromLine = 0;
         } else {
-            if (line > displayToLine) {
+            if (line >= displayToLine) {
                 displayToLine = line + 3;
                 displayToLine = Math.min(displayToLine, lastLine);
 
-                displayFromLine = displayToLine - noDisplayLines;
+                displayFromLine = displayToLine - noDisplayLines + 1;
                 displayFromLine = Math.max(displayFromLine, 0);
             }
 
@@ -173,13 +174,23 @@ public class TextContent {
     public String getText(TextSelection selection) {
         CursorPosition from = selection.from();
         CursorPosition to = selection.to();
-
+        
+        
+        int line = from.getLine();
+        String text = getText(line);
         if (from.getLine() == to.getLine()) {
-            TextBlockReference block = getBlockFor(from.getLine());
-            return block.block.getText().substring(from.getCharacter(), to.getCharacter());
+            return text.substring(from.getCharacter(), to.getCharacter());
 
         } else {
-            throw new NotImplementedException();
+            StringBuffer str = new StringBuffer();
+            str.append(text.substring(from.getCharacter()));
+            for (int i = line + 1 ; i < line + (to.getLine() - from.getLine()); i++) {
+                text = getText(i);
+                str.append(text);
+            }
+            text = getText(line + (to.getLine() - from.getLine()));
+            str.append(text.substring(0, to.getCharacter()));
+            return str.toString();
         }
     }
 
@@ -220,19 +231,16 @@ public class TextContent {
     }
 
     public String toString() {
-        StringBuffer content = new StringBuffer();
-        content.append("TextFieldContent [");
-        content.append("field=");
-        content.append(target);
-        content.append(",no blocks=");
-        content.append(blocks.size());
-        content.append("]\n");
-
+        ToString content = new ToString(this);
+        content.append("field", target);
+        content.append("lines", noDisplayLines);
+        content.append("blocks=", blocks.size());
+/*
         for (int i = 0; i < blocks.size(); i++) {
             content.append(i == 0 ? "   " : "\n   ");
             content.append(blocks.elementAt(i));
         }
-
+*/
         return content.toString();
     }
 
@@ -245,6 +253,10 @@ public class TextContent {
         return lines;
     }
 
+    public int getDisplayFromLine() {
+        return displayFromLine;
+    }
+    
     public void setNoDisplayLines(int noDisplayLines) {
         this.noDisplayLines = noDisplayLines;
         //       displayToLine = displayFromLine + noDisplayLines - 1;
@@ -277,18 +289,13 @@ public class TextContent {
 
     int cursorAtLine(Location atLocation) {
         LOG.debug("pointer at " + atLocation);
-        int y = atLocation.getY(); // -
-                                                       // (forField.getBaseline()
-                                                       // -
-                                                       // forField.getAscent());
+        int y = atLocation.getY();
         int lineIndex = displayFromLine + (y / target.getText().getLineHeight());
         lineIndex = Math.max(lineIndex, 0);
         return lineIndex;
     }
 
     int cursorAtCharacter(Location atLocation, int lineOffset) {
-        //       if ((displayFromLine + lineOffset) <= displayToLine) {
-
         String text = getText(lineOffset);
         if (text == null) {
             for (int i = lineOffset; i >= 0; i--) {

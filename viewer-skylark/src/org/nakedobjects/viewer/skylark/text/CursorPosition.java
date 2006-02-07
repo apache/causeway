@@ -207,12 +207,12 @@ public class CursorPosition {
 
             int lineLength = text.length();
             // skip spaces
-            do {
+            while ((character < lineLength) && (text.charAt(character) == ' ')) {
                 character++;
-            } while ((character < lineLength) && (text.charAt(character) == ' '));
-
+            }
+        
             // skip characters (until next space)
-            while (character + 1 <  text.length() && text.charAt(character + 1) != ' ') {
+            while (character + 1 <=  text.length() && text.charAt(character) != ' ') {
                 character++;
             }
         }

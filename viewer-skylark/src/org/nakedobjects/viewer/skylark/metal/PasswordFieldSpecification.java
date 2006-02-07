@@ -8,15 +8,12 @@ import org.nakedobjects.viewer.skylark.core.AbstractFieldSpecification;
 import org.nakedobjects.viewer.skylark.value.PasswordField;
 
 public class PasswordFieldSpecification extends AbstractFieldSpecification {
-    private static final int ORIGINAL_WIDTH = 20;
-
-
-    public boolean canDisplay(Content content) {
+     public boolean canDisplay(Content content) {
         return content.isValue() && content.getNaked() instanceof PasswordValue;
     }
 
     public View createView(Content content, ViewAxis axis) {
-        return new PasswordField(content, this, axis, ORIGINAL_WIDTH);
+        return new PasswordField(content, this, axis, TEXT_WIDTH);
     }
     
     public String getName() {

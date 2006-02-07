@@ -20,10 +20,13 @@ public class WrappedTextField extends TextField {
         super(content, specification, axis, showLines, width, TextContent.WRAPPING);
     }
 
-    
-    
     private boolean multiline;
     private boolean wrapping;
+
+
+    public String debugDetails() {
+        return super.debugDetails() + "\n"+ textContent;
+    }
 
     public void setMultiline(boolean multiline) {
         this.multiline = multiline;
@@ -48,7 +51,10 @@ public class WrappedTextField extends TextField {
 
         CursorPosition from = selection.from();
         CursorPosition to = selection.to();
-/**
+
+        String[] lines = textContent.getDisplayLines();
+        int displayFromLine = textContent.getDisplayFromLine();
+        int displayToLine = displayFromLine + lines.length;
         for (int i = displayFromLine; i <= displayToLine; i++) {
             if ((i >= from.getLine()) && (i <= to.getLine())) {
                 String line = textContent.getText(i);
@@ -65,21 +71,18 @@ public class WrappedTextField extends TextField {
                     end = style.stringWidth(line.substring(0, at));
                 }
 
-                canvas.drawSolidRectangle(start + (HPADDING), top, end - start, lineHeight(), Style.PRIMARY3);
+                canvas.drawSolidRectangle(start + (HPADDING), top, end - start, getText().getLineHeight(), Style.PRIMARY3);
             }
 
-            top += lineHeight();
+            top += getText().getLineHeight();
         }
- */
-        	}
+    }
 
 
     protected void drawText(Canvas canvas, Color textColor, int width) {
-
         int baseline = getBaseline();
-        //LOG.debug(displayFromLine + " -> " + displayToLine);
-        
         String[] lines = textContent.getDisplayLines();
+        int cursorLine = cursor.getLine() - textContent.getDisplayFromLine();
         for (int i = 0; i < lines.length; i++) {
             String chars = lines[i];
             if(chars == null) {
@@ -88,7 +91,7 @@ public class WrappedTextField extends TextField {
             if (chars.endsWith("\n")) { throw new RuntimeException(); }
 
             // draw cursor
-            if (hasFocus() && (cursor.getLine() == i) && canChangeValue()) {
+            if (hasFocus() && canChangeValue() && cursorLine == i) {
                 int at = Math.min(cursor.getCharacter(), chars.length());
                 int pos = style.stringWidth(chars.substring(0, at));
                 canvas.drawLine(pos + (HPADDING), (baseline + style.getDescent()), pos + (HPADDING),
@@ -131,7 +134,7 @@ public class WrappedTextField extends TextField {
 
     public void setSize(Size size) {
         super.setSize(size);
-        textContent.setNoDisplayLines(size.getHeight() / style.getTextHeight());
+        textContent.setNoDisplayLines(size.getHeight() / style.getLineHeight());
     }
 
     

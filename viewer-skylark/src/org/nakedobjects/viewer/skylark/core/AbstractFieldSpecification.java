@@ -5,6 +5,8 @@ import org.nakedobjects.viewer.skylark.ViewSpecification;
 
 
 public abstract class AbstractFieldSpecification implements ViewSpecification {
+    protected static final int TEXT_WIDTH = 30;
+
     public boolean canDisplay(Content content) {
         return content.isValue();
     }

@@ -1,4 +1,3 @@
-
 package org.nakedobjects.viewer.skylark.value;
 
 import org.nakedobjects.object.ConcurrencyException;
@@ -72,7 +71,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         }
         textContent = new TextContent(this, 1, wrap);
         cursor = new CursorPosition(textContent, 0, 0);
-        selection = new TextSelection(cursor, cursor);
+        selection = new TextSelection(textContent, cursor);
         textContent.setText(value == null ? "" : value.titleString());
         cursor.home();
         isSaved = true;
@@ -173,8 +172,6 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
     }
 
     public void draw(Canvas canvas) {
-    //    super.draw(canvas);
-
         int width = getMaxWidth();
 
         align();
@@ -300,7 +297,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
             
             // testing
             if( cursor.getLine() > textContent.getNoLinesOfContent()) {
-            throw new NakedObjectRuntimeException("not inside content for line " + cursor.getLine() + " : " + textContent.getNoLinesOfContent());
+                throw new NakedObjectRuntimeException("not inside content for line " + cursor.getLine() + " : " + textContent.getNoLinesOfContent());
             }
             
             
@@ -414,11 +411,11 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         switch (keyCode) {
         case KeyEvent.VK_PAGE_UP:
             key.consume();
-            pageUp(ctrl);
+            pageUp(shift, ctrl);
             break;
         case KeyEvent.VK_PAGE_DOWN:
             key.consume();
-            pageDown(ctrl);
+            pageDown(shift, ctrl);
             break;
         case KeyEvent.VK_V:
             if (ctrl) {
@@ -487,7 +484,7 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
         LOG.debug(selection);
     }
 
-    protected void pageDown(final boolean ctrl) {
+    protected void pageDown(final boolean shift, final boolean ctrl) {
         if (ctrl) {
             if( textContent.decreaseDepth()) {
                 textContent.alignDisplay(cursor.getLine());
@@ -495,17 +492,19 @@ public abstract class TextField extends AbstractField implements TextBlockTarget
             }
         } else {
             cursor.pageDown();
+            highlight(shift);
         }
         markDamaged();
     }
 
-    protected void pageUp(final boolean ctrl) {
+    protected void pageUp(final boolean shift, final boolean ctrl) {
         if (ctrl) {
             textContent.increaseDepth();        
             textContent.alignDisplay(cursor.getLine());    
             invalidateLayout();
         } else {
             cursor.pageUp();
+            highlight(shift);
         }
         markDamaged();
     }
