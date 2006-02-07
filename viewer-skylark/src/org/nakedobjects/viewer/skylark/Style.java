@@ -11,16 +11,16 @@ public class Style {
     public static final Color APPLICATION_BACKGROUND = new Color("application.background", "#e0e0e0");
     public static final Color WINDOW_BACKGROUND = new Color("window.background", "#ffffff");
     public static final Color BLACK = new Color("black", "#000000");
-    public static final Text CLASS = new AwtText("class", "SansSerif--12");
+    public static final Text CLASS = new AwtText("class", "SansSerif-bold-12");
     public static final Color CONTENT_MENU = new Color("menu.content", "#FFCCCC");
-    public static final Text DEBUG = new AwtText("debug", "MonoSpaced--10");
+    public static final Text DEBUG = new AwtText("debug", "MonoSpaced--12");
     public static final Color DISABLED_MENU = new Color("menu.disabled", "#666666");
 
     public static final Color IDENTIFIED = new Color("identified", "#0099ff");
     public static final Color INVALID = new Color("invalid", "#ffc4c4");
-    public static final Text LABEL = new AwtText("label", "SansSerif--10");
+    public static final Text LABEL = new AwtText("label", "SansSerif--12");
     public static final Text MENU = new AwtText("menu", "SansSerif--12");
-    public static final Text NORMAL = new AwtText("normal", "SansSerif-plain-14");
+    public static final Text NORMAL = new AwtText("normal", "SansSerif-plain-12");
     public static final Color NORMAL_MENU = new Color("menu.normal", "#000000");
     public static final Color PRIMARY1 = new Color("primary1", "#666699"); //"#0066cc"
     public static final Color PRIMARY2 = new Color("primary2", "#9999cc");
@@ -31,7 +31,7 @@ public class Style {
     public static final Color SECONDARY1 = new Color("secondary1", "#666666");
     public static final Color SECONDARY2 = new Color("secondary2", "#999999");
     public static final Color SECONDARY3 = new Color("secondary3", "#cccccc");
-    public static final Text STATUS = new AwtText("status", "SansSerif--10");
+    public static final Text STATUS = new AwtText("status", "SansSerif--12");
     public static final Color RESIZE = new Color("resize", SECONDARY2);
 
     // fonts
