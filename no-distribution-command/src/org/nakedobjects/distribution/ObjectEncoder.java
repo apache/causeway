@@ -271,7 +271,6 @@ public final class ObjectEncoder {
     }
 
     private NakedObjectField[] getFields(NakedObjectSpecification specification) {
-        // return specification.getFields();
         return dataStructure.getFields(specification);
     }
 
@@ -296,11 +295,6 @@ public final class ObjectEncoder {
         if (!isTransient && (resolveState.isSerializing() || resolveState.isGhost() || graphDepth <= 0)) {
             return createIdentityData(object);
         }
-        /*
-         * if (!isTransient && (resolveState.isSerializing() || resolveState.isGhost() ||
-         * !recursePersistentObjects)) { return createReference(object); } if (!isTransient && graphDepth <=
-         * 0) { return createReference(object); }
-         */
         if (isTransient && knownTransients.containsKey(object)) {
             return (ObjectData) knownTransients.get(object);
         }
@@ -318,10 +312,10 @@ public final class ObjectEncoder {
         Data[] fieldContent = new Data[fields.length];
         NakedObjects.getObjectLoader().start(object, object.getResolveState().serializeFrom());
         for (int i = 0; i < fields.length; i++) {
-            Naked field = object.getField(fields[i]);
             if (fields[i].isDerived()) {
                 continue;
             }
+            Naked field = object.getField(fields[i]);
 
             if (fields[i].isValue()) {
                 fieldContent[i] = createValueData(field);
