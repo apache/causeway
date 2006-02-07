@@ -1,5 +1,7 @@
 package org.nakedobjects.utility;
 
+import org.nakedobjects.object.NakedObjects;
+
 import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
@@ -91,7 +93,7 @@ public abstract class DebugFrame extends Frame {
         TextArea textArea = new TextArea("", 60, 110, TextArea.SCROLLBARS_BOTH);
         textArea.setForeground(Color.black);
         textArea.setEditable(false);
-        Font font = new Font("Courier", Font.PLAIN, 11);
+        Font font = NakedObjects.getConfiguration().getFont("nakedobjects.debug.font", new Font("Courier", Font.PLAIN, 12));
         textArea.setFont(font);
         tabPane.add("Center", textArea);
         field = textArea;
