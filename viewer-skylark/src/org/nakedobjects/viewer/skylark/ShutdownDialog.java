@@ -110,7 +110,7 @@ class ShutdownDialog extends Dialog implements ActionListener, KeyListener {
 
     private void quit() {
         dispose();
-        ((ViewerFrame) getOwner()).quit();
+        ((ViewerFrame) getParent()).quit();
     }
     
     public void dispose() {
