@@ -21,8 +21,10 @@ public class TableFocusManager implements FocusManager {
         View[] cells = r.getSubviews();
         for (int j = cell + 1; j < cells.length; j++) {
             if (cells[j].canFocus()) {
+                cells[cell].markDamaged();
                 cell =j;
-                setFocus(cells[cell]);
+//                setFocus(cells[cell]);
+                cells[j].markDamaged();
                 return; 
             }
         }
@@ -36,8 +38,10 @@ public class TableFocusManager implements FocusManager {
         cells = r.getSubviews();
         for (int j = 0; j < cells.length; j++) {
             if (cells[j].canFocus()) {
+                cells[cell].markDamaged();
                 cell =j;
-                setFocus(cells[cell]);
+                cells[j].markDamaged();
+//                setFocus(cells[cell]);
                 return;
             }
         }
@@ -45,7 +49,34 @@ public class TableFocusManager implements FocusManager {
     
 
 
-    public void focusPreviousView() {}
+    public void focusPreviousView() {
+        View r = table.getSubviews()[row];
+        View[] cells = r.getSubviews();
+        for (int j = cell - 1; j >= 0; j--) {
+            if (cells[j].canFocus()) {
+                cells[cell].markDamaged();
+                cell =j;
+                cells[j].markDamaged();
+                return; 
+            }
+        }
+        
+        row--;
+        if(row == -1) {
+            row = table.getSubviews().length - 1;
+        }
+        
+        r = table.getSubviews()[row];
+        cells = r.getSubviews();
+        for (int j = cells.length - 1; j >= 0; j--) {
+            if (cells[j].canFocus()) {
+                cells[cell].markDamaged();
+                cell =j;
+                cells[j].markDamaged();
+                return;
+            }
+        }
+    }
 
     public void focusParentView() {}
 
@@ -62,8 +93,10 @@ public class TableFocusManager implements FocusManager {
             View[] cells = rows[0].getSubviews();
             for (int j = 0; j < cells.length; j++) {
                 if (cells[j].canFocus()) {
+                    cells[cell].markDamaged();
                     cell =j;
-                    setFocus(cells[cell]);
+                    cells[j].markDamaged();
+                  //  setFocus(cells[cell]);
                     return;
                 }
             }
@@ -72,7 +105,7 @@ public class TableFocusManager implements FocusManager {
 
     public View getFocus() {
         View[] rows = table.getSubviews();
-        if(row == -1 || row > rows.length) {
+        if(row < 0 || row >= rows.length) {
             return table;
         }
         View view = rows[row];
@@ -80,8 +113,22 @@ public class TableFocusManager implements FocusManager {
     }
 
     public void setFocus(View view) {
-        row = 1;
-        cell = 1;
+        if(view == table) {
+            return;
+        }
+    
+        View[] rows = table.getSubviews();
+        for(row = 0; row < rows.length; row++) {
+            View[] cells = rows[row].getSubviews();
+            for (int j = 0; j < cells.length; j++) {
+                if (view == cells[j] && cells[j].canFocus()) {
+                    cells[cell].markDamaged();
+                    cell =j;
+                    cells[j].markDamaged();
+                    return;
+                }
+            }
+        }
     }
 
     public String toString() {

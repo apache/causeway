@@ -195,6 +195,8 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                     viewer.popupMenu(identifiedView, at, forView, includeExploration, includeDebug);
 
             } else {
+                viewer.setKeyboardFocus(identifiedView);
+
                 switch (me.getClickCount()) {
                 case 1:
                     viewer.firstClick(click);
@@ -366,7 +368,7 @@ public class InteractionHandler implements MouseMotionListener, MouseListener, K
                 viewer.clearStatus();
                 viewer.disposeOverlayView();
             }
-            viewer.setKeyboardFocus(overView);
+     //       viewer.setKeyboardFocus(overView);
             Click click = new Click(null, downAt, me.getModifiers());
             viewer.mouseDown(click);
             // drag should not be valid after double/triple click

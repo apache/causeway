@@ -121,7 +121,7 @@ public class CompositeView extends ObjectView {
     }
 
     public FocusManager getFocusManager() {
-        return focusManager ;
+        return focusManager == null ? super.getFocusManager() : focusManager;
     }
     
     public Size getRequiredSize() {
