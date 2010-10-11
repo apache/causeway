@@ -1,5 +1,0 @@
-ant clean pdf
-
-
-pause
-
