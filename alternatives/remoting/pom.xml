@@ -28,11 +28,11 @@
 
 	<modules>
 		<module>common</module>
-		<module>http</module>
-		<module>sockets</module>
-		<module>xstream</module>
-		<module>encode</module>
-		<module>serialize</module>
+		<module>transport-http</module>
+		<module>transport-sockets</module>
+		<module>marshalling-xstream</module>
+		<module>marshalling-encode</module>
+		<module>marshalling-serialize</module>
 	</modules>
 	
 	<reporting>

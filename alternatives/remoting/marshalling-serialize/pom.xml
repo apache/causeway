@@ -8,7 +8,7 @@
 	</parent>
 
 	<groupId>org.apache.isis.alternatives.remoting</groupId>
-	<artifactId>common</artifactId>
+	<artifactId>marshalling-serialize</artifactId>
     <name>Remoting APIs</name>
 
 	<properties>
