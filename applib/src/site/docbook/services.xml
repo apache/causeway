@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<article>
+  <articleinfo>
+    <title>Services</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Services</title>
+
+    <para>Services, which are automatically injected into any domain object
+    that needs them, are just ordinary domain objects but with an
+    <literal>getId()</literal> identity method. The method recognised
+    is:</para>
+
+    <programlisting format="linespecific">public String getId()</programlisting>
+
+    <para>This identity method is currently used only by perspectives, when
+    registering services. (Strictly speaking the <literal>getId()</literal>
+    method is optional; if not present then the fully qualified class name is
+    used as the Id).</para>
+
+    <para>All the other methods are processed as for domain objects, as
+    described in a previous section.</para>
+
+    <para>To simplify the process of writing service objects the following
+    abstract classes are available from within the application library:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>AbstractFactoryAndRepository</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>AbstractService</literal></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In addition there are classes within the framework that assist
+    building services that need to integrate with the framework.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>RepositoryHelper</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>ServiceException</literal></para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Registering services</title>
+
+      <para>Services are registered with the Framework at startup via the
+      properties file, using the services properties. The
+      <literal>services</literal> property itself dictates which service
+      classes are to be instantiated at startup, for example:</para>
+
+      <programlisting format="linespecific">isis.services = bom.BookingFactory, bom.CustomerFactoryAndRepository, \
+  bom.LocationFactoryAndRepository
+</programlisting>
+
+      <para>The <literal>prefix</literal> property allows you to specify the
+      common package once and, hence omit them from the classes in the list.
+      The following set of properties is therefore equivalent to the previous
+      example.</para>
+
+      <programlisting format="linespecific">isis.services.prefix = bom
+isis.services = BookingFactory, CustomerFactoryAndRepository, \
+  LocationFactoryAndRepository
+</programlisting>
+
+      <section>
+        <title>System repositories</title>
+
+        <para>As well as services defined programmatically, it is possible to
+        use a repository provided by the framework that will, for a configured
+        object type, provide methods to:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Create a new transient instance</para>
+          </listitem>
+
+          <listitem>
+            <para>Create a new persisted instance</para>
+          </listitem>
+
+          <listitem>
+            <para>Find all persisted instances</para>
+          </listitem>
+
+          <listitem>
+            <para>Find instances with a specified title</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To register such a service prefix the class name with
+        'repository#', for example:</para>
+
+        <programlisting format="linespecific">isis.services = repository#bom.Booking</programlisting>
+      </section>
+    </section>
+
+    <section>
+      <title>Factories/repositories</title>
+
+      <para>TODO</para>
+    </section>
+
+    <section>
+      <title>Other services</title>
+
+      <para></para>
+
+      <para>TODO</para>
+    </section>
+  </section>
+</article>

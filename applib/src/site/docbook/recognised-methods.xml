@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<article>
+  <articleinfo>
+    <title>Recognised Methods</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Recognised Methods</title>
+
+    <para>The Java 1.5 reflector allows the domain modeller to define
+    behaviourally complete domain objects, provide maximum feedback to the
+    user, and control any interaction that may take place (rather than place
+    that code in each and every user interface and back-end). This sections
+    lists the explicit methods that are recognised by the standard reflector.
+    All methods must be <literal>public</literal> to be recognised.</para>
+
+    <para>Methods that do not get matched with any of the listed rules are
+    deemed to be action methods that we expect the user to invoke via the user
+    interface. These are public methods, of the following format</para>
+
+    <programlisting format="linespecific">public void &lt;actionName&gt;([&lt;property type&gt; param]...)
+public &lt;type&gt; &lt;actionName&gt;([&lt;property type&gt; param]...)</programlisting>
+
+    <para>that are not used for fields, titles, or for controlling other
+    methods. Essentially they are the methods left over from generating all
+    other aspects of the class.</para>
+
+    <para>When such a method returns a reference the framework will attempt to
+    display that object. If an action method returns <literal
+    moreinfo="none">null</literal> then nothing will be displayed.</para>
+
+    <section>
+      <title id="addto-method">addTo</title>
+
+      <programlisting format="linespecific">public void addTo&lt;PropertyName&gt;(&lt;collection element type&gt; param)</programlisting>
+
+      <para>Used in conjunction with a collection, the <literal
+      moreinfo="none">addTo</literal> method is called by the framework when
+      the user adds an element to the collection. By providing this method in
+      conjunction with a non-generic collection it will be limited to a
+      specific type (rather than being used to store references of type
+      <literal>Object</literal>). This behaviour is similar to that of the
+      <literal>modify</literal> method for properties.</para>
+
+      <para>See also <xref linkend="modify-method" /> and <xref
+      linkend="removefrom-method" /></para>
+    </section>
+
+    <section>
+      <title>choices</title>
+
+      <para><emphasis>On a property</emphasis></para>
+
+      <programlisting format="linespecific">public &lt;property type&gt;[] choices&lt;PropertyName&gt;([&lt;property type&gt; param])
+
+public List&lt;property type&gt; choices&lt;PropertyName&gt;([&lt;property type&gt; param])</programlisting>
+
+      <para>Used in conjunction with a property, the
+      <literal>choices</literal> method provides the user with a set of
+      options for setting a property. This method is called when the user
+      interface makes the options available, hence its return value can be
+      based on the current state of the object. Note - this does not limit the
+      state of the field, see the <literal>validate</literal> methods for a
+      way to do that.</para>
+
+      <para><emphasis>On parameters on an action</emphasis></para>
+
+      <para>Either:</para>
+
+      <programlisting format="linespecific">public Object[] choicesN&lt;actionName&gt;()
+
+public List&lt;parameter type&gt; choicesN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
+
+      <para>where N is the 0-based parameter number.</para>
+
+      <para>Or:</para>
+
+      <programlisting format="linespecific">public Object[] choices&lt;actionName&gt;([&lt;parameter type&gt; param]...)
+
+public List&lt;parameter type&gt; choices&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
+
+      <para>Complements an action method, or a specific paramter within an
+      action.</para>
+
+      <para>The <literal>choices</literal> method provides a set of options
+      for the parameters of an action. This method is called when the user
+      interface prompts for the parameters from the user, so the options
+      cannot depend on the state of any of the other parameters. Note - this
+      does not limit the state of the parameter, see the
+      <literal>validate</literal> methods for a way to do that.</para>
+
+      <para>For each parameter the array should contain either <literal
+      moreinfo="none">null</literal>, an array, or a collection.</para>
+    </section>
+
+    <section>
+      <title id="clear-method">clear</title>
+
+      <programlisting format="linespecific">public void clear&lt;PropertyName&gt;()</programlisting>
+
+      <para>Used in conjunction with a property, the <literal>clear</literal>
+      method is called when the user (rather than the framework) clears a
+      reference field, or blanks (so there is no entry) a value field.</para>
+
+      <para>See also <xref linkend="modify-method" /></para>
+    </section>
+
+    <section>
+      <title>created</title>
+
+      <programlisting format="linespecific">public void created()</programlisting>
+
+      <para>Life cycle method called by framework when an object is first
+      created. This is the instance's logical creation. This method will
+      <emphasis>not</emphasis> be called when the object is recreated during
+      persistence or remoting.</para>
+    </section>
+
+    <section>
+      <title>default</title>
+
+      <para><emphasis>For a property</emphasis></para>
+
+      <programlisting format="linespecific">public &lt;parameter type&gt; default&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements a get/set method for a reference or value
+      property.</para>
+
+      <para>Provides the default reference or value for a property to be set
+      to when an object is first created, or the user asks for a property to
+      be reset.</para>
+
+      <para><emphasis>For parameters on an action</emphasis></para>
+
+      <para>Either:</para>
+
+      <programlisting format="linespecific">public Object[] defaultN&lt;actionName&gt;()
+
+public List&lt;parameter type&gt; defaultN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
+
+      <para>where N is the 0-based parameter number.</para>
+
+      <para>Or:</para>
+
+      <programlisting format="linespecific">public Object[] default&lt;actionName&gt;([&lt;parameter type&gt; param]...)
+
+public List&lt;parameter type&gt; default&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
+
+      <para>Complements an action method, or a specific parameter on an action
+      method.</para>
+
+      <para>Provides the defaults that should be used for the parameters
+      expected by an action method. The values should be provided as an array
+      with the same number of elements as the number of parameters. Any
+      parameter that does not have a default should have its corresponding
+      element in the array set to null.</para>
+    </section>
+
+    <section>
+      <title>deleted</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>removed()</literal></para>
+
+      <programlisting format="linespecific">public void deleted()</programlisting>
+
+      <para>Life cycle method called by framework when an object has just been
+      removed from the persistent store. At this point the object will exist
+      in memory, but no longer exist in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>deleting</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>removing()</literal></para>
+
+      <programlisting format="linespecific">public void deleting()</programlisting>
+
+      <para>Life cycle method called by framework when an object is just about
+      to be removed from the persistent store. At this point the object still
+      exists in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>disable</title>
+
+      <programlisting format="linespecific">public String disable&lt;PropertyName&gt;([&lt;property type&gt; param])
+
+public String disable&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements a get/set method for a field, or an action
+      method.</para>
+
+      <para>The <literal moreinfo="none">disable</literal> dynamically
+      controls whether a field is editable, or an action can be initiated. If
+      a <literal>String</literal> object is returned the field or action is
+      disabled and the string is made visible to user to inform them why it is
+      disabled. If the method returns <literal moreinfo="none">null</literal>
+      then field or action remains enabled.</para>
+    </section>
+
+    <section>
+      <title>get</title>
+
+      <para><emphasis>Value or reference property</emphasis></para>
+
+      <programlisting format="linespecific">public &lt;property type&gt; get&lt;PropertyName&gt;()</programlisting>
+
+      <para>A standard JavaBean accessor/mutator pair will be recognised as a
+      field for a value or reference. Values include Java primitives,
+      <literal>String</literal>s and <literal>Date</literal>s, and also the
+      value types provided by the [[NAME]] application library (see the
+      section on <ulink url="recognised-types.html">recognised
+      types</ulink>).</para>
+
+      <para>If there is no mutator method then the field is flagged as being
+      derived and will not be persisted or editable.</para>
+
+      <para><emphasis>Collection property</emphasis></para>
+
+      <para>A collection is picked up via an accessor method with the
+      following signature. Java arrays, <literal>Vector</literal>s and
+      <literal>List</literal>s (including generic lists) are the only types
+      that are recognised at the moment.</para>
+
+      <programlisting format="linespecific">public &lt;collection type&gt; get&lt;PropertyName&gt;()</programlisting>
+    </section>
+
+    <section>
+      <title>getId</title>
+
+      <programlisting format="linespecific">public String getId()</programlisting>
+
+      <para>The <literal>getId</literal> method is used by service objects to
+      provide an identity for a particular service type. This should be the
+      same for all implementations of a specific service allowing them to be
+      swapped for one another.</para>
+    </section>
+
+    <section>
+      <title>hide</title>
+
+      <programlisting format="linespecific">public boolean hide&lt;PropertyName&gt;([&lt;property type&gt; param])
+
+public boolean hide&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements a get/set method for a field, or an action
+      method.</para>
+
+      <para>The <literal moreinfo="none">hide</literal> method allows a
+      property or action to be dynamically hidden from the user. This is
+      typically used for security reasons, such as hiding a field once it is
+      set up. Returning <literal moreinfo="none">true</literal> makes the
+      property or action invisible.</para>
+    </section>
+
+    <section>
+      <title>iconName</title>
+
+      <programlisting format="linespecific">public String iconName()</programlisting>
+
+      <para>The <literal moreinfo="none">iconName</literal> is used to
+      over-ride the framework's default mechanism for determining the icon to
+      display based on the class name. The name returned by this method should
+      be simply a name and not a filepath: it should not have an file
+      extension. The framework will look for an acceptable type of image using
+      this name, deriving possible filenames from it. See the section on
+      <ulink url="images.html">images</ulink> for more information.</para>
+    </section>
+
+    <section>
+      <title>loaded</title>
+
+      <programlisting format="linespecific">public void loaded()</programlisting>
+
+      <para>Life cycle method called by framework when an object has just been
+      loaded in from the persistent store. At this point the object has it's
+      correct persisted state.</para>
+    </section>
+
+    <section>
+      <title>loading</title>
+
+      <programlisting format="linespecific">public void loading()</programlisting>
+
+      <para>Life cycle method called by framework when an object is just about
+      to be loaded from the persistent store. At this point the object exists
+      in memory but has not had its state restored.</para>
+    </section>
+
+    <section>
+      <title id="modify-method">modify</title>
+
+      <programlisting format="linespecific">public void modify&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a property.</para>
+
+      <para>The <literal moreinfo="none">modify</literal> method is called
+      when the user (rather than the framework) sets a reference or value
+      field. This is typically used to initialise an association (where an
+      association is combination of references, such as a back link), or to
+      trigger other behaviours such as adding the new value to a total.</para>
+
+      <para>See also <xref linkend="clear-method" />.</para>
+    </section>
+
+    <section>
+      <title>persisted</title>
+
+      <para>Replaces <literal>saved()</literal></para>
+
+      <programlisting format="linespecific">public void persisted()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object has
+      just been added to the persistent store. At this point the object exists
+      in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>persisting</title>
+
+      <para>Replaces <literal>saving()</literal></para>
+
+      <programlisting format="linespecific">public void persisting()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object is
+      just about to be added to the persistent store. At this point the object
+      exists only in memory and not in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>removed</title>
+
+      <para>Replaces <literal>deleted()</literal></para>
+
+      <programlisting format="linespecific">public void removed()</programlisting>
+
+      <para>Life cycle method called by framework when an object has just been
+      removed from the persistent store. At this point the object will exist
+      in memory, but no longer exist in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>removing</title>
+
+      <para>Replaces <literal>deleting()</literal></para>
+
+      <programlisting format="linespecific">public void removing()</programlisting>
+
+      <para>Life cycle method called by framework when an object is just about
+      to be removed from the persistent store. At this point the object still
+      exists in the persistent store.</para>
+    </section>
+
+    <section>
+      <title id="removefrom-method">removeFrom</title>
+
+      <programlisting format="linespecific">public void removeFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a collection.</para>
+
+      <para>The <literal moreinfo="none">removeFrom</literal> method is called
+      by the framework when the user removes an element from the collection.
+      By providing this method in conjunction with a non-generic collection
+      interactions with that collection become limited to a specific type
+      (rather than being used to store references of type
+      <literal>Object</literal>). This signature is similar to the <literal
+      moreinfo="none">clear</literal> method for properties.</para>
+
+      <para>See also <xref linkend="clear-method" /> and <xref
+      linkend="addto-method" />.</para>
+    </section>
+
+    <section>
+      <title>saved</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>persisted()</literal></para>
+
+      <programlisting format="linespecific">public void saved()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object has
+      just been added to the persistent store. At this point the object exists
+      in the persistent store..</para>
+    </section>
+
+    <section>
+      <title>saving</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>persisting()</literal></para>
+
+      <programlisting format="linespecific">public void saving()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object is
+      just about to be added to the persistent store. At this point the object
+      exists only in memory and not in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>set</title>
+
+      <programlisting format="linespecific">public void set&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a <literal>get</literal> method.</para>
+
+      <para>The <literal moreinfo="none">set</literal> method is called when
+      the property is changed, either by the user or the framework. As the
+      framework calls the same method when recreating the object from
+      persistent data it is important to avoid doing any work in the
+      <literal>set</literal> method other than setting up the property
+      variable. A typical set method would be:</para>
+
+      <programlisting format="linespecific">private String name;
+
+public void setName(String name) {
+    this.name = name;
+}</programlisting>
+    </section>
+
+    <section>
+      <title>toString</title>
+
+      <programlisting format="linespecific">public String toString()</programlisting>
+
+      <para>The <literal>toString</literal> method is used to get a title for
+      the object. If the <literal>toString</literal> method cannot serve as
+      the title, because it is being used for alternative purposes (such as
+      debugging) then you may define a <literal>title</literal> method instead
+      (below).</para>
+    </section>
+
+    <section>
+      <title>title</title>
+
+      <programlisting format="linespecific">public String title()</programlisting>
+
+      <para>If a <literal>title</literal> method is defined then the framework
+      will use this in preference to the <literal>toString</literal> method
+      for displaying the object's title.</para>
+    </section>
+
+    <section>
+      <title>updated</title>
+
+      <programlisting format="linespecific">public void updated()</programlisting>
+
+      <para>Life cycle method called by framework when a modified persistent
+      object has just been saved to the persistent store. At this point the
+      object's state in the persistent store will be in its new state.</para>
+    </section>
+
+    <section>
+      <title>updating</title>
+
+      <programlisting format="linespecific">public void updating()</programlisting>
+
+      <para>Life cycle method called by framework when a persistent object has
+      just been modified and is about to be saved to the persistent store. At
+      this point the object's state in the persistent store will still be in
+      its pre-modified state.</para>
+    </section>
+
+    <section>
+      <title>validate</title>
+
+      <para><emphasis>Ensure value or reference is valid</emphasis></para>
+
+      <programlisting format="linespecific">public String validate&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a get/set method for a value or reference
+      property.</para>
+
+      <para>This <literal>validate</literal> method is used to check the
+      value/reference that is to be used to set a property. Using such a
+      mechanism the programmer can guarantee that a field never becomes
+      invalid. If a <literal>String</literal> object is returned the
+      value/reference is consider to be invalid and the field will not be set.
+      The string itself will then be made visible to the user to inform them
+      why it is invalid. If the method returns <literal
+      moreinfo="none">null</literal> then property will be set, that is, its
+      <literal>set</literal> or <literal>modify</literal> method will be
+      called with the same parameter.</para>
+
+      <para><emphasis>Ensure collection can have an element added or
+      removed</emphasis></para>
+
+      <programlisting format="linespecific">public String validateAddTo&lt;PropertyName&gt;(&lt;property type&gt; param)
+public String validateRemoveFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a get method for a collection property.</para>
+
+      <para>This <literal>validate</literal> method is used to check that the
+      specified object can be added to or removed from a collection. Using
+      such a mechanism the programmer can guarantee that the collection never
+      becomes invalid. If a <literal>String</literal> object is returned then
+      adding/removing the specified object is not valid and the collection
+      will not be changed. The string itself will then be made visible to the
+      user to inform them why changing the collection with the object would be
+      invalid. If the method returns <literal moreinfo="none">null</literal>
+      then the object will be added to/removed from the collection, that is,
+      from the collection object directly if there is no
+      <literal>addTo</literal>/<literal>removeFrom</literal> method, or via a
+      call to the <literal>addTo</literal>/<literal>removeFrom</literal>
+      method, with the same parameter, if they do exist.</para>
+
+      <para><emphasis>Ensure it is valid to invoke an action</emphasis></para>
+
+      <programlisting format="linespecific">public String validate&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements an action method.</para>
+
+      <para>This <literal>validate</literal> method is used to check that the
+      actions parameters are all valid and that the action method can be
+      safely invoked, that is, if it is invoked that it will not fail. If a
+      <literal>String</literal> object is returned then the action should not
+      be invoked. The string itself will then be made visible to the user to
+      inform them why the method cannot be invoked. If the method returns
+      <literal moreinfo="none">null</literal> then the action method will be
+      invoked with the same set of parameters.</para>
+
+      <para><emphasis>Ensure object is in a valid state to be
+      saved</emphasis></para>
+
+      <para>A validate() method may be added to provided validation at object
+      level - prior to making an object persistent.</para>
+
+      <programlisting format="linespecific">public String validate()</programlisting>
+
+      <para>This is particularly useful for validating fields in relation to
+      each other, as in the following example:</para>
+
+      <programlisting format="linespecific">public class Booking {
+    private Date fromDate;
+    public Date getFromDate() {...}
+    public void setFromDate(Date d) {...}
+    
+    private Date toDate;
+    public Date getToDate() {...}
+    public void setToDate(Date d) {...}
+
+    public String validate() {
+        if (fromDate &gt; toDate) {
+            return "From Date cannot be after To Date";
+        }
+        return null;
+    }
+    ...
+}</programlisting>
+
+      <para>This will prevent the user from saving a transient
+      <literal>Booking</literal> where the From Date falls after the To Date.
+      Note that in this example, the two date properties could also have their
+      own individual validate methods - for example in order to test that each
+      date was after today.</para>
+
+      <note>
+        <para>At the time of writing, the <literal>validate</literal> method
+        is called only when the object is first saved, not when it is
+        subsequently updated. For validation of subsequent updates, it is
+        necessary to build the validation logic into the individual property
+        validation methods, though these could delegate to a common
+        <literal>validate</literal> method.</para>
+      </note>
+    </section>
+  </section>
+</article>

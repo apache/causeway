@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+
+	<bannerLeft>
+		<name>[[NAME]]</name>
+		<src>images/banner-left.png</src>
+		<href>../index.html</href>
+	</bannerLeft>
+
+	<bannerRight>
+		<src>images/sflogo.png</src>
+		<href>http://sourceforge.net/projects/isis</href>
+	</bannerRight>
+	
+	<body>
+		<breadcrumbs>
+			<item name="[[NAME]]" href="../index.html" />
+			<item name="AppLib" href="index.html" />
+		</breadcrumbs>
+
+		<menu name="Application Library">
+			<item name="About" href="index.html" />
+			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
+		</menu>
+
+		<menu name="Documentation">
+			<item name="${docbkx.title} (PDF)" href="docbkx/pdf/${docbkx.outputName}.pdf" />
+			<item name="${docbkx.title} (HTML)" href="docbkx/html/guide/${docbkx.outputName}.html" />
+			<!--
+			to incorporate into docbkx
+			<item name="Recognised Types" href="recognised-types.html" />
+			<item name="Recognised Methods" href="recognised-methods.html" />
+			<item name="Recognised Annotations" href="recognised-annotations.html" />
+			<item name="Services" href="services.html" />
+			<item name="Fixtures" href="fixtures.html" />
+			<item name="Developing Domain Objects" href="developing-domain-objects.html" />
+			-->
+		</menu>
+
+		<menu name="Maven Reports" ref="reports"/>
+	</body>
+</project>

@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.apache.isis</groupId>
+	<artifactId>applib</artifactId>
+	
+	<name>Application Library</name>
+	
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>trunk</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<!-- this may be redundant because this module is now parented by trunk -->
+	<scm>
+		<connection>scm:svn:http://apache.isis.svn/svnroot/trunk/applib</connection>
+		<developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/applib</developerConnection>
+		<url>http://dev.isis.apache.org/trac/browser/framework/trunk/applib</url>
+	</scm>
+
+	<!-- used in Site generation for relative references -->
+	<url>http://isis.apache.org/applib</url>
+
+	<properties>
+    	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
+
+		<docbkx.title>Apache Isis Application Library</docbkx.title>
+		<docbkx.outputName>isis-applib</docbkx.outputName>
+	</properties>
+	
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+            </plugin>
+		
+			<!-- this may be redundant because this module is now parented by trunk -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<preparationGoals>clean install</preparationGoals>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<tagBase>https://apache.isis.svn/svnroot/tags/applib</tagBase>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<inherited>true</inherited>
+				<reportSets>
+					<reportSet>
+						<inherited>true</inherited>
+						<reports>
+							<report>dependencies</report>
+							<report>dependency-convergence</report>
+							<report>plugins</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+	
+</project>

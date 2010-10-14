@@ -1,0 +1,83 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+
+package org.apache.isis.applib.fixtures;
+
+/**
+ * Sole purpose is to switch the current user while object fixtures are being installed.
+ * 
+ * <p>
+ * An alternative is to switch user using the {@link AbstractFixture#switchUser(String, String...) switchUser} method.
+ * 
+ * <p>
+ * Note that (unlike the otherwise similar {@link DateFixture}) the last user switched to is
+ * <i>not</i> used as the logon fixture.  If you want to automatically logon as some user,
+ * use the {@link LogonFixture}.
+ * 
+ * @see DateFixture
+ * @see LogonFixture
+ */
+public class SwitchUserFixture extends AbstractFixture {
+
+    public SwitchUserFixture(final int year, final int month, final int day, final int hour, final int minutes) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+        this.hour = hour;
+        this.minute = minutes;
+    }
+
+    public SwitchUserFixture(final int year, final int month, final int day) {
+        this(year, month, day, 0, 0);
+    }
+
+    private final int year;
+
+    public int getYear() {
+        return year;
+    }
+    private final int month;
+
+    public int getMonth() {
+        return month;
+    }
+    private final int day;
+
+    public int getDay() {
+        return day;
+    }
+    private final int hour;
+
+    public int getHour() {
+        return hour;
+    }
+    private final int minute;
+
+    public int getMinute() {
+        return minute;
+    }
+
+    @Override
+    public void install() {
+        setDate(year, month, day);
+        setTime(hour, minute);
+    }
+
+}
