@@ -11,7 +11,7 @@
 	<groupId>org.apache.isis.alternatives</groupId>
 	<artifactId>progmodel</artifactId>
 
-	<name>Alternative Programming Models</name>
+	<name>Alternative ProgModels</name>
 
 	<packaging>pom</packaging>
 
@@ -27,7 +27,9 @@
 
 
 	<modules>
+		<!-- 
 		<module>groovy</module>
+		-->
 		<module>headless</module>
 	</modules>
 	

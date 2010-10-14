@@ -11,7 +11,7 @@
 	<artifactId>identity</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
-	<name>Identity (noop) Bytecode Implementation</name>
+	<name>Identity Bytecode Implementation</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>

@@ -10,7 +10,7 @@
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>scimpi-servlet</artifactId>
 	
-	<name>Scimpi Servlet</name>
+	<name>Scimpi Viewer Servlet</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>

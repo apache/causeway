@@ -11,7 +11,7 @@
 	<groupId>org.apache.isis.alternatives</groupId>
 	<artifactId>bytecode</artifactId>
 
-	<name>Alternative Bytecode Enhancement</name>
+	<name>Alternative Bytecode Implementations</name>
 
 	<packaging>pom</packaging>
 

@@ -9,7 +9,7 @@
 
 	<groupId>org.apache.isis.alternatives.remoting</groupId>
 	<artifactId>marshalling-serialize</artifactId>
-    <name>Remoting APIs</name>
+    <name>Serializable Marshalling</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>

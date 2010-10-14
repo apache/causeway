@@ -10,7 +10,7 @@
     <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>scimpi-dispatcher</artifactId>
 	
-	<name>Scimpi Dispatcher</name>
+	<name>Scimpi Viewer Dispatcher</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>

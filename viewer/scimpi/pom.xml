@@ -13,7 +13,7 @@
 	<artifactId>scimpi</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
-	<name>Scimpi</name>
+	<name>Scimpi Viewer</name>
 	
 	<packaging>pom</packaging>
 

@@ -9,7 +9,7 @@
 
 	<artifactId>transport-http-server</artifactId>
 	
-	<name>HTTP Remoting (Server-side)</name>
+	<name>HTTP Transport (Server-side)</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>

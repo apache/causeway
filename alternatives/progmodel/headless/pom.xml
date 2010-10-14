@@ -12,7 +12,7 @@
 	<artifactId>headless</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
-	<name>Headless Programming Model</name>
+	<name>Headless ProgModel</name>
 	
 	<packaging>pom</packaging>
 

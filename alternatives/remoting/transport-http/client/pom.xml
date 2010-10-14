@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>transport-http-client</artifactId>
-	<name>HTTP Remoting (Client-side)</name>
+	<name>HTTP Transport (Client-side)</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>

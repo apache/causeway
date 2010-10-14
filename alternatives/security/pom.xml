@@ -28,7 +28,9 @@
 
 	<modules>
 		<module>ldap</module>
+		<!-- 
 		<module>jdbc</module>
+		-->
 	</modules>
 	
 	<reporting>
