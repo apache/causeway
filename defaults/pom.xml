@@ -2,18 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>org.apache.isis</groupId>
+	<artifactId>defaults</artifactId>
+
+	<name>Isis Default Implementations</name>
+
+	<packaging>pom</packaging>
+
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-
-	<groupId>org.apache.isis</groupId>
-	<artifactId>alternatives</artifactId>
-
-	<name>Alternative Implementations</name>
-
-	<packaging>pom</packaging>
 
 	<properties>
     	<pdf.title>Overview</pdf.title>
@@ -31,7 +31,6 @@
 		<module>security</module>
 		<module>objectstore</module>
 		<module>progmodel</module>
-		<module>remoting</module>
 	</modules>
 	
 	<reporting>
@@ -63,14 +62,34 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+			
+			<dependency>
+				<groupId>org.apache.isis.defaults</groupId>
+				<artifactId>bytecode</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
 
-			<!--
-				unlike core, there's no need to list all the submodules because each
-				plugin should be independent of the others.
-			-->
+			<dependency>
+				<groupId>org.apache.isis.defaults</groupId>
+				<artifactId>progmodel</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.defaults</groupId>
+				<artifactId>objectstore</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.defaults</groupId>
+				<artifactId>security</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+
 		</dependencies>
 	</dependencyManagement>
-
 
 </project>	
 

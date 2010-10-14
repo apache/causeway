@@ -3,18 +3,16 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 	
-	<groupId>org.apache.isis.plugins</groupId>
-	<artifactId>sql-integrationtests</artifactId>
-	<version>0.1-SNAPSHOT</version>
-	
-	<name>SQL Persistor integration tests</name>
-	
-	<parent>
-		<groupId>org.apache.isis.plugins</groupId>
+    <parent>
+		<groupId>org.apache.isis.alternatives.objectstore</groupId>
 		<artifactId>sql</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
+	<artifactId>sql-integrationtests</artifactId>
+	
+	<name>SQL ObjectStore Integration Tests</name>
+	
 	<properties>
     	<pdf.title>Configuration Guide</pdf.title>
     	<pdf.outputName>${project.artifactId}-configuration-guide</pdf.outputName>

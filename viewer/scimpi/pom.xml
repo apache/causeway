@@ -3,19 +3,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.plugins</groupId>
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>viewer</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>scimpi</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
 	<name>Scimpi</name>
 	
 	<packaging>pom</packaging>
-
-	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
@@ -37,13 +37,13 @@
 	<dependencyManagement>
 		<dependencies>
 	        <dependency>
-	            <groupId>org.apache.isis.plugins</groupId>
+	            <groupId>org.apache.isis.viewer</groupId>
 	            <artifactId>scimpi-dispatcher</artifactId>
 	            <version>0.1-SNAPSHOT</version>
 	        </dependency>
 
 	        <dependency>
-	            <groupId>org.apache.isis.plugins</groupId>
+	            <groupId>org.apache.isis.viewer</groupId>
 	            <artifactId>scimpi-servlet</artifactId>
 	            <version>0.1-SNAPSHOT</version>
 	        </dependency>

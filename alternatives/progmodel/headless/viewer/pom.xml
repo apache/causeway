@@ -1,16 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.plugins</groupId>
-	<artifactId>headless-viewer</artifactId>
-	
-	<name>Headless Viewer</name>
-
     <parent>
-        <groupId>org.apache.isis.plugins</groupId>
+        <groupId>org.apache.isis.alternatives.progmodel</groupId>
         <artifactId>headless</artifactId>
         <version>0.1-SNAPSHOT</version>
 	</parent>
+
+	<artifactId>headless-viewer</artifactId>
+	
+	<name>Headless ProgModel Viewer</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
@@ -18,11 +17,11 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
+        <groupId>org.apache.isis.alternatives.progmodel</groupId>
 			<artifactId>headless-applib</artifactId>
         </dependency>
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
+        <groupId>org.apache.isis.alternatives.progmodel</groupId>
 			<artifactId>headless-applib</artifactId>
 		    <type>test-jar</type>
 		    <scope>test</scope>
@@ -42,13 +41,8 @@
         </dependency>
 
 		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-cglib</artifactId>
-        </dependency>
-
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-javassist</artifactId>
+		    <groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
         </dependency>
 
 		<dependency>

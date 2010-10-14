@@ -2,25 +2,25 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.plugins</groupId>
-	<artifactId>http-remoting</artifactId>
-	<version>0.1-SNAPSHOT</version>
-	
-	<name>HTTP Remoting</name>
-	
-	<packaging>pom</packaging>
-
 	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
+		<groupId>org.apache.isis.alternatives</groupId>
+		<artifactId>remoting</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 	
+	<groupId>org.apache.isis.alternatives.remoting</groupId>
+	<artifactId>transport-http</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	
+	<name>HTTP Transport</name>
+	
+	<packaging>pom</packaging>
+
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
 
-		<docbkx.title>Apache Isis HTTP Remoting</docbkx.title>
-		<docbkx.outputName>isis-http-remoting</docbkx.outputName>
+		<docbkx.title>Apache Isis HTTP Transport</docbkx.title>
+		<docbkx.outputName>isis-remoting-transport-http</docbkx.outputName>
 	</properties>
 
 	<build>

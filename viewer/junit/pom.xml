@@ -1,25 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.plugins</groupId>
-	<artifactId>headless-junit</artifactId>
-	
-	<name>Headless JUnit Integration</name>
-
-    <parent>
-        <groupId>org.apache.isis.plugins</groupId>
-        <artifactId>headless</artifactId>
-        <version>0.1-SNAPSHOT</version>
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>viewer</artifactId>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
-    
+
+	<groupId>org.apache.isis.viewer</groupId>
+	<artifactId>junit</artifactId>
+	
+	<name>JUnit Viewer</name>
+
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+    	<headless-viewer.version>0.1-SNAPSHOT</headless-viewer.version>
 	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
+			<groupId>org.apache.isis.alternatives.progmodel</groupId>
 			<artifactId>headless-viewer</artifactId>
+			<version>${headless-viewer.version}</version>
         </dependency>
 
 		<dependency>
@@ -34,16 +36,6 @@
 		    <artifactId>runtime</artifactId>
 		    <type>test-jar</type>
 		    <scope>test</scope>
-        </dependency>
-
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-cglib</artifactId>
-        </dependency>
-
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-javassist</artifactId>
         </dependency>
 
 		<dependency>

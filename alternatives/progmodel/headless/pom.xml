@@ -2,19 +2,19 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.plugins</groupId>
+	<parent>
+		<groupId>org.apache.isis.alternatives</groupId>
+		<artifactId>progmodel</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.alternatives.progmodel</groupId>
 	<artifactId>headless</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
-	<name>Headless</name>
+	<name>Headless Programming Model</name>
 	
 	<packaging>pom</packaging>
-
-	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
@@ -36,12 +36,18 @@
 	<modules>
 		<module>applib</module>
 		<module>viewer</module>
-		<module>junit</module>
 		<module>embedded</module>
 	</modules>
 
 	<dependencyManagement>
 		<dependencies>
+
+			<!--  ? TODO: it'd be better to use a scope=import on org.apache.isis:defaults ? -->
+			<dependency>
+				<groupId>org.apache.isis.defaults</groupId>
+				<artifactId>bytecode</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
 
 			<!-- headless applib -->
 			<dependency>
@@ -61,19 +67,6 @@
 				<groupId>${project.groupId}</groupId>
 				<artifactId>headless-viewer</artifactId>
 				<version>${project.version}</version>
-			</dependency>
-
-			<!-- headless junit -->
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>headless-junit</artifactId>
-				<version>${project.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>${project.groupId}</groupId>
-				<artifactId>headless-junit</artifactId>
-				<version>${project.version}</version>
-				<type>test-jar</type>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

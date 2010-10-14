@@ -2,18 +2,18 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>org.apache.isis</groupId>
+	<artifactId>viewer</artifactId>
+
+	<name>Isis Viewer Implementations</name>
+
+	<packaging>pom</packaging>
+
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-
-	<groupId>org.apache.isis</groupId>
-	<artifactId>alternatives</artifactId>
-
-	<name>Alternative Implementations</name>
-
-	<packaging>pom</packaging>
 
 	<properties>
     	<pdf.title>Overview</pdf.title>
@@ -27,11 +27,13 @@
 
 
 	<modules>
-		<module>bytecode</module>
-		<module>security</module>
-		<module>objectstore</module>
-		<module>progmodel</module>
-		<module>remoting</module>
+		<module>dnd</module>
+		<module>html</module>
+		<module>scimpi</module>
+		<module>restful</module>
+		<module>wicket</module>
+		<module>bdd</module>
+		<module>junit</module>
 	</modules>
 	
 	<reporting>
@@ -70,7 +72,6 @@
 			-->
 		</dependencies>
 	</dependencyManagement>
-
 
 </project>	
 

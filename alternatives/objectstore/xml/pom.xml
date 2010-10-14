@@ -1,17 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.plugins</groupId>
-	<artifactId>xml-persistor</artifactId>
-	<version>0.1-SNAPSHOT</version>
-	
-	<name>XML Persistor</name>
-
-	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
+    <parent>
+		<groupId>org.apache.isis.alternatives</groupId>
+		<artifactId>objectstore</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
+
+	<groupId>org.apache.isis.alternatives.objectstore</groupId>
+	<artifactId>xml</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<name>XML ObjectStore</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>

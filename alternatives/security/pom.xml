@@ -4,14 +4,14 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
+		<artifactId>alternatives</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis</groupId>
-	<artifactId>alternatives</artifactId>
+	<groupId>org.apache.isis.alternatives</groupId>
+	<artifactId>security</artifactId>
 
-	<name>Alternative Implementations</name>
+	<name>Alternative Security Implementations</name>
 
 	<packaging>pom</packaging>
 
@@ -27,11 +27,8 @@
 
 
 	<modules>
-		<module>bytecode</module>
-		<module>security</module>
-		<module>objectstore</module>
-		<module>progmodel</module>
-		<module>remoting</module>
+		<module>ldap</module>
+		<module>jdbc</module>
 	</modules>
 	
 	<reporting>

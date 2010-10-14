@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>bytecode-cglib</artifactId>
-	<name>Core Cglib Bytecode</name>
-
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>core</artifactId>
+		<artifactId>defaults</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
+
+	<groupId>org.apache.isis.defaults</groupId>
+	<artifactId>bytecode</artifactId>
+	<name>Default Bytecode (CgLib)</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>

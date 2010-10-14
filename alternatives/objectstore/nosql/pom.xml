@@ -2,11 +2,17 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.plugins</groupId>
-	<artifactId>nosql-persistor</artifactId>
+    <parent>
+		<groupId>org.apache.isis.alternatives</groupId>
+		<artifactId>objectstore</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.alternatives.objectstore</groupId>
+	<artifactId>nosql</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
-	<name>NOSQL Persistor</name>
+	<name>NOSQL ObjectStore</name>
 	
 	<description>
     	Provides file based persistence for a standalone application using a NOSQL database.
@@ -67,12 +73,6 @@
         </plugins>
     </build>
 	
-    <parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
-
 	<dependencyManagement>
 		<dependencies>
             <dependency>

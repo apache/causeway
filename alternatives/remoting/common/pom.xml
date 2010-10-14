@@ -1,15 +1,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>remoting</artifactId>
-    <name>Core Remoting (Client/Server Support)</name>
-
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>core</artifactId>
+		<artifactId>alternatives</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
+
+	<groupId>org.apache.isis.alternatives</groupId>
+	<artifactId>remoting</artifactId>
+    <name>Remoting (Client/Server Support)</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
