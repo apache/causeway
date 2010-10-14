@@ -42,9 +42,6 @@
 		<module>commons</module>
 		<module>metamodel</module>
 		<module>runtime</module>
-		<module>bytecode-cglib</module>
-		<module>bytecode-javassist</module>
-		<module>remoting</module>
 		<module>webapp</module>
 		<module>webserver</module>
 	</modules>
