@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Apache Isis Release</name>
+	<groupId>org.apache.isis</groupId>
+	<artifactId>release</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	
+	<packaging>pom</packaging>
+
+	<url>http://dev.isis.apache.org/release</url>
+
+	<properties>
+		<compileSource>1.6</compileSource>
+		<compileTarget>1.6</compileTarget>
+
+		<nof.core.version>0.1-SNAPSHOT</nof.core.version>
+		<nof.plugins.dnd-viewer.version>0.1-SNAPSHOT</nof.plugins.dnd-viewer.version>
+		<nof.plugins.html-viewer.version>0.1-SNAPSHOT</nof.plugins.html-viewer.version>
+		<nof.plugins.headless-viewer.version>0.1-SNAPSHOT</nof.plugins.headless-viewer.version>
+		<nof.plugins.xml-persistor.version>0.1-SNAPSHOT</nof.plugins.xml-persistor.version>
+		<nof.plugins.http-remoting.version>0.1-SNAPSHOT</nof.plugins.http-remoting.version>
+		<nof.plugins.xstream-marshalling.version>0.1-SNAPSHOT</nof.plugins.xstream-marshalling.version>
+		<nof.plugins.scimpi.version>0.1-SNAPSHOT</nof.plugins.scimpi.version>
+
+		<nof.plugins.hibernate-persistor.version>0.1-SNAPSHOT</nof.plugins.hibernate-persistor.version>
+		<nof.plugins.berkeley-persistor.version>0.1-SNAPSHOT</nof.plugins.berkeley-persistor.version>
+		<nof.plugins.sql-persistor.version>0.1-SNAPSHOT</nof.plugins.sql-persistor.version>
+		<nof.plugins.nosql-persistor.version>0.1-SNAPSHOT</nof.plugins.nosql-persistor.version>
+
+		<!--
+			used in distributionManagement; override using profiles or with -D
+		-->
+		<distributionManagement.repository.url>file:///tmp/m2-repo/release</distributionManagement.repository.url>
+		<distributionManagement.snapshotRepository.url>file:///tmp/m2-repo/snapshot</distributionManagement.snapshotRepository.url>
+		<distributionManagement.site.url>file:///tmp/m2-sites/isis</distributionManagement.site.url>
+	</properties>
+
+	<scm>
+		<connection>scm:svn:http://apache.isis.svn/svnroot/trunk/release</connection>
+		<developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/release</developerConnection>
+		<url>http://dev.isis.apache.org/trac/browser/framework/trunk/release</url>
+	</scm>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>2.3.1</version>
+					<configuration>
+						<showDeprecation>false</showDeprecation>
+						<showWarnings>false</showWarnings>
+						<source>${compileSource}</source>
+						<target>${compileTarget}</target>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>applib</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>applib</artifactId>
+				<classifier>javadoc</classifier>
+				<version>${nof.core.version}</version>
+			</dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>commons</artifactId>
+                <version>${nof.core.version}</version>
+            </dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>metamodel</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>runtime</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>bytecode-cglib</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>bytecode-javassist</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>remoting</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>webapp</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>webserver</artifactId>
+				<version>${nof.core.version}</version>
+			</dependency>
+
+
+			<!-- plugins -->
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>dnd-viewer</artifactId>
+				<version>${nof.plugins.dnd-viewer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>html-viewer</artifactId>
+				<version>${nof.plugins.html-viewer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>headless</artifactId>
+				<version>${nof.plugins.headless-viewer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>headless-applib</artifactId>
+				<version>${nof.plugins.headless-viewer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>headless-embedded</artifactId>
+				<version>${nof.plugins.headless-viewer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>headless-junit</artifactId>
+				<version>${nof.plugins.headless-viewer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>headless-viewer</artifactId>
+				<version>${nof.plugins.headless-viewer.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>xml-persistor</artifactId>
+				<version>${nof.plugins.xml-persistor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>nosql-persistor</artifactId>
+				<version>${nof.plugins.nosql-persistor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>http-remoting</artifactId>
+				<version>${nof.plugins.http-remoting.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>http-remoting-client</artifactId>
+				<version>${nof.plugins.http-remoting.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>http-remoting-server</artifactId>
+				<version>${nof.plugins.http-remoting.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>xstream-marshalling</artifactId>
+				<version>${nof.plugins.xstream-marshalling.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>scimpi-dispatcher</artifactId>
+				<version>${nof.plugins.scimpi.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>scimpi-servlet</artifactId>
+				<version>${nof.plugins.scimpi.version}</version>
+			</dependency>
+
+			<!--
+				Not provided in version 4.0.x
+			-->
+			<!-- 
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>berkeley-persistor</artifactId>
+				<version>${nof.plugins.berkeley-persistor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>sql-persistor</artifactId>
+				<version>${nof.plugins.sql-persistor.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.plugins</groupId>
+				<artifactId>hibernate-persistor</artifactId>
+				<version>${nof.plugins.hibernate-persistor.version}</version>
+			</dependency>
+			-->
+
+		</dependencies>
+	</dependencyManagement>
+
+
+	<profiles>
+		<profile>
+			<id>deploy-remote</id>
+			<!--
+				to deploy to the NOF repo (and for staging to central repo)
+			-->
+			<properties>
+				<website.url></website.url>
+				<distributionManagement.repository.url>sftp://www.apache.isis.dev/htdocs/m2-repo/release</distributionManagement.repository.url>
+				<distributionManagement.snapshotRepository.url>sftp://www.apache.isis.dev/htdocs/m2-repo/snapshot</distributionManagement.snapshotRepository.url>
+				<distributionManagement.site.url>scp://shell.sourceforge.net/home/groups/n/na/isis/htdocs/m2-site</distributionManagement.site.url>
+			</properties>
+		</profile>
+		<profile>
+			<id>deploy-star</id>
+			<!-- to deploy into the sister objects' (starobjects.org) repos -->
+			<properties>
+				<distributionManagement.repository.url>sftp://web.sourceforge.net/home/groups/s/st/starobjects/htdocs/m2-repo/release</distributionManagement.repository.url>
+				<distributionManagement.snapshotRepository.url>sftp://web.sourceforge.net/home/groups/s/st/starobjects/htdocs/m2-repo/snapshot</distributionManagement.snapshotRepository.url>
+				<distributionManagement.site.url>scp://shell.sourceforge.net/home/groups/s/st/starobjects/htdocs/m2-no-site</distributionManagement.site.url>
+			</properties>
+		</profile>
+	</profiles>
+
+	<distributionManagement>
+		<repository>
+			<id>isis-release</id>
+			<name>[[NAME]] Release Repository</name>
+			<url>${distributionManagement.repository.url}</url>
+		</repository>
+		<snapshotRepository>
+			<id>isis-snapshot</id>
+			<name>[[NAME]] Snapshot Repository</name>
+			<url>${distributionManagement.snapshotRepository.url}</url>
+			<uniqueVersion>false</uniqueVersion>
+		</snapshotRepository>
+		<site>
+			<id>isis-site</id>
+			<name>[[NAME]] Site</name>
+			<url>${distributionManagement.site.url}/release</url>
+		</site>
+	</distributionManagement>
+
+</project>
