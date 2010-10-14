@@ -2,15 +2,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.apache</groupId>
+	    <artifactId>apache</artifactId>
+	    <version>7</version>
+	</parent>
+	
 	<groupId>org.apache.isis</groupId>
-    <artifactId>trunk</artifactId>
+    <artifactId>isis-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
     
-    <name>[[NAME]]</name>
+    <name>Apache Isis</name>
    	<description>
-		Root POM for [[NAME]] core 
-		framework and its plugins.
+		Root POM for core framework, the viewers, 
+        the default implementations and alternatives implementations.
 		Defines standard build process, as well as
 		standard set of 3rd party dependencies
 		(eg for testing and logging frameworks).
@@ -20,36 +26,16 @@
 
 	<!-- mvn clean install -->
 	<!-- mvn clean install -P build-all -->
-	<!-- mvn deploy -P build-all -->
+
 	<!-- mvn deploy -P build-all,deploy-remote -->
+	<!-- mvn deploy -P build-all,apache-release -->
 
-	<!-- mvn site-deploy -->
-	<!-- mvn site-deploy -P site-all -->
-	<!-- mvn site-deploy -P site-all,deploy-remote -->
+	<!-- mvn site-deploy -P deploy-local -->
 
-    <scm>
-        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk</connection>
-        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk</developerConnection>
-        <url>http://dev.isis.apache.org/trac/browser/framework/trunk</url>
-    </scm>
+	<!-- mvn site-deploy -P site-all,deploy-local -->
+	<!-- mvn site-deploy -P site-all,apache-release -->
 
-	<!-- used in Site generation for relative references -->
-    <url>http://isis.apache.org</url>
-    
-   	<inceptionYear>2001</inceptionYear>
-    
-   	<organization>
-		<name>[[NAME]] Contributors</name>
-		<url>http://isis.apache.org</url>
-	</organization>
-    
-   	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>manual</distribution>
-		</license>
-	</licenses>
+   	<inceptionYear>2010</inceptionYear>
     
     <properties>
 		<compileSource>1.6</compileSource>
@@ -65,19 +51,13 @@
 			fallback; submodules can override referencing the file locally to
 			allow offline builds if required
 		-->
-		<pmd.ruleset>https://apache.isis.svn/svnroot/trunk/src/main/pmd/pmd.xml</pmd.ruleset>
+		<pmd.ruleset>https://svn.apache.org/repos/asf/incubator/isis/trunk/src/main/pmd/pmd.xml</pmd.ruleset>
 
-		<!--
-			used in distributionManagement; override using profiles or with -D
-		-->
-		<distributionManagement.repository.url>file:///tmp/m2-repo/release</distributionManagement.repository.url>
-		<distributionManagement.snapshotRepository.url>file:///tmp/m2-repo/snapshot</distributionManagement.snapshotRepository.url>
-		<distributionManagement.site.url>file:///tmp/m2-sites/isis</distributionManagement.site.url>
 
 		<!--
 		used by maven-pdf-plugin for site-docs in PDF format
 		-->
-		<pdf.author>[[NAME]] Contributors</pdf.author>
+		<pdf.author>Apache Isis Contributors</pdf.author>
     	<pdf.title>Site Docs</pdf.title>
     	<pdf.outputName>site-docs</pdf.outputName>
     	
@@ -89,14 +69,24 @@
     	
     	<trunk.baseDir>${project.build.directory}/..</trunk.baseDir>
     </properties>
+
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk</url>
+    </scm>
+
+    <!-- used in Site generation for relative references -->
+    <url>http://incubator.apache.org/isis</url>
+    
     
     <mailingLists>
     	<mailingList>
-    		<name>contributors</name>
-    		<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=isis-contributors</archive>
-    		<post>isis-contributors@lists.sourceforge.net</post>
-    		<subscribe>https://lists.sourceforge.net/lists/listinfo/isis-contributors</subscribe>
-    		<unsubscribe>https://lists.sourceforge.net/lists/listinfo/isis-contributors</unsubscribe>
+    		<name>developers</name>
+    		<archive>http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/</archive>
+    		<post>isis-dev@incubator.apache.org</post>
+    		<subscribe>isis-dev-subscribe@incubator.apache.org</subscribe>
+    		<unsubscribe>isis-dev-unsubscribe@incubator.apache.org</unsubscribe>
     	</mailingList>
     </mailingLists>
 
@@ -105,8 +95,8 @@
 			<id>rcmatthews</id>
 			<name>Robert Matthews</name>
 			<email>rmatthews@isis.apache.org</email>
-			<organization>[[NAME]] Group Ltd.</organization>
-			<organizationUrl>http://isis.apache.org</organizationUrl>
+			<organization>Naked Objects Group Ltd.</organization>
+			<organizationUrl>http://nakedobjects.net</organizationUrl>
 			<roles>
 				<role>architect</role>
 				<role>developer</role>
@@ -114,7 +104,7 @@
 			<timezone>+0</timezone>
 		</developer>
 		<developer>
-			<id>dkhaywood</id>
+			<id>danhaywood</id>
 			<name>Dan Haywood</name>
 			<email>dan@haywood-associates.co.uk</email>
 			<organization>Haywood Associates Ltd.</organization>
@@ -125,6 +115,8 @@
 			<timezone>+0</timezone>
 		</developer>
 	</developers>
+	
+	<!-- TODO: these need to altered to developers -->
 	<contributors>
 		<contributor>
 			<name>Kevin Meyer</name>
@@ -138,17 +130,19 @@
 	</contributors>
 
 	<issueManagement>
-		<system>Trac</system>
-		<url>http://dev.isis.apache.org/trac/report</url>
+		<system>Jira</system>
+		<url>https://issues.apache.org/jira/browse/ISIS</url>
 	</issueManagement>
 
+<!--
+TODO: is there a CI server for ASF?  I've asked on isis-dev.
 	<ciManagement>
 		<system>Hudson</system>
-		<url>http://dev.isis.apache.org/hudson/</url>
+		<url>http://isis.apache.org/hudson/</url>
 		<notifiers>
 			<notifier>
 				<type>mail</type>
-				<address>rmatthews@isis.apache.org</address>
+				<address>rmatthews@nakedobjects.org</address>
 				<sendOnError />
 				<sendOnFailure />
 				<sendOnSuccess />
@@ -157,7 +151,7 @@
 			</notifier>
 			<notifier>
 				<type>mail</type>
-				<address>dan@haywood-associatees.co.uk</address>
+				<address>dan@haywood-associates.co.uk</address>
 				<sendOnError />
 				<sendOnFailure />
 				<sendOnSuccess />
@@ -166,29 +160,7 @@
 			</notifier>
 		</notifiers>
 	</ciManagement>
-
-	<repositories>
-		<repository>
-			<id>isis-snapshot</id>
-			<url>http://isis.apache.org/m2-repo/snapshot/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-		</repository>
-		<repository>
-			<id>isis-release</id>
-			<url>http://isis.apache.org/m2-repo/release/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
+-->
 
 	<pluginRepositories>
 		<pluginRepository>
@@ -1165,21 +1137,10 @@
 	</dependencies>
 
 	<distributionManagement>
-		<repository>
-			<id>isis-release</id>
-			<name>[[NAME]] Release Repository</name>
-			<url>${distributionManagement.repository.url}</url>
-		</repository>
-		<snapshotRepository>
-			<id>isis-snapshot</id>
-			<name>[[NAME]] Snapshot Repository</name>
-			<url>${distributionManagement.snapshotRepository.url}</url>
-			<uniqueVersion>false</uniqueVersion>
-		</snapshotRepository>
 		<site>
 			<id>isis-site</id>
-			<name>[[NAME]] Site</name>
-			<url>${distributionManagement.site.url}</url>
+			<name>Apache Isis Site</name>
+			<url>${distMgmtSnapshotsSiteUrl}</url>
 		</site>
 	</distributionManagement>
 
@@ -1383,24 +1344,16 @@
 				</plugins>
 			</reporting>
 		</profile>
+
 		<profile>
-			<id>deploy-remote</id>
+			<id>deploy-local</id>
 			<!--
-				to deploy remotely to [[NAME]]'s SF repo (and for staging to central repo)
+			to deploy locally to Apache Isis' SF repo
 			-->
 			<properties>
-				<distributionManagement.repository.url>sftp://www.apache.isis.dev/m2/repo/release</distributionManagement.repository.url>
-				<distributionManagement.snapshotRepository.url>sftp://www.apache.isis.dev/m2/repo/snapshot</distributionManagement.snapshotRepository.url>
-				<distributionManagement.site.url>scp://shell.sourceforge.net/home/groups/n/na/isis/m2/site</distributionManagement.site.url>
-			</properties>
-		</profile>
-		<profile>
-			<id>deploy-star</id>
-			<!-- to deploy into the sister objects' (starobjects.org) repos -->
-			<properties>
-				<distributionManagement.repository.url>sftp://web.sourceforge.net/home/groups/s/st/starobjects/htdocs/m2-repo/release</distributionManagement.repository.url>
-				<distributionManagement.snapshotRepository.url>sftp://web.sourceforge.net/home/groups/s/st/starobjects/htdocs/m2-repo/snapshot</distributionManagement.snapshotRepository.url>
-				<distributionManagement.site.url>scp://shell.sourceforge.net/home/groups/s/st/starobjects/htdocs/m2-no-site</distributionManagement.site.url>
+				<distMgmtSnapshotsName>file:///tmp/m2-repo/release</distMgmtSnapshotsName>
+				<distMgmtSnapshotsUrl>file:///tmp/m2-repo/snapshot</distMgmtSnapshotsUrl>
+				<distMgmtSnapshotsSiteUrl>file:///tmp/m2-sites/isis</distMgmtSnapshotsSiteUrl>
 			</properties>
 		</profile>
 
@@ -1412,7 +1365,9 @@
 		 	<modules>
 		        <module>applib</module>
 		        <module>core</module>
-		        <module>extensions</module>
+		        <module>defaults</module>
+		        <module>viewer</module>
+		        <module>alternatives</module>
 		        <module>release</module>
 		   </modules>
 		</profile>
@@ -1423,25 +1378,32 @@
            	</modules>
    	    </profile>
    	    <profile>
-   	        <id>core</id>
+   	        <id>defaults</id>
             <modules>
 		       <module>applib</module>
                <module>core</module>
+               <module>defaults</module>
 		       <module>release</module>
            	</modules>
    	    </profile>
    	    <profile>
-   	        <id>extensions</id>
+   	        <id>viewer</id>
             <modules>
-               <module>extensions</module>
+               <module>viewer</module>
+           	</modules>
+   	    </profile>
+   	    <profile>
+   	        <id>alternatives</id>
+            <modules>
+               <module>alternatives</module>
            	</modules>
    	    </profile>
    	    <profile>
    	        <id>support</id>
             <modules>
                <module>release</module>
-               <module>distribution</module>
-               <module>archetypes</module>
+               <module>examples</module>
+               <module>support</module>
            	</modules>
    	    </profile>
     </profiles>
