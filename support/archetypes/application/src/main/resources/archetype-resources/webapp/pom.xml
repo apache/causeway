@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Web Application</name>
+	<artifactId>${artifactId}</artifactId>
+	<packaging>war</packaging>
+
+	<parent>
+		<groupId>${groupId}</groupId>
+		<artifactId>${rootArtifactId}</artifactId>
+		<version>${version}</version>
+	</parent>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+            </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+	
+		<!-- other modules in this project -->
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>${rootArtifactId}-fixture</artifactId>
+		</dependency>
+
+
+		<!-- [[NAME]] -->
+	    <dependency>
+	        <groupId>org.apache.isis.core</groupId>
+	        <artifactId>bytecode-cglib</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.isis.core</groupId>
+	        <artifactId>bytecode-javassist</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>remoting</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>html-viewer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>http-remoting-server</artifactId>
+		</dependency>
+	    <dependency>
+	        <groupId>org.apache.isis.plugins</groupId>
+	        <artifactId>headless-embedded</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>xml-persistor</artifactId>
+		</dependency>
+		<!--
+		comment in launch using org.apache.isis.webserver.WebServer
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>webserver</artifactId>
+		</dependency>
+		-->
+
+	</dependencies>
+
+</project>

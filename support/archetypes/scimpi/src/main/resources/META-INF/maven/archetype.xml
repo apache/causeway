@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<archetype>
+    <id>scimpi-webapp</id>
+
+    <resources>
+        <resource>src/main/webapp/META-INF/MANIFEST.MF</resource>
+        <resource filtered="false">src/main/webapp/WEB-INF/logging.properties</resource>
+        <resource filtered="false">src/main/webapp/WEB-INF/web.xml</resource>
+        <resource>src/main/webapp/WEB-INF/isis.properties</resource>
+        <resource filtered="false">src/main/webapp/WEB-INF/allow</resource>
+        <resource filtered="false">src/main/webapp/WEB-INF/passwords</resource>
+
+        <resource filtered="false">src/main/webapp/style/screen.css</resource>
+        <resource filtered="false">src/main/webapp/style/template.shtml</resource>
+
+        <resource filtered="false">src/main/webapp/generic/action.shtml</resource>
+        <resource filtered="false">src/main/webapp/generic/collection.shtml</resource>
+        <resource filtered="false">src/main/webapp/generic/edit.shtml</resource>
+        <resource filtered="false">src/main/webapp/generic/object.shtml</resource>
+
+        <resource filtered="false">src/main/webapp/login.shtml</resource>
+        <resource filtered="false">src/main/webapp/index.shtml</resource>
+
+        <resource filtered="false">src/main/webapp/images/banner.png</resource>
+        <resource filtered="false">src/main/webapp/images/bg-button.gif</resource>
+        <resource filtered="false">src/main/webapp/images/banner-bg.png</resource>
+        <resource filtered="false">src/main/webapp/images/Default.png</resource>
+        <resource filtered="false">src/main/webapp/images/logo.png</resource>
+    </resources>
+</archetype>

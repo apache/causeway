@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><archetype>
+  <id>application</id>
+  <resources>
+    <resource>pom.xml</resource>
+    <resource>config/allow</resource>
+    <resource>config/embedded-web-server.properties</resource>
+    <resource>config/logging.properties</resource>
+    <resource>config/isis.properties</resource>
+    <resource>config/passwords</resource>
+    <resource>config/protocol.properties</resource>
+    <resource>config/transport_sockets.properties</resource>
+    <resource>config/transport_http.properties</resource>
+    <resource>config/viewer_html.properties</resource>
+    <resource>ide/eclipse/launch/Isis (DnD).launch</resource>
+    <resource>ide/eclipse/launch/Isis (HTML).launch</resource>
+    <resource>src/main/assembly/scripts/isis.bat</resource>
+    <resource>src/main/assembly/scripts/isis.sh</resource>
+    <resource>src/main/assembly/descriptor.xml</resource>
+    <resource>src/main/java/dom/DomainObject.java</resource>
+    <resource>src/main/java/fixture/DomainObjectFixture.java</resource>
+    <resource>src/main/java/service/DomainObjectRepository.java</resource>
+    <resource>src/main/resources/images/DomainObject.gif</resource>
+    <resource>src/main/webapp/images/banner.png</resource>
+    <resource>src/main/webapp/images/banner-bg.png</resource>
+    <resource>src/main/webapp/default.css</resource>
+    <resource>src/main/webapp/images/banner.png</resource>
+    <resource>src/main/webapp/images/banner-bg.png</resource>
+<!--
+    <resource>webapp/ide/eclipse/launch/WebServer.launch</resource>
+    <resource>webapp/src/main/resources/images/Default.png</resource>
+    <resource>webapp/src/main/webapp/WEB-INF/allow</resource>
+    <resource>webapp/src/main/webapp/WEB-INF/logging.properties</resource>
+    <resource>webapp/src/main/webapp/WEB-INF/isis.properties</resource>
+    <resource>webapp/src/main/webapp/WEB-INF/passwords</resource>
+    <resource>webapp/src/main/webapp/WEB-INF/protocol.properties</resource>
+    <resource>webapp/src/main/webapp/WEB-INF/web.properties</resource>
+    <resource>webapp/src/main/webapp/WEB-INF/web.xml</resource>
+-->
+    <resource>src/main/webapp/default.css</resource>
+  </resources>
+</archetype>

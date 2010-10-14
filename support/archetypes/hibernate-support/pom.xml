@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+    <name>Hibernate Support Archetype</name>
+    <groupId>org.apache.isis.archetypes</groupId>
+    <artifactId>hibernate-support</artifactId>
+    <packaging>maven-archetype</packaging>
+    <version>0.1-SNAPSHOT</version>
+  
+ 	<parent>
+	    <groupId>org.apache.isis</groupId>
+	    <artifactId>isis-parent</artifactId>
+        <version>7</version>
+        <relativePath>../pom/pom.xml</relativePath>
+    </parent>
+
+    <scm>
+        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/archetypes/hibernate-support</connection>
+        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/archetypes/hibernate-support</developerConnection>
+        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/archetypes/hibernate-support</url>
+    </scm>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-archetype-plugin</artifactId>
+                <extensions>true</extensions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

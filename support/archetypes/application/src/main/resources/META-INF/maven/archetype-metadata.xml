@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?><archetype-descriptor name="application">
+  <modules>
+    <module id="${rootArtifactId}-dom" dir="dom" name="${rootArtifactId}-dom">
+      <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.png</include>
+            <include>**/*.gif</include>
+            <include>**/*.jpg</include>
+            <include>**/*.jpeg</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-fixture" dir="fixture" name="${rootArtifactId}-fixture">
+      <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-service" dir="service" name="${rootArtifactId}-service">
+      <fileSets>
+        <fileSet filtered="true" packaged="true" encoding="UTF-8">
+          <directory>src/main/java</directory>
+          <includes>
+            <include>**/*.java</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-commandline" dir="commandline" name="${rootArtifactId}-commandline">
+      <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>src/main/assembly</directory>
+          <includes>
+            <include>**/*.sh</include>
+            <include>**/*.bat</include>
+            <include>**/*.xml</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.png</include>
+            <include>**/*.gif</include>
+            <include>**/*.jpg</include>
+            <include>**/*.jpeg</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/webapp</directory>
+          <includes>
+            <include>**/*.css</include>
+            <include>**/*.xml</include>
+            <include>**/*.png</include>
+            <include>**/*.gif</include>
+            <include>**/*.jpg</include>
+            <include>**/*.jpeg</include>
+            <include>**/*.</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>config</directory>
+          <includes>
+            <include>**/*.properties</include>
+            <include>allow</include>
+            <include>passwords</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>ide/eclipse/launch</directory>
+          <includes>
+            <include>**/*.launch</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    <module id="${rootArtifactId}-webapp" dir="webapp" name="${rootArtifactId}-webapp">
+      <fileSets>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>src/main/webapp</directory>
+          <includes>
+            <include>**/*.properties</include>
+            <include>**/allow</include>
+            <include>**/passwords</include>
+          </includes>
+        </fileSet>
+        <fileSet filtered="true" encoding="UTF-8">
+          <directory>ide/eclipse/launch</directory>
+          <includes>
+            <include>**/*.launch</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/webapp</directory>
+          <includes>
+            <include>**/*.css</include>
+            <include>**/*.xml</include>
+            <include>**/*.png</include>
+            <include>**/*.gif</include>
+            <include>**/*.jpg</include>
+            <include>**/*.jpeg</include>
+            <include>**/*.</include>
+          </includes>
+        </fileSet>
+        <fileSet encoding="UTF-8">
+          <directory>src/main/resources</directory>
+          <includes>
+            <include>**/*.png</include>
+            <include>**/*.gif</include>
+            <include>**/*.jpg</include>
+            <include>**/*.jpeg</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+  </modules>
+</archetype-descriptor>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?><archetype-descriptor name="expenses-demo">
+  <fileSets>
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory>src/main/webapp</directory>
+      <includes>
+        <include>**/*.xml</include>
+        <include>**/*.shtml</include>
+        <include>**/*.properties</include>
+        <include>**/allow</include>
+        <include>**/passwords</include>
+      </includes>
+    </fileSet>
+    <fileSet encoding="UTF-8">
+      <directory>src/main/webapp</directory>
+      <includes>
+        <include>**/*.</include>
+        <include>**/*.jpg</include>
+        <include>**/*.MF</include>
+        <include>**/*.png</include>
+        <include>**/*.css</include>
+        <include>**/*.gif</include>
+      </includes>
+    </fileSet>
+  </fileSets>
+</archetype-descriptor>
