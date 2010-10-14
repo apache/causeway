@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Example Shopping Cart</name>
+	<description>Scimpi example of an shopping cart application</description>
+	<groupId>org.apache.isis.distribution</groupId>
+	<artifactId>example-shopping-cart</artifactId>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.apache.isis.distribution</groupId>
+		<artifactId>examples</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>2.5.1</version>
+				<configuration>
+					<downloadSources>true</downloadSources>
+					<downloadJavadocs>true</downloadJavadocs>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+				<executions>
+					<execution>
+						<id>source</id>
+						<phase>compile</phase>
+					</execution>
+					<execution>
+						<id>test</id>
+						<phase>test-compile</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>2.0-beta-5</version>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<excludes>
+						<exclude>**/Test*.java</exclude>
+					</excludes>
+					<useFile>true</useFile>
+					<printSummary>false</printSummary>
+					<outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/Test*.java</exclude>
+					</excludes>
+					<showSuccess>false</showSuccess>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<preparationGoals>clean install</preparationGoals>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+				</configuration>
+			</plugin>
+			
+		</plugins>
+	</build>
+	
+	<modules>
+		<module>shopping</module>
+		<module>catalogue</module>
+		<module>cart</module>
+	</modules>
+
+	<reporting>
+		<plugins>
+
+			<!--  General project overview -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<inherited>false</inherited>
+						<reports>
+							<report>license</report>
+							<report>project-team</report>
+							<report>issue-tracking</report>
+							<report>scm</report>
+							<report>cim</report>
+						</reports>
+					</reportSet>
+					<reportSet>
+						<reports>
+							<report>dependencies</report>
+							<report>dependency-convergence</report>
+							<report>index</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+
+			<!-- Unit tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+
+			<!-- API docs -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<configuration>
+					<aggregate>true</aggregate>
+					<doctitle>[[NAME]] Application</doctitle>
+					<splitindex>false</splitindex>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>webserver</artifactId>
+        </dependency>
+
+         <dependency>
+            <groupId>org.apache.isis.plugins</groupId>
+            <artifactId>xml-persistor</artifactId>
+        </dependency>
+    </dependencies>
+
+
+</project>
+
+

@@ -1,0 +1,14 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style/screen.css" type="text/css"/>
+    <title>Debug -- Specification</title>
+</head>
+
+<body>
+	<a href="index.shtml">Debug Home</a> | 
+	<a href="list-specifications.shtml">Specifications</a>
+    <swf:debug type="specification" value="${spec}"/>
+    <a href="index.shtml">Debug Home</a> | 
+	<a href="list-specifications.shtml">Specifications</a>
+</body>
+</html>

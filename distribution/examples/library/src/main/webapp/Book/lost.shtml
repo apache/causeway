@@ -1,0 +1,13 @@
+<swf:page-title>Lost book</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+<p>Select the book to remove from the library system</p>
+
+<swf:action-form object="service:books" method="findByTitle" view="lost.shtml" result-name="books"/>
+
+<swf:unless empty="${books}">
+    <swf:action-form object="service:books" method="removeBook" view="../index.shtml">
+        <swf:radio-list field="param0" collection="${books}" />
+    </swf:action-form>
+</swf:unless>

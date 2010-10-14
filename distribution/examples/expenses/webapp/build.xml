@@ -1,0 +1,108 @@
+<project name="inis-webapp" default="jar" basedir=".">
+  <property file="${user.home}/.m2/maven.properties"/>
+  <property name="maven.build.output" value="target/classes"/>
+  <property name="maven.build.directory" value="target"/>
+  <property name="maven.build.final.name" value="inis-webapp-1.0-SNAPSHOT"/>
+  <property name="maven.test.reports" value="${maven.build.directory}/test-reports"/>
+  <property name="maven.test.output" value="target/test-classes"/>
+  <property name="maven.repo.local" value="${user.home}/.m2/repository"/>
+  <path id="build.classpath">
+    <fileset dir="${maven.repo.local}">
+      <include name="commons-logging/commons-logging/1.0/commons-logging-1.0.jar"/>
+      <include name="org/apache/isis/nos-bootstrap/3.0M3-SNAPSHOT/nos-bootstrap-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/nof-core/3.0M3-SNAPSHOT/nof-core-3.0M3-SNAPSHOT.jar"/>
+      <include name="commons-lang/commons-lang/1.0/commons-lang-1.0.jar"/>
+      <include name="com/isisgroup/inis-prototype/1.0-SNAPSHOT/inis-prototype-1.0-SNAPSHOT.jar"/>
+      <include name="log4j/log4j/1.2.8/log4j-1.2.8.jar"/>
+      <include name="org/apache/isis/nos-web-app/3.0M3-SNAPSHOT/nos-web-app-3.0M3-SNAPSHOT.war"/>
+      <include name="org/apache/isis/nof-persistor/3.0M3-SNAPSHOT/nof-persistor-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/nof-reflector-core/3.0M3-SNAPSHOT/nof-reflector-core-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/nos-viewer-cli/3.0M3-SNAPSHOT/nos-viewer-cli-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/logging-util/3.0M3-SNAPSHOT/logging-util-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/nos-viewer-dnd/3.0M3-SNAPSHOT/nos-viewer-dnd-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/nos-objectstore-xml/3.0M3-SNAPSHOT/nos-objectstore-xml-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/no-application-library/3.0M3-SNAPSHOT/no-application-library-3.0M3-SNAPSHOT.jar"/>
+      <include name="org/apache/isis/nof-reflector-java/3.0M3-SNAPSHOT/nof-reflector-java-3.0M3-SNAPSHOT.jar"/>
+      <include name="com/isisgroup/inis-integration/1.0-SNAPSHOT/inis-integration-1.0-SNAPSHOT.jar"/>
+      <include name="commons-cli/commons-cli/1.0/commons-cli-1.0.jar"/>
+      <include name="org/apache/isis/no-architecture/3.0M3-SNAPSHOT/no-architecture-3.0M3-SNAPSHOT.jar"/>
+      <include name="com/isisgroup/inis-bom/1.0-SNAPSHOT/inis-bom-1.0-SNAPSHOT.jar"/>
+    </fileset>
+  </path>
+  <target name="clean" description="Clean the output directory">
+    <delete dir="${maven.build.directory}"/>
+  </target>
+  <target name="compile" depends="get-deps" description="Compile the code">
+    <mkdir dir="${maven.build.output}"/>
+    <javac destdir="${maven.build.output}" excludes="**/package.html" debug="true" deprecation="true" optimize="false">
+      <src>
+        <pathelement location="src/main/java"/>
+      </src>
+      <classpath refid="build.classpath"/>
+    </javac>
+    <copy todir="${maven.build.output}">
+      <fileset dir="src/main/resources"/>
+    </copy>
+  </target>
+  <target name="jar" depends="compile,test" description="Clean the JAR">
+    <jar jarfile="${maven.build.directory}/${maven.build.final.name}.jar" basedir="${maven.build.output}" excludes="**/package.html"/>
+  </target>
+  <target name="compile-tests" depends="junit-present, compile" description="Compile the test code" if="junit.present">
+    <mkdir dir="${maven.test.output}"/>
+  </target>
+  <target name="test" depends="junit-present, compile-tests" if="junit.present" description="Run the test cases"/>
+  <target name="test-junit-present">
+    <available classname="junit.framework.Test" property="junit.present"/>
+  </target>
+  <target name="junit-present" depends="test-junit-present" unless="junit.present">
+    <echo>================================= WARNING ================================</echo>
+    <echo> Junit isn&apos;t present in your $ANT_HOME/lib directory. Tests not executed. </echo>
+    <echo>==========================================================================</echo>
+  </target>
+  <target name="test-offline">
+    <condition property="maven.mode.offline">
+      <equals arg1="${build.sysclasspath}" arg2="only"/>
+    </condition>
+  </target>
+  <target name="get-deps" depends="test-offline" description="Download all dependencies" unless="maven.mode.offline">
+    <mkdir dir="${maven.repo.local}"/>
+    <get src="http://repository.isis.apache.org//commons-logging/commons-logging/1.0/commons-logging-1.0.jar" dest="${maven.repo.local}/commons-logging/commons-logging/1.0/commons-logging-1.0.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/commons-logging/commons-logging/1.0/commons-logging-1.0.jar" dest="${maven.repo.local}/commons-logging/commons-logging/1.0/commons-logging-1.0.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nos-bootstrap/3.0M3-SNAPSHOT/nos-bootstrap-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-bootstrap/3.0M3-SNAPSHOT/nos-bootstrap-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nos-bootstrap/3.0M3-SNAPSHOT/nos-bootstrap-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-bootstrap/3.0M3-SNAPSHOT/nos-bootstrap-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nof-core/3.0M3-SNAPSHOT/nof-core-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-core/3.0M3-SNAPSHOT/nof-core-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nof-core/3.0M3-SNAPSHOT/nof-core-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-core/3.0M3-SNAPSHOT/nof-core-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//commons-lang/commons-lang/1.0/commons-lang-1.0.jar" dest="${maven.repo.local}/commons-lang/commons-lang/1.0/commons-lang-1.0.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/commons-lang/commons-lang/1.0/commons-lang-1.0.jar" dest="${maven.repo.local}/commons-lang/commons-lang/1.0/commons-lang-1.0.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//com/isisgroup/inis-prototype/1.0-SNAPSHOT/inis-prototype-1.0-SNAPSHOT.jar" dest="${maven.repo.local}/com/isisgroup/inis-prototype/1.0-SNAPSHOT/inis-prototype-1.0-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/com/isisgroup/inis-prototype/1.0-SNAPSHOT/inis-prototype-1.0-SNAPSHOT.jar" dest="${maven.repo.local}/com/isisgroup/inis-prototype/1.0-SNAPSHOT/inis-prototype-1.0-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//log4j/log4j/1.2.8/log4j-1.2.8.jar" dest="${maven.repo.local}/log4j/log4j/1.2.8/log4j-1.2.8.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/log4j/log4j/1.2.8/log4j-1.2.8.jar" dest="${maven.repo.local}/log4j/log4j/1.2.8/log4j-1.2.8.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nos-web-app/3.0M3-SNAPSHOT/nos-web-app-3.0M3-SNAPSHOT.war" dest="${maven.repo.local}/org/apache/isis/nos-web-app/3.0M3-SNAPSHOT/nos-web-app-3.0M3-SNAPSHOT.war" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nos-web-app/3.0M3-SNAPSHOT/nos-web-app-3.0M3-SNAPSHOT.war" dest="${maven.repo.local}/org/apache/isis/nos-web-app/3.0M3-SNAPSHOT/nos-web-app-3.0M3-SNAPSHOT.war" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nof-persistor/3.0M3-SNAPSHOT/nof-persistor-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-persistor/3.0M3-SNAPSHOT/nof-persistor-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nof-persistor/3.0M3-SNAPSHOT/nof-persistor-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-persistor/3.0M3-SNAPSHOT/nof-persistor-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nof-reflector-core/3.0M3-SNAPSHOT/nof-reflector-core-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-reflector-core/3.0M3-SNAPSHOT/nof-reflector-core-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nof-reflector-core/3.0M3-SNAPSHOT/nof-reflector-core-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-reflector-core/3.0M3-SNAPSHOT/nof-reflector-core-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nos-viewer-cli/3.0M3-SNAPSHOT/nos-viewer-cli-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-viewer-cli/3.0M3-SNAPSHOT/nos-viewer-cli-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nos-viewer-cli/3.0M3-SNAPSHOT/nos-viewer-cli-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-viewer-cli/3.0M3-SNAPSHOT/nos-viewer-cli-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/logging-util/3.0M3-SNAPSHOT/logging-util-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/logging-util/3.0M3-SNAPSHOT/logging-util-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/logging-util/3.0M3-SNAPSHOT/logging-util-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/logging-util/3.0M3-SNAPSHOT/logging-util-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nos-viewer-dnd/3.0M3-SNAPSHOT/nos-viewer-dnd-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-viewer-dnd/3.0M3-SNAPSHOT/nos-viewer-dnd-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nos-viewer-dnd/3.0M3-SNAPSHOT/nos-viewer-dnd-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-viewer-dnd/3.0M3-SNAPSHOT/nos-viewer-dnd-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nos-objectstore-xml/3.0M3-SNAPSHOT/nos-objectstore-xml-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-objectstore-xml/3.0M3-SNAPSHOT/nos-objectstore-xml-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nos-objectstore-xml/3.0M3-SNAPSHOT/nos-objectstore-xml-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nos-objectstore-xml/3.0M3-SNAPSHOT/nos-objectstore-xml-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/no-application-library/3.0M3-SNAPSHOT/no-application-library-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/no-application-library/3.0M3-SNAPSHOT/no-application-library-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/no-application-library/3.0M3-SNAPSHOT/no-application-library-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/no-application-library/3.0M3-SNAPSHOT/no-application-library-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/nof-reflector-java/3.0M3-SNAPSHOT/nof-reflector-java-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-reflector-java/3.0M3-SNAPSHOT/nof-reflector-java-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/nof-reflector-java/3.0M3-SNAPSHOT/nof-reflector-java-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/nof-reflector-java/3.0M3-SNAPSHOT/nof-reflector-java-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//com/isisgroup/inis-integration/1.0-SNAPSHOT/inis-integration-1.0-SNAPSHOT.jar" dest="${maven.repo.local}/com/isisgroup/inis-integration/1.0-SNAPSHOT/inis-integration-1.0-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/com/isisgroup/inis-integration/1.0-SNAPSHOT/inis-integration-1.0-SNAPSHOT.jar" dest="${maven.repo.local}/com/isisgroup/inis-integration/1.0-SNAPSHOT/inis-integration-1.0-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//commons-cli/commons-cli/1.0/commons-cli-1.0.jar" dest="${maven.repo.local}/commons-cli/commons-cli/1.0/commons-cli-1.0.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/commons-cli/commons-cli/1.0/commons-cli-1.0.jar" dest="${maven.repo.local}/commons-cli/commons-cli/1.0/commons-cli-1.0.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//org/apache/isis/no-architecture/3.0M3-SNAPSHOT/no-architecture-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/no-architecture/3.0M3-SNAPSHOT/no-architecture-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/isis/no-architecture/3.0M3-SNAPSHOT/no-architecture-3.0M3-SNAPSHOT.jar" dest="${maven.repo.local}/org/apache/isis/no-architecture/3.0M3-SNAPSHOT/no-architecture-3.0M3-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repository.isis.apache.org//com/isisgroup/inis-bom/1.0-SNAPSHOT/inis-bom-1.0-SNAPSHOT.jar" dest="${maven.repo.local}/com/isisgroup/inis-bom/1.0-SNAPSHOT/inis-bom-1.0-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+    <get src="http://repo1.maven.org/maven2/com/isisgroup/inis-bom/1.0-SNAPSHOT/inis-bom-1.0-SNAPSHOT.jar" dest="${maven.repo.local}/com/isisgroup/inis-bom/1.0-SNAPSHOT/inis-bom-1.0-SNAPSHOT.jar" usetimestamp="true" ignoreerrors="true"/>
+  </target>
+</project>

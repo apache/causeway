@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<base href="${_base}"/>
+<title>${title}</title>
+<link rel="stylesheet" title="Style 1" href="${_context}/style/screen.css" type="text/css" media="all" />
+</head>
+
+<body>
+
+<div id="banner">
+	<div class="logo"><img src="${_context}/images/banner.jpg"/></div>
+</div>
+
+<div id="content">
+	<div id="side">
+		<ul>
+            <li><a href="${_context}/index.shtml">Loans</a></li>
+            <li><a href="${_context}/members.shtml">Member Admin</a></li>
+            <li><a href="${_context}/books.shtml">Book Admin</a></li>
+		</ul>
+	</div>
+	<div id="main">
+        <swf:feedback />
+		<swf:content />
+        <swf:diagnostics/>
+	</div>
+</div>
+
+</body>
+</html>

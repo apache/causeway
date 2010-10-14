@@ -1,0 +1,18 @@
+<swf:page-title>Admin Members</swf:page-title>
+<swf:template  file="style/template.shtml" />
+
+<h3>${title}</h3>
+
+<div class="actions">
+    <div class="action">
+        <a class="action" href="Member/new.shtml">New member</a>
+    </div>
+    <div class="action">
+        <a class="action" href="Member/suspend.shtml">Suspend member</a>
+    </div>
+    <div class="action">
+        <a class="action" href="Member/reinstate.shtml">Reinstate member</a>
+    </div>
+</div>
+
+ 

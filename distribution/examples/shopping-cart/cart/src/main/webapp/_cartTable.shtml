@@ -1,0 +1,16 @@
+<table>
+    <swf:collection object="${cart}" field="items">
+        <tr>
+            <td><swf:field field="product"/></td>
+       		 <td><swf:edit title="update" view="${_this}"><swf:include name="quantity"/></swf:edit></td>
+             <td><swf:field field="price"/></td>
+             <td><swf:field field="total"/></td>
+        </tr>    
+    </swf:collection>
+     <tr>
+        <td>Total</td>
+        <td><swf:field object="${cart}" field="noItems" /> items</td>
+        <td></td>
+        <td><swf:field object="${cart}" field="total" /></td>
+     </tr>
+</table>

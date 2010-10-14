@@ -1,0 +1,8 @@
+<swf:page-title>Your order</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+
+Date: <swf:field field="date">
+
+<swf:action-button method="cancel" title="Cancel order"/>

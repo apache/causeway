@@ -1,0 +1,12 @@
+<swf:page-title>Member Listing</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<p>Matching members</p>
+
+<ol>
+    <swf:collection>
+        <li><swf:object-link view="/library/Member/show.shtml"><swf:field field="name"/> (<swf:field field="code"/>)</swf:object-link></li>
+    </swf:collection>
+</ol>
+ 
+<swf:action-form object="service:members" method="findByName" legend="Search again"/>

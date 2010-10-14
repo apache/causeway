@@ -1,0 +1,30 @@
+
+<swf:page-title>Checkout</swf:page-title>
+
+<swf:template  file="style/template.shtml" />
+<!-- 
+<swf:run-action object="service:carts" method="findCart" result-name="cart">
+    <swf:parameter value="${_session}" />
+</swf:run-action>
+ -->
+
+
+<h3>Cart items</h3>
+<swf:import file="_cartTable.shtml"/>
+
+<a href="index.shtml">Continue shopping</a>
+
+
+<h3>Dispatch to</h3>
+<div>
+    <swf:field object="${cart}" field="address"/>
+</div>
+
+<h3>Payment details</h3>
+<div>
+    <swf:field object="${cart}" field="paymentMethod"/>
+</div>
+
+<div>
+    <swf:action-button object="${cart}" method="checkOut" title="Complete order"/>
+</div>

@@ -1,0 +1,21 @@
+<swf:page-title>Expenses -  Home</swf:page-title>
+<swf:template file="style/template.shtml"/>
+
+<swf:action-form object="service:Claims" method="createNewClaim" />
+
+<h2>My recent claims</h2>
+<swf:run-action object="service:Claims" method="myRecentClaims"/>
+
+<swf:table link="_generic.shtml">
+	<swf:exclude name="claimant" />
+	<swf:exclude name="projectCode" />
+</swf:table>
+
+ <swf:new-action-link object="service:Claims" method="findMyClaims">Find other claims</swf:new-action-link>
+   		
+<h2>Claims awaiting my approval</h2>
+<swf:run-action object="service:Claims" method="claimsAwaitingMyApproval" result-name="approvals" />
+<swf:table object="approvals" link="Approving/claim.shtml">
+    <swf:exclude name="dateCreated" />
+	<swf:exclude name="approver" />
+</swf:table>

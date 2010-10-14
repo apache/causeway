@@ -1,0 +1,62 @@
+<assembly>
+	<id>server</id>
+	<baseDirectory>isis-server</baseDirectory>
+
+	<formats>
+		<format>zip</format>
+	</formats>
+
+	<fileSets>
+		<fileSet>
+			<outputDirectory></outputDirectory>
+			<includes>
+				<include>lcp.bat</include>
+				<include>run.bat</include>
+				<include>run.sh</include>
+			</includes>
+			<fileMode>755</fileMode>
+		</fileSet>
+		
+		<fileSet>
+			<outputDirectory>images</outputDirectory>
+			<directory>../expenses.app.client/src/main/resources/images</directory>
+			<includes>
+				<include>*</include>
+			</includes>
+		</fileSet>
+
+		<fileSet>
+			<outputDirectory>config</outputDirectory>
+			<includes>
+				<include>logging.properties</include>
+			</includes>
+		</fileSet>
+
+		<fileSet>
+			<outputDirectory>web</outputDirectory>
+			<directory>../expenses.app.client/src/main/webapp</directory>
+			<excludes>
+				<exclude>WEB-INF</exclude>
+			</excludes>
+		</fileSet>
+
+		<fileSet>
+			<outputDirectory>config</outputDirectory>
+			<directory>../expenses.app.client/config</directory>
+			<includes>
+				<include>isis.properties</include>
+				<include>hibernate.properties</include>
+				<include>web.properties</include>
+				<include>passwords</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/lib</outputDirectory>
+			<unpack>false</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+</assembly>

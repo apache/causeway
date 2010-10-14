@@ -1,0 +1,103 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Distributions</name>
+    <artifactId>distribution</artifactId>
+   	<packaging>pom</packaging>
+   	<version>0.1-SNAPSHOT</version>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>core</artifactId>
+		<version>0.1-SNAPSHOT</version>
+		<relativePath>../../core/pom.xml</relativePath>
+	</parent>
+
+
+    <scm>
+        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/distribution</connection>
+        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/distribution</developerConnection>
+        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/distribution</url>
+    </scm>
+
+	<build>
+	    <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-release-plugin</artifactId>
+               <version>2.0-beta-9</version>
+               <configuration>
+                   <remoteTagging>true</remoteTagging>
+                   <preparationGoals>clean verify</preparationGoals>
+                   <autoVersionSubmodules>true</autoVersionSubmodules>
+                   <tagBase>https://apache.isis.svn/svnroot/tags/distribution</tagBase>
+               </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+	    </plugins>
+	</build>
+
+    <modules>
+        <module>examples</module>
+        <module>tarball</module>
+    </modules>
+ 
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+			    <groupId>org.apache.isis</groupId>
+			    <artifactId>release</artifactId>
+			    <version>0.1-SNAPSHOT</version>
+			    <type>pom</type>
+			    <scope>import</scope>
+			</dependency>
+			
+		    <dependency>
+			    <groupId>org.apache.isis.examples</groupId>
+			    <artifactId>expenses-dom</artifactId>
+			    <version>${project.version}</version>
+		    </dependency>
+
+		    <dependency>
+			    <groupId>org.apache.isis.examples</groupId>
+			    <artifactId>expenses-services</artifactId>
+			    <version>${project.version}</version>
+		    </dependency>
+
+		    <dependency>
+			    <groupId>org.apache.isis.examples</groupId>
+			    <artifactId>expenses-fixtures</artifactId>
+			    <version>${project.version}</version>
+		    </dependency>
+
+		    <dependency>
+			    <groupId>org.apache.isis.examples</groupId>
+			    <artifactId>expenses-hibernate</artifactId>
+			    <version>${project.version}</version>
+		    </dependency>
+
+		    <dependency>
+			    <groupId>org.apache.isis.examples</groupId>
+			    <artifactId>expenses-commandline</artifactId>
+			    <version>${project.version}</version>
+		    </dependency>  
+		    
+		</dependencies>
+	</dependencyManagement>
+
+	<distributionManagement>
+		<!-- required because doesn't use 'plugins' as its parent -->
+		<site>
+			<id>website</id>
+			<url>${website.url}/plugins/distribution</url>
+		</site>
+	</distributionManagement>
+
+</project>

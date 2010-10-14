@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>My recent claims</title>
+<link rel="stylesheet" title="Style 1" href="./default.css" type="text/css" media="all" />
+</head>
+
+<body onLoad="window.document.form.fld0.focus()">
+<swf:import file="header.shtml" />
+
+<swf:feedback/>
+
+
+<swf:run-action service="org.apache.isis.example.expenses.employee.EmployeeStartPoints" method="me" result-name="claimant" scope="session"/>
+<h2>Recent claims for <swf:title object="${claimant}"/></h2>
+
+<swf:run-action service="org.apache.isis.example.expenses.claims.ClaimStartPoints" method="myRecentClaims" />
+<swf:table link="view-claim.shtml" element-name="claim" scope="session">
+	<swf:include name="dateCreated"/>
+	<swf:include name="status"/>
+	<swf:include name="description"/>
+	<swf:include name="total"/>
+</swf:table>
+
+<div class="left-dialog">
+	<h4>Find Other Claims</h4>
+   <swf:action-form service="org.apache.isis.example.expenses.claims.ClaimStartPoints" method="findMyClaims" 
+   		view="view.shtml" result-name="object" title="Find" place-button="right" />
+</div>
+
+<div class="right-dialog">
+	<h4><swf:action-name service="org.apache.isis.example.expenses.claims.ClaimStartPoints" method="createNewClaim" /></h4>
+   <swf:action-form service="org.apache.isis.example.expenses.claims.ClaimStartPoints" method="createNewClaim" result-name="claim" 
+   		scope="session" view="view-claim.shtml" title="Create" place-button="right" />
+</div>
+
+<!-- 
+<swf:debug list="variables" />
+ -->
+
+<swf:import file="footer.shtml" />
+
+</body>
+</html>

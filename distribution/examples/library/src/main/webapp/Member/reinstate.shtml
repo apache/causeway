@@ -1,0 +1,16 @@
+<swf:page-title>Reinstate member</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+<p>Select the member to reinstate</p>
+
+<swf:action-form object="service:members" method="findByName" view="reinstate.shtml" result-name="members"/>
+
+<swf:unless empty="${members}">
+    <swf:collection collection="${members}">
+        <p><swf:title icon="no" /> - 
+        <swf:action-button object="${_result}" method="reinstate" view="../index.shtml">
+            </swf:action-button>
+            </p>
+    </swf:collection>
+</swf:unless>

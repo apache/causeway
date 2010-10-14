@@ -1,0 +1,19 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2>Editing Claim <swf:title /></h2>
+
+
+<swf:edit view="../Claim/object.shtml">
+    <swf:include name="description"/>
+    <swf:include name="dateCreated"/>
+    <swf:selector field="approver" object="service:Employees" method="findEmployeeByName" legend="Find alternative approver" type="dropdown"/>
+    <swf:include name="approver"/>
+
+
+    <!-- 
+     -->
+</swf:edit>
+
+<div class="action">
+    <a href="_generic.shtml?_result=${claim}">Back to claim</a>
+</div>

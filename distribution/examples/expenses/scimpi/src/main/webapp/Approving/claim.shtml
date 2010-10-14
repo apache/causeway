@@ -1,0 +1,19 @@
+<swf:template  file="../style/template.shtml" />
+
+<swf:initialize name="claim" scope="session" type="org.apache.isis.example.expenses.claims.Claim" />
+
+<h2><swf:title object="${claim}"/></h2>
+
+<swf:short-form object="${claim}"/>
+
+<h3>Expense items</h3>
+<swf:table object="${claim}" field="expenseItems" link="../Approving/item.shtml"/>
+
+<swf:action-form method="approveItems" view="${_this}" /> 
+<swf:action-form method="rejectItems" view="${_this}" /> 
+<swf:action-form method="queryItems" view="${_this}" /> 
+<swf:action-form method="returnToClaimant" view="${_this}" /> 
+
+
+
+

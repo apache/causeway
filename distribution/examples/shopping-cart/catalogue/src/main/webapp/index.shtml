@@ -1,0 +1,32 @@
+<swf:page-title>Store Admin</swf:page-title>
+
+<swf:template  file="style/template.shtml" />
+
+<swf:action-link object="service:products" method="newProduct">Add new product</swf:action-link>
+
+<swf:run-action object="service:products" method="allProducts"/>
+<table>
+<swf:collection >
+        <tr>
+            <td>
+                <swf:variable name="cover"><swf:field field="imageUrl"/></swf:variable>
+                <img style="height: 100px" src="covers/${cover}" />
+            </td>
+            <td>
+                <p><strong><swf:field field="title"/></strong></p>
+                <p><swf:field field="description" truncate="400"/></p>
+                <p><swf:field field="price"/></p>
+            </td>
+            <td>
+                <swf:object-link>Show</swf:object-link>
+                <br/>
+                <swf:edit-link>Edit</swf:edit-link>
+                <br/>
+                <swf:action-link object="service:products" method="destroy">
+                Delete
+                    <swf:parameter value="${_result}"/>
+                </swf:action-link>
+            </td>
+        </tr>
+</swf:collection>
+</table>

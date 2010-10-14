@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+
+<project name="Expenses">
+	<path id="source.path">
+		<pathelement path="expenses-dom/${src.dir}" />
+		<pathelement path="expenses-fixture/${src.dir}" />
+		<!-- not available in 4.0
+		<pathelement path="expenses-hibernate/${src.dir}" />
+		-->
+		<pathelement path="expenses-service/${src.dir}" />
+		
+	</path>
+</project>

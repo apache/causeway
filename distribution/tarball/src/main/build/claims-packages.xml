@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+
+<project name="Sample" >
+	<path id="source.path">
+		<pathelement path="claims-dom"/>
+		<pathelement path="claims-service"/>
+		<pathelement path="claims-fixture" />
+	</path>
+</project>

@@ -1,0 +1,40 @@
+
+<swf:page-title>Checkout</swf:page-title>
+
+<swf:template  file="template.shtml" />
+
+<swf:run-action object="service:carts" method="findCart" result-name="cart">
+    <swf:parameter value="${_session}" />
+</swf:run-action>
+
+<h3>Cart items</h3>
+<table>
+<swf:collection object="${cart}" field="items">
+    <tr>
+        <td><swf:field field="product"/></td>
+        <td>x <swf:field field="quantity"/></td>
+         <td><swf:field field="price"/></td>
+         <td><swf:field field="total"/></td>
+    </tr>    
+</swf:collection>
+ <tr>
+    <td>Total</td>
+    <td><swf:field object="${cart}" field="noItems" /> items</td>
+    <td></td>
+    <td><swf:field object="${cart}" field="total" /></td>
+ </tr>
+</table>
+<a href="index.shtml">Continue shopping</a>
+
+
+<h3>Dispatch to</h3>
+<swf:variable name="address"><swf:field object="${cart}" field="address"/></swf:variable>
+<!-- 
+<swf:short-form object="${address}" />
+ -->
+<a href="_generic_edit.shtml?_result=${cart}">Change address</a>
+
+<h3>Payment details</h3>
+<a href="_generic_edit.shtml">Change payment details</a>
+
+

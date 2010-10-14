@@ -1,0 +1,11 @@
+<swf:page-title>My Cart</swf:page-title>
+
+<swf:template  file="style/template.shtml" />
+
+<h3>Cart items</h3>
+<swf:import file="_cartTable.shtml"/>
+
+<p><swf:unless object="${cart}" field-set="cartEmpty"><a href="checkout.shtml">Checkout</a></swf:unless> </p>
+<p><swf:action-button object="${cart}" method="emptyCart"/></p>
+
+<p><a href="index.shtml">Continue shopping</a></p>

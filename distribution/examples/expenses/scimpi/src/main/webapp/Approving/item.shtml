@@ -1,0 +1,12 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+
+<div class="action">
+    <swf:object-link object="${claim}" view="../Approving/claim.shtml">Back to claim</swf:object-link>
+</div>
+<swf:long-form />
+
+	<swf:action-button object="${_result}" method="approve" view="../Approving/claim.shtml"/>
+	<swf:action-form  object="${_result}" method="reject" title="OK" legend="Reject" view="../Approving/claim.shtml"/>
+	<swf:action-form  object="${_result}" method="query" title="OK" legend="Query" view="../Approving/claim.shtml"/>

@@ -1,0 +1,16 @@
+<swf:page-title>Suspend member</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+<p>Select the member to suspend</p>
+
+<swf:action-form object="service:members" method="findByName" view="suspend.shtml" result-name="members"/>
+
+<swf:unless empty="${members}">
+    <swf:collection collection="${members}">
+        <p><swf:title icon="no" /> - 
+        <swf:action-button object="${_result}" method="suspend" view="../index.shtml">
+            </swf:action-button>
+            </p>
+    </swf:collection>
+</swf:unless>

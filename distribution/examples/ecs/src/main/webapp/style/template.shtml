@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>${title}</title>
+<link rel="stylesheet" title="Style 1" href="style/screen.css" type="text/css" media="all" />
+</head>
+
+<body>
+
+<div id="banner">
+	<div class="logo"><img src="images/banner.jpg"/></div>
+</div>
+
+<div id="content">
+	<div id="side">
+		<ul>
+            <li><a href="index.shtml">Home</a></li>
+		</ul>
+        <!--
+            uncomment if using NOF users 
+            <swf:user login-view="generic/login.shtml" logout-view="index.shtml" />
+         -->
+	</div>
+	<div id="main">
+        <swf:feedback />
+		<swf:content />
+        
+        <div class="debug">
+            <swf:debug uri="uri"/>
+            <swf:debug list="variables"/>
+            <swf:debug list="parameters"/>
+            <swf:debug list="mappings"/>
+        </div>
+	</div>
+</div>
+
+
+</body>
+</html>

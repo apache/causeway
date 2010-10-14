@@ -1,0 +1,14 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style/screen.css" type="text/css"/>
+    <title>Debug -- Objects</title>
+</head>
+
+<body>
+	<a href="index.shtml">Debug Home</a>
+	<div>
+     <swf:debug type="list-objects"/>
+     </div>
+     <a href="index.shtml">Debug Home</a>
+</body>
+</html>

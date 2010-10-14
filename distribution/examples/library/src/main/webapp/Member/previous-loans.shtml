@@ -1,0 +1,8 @@
+<swf:page-title>Previous loans for <swf:title object="${member}" icon="no" /></swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+<swf:table />
+ 
+<a href="show.shtml">Return to member's page</a>
+ 

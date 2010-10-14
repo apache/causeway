@@ -1,0 +1,38 @@
+<swf:page-title>Catalogue</swf:page-title>
+
+<swf:template  file="template.shtml" />
+
+<swf:run-action object="service:carts" method="findCart" result-name="cart">
+    <swf:parameter value="${_session}" />
+</swf:run-action>
+
+<div id="cart">
+<h4>Cart</h4>
+<ul>
+<swf:collection  object="${cart}" field="items">
+    <li><swf:field field="quantity" /> x <swf:field field="product" /></li>
+</swf:collection>
+</ul>
+<p><swf:field object="${cart}" field="noItems" /> items, <swf:field object="${cart}" field="total" /></p>
+<p><a href="checkout.shtml">Checkout</a> | <swf:action-button object="${cart}" method="clearCart" view="index.shtml" /></p>
+</div>
+
+<swf:run-action object="service:products" method="allProducts"/>
+<swf:collection >
+    <swf:variable name="cover"><swf:field field="imageUrl"/></swf:variable>
+    <div class="book">
+        <div class="cover"/>
+            <img style="height: 120px" src="../covers/${cover}" />
+        </div>
+    
+        <div class="description">    
+            <h3><swf:field field="title"/></h3>
+            <p><swf:field field="description"></p>
+            <p class="price"><swf:field field="price"/></p>
+            <swf:action-button object="${cart}" method="addToCart" view="index.shtml">
+                <swf:parameter value="${_result}" /> 
+            </swf:action-button>
+        </div>
+    </div>    
+</swf:collection>
+

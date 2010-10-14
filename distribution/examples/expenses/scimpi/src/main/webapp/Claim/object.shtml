@@ -1,0 +1,32 @@
+<swf:initialize name="claim" scope="session" type="org.apache.isis.example.expenses.claims.Claim" />
+
+<swf:page-title><swf:title object="${claim}" icon="off"/></swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<swf:mark name="claim" />
+
+<h2><swf:title object="${claim}"/></h2>
+
+<swf:short-form object="${claim}" >
+	<swf:link name="claimant" />
+	<swf:link name="approver" />
+</swf:short-form>
+
+<swf:edit-link object="${claim}">Edit Claim details</swf:edit-link>
+
+<swf:table object="${claim}" field="expenseItems" element-name="item" link="${_this}"/>
+
+<swf:when set="${item}">
+    <h4>Selected item</h4>
+    <swf:scope name="item" scope="request" />
+    <swf:title object="${item}" />
+	<swf:short-form object="${item}" />
+    <swf:edit-link object="${item}">Edit item</swf:edit-link>
+</swf:when>
+
+<swf:action-form object="${claim}" method="createNewExpenseItem" />
+
+<swf:new-action-link object="${claim}" method="submit">Submit</swf:new-action-link>
+
+
+

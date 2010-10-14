@@ -1,0 +1,29 @@
+<swf:page-title><swf:element-type /> Listing</swf:page-title>
+
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+
+<table>
+<swf:collection >
+        <tr>
+            <td>
+                <swf:variable name="cover"><swf:field field="imageUrl"/></swf:variable>
+                <img style="height: 100px" src="covers/${cover}" />
+            </td>
+            <td>
+                <p><strong><swf:field field="title"/></strong></p>
+                <p><swf:field field="description" truncate="400"/></p>
+            </td>
+            <td>
+                <a href="_generic.shtml?_result=${_result}">Show</a>
+                <br/>
+                <a href="edit.app?view=/demo/generic/_generic_edit.shtml&object=${_result}">Edit</a>
+                <br/>
+                
+            </td>
+        </tr>
+</swf:collection>
+</table>
+
+<swf:action-link object="service:products" method="newProduct" view="_generic.shtml" />

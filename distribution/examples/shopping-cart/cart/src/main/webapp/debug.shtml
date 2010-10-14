@@ -1,0 +1,9 @@
+<swf:page-title>Application template</swf:page-title>
+
+<swf:template  file="style/template.shtml" />
+
+<h2>Default Services</h2>
+<swf:services />
+
+<swf:variable name="_back_to" value="/demo/index.shtml" scope="session"/>
+ 

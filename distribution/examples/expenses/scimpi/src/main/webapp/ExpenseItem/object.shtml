@@ -1,0 +1,11 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+
+<swf:long-form />
+
+<div class="action">
+    <swf:object-link object="${claim}">Back to claim</swf:object-link>
+</div>
+
+<swf:methods />

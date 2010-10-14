@@ -1,0 +1,13 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+
+<swf:long-form link="_generic.shtml" />
+
+<div class="action">
+    <a href="${_return-to}">Back</a>
+</div>
+
+
+<swf:methods />
+

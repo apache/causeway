@@ -1,0 +1,56 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+
+<!--
+*** this if for the commented out field in the next action form 
+<swf:run-action object="service:Employees" method="findEmployeeByName" result-name="apps">
+    <swf:parameter number="1" value="a"/>
+</swf:run-action>
+ -->
+                
+                                
+<swf:action-form method="submit" void="../Claim/object.shtml">
+<!-- 
+     <swf:selector field="param0" collection="${approvers}" />
+ -->
+    <swf:selector field="param0" object="service:Employees" method="findEmployeeByName" legend="Find alternative approver" type="dropdown"/>
+
+<!-- 
+     <swf:form-field field="param0">
+        <select name="param0">
+            <swf:collection collection="${apps}">
+                <option value="${_result}"><swf:title icon="off"/></option>
+             </swf:collection>
+        </select>               
+    </swf:form-field>
+ -->
+</swf:action-form>
+		
+        <!-- 
+<swf:action-form object="service:Employees" method="findEmployeeByName" 
+    		result-name="approvers" view="../Claim/submit.shtml" legend="Find another approver" label="foo">
+            
+            <swf:form-field field="param0">
+                <select name="param0">
+                    <option>Sven</option>
+                    <option>Dick</option>
+                    <option>Bob</option>
+                </select>               
+            </swf:form-field>
+</swf:action-form>
+         -->
+		
+<swf:object-link object="${claim}">Back to claim</swf:object-link>
+
+
+
+
+<!-- 
+
+
+                    <swf:collection collection="${apps}">
+                        <option><swf:title icon="off"/></option>
+                     </swf:collection>
+
+ -->

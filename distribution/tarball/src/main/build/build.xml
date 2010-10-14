@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<project name="[[NAME]] Example" default="dnd" basedir=".">
+	<property name="lib.dir" value="../../lib" />
+	<property name="build.dir" value="./build" />
+	<property name="dist.dir" value="./dist" />
+	<property name="classes.dir" value="./build/classes" />
+	<property name="resources.dir" value="./build/resources" />
+	<property name="war.dir" value="${build.dir}/war" />
+	<property name="src.dir" value="/src/" />
+	<property name="resource.src.dir" value="../../resources" />
+	<property name="compile.target" value="1.5" />
+	<property name="source.target" value="1.5" />
+	<property name="bootclass" value="org.apache.isis.runtime.Isis" />
+	<property name="application.name" value="no-application" />
+
+	<target name="clean">
+		<delete dir="${build.dir}" failonerror="false" />
+		<delete dir="${dist.dir}" failonerror="false" />
+	</target>
+
+	<fileset dir="${lib.dir}" id="libs.set">
+		<include name="**/*.jar" />
+	</fileset>
+
+	<path id="libs.path">
+		<fileset refid="libs.set" />
+	</path>
+
+	<import file="./packages.xml" />
+
+	<target name="compile" description="Compile example">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+
+		<javac destdir="${classes.dir}" target="${compile.target}" source="${source.target}">
+			<src refid="source.path" />
+			<classpath refid="libs.path" />
+		</javac>
+		
+		<copy todir="${resources.dir}/images">
+			<fileset dir="images"/>
+		</copy>
+	</target>
+
+	<target name="dist" depends="compile" description="Collects together files for distribution">
+		<copy todir="${build.dir}/lib">
+			<fileset refid="libs.set" />
+		</copy>
+		<mkdir dir="${build.dir}/images" />
+		<copy todir="${build.dir}">
+			<fileset dir=".">
+				<include name="config/*" />
+			</fileset>
+			<fileset dir="${resource.src.dir}">
+				<include name="web/*" />
+				<include name="isis.*" />
+				<include name="lcp.bat" />
+			</fileset>
+		</copy>
+		<chmod file="${build.dir}/isis.sh" perm="ugo+x" />
+
+		<mkdir dir="${dist.dir}" />
+		<zip destfile="${dist.dir}/${application.name}.zip">
+			<zipfileset dir="${build.dir}" prefix="${application.name}">
+				<exclude name="isis.sh" />
+			</zipfileset>
+			<zipfileset dir="${build.dir}" filemode="755" prefix="${application.name}">
+				<include name="isis.sh" />
+			</zipfileset>
+		</zip>
+	</target>
+
+	<target name="exploration-dnd" depends="compile" description="Explore example using drag-and-drop graphical viewer">
+		<java fork="yes" classname="${bootclass}">
+			<classpath path="${classes.dir}" />
+			<classpath refid="libs.path" />
+			<classpath path="${resources.dir}" />
+			<arg line="--type exploration --viewer dnd" />
+		</java>
+	</target>
+
+	<target name="exploration-html" depends="compile" description="Explore example using command-line viewer">
+		<java fork="yes" classname="${bootclass}">
+			<classpath path="${classes.dir}" />
+			<classpath refid="libs.path" />
+			<classpath path="${resources.dir}" />
+			<arg line="--type exploration --viewer html" />
+		</java>
+	</target>
+
+	<target name="dnd" depends="compile" description="Run example using drag and drop viewer">
+		<java fork="yes" classname="${bootclass}">
+			<classpath path="${classes.dir}" />
+			<classpath refid="libs.path" />
+			<classpath path="${resources.dir}" />
+			<arg line="--type prototype --viewer dnd" />
+		</java>
+	</target>
+
+	<target name="html" depends="compile" description="Run example using web viewer">
+		<java fork="yes" classname="${bootclass}">
+			<classpath path="${classes.dir}" />
+			<classpath refid="libs.path" />
+			<classpath path="${resources.dir}" />
+			<arg line="--type prototype --viewer html" />
+		</java>
+	</target>
+
+	<target name="standalone-xml" depends="compile" description="Run standalone with xml persistence">
+		<java fork="yes" classname="${bootclass}">
+			<classpath path="${classes.dir}" />
+			<classpath refid="libs.path" />
+			<classpath path="${resources.dir}" />
+			<arg line="--type single-user --viewer dnd --persistor xml" />
+		</java>
+	</target>
+
+</project>
+
+

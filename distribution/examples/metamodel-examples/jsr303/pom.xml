@@ -1,0 +1,39 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<name>Metamodel Examples: JSR303 Validation</name>
+	<artifactId>metamodel-examples-jsr303</artifactId>
+
+    <parent>
+	    <groupId>org.apache.isis.distribution</groupId>
+	    <artifactId>examples</artifactId>
+	    <version>0.1-SNAPSHOT</version>
+    </parent>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.agimatec</groupId>
+			<artifactId>agimatec-validation</artifactId>
+			<version>0.6</version>
+		</dependency>
+
+		<dependency>
+      		<groupId>org.apache.isis.core</groupId>
+			<artifactId>runtime</artifactId>
+	 	</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.4</version>
+    		</dependency>
+
+		<dependency>
+			<groupId>org.jmock</groupId>
+			<artifactId>jmock</artifactId>
+			<version>2.4.0</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>

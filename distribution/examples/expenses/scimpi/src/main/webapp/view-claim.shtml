@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Claim - <swf:title object="${claim}" /></title>
+<link rel="stylesheet" title="Style 1" href="./default.css" type="text/css" media="all" />
+</head>
+<body onLoad="window.document.form.fld0.focus()">
+
+<swf:import file="header.shtml" />
+
+
+<h2>Claim - <swf:title object="${claim}" /></h2>
+
+<swf:short-form class="form" object="${claim}" >
+	<swf:exclude name="claimant" />
+</swf:short-form>
+
+<swf:table class="table" object="${claim}" field="expenseItems" link="view-expense.shtml" element-name="expense-item">
+	<swf:exclude name="claim" />
+</swf:table>
+
+<p><swf:action-name object="${claim}" method="createNewExpenseItem" /></p>
+<swf:action-form object="${claim}" method="createNewExpenseItem" view="new-expense.shtml" result-name="expense-item"/>
+
+<p><swf:action-name object="${claim}" method="submit" /> (to <swf:field object="${claim}" field="approver" />)</p>
+<swf:action-form object="${claim}" method="submit" view="my-claims.shtml" result-name="expense-item">
+	<swf:exclude name="approver" />
+</swf:action-form>
+
+<p><swf:view-link view="submit-form.shtml" claim.to.copy="${claim}">Submit</swf:view-link>  claim to another approver</p>
+
+<p>Create <swf:view-link view="copy-claim.shtml" claim.to.copy="${claim}">new claim</swf:view-link> from this claim</p>
+
+<swf:action-form  object="${claim}" method="returnToClaimant" title="Return this claim to me" view="view-claim.shtml" />
+
+<p>View <swf:view-link view="recorded-actions.shtml" recordedActionContext="${claim}">recorded actions</swf:view-link> for this claim</p>
+
+<pre class="debug"><swf:debug list="variables" />
+claim: variable = <swf:debug variable="claim"/>, value = <swf:debug value="${claim}"/></pre>
+
+<swf:import file="footer.shtml" />
+</body>
+</html>

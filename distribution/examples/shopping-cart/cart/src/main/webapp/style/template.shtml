@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<title>${title}</title>
+	<link rel="stylesheet" title="Style 1" href="./style/demo.css" type="text/css" media="all" />
+</head>
+
+<body id="demo">
+
+<div id="banner">
+	<div class="logo"><img src="images/logo.png"/></div>
+	<div class="title">Book Store</div>
+</div>
+
+<!-- 
+<swf:initialize-from-cookie name="cart">
+    <swf:run-action object="service:carts" method="newCart" />
+</swf:initialize-from-cookie> 
+ -->
+ 
+<swf:initialize-from-cookie name="shop-user">
+    <swf:run-action object="service:sessions" method="newUser" />
+</swf:initialize-from-cookie> 
+<!-- 
+ <swf:debug object="${shop-user}"/>
+<swf:variable name="cart"><swf:field object="${shop-user}" field="cart"/></swf:variable>
+ --> 
+<swf:get object="${shop-user}" field="cart" result-name="cart"/>
+
+<div id="content">
+	<div id="side">
+		<ul>
+            <li><a href="index.shtml">Home</a></li>
+            <li><a href="questions.shtml">Questions</a></li>
+            <li><a href="news.shtml">News</a></li>
+            <li><a href="contact.shtml">Contact</a></li>
+            <!-- 
+            <swf:unless object="${session}" field-empty="customer">
+                <li><a href="myAccount.shtml">My account</a></li>
+            </swf:unless>
+             -->
+            <swf:unless object="${cart}" field-set="cartEmpty">
+	            <li><a href="showCart.shtml">My cart</a></li>
+                <li><a href="checkout.shtml">Checkout</a></li>
+            </swf:unless>
+		</ul>
+        
+<!-- 
+        <swf:when object="${session}" field-empty="customer">
+            <swf:action-form object="${session}" method="logon"/>
+        </swf:when>
+        <swf:unless object="${session}" field-empty="customer">
+            Welcome <swf:field object="${session}" field="customer"/>. <a href="logout.app">Logout</a>
+        </swf:unless>
+ -->        
+	</div>
+	<div id="main">
+        <swf:feedback />
+		<swf:content />
+        <swf:diagnostics/>
+	</div>
+</div>
+
+</body>
+</html>

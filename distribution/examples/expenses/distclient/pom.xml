@@ -1,0 +1,72 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+	    <groupId>org.apache.isis.distribution</groupId>
+	    <artifactId>example-expenses</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<name>Example Expenses Client Distribution</name>
+	<artifactId>expenses-distclient</artifactId>
+	<packaging>pom</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<descriptors>
+						<descriptor>client.xml</descriptor>
+					</descriptors>
+					<finalName>expenses-${version}</finalName>
+					<outputDirectory>target</outputDirectory>
+					<tarLongFileMode>gnu</tarLongFileMode>
+                    <attach>false</attach>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>expenses-dom</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>expenses-fixtures</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>expenses-hibernate</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>dnd-viewer</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>xstream-marshalling</artifactId>
+		</dependency>
+
+
+	</dependencies>
+</project>

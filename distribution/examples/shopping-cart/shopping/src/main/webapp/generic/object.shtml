@@ -1,0 +1,12 @@
+<swf:page-title><swf:title icon="no" /></swf:page-title>
+
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+
+<swf:long-form link="_generic.shtml" />
+
+<a href="${_back_to}">Back</a>
+<!-- 
+<swf:methods />
+ -->

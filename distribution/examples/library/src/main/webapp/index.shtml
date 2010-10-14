@@ -1,0 +1,8 @@
+<swf:page-title>Library Home Page</swf:page-title>
+<swf:template  file="style/template.shtml" />
+
+<h3>${title}</h3>
+<swf:action-form object="service:members" method="findByName" legend="Search for member"/>
+
+
+ 

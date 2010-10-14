@@ -1,0 +1,10 @@
+<swf:page-title>Claims</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<swf:table link="_generic.shtml">
+	<swf:exclude name="claimant" />
+	<swf:exclude name="projectCode" />
+</swf:table>
+
+<swf:action-form object="service:Claims" method="findMyClaims" place-button="right" />
+ 

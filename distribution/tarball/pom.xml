@@ -1,0 +1,195 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<name>Tarball</name>
+    <groupId>org.apache.isis.distribution</groupId>
+	<artifactId>distribution-tarball</artifactId>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>distribution</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.2-beta-4</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/dist-for-maven.xml</descriptor>
+						<descriptor>src/main/assembly/dist-for-ant.xml</descriptor>
+						<descriptor>src/main/assembly/jar-with-dependencies.xml</descriptor>
+						<descriptor>src/main/assembly/source.xml</descriptor>
+					</descriptors>
+					<!-- use the version from artifact, eg release/pom.xml -->
+					<finalName>isis-${project.parent.parent.version}</finalName>
+					<outputDirectory>target</outputDirectory>
+					<tarLongFileMode>gnu</tarLongFileMode>
+                    <attach>false</attach>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+	    <!-- core -->
+		<dependency>
+			<groupId>org.apache.isis</groupId>
+			<artifactId>applib</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis</groupId>
+			<artifactId>applib</artifactId>
+			<type>jar</type>
+			<classifier>javadoc</classifier>
+		</dependency>
+
+	    <dependency>
+            <groupId>org.apache.isis.core</groupId>
+        	<artifactId>webserver</artifactId>
+	    </dependency>
+
+		<!-- dnd viewer -->
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>dnd-viewer</artifactId>
+		</dependency>
+
+        <!-- html viewer -->
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>html-viewer</artifactId>
+		</dependency>
+
+        <!-- xml object store -->
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>xml-persistor</artifactId>
+		</dependency>
+
+        <!-- berkeley object store -->
+        <!-- not part of 4.0 
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>berkeley-persistor</artifactId>
+		</dependency>
+-->
+        <!-- sql object store -->
+        <!-- not part of 4.0 
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>sql-persistor</artifactId>
+		</dependency>
+-->
+        <!-- hibernate object store -->
+        <!-- not part of 4.0 
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>hibernate-persistor</artifactId>
+		</dependency>
+-->
+        <!-- http remoting -->
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>http-remoting-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>http-remoting-server</artifactId>
+		</dependency>
+
+        <!-- xstream marshalling -->
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>xstream-marshalling</artifactId>
+		</dependency>
+
+        <!-- headless -->
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>headless-applib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>headless-embedded</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>headless-junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>headless-viewer</artifactId>
+		</dependency>
+		
+
+
+        <!-- Expenses demo -->
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-dom</artifactId>
+            <version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-fixtures</artifactId>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-services</artifactId>
+            <version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-commandline</artifactId>
+            <version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-webapp</artifactId>
+            <type>war</type>
+            <version>0.1-SNAPSHOT</version>
+        </dependency>
+
+        <!-- not part of 4.0 
+
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-hibernate</artifactId>
+            <version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-distclient</artifactId>
+            <version>0.1-SNAPSHOT</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.distribution</groupId>
+			<artifactId>expenses-distserver</artifactId>
+            <version>0.1-SNAPSHOT</version>
+		</dependency>
+        -->
+
+		
+	</dependencies>
+</project>

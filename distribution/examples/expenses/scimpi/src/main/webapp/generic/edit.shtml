@@ -1,0 +1,11 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2>Edit <swf:title /></h2>
+
+<swf:edit />
+
+<div class="action">
+    <a href="${_return-to}">Back</a>
+</div>
+
+  

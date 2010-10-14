@@ -1,0 +1,12 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2>Editing Expense Item</h2>
+
+<!--   <swf:edit view="../Claim/object.shtml?_result=${claim}"/>-->
+
+ <swf:title />
+<swf:edit view="../Claim/object.shtml"/>
+
+<div class="action">
+    <a href="_generic.shtml?_result=${claim}">Back to claim</a>
+</div>

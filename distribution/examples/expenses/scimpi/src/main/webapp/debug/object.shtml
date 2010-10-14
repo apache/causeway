@@ -1,0 +1,10 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style/screen.css" type="text/css"/>
+    <title>Debug</title>
+</head>
+
+<body>
+     <swf:debug type="object" value="${object}"/>
+</body>
+</html>

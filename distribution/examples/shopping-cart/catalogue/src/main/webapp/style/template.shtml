@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>${title}</title>
+<link rel="stylesheet" title="Style 1" href="style/demo.css" type="text/css" media="all" />
+</head>
+
+<body id="demo">
+
+<div id="banner">
+	<div class="logo"><img src="images/logo.png"/></div>
+	<div class="title">Book Store Admin</div>
+</div>
+
+<div id="content">
+	<div id="side">
+		<ul>
+            <li><a href="${_context}/index.shtml">Catalogue Editor</a></li>
+            <li><swf:action-link object="service:carts" method="allCarts">Carts</swf:action-link></li>
+      	    <li><swf:action-link object="service:carts" method="allOrders">Orders</swf:action-link></li>
+		</ul>
+        <swf:user login-view="${_context}/login.shtml" logout-view="${_context}/login.shtml" />
+	</div>
+	<div id="main">
+        <swf:feedback />
+		<swf:content />
+		
+		<swf:diagnostics/>
+	</div>
+</div>
+
+</body>
+</html>

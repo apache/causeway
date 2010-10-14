@@ -1,0 +1,33 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+
+
+<swf:variable name="claim" scope="session">${_result}</swf:variable>
+
+
+<swf:short-form link="_generic.shtml" />
+
+<h3>Expense items</h3>
+<swf:table object="${claim}" field="expenseItems" link="_generic.shtml"/>
+
+
+
+<!-- <p><swf:action-name object="${claim}" method="createNewExpenseItem" /></p>-->
+<swf:action-form object="${claim}" method="createNewExpenseItem" />
+
+<!--  <p><swf:action-name object="${claim}" method="submit" /> (to <swf:field object="${claim}" field="approver" />)</p>
+<swf:action-form object="${claim}" method="submit">
+    <swf:exclude name="approver" />
+</swf:action-form>
+
+<p><swf:view-link view="submit-form.shtml" claim.to.copy="${claim}">Submit</swf:view-link>  claim to another approver</p>
+
+<p>Create <swf:view-link view="copy-claim.shtml" claim.to.copy="${claim}">new claim</swf:view-link> from this claim</p>
+
+<swf:action-form  object="${claim}" method="returnToClaimant" title="Return this claim to me" />
+
+<p>View <swf:view-link recordedActionContext="${claim}">recorded actions</swf:view-link> for this claim</p>-->
+
+<swf:methods/>
+

@@ -1,0 +1,11 @@
+<swf:page-title>My Account</swf:page-title>
+
+<swf:template  file="style/template.shtml" />
+
+<h3>My Account</h3>
+ <swf:long-form object="${cart}" link="_generic.shtml"/>
+ <hr>
+ <swf:long-form object="${session}" field="cart" link="_generic.shtml"/>
+ 
+ 
+<p><a href="index.shtml">Continue shopping</a></p>

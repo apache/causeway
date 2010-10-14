@@ -1,0 +1,30 @@
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+
+<swf:long-form />
+
+
+<div class="actions">
+	<swf:methods />
+    
+	<div class="action">
+    <a href="${_return-to}">Back</a>
+    </div>
+</div>
+
+
+
+<swf:when field-editable="normalApprover">
+    <div class="approvers">
+    	<h4>Change approver</h4>
+        
+    	<swf:when set="${approvers}">
+    		<swf:edit>
+    			<swf:radio-list field="normalApprover" collection="${approvers}" />
+    		</swf:edit>	
+    	</swf:when>
+    	 <swf:action-form object="service:Employees" method="findEmployeeByName" result-name="approvers" />
+	</div>
+</swf:when>
+ 

@@ -1,0 +1,85 @@
+<component>
+    <fileSets>
+        <!--  Text files - Read-Mes -->
+        <fileSet>
+	        <directory>../..</directory>
+	        <outputDirectory></outputDirectory>
+	        <includes>
+		        <include>README.TXT</include>
+		        <include>LICENSE.TXT</include>
+                <include>RELEASE.TXT</include>
+	        </includes>
+        </fileSet>
+
+        <!-- Icon library, IDE templates and launchers -->
+        <fileSet>
+	        <directory>src/main/</directory>
+	        <outputDirectory>resources</outputDirectory>
+	        <includes>
+		        <include>icon-library/**</include>
+		        <include>ide/**</include>
+	        </includes>
+        </fileSet>
+    </fileSets>
+    
+  	<files>
+		<!-- Resources -->
+		<file>
+			<outputDirectory>docs</outputDirectory>
+			<source>../documentation/manuals/target/docbkx/pdf/application.pdf</source>
+			<destName>documentation.pdf</destName>
+			<filtered>false</filtered>
+		</file>
+  	</files>
+
+    <dependencySets>
+        <dependencySet>
+		    <useStrictFiltering>true</useStrictFiltering>
+	      	<outputDirectory>resources/html-viewer</outputDirectory>
+			<unpack>true</unpack>
+			<unpackOptions>
+                <includes>
+                    <include>default.css</include>
+                    <include>default-images/**</include>
+                    <include>images/**</include>
+                </includes>
+            </unpackOptions>
+			<scope>runtime</scope>
+			<includes> 
+				<include>org.apache.isis.plugins:html-viewer</include>
+			</includes>
+		</dependencySet>
+
+        <dependencySet>
+		    <useStrictFiltering>true</useStrictFiltering>
+	      	<outputDirectory>docs/api/</outputDirectory>
+	      	<!--
+	      	<useProjectAttachments>true</useProjectAttachments>
+            <useProjectArtifact>true</useProjectArtifact>
+            <scope>compile</scope>
+			-->
+			<unpack>true</unpack>
+			<!--
+			 <useTransitiveDependencies>false </useTransitiveDependencies>
+			<excludes>
+			    <exclude>org.apache.isis.core:*</exclude>
+			    <exclude>org.apache.isis.plugins:*</exclude>
+			    <exclude>org.apache.isis.distribution:*</exclude>
+			</excludes>
+			-->
+			<includes> 
+            	<!--
+            		groupId:artifactId:version:type:classifier 
+            		These don't work
+				    <include>org.apache.isis:applib:jar:javadoc</include>
+				    <include>*:jar:javadoc</include>
+				    <include>org.apache.isis:applib</include>
+				    but the following does!
+            		-->
+				<include>org.apache.isis:applib:*:javadoc</include>
+			</includes>
+		</dependencySet>
+	</dependencySets>
+    
+</component>
+

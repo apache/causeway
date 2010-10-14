@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<assembly xmlns="http://maven.apache.org" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/xsd/assembly-1.1.0-SNAPSHOT.xsd">
+
+	<id>libs-only-with-dependencies</id>
+	<formats>
+		<format>jar</format>
+	</formats>
+
+	<includeBaseDirectory>false</includeBaseDirectory>
+
+	<dependencySets>
+		<dependencySet>
+			<excludes>
+				<exclude>org.apache.isis.distribution:*</exclude>
+                <exclude>org.apache.isis:applib:jar:javadoc</exclude>
+			</excludes>
+			
+			<outputDirectory></outputDirectory>
+			<outputFileNameMapping></outputFileNameMapping>
+			<unpack>true</unpack>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+
+	<fileSets>
+		<fileSet>
+			<directory>target/classes</directory>
+			<outputDirectory></outputDirectory>
+		</fileSet>
+	</fileSets>
+</assembly>

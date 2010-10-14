@@ -1,0 +1,8 @@
+<swf:page-title>New member</swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2>${title}</h2>
+<swf:run-action object="service:members" method="newMember"/>
+<swf:edit view="../index.shtml" />
+
+

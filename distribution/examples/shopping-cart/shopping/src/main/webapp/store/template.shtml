@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>${title}</title>
+<link rel="stylesheet" title="Style 1" href="../style/demo.css" type="text/css" media="all" />
+</head>
+
+<body id="demo">
+
+<div id="banner">
+	<div class="logo"><img src="../images/logo.png"/></div>
+	<div class="title">Book Store</div>
+</div>
+
+<div id="content">
+	<div id="side">
+		<ul>
+            <li><a href="home.shtml">Home</a></li>
+            <li><a href="questions.shtml">Questions</a></li>
+            <li><a href="news.shtml">News</a></li>
+            <li><a href="contact.shtml">Contact</a></li>
+		</ul>
+	</div>
+	<div id="main">
+        <swf:feedback />
+		<swf:content />
+	</div>
+</div>
+
+</body>
+</html>

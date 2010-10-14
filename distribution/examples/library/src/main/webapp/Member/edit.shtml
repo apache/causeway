@@ -1,0 +1,9 @@
+<swf:page-title>Edit member details: <swf:title icon="no" /></swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<swf:edit legend="${title}" view="show.shtml"/>
+
+<a href="show.shtml">Return to member's page</a>
+
+
+  

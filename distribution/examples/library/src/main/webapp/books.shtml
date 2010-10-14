@@ -1,0 +1,14 @@
+<swf:page-title>Admin Books</swf:page-title>
+<swf:template  file="style/template.shtml" />
+
+<h3>${title}</h3>
+
+<div class="actions">
+    <div class="action">
+        <a class="action" href="Book/new.shtml">Add new book</a>
+    </div>
+    <div class="action">
+        <a class="action" href="Book/lost.shtml">Book lost</a>
+    </div>
+</div>
+

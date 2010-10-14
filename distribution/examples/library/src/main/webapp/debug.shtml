@@ -1,0 +1,6 @@
+<swf:page-title>Library Home Page</swf:page-title>
+<swf:template  file="style/template.shtml" />
+
+<H1>MY PAGE</H1>
+<swf:services/>
+ 
