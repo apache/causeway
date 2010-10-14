@@ -5,7 +5,7 @@
 	<groupId>org.apache.isis</groupId>
 	<artifactId>defaults</artifactId>
 
-	<name>Isis Default Implementations</name>
+	<name>Default Implementations</name>
 
 	<packaging>pom</packaging>
 

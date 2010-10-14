@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-	<groupId>org.apache.isis.distribution</groupId>
-	<artifactId>example-claims</artifactId>
-	<version>0.1-SNAPSHOT</version>
+		<groupId>org.apache.isis.distribution</groupId>
+		<artifactId>example-claims</artifactId>
+		<version>0.1-SNAPSHOT</version>
 	</parent>
 
 	<name>Example Claims Command Line</name>
@@ -43,7 +44,7 @@
 						<descriptor>src/main/assembly/descriptor.xml</descriptor>
 					</descriptors>
 					<finalName>claims-demo-${version}</finalName>
-                    <attach>false</attach>
+					<attach>false</attach>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -52,7 +53,7 @@
 
 
 	<dependencies>
-	
+
 		<!-- other modules in this project -->
 
 		<dependency>
@@ -62,14 +63,14 @@
 
 		<!-- [[NAME]] -->
 
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-cglib</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-javassist</artifactId>
-	    </dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>bytecode-cglib</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>bytecode-javassist</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>remoting</artifactId>
@@ -90,18 +91,18 @@
 			<groupId>org.apache.isis.plugins</groupId>
 			<artifactId>http-remoting-server</artifactId>
 		</dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.plugins</groupId>
-	        <artifactId>headless-embedded</artifactId>
-	    </dependency>
+		<dependency>
+			<groupId>org.apache.isis.plugins</groupId>
+			<artifactId>headless-embedded</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.plugins</groupId>
 			<artifactId>xml-persistor</artifactId>
 		</dependency>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>webserver</artifactId>
-        </dependency>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>webserver</artifactId>
+		</dependency>
 
 	</dependencies>
 
