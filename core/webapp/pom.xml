@@ -1,0 +1,53 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>webapp</artifactId>
+	<name>Core Webapp Bootstrapper</name>
+
+    <parent>
+        <groupId>org.apache.isis</groupId>
+        <artifactId>core</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+	<properties>
+    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<configuration>
+					<wtpversion>2.0</wtpversion>
+				</configuration>
+			</plugin>
+            
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-war-plugin</artifactId>
+			</plugin>
+
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+            </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+            <artifactId>runtime</artifactId>
+		</dependency>
+
+	    <dependency>
+		    <groupId>javax.servlet</groupId>
+		    <artifactId>servlet-api</artifactId>
+		    <scope>provided</scope>
+        </dependency>
+	</dependencies>
+
+</project>

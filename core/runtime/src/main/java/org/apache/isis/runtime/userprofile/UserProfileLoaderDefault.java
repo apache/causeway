@@ -1,0 +1,253 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+
+package org.apache.isis.runtime.userprofile;
+
+import java.util.List;
+
+import org.apache.log4j.Logger;
+import org.apache.isis.commons.debug.DebugInfo;
+import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.runtime.persistence.PersistenceSession;
+import org.apache.isis.runtime.session.IsisSession;
+
+/**
+ * Acts like a bridge, loading the profile from the underlying store.
+ */
+public class UserProfileLoaderDefault implements UserProfileLoader, DebugInfo {
+	
+    private static final String DEFAULT_PERSPECTIVE_NAME = "[[NAME]]";
+    private static final String EXPLORATION =  " Exploration";
+
+	private Logger LOG = Logger.getLogger(UserProfile.class);
+
+    public static enum Mode {
+    	/**
+    	 * Must provide some services.
+    	 */
+    	STRICT,
+    	/**
+    	 * For testing only, no services is okay.
+    	 */
+    	RELAXED
+    }
+    
+
+    private final UserProfileStore store;
+    private final Mode mode;
+    
+    private UserProfile userProfile;
+
+	private List<Object> serviceList;
+
+
+
+    
+    ////////////////////////////////////////////////////////
+    // Constructor
+    ////////////////////////////////////////////////////////
+
+    public UserProfileLoaderDefault(final UserProfileStore store) {
+        this(store, Mode.STRICT);
+    }
+
+    /**
+     * for testing purposes, explicitly specify the Mode.
+     */
+    public UserProfileLoaderDefault(final UserProfileStore store, final Mode mode) {
+        this.store = store;
+        this.mode = mode;
+    }
+
+    ////////////////////////////////////////////////////////
+    // init, shutdown
+    ////////////////////////////////////////////////////////
+
+	/**
+	 * Does nothing.
+	 */
+	public void init() {
+	}
+
+
+	/**
+	 * Does nothing.
+	 */
+	public void shutdown() {
+	}
+
+    ////////////////////////////////////////////////////////
+    // Fixtures
+    ////////////////////////////////////////////////////////
+
+    /**
+     * @see PersistenceSession#isFixturesInstalled()
+     */
+    public boolean isFixturesInstalled() {
+        return store.isFixturesInstalled(); 
+    }
+
+
+    ////////////////////////////////////////////////////////
+    // saveAs...
+    ////////////////////////////////////////////////////////
+    
+    public void saveAsDefault(UserProfile userProfile) {
+        store.save("_default", userProfile);
+    }
+
+    public void saveForUser(String userName, UserProfile userProfile) {
+        store.save(userName, userProfile);
+    }
+
+    ////////////////////////////////////////////////////////
+    // saveSession
+    ////////////////////////////////////////////////////////
+
+    public void saveSession(List<ObjectAdapter> objects) {
+        loadOrCreateProfile();
+        userProfile.saveObjects(objects);
+        save(userProfile);
+    }
+
+    private void save(UserProfile userProfile) {
+        saveForUser(userName(), userProfile);
+    }
+
+    
+    ////////////////////////////////////////////////////////
+    // getProfile
+    ////////////////////////////////////////////////////////
+
+    public UserProfile getProfile(AuthenticationSession session) {
+        String userName = session.getUserName();
+        UserProfile profile = store.getUserProfile(userName);
+        userProfile =  profile != null ? profile : createUserProfile(userName);
+        return userProfile;
+    }
+
+    @Deprecated
+    public UserProfile getProfile() {
+        loadOrCreateProfile();
+        return userProfile;
+    }
+
+    
+    ////////////////////////////////////////////////////////
+    // Helpers: (for getProfile)
+    ////////////////////////////////////////////////////////
+
+    private void loadOrCreateProfile() {
+        if (userProfile == null) {
+            String userName = userName();
+            UserProfile profile = store.getUserProfile(userName);
+            userProfile =  profile != null ? profile : createUserProfile(userName);
+        }
+    }
+
+
+    private UserProfile createUserProfile(String userName) {
+        UserProfile template = store.getUserProfile("_default");
+		if (template == null) {
+			return createDefaultProfile(userName);
+		} else {
+			return createProfileFromTemplate(userName, template);
+		}
+    }
+    
+
+    private UserProfile createDefaultProfile(String userName) {
+        UserProfile profile = new UserProfile();
+        profile.newPerspective(DEFAULT_PERSPECTIVE_NAME + (IsisContext.getDeploymentType().isExploring() ? EXPLORATION : ""));
+
+        List<Object> services = getServices();
+        if (services.size() == 0 && mode == Mode.STRICT) {
+            throw new IsisException("No known services");
+        }
+        for (Object service : services) {
+            profile.getPerspective().addToServices(service);
+        }
+        LOG.info("creating exploration UserProfile for " + userName);
+        return profile;
+    }
+
+
+    private UserProfile createProfileFromTemplate(String userName, UserProfile template) {
+        UserProfile userProfile = new UserProfile();
+        userProfile.copy(template);
+        LOG.info("creating UserProfile, from template, for " + userName);
+        return userProfile;
+    }
+
+    
+    ////////////////////////////////////////////////////////
+    // Debugging
+    ////////////////////////////////////////////////////////
+    
+    public void debugData(DebugString debug) {
+        debug.appendln("Store", store.toString());
+        debug.appendln("Mode", mode);
+        
+        debug.append(store);
+        debug.append(userProfile);
+    }
+
+    public String debugTitle() {
+        return "User Profile Service";
+    }
+
+
+    ////////////////////////////////////////////////////////
+    // Dependencies (injected via setters)
+    ////////////////////////////////////////////////////////
+	
+	public List<Object> getServices() {
+		return serviceList;
+	}
+
+	public void setServices(List<Object> serviceList) {
+		this.serviceList = serviceList;
+	}
+
+    ////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    ////////////////////////////////////////////////////////
+	
+	private static AuthenticationSession getAuthenticationSession() {
+		return getSession().getAuthenticationSession();
+	}
+
+    private static String userName() {
+        return getAuthenticationSession().getUserName();
+    }
+
+	private static IsisSession getSession() {
+		return IsisContext.getSession();
+	}
+
+	
+
+}
+
+

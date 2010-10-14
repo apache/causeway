@@ -1,0 +1,204 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.apache.isis</groupId>
+	<artifactId>core</artifactId>
+	
+	<name>Core</name>
+	
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>trunk</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<!-- this may be redundant because this module is now parented by trunk -->
+	<scm>
+		<connection>scm:svn:http://apache.isis.svn/svnroot/trunk/core</connection>
+		<developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/core</developerConnection>
+		<url>http://dev.isis.apache.org/trac/browser/framework/trunk/core</url>
+	</scm>
+
+	<!-- used in Site generation for relative references -->
+	<url>http://isis.apache.org/core/</url>
+
+	<properties>
+		<current40xVersion>4.0</current40xVersion>
+		<dependency.locations.enabled>false</dependency.locations.enabled>
+		
+    	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
+		
+		<checkstyle.configLocation>../src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
+		<pmd.ruleset>../src/main/pmd/pmd.xml</pmd.ruleset>
+
+		<docbkx.title>Apache Isis Core</docbkx.title>
+		<docbkx.outputName>isis-core</docbkx.outputName>
+	</properties>
+
+	<modules>
+		<module>commons</module>
+		<module>metamodel</module>
+		<module>runtime</module>
+		<module>bytecode-cglib</module>
+		<module>bytecode-javassist</module>
+		<module>remoting</module>
+		<module>webapp</module>
+		<module>webserver</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+			</plugin>
+
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+            </plugin>
+
+			<!-- this may be redundant because this module is now parented by trunk -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<configuration>
+					<preparationGoals>clean install</preparationGoals>
+					<autoVersionSubmodules>true</autoVersionSubmodules>
+					<tagBase>https://apache.isis.svn/svnroot/tags/core</tagBase>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<inherited>true</inherited>
+				<reportSets>
+					<reportSet>
+						<inherited>true</inherited>
+						<reports>
+							<report>dependencies</report>
+							<report>dependency-convergence</report>
+							<report>plugins</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- applib -->
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- commons -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>commons</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>commons</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- metamodel -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>metamodel</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>metamodel</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- remoting -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>remoting</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>remoting</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- runtime -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>runtime</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>runtime</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- webapp -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>webapp</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>webapp</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- webserver -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>webserver</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>webserver</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>test-jar</type>
+			</dependency>
+
+			<!-- bytecode -->
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>bytecode-cglib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>bytecode-javassist</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+</project>

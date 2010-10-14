@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.2.218" flavor="j2se">
+   <property name="hide-externals" value="true" />
+   <property name="detail-mode" value="true" />
+   <classpath>
+      <classpathentry kind="lib" path="C:\SVN-NO\framework-trunk-REORG\metamodel\target\classes" />
+   </classpath>
+   <transformations>
+      <transformation in="org.apache.isis.specloader.reflector.*" out="org.apache.isis.progmodel.java5.reflector.*" />
+      <transformation in="org.apache.isis.specloader.*" out="org.apache.isis.metamodel.specloader.*" />
+   </transformations>
+   <grid-set sep="." version="3.2.218">
+      <grid name="Diagram 1" enforce="true" strict="false">
+         <row>
+            <cell name="progmodel.java5" pattern="org.apache.isis.progmodel.java5.*" vexpanded="true" visibility="public" />
+            <cell name="snapshot" pattern="org.apache.isis.snapshot.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="runtimecontext" pattern="org.apache.isis.runtimecontext.*" vexpanded="true" visibility="public" />
+            <cell name="config" pattern="org.apache.isis.config.*" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="metamodel" pattern="org.apache.isis.metamodel.*" vexpanded="false" visibility="public">
+               <grid>
+                  <row>
+                     <cell name="criteria" pattern="org.apache.isis.metamodel.criteria.?" vexpanded="true" visibility="public" />
+                     <cell name="interactions" pattern="org.apache.isis.metamodel.interactions.?" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="util" pattern="org.apache.isis.metamodel.util.?" vexpanded="true" visibility="public" />
+                     <cell name="specloader" pattern="org.apache.isis.metamodel.specloader.?" vexpanded="false" visibility="public">
+                        <grid>
+                           <row>
+                              <cell name="package-info" pattern="org.apache.isis.metamodel.specloader.package-info" vexpanded="true" visibility="public" />
+                              <cell name="FacetDecoratorInstaller" pattern="org.apache.isis.metamodel.specloader.FacetDecoratorInstaller" vexpanded="true" visibility="public" />
+                              <cell name="SpecificationLoaderAware" pattern="org.apache.isis.metamodel.specloader.SpecificationLoaderAware" vexpanded="true" visibility="public" />
+                           </row>
+                           <row>
+                              <cell name="SpecificationLoader" pattern="org.apache.isis.metamodel.specloader.SpecificationLoader" vexpanded="true" visibility="public" />
+                           </row>
+                        </grid>
+                     </cell>
+                  </row>
+                  <row>
+                     <cell name="spec" pattern="org.apache.isis.metamodel.spec.*" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="consent" pattern="org.apache.isis.metamodel.consent.?" vexpanded="true" visibility="public" />
+                     <cell name="facetdecorator" pattern="org.apache.isis.metamodel.facetdecorator.?" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="exceptions" pattern="org.apache.isis.metamodel.exceptions.?" vexpanded="true" visibility="public" />
+                     <cell name="facets" pattern="org.apache.isis.metamodel.facets.*" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="authentication" pattern="org.apache.isis.metamodel.authentication.?" vexpanded="true" visibility="public" />
+                     <cell name="adapter" pattern="org.apache.isis.metamodel.adapter.*" vexpanded="true" visibility="public" />
+                  </row>
+               </grid>
+            </cell>
+         </row>
+         <row>
+            <cell name="commons" pattern="org.apache.isis.commons.*" vexpanded="true" visibility="public" />
+         </row>
+         <description>Top-level breakout</description>
+      </grid>
+   </grid-set>
+</local-project>
+
