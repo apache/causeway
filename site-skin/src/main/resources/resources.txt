@@ -1,0 +1,7 @@
+images/expanded.gif
+images/collapsed.gif
+images/logos/maven-feather.png
+images/logos/build-by-maven-white.png
+images/logos/build-by-maven-black.png
+css/maven-base.css
+css/print.css

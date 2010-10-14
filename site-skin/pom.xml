@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>trunk</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>  
+
+    <groupId>org.apache.isis.skins</groupId>
+    <artifactId>classic-skin</artifactId>
+    <version>1.0</version>
+    <name>Classic Skin</name>
+
+   <scm>
+        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/site-skin</connection>
+        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/site-skin</developerConnection>
+        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/site-skin</url>
+    </scm>
+
+	<properties>
+		<checkstyle.configLocation>../src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
+		<pmd.ruleset>../src/main/pmd/pmd.xml</pmd.ruleset>
+	</properties>
+</project>
