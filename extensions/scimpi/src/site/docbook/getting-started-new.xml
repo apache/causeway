@@ -1,0 +1,254 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title>Getting Started</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <para>The Scimpi framework can be downloaded from the Scimpi project on
+  SourceForge (see <ulink
+  url="???">http://sourceforge.net/projects/scimpi/</ulink>). The files are
+  labelled in the format</para>
+
+  <literallayout>scimpi-<emphasis>version</emphasis>-<emphasis>type</emphasis>.<emphasis>compression</emphasis>
+</literallayout>
+
+  <para>Where <emphasis>scimpi</emphasis> is the product name and</para>
+
+  <variablelist>
+    <varlistentry>
+      <term>version</term>
+
+      <listitem>
+        <para>indicates the release version and reflects the maturity and
+        stability of the release</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term>type</term>
+
+      <listitem>
+        <para>is either <emphasis>for-ant</emphasis>,
+        <emphasis>for-maven</emphasis> or <emphasis>source</emphasis>; where
+        the binary versions are ready to deploy or develop with, and the
+        source release can be used to further develop or modify the framework
+        or can be used to build the binary version.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term>compression</term>
+
+      <listitem>
+        <para><emphasis>zip</emphasis> or <emphasis>tgz</emphasis> - for uses
+        on Windows or Unix systems respectively.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+
+  <para>Once downloaded and exploded a directory named <literal
+  moreinfo="none">scimpi-</literal><emphasis><literal
+  moreinfo="none">version</literal> </emphasis> will be placed on your disk,
+  and will contain the following:-</para>
+
+  <literallayout>scimpi-0.1
+  demo
+  docs
+  LICENSE.TXT
+  README.TXT
+  template</literallayout>
+
+  <section>
+    <title id="run-demo">Running the demo system</title>
+
+    <para>The <filename moreinfo="none">demo</filename> directory contains a
+    number of demo applications and a server to run them on. Within the
+    <filename moreinfo="none">demo</filename> directory run the web server
+    program, on Windows run the batch file:</para>
+
+    <literallayout>$ cd scimpi-0.1\demo\
+$ webserver.bat</literallayout>
+
+    <para>While on Unix/Linux run the shell script:</para>
+
+    <literallayout>$ cd scimpi-0.1/demo/
+$ ./webserver.sh
+</literallayout>
+
+    <para>Once the server is running open up a browser and use the following
+    URLs to access the demo web applications: <ulink
+    url="???">http://localhost:8080/catalogue/</ulink>, <ulink
+    url="???">http://localhost:8080/cart/</ulink> and <ulink
+    url="???">http://localhost:8080/expenses</ulink>.</para>
+
+    <para>To log on to the web applications use one of the user names
+    <emphasis>sven</emphasis>, <emphasis>dick</emphasis> or
+    <emphasis>bob</emphasis> and the password
+    <emphasis>pass</emphasis>.</para>
+
+    <para>When finished use <literal moreinfo="none">Ctrl-C</literal> to
+    terminate the server.</para>
+  </section>
+
+  <section>
+    <title>Installing the demos on a web server</title>
+
+    <para>An alternative to running the supplied standalone server is to use
+    an existing Servlet enabled web server such a Tomcat. Simply drop the
+    <literal moreinfo="none">war</literal> files from the <filename
+    moreinfo="none">demo/webapp</filename> directory into the deployment
+    directory on the web server (in the case of Tomcat this is the <filename
+    moreinfo="none">webapp</filename> directory). The server should then
+    automatically make the applications available as above.</para>
+  </section>
+
+  <section>
+    <title>Building a new web application with Ant</title>
+
+    <para>A new web application can be created by making a copy of the
+    <filename moreinfo="none">template</filename> directory and using Ant, or
+    an IDE, to build the war. The following Linux command copies across the
+    complete <filename moreinfo="none">template</filename> directory into a
+    new directory called <filename
+    moreinfo="none">conference</filename>.</para>
+
+    <literallayout>$ cp --recursive scimpi-0.1/template/ conference</literallayout>
+
+    <para>Once we have changed to the new directory we can use Ant to compile
+    the code and create the war file.</para>
+
+    <literallayout>$ cd conference/
+$ ant war
+Buildfile: build.xml
+
+compile:
+    [mkdir] Created dir: /home/rcm/tmp/conference/build
+    [mkdir] Created dir: /home/rcm/tmp/conference/build/classes
+    [javac] Compiling 8 source files to /home/rcm/tmp/conference/build/classes
+
+war:
+      [war] Building war: /home/rcm/tmp/conference/build/scimpi.war
+
+BUILD SUCCESSFUL
+Total time: 2 seconds
+$</literallayout>
+
+    <para>To run the new web application the war file needs to be deployed to
+    a running web server. The following example copies it to a locally
+    installed Tomcat 5.5 server.</para>
+
+    <literallayout>$ cp build/scimpi.war ~/usr/apache-tomcat-5.5.23/webapps/.</literallayout>
+
+    <para>The web application can now be accessed from a browser using the URL
+    <ulink url="???">http://localhost:8080/scimpi/</ulink>.</para>
+
+    <para>Once set up the source code for the domain model, in <filename
+    moreinfo="none">src/</filename>, can be replaced or modified, and specific
+    views can be added to <filename moreinfo="none">webapp/</filename>.
+    Rebuild and redeploy through the same process to see the results.</para>
+
+    <para>The Ant build configuration uses two useful properties that should
+    be set up: <literal>webapp.name</literal>, the name of the generated war
+    file and hence the context name of the application, and <filename
+    moreinfo="none">deploy.dir</filename>, the directory that the war file is
+    copied to when the <literal moreinfo="none">deploy</literal> target is
+    used. These can either be changed within the <filename
+    moreinfo="none">build.xml</filename> file, or specified on the command
+    line when running Ant as the example below shows, which will produce a war
+    file called <filename moreinfo="none">conference.war</filename> instead of
+    <filename moreinfo="none">scimpi.war</filename> and will be accessible via
+    the URL <ulink url="???">http://localhost:8080/conference/</ulink>
+    .</para>
+
+    <literallayout>$ ant -Dwebapp.name=conference
+$ cp build/conference.war ~/usr/apache-tomcat-5.5.23/webapps/.</literallayout>
+
+    <para>To get Ant to copy across the war file to the web server ensure the
+    <filename moreinfo="none">deploy.dir</filename> property is correctly set
+    and run ant with the <literal moreinfo="none">deploy</literal> target as
+    the example below shows.</para>
+
+    <literallayout>$ ant -Ddeploy.dir=/home/rcm/usr/apache-tomcat-5.5.23/webapps/ deploy</literallayout>
+
+    <para>These properties can also be permanently set up by specifying them
+    in the <filename moreinfo="none">build.xml</filename> file.</para>
+  </section>
+
+  <section>
+    <title>Building a new web application with Maven</title>
+
+    <para>You can use Maven archetypes to quickly set up a Scimpi web
+    application. Run the following command specifying a suitable group and
+    artifact ID. The group ID is typically based on you domain name, while the
+    artifact ID uniquely represents the web application you are
+    creating.</para>
+
+    <literallayout>$ mvn org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha-7:create \
+  -DarchetypeGroupId=org.scimpi \
+  -DarchetypeArtifactId=scimpi-webapp \
+  -DarchetypeVersion=0.1-SNAPSHOT \
+  -DgroupId=<emphasis>[my group id]</emphasis> \
+  -DartifactId=<emphasis>[my artifact id]</emphasis> 
+</literallayout>
+
+    <para>The resulting directory (with the name from the artifact ID)
+    contains a Maven style project for a complete example web application. So
+    assuming that the artifact ID was given as <literal
+    moreinfo="none">conference</literal> then the directory would also be
+    <filename moreinfo="none">conference</filename>.</para>
+
+    <para>From within the artifact directory you can build the application by
+    running Maven with</para>
+
+    <literallayout>$ mvn install</literallayout>
+
+    <para>The newly created <filename moreinfo="none">target</filename>
+    directory contains a war file with the name of the artifact, e.g.
+    <filename moreinfo="none">conference-1.0-SNAPSHOT.war</filename>. This
+    file can then be manually deployed to a suitable web server or Maven can
+    run a web server for you.</para>
+
+    <literallayout>$ mvn jetty:run</literallayout>
+
+    <para>Once set up the source code for the domain model, in <filename
+    moreinfo="none">src/main/java/</filename>, can be replaced or modified,
+    and specific views can be added to <filename
+    moreinfo="none">src/main/webapp/</filename>. Rebuild and redeploy through
+    the same process to see the results.</para>
+
+    <para></para>
+  </section>
+</article>

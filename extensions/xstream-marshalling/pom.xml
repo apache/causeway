@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.apache.isis.plugins</groupId>
+	<artifactId>xstream-marshalling</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	
+	<name>XStream Marshalling</name>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>plugins</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+    	
+		<docbkx.title>Apache Isis XStream Marshalling</docbkx.title>
+		<docbkx.outputName>isis-xstream-marshalling</docbkx.outputName>
+	</properties>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+            </plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.thoughtworks.xstream</groupId>
+				<artifactId>xstream</artifactId>
+				<version>1.2.1</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>remoting</artifactId>
+		</dependency>
+	
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+		</dependency>
+	</dependencies>
+	
+</project>

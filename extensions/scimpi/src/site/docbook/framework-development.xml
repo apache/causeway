@@ -1,0 +1,317 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title>Framework Development</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <para>This chapter looks at setting up a development environment (Eclipse)
+  to allow development of the Scimpi framework itself. This is the setup for
+  developers of the framework, developers who are writing extensions to the
+  framework.</para>
+
+  <section>
+    <title>Getting the Source and Setting up Eclipse</title>
+
+    <para>Scimpi development requires:-</para>
+
+
+      <para>Java 5</para>
+
+      <para>[[NAME]] 3.0.2</para>
+
+      <para>Subversion</para>
+
+      <para>Maven 2</para>
+
+      <para>Eclipse (3.2 or 3.3) - another IDE can be used but is not covered here.</para>
+
+    <para>Check out the code from the Source Forge repository us the following
+    command</para>
+
+    <literallayout>$ svn co https://scimpi.svn.sourceforge.net/svnroot/scimpi/trunk scimpi_DEV</literallayout>
+
+    <para>This creates the directory <filename
+    moreinfo="none">scimpi_DEV</filename> with the following (approximate)
+    contents</para>
+
+    <literallayout>cart-demo
+expenses-demo
+LICENSE.TXT
+pom.xml
+README.TXT
+release
+scimpi-dispatcher
+scimpi-docs
+scimpi-server
+scimpi-servlet
+webapp-template</literallayout>
+
+    <para>Before importing the code into the IDE we need to set up the IDE's
+    project structure. Through Maven run the following commands to set up
+    projects (creates <filename moreinfo="none">.project</filename>, <filename
+    moreinfo="none">.classpath</filename> and other Eclipse property files)
+    and set the repository variable (<literal
+    moreinfo="none">M2_REPO</literal>) within Eclipse.</para>
+
+    <literallayout>$ mvn eclipse:eclipse
+$ mvn -Declipse.workspace=. eclipse:add-maven-repo</literallayout>
+
+    <para>Using the import wizard in Eclipse (File/Import menu) select
+    <option>Existing Projects into Workspace</option> and press the <literal
+    moreinfo="none">Next</literal> button. Within the second tab of the wizard
+    specify the directory as checked out above. Once a list has appeared in
+    the <literal moreinfo="none">Projects</literal> field, as seen below,
+    press the <literal moreinfo="none">finish</literal> button.</para>
+  </section>
+
+  <section>
+    <title>Running the Demos</title>
+
+    <para>Eclipse's Web Standard Tools (WST) and J2EE Standard Tools (JST)
+    provides tooling for building and running web applications including
+    running a Servlet Container from within Eclipse.</para>
+
+    <para>Before running such a web application is necessary to ensure that
+    related projects are added to the server's classpath. This is done via the
+    properties for the web application project under the <emphasis>J2EE Module
+    Dependencies</emphasis> section. In there tick the projects that are
+    needed to run Scimpi, at the time of writing these are
+    <emphasis>scimpi-dispatcher</emphasis> and
+    <emphasis>scimpi-servlet</emphasis>.</para>
+
+    <para>To run the examples with Eclipse right-click on the cart-demo
+    project and from the <option>Run As</option> menu select the <option>Run
+    on Server</option> option. The dialog that pops up should be correctly set
+    for the local server. (If there are no servers set up they can be added
+    via the preferences, see the section Server/Installed Runtimes and use the
+    Add button to add a server that you have installed on your machine.) Press
+    <literal moreinfo="none">Next</literal> to move to the second page where
+    you add all the other projects as web applications, or <literal
+    moreinfo="none">Finish</literal> to run the server.</para>
+  </section>
+
+  <section>
+    <title>How Scimpi works</title>
+
+    <para>The Scimpi framework is used to build Java web applications that run
+    in a servlet container such Tomcat or JRun. Using the [[NAME]]
+    framework to access a Java domain model Scimpi can be used to create
+    dynamic web pages that access and manipulate that domain model.</para>
+
+    <para>Pages are generated by Scimpi by processing template files (with the
+    extension <filename moreinfo="none">shtml</filename>) that contain special
+    tags that instruct the framework to do particular things (all other files
+    with extensions other than <filename moreinfo="none">shtml</filename> are
+    passed to the browser unchanged). The template files are essentially HTML
+    files interspersed with Scimpi tags that are processed and will typically
+    generate some HTML code to replace the tag in the file that is passed to
+    browser. Like most other web applications the template files, and all
+    other browser requestable resources are placed in the
+    <emphasis>webapp</emphasis> directory.</para>
+
+    <literallayout>webapp/
+    generic/
+        action.shtml
+        collection.shtml
+        edit.shtml
+        object.shtml
+    images/
+        Default.png
+        logo.png
+    style/
+        screen.css
+        template.shtml
+    WEB-INF/
+        isis.properties
+        passwords
+        web.xml
+    index.shtml</literallayout>
+
+      <para>Loading [[NAME]]</para>
+
+      <para>When the servlet container loads the Scimpi based web application
+      it starts off by loading up [[NAME]] and introspecting the domain
+      model. This is controlled by the <filename
+      moreinfo="none">isis.properties</filename> file. A basic
+      configuration, like the one shown below, will list the service objects
+      that [[NAME]] should make available and the fixtures that should be
+      run the first time the web application is started to populate the object
+      store with the initial set of domain objects.</para>
+
+    <literallayout>isis.services.prefix=org.apache.isis.app.cart.services
+isis.services=ClaimantRepository, ClaimRepository
+
+isis.fixtures.prefix=org.apache.isis.app.cart.fixtures
+isis.fixtures=ClaimsFixture</literallayout>
+
+      <para>Default security</para>
+
+      <para>[[NAME]] is <emphasis>user</emphasis> orientated, that is it
+      expects the interactions with it to be on behalf of a user. To this end
+      the system must authorise a user before anything can be done, this is
+      the same principle as a database engine. The <filename
+      moreinfo="none">passwords</filename> file contains a set of user names
+      and passwords for [[NAME]]'s most basic authorisation
+      implementation. The example below defines a set of actual users for
+      applications that will be based on [[NAME]] users, and a system
+      user (<emphasis>webapp</emphasis>) for applications that either have no
+      concepts of users or provide for it within the domain model.</para>
+
+    <literallayout># username:password
+sven:pass
+dick:pass
+bob:pass
+
+webapp:pass</literallayout>
+
+      <para>web application configuration</para>
+
+      <para>The web application configuration file for a Scimpi application is
+      rather simple and varies little from application to application. The
+      change that needs to be made only applies to applications that use [[NAME]]
+      Objects users, for which the to parameters for the dispatcher servlet
+      should be removed so that web application does not log-in automatically
+      when a session is started.</para>
+
+    <literallayout>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;web-app id="WebApp_ID" version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"&gt;
+    &lt;display-name&gt;example&lt;/display-name&gt;
+
+    &lt;welcome-file-list&gt;
+        &lt;welcome-file&gt;index.shtml&lt;/welcome-file&gt;
+    &lt;/welcome-file-list&gt;
+
+    &lt;listener&gt;
+        &lt;listener-class&gt;org.apache.isis.webapp.servlet.SystemInitializer&lt;/listener-class&gt;
+    &lt;/listener&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.apache.isis.webapp.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        <emphasis>&lt;init-param&gt;
+            &lt;param-name&gt;username&lt;/param-name&gt;
+            &lt;param-value&gt;webapp&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;password&lt;/param-name&gt;
+            &lt;param-value&gt;pass&lt;/param-value&gt;
+        &lt;/init-param&gt;</emphasis>
+        &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.shtml&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;url-pattern&gt;*.app&lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+&lt;/web-app&gt;
+</literallayout>
+
+      <para>Controllers</para>
+
+      <para>Scimpi provides a single dispatcher servlet and a set of
+      controllers. Other controllers can be added if needed.</para>
+
+    <para>The built-in controllers are:-</para>
+
+    <variablelist>
+      <varlistentry>
+        <term>logon</term>
+
+        <listitem>
+          <para>processes a username and password parameter and requests a
+          [[NAME]] Session from the underlying framework.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>logout</term>
+
+        <listitem>
+          <para>End the [[NAME]] Session from the underlying framework,
+          and clears the request context.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>debug</term>
+
+        <listitem>
+          <para>creates a debug page displaying internal details and state of
+          the Scimpi and [[NAME]] frameworks.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>edit</term>
+
+        <listitem>
+          <para>process a set of fields from an HTML form for a specified
+          object and sets those fields of that object held by [[NAME]]
+          Objects.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term>action</term>
+
+        <listitem>
+          <para>process a set of fields from an HTML form for a specified
+          method on a domain object or service object and invokes that
+          method.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+
+    <section>
+      <title>Objects</title>
+
+      <para>The domain objects handled by [[NAME]] are wrapped in
+      adapters that allow those domain objects to be processed transparently
+      by the NOF with the domain objects be redefined to deal with technical
+      aspects of enterprise systems such as security and persistence. Each
+      domain object is given an object identifier (OID) so the it can be
+      referred to across machines. The Scimpi framework works with this
+      mechanism by mapping HTML friendly identifiers to the OIDs.</para>
+    </section>
+  </section>
+</article>

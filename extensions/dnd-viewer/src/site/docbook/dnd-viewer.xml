@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<article>
+  <articleinfo>
+    <title>DND Viewer Development</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>DND Viewer development</title>
+
+    <para>The DND viewer basically displays a set of <literal>View</literal>
+    objects, where each view is render its assigned <literal>Content</literal>
+    object. A content is something like a message, a service object, a domain
+    object or a field within a domain object. If a view is to show more than
+    one thing (eg the contents of a list, or the properties of an object) then
+    the view must provide a set of subviews and arrange those views is some
+    orderly fashion. The viewer provides
+    <literal>AbstractCompositeView</literal> for this purpose. A further
+    subclass, <literal>CompositeViewBuilder</literal>, provides an even better
+    mechanism by allowing a ViewBuilder to be assigned to create and add the
+    subviews, while an <literal>AbstractBuilderDecorator</literal> can be
+    assigned to layout the subviews. Many builders and layouts are provided
+    that can be combined to create specific views.</para>
+
+    <para>In addtion to this creation process the views themselves can be
+    decorated to provide specific behaviour and looks.</para>
+
+    <section>
+      <title>Specification</title>
+
+      <para>Each available view is created via a
+      <literal>ViewSpecification</literal> instance. An instance of each
+      specification is registered with the view factory, either directly (via
+      the <literal>ViewFactory</literal> instance) or indirectly via the
+      configuration file. To register a view specification at runtime add
+      something like the following to the <filename
+      moreinfo="none">isis.properties</filename>, or other properties,
+      file.</para>
+
+      <programlisting format="linespecific">isis.viewer.dnd.specification.view=org.apache.isis.viewer.dnd.view.calendar.CalendarSpecification, \
+    org.apache.isis.viewer.dnd.view.form.WindowExpandableFormSpecification
+</programlisting>
+
+      <para>Each specification determines if it can display a particular
+      object, by returning <literal moreinfo="none">true</literal>/<literal
+      moreinfo="none">false</literal> from the
+      <literal>canDisplay(Content)</literal> method.</para>
+
+      <para>The name of the specification, provided via the
+      <literal>getName</literal> method, is used to create a list of available
+      views that the user can select from.</para>
+
+      <para>An open view (<literal>isOpen</literal> returning <literal
+      moreinfo="none">true</literal>) indicates that the view shows content of
+      the object, as opposed to just the object itself.</para>
+
+      <para>A subview (<literal>isSubview</literal> returning <literal
+      moreinfo="none">true</literal>) indicates that the view can be used as a
+      child part of another view. Otherwise the view is a root view, standing
+      by itself.</para>
+
+      <para>A view that can be replaced by another view within the screen area
+      is indicated by <literal>isReplaceable</literal> returning <literal
+      moreinfo="none">true</literal>.</para>
+
+      <para>TODO what is <literal>isAligned</literal>?</para>
+    </section>
+
+    <section>
+      <title>View</title>
+
+      <para>Displayed objects are rendered using an instance of
+      <literal>View</literal>. View classes are typically created by
+      subclassing <literal>AbstractView.</literal></para>
+
+      <para>Views are designed so that the can be decorated to add looks and
+      behaviour. Such decorators are typically created by subclassing
+      AbstractViewDecorator.</para>
+
+      <para></para>
+
+      <section>
+        <title>Sizing</title>
+
+        <para>Views can request a specific area to render themselves within.
+        The parent view, starting from the top-level workspace, asks each
+        component view by calling the view's
+        <literal>getRequiredSize</literal> method. The parent passes in the
+        maximum size so that component can make the most of the available
+        space.</para>
+      </section>
+
+      <section>
+        <title>Layout</title>
+
+        <para>Each view provides a layout mechanism (via the
+        <literal>layout(Size)</literal> method) that should size and position
+        each of its subviews. This is not applicable to node views, which by
+        definition have no children. The size passed in the amount of space
+        available to the view. Before the layout method is called the
+        getRequiredSize method is called to determine the optimum size to
+        provide for the view. The laying out of a view should only occur when
+        the contents have changed so a flag should be maintained to track
+        this. The <literal>invalidateLayout</literal> method should set this
+        flag so the the viewer can indicate when a view needs to be re-laid
+        out. It should also pass up the request to ensure that any work done
+        by the superclass will also be completed. The example below shows a
+        typical layout scenario.</para>
+
+        <programlisting format="linespecific">    public void invalidateLayout() {
+        super.invalidateLayout();
+        invalidLayout = true;
+    }
+
+    public void layout(final Size maximumSize) {
+        if (invalidLayout) {
+            Size formSize = form.getRequiredSize(maximumSize);
+            form.setSize(formSize);
+            form.layout(maximumSize);
+            form.setLocation(new Location(0,0));
+            
+            Size collectionSize = collection.getRequiredSize(maximumSize);
+            collection.setSize(collectionSize);
+            collection.layout(maximumSize);
+            collection.setLocation(new Location(0, formSize.getHeight()));
+
+            invalidLayout = false;
+        }
+    }</programlisting>
+      </section>
+
+      <section>
+        <title>Drawing</title>
+
+        <para>The parent asks each component to draw itself by calling the
+        view's <literal>draw</literal> method. A Canvas object is passed in
+        that is then used to do the actual drawing.</para>
+
+        <para>A view can also provide a <literal>print</literal> method for
+        drawing to a printing surface. In the AbstractView class this simply
+        delegates to the draw method to allow the one method to render both to
+        screen and paper.</para>
+      </section>
+
+      <section>
+        <title>Window border</title>
+
+        <para>A view can be given a border by chaining a
+        <literal>WindowBorder</literal> decorator to a view as follows,
+        indicating if the window is scrollable with the second
+        parameter.</para>
+
+        <programlisting format="linespecific">new WindowBorder(new SimpleView(content, axis), false);</programlisting>
+
+        <para>The style of the border can be changed by providing a
+        <literal>BorderDrawing</literal> class that is used for all
+        instances.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Composite views</title>
+
+      <para>Although you can create your own subclass of
+      <literal>View</literal> that contain other views, it can be a lot
+      simpler to extend the <literal>AbstractCompositeView</literal> class or
+      to use the <literal>CompositeViewBuilder</literal> class in conjunction
+      with some <literal>ViewBuilder</literal> objects to build and layout a
+      view. The bulk of the work in a composite view, however, is in passing
+      the events etc on to the right subview, and this is something the
+      <literal>AbstractCompositeView</literal> view does for you.</para>
+
+      <para>For a view that you want to construct and layout extend the
+      <literal>AbstractCompositeView</literal> class and add methods to build
+      the view, determine its required size and layout its components. The
+      following example shows a view for summarising an object. The
+      <literal>buildView</literal> method calls addView for each of the
+      component view, which in this example are the default views for each
+      field object. The <literal>getMaximumSize</literal> method add the
+      heights of all the component views togther and finds the maximum width.
+      The <literal>doLayout</literal> method simply sets the size of each
+      component to its required size and sets the vertical position so they
+      are stacked vertically.</para>
+
+      <programlisting format="linespecific">public class SummaryView extends AbstractCompositeView {
+
+    public SummaryView(Content content, ViewSpecification specification, ViewAxis viewAxis) {
+        super(content, specification, viewAxis);
+    }
+
+    protected void buildView() {
+        ObjectSpecification spec = getContent().getSpecification();
+        AuthenticationSession session = IsisContext.getAuthenticationSession();
+        ObjectAdapter target = getContent().getAdapter();
+        ObjectAssociation[] fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        for (int i = 0; i &lt; fields.length; i++) {
+            Content fieldContent = Toolkit.getContentFactory().createFieldContent(fields[i], target, fields[i].get(target));
+            if (fieldContent instanceof TextParseableContent) {
+                View view = Toolkit.getViewFactory().createFieldView((TextParseableField) fieldContent, null);
+                addView(view);
+            }
+            if (fieldContent instanceof ObjectContent) {
+                View view = Toolkit.getViewFactory().createView(new ViewRequirement(fieldContent, ViewRequirement.CLOSED));
+                addView(view);
+            }
+        }
+    }
+
+    public Size getMaximumSize() {
+        Size size = new Size(0, 0);
+        for (View view : getSubviews()) {
+            Size viewSize = view.getMaximumSize();
+            size.extendHeight(viewSize.getHeight());
+            size.ensureWidth(viewSize.getWidth());
+        }
+        return size;
+    }
+
+    protected void doLayout(Size maximumSize) {
+        int y = 0;
+        for (View view : getSubviews()) {
+            Size viewSize = view.getMaximumSize();
+            view.setSize(viewSize);
+            view.layout(maximumSize);
+            view.setLocation(new Location(0, y));
+            y += viewSize.getHeight();
+        }
+    }
+
+    public String toString() {
+        return "Form" + getId();
+    }
+}</programlisting>
+
+      <para>The following example shows this</para>
+
+      <programlisting format="linespecific">
+public class MyListSpecification extends AbstractCompositeViewSpecification {
+
+    public MyListSpecification() {
+        SubviewSpec subviewSpec = new SubviewSpec() {
+            public View createSubview(final Content content, final ViewAxis axis) {
+                return new InternalFormSpecification().createView(content, axis);
+            }
+
+            public View decorateSubview(final View subview) {
+                return new EmptyBorder(3, new BackgroundBorder(new LineBorder(1, 8, new IconBorder(subview))));
+            }
+        };
+        builder = new StackLayout(new CollectionElementBuilder(subviewSpec));
+    }
+
+    public String getName() {
+        return "My List";
+    }
+
+    public boolean canDisplay(final Content content) {
+        return content.isCollection();
+    }
+}
+</programlisting>
+
+      <section>
+        <title>Master/detail panel</title>
+
+        <para>A panel with a set of closed objects on one side and an opened
+        object on the other side can be created using the
+        <literal>MasterDetailPanel</literal> class. When the master view is
+        created a <literal>SelectableViewAxis</literal> is created and passed
+        to each item so that it can indicate that is selected and tell the
+        main view to show that object on the detail side. For this to work the
+        item view must detect the <literal>SelectableViewAxis</literal> and
+        use it to set and show that item's selected state. This is currently
+        provided TreeNodeBorder and by the
+        <literal>SubviewIconSpecification</literal>, which adds a
+        <literal>SelectedBorder</literal> decorator to the icon.</para>
+
+        <para>The detail side is initially created with BlankView object. This
+        is then replaced by a view created for the object that is selected via
+        the <literal>SelectableViewAxis</literal>.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Axis</title>
+
+      <para>If separate views need to be related, for example for their sizes
+      to be made consistent or find out a maximum value, then an ViewAxis
+      object should be created and passed to each subview.</para>
+
+      <para></para>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Borders</title>
+
+      <para>Borders decorate views by adding behaviour and content to their
+      edges. Border are used at all levels to distinguish and control windows,
+      objects and fields. Borders are decorators, so are added like this,
+      which gives 3 pixels of empty space, a default white background, a
+      rounded rectangle and an object icon :</para>
+
+      <programlisting format="linespecific">new EmptyBorder(3, new BackgroundBorder(new LineBorder(1, 8, new IconBorder(subview))));</programlisting>
+
+      <para>Windows can be created by decorating a view with a
+      <literal>WindowBorder</literal> or
+      <literal>DialogBorder</literal>.</para>
+
+      <para>Control buttons can be added to views (as done for dialogs) using
+      a <literal>ButtonBorder</literal>.</para>
+
+      <para>Simple decorative borders include:
+      <literal>BackgroundBorder</literal>, <literal>LineBorder</literal>,
+      <literal>EmptyBorder</literal> and
+      <literal>LabelBorder</literal>.</para>
+
+      <section>
+        <title>Resizable views</title>
+
+        <para>Views are typically fixed size by design so that a view always,
+        where possible, shows it entire content. A view can be made resizable
+        by adding a <literal>ViewResizeBorder</literal> decorator, which will
+        provide a drag handle to resize the view with.</para>
+
+        <programlisting format="linespecific">view = new ViewResizeBorder(view);</programlisting>
+      </section>
+
+      <section>
+        <title></title>
+
+        <para></para>
+      </section>
+    </section>
+
+    <section>
+      <title>Menus</title>
+
+      <para>Menu items are added by creating <literal>UserAction</literal>
+      objects and <literal>UserActionSet</literal> for submenus. The
+      <literal>UserActionAbstract</literal> class provides the basic behaviour
+      for menu items.</para>
+    </section>
+
+    <section>
+      <title>Interactions</title>
+
+      <para>All user events - keyboard and mouse events - are routed through
+      <literal>InteractionHandler</literal>.</para>
+    </section>
+
+    <section>
+      <title>Gotchas</title>
+
+      <para>If a view, and particularly a border, has it contents changed so
+      it is wrapping a different object, then it must reset the view property
+      via a call to the setView method as shown below. This example is from a
+      border that replaces an icon with a form so initially we</para>
+
+      <para>ExpanderBorder --&gt; ObjectBorder --&gt; Icon</para>
+
+      <para>and after the first click we get</para>
+
+      <para>ExpanderBorder --&gt; <emphasis>IconBorder</emphasis> --&gt;
+      <emphasis>CompositeView</emphasis></para>
+
+      <para>where the border and composite are newly created. Because the form
+      was created without reference to the ExpanderBorder it has the
+      <emphasis>view</emphasis> property set to reference the IconBorder. Call
+      setView as below corrects this so that view refers to the ExpanderBorder
+      instead.</para>
+
+      <programlisting format="linespecific">            View parent = wrappedView.getParent();
+            
+            getViewManager().removeFromNotificationList(wrappedView);
+            if (isOpen) {
+                wrappedView = new InternalFormSpecification().createView(getContent(), null);
+            } else {
+                ViewRequirement requirement = new ViewRequirement(getContent(), ViewRequirement.CLOSED);
+                wrappedView = Toolkit.getViewFactory().createView(requirement );
+            }
+            <emphasis role="bold">setView(this);</emphasis>
+            setParent(parent);
+</programlisting>
+    </section>
+
+    <section>
+      <title>Loading images</title>
+
+      <para></para>
+
+      <programlisting format="linespecific">            Image busyImage = ImageFactory.getInstance().loadIcon("busy", 16, null);
+</programlisting>
+    </section>
+  </section>
+</article>

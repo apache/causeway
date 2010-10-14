@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+	    <!--  debugging -->
+        <property name="show_sql">false</property>
+        <property name="bytecode.use_reflection_optimizer">true</property>
+		<property name="hibernate.query.substitutions">true 1, false 0</property>
+
+        <property name="connection.driver_class">org.hsqldb.jdbcDriver</property>
+        <property name="connection.username">sa</property>
+        <property name="connection.password"></property>
+        <property name="connection.url">jdbc:hsqldb:file:tmp/hsql-db</property>
+        <property name="dialect">org.hibernate.dialect.HSQLDialect</property>
+
+        <!-- 
+        <property name="connection.driver_class">org.apache.derby.jdbc.EmbeddedDriver</property>
+         connection is jdbc:derby:test or jdbc:derby:test;create=true to create DB
+        <property name="connection.url">jdbc:derby:test;create=true</property>
+        <property name="dialect">org.hibernate.dialect.DB2Dialect</property>
+
+        <property name="connection.driver_class">org.gjt.mm.mysql.Driver</property>
+        <property name="connection.password">test</property>
+        <property name="connection.url">jdbc:mysql:///test</property>
+        <property name="connection.username">test</property>
+        <property name="dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+        -->
+        
+		<property name="current_session_context_class">
+		     org.hibernate.context.ThreadLocalSessionContext
+    	</property>
+        <!--  or org.hibernate.context.JTASessionContext for JTA  -->
+        
+		<property name="connection.provider_class">
+		     org.hibernate.connection.C3P0ConnectionProvider
+    	</property>
+    	<property name="c3p0.minPoolSize">3</property>
+	    <property name="c3p0.timeout">1000</property>
+	    <!-- 
+		<property name="c3p0.min_size">5</property>
+		<property name="c3p0.timeout">5000</property>
+		<property name="c3p0.max_statements">100</property>
+		<property name="c3p0.validate">false</property>
+
+		<property name="cache.provider_class">
+			net.sf.ehcache.hibernate.Provider</property>
+		
+		 -->
+		<!--  transactions - should use JTA if possible
+		<property name="transaction.factory_class">
+			net.sf.hibernate.transaction.JDBCTransactionFactory</property>
+	    <property name="transaction.factory_class">
+	        org.hibernate.transaction.JTATransactionFactory
+    	</property>
+	    <property name="jta.UserTransaction">
+    	    java:comp/UserTransaction
+	    </property>
+	     -->
+   </session-factory>
+</hibernate-configuration>

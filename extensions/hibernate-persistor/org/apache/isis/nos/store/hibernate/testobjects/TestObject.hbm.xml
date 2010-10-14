@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+  <class name="org.apache.isis.nos.store.hibernate.testobjects.TestObject" table="TESTOBJECT" lazy="false">
+    <id name="id" column="PKtestobjectID" type="long" access="org.apache.isis.nos.store.hibernate.property.OidAccessor">
+      <generator class="native"/>
+    </id>
+    <version name="adapter_version" type="long" access="org.apache.isis.nos.store.hibernate.property.VersionAccessor" column="version"/>
+    <property name="adapter_modified_by" type="string" access="org.apache.isis.nos.store.hibernate.property.UserAccessor" column="modified_by"/>
+    <property name="adapter_modified_on" type="timestamp" access="org.apache.isis.nos.store.hibernate.property.TimestampAccessor" column="modified_on"/>
+    <property name="title" column="title" type="string" access="org.apache.isis.nos.store.hibernate.property.TitleAccessor"/>
+  </class>
+</hibernate-mapping>

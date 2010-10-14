@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.apache.isis.plugins</groupId>
+	<artifactId>scimpi</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	
+	<name>Scimpi</name>
+	
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>plugins</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<properties>
+    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+
+		<docbkx.title>Apache Isis Scimpi Viewer</docbkx.title>
+		<docbkx.outputName>isis-scimpi-viewer</docbkx.outputName>
+	</properties>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+            </plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+	        <dependency>
+	            <groupId>org.apache.isis.plugins</groupId>
+	            <artifactId>scimpi-dispatcher</artifactId>
+	            <version>0.1-SNAPSHOT</version>
+	        </dependency>
+
+	        <dependency>
+	            <groupId>org.apache.isis.plugins</groupId>
+	            <artifactId>scimpi-servlet</artifactId>
+	            <version>0.1-SNAPSHOT</version>
+	        </dependency>
+
+	        <dependency>
+	            <groupId>org.htmlparser</groupId>
+	            <artifactId>htmlparser</artifactId>
+	            <version>1.6</version>
+	        </dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<modules>
+		<module>dispatcher</module>
+		<module>servlet</module>
+	</modules>
+</project>

@@ -1,0 +1,61 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+ -----
+ Welcome to Scimpi
+ -----
+ The [[NAME]] Team
+ -----
+
+Welcome to Scimpi
+
+  
+  
+ Scimpi is an ultra-lightweight framework for developing web 
+      applications that are based on strong domain models. It will appeal strongly 
+      to any developer who identifies with the principles of {{{http://en.wikipedia.org/wiki/Domain_driven_design}domain-driven 
+      design}} and/or {{{http://agilemanifesto.org/} agile      development}}.
+      
+      
+ <<A Scimpi web-application has just two elements:>>
+
+	* <<Domain objects>>, written as {{{http://en.wikipedia.org/wiki/POJO} Plain 
+      Old Java Objects (POJOs)}}, that follow a few simple conventions, and 
+      which are persisted via {{{http://www.hibernate.org/} Hibernate}}.
+
+	* <<Web pages>>, written as pure HTML, with embedded 
+      tags to display information from the domain objects, and/or to invoke their 
+      methods.
+
+ <<The benefits are:>> 
+
+    * Very rapid prototyping. As soon as you have any domain objects you 
+          view them and invoke their actions via a generic Scimpi web page. Then 
+          you add customised web pages and navigation only as you need them.
+
+    * Much less code to write, and to maintain, as business requirements 
+          change
+
+    * Supports an agile, iterative, approach to development.
+
+    * No need to keep multiple layers in synch using complex configuration 
+          files.
+
+    *<All> business logic is encapsulated on the domain objects, 
+          instead of being scattered across multiple layers, making them more 
+          re-usable between applications

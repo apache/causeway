@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Maooing DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="org.apache.isis.perspective.Perspective" table="PERSPECTIVE">
+
+       <id name="id" column="PKperspectiveID" type="long" access="org.apache.isis.extensions.hibernate.objectstore.persistence.hibspi.accessor.OidAccessor">
+  		<generator class="native" /> 
+  		</id>
+
+        <property name="name"
+            column="NAME"
+            type="string"/>
+
+        <property name="userName"
+            column="USER_NAME"
+            type="string"/>
+
+ 		<bag access="field" name="services" table="PERSPECTIVE_SERVICES" lazy="false">
+      		<key column="FKperspective"/>
+      		<element type="org.apache.isis.extensions.hibernate.objectstore.persistence.hibspi.usertype.DomainModelResourceType" column="service"/>
+    	</bag>
+
+  		<bag access="field" name="objects" table="PERSPECTIVE_OBJECTS" lazy="false">
+      		<key column="FKperspective"/>
+      		<many-to-any id-type="long">
+        		<column name="objectstype"/>
+        		<column name="objectsID"/>
+      		</many-to-any>
+    	</bag>
+    </class>
+    
+</hibernate-mapping>
+

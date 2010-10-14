@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+	<bannerLeft>
+		<name>[[NAME]]</name>
+		<src>../../../images/banner-left.png</src>
+		<href>../../../index.html</href>
+	</bannerLeft>
+
+	<bannerRight>
+		<src>../../../images/sflogo.png</src>
+		<href>http://sourceforge.net/projects/isis</href>
+	</bannerRight>
+	
+	<body>
+		<breadcrumbs>
+			<item name="AppLib" href="index.html" />
+		</breadcrumbs>
+
+		<menu name="Headless AppLib">
+			<item name="About" href="index.html" />
+			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
+		</menu>
+
+		<!--
+		<menu name="Documentation">
+		</menu>
+		-->
+
+		<menu name="Maven Reports" ref="reports"/>
+
+		<!--
+		<menu name="For Contributors">
+		</menu>
+		-->
+
+	</body>
+</project>

@@ -1,0 +1,973 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title>Scimpi web applications</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Scimpi web applications</title>
+
+    <para></para>
+
+    <section>
+      <title>Domain model</title>
+
+      <para>The only code in a Scimpi is the domain model; there is generally
+      no web application code other than the markup in the pages. Building a
+      domain model is detailed in the manual for the [[NAME]]
+      Framework.</para>
+
+      <para>TODO Asimple explanation should follow, including a short class
+      example.</para>
+
+      <para>In essence a domain model should define classes for each type of
+      object in the system. The classes are written in as standard Java
+      classes that use the getter and setter methods to make the properties of
+      an object available and have a way to inform a container that they have
+      changed their state or still need to load it. The easiest way of
+      creating such classes is to extend
+      <literal>AbstractDomainObject</literal> object as this provides a simple
+      way notify the container of the requests for dealing with the objects
+      persistence. The following class show a simple but typical domain object
+      that can be used in a [[NAME]] system. This object represent an
+      employee that has a name and knows it approver.</para>
+
+      <programlisting format="linespecific">package org.apache.isis.app.cart;
+
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
+
+public class Employee extends AbstractDomainObject {
+    private String name;
+    private Employee approver;
+
+    @MemberOrder(sequence="1")
+    public String getName() {
+        resolve(name);
+        return name;
+    }
+    
+    public void setName(String lastName) {
+        this.name = lastName;
+        objectChanged();
+    }
+
+    @MemberOrder(sequence="2")
+    public Employee getApprover() {
+        resolve(approver);
+        return approver;
+    }
+    
+    public void setApprover(Employee approver) {
+        this.approver = approver;
+        objectChanged();
+    }
+    
+    public String title() {
+        return getName();
+    }
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Directory structure</title>
+
+      <para>Each Scimpi application builds upon the following directory
+      structure, which is based on the standard layout required by Servlet and
+      JSP based Java web applications.</para>
+
+      <literallayout>webapp/
+    index.shtml
+    login.shtml
+    generic/
+        action.shtml
+        collection.shtml
+        edit.shtml
+        object.shtml
+    images/
+        banner.jpg
+        bg-button.gif
+        Claim.gif
+        ClaimItem.gif
+        Default.png
+        Employee.gif
+        logo.png
+    style/
+        screen.css
+        template.shtml
+    WEB-INF/
+        lib/
+        logging.properties
+        isis.properties
+        passwords
+        web.xml</literallayout>
+
+      <para>The file <filename>index.shtml</filename> is the welcome file for
+      the web application; the welcome file is the file that is served when no
+      files is specified. For example
+      <literal>http://localhost:8080/expenses</literal> will return the file
+      <filename>index.shtml</filename> file from expenses webapp
+      directory.</para>
+
+      <para>The file <filename>login.shtml</filename> is a log on page that is
+      used to authenticate the user via [[NAME]].</para>
+
+      <para>The <filename>images</filename> directory is used for both the
+      icons for objects and for images used by the style sheet and
+      templates.</para>
+
+      <para>The <filename>WEB-INF</filename> directory contains all the
+      configuration files.</para>
+
+      <para>The <filename>generic</filename> directory holds default pages for
+      viewing, editing and running actions on objects.</para>
+    </section>
+
+    <section>
+      <title>Requested resources</title>
+
+      <para>Scimpi processes requests for resources that have the extensions
+      <filename>shtml</filename> and <filename>app</filename> specially. All
+      other resources, such images, text files and HTML documents, are assumed
+      to be files and return directly as such. Specially handled request are
+      handled by Scimpi's dispatcher where the resources with the
+      <filename>app</filename> extension are mapped to Scimpi actions and
+      those with the <filename>shtml</filename> extension cause the
+      corresponding file to be read in and processed as Scimpi templates
+      containing Scimpi tags that are to be replaced by the processor.</para>
+
+      <para>However, when a request is made for a generic page (as
+      <literal>_generic.shtml</literal>,
+      <literal>_generic_edit.shtml</literal> and
+      <literal>_generic_action.shtml</literal>) Scimpi seeks the most suitable
+      file to process the request. The request is based on the object
+      reference held by the RESULT variable. Using this object it first looks
+      for a directory named after the objects class, and if it exists will
+      look for a suitable file. If no such directory exists then a file in the
+      <filename>generic</filename> directory is used. The file, from either
+      the <filename>generic</filename> or class named directory, depends on
+      the generic page name. For <literal>_generic.shtml</literal> a file
+      called <filename>objects.shtml</filename> or
+      <filename>collection.shtml</filename> is used depending on whether the
+      referenced object is an object or a collection. For
+      <literal>_generic_edit.shtml</literal> a file called
+      <filename>edit.shtml</filename> is used. When the request is
+      <literal>_generic_action.shtml</literal> Scimpi looks for an
+      <filename>shtml</filename> file with the same name as requested in the
+      <emphasis>method</emphasis> parameter.</para>
+    </section>
+
+    <section>
+      <title>Variables</title>
+
+      <para>All web applications are built on HTTP, which is stateless, so
+      Scimpi provides a way maintaining state between requests on your behalf.
+      By asking Scimpi to store values for you, either implicitly or
+      explicitly, your web application can easily refer to objects and other
+      data that were used previously. Without such a capability each request
+      would effectively be the first request and all needed information would
+      have to be encoded within the web page. Every variable in Scimpi is
+      known by its given name and is kept for a set duration, known as its
+      scope. In addition to the variables that are defined by the web
+      application there are others that are automatically provided by the
+      system.</para>
+
+      <para>The <emphasis>variable</emphasis> tag allows a variable to be
+      explicitly set up. This tag simply stores the content of the block with
+      the associated name. So the following markup creates a variable called
+      <emphasis>duration</emphasis> and stores the value "1250" within it
+      (note that it is a string, not a number, as it is taken from the HTML
+      page).</para>
+
+      <programlisting format="linespecific">&lt;swf:variable name="duration"&gt;1250&lt;/swf:variable&gt;</programlisting>
+
+      <para>Once a variable has been declared it can be used within the HTML,
+      as markup itself or as attribute, by wrapping the name with
+      <emphasis>${</emphasis> and <emphasis>}</emphasis>. So now, for example,
+      we can output the value variable in a bold form using the
+      following</para>
+
+      <programlisting format="linespecific">&lt;b&gt;${value}&lt;/b&gt;</programlisting>
+
+      <para>that will result in the following HTML being received by the
+      browser.</para>
+
+      <programlisting format="linespecific">&lt;b&gt;1250&lt;/b&gt;</programlisting>
+
+      <para>Most commonly it is the tags that implicitly set up variables with
+      the results of their actions or with references to objects. The
+      following example shows an action that places its result, a collection
+      of claims, into the <emphasis>claims</emphasis> variable, after which
+      the <emphasis>table</emphasis> tag refers to the collection via the same
+      variable (which is written as <emphasis>${claims}</emphasis> to show
+      that it is a variable).</para>
+
+      <programlisting format="linespecific">&lt;swf:run-action object="service:claims" method="allClaims" result-name="claims"/&gt;
+&lt;swf:table collection="${claims}"/&gt;</programlisting>
+
+      <para>Note that if you didn't specify a variable for the result to be
+      put in then the default variable RESULT would be used instead. The same
+      applies to the table tag, which would use the variable RESULT to find
+      the claim. This is the same for all other tags the have an attribute for
+      a variable name, or that need to refer to an object or
+      collection.</para>
+
+      <section>
+        <title>Scope</title>
+
+        <para>In the previous examples the two variables that we declared
+        would only be available while the current page is being prepared and
+        would not exist when the subsequent page is requested. These variable
+        therefore have narrowest scope. From the widest to narrowest the four
+        available scopes are:-</para>
+
+        <variablelist>
+          <varlistentry>
+            <term>global</term>
+
+            <listitem>
+              <para>exists for the lifetime of the server;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>session</term>
+
+            <listitem>
+              <para>exists for the period that the user is logged in;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>interaction</term>
+
+            <listitem>
+              <para>spans two requests: the first request prepares a view; and
+              the second is based on data in that first view;</para>
+            </listitem>
+          </varlistentry>
+
+          <varlistentry>
+            <term>request</term>
+
+            <listitem>
+              <para>exists only for the current request; will not be available
+              during the subsequent request.</para>
+            </listitem>
+          </varlistentry>
+        </variablelist>
+
+        <para>To specific a scope when specifying a variable simply add a
+        <literal>scope</literal> attribute with one of the four scope
+        names.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Page references</title>
+
+      <para>As Scimpi has a mechanism for finding the most appropriate page
+      for rendering a view of an object (the generic pages, such as
+      <filename>_generic.html</filename>) there are some details about page
+      references that you should be aware of. Essentially, because the page
+      that was requested might not be the page that was served, the relative
+      location of referenced files might not be as first expected.</para>
+
+      <para>To make this concrete we will use a simple example. Consider a
+      claims page generated in response to a request
+      like<emphasis>http://localhost:8080/expenses/Claim/object.shtml?claim=...</emphasis>
+      that contains a list of expenses whose hyper-links a<literal>re defined
+      as _generic.html</literal> so that the most suitable page will be used.
+      When such a link is clicked on the URL used by the browser would,
+      therefore, be something like
+      <emphasis>http://localhost:8080/expenses/Claim/_generic.shtml?_result=...</emphasis>.
+      Now as the page that is returned would be generated from the most
+      suitable template it would use the file
+      <filename>object.shtml</filename> from the
+      <filename>ExpenseItem</filename> directory rather than the
+      <filename>Claim</filename> directory. However, the generated page when
+      displayed by the browser will still have a base URL of
+      <emphasis>http://localhost:8080/expenses/Claim/</emphasis>. An image tag
+      on that page, such as <literal>&lt;img src="person.png"/&gt;</literal>,
+      will, therefore, result in a request from the browser of
+      <literal>http://localhost:8080/expenses/Claim/person.png</literal>. This
+      obviously will not find the file as it is
+      <filename>ExpenseItem</filename> directory; so a URL intended to be
+      relative to the current page ends up being relative to the page in the
+      previous request.</para>
+
+      <para>To get round such a problem the URL specified should use the
+      system variables <literal>_context</literal> and
+      <literal>_directory</literal> to set up the full path. So returning to
+      our above example <literal>img</literal> tag should be changed to</para>
+
+      <programlisting format="linespecific">&lt;img src="${_context}${_directory}person.png"/&gt;</programlisting>
+
+      <para>so that web application context name and the directory that the
+      template file is actually in are appended with the image name creating a
+      path that absolutely identifies the resource as the resultant HTML
+      shows.</para>
+
+      <literallayout>&lt;img src="/expenses/Claim/person.png"/&gt;</literallayout>
+
+      <para>There are four such system variables that relate to URLs:</para>
+
+      <variablelist>
+        <varlistentry>
+          <term>_base</term>
+
+          <listitem>
+            <para>the complete URL for the current resource;</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>_context</term>
+
+          <listitem>
+            <para>the web application context name, used to distinguish one
+            web application from another and forming the first part of the
+            pathname in the URL;</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>_directory</term>
+
+          <listitem>
+            <para>the directory containing the current resource;</para>
+          </listitem>
+        </varlistentry>
+
+        <varlistentry>
+          <term>_this</term>
+
+          <listitem>
+            <para>the filename of the current resource.</para>
+          </listitem>
+        </varlistentry>
+      </variablelist>
+
+      <para>Such issues can also arise when creating links that are intended
+      to show a particular object or run an action. As you not only have to
+      get the location correct but also pass over the reference to the object
+      to be shown and, for actions, pass over the method name, all by creating
+      a long URL it is simpler to use one of the Scimpi link tags that takes
+      care of all this for you. So instead of an <literal>a</literal> tag
+      like</para>
+
+      <programlisting format="linespecific">&lt;a href="_generic_edit.shtml?_result=${item}"&gt;edit&lt;/a&gt;</programlisting>
+
+      <para>use the Scimpi <literal>edit-link</literal> tag as follows.</para>
+
+      <programlisting format="linespecific">&lt;swf:edit-link object="${item}"&gt;edit&lt;/swf:edit-link&gt;&lt;/a&gt;</programlisting>
+
+      <para>Other link tags are <literal>object-link</literal>,
+      <literal>action-link</literal> and
+      <literal>new-action-link</literal>.</para>
+    </section>
+
+    <section>
+      <title>Configuration</title>
+
+      <para>There are a number of configuration files for each web application
+      and these are placed in the WEB-INF directory. This section describes
+      the common settings that are used. Most configuration aspects affect the
+      [[NAME]] framework and are detailed in its manual.</para>
+
+      <para>Services</para>
+
+      <para>The service objects that [[NAME]] instantiates and makes
+      available to your web application are listed in the
+      <filename>isis.properties</filename> file with the
+      <literal>services</literal> properties. The example segment below will
+      make the classes
+      <literal>org.example.services.ClaimantRepository</literal> and
+      <literal>org.example.services.ClaimRepository</literal>
+      available.</para>
+
+      <literallayout>isis.services.prefix=org.example.services
+isis.services=ClaimantRepository, ClaimRepository
+</literallayout>
+
+      <para>Fixtures</para>
+
+      <para>Fixtures are run the first time that your web application is
+      started and can be used to prime the object store with an initial set of
+      domain objects such as reference or demo objects. Fixtures are specified
+      in the <filename>isis.properties</filename> file with the
+      <literal>fixtures</literal> properties. The following snippet loads up
+      the <literal>org.apache.isis.app.cart.fixtures.ClaimsFixture</literal>
+      class on the first startup.</para>
+
+      <literallayout>isis.fixtures=org.apache.isis.app.cart.fixtures.ClaimsFixture</literallayout>
+
+      <para>XML object store</para>
+
+      <para>The template code provided is designed to run with the XML object
+      store; other persistence layers can be used and are outlined in the
+      [[NAME]] manual. As this is a file based store the place it expects
+      to find its files must remain both consistence and in existence. The
+      problem comes down to the servlet container and the root path it gives
+      its web application. Typically the only reliable system independent
+      place is the web applications extraction directory but this is replaced
+      each time a web application is redeployed. As there are no other
+      guaranteed cross-platform directories we can default to it is best to
+      specify where the object store should be placed. The location of the XML
+      object store files are specified in the
+      <filename>isis.properties</filename> file with the
+      <literal>xmlos.dir</literal> property. The following snippet places the
+      files in the <filename>tmp/example-data</filename> directory, which on
+      Tomcat will be relative the startup directory (a better option is to use
+      a rooted path that absolutely identifies where the files are to be
+      placed).</para>
+
+      <literallayout>isis.xmlos.dir=tmp/example-data</literallayout>
+
+      <para>Passwords</para>
+
+      <para>The default authentication for the template code is through a
+      password file, [[NAME]]'s most basic authorisation implementation;
+      other authentication methods can be used and are outlined in the [[NAME]]
+      Objects manual. The <filename>passwords</filename> file contains a set
+      of user names and passwords that Scimpi and [[NAME]] will allow
+      user to log in with. The example below defines a set of [[NAME]]
+      users; that is the users are users of the system and not just
+      Scimpi.</para>
+
+      <literallayout># username:password
+sven:pass
+dick:pass
+bob:pass</literallayout>
+
+      <para>If the users are defined by the web application rather than
+      through [[NAME]] then it becomes the domain model's responsibility
+      to identify and authenticate the users. To allow for this the
+      <filename>password</filename> file must contain a system user, and
+      Scimpi must automatically connect as that user. This is done via servlet
+      initialisation parameters that are set in the
+      <filename>web.xml</filename> configuration file, which the servlet
+      container processes. In the <literal>servlet</literal> block two
+      <literal>init-parameter</literal> blocks are added to specify the user
+      name and password. The following snippet shows the
+      <literal>servlet</literal> block once the two parameters have been
+      added.</para>
+
+      <programlisting format="linespecific">&lt;servlet&gt;
+    &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.apache.isis.webapp.servlet.DispatcherServlet&lt;/servlet-class&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;username&lt;/param-name&gt;
+        &lt;param-value&gt;webapp&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;password&lt;/param-name&gt;
+        &lt;param-value&gt;pass&lt;/param-value&gt;
+    &lt;/init-param&gt;
+&lt;/servlet&gt;</programlisting>
+
+      <para>The user name and password specified for auto-login should then be
+      added to the password file so that the system user can be authenticated.
+      This can be done by adding the following line to the
+      <filename>password</filename> file.</para>
+
+      <programlisting format="linespecific">webapp:pass</programlisting>
+    </section>
+
+    <section>
+      <title>Scimpi tags</title>
+
+      <para>Each tag is used in the form</para>
+
+      <programlisting format="linespecific">&lt;swf:<emphasis>tag-name</emphasis> <emphasis>attribute-name</emphasis>="<emphasis>attribute value</emphasis>" /&gt;</programlisting>
+
+      <para>for an empty tag, while a tag containing other tags will be of the
+      form</para>
+
+      <programlisting format="linespecific">&lt;swf:<emphasis>tag-name</emphasis> <emphasis>attribute-name</emphasis>="<emphasis>attribute value</emphasis>"&gt;
+    <emphasis>enclosed text or tags</emphasis>
+&lt;/swf:<emphasis>tag-name</emphasis>&gt;</programlisting>
+
+      <para>Scimpi markup, being XML embedded in XHTML pages, is case
+      sensitive. All tag and attribute names must be lower case.</para>
+
+      <section>
+        <title>Page layout</title>
+
+        <para>Scimpi pages can import chunks of markup from other files as
+        well use a template to form the basis of a page. The
+        <literal>import</literal> tag simply reads in a specified file for
+        inclusion at the point of the tag. If the file has an
+        <filename>shtml</filename> extension that file is also processed. This
+        is useful for including common elements in file such as a header or
+        footer.</para>
+
+        <para>The <literal>template</literal> tag similarly reads in a
+        specified file, but while it is reading it in it looks for a
+        <literal>content</literal> tag and suspends reading when it finds one.
+        The remainder of current file is then read in and processed before the
+        reading of the template file is completed. So given the two files,
+        <filename>my-template.html</filename> and
+        <filename>my-page.shtml,</filename> as listed here</para>
+
+        <programlisting format="linespecific">&lt;hmtl&gt;
+&lt;head&gt;
+  &lt;title&gt;Scimpi Page&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  &lt;swf:content /&gt;
+&lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+        <programlisting format="linespecific">&lt;swf:template  file="my-template.shtml" /&gt;
+&lt;h1&gt;My new page&lt;/h1&gt;</programlisting>
+
+        <para>the resultant markup will be as follows,</para>
+
+        <programlisting format="linespecific">&lt;hmtl&gt;
+&lt;head&gt;
+  &lt;title&gt;Scimpi Page&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+  <emphasis role="strong">&lt;h1&gt;My new page&lt;/h1&gt;</emphasis>
+&lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+        <para>where the content tag has been replaced with content of the
+        original file (but without the <literal>template</literal>
+        tag).</para>
+
+        <para>Another tool for minimising page size is move common markup into
+        separate files and import those block into the multiple files when
+        needed using the <literal>import</literal> tag. When using this
+        technique it is useful to indicate in the segments file name that it
+        is in an import; we place an underscore at beginning of such
+        files.</para>
+      </section>
+
+      <section>
+        <title>Form views</title>
+
+        <para>Scimpi has a number of tags that allow objects, and parts of
+        objects, to displayed. The whole object can be displayed using the
+        <literal>short-form</literal> and <literal>long-form</literal> tags;
+        the difference between these two is the short version does not display
+        properties that are collections while long version shows these as
+        tables.</para>
+
+        <para>Linking properties</para>
+
+        <para>Each reference property can be marked so it provides a link to a
+        page that shows more details about that object. For each property that
+        requires a link add a <literal>link</literal> tag to the
+        <literal>short-form</literal>/<literal>long-form</literal> block
+        specifying the name of the property in the <literal>name</literal>
+        attribute. By default the page that you will be linked to is the most
+        appropriate one for that type of object; alternatively you can specify
+        a <literal>view</literal> attribute so the links is to a specific
+        page. The following example ensures that the approver field is
+        hyper-linked and the user will be taken the generic object view
+        page.</para>
+
+        <programlisting format="linespecific">&lt;swf:long-form&gt;
+    &lt;swf:link name="approver"/&gt;
+&lt;/swf:long-form&gt;</programlisting>
+
+        <para>Specifying object properties to include</para>
+
+        <para>By default all properties are shown for these tags, but an
+        explicit list of properties can be specified using the
+        <literal>include</literal> and <literal>exclude</literal> tags. When a
+        <literal>include</literal> tag is added all other properties that do
+        not also have an include tag will be excluded. The following example
+        shows how the claimant property can be removed by using a exclude
+        tag.</para>
+
+        <programlisting format="linespecific">&lt;swf:long-form&gt;
+    &lt;swf:exclude name="claimant"/&gt;
+&lt;/swf:long-form&gt;</programlisting>
+
+        <para>Fields and labels</para>
+
+        <para>In addition to displaying the complete or partial object using
+        the form tags a property's label and content can also be accessed
+        directly allowing an object's view to be constructed manually. The
+        <literal>label</literal> tag gets the field's proper name while the
+        <literal>field</literal> tag get the field's contents. Both take the
+        name of the field in the <literal>field</literal> attribute. The
+        following example creates a simple colon separated view of the current
+        object, showing the claimant, description and status labels and field
+        contents.</para>
+
+        <programlisting format="linespecific">&lt;div class="form"&gt;
+    &lt;div&gt;&lt;swf:label field="claimant"/&gt;: &lt;swf:field field="claimant"/&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;swf:label field="description"/&gt;: &lt;swf:field field="description"/&gt;&lt;/div&gt;
+    &lt;div&gt;&lt;swf:label field="status"/&gt;: &lt;swf:field field="status"/&gt;&lt;/div&gt;
+&lt;/div&gt;</programlisting>
+      </section>
+
+      <section>
+        <title>Lists and tables</title>
+
+        <para>List and table views of collections can be most simply created
+        using the <literal>list</literal> and <literal>table</literal> tags.
+        These tags can be used to create a view from either an explicit
+        collection or a collection property within an object. If the
+        <literal>field</literal> attribute is specified then a collection is
+        deemed to be an object's property otherwise it is an explicit
+        collection. When no <literal>collection</literal> or
+        <literal>object</literal> attribute is specified the RESULT variable
+        is used.</para>
+
+        <para>The <literal>list</literal> tag creates a numbered list of the
+        form</para>
+
+        <literallayout>&lt;ol&gt;&lt;li&gt;Submitted - Meeting with client&lt;/li&gt;
+&lt;li&gt;Submitted - Meeting in city office&lt;/li&gt;
+&lt;li&gt;New - Meeting at clients&lt;/li&gt;
+&lt;/ol&gt;</literallayout>
+
+        <para>but it can also show as bulleted form (as a
+        <literal>ul</literal> block) by specifying the
+        <literal>&gt;type</literal> attribute.</para>
+
+        <para>The <literal>table</literal> tag creates a table with a row for
+        each element and a column for each association/value property;
+        collection properties are not shown. By default each column has a
+        header that shows the name of the property, but this can be prevented
+        via the <literal>&gt;heading</literal> attribute.</para>
+
+        <para>Linking collection elements</para>
+
+        <para>Within list and tables we can provide links to pages that show
+        or manipulate the individual items. By adding a
+        <literal>link</literal> attribute Scimpi will create a hyper-link (an
+        <literal>a</literal> tag) to the specified page that includes a
+        reference to the current element. This Scimpi markup</para>
+
+        <programlisting format="linespecific">&lt;swf:list type="circle" link="_generic.shtml"/&gt;</programlisting>
+
+        <para>therefore generates the following HTML markup instead of the
+        first element in the example above.</para>
+
+        <literallayout>&lt;li&gt;&lt;a href="_generic.shtml?_result=Porg.apache.isis.app.cart.Claim@fdzsbkg0"&gt;
+Submitted - Meeting with client&lt;/a&gt;&lt;/li&gt;</literallayout>
+
+        <para>The parameter name can be specified using the
+        <literal>element-name</literal> attribute and, as can seen in the
+        example, this defaults to RESULT.</para>
+
+        <para>As tables can show the element, as a row, and other objects, as
+        the columns, it is possible to make the objects link to other pages
+        instead of the row. For each column that should be linked a
+        <literal>link</literal> tag should be added to the
+        <literal>table</literal> block and the <literal>name</literal>
+        attribute set to identify the property to provide the link on. The
+        following example creates a link that lets us view the approver in
+        detail.</para>
+
+        <programlisting format="linespecific">&lt;swf:table&gt;
+    &lt;swf:link name="approver" view="_generic.shtml"/&gt;
+&lt;/swf:table&gt;</programlisting>
+
+        <para>Specifying the columns in a table</para>
+
+        <para>The columns displayed in a table can be controlled by adding
+        <literal>include</literal> and <literal>exclude</literal> tag to the
+        <literal>table</literal> block. By using an <literal>exclude</literal>
+        tag you indicate that a named property is not be shown thereby
+        reducing the number of columns shown as needed. The
+        <literal>include</literal> tag indicates that you want to show a named
+        property but not any others thereby allowing the exact number of
+        columns specified. The following example excludes the approver and
+        claimant columns so all the rest still show.</para>
+
+        <programlisting format="linespecific">&lt;swf:table heading="no" &gt;
+   &lt;swf:exclude name="approver"/&gt;
+   &lt;swf:exclude name="claimant"/&gt;
+&lt;/swf:table&gt;</programlisting>
+      </section>
+
+      <section>
+        <title>Collections</title>
+
+        <para>While the <literal>list</literal> and <literal>table</literal>
+        tags provide a quick and simple way of displaying a collection the
+        <literal>collection</literal> tag provides the mechanism for building
+        up your own view of a collection element by element. The
+        <literal>collection</literal> tag takes the same attributes for
+        determining the collection as the <literal>list</literal> and
+        <literal>table</literal> tags do. The content between the opening and
+        closing tags is processed for each element of the collection. By
+        default the element's reference is put in the RESULT variable, but
+        this can be changed by adding the <literal>element-name</literal>
+        attribute. The following example shows a <literal>collection</literal>
+        tag used within a <literal>ul</literal> tag to create a series of
+        <literal>li</literal> elements from the current collection
+        object.</para>
+
+        <programlisting format="linespecific">&lt;ul&gt;&lt;swf:collection&gt;
+    &lt;li&gt;&lt;swf:title icon="off"/&gt;&lt;/li&gt;
+&lt;/swf:collection&gt;&lt;/ul&gt;</programlisting>
+
+        <literallayout>&lt;ol&gt;
+    &lt;li&gt;Submitted - Meeting with client&lt;/li&gt;
+    &lt;li&gt;Submitted - Meeting in city office&lt;/li&gt;
+    &lt;li&gt;New - Meeting at clients&lt;/li&gt;
+&lt;/ol&gt;</literallayout>
+      </section>
+
+      <section>
+        <title>Element type</title>
+
+        <para>The <literal>element-type</literal> tag can be used to get hold
+        of the type of elements a collection holds. If the system is
+        configured with internationalization then the name will be
+        localized.</para>
+      </section>
+
+      <section>
+        <title>Titles</title>
+
+        <para>An object's title can be displayed using the
+        <literal>title</literal> tag. The default version displays an icon
+        image as well as the title text, but this can be prevented by setting
+        the <literal>&gt;icon</literal> attribute to <emphasis>no</emphasis>.
+        The following example displays an icon and title text as a level three
+        heading.</para>
+
+        <programlisting format="linespecific">&lt;h3&gt;&lt;swf:title/&gt;&lt;/h3&gt;</programlisting>
+
+        <literallayout>&lt;h3&gt;&lt;img class="title-icon" src="/example/images/Default.png" /&gt;Submitted - 
+Meeting with client&lt;/h3&gt;</literallayout>
+      </section>
+
+      <section id="edit_forms">
+        <title>Edit forms</title>
+
+        <para>Using the <literal>edit</literal> tag we can display an HTML
+        form for an object. Any disabled or uneditable properties are simply
+        shown by title while the fields to be edited have the most suitable
+        input field created for them.</para>
+
+        <para>Reference fields won't work particularly well in the default tag
+        as there is no other available references to set the field to unless
+        that field has some options or a default defined for it in the model.
+        To make it possible for the user to select a suitable reference to set
+        the field with the <literal>selector</literal> tag can be used to
+        create a drop-down or options list with suitable choices. This tag can
+        either take a collection or an object and a method that results in a
+        collection and will create an object selection widget. The following
+        example shows how the default approver field can be replaced by a list
+        showing all the claimants as provided by the claimants
+        repository.</para>
+
+        <programlisting format="linespecific">&lt;swf:edit&gt;
+    &lt;swf:selector field="approver" object="service:claimants" method="allClaimants" type="list"/&gt;
+&lt;/swf:edit&gt;</programlisting>
+
+        <para>If we want to the give the user some control over what is
+        selectable, instead of providing a long and too comprehensive list, we
+        can first prompt the user for criteria that can be used when calling a
+        method that has one or more parameters. Scimpi then creates a form
+        that collected the parameters for that method and after the user
+        presses the search button it will create a selection list based on the
+        method call using those parameters. In the following example the
+        <literal>selector</literal> tag uses the
+        <literal>findClaimants</literal> method that takes a
+        <literal>String</literal> parameter. This results in a single field
+        form that invokes the search method and generates a drop-down list
+        (the default type of selector).</para>
+
+        <programlisting format="linespecific">&lt;swf:edit&gt;
+    &lt;swf:selector field="approver" object="service:claimants" method="findClaimants"/&gt;
+&lt;/swf:edit&gt;</programlisting>
+
+        <para>If more control over the entry field is required then you can
+        define your own field within a <literal>form-field</literal> tag. This
+        tag simply replaces the auto-generated field with contained block of
+        markup leaving you with the responsibility of setting it up correctly.
+        This typically means you need to determine the options and ensure that
+        the HTML field has a name that matches the property in the object. The
+        following simplified example creates a drop-down list for the
+        <literal>name</literal> property; the <literal>field</literal>
+        attribute of the Scimpi tag and the <literal>&gt;name</literal>
+        attribute of the HTML tag must have the same field name.</para>
+
+        <programlisting format="linespecific">&lt;swf:form-field field="name"&gt;
+    &lt;select name="name"&gt;
+         &lt;option&gt;best&lt;/option&gt;
+         &lt;option&gt;average&lt;/option&gt;
+         &lt;option&gt;worst&lt;/option&gt;
+    &lt;/select&gt;
+&lt;/swf:form-field&gt;
+</programlisting>
+
+        <para>Controlling the visible fields</para>
+
+        <para>Like the object views, the properties shown in the edit form can
+        be controlled using the <literal>include</literal> and
+        <literal>exclude</literal> tags. The <literal>exclude</literal> tag
+        simply removes the named field from the complete set of fields, while
+        a set of <literal>include</literal> tags defines the complete list of
+        fields to be shown. It is important to remember that the object cannot
+        be saved if all the required properties are not set, or if entries are
+        invalid. This can happen when you exclude such fields unless they have
+        a default value. The following example removes the status and claimant
+        fields from the property set.</para>
+
+        <programlisting format="linespecific">&lt;swf:edit&gt;
+    &lt;swf:exclude name="status"/&gt;
+    &lt;swf:exclude name="claimant"/&gt;
+&lt;/swf:edit&gt;</programlisting>
+      </section>
+
+      <section>
+        <title>Actions</title>
+
+        <para>Two special tags provide access to all actions for an object and
+        for all the actions on all the service objects. These tags -
+        <literal>methods</literal> and <literal>services</literal> - are
+        typically used for generic pages but can be used on specific pages as
+        a way of minimising the amount of tags required to make a number of
+        your actions available. The <literal>methods</literal> tag will,
+        except on service objects, also provide an edit option that will open
+        up an edit view. By default all the actions are displayed, either as
+        buttons or links to action pages, but the list can be controlled using
+        the <literal>include</literal> and <literal>exclude</literal> tags.
+        The following example will provide access to all the methods from the
+        claimant service except the <literal>allClaimants</literal> one; there
+        will be no edit option also as it is for a service.</para>
+
+        <programlisting format="linespecific">&lt;swf:methods object="service:claimants" &gt;
+    &lt;swf:exclude name="allClaimants"/&gt;
+&lt;/swf:methods&gt;</programlisting>
+
+        <para>Common attributes</para>
+
+        <para>All the other action tags target a specific object to run a
+        specific action on. These are specified by the
+        <literal>object</literal> and <literal>method</literal> attributes
+        respectively. Also the name of the variable that will hold the results
+        can be specified with the <literal>&gt;result-name</literal>
+        attribute, with its scope being set via the <literal>scope</literal>
+        attribute. For all the tags that will forward you to another page
+        after executing can specify that page when: the result is returned
+        (<literal>&gt;the view</literal> attribute); when no result is
+        returned (void); and when an error (such as a validation failure)
+        occurs (<literal>error</literal>).</para>
+
+        <para>In-line actions</para>
+
+        <para>Actions can be run as they are come across while processing a
+        page using the <literal>run-action</literal> tag. These are typically
+        used when details are needed for other tags in the page. The following
+        example shows how a table of all the claims can be displayed by
+        running the <literal>allClaims</literal> method on the claims
+        repository.</para>
+
+        <programlisting format="linespecific">&lt;swf:run-action object="service:claims" method="allClaims"/&gt;
+&lt;swf:table/&gt;</programlisting>
+
+        <para>Immediate actions</para>
+
+        <para>Some actions can be invoked by the user immediately while others
+        require input from the user before they can be run (these are covered
+        next). Web users expect links to take them to another page while
+        buttons will make a change to the state of the system, so Scimpi
+        provides the <literal>action-link</literal> and
+        <literal>action-button</literal> tags to allow the appropriate
+        rendering. Both tags operate in the same way but while one is rendered
+        as a hyper-link the other is a form with no fields, just a button.
+        These tags are typically used with methods that do not have parameters
+        as the following example shows.</para>
+
+        <programlisting format="linespecific">&lt;swf:action-link object="service:claimants" method="allClaimants"/&gt;</programlisting>
+
+        <para>If a method has parameters and they either have a suitable
+        default value or you have access to suitable value through the page
+        then these tags can also be used for these parameterised methods. If
+        the tag specifies a method with parameters it will expect a
+        <literal>parameter</literal> tag to specify the parameter's value or
+        will use the default value as specified by the model. If neither of
+        these exists then an error will be generated. The following example
+        creates a form with a button that runs the one parameter submit method
+        where the parameter value is that held by the approver
+        variable.</para>
+
+        <programlisting format="linespecific">&lt;swf:action-button object="${claim}" method="submit"&gt;
+    &lt;swf:parameter number="1" value="${approver}"/&gt;
+&lt;/swf:action-button&gt;</programlisting>
+
+        <para>Prompted actions</para>
+
+        <para>When an action requires input from the user the
+        <literal>action-form</literal> tag should be used to create an HTML
+        form with fields for the parameters. Each parameter is displayed as an
+        appropriate entry field and, by default, all the parameters made
+        visible but this can be controlled using the
+        <literal>include</literal> and <literal>exclude</literal> tags. Using
+        <literal>include</literal> you can build up a list of all the
+        parameters you want to be shown (any parameter then not specified
+        through an include is excluded by default), while by using
+        <literal>exclude</literal>, specific parameters can be removed from
+        the full list. Only parameters that are optional or have a default
+        value should, however, be excluded as otherwise the action will not be
+        able to be run.</para>
+
+        <para>By default the most suitable HTML field is used for each
+        particular parameter but it is possible to provide your own fields
+        when needed. The simplest option is to use the
+        <literal>selector</literal> tag to provide a selection option - as a
+        drop-down, list or set of radio buttons - to the user instead of the
+        default field. The use of the <literal>selector</literal> tag is
+        discussed in the previous section (see <xref linkend="edit_forms" />).
+        The alternative is to create your own input field using the
+        <literal>form-field</literal> tag, again this is described above (see
+        <xref linkend="edit_forms" />). The following example shows the
+        <literal>selector</literal> tag in use to provide a list of possible
+        approvers.</para>
+
+        <programlisting format="linespecific">&lt;swf:action-form method="submit" view="_generic.shtml" void="../index.shtml"&gt;
+    &lt;swf:selector field="param0" object="service:claimants" method="allClaimants"/&gt;
+&lt;/swf:action-form&gt;</programlisting>
+      </section>
+    </section>
+  </section>
+</article>

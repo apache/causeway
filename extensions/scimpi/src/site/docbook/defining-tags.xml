@@ -1,0 +1,114 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title>Creating new tags</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <para>Scimpi can be extended by adding new tags and/or actions. </para>
+
+  <para>Adding a new tag only requires the implementation of a
+  <literal>ElementProcessor</literal> class and its registration within the
+  webapp.</para>
+
+  <para>An element processor does two things. It gives a name to the element,
+  which is used to write the element in the webpages in the form
+  <literal>&lt;swf:<replaceable>name</replaceable>&gt;</literal>. Second it
+  processes the tag and generates HTML code. The following is the most basic
+  processor you can create for a new tag <literal>&lt;swf:count
+  /&gt;</literal>.</para>
+
+  <programlisting>package org.apache.isis.webapp.view.collection;
+
+import org.apache.isis.webapp.ElementProcessor;
+import org.apache.isis.webapp.processor.Request;
+
+
+public class CountElements implements ElementProcessor {
+
+    public void process(Request request) {
+        request.appendHtml("&lt;b&gt;count goes here&lt;/b&gt;");
+    }
+
+    public String getName() {
+        return "count";
+    }
+
+}</programlisting>
+
+  <para>To make this available add the class name needs to be registered to
+  the <emphasis>processors</emphasis> list in a suitable configuration file.
+  Assuming there is currently no cofiguration file then one must be specified
+  in the <filename>WEB-INF/web.xml</filename> file first. Add an
+  <emphasis>init parameter</emphasis> to the dispatcher servlet element as
+  below:</para>
+
+  <literallayout>    :
+    :
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;dispatcher&lt;/servlet-name&gt;
+        &lt;servlet-class&gt;org.apache.isis.webapp.servlet.DispatcherServlet&lt;/servlet-class&gt;
+        &lt;init-param&gt;
+            &lt;param-name&gt;config&lt;/param-name&gt;
+            &lt;param-value&gt;config.xml&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        :
+        :</literallayout>
+
+  <para>The name must be <emphasis>config</emphasis>, but the file name can be
+  changed to suit.</para>
+
+  <para>Next, create that file in the WEB-INF directory and specify the full
+  class name of the processor. Here is the
+  <filename>WEB-INF/config.xml</filename> file for this example. </para>
+
+  <literallayout>&lt;config&gt;
+    &lt;processors&gt;
+        &lt;processor&gt;org.apache.isis.webapp.view.collection.CountElements&lt;/processor&gt;
+    &lt;/processors&gt;
+&lt;/config&gt;</literallayout>
+
+  <para></para>
+
+  <para>Check this has been added by looking at the list of elements on the
+  Dispatcher page:
+  <literal>http://localhost:8080/debug.app?action=dispatcher</literal>.</para>
+
+  <section>
+    <title></title>
+
+    <para></para>
+  </section>
+</article>

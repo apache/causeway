@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+
+<profile>
+  <options>
+    <option id="power">on</option>
+    <option id="height">50</option>
+    <options id="opts">
+        <option id="option1">value1</option>
+        <options id="options3">
+            <option id="option4">value4</option>
+            <option id="option5">value5</option>
+        </options>
+        <option id="option2">value2</option>
+    </options>
+  </options>
+  <perspectives>
+  <perspective name="Library">
+    <services>
+      <service  id="Service one"/>
+      <service  id="Service two"/>
+      <service  id="Service three"/>
+    </services>
+    <objects>
+    </objects>
+  </perspective>
+  <perspective name="Admin">
+    <services>
+      <service  id="repository#org.apache.isis.xmlpersistence.profilestore.TestServiceObject"/>
+      <service  id="test service"/>
+    </services>
+    <objects>
+    </objects>
+  </perspective>
+  </perspectives>
+</profile>

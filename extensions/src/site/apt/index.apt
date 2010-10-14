@@ -1,0 +1,61 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Viewers and Object Stores
+ 
+ <Apache Isis> defines APIs and implementations for two main APIs: 
+  
+ * {{{./viewers/index.html}viewers}}
+ 
+   The viewer API provides different ways for domain objects to be 
+   rendered as an object-oriented UI.
+   
+ * {{{./objectstores/index.html}object stores}}
+ 
+   The object store API allows Isis to persist domain objects using different 
+   technologies.
+   
+ []
+ 
+Other APIs
+ 
+ As well as viewers and object store, the framework provides a number of other 
+ more fine-grained APIs:
+
+ * programming model / other language support
+ 
+   The Isis programming model is well-defined (see the 
+   {{{../applib/index.html}applib}} module for details) and generally should
+   not require adjusting; but can be modified if required.
+
+ * authentication & authorization
+ 
+   The mechanisms for authentication ("who are you"?) and authorization 
+   ("what can you do?") are both pluggable.
+ 
+ * remoting APIs
+ 
+   Client/server deployments require both a transport protocol and a 
+   marshalling mechanism for network interactions.
+ 
+ []
+ 
+ The <alternates> module acts as the parent for the available alternates.  Note that plugins are versioned
+ separately from the main {{{../core/index.html}core}} framework.
+ 

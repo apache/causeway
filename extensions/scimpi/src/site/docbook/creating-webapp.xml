@@ -1,0 +1,264 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title>Creating a Scimpi web application</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <para>When you ran the demos in the previous section (see <ulink
+  url="getting-started.xml#run-demo">running the demo system</ulink>) you
+  where presented with a fully scripted web based application. Scimpi provides
+  some generic template files that give you an application framework to start
+  with. In this section we will look how a scimpi application is created, and
+  specifically how the pages are constructed. The examples here are based on
+  the domain model that provided as part of the template and is provided in
+  the appendix for reference. The first thing to look at is the use of generic
+  views in Scimpi.</para>
+
+  <para>Set up an example application as detailed in the previous section. The
+  following example shows the complete create, build and run cycle using Ant
+  and the provided lightweight server.</para>
+
+  <literallayout>$ cd scimpi-0.1
+$ cp --recursive template example
+$ cd example
+$ ant deploy -Ddeploy.dir=../demo/webapp/ -Dwebapp.name=example
+Buildfile: build.xml
+
+compile:
+    [mkdir] Created dir: /home/rcm/tmp/scimpi-0.1/example2/build
+    [mkdir] Created dir: /home/rcm/tmp/scimpi-0.1/example2/build/classes
+    [javac] Compiling 6 source files to /home/rcm/tmp/scimpi-0.1/example2/build/classes
+
+war:
+      [war] Building war: /home/rcm/tmp/scimpi-0.1/example2/build/example.war
+
+deploy:
+     [copy] Copying 1 file to /home/rcm/tmp/scimpi-0.1-SNAPSHOT/demo/webapp
+
+BUILD SUCCESSFUL
+Total time: 1 second
+$ cd ../demo
+$ ./webserver.sh
+2008-03-17 15:49:16.934::INFO:  Logging to STDERR via org.mortbay.log.StdErrLog
+2008-03-17 15:49:16.977::INFO:  jetty-6.1.5
+:
+:
+:</literallayout>
+
+  <section>
+    <title>Generic views</title>
+
+    <para>Access the main page by entering the
+    <emphasis>http://localhost:8080/example</emphasis> in the address field
+    and pressing the Go button. The opening screen of the browser shows the
+    actions of all the services that the application provides, i.e., the
+    methods defined in the <literal>ClaimantRepository</literal> and
+    <literal>ClaimRepository</literal> service classes. As for most web
+    applications this is the welcome page and in this case maps to <filename
+    moreinfo="none">index.shtml</filename>.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/opening.png" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>Clicking on the links/buttons will invoke the selected method and
+    display a generic view. For example the <userinput>All
+    Claimants</userinput> button above generates invokes the
+    <literal>allClaimants</literal> method on the claimants repository service
+    object, which returns a collection. This displays the list of claimants as
+    shown below. This uses the template <filename
+    moreinfo="none">generic/collection.shtml</filename> to create the
+    page.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/listing.png" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>Clicking on the select link will use another generic page (<filename
+    moreinfo="none">generic/object.shtml</filename>) to show you detail of the
+    object, while clicking on the edit link will use the template <filename
+    moreinfo="none">generic/edit.shtml</filename> to provide a page containing
+    an HTML form for editing the object. Here you can change the name of the
+    employee.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/generic-edit.png" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>If we now use the same technique to view all the claims and then
+    open up a specific one using the select link, the claim viewing page
+    (still <filename moreinfo="none">generic/object.shtml</filename>) shows
+    the complete claim including a list of the expense items. Notice that at
+    bottom of the page there is a second link (below edit), this is the action
+    method defined in the <literal>Claim</literal> class called
+    <literal>submit</literal>.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/object-with-method.png"
+                   width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>Clicking such a link will either invoke the method immediately if it
+    has no parameters or, as in this case, it will open up a generic action
+    form (<filename moreinfo="none">generic/action.shtml</filename>) to allow
+    the user to set the parameters before the method is executed. Below we see
+    the page that we get after pressing the link on the page above. The
+    approver parameter is set to the default value as specified in the domain
+    model.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/generic-action.png" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>After pressing the <userinput>OK</userinput> button you are returned
+    to the home page as the method return nothing to process. Had the method
+    returned an object then that object would displayed. If you navigate back
+    to the claim you will see that the approver has been set up and the status
+    changed to <emphasis>Submitted</emphasis>.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/changed-object.png" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>All the above was achieved through generic views, no HTML or
+    template pages were written. In the next section we will look at how we
+    create our own pages to create a targeted and stylised user
+    interface.</para>
+  </section>
+
+  <section>
+    <title>Basic Scimpi pages</title>
+
+    <para>If we now create a new page called <filename
+    moreinfo="none">example.shtml</filename> (placed in the <filename
+    moreinfo="none">example/webapp</filename> directory) with the following
+    markup we will be getting Scimpi to run an action and list the results to
+    us. This shows us a number of important things about Scimpi pages. First,
+    all files with the extension <filename moreinfo="none">shtml</filename>
+    are Scimpi files and are processed on the server before being sent to the
+    client. These files are essentially HTML files with addition Scimpi tags
+    that will replaced with dynamic content when processed. Second, all Scimpi
+    tags are of the form <literal>&lt;swf:<replaceable>command</replaceable>
+    <replaceable>attributes</replaceable>&gt;</literal>.</para>
+
+    <programlisting format="linespecific">&lt;html&gt;
+&lt;head&gt;
+    &lt;link rel="stylesheet" href="style/screen.css" type="text/css"/&gt;
+    &lt;title&gt;Claims&lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;Claims&lt;/h1&gt;
+    <emphasis role="strong">&lt;swf:run-action object="service:claims" method="allClaims" /&gt;
+    &lt;swf:list type="disc"/&gt;</emphasis>
+&lt;/body&gt;
+&lt;/html&gt;</programlisting>
+
+    <para>Depending on how you are running Scimpi you may need to rebuild the
+    web application, redeploy it or restart the web server. (Using Ant and the
+    provided web server, as described above, you should run Ant again (to copy
+    the new file across) and restart the web server.)</para>
+
+    <para>This example uses two Scimpi tags to interact with [[NAME]] and
+    generate some dynamic HTML. The first tag invokes the action
+    <emphasis>allProducts</emphasis> on the service object known as
+    <emphasis>claims</emphasis>, which is the claims repository; the
+    <emphasis>service:</emphasis> prefix indicates the object is a service and
+    <emphasis>claims</emphasis> is the name of the service object as provided
+    by its <literal>getId</literal> method. The second tag generates an
+    unordered list (OL tag) with a set of list items (within LI tags) from the
+    collection that was returned by the previous tag. The browser shows the
+    following when the <filename moreinfo="none">example.shtml</filename> page
+    is requested.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/list-tag.png" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>By replacing <literal moreinfo="none">tag &lt;swf:list
+    type="disc"/&gt;</literal> with <literal
+    moreinfo="none">&lt;swf:table/&gt;</literal> an HTML table will be
+    generated instead of a list.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/table-tag.png" width="100%" />
+      </imageobject>
+    </mediaobject>
+
+    <para>As well as tags that practically do all the work of generating
+    things likes lists, tables and forms, Scimpi provides tags to allow you to
+    build your own. The next example uses the <emphasis>collection</emphasis>
+    tag in place of <emphasis>table</emphasis> to control the processing of
+    the contained block. This tag will iterate through the collection and for
+    each element will process the contained elements so that the elements
+    title and <literal>claimant</literal> field is displayed along with a
+    table showing the <literal>items</literal> field.</para>
+
+    <programlisting format="linespecific">    &lt;h1&gt;Claims&lt;/h1&gt;
+    &lt;swf:run-action object="service:claims" method="allClaims" /&gt;
+    &lt;swf:collection&gt;
+        &lt;div&gt;
+            &lt;h3&gt;&lt;swf:title icon="off"/&gt;, for &lt;swf:field field="claimant" icon="off"/&gt;&lt;/h3&gt;
+            &lt;swf:table field="items"/&gt;
+        &lt;/div&gt;
+    &lt;/swf:collection&gt;</programlisting>
+
+    <para>The result of this page are the same three elements as before but
+    the layout and detail have been specified in detail.</para>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata fileref="images/example/designed-collection.png"
+                   width="100%" />
+      </imageobject>
+    </mediaobject>
+  </section>
+</article>
