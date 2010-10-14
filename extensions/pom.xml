@@ -42,7 +42,6 @@
 		<module>scimpi</module>
 		<module>headless</module>
 		<module>xml-persistor</module>
-		<module>berkeley-persistor</module>
 		<module>nosql-persistor</module>
 		<module>sql</module>
 		<module>http-remoting</module>
@@ -101,16 +100,6 @@
 		</dependencies>
 	</dependencyManagement>
 
-
-	<profiles>
-		<profile>
-			<!--  mothballed -->
-			<id>plugins-mothballed</id>
-			<modules>
-				<module>hibernate-persistor</module>
-			</modules>
-		</profile>
-	</profiles>
 
 </project>	
 
