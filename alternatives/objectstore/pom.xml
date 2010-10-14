@@ -30,7 +30,9 @@
 		<module>xml</module>
 		<module>sql</module>
 		<module>nosql</module>
+		<!-- 
 		<module>jpa</module>
+		-->
 	</modules>
 	
 	<reporting>
