@@ -1,0 +1,207 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title>Running as a Prototype</title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <sidebar>
+    <title>Quick Start - Maven</title>
+
+    <para>Assuming that you have created your [[NAME]] application from
+    an <ulink url="building-with-maven.xml">archetype</ulink> then you can use
+    the following commands to build and then run the prototype:-</para>
+
+    <literallayout>$ mvn package
+$ cd commandline/target/<emphasis>myapp</emphasis>-commandline-1.0-SNAPSHOT-commandline.dir/<emphasis>myapp</emphasis>-commandline-1.0-SNAPSHOT/
+$ ./isis.sh -t exploration</literallayout>
+  </sidebar>
+
+  <section>
+    <title>Running a [[NAME]] application as a prototype</title>
+
+    <para>A [[NAME]] application is commonly developed in two stages.
+    First it is developed as standalone prototype, running on a single
+    machine, with no security, and with all the objects in memory. Then it is
+    converted into a deployable application i.e. running on a server with
+    multiple clients, with a persistence layer (most commonly in the form of
+    the Hibernate Object Store) and with full authentication and
+    authorization. (Note that these two phases do not have to be sequential,
+    you might prefer to develop your system feature-by-feature right through
+    to a deployable version.) In this section we show you how to run [[NAME]]
+    Objects as prototype; in the next section we show you how to deploy the
+    same domain object model as the real application.</para>
+
+    <para>Running a [[NAME]] application generally requires some
+    configuration files and images. Resources are typically loaded from the
+    working directory, while specific resources can be loaded from the class
+    path. Assuming that we will be running from the development directory the
+    following structure is typical of a [[NAME]] application.</para>
+
+    <literallayout>project/
+    src/
+    xat/
+    config/
+        isis.properties
+        passwords
+    images/
+    build.xml
+    :</literallayout>
+
+    <section>
+      <title>Configuration</title>
+
+      <para>[[NAME]] loads in one or more properties files during
+      startup. The properties files must contain at least a list of services
+      that the application uses and commonly there is also a list of fixtures
+      that are to be run at startup. In addition to the core properties there
+      may be also other properties that are used by other components. The file
+      <filename class="directory"
+      moreinfo="none">isis.properties</filename> is always loaded up,
+      while other properties files relating to specific components are only
+      loaded up if the component they relate to is to be is used. For example
+      when using the DND viewer the system will also load in the file
+      <filename class="directory"
+      moreinfo="none">viewer_dnd.properties</filename>, and when using the
+      hibernate object store the file <filename class="directory"
+      moreinfo="none">persistor_hibernate.properties</filename> is loaded.
+      While <filename class="directory"
+      moreinfo="none">isis.properies</filename> must exist for the
+      framework to start up properly, all other properties files are
+      optional.</para>
+
+      <para>The example <filename class="directory"
+      moreinfo="none">isis.properties</filename> file below shows a
+      number of service classes being listed along with a generic repository
+      for accessing Location objects. The prefix is prepended to each class
+      name before loading. The second set of properties lists the fixture
+      classes to load and instantiate.</para>
+
+      <programlisting format="linespecific">isis.services.prefix=org.apache.isis.example.ecs
+isis.services=repository#Location,resources.CustomerRepository, \
+  CustomerFactory, BookingFactory, resources.PaymentMethodFactory, \
+  resources.PhoneNumberFactory, LocationFactory
+
+isis.fixtures.prefix=org.apache.isis.example.ecs.fixtures
+isis.fixtures=CitiesFixture, BookingsFixture, ContextFixture</programlisting>
+    </section>
+
+    <section>
+      <title>Authentication</title>
+
+      <para>By default the authentication mechanism is a username/password
+      challenge with the details stored in a password file called <filename
+      class="directory" moreinfo="none">passwords</filename>. This file is a
+      simple list of user names and their corresponding passwords separated by
+      a colon. The file below shows two users with badly chosen
+      passwords.</para>
+
+      <programlisting format="linespecific">jbrown:pass
+tsmith:pass</programlisting>
+    </section>
+
+    <section>
+      <title>Images</title>
+
+      <para>The drag and drop and web interfaces both display icons as part of
+      the views for each object. Images for these icons, and for other uses,
+      are sought in the <filename class="directory"
+      moreinfo="none">images</filename> directory. The web interface currently
+      only works with GIF images, while the DnD interface will work with GIF,
+      PNG and JPEG images. The following shows images for the main objects in
+      the ECS example.</para>
+
+      <literallayout>images
+    Booking.gif
+    City.gif
+    CreditCard.gif
+    Customer.gif
+    Location.gif
+    Telephone.gif
+</literallayout>
+    </section>
+
+    <section>
+      <title>Bootloader</title>
+
+      <para>Running a [[NAME]] application is done via the [[NAME]]
+      boot loader, which is the class <literal>Isis</literal>. Without
+      any arguments [[NAME]] will be started in prototype mode with the
+      Drag and Drop viewer. The example below shows the Ant target (from the
+      build template file) that will start up [[NAME]] in exploration
+      mode. The classpath is simply a list of all the library jars (as
+      compiled by the <emphasis role="strong">path</emphasis> element) and the
+      classes compiled by the <emphasis role="strong">compile</emphasis>
+      target show previously.</para>
+
+      <programlisting format="linespecific">&lt;property name="bootclass" value="org.apache.isis.runtime.Isis"/&gt;
+
+&lt;path id="libs.external"&gt;
+  &lt;fileset dir="${lib.dir}"&gt;
+      &lt;include name="**/*.jar" /&gt;
+  &lt;/fileset&gt;
+&lt;/path&gt;
+
+&lt;target name="exploration-dnd" depends="compile" 
+  description="Run exploration class using drag-and-drop graphical viewer"&gt;
+
+    &lt;java fork="yes" classname="${bootclass}"&gt;
+      &lt;classpath path="${classes.dir}" /&gt;
+      &lt;classpath refid="libs.external" /&gt;
+      &lt;arg line="<emphasis role="strong">--type exploration --viewer dnd</emphasis>"/&gt;
+    &lt;/java&gt;
+&lt;/target&gt;
+
+</programlisting>
+
+      <para>Run</para>
+
+      <literallayout>$ ant exploration-dnd
+Buildfile: build.xml</literallayout>
+
+      <para>By changing the command line parameters you can change the way
+      that [[NAME]] starts up. This can include using different: viewers,
+      such as web browser, command line and drag and drop; persistors, such as
+      Hibernate, XML, and in-memory; and modes, such as standalone, client and
+      server. Details on all the options are listed in the reference
+      section.</para>
+
+      <para><emphasis>TODO: need to discuss the alternative
+      org.apache.isis.webserver.WebServer bootloader that can be used to run
+      the webapp defined by the webapp project's web.xml
+      descriptor.</emphasis></para>
+    </section>
+  </section>
+</article>

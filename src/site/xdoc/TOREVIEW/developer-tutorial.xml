@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>Developing a [[NAME]] application</title>
+
+    <author email="dev@maven.apache.org">The [[NAME]] Team</author>
+  </properties>
+
+  <body>
+    <section name="How [[NAME]] applications are built"><h3>A closer look
+    at the Expenses Processing demo application</h3> <p>If you haven't already
+    done so, run the online demo of our simple <a
+    href="../demo/index.shtml">Expenses Processing</a> application.</p> <p>The
+    full source code of this application is included with the [[NAME]]
+    download, and there is a section of the [[NAME]] Application
+    Development Manual (also included), which looks in detail at how that
+    application is written. However, for a rapid overview, run these two
+    screen movies (requires <a
+    href="http://www.adobe.com/shockwave/download/">Shockwave</a>):</p> <ul>
+        <li><a href="movies/Anatomy of a [[NAME]].htm">Anatomy of a [[NAME]]
+        Object</a></li>
+
+        <li><a href="movies/Actions.htm">Object Actions</a></li>
+      </ul> <h3>Building a simple application from scratch</h3> <p>Follow the
+    steps in this <a href="movies/first-app.htm">screen movie</a> to create
+    your first simple [[NAME]] application within just a few minutes.
+    (The movie shows the application being developed within Eclipse, but the
+    same principles apply for any development environment).</p></section>
+  </body>
+</document>

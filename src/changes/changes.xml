@@ -1,0 +1,133 @@
+<document>
+		<properties>
+				<title>[[NAME]]</title>
+				<author email="jruiz@exist.com">Johnny R. Ruiz III</author>
+		</properties>
+
+		<body>
+				<release version="3.0.1" date="unreleased" description="Bug fixes">
+
+						<action dev="rcmatthews" type="add">
+								All types of Java collections can now be used, specifically Sets. (408)
+						</action>
+
+						<action dev="scascarini" type="add">
+								Made database authenticator more configurable by moving (optional) SQL into properties
+								and allowing algorithm to be switched off or changed
+						</action>
+
+						<action dev="scascarini" type="fix">
+								Bug 418: Fixtures always run against PostgreSQL database - fix by checking both upper
+								and lower case names for table existence.
+						</action>
+
+						<action dev="rcmatthews" type="fix">
+								Currency, in expense example, was not resolving itself - added resolve calls for each
+								get method.
+						</action>
+
+						<action dev="scascarini" type="fix">
+								Made bounded objects in expenses DOM immutable so users cannot edit them
+						</action>
+
+						<action dev="rcmatthews" action="add">
+								Replaced the TransientObjectStore with InMemoryObjectStore. This stores the POJOs rather
+								than the adapters and hence work more like an persisting object store as the objects are
+								retrieved from memory and adapters are created for them. This is particularly important
+								when fixtures are run and the system is reset before running. (422)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Transient border now recursively works through views checking for valid fields. (423)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								All adapters now handle the empty state consistently and with out throwing NPE. (413)
+								Have reviewed and consolidated the parsing, encoding and decoding of adapter values.
+						</action>
+
+						<action dev="scascarini" action="fix">
+								Bug 420 Hib OS: ConcurrentListModification in Hibernate when deployed via Tomcat (works
+								okay in Jetty). Fixed by removing pre and post flush interceptors that update resolving
+								state (to and from serializing).
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Blank lines are now ignored in password files, and invalid entries are flagged. (425)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								HTML page builder now has a default title so every page is guaranteed to display with a
+								title. (425)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Choices method for properties can now be lists or arrays. (426)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Choices drop down on value fields now show the selection that was made. (426)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Collection views, when updated, no longer remove duplicated elements. (415)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Named parameters (using @Named) are no longer being ignored when internationalization
+								decorator is used. (416)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								All removed views are now released from the view update notifier list. (407)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Fixed hanging of DND Viewer when dropping object onto field within the top-level form
+								view. (412)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Using the back button on the browser doesn't not cause exception anymore when a link is
+								selected or a task is completed. (414)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								If an reflectively called method throws a runtime exception this is now thrown on
+								(rather than a ReflectionException)
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								The RegEx processor now places a much better message into the regex failure exception
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Descriptions for options are changed to an empty string instead of being left as null
+								(for better message concatenation).
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								If a regex fails to validate a field or parameter the user is now prevented from saving
+								(in HTML and DND). (111)
+						</action>
+
+						<action dev="scascarini" action="fix">
+								Refactored web code to be independent of servlet implmentation classes for ASP.NET port
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Objects that are destroyed are flaged as such (with a ResolveState of DESTROYED) and any
+								root views are removed from DND UI. (417)
+
+								When actions are execute remotely, or locally and changes are passed to the server, the
+								set of objects that has been disposed is passed back to the client so it can remove the
+								views of the disposed objects.
+						</action>
+
+						<action dev="rcmatthews" action="fix">
+								Mouse pointer was not changing to resize cursor when over a resizable view.
+						</action>
+				</release>
+
+		</body>
+</document>

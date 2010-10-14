@@ -1,0 +1,70 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+ -----
+ Downloads
+ -----
+ The [[NAME]] Team
+ -----
+
+Downloads
+
+  [[NAME]] is available in both binary and source form.  The binary downloads allow you build with either Maven or Ant.
+ 
+  Use the source code to rebuild a specific release (creating all the distributions available here) or to populate your own Maven repository. Typically this is after changes have been made to the source.
+  
+  If you are a <Maven> user then the simplest way to develop is using Maven. This is a smaller download as only the necessary jars are downloaded at compile time.
+  
+  If you are still using <Ant> then the larger download is available.  This contains all the dependendent jars and some examples that use Ant.
+  
+  For other uses where you are only interested in the dependencies then the last download is for you.
+  
+* The latest release - version 4.0.0
+
+*-------------------------+---------+---------+
+ Source | <zip> | {{{http://sourceforge.net/projects/isis/files/isis/Version 4.0.0/isis-4.0.0-source.zip/download} isis-4.0.0-source.zip}} |
+*-------------------------+---------+---------+
+ For Maven | <zip>\ | {{{http://sourceforge.net/projects/isis/files/isis/Version 4.0.0/isis-4.0.0-for-maven.zip/download} isis-4.0.0-for-maven.zip}}\  |
+  | <tar.gz> | {{{http://sourceforge.net/projects/isis/files/isis/Version 4.0.0/isis-4.0.0-for-maven.tar.gz/download} isis-4.0.0-for-maven.tar.gz}}  |
+*-------------------------+---------+---------+
+ For Ant | <zip>\ | {{{http://sourceforge.net/projects/isis/files/isis/Version 4.0.0/isis-4.0.0-for-ant.zip/download} isis-4.0.0-for-ant.zip}}\  |
+  | <tar.gz> | {{{http://sourceforge.net/projects/isis/files/isis/Version 4.0.0/isis-4.0.0-for-ant.tar.gz/download} isis-4.0.0-for-ant.tar.gz}} |
+*-------------------------+---------+---------+
+ Libraries only | <jar> | {{{http://sourceforge.net/projects/isis/files/isis/Version 4.0.0/isis-4.0.0-libs-only-with-dependencies.zip/download} isis-4.0.0-libs-only-with-dependencies.zip}} |
+*-------------------------+---------+---------+
+
+
+
+* Previous releases
+
+  Previous releases can be downloaded from the Source Forge {{{http://sourceforge.net/projects/isis/} project page}}.
+
+~~
+~~ TODO: need to say something about documentation once we have it sorted out.  What's written
+~~ here is incorrect though; there will be documentation per module.
+~~  
+~~* Documentation
+~~
+~~  The documentation is available as a copy of this web site or PDF,
+~~  
+~~*-------------------------+---------+---------+
+~~ Web Site | <jar> | {{{./isis-${project.version}-site.jar} isis-${project.version}-site.jar}} |
+~~*-------------------------+---------+---------+
+~~ Printed Documentation | <pdf> | {{{./isis-${project.version}.pdf} isis-${project.version}.pdf}} |
+~~*-------------------------+---------+---------+
+

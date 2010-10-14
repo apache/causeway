@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document xmlns="http://maven.apache.org/XDOC/2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/XDOC/2.0 http://maven.apache.org/xsd/xdoc-2.0.xsd">
+	<properties>
+		<title>Maven Archetype</title>
+
+    <author email="isis-contributors@lists.sourceforge.net">[[NAME]] Contributors</author>
+	</properties>
+
+	<body>
+		<section name="Maven Archetype">
+			<h3>Maven Archetype</h3>
+			<p>
+			This <a href="./screencasts/maven-archetype.html">screencast</a> (originally posted on <a href="http://danhaywood.com/2009/08/29/using-the-isis-4-0-maven-archetype/">Dan Haywood's blog</a> shows how to get started using the Maven
+			archetype that comes with [[NAME]] 4.0.
+			</p>
+			
+		</section>
+		<section name="What Next?">
+		<p>
+			 Next, you might want to see some <a href="./programming-screencasts.html">further screencasts</a> that show
+			 how programming model works.  Alternatively, go back to the <a href="./index.html">home page</a> for other resources. 
+		</p>
+		</section>
+	</body>
+</document>

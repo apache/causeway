@@ -1,0 +1,130 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Where's to Start?
+
+  There's quite a lot to <Apache Isis>, with lots of optional components.  To 
+  keep things manageable, all Isis documentation about these components is 
+  scoped closest along with that component.  That means that 
+  any given documentation is likely to have just the information you 
+  require to use or configure that component (it also makes it easier for us
+  to maintain those documents).
+  
+  On the other hand, it can be difficult to know exactly where to go in the 
+  first place... hence these notes.
+  
+  <<Your first port of call should be the {{{./core/docbkx/pdf/isis-core.pdf}core}}  
+  documentation>>.  In particular:
+  
+  * the first chapter provide a general overview of some of the principles and 
+    patterns of <Apache Isis>
+    
+  * the second chapter will take you through our recommended process of
+    developing an Isis application.  The focus is on using the default 
+    settings of the core framework, but there's plenty of signposting to 
+    alternate implementations of Isis' various components.
+    
+  []
+
+  That documentation also covers the core APIs and their default 
+  implementations, and it also details how to deploy your application in 
+  various configurations (webapp or client/server) with those default
+  implementations. 
+     
+  If you were only going to use the default implementations, then the above
+  core documentation ought to be all you would need to read.  However, chances 
+  are that you'll want to use one of the alternates, which means you'll also
+  need to refer to other documentation.
+  
+What Else to Read?  
+  
+  The remaining documentation is specific to each module, either giving
+  guidance and support on how to develop Isis applications, or describing how
+  to configure some alternate implementation:
+  
+  * the {{{./support/archetypes/application/index.html}application}} archetype
+  
+    is used to create an initial <Apache Isis> application to get you started.
+    set up using the in-memory object 
+    store, the {{{./plugins/dnd-viewer/index.html}DnD viewer}}, and the
+    {{{./plugins/html-viewer/index.html}HTML viewer}}.
+   
+  * the {{{./applib/index.html}applib}} module
+  
+    describes Isis' <programming model> along with the use of fixtures 
+    during prototyping and testing;
+  
+  * the {{{./alternates/storytests/index.html}storytests}} module
+  
+    is used for writing story tests using FitNesse or Concordion;
+    
+  * the {{{./alternates/headless/index.html}headless}} module 
+  
+    has support for writing unit tests with various JUnit integrations. This
+    module can also be used for domain objects that collaborate with each other
+    through 
+    
+  * the {{{./support/domain/index.html}domain}} library
+  
+    provides using off-the-shelf services, values and entities for you to reuse
+    
+  * the various object stores:
+  
+    * {{{./alternates/objectstores/xml/index.html}XML Object Store}}
+  
+    * {{{./alternates/objectstores/berkeley/index.html}Berkeley Object Store}}
+  
+    * {{{./alternates/objectstores/sql/index.html}SQL Object Store}}
+  
+    * {{{./alternates/objectstores/jpa/index.html}JPA Object Store}}
+  
+    * {{{./alternates/objectstores/couchdb/index.html}CouchDB Object Store}}
+  
+    []
+    
+  * the various viewers:
+  
+    * {{{./alternates/viewers/dnd/index.html}DnD}} viewer
+
+    * {{{./alternates/viewers/html/index.html}HTML}} viewer
+
+    * {{{./alternates/viewers/scimpi/index.html}Scimpi}} viewer
+
+    * {{{./alternates/viewers/wicket/index.html}Wicket}} viewer
+
+    * {{{./alternates/viewers/restful/index.html}RESTful}} viewer
+    
+    []
+
+  * using {{{./alternates/http-remoting/index.html}http-remoting}}
+  
+    for the network transport in client/server deployments (the default is 
+    plain sockets);
+  
+  * using {{{./alternates/xstream-marshalling/index.html}xstream-marshalling}}
+   
+    for the marshalling mechanism in client/server deployments (the default
+    is encoding/serialization);
+    
+  * using {{{./alternates/ldap-auth/index.html}LDAP auth}} 
+  
+    for the authentication and authorization using LDAP (the default is a simple
+    file-based implementation)
+   
+  []

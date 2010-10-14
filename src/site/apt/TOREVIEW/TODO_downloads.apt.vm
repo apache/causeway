@@ -1,0 +1,52 @@
+ -----
+ Downloads
+ -----
+ The [[NAME]] Team
+ -----
+
+Downloads
+
+  [[NAME]] is available in both binary and source form.  The binary downloads allow you build with either Maven or Ant.
+ 
+  Use the source code to rebuild a specific release (creating all the distributions available here) or to populate your own Maven repository. Typically this is after changes have been made to the source.
+  
+  If you are a <Maven> user then the simplest way to develop is using Maven. This is a smaller download as only the necessary jars are downloaded at compile time.
+  
+  If you are still using <Ant> then the larger download is available.  This contains all the dependendent jars and some examples that use Ant.
+  
+  For other uses where you are only interested in the dependencies then the last download is for you.
+  
+* The latest release - version ${project.version}
+
+*-------------------------+---------+---------+
+ Source | <zip> | {{{http://sourceforge.net/projects/isis/files/isis/Version ${project.version}/isis-${project.version}-source.zip/download} isis-${project.version}-source.zip}} |
+*-------------------------+---------+---------+
+ For Maven | <zip>\ | {{{http://sourceforge.net/projects/isis/files/isis/Version ${project.version}/isis-${project.version}-for-maven.zip/download} isis-${project.version}-for-maven.zip}}\  |
+  | <tar.gz> | {{{http://sourceforge.net/projects/isis/files/isis/Version ${project.version}/isis-${project.version}-for-maven.tar.gz/download} isis-${project.version}-for-maven.tar.gz}}  |
+*-------------------------+---------+---------+
+ For Ant | <zip>\ | {{{http://sourceforge.net/projects/isis/files/isis/Version ${project.version}/isis-${project.version}-for-ant.zip/download} isis-${project.version}-for-ant.zip}}\  |
+  | <tar.gz> | {{{http://sourceforge.net/projects/isis/files/isis/Version ${project.version}/isis-${project.version}-for-ant.tar.gz/download} isis-${project.version}-for-ant.tar.gz}} |
+*-------------------------+---------+---------+
+ Libraries only | <jar> | {{{http://sourceforge.net/projects/isis/files/isis/Version ${project.version}/isis-${project.version}-libs-only-with-dependencies.zip/download} isis-${project.version}-libs-only-with-dependencies.zip}} |
+*-------------------------+---------+---------+
+
+
+
+* Previous releases
+
+  Previous releases can be downloaded from the Source Forge {{{http://sourceforge.net/projects/isis/} project page}}.
+
+~~
+~~ TODO: need to say something about documentation once we have it sorted out.  What's written
+~~ here is incorrect though; there will be documentation per module.
+~~  
+~~* Documentation
+~~
+~~  The documentation is available as a copy of this web site or PDF,
+~~  
+~~*-------------------------+---------+---------+
+~~ Web Site | <jar> | {{{./isis-${project.version}-site.jar} isis-${project.version}-site.jar}} |
+~~*-------------------------+---------+---------+
+~~ Printed Documentation | <pdf> | {{{./isis-${project.version}.pdf} isis-${project.version}.pdf}} |
+~~*-------------------------+---------+---------+
+

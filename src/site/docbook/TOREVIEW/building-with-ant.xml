@@ -1,0 +1,225 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title></title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Building a [[NAME]] application with Ant</title>
+
+    <para>Once an application is written it must, like all Java programs, be
+    compiled before it can be run. As you want to run your application within
+    the framework there are dependencies that need to be satisfied to allow
+    this. [[NAME]] promote two ways of doing this, using Ant and Maven.
+    This section looks at how to use Ant to build a [[NAME]] application,
+    while the next section shows how to do the same thing with Maven.</para>
+
+    <section>
+      <title>Project organisation</title>
+
+      <para>How you organise your project and its dependencies is a matter of
+      personal preference, but for this section we will assume the following
+      directory structure, where <filename class="directory"
+      moreinfo="none">isis-4.0</filename> is the unzipped distribution
+      and <filename class="directory" moreinfo="none">project</filename> is
+      the directory containing the application you are working on.</para>
+
+      <literallayout>isis-4.0/
+    lib/
+    resources/
+    :
+    :
+project/
+    src/
+    xat/
+    resources/
+    config/
+    build.xml
+    :
+    :</literallayout>
+
+      <para>The source code for the domain objects is contained in the
+      <filename class="directory" moreinfo="none">src</filename> directory and
+      the tests are in <filename class="directory"
+      moreinfo="none">xat</filename>. Resources to be made available via the
+      class path (rather than loaded via the file system) should be added to
+      the <filename class="directory"
+      moreinfo="none">project/resources</filename> directory, while
+      configuration files should be placed in <filename class="directory"
+      moreinfo="none">config</filename>. The file <filename class="directory"
+      moreinfo="none">build.xml</filename> should be copied across from the
+      <filename class="directory"
+      moreinfo="none">isis-4.0/resources</filename> directory.</para>
+    </section>
+
+    <section>
+      <title>Compilation</title>
+
+      <para>To build a [[NAME]] application you need to have access to
+      its needed libraries as well as your source code. The libraries are all
+      contained in the <filename class="directory"
+      moreinfo="none">lib</filename> directory within the distribution
+      download. The following extract from a <filename class="directory"
+      moreinfo="none">build.xml</filename> file<footnote>
+          <para>The complete file can be found in the resource
+          directory</para>
+        </footnote> shows how you can use Ant to compile a [[NAME]]
+      application. The <emphasis role="strong">path</emphasis> element is used
+      to link in all the Jar files that are provided by the distribution,
+      while the <emphasis role="strong">compile</emphasis> target uses javac
+      to compile your Java code found in the source directory. Make sure you
+      change the <emphasis role="strong">lib.dir</emphasis> property to point
+      to the lib directory within the binary download and the <emphasis
+      role="strong">src.dir</emphasis> property to your source directory. The
+      <emphasis role="strong">src</emphasis> directory will normally contain
+      DOM classes, fixtures and application-framework integration code (such
+      as repositories and services).</para>
+
+      <programlisting format="linespecific">&lt;property name="lib.dir" value="<emphasis
+          role="strong">../isis-3.0/lib/</emphasis>" /&gt;
+&lt;property name="build.dir" value="./build" /&gt;
+&lt;property name="classes.dir" value="./build/classes" /&gt;
+&lt;property name="src.dir" value="<emphasis role="strong">./src/</emphasis>" /&gt;
+&lt;property name="xat.dir" value="./xat" /&gt;
+&lt;property name="compile.target" value="1.5" /&gt;
+&lt;property name="source.target" value="1.5" /&gt;
+
+
+&lt;fileset dir="${lib.dir}" id="libs.set"&gt;
+  &lt;include name="**/*.jar" /&gt;
+&lt;/fileset&gt;
+
+&lt;path id="libs.path"&gt;
+  &lt;fileset refid="libs.set" /&gt;
+&lt;/path&gt;
+
+&lt;target name="compile" description="Compile example"&gt;
+  &lt;mkdir dir="${build.dir}" /&gt;
+  &lt;mkdir dir="${classes.dir}" /&gt;
+
+  &lt;javac destdir="${classes.dir}" target="${compile.target}" source="${source.target}"&gt;
+      &lt;src path="${src.dir}" /&gt;
+      &lt;src path="${xat.dir}" /&gt;
+      &lt;classpath refid="libs.path" /&gt;
+   &lt;/javac&gt;
+&lt;/target&gt;</programlisting>
+
+      <para>Running Ant with the <emphasis role="strong">compile</emphasis>
+      target will compile your code, producing the following output indicating
+      that the compilation was successful. The newly created <filename
+      class="directory" moreinfo="none">build</filename> directory will
+      contain the class files.</para>
+
+      <literallayout>$ ant compile
+Buildfile: build.xml
+
+compile:
+    [mkdir] Created dir: /home/rcm/workspace/project/build
+    [javac] Compiling 17 source files to /home/rcm/workspace/project/build
+    [javac] Note: Some input files use unchecked or unsafe operations.
+    [javac] Note: Recompile with -Xlint:unchecked for details.
+
+BUILD SUCCESSFUL
+Total time: 2 seconds</literallayout>
+    </section>
+
+    <section>
+      <title>Distribution</title>
+
+      <para>A fully runnable distribution and zip file can be created using
+      the build file. Ensure the <emphasis
+      role="strong">resource.dir</emphasis> property points the resource
+      directory in the distribution.</para>
+
+      <programlisting format="linespecific">&lt;property name="resource.dir" value="<emphasis
+          role="strong">../isis-4.0/resources</emphasis>" /&gt;
+
+&lt;target name="dist" depends="compile" description="Collects together files for distribution"&gt;
+  &lt;copy todir="${build.dir}/lib"&gt;
+    &lt;fileset refid="libs.set" /&gt;
+  &lt;/copy&gt;
+  &lt;copy todir="${build.dir}"&gt;
+    &lt;fileset dir="."&gt;
+      &lt;include name="config/*" /&gt;
+      &lt;include name="images/*" /&gt;
+    &lt;/fileset&gt;
+    &lt;fileset dir="${resource.dir}"&gt;
+      &lt;include name="web/*" /&gt;
+      &lt;include name="run.*"/&gt;
+      &lt;include name="lcp.bat"/&gt;
+    &lt;/fileset&gt;
+  &lt;/copy&gt;
+  &lt;chmod file="${build.dir}/isis.sh" perm="ugo+x"/&gt;
+
+  &lt;mkdir dir="${dist.dir}" /&gt;
+  &lt;zip destfile="dist/no-application.zip" &gt;
+    &lt;zipfileset dir="${build.dir}" prefix="no-application" /&gt;
+  &lt;/zip&gt;
+&lt;/target&gt;</programlisting>
+
+      <para>Running ant with the <emphasis role="strong">dist</emphasis>
+      target will create the distribution, producing the following
+      output.</para>
+
+      <literallayout>$ ant dist
+Buildfile: build.xml
+
+compile:
+dist:
+     [copy] Copying 45 files to /home/rcm/workspace/project/build/lib
+     [copy] Copying 7 files to /home/rcm/workspace/project/build
+      [zip] Building zip: /home/rcm/workspace/project/dist/no-application.zip
+BUILD SUCCESSFUL
+Total time: 6 seconds</literallayout>
+
+      <para>After this has completed the <filename class="directory"
+      moreinfo="none">build</filename> directory will look like the following,
+      and the <filename class="directory" moreinfo="none">dist</filename>
+      directory will contain a zipped file of the same contents.</para>
+
+      <literallayout>build/
+   classes/
+   config/
+   images/
+   lib/
+   resources/
+   web/
+   lcp.bat
+   isis.bat
+   isis.sh</literallayout>
+    </section>
+  </section>
+</article>

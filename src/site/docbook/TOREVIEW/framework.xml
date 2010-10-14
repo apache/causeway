@@ -1,0 +1,809 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title>[[NAME]] 3.0 [NOT YET UPDATED FOR 4.0]</title>
+
+    <subtitle>Framework Development Manual</subtitle>
+
+    <releaseinfo>Version 0.1</releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Robert</firstname>
+
+        <surname>Matthews</surname>
+      </author>
+
+      <author>
+        <firstname>Richard</firstname>
+
+        <surname>Pawson</surname>
+      </author>
+
+      <author>
+        <firstname>Stef</firstname>
+
+        <surname>Cascarini</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </articleinfo>
+
+  <!-- front matter -->
+
+  <section>
+    <title>Preface</title>
+
+    <para>This manual documents the development of the [[NAME]]
+    Framework, its associated components and tools.</para>
+
+    <note>
+      <para>This manual has not yet been updated for [[NAME]] 4.0.</para>
+    </note>
+
+    <para>You can download [[NAME]] via <ulink
+    url="isis.apache.org">isis.apache.org</ulink>, or direct from
+    <ulink
+    url="http://sourceforge.net/projects/isis/">SourceForge</ulink>,
+    under an open source licence.</para>
+
+    <para>This edition of the manual is intended for use with version 3.0 of
+    the [[NAME]] framework, which works with Java version 1.5 or
+    higher.</para>
+  </section>
+
+  <!-- main content -->
+
+  <section>
+    <title>How to build [[NAME]] from source</title>
+
+    <para>If you are thinking about modifying or contribute to [[NAME]],
+    then you’ll want to be able to build [[NAME]] from source.</para>
+
+    <para>[[NAME]] is built using Maven 2. So it pretty much builds
+    itself, provided you are on the Internet to download any dependencies.
+    However:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>[[NAME]] also uses a couple of its own Maven plugins.
+        Although the plan is for these to be made available in public
+        repositories, that hasn’t happened at the time of writing. Therefore
+        you may need to build these first.</para>
+      </listitem>
+
+      <listitem>
+        <para>There is one further dependency that is unavailable (due to
+        licensing restrictions) from repositories, so that must be installed
+        manually. This doc also describes how to install that dependency
+        manually.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Although you can just use Maven from the command line, you’ll almost
+    certainly want to use an IDE for proper development. We use Eclipse IDE
+    with the M2Eclipse plugin. The maven-eclipse-plugin can be used to
+    generate the Eclipse .project and related files; that’s why they aren’t
+    checked into source code. If you use another IDE, then you may well find a
+    similar Maven plugin.</para>
+
+    <section>
+      <title>Maven Modules</title>
+
+      <para>Full details of Maven modules are at <ulink
+      url="???">http://isis.apache.org/wiki/Maven_Modules</ulink>.</para>
+    </section>
+
+    <section>
+      <title>Source Code Repository</title>
+
+      <para>The source code can be downloaded as a zip file, but we suggest
+      accessing the repository directly so you can keep up to date with the
+      latest ongoing developments.</para>
+
+      <para>The development version of the [[NAME]] framework can be
+      downloaded from the Subversion repository on SourceForge using the URL
+      <emphasis>https://isis.svn.sourceforge.net/svnroot/isis</emphasis>.
+      The following command gets hold of the trunk (main line of ongoing
+      development) and creates a working directory called <filename
+      class="directory" moreinfo="none">isis</filename>:</para>
+
+      <literallayout>svn checkout https://apache.isis.svn/svnroot/trunk isis</literallayout>
+
+      <para>If you are a registered developer then also specify your
+      SourceForge user name:</para>
+
+      <literallayout>svn checkout https://<emphasis>username</emphasis>@apache.isis.svn/svnroot/trunk isis</literallayout>
+    </section>
+
+    <section>
+      <title>Prerequisites</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>Install a Subversion client, for example <ulink
+          url="http://tortoisesvn.tigris.org">TortoiseSVN</ulink>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Install <ulink url="http://java.sun.com">Java 5 or 6</ulink>
+          and setup the <literal>JAVA_HOME</literal> environment
+          variable.</para>
+        </listitem>
+
+        <listitem>
+          <para>Install <ulink url="http://maven.apache.org">Maven
+          2.0.9</ulink> or later, setup the <literal>MAVEN_HOME</literal>
+          environment variable and add the path the <filename
+          moreinfo="none">mvn</filename> executable to <literal>PATH</literal>
+          environment variable.</para>
+        </listitem>
+
+        <listitem>
+          <para>Install <ulink url="http://eclipse.org">Eclipse 3.4</ulink>
+          (JEE edition).</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>We also recommend that you install the following plugins for
+      Eclipse:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the <ulink
+          url="http://m2eclipse.codehaus.org">M2Eclipse</ulink> plugin</para>
+        </listitem>
+
+        <listitem>
+          <para><ulink url="http://subclipse.tigris.org">Subclipse</ulink>
+          plugin</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Building [[NAME]]</title>
+
+      <section>
+        <title>Building [[NAME]]’s own Maven plugins</title>
+
+        <para>The plugins are available from the URL
+        <emphasis>https://isis.svn.sourceforge.net/svnroot/isis/maven-plugins/trunk</emphasis>.
+        Check out that directory as for the framework itself. Then build from
+        within the new direcotry using</para>
+
+        <literallayout>$ mvn clean install</literallayout>
+
+        <para>All being well, the plugins should build okay:</para>
+
+        <literallayout>Running org.apache.isis.doclet.xml.FileTest
+Loading source files for package org.apache.isis.doclet.tests...
+Constructing Javadoc information...
+/home/rcm/tmp/plugins/xmldoclet/target/api.xml
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.258 sec
+
+Results :
+
+Tests run: 22, Failures: 0, Errors: 0, Skipped: 0
+
+[INFO] [jar:jar]
+[INFO] Building jar: /home/rcm/tmp/plugins/xmldoclet/target/xmldoclet-1.0-SNAPSHOT.jar
+[INFO] [install:install]
+[INFO] Installing /home/rcm/tmp/plugins/xmldoclet/target/xmldoclet-1.0-SNAPSHOT.jar to /home/rcm/.m2/repository/org/apache/isis/xmldoclet/1.0-SNAPSHOT/xmldoclet-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] ------------------------------------------------------------------------
+[INFO] [[NAME]] ......................................... SUCCESS [7.796s]
+[INFO] code-example-plugin Maven Mojo ........................ SUCCESS [5.159s]
+[INFO] xmldoclet ............................................. SUCCESS [15.622s]
+[INFO] ------------------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 29 seconds
+[INFO] Finished at: Tue Sep 16 21:02:15 BST 2008
+[INFO] Final Memory: 28M/247M
+[INFO] ------------------------------------------------------------------------
+[rcm@localhost plugins]$ </literallayout>
+      </section>
+
+      <section>
+        <title>Building from the Command Line</title>
+
+        <para>Building using Maven is a two step process. This allows the core
+        framework and the distribution to be run separately so that work on
+        the code can be quickly built and tested, while producing a
+        distribution will take more time, but only when it is needed.</para>
+
+        <para>After checking out the source as descibed in an earlier section,
+        build the core using:</para>
+
+        <literallayout>$ mvn clean install</literallayout>
+
+        <para>This will build to completion and all the generated jars will be
+        added to the Maven repository <emphasis>[NB: the modules may have
+        changed from the following list]</emphasis>:</para>
+
+        <literallayout>[INFO] Authentication Implementations ........................ SUCCESS [0.059s]
+[INFO] LDAP Authorization .................................... SUCCESS [1.209s]
+[INFO] File-based Authorization .............................. SUCCESS [1.216s]
+[INFO] Hibernate Authorization ............................... SUCCESS [1.703s]
+[INFO] Authorization Proxy ................................... SUCCESS [0.745s]
+[INFO] Authorization Implementations ......................... SUCCESS [0.065s]
+[INFO] Viewer Drag and Drop Implementation ................... SUCCESS [28.322s]
+[INFO] Viewer HTML Implementation ............................ SUCCESS [11.655s]
+[INFO] Viewer Implementations ................................ SUCCESS [0.050s]
+[INFO] Remoting Command Transport Encoding ................... SUCCESS [2.205s]
+[INFO] Remoting Command Transport Serialize .................. SUCCESS [0.984s]
+[INFO] Remoting Command Transport XStream .................... SUCCESS [1.103s]
+[INFO] Remoting Command Transport Pipe ....................... SUCCESS [1.744s]
+[INFO] Remoting Command Client Installer ..................... SUCCESS [1.174s]
+[INFO] Remoting Command Server Installer ..................... SUCCESS [1.040s]
+[INFO] Remoting Command Implementation ....................... SUCCESS [0.068s]
+[INFO] XAT Documentor ........................................ SUCCESS [5.561s]
+[INFO] XAT Framework ......................................... SUCCESS [2.529s]
+[INFO] XAT (Executable Application Testing) .................. SUCCESS [0.113s]
+[INFO] Bootstrap System ...................................... SUCCESS [0.677s]
+[INFO] Bootstrapper Command Line Implementation .............. SUCCESS [2.970s]
+[INFO] Bootstrapper Command Line DnD Client .................. SUCCESS [1.342s]
+[INFO] Bootstrapper Command Line Jetty Client ................ SUCCESS [1.650s]
+[INFO] Bootstrapper Web App Implementation ................... SUCCESS [6.644s]
+[INFO] Bootstrap XAT JUnit4 Integration ...................... SUCCESS [1:11.722s]
+[INFO] Bootstrapper Implementations .......................... SUCCESS [0.077s]
+[INFO] ------------------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 7 minutes 7 seconds
+[INFO] Finished at: Tue Sep 16 21:19:07 BST 2008
+[INFO] Final Memory: 58M/247M
+[INFO] ------------------------------------------------------------------------
+[rcm@localhost isis_DEV_4.0]$</literallayout>
+
+        <para>To create the documentation and the the distribution files use
+        the <emphasis>dist</emphasis> profile</para>
+
+        <literallayout>$ mvn clean install -P dist</literallayout>
+
+        <para>The very first time you run the build, it’ll get most of the way
+        until it hits the missing dependency while building the
+        documentation:</para>
+
+        <literallayout>[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD ERROR
+[INFO] ------------------------------------------------------------------------
+[INFO] Failed to resolve artifact.
+
+Missing:
+----------
+1) com.java:jimi:jar:1.0
+
+  Try downloading the file manually from the project website.
+
+  Then, install it using the command: 
+      mvn install:install-file -DgroupId=com.java -DartifactId=jimi -Dversion=1.0 -Dpackaging=jar -Dfile=/path/to/file
+
+  Alternatively, if you host your own repository you can deploy the file there: 
+      mvn deploy:deploy-file -DgroupId=com.java -DartifactId=jimi -Dversion=1.0 -Dpackaging=jar -Dfile=/path/to/file -Durl=[url] -DrepositoryId=[id]
+
+  Path to dependency: 
+      1) com.agilejava.docbkx:docbkx-maven-plugin:maven-plugin:2.0.8
+      2) com.java:jimi:jar:1.0
+
+----------
+1 required artifact is missing.
+
+for artifact: 
+  com.agilejava.docbkx:docbkx-maven-plugin:maven-plugin:2.0.8
+
+from the specified remote repositories:
+  central (http://repo1.maven.org/maven2),
+  jboss.org (http://repository.jboss.org/maven2),
+  java.net (https://maven-repository.dev.java.net/repository)
+
+
+[INFO] ------------------------------------------------------------------------
+[INFO] For more information, run Maven with the -e switch
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 32 seconds
+[INFO] Finished at: Tue Sep 16 21:21:58 BST 2008
+[INFO] Final Memory: 48M/247M
+[INFO] ------------------------------------------------------------------------
+[rcm@localhost isis_DEV_4.0]$</literallayout>
+
+        <para>The fix is as suggested by Maven itself:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Download the <emphasis>jimi</emphasis> jar file. You’ll find
+            it within the <filename
+            moreinfo="none">JimiProClasses.zip</filename> downloadable from
+            the <ulink url="http://java.sun.com/products/jimi/">Jimi
+            page</ulink>.</para>
+          </listitem>
+
+          <listitem>
+            <para>Install into your local Maven repository using:</para>
+
+            <literallayout>mvn install:install-file –D groupId=com.java –D artifactId=jimi –D version=1.0 –D packaging=jar \ –D file=/path/to/jimi.jar</literallayout>
+          </listitem>
+        </itemizedlist>
+
+        <para>You can then restart the build.</para>
+
+        <literallayout>mvn clean install</literallayout>
+
+        <para>This time it should complete to the end:</para>
+
+        <literallayout>[INFO] Setting property: resource.manager.logwhenfound =&gt; 'false'.
+[INFO] [archetype:jar]
+[INFO] [archetype:add-archetype-metadata]
+[INFO] [archetype:integration-test]
+[INFO] [install:install]
+[INFO] Installing /home/rcm/no-development/isis_DEV_4.0/archetype/target/isis-archetype-1.0-SNAPSHOT.jar to /home/rcm/.m2/repository/org/apache/isis/isis-archetype/1.0-SNAPSHOT/isis-archetype-1.0-SNAPSHOT.jar
+[INFO] [archetype:update-local-catalog]
+[INFO] 
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] ------------------------------------------------------------------------
+[INFO] [[NAME]] ......................................... SUCCESS [6.775s]
+[INFO] Distribution Documentation Examples ................... SUCCESS [6.412s]
+[INFO] Distribution Documentation ............................ SUCCESS [3:12.485s]
+[INFO] Example Expenses DOM .................................. SUCCESS [4.136s]
+[INFO] Example Expenses Email Service ........................ SUCCESS [2.525s]
+[INFO] Example Expenses Fixtures ............................. SUCCESS [4.082s]
+[INFO] Example Expenses Hibernate ............................ SUCCESS [3.362s]
+[INFO] Example Expenses Client ............................... SUCCESS [15.070s]
+[INFO] Distribution Tarball .................................. SUCCESS [1:40.606s]
+[INFO] Distribution Eclipse Framework ........................ SUCCESS [21.527s]
+[INFO] Distribution Eclipse Viewer DnD ....................... SUCCESS [7.374s]
+[INFO] Distribution Eclipse Remoting Command XStream ......... SUCCESS [10.428s]
+[INFO] Distribution Eclipse Hibernate ........................ SUCCESS [16.988s]
+[INFO] Distribution Eclipse XAT .............................. SUCCESS [9.526s]
+[INFO] Distribution Eclipse Example Expenses ................. SUCCESS [10.379s]
+[INFO] Distribution Eclipse Example Expenses ................. SUCCESS [21.736s]
+[INFO] Example Facet JSR303 Validation ....................... SUCCESS [7.168s]
+[INFO] Distribution Eclipse Example Facet JSR303 ............. SUCCESS [8.454s]
+[INFO] Distribution Eclipse .................................. SUCCESS [0.097s]
+[INFO] Distribution .......................................... SUCCESS [0.055s]
+[INFO] Examples Expenses Client Distribution ................. SUCCESS [7.160s]
+[INFO] Example Expenses Server Distribution .................. SUCCESS [9.371s]
+[INFO] Example Expenses ...................................... SUCCESS [0.059s]
+[INFO] Example Facet Namefile ................................ SUCCESS [4.011s]
+[INFO] Example Facets ........................................ SUCCESS [0.098s]
+[INFO] Examples .............................................. SUCCESS [0.050s]
+[INFO] [[NAME]] Archetype ............................... SUCCESS [2.336s]
+[INFO] ------------------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 7 minutes 59 seconds
+[INFO] Finished at: Tue Sep 16 21:35:52 BST 2008
+[INFO] Final Memory: 107M/267M
+[INFO] ------------------------------------------------------------------------
+[rcm@localhost isis_DEV_4.0]$ </literallayout>
+
+        <para>If you go to the ...... directory - documentation; zip
+        files</para>
+      </section>
+
+      <section>
+        <title>Building in Eclipse</title>
+
+        <para>You can directly import all the projects into Eclipse. (Note:
+        there no need to run mvn eclipse:m2eclipse).</para>
+
+        <para><emphasis>[NB: the following screenshots are a little
+        out-of-date, but you get the idea...]</emphasis></para>
+
+        <para>File &gt; Import</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/m2eclipse-file-import.png" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Specify the framework/trunk as root directory. The M2Eclipse
+        plugin will locate all the Maven projects referenced:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/m2eclipse-root-directory.png" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Hit finish. You’ll end up with a bunch of projects:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/m2eclipse-bunch-of-projects.png" />
+          </imageobject>
+        </mediaobject>
+
+        <para>You might then want to organize into working sets. We tend to
+        organize by the top-level modules.</para>
+
+        <para>You can now set to develop using either Maven or Eclipse. One
+        suggestion (pretty obvious really): if doing a command line build,
+        then do a full refresh in Eclipse afterwards.</para>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Code style</title>
+
+    <para>The style of framework code has developed over the lifetime of the
+    project. This style should be adhere to in every class to provide
+    consistency across the code base.</para>
+
+    <section>
+      <title>Code formatting</title>
+
+      <para>A code formatter specification is available for use within
+      Eclipse. Every class should be formatted using this formatter before the
+      code is checked back into the repository. The specification can be found
+      in the root of source tree in the file <filename class="directory"
+      moreinfo="none">java-format.xml</filename>. This can be summarised as
+      follows:</para>
+
+      <para>File footer</para>
+
+      <para>Each code file should end with a copyright statement exactly as
+      follows, starting in the first column</para>
+
+      <programlisting format="linespecific">// Copyright (c) [[NAME]] Group Ltd.</programlisting>
+
+      <itemizedlist>
+        <listitem>
+          <para>Indentation is achieved using spaces, not tabs; there should
+          be no tabs, except where needed in quoted strings</para>
+        </listitem>
+
+        <listitem>
+          <para>Each level of indentation is 4 characters</para>
+        </listitem>
+
+        <listitem>
+          <para>Code lines are wrapped at 130 characters, with a two space
+          indentation for wrapped lines</para>
+        </listitem>
+
+        <listitem>
+          <para>Comment lines are wrapped at 110 characters, with a two space
+          indentation for wrapped lines</para>
+        </listitem>
+
+        <listitem>
+          <para>Statements should only be wrapped when too long for the
+          line</para>
+        </listitem>
+
+        <listitem>
+          <para>Block braces ({}) start on the same line as their controlling
+          statement and end, indented to the same level as the starting line,
+          on a new line</para>
+        </listitem>
+
+        <listitem>
+          <para>No comments or blank lines should be placed before the package
+          statement</para>
+        </listitem>
+
+        <listitem>
+          <para>One blank line between package statement and imports</para>
+        </listitem>
+
+        <listitem>
+          <para>Imports should be grouped by major type
+          (<literal>java</literal>, <literal>com</literal>,
+          <literal>org</literal> etc), with a blank line</para>
+        </listitem>
+
+        <listitem>
+          <para>Two blank lines between imports and class/interface
+          declaration</para>
+        </listitem>
+
+        <listitem>
+          <para>A single blank line between each method declaration, and
+          blocks of field etc</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>To set up code formatting use the Java/Code Style/Formatter
+      section in the preferences to load in the format file, using the
+      <emphasis>Import</emphasis> button, from the checked out source.</para>
+
+      <para>To set up the correct import order use the <emphasis>Java/Code
+      Style/Organize Imports</emphasis> section in the preferences to load in
+      the order file, <filename class="directory"
+      moreinfo="none">nof.importorder</filename>, from the checked out
+      source.</para>
+
+      <section>
+        <title>Naming</title>
+
+        <para>All names should be written in English and be full words.</para>
+
+        <para>Abbreviation should be avoided unless they are very well known
+        and unambiguous. For example use <emphasis>international</emphasis>
+        not <emphasis>i18n</emphasis>, and <emphasis>position</emphasis> not
+        <emphasis>pos</emphasis>.</para>
+
+        <para>Abbreviations and acronyms should not be uppercase when used as
+        name, and should only be used when it is common, such as XML, SQL, POP
+        etc. Using all uppercase for the base name conflicts with the naming
+        conventions below and reduces readability.</para>
+
+        <programlisting format="linespecific">XmlObjectStore(); // NOT: XMLObjectstore</programlisting>
+
+        <para>Where there are complementary concepts, then complementary names
+        should be used, such as: start/stop; next/previous; begin/end,
+        open/close, show/hide. This helps to indicate that things are
+        related.</para>
+
+        <para>Package naming</para>
+
+        <para>All package names should be in lower case.</para>
+
+        <programlisting format="linespecific">org.apache.isis.application</programlisting>
+
+        <para>Class naming</para>
+
+        <para>All class names should be nouns and written in camel case.
+        Interfaces should <emphasis role="strong">not</emphasis> have an 'I'
+        placed in front of it.</para>
+
+        <programlisting format="linespecific">ObjectAdapter, Configuration</programlisting>
+
+        <para>Method naming</para>
+
+        <para>Method names should be verbs and written in mixed case starting
+        with lower case.</para>
+
+        <programlisting format="linespecific">isActionStatic(), prepare()</programlisting>
+
+        <para>Variable naming</para>
+
+        <para>Variable names must be in mixed case starting with lower case
+        (never an underscore). Variables should have full sensible name,
+        reflecting their purpose.</para>
+
+        <programlisting format="linespecific">count, target, previousOid</programlisting>
+
+        <para>Short variable names should only be used within small blocks of
+        codes or short method, but never for parameter names.</para>
+
+        <para>Constant naming</para>
+
+        <para>Constants' names should be all uppercase with an underscore
+        between words.</para>
+
+        <programlisting format="linespecific">isActionStatic(), prepare()</programlisting>
+
+        <para>Property naming</para>
+
+        <para>Accessor and mutator method names should be prefixed with
+        <emphasis>get</emphasis> and <emphasis>set</emphasis>.</para>
+
+        <programlisting format="linespecific">getActionName(), setDelay(int time)</programlisting>
+
+        <para>Boolean methods and variables</para>
+
+        <para>Boolean variable and accessor method names should be prefixed
+        with <emphasis>is</emphasis>, <emphasis>can</emphasis>,
+        <emphasis>has</emphasis> or <emphasis>should</emphasis>.</para>
+
+        <programlisting format="linespecific">isDirty(), canSave(ObjectAdapter object)</programlisting>
+
+        <para>Mutator methods for boolean variables should use a
+        <emphasis>set</emphasis> prefix.</para>
+
+        <programlisting format="linespecific">setDirty(), setInitialised(boolean initialised)</programlisting>
+      </section>
+    </section>
+
+    <section>
+      <title>Constants</title>
+
+      <para>Use constants instead of fixed phrases, except for messages, debug
+      information and the like. For example:</para>
+
+      <programlisting format="linespecific">if (name.equals(OPENING_TAG)) // Not if (name.equals("&lt;"))</programlisting>
+
+      <para>Also use constants instead of magic numbers. For example:</para>
+
+      <programlisting format="linespecific">if (line &gt; MAXIMUM_LINES) // Not if (line &gt; 5)</programlisting>
+    </section>
+
+    <section>
+      <title>Code conventions</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>Classes, not packages, should be imported - no * - use
+          the<emphasis> organise imports</emphasis> option to set up
+          imports</para>
+        </listitem>
+
+        <listitem>
+          <para>Unless there is a clash of class names, fully qualified names
+          should not be used in the code</para>
+        </listitem>
+
+        <listitem>
+          <para>No uneeded imports should be left in the code - this can be
+          ensured via the <emphasis>organise imports</emphasis> option</para>
+        </listitem>
+
+        <listitem>
+          <para>Comments should not contain any JavaDoc tags that are not
+          complete, including <emphasis>@param</emphasis> markers that simply
+          echo the name of the parameter - these are often left in by the code
+          templates</para>
+        </listitem>
+
+        <listitem>
+          <para>The end of each file should end with <emphasis>// Copyright
+          (c) [[NAME]] Group Ltd.\n</emphasis> on a line by itself</para>
+        </listitem>
+
+        <listitem>
+          <para>Where possible use final variables</para>
+        </listitem>
+
+        <listitem>
+          <para>All parameters should be marked as final</para>
+        </listitem>
+
+        <listitem>
+          <para>Do not check in commented-out code, use the repository to
+          revert to previous versions</para>
+        </listitem>
+
+        <listitem>
+          <para>Add TODO, REVIEW, FIXME tasks to code wherever work is to be
+          done on the code that you are not going to do now</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A code template is also provided with the NOF code to provide
+      consistent formatting and the exclusion of unwanted comments that are
+      normally added by the IDE. This is set up in the <emphasis>Java/Code
+      Style/Code Templates</emphasis> section of the preferences by loading in
+      the file <filename class="directory"
+      moreinfo="none">codetemplates.xml</filename> file from the root of the
+      source tree.</para>
+    </section>
+
+    <section>
+      <title>Code order</title>
+
+      <para>Declarations within each class should follow the standard order,
+      with each set ordered alphabetically. To avoid problems with static
+      initialization set up dependent static variables within a static block.
+      This order can be specified in the preferences under
+      <emphasis>Java/Appearance/Members Sort Order</emphasis>, and the code
+      can be ordered using the <emphasis>Source/Sort Members</emphasis>
+      options.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Typed (inner classes etc)</para>
+        </listitem>
+
+        <listitem>
+          <para>Static field</para>
+        </listitem>
+
+        <listitem>
+          <para>Static initializers</para>
+        </listitem>
+
+        <listitem>
+          <para>Static methods</para>
+        </listitem>
+
+        <listitem>
+          <para>Initializers</para>
+        </listitem>
+
+        <listitem>
+          <para>Fields</para>
+        </listitem>
+
+        <listitem>
+          <para>Constructors</para>
+        </listitem>
+
+        <listitem>
+          <para>Methods</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This order can be set up in the <emphasis>Java/Appearance/Member
+      Sort Order</emphasis> section of the preferences. There is no import
+      facility so it needs to be set up by hand as shown below.</para>
+    </section>
+
+    <section>
+      <title>Package naming</title>
+
+      <para>The NOF is released under the domain
+      <emphasis>isis.apache.org</emphasis>, so all packages start with
+      <literal>org.apache.isis</literal>. The main groupings are then:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>noa - the NO architecture</para>
+        </listitem>
+
+        <listitem>
+          <para>applib - the application library for building independent
+          domain models</para>
+        </listitem>
+
+        <listitem>
+          <para>nof - the core framework</para>
+        </listitem>
+
+        <listitem>
+          <para>nos - the components for building NO systems</para>
+        </listitem>
+
+        <listitem>
+          <para>example - example DOMs</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Within the components (nos) there are currently the following
+      subgoupings:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>client - users of the framework, such as viewers and the
+          testing framework</para>
+        </listitem>
+
+        <listitem>
+          <para>store - object store implementations</para>
+        </listitem>
+
+        <listitem>
+          <para>remote - remoting code for distributed processing</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+</article>

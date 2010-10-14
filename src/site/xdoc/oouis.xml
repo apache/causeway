@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+  <properties>
+    <title>Object Oriented User Interfaces</title>
+  </properties>
+
+  <body>
+<section name="Object Oriented User Interfaces">
+<h3>The 'drag and drop' user interface</h3><img align="left" alt="" class="wrap-left"
+    src="images/dnd-ui.png" style="margin:0 20px 20px 0;" /><p>In this
+    application, each icon represents a domain
+    object. Double-clicking on an object opens a view showing its properties
+    and collections contained, many of which will contain references to other
+    domain objects. Right-clicking on any object will give the user a pop-up
+    menu of actions that they can perform.</p>
+
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+
+<h3>The HTML user
+    interface</h3><img align="right" alt="" class="wrap-right"
+    src="images/html-ui.png" style="margin:0 0 0 20px;" /><p>This screenshot
+    shows the same application being used through a pure HTML user interface.
+    The object's properties are on the right, with the action menu on the
+    left. This user interface was also created 100% automatically from the 
+    same domain object model. The HTML user interface makes
+    it easy to customise the look of an application (merely by editing the
+    Cascading Style Sheet), and meets the most stringent accessibility
+    guidelines, but it is not as 'expressive' as the interface provided by
+    Isis' Drag and Drop viewer.  They are both examples, though, of <a
+    href="http://en.wikipedia.org/wiki/Object-oriented_user_interface">
+    object-oriented user interfaces</a>.</p>
+</section>
+
+  </body>
+</document>

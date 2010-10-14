@@ -1,0 +1,68 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+Background Material
+
+ <Apache Isis> is based on the combining of an earlier framework, the 
+ <[[NAME]] Framework for Java> with a number of sister projects).  Much 
+ of the material that related to those frameworks/projects is relevant to 
+ Isis.
+
+* Further Reading
+
+ Relating mostly to the [[NAME]] pattern:
+ 
+ * a {{{./isis-pattern.html}general introduction}} to the pattern
+ 
+ * a discussion on the empowering nature of {{{./oouis.html}object oriented UIs}} generated
+   by [[NAME]] systems
+ 
+ * on the {{{./isis-pattern-benefits.html}benefits}} of using a framework that
+   implements the [[NAME]] pattern
+
+ * about a substantial real-world {{{./isis-case-study.html}case study}} of
+   a government system that uses the [[NAME]] pattern
+   
+  [] 
+
+* Screencasts and Movies
+
+  A number of screencasts and movies were captured about Isis' forerunner, the
+  <[[NAME]] Framework>.  View them to:
+
+ * see how an example application can run with {{{./nof-expenses-movies.html}different UIs}} 
+ 
+ * learn a little more about how the [[NAME]] {{{./nof-tutorial-movies.html}GUI relates to the code}} by way of some tutorial movies
+
+ * see how to use the {{{./nof-maven-archetype.html}Maven archetype}} to start writing your own [[NAME]] app
+
+ * watch how to start {{{./nof-programming-screencasts.html}programming}} your own [[NAME]] applications
+
+  [] 
+
+* Books and Academia
+
+  A couple of {{{./isis-books.html}books}} have been written about the <[[NAME]] Framework for Java>:
+  
+  * <Domain Driven Design using [[NAME]], Dan Haywood, Pragmatic Bookshelf 2009>
+  
+  * <[[NAME]], Richard Pawson and Robert Matthews, Wiley 2002> (also available online {{{./book}here}}).
+  
+  [] 
+
+  In addition, you may want to check out Richard Pawson's {{{./Pawson-[[NAME]]-Objects-thesis.pdf}PhD Thesis}} on [[NAME]].

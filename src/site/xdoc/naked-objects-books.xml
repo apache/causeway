@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE document PUBLIC "-//Apache Software Foundation//DTD XDOC 1.0//EN"
+"http://maven.apache.org/dtd/xdoc_1_0.dtd">
+<document>
+	<properties>
+		<title>Introduction to [[NAME]]</title>
+		<author email="isis-contributors@lists.sourceforge.net">[[NAME]] Contributors</author>
+	</properties>
+
+	<body>
+		<section name="">
+
+			<h3>[[NAME]]</h3>
+
+			<p>
+				<i>Richard Pawson and Robert Matthews, Wiley 2002</i>
+			</p>
+
+			<img align="left" alt="[[NAME]]" class="wrap-left"
+				src="images/isis-book.jpg" style="margin:0 20px 20px 0; border-style:solid; border-width:1px;" />
+			<p>This book describes the original ideas of [[NAME]]. Although
+				based on a very early version of the framework, it's still
+				definitely worth a read (and beautifully produced).</p>
+
+			<p>Amazon quotes: (avg 5 stars)</p>
+			<ul style="padding-left: 20px">
+				<li>
+					<cite>Brilliant argument and toolkit for information systems</cite>
+				</li>
+				<li>
+					<cite>Most thoughtful and beautiful technical book I have read
+					</cite>
+				</li>
+				<li>
+					<cite>Excellent presentation of an innovative practical idea</cite>
+				</li>
+			</ul>
+
+			<p>
+				The book is freely available online
+				<a href="book/">here</a>
+				. Or, you can
+				get a hardcopy of the book at
+				<a
+					href="http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0470844205.html">Wiley (publisher)</a>
+				and
+				<a
+					href="http://www.amazon.com/[[NAME]]-Objects-Richard-Pawson/dp/0470844205">Amazon</a>
+				.
+			</p>
+
+			<p>&nbsp;</p>
+			<p>&nbsp;</p>
+			
+			<h3>Domain Driven Design using [[NAME]]</h3>
+
+			<p>
+				<i>Dan Haywood, Pragmatic Bookshelf 2009</i>
+			</p>
+
+			<img align="left" alt="Domain Driven Design using [[NAME]]"
+				class="wrap-left" src="images/dhnako.jpg"
+				style="margin:0 20px 20px 0; border-style:solid; border-width:1px;" />
+
+			<p>This more recent book draws the parallel between domain-driven
+				design and [[NAME]] (4.0). In the spirit of the Pragmatic
+				Bookshelf, it's a practical, hands-on
+				sort of book, building up a
+				case study as it goes and encouraging you to
+				build your own app as
+				you go.</p>
+
+			<p>Amazon quotes: (avg 4.5 stars)</p>
+			<ul style="padding-left: 20px">
+				<li>
+					<cite>Important Contribution to Domain-Driven Design</cite>
+				</li>
+				<li>
+					<cite>The easy-to-learn [[NAME]] Framework .. provide[s] a
+						masterful exposition on DDD</cite>
+				</li>
+				<li>
+					<cite>Clear and passionate book about a great subject</cite>
+				</li>
+				<li>
+					<cite>Excellent book and a great framework</cite>
+				</li>
+			</ul>
+
+			<p>
+				You can find the book at
+				<a
+					href="http://www.pragprog.com/titles/dhnako/domain-driven-design-using-isis">Pragmatic Bookshelf (publisher)</a>
+				and
+				<a
+					href="http://www.amazon.com/Domain-Driven-Design-Objects-Pragmatic-Programmers/dp/1934356441">Amazon.com</a>
+				.
+			</p>
+
+
+
+		</section>
+	</body>
+</document>

@@ -1,0 +1,428 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+
+  <articleinfo>
+    <title></title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>a [[NAME]] application for enterprise use</title>
+
+    <para>Assuming that you have developed your domain model and tested it as
+    a standalone prototype (previous section), this section describes the
+    process of deploying the domain object model as an enterprise
+    application.</para>
+
+    <section>
+      <title>Running Client-Server over Sockets</title>
+
+      <section>
+        <title>Running [[NAME]] as a socket server</title>
+
+        <literallayout>$ isis.sh --type server --viewer xstream-sockets --persistor xml</literallayout>
+
+        <para>This command runs [[NAME]] as a socket server. The
+        <literal>viewer</literal> command line option specifies that the
+        server will listen for requests using basic TCP/IP plain sockets with
+        the XStream marshalling mechanism. The <literal>persistor</literal>
+        command line option indicates to use XML object store as the
+        persistence mechanism.</para>
+      </section>
+
+      <section>
+        <title>Running [[NAME]] as a socket client</title>
+
+        <literallayout>$ isis.sh --type client --viewer dnd --connector xstream-sockets </literallayout>
+
+        <para>This commands starts up [[NAME]] as a client, using the DND
+        viewer. The <literal>connector</literal> command line option indicates
+        to use the XStream marshalling mechanism over basic TCP/IP sockets. As
+        we are now running a multi-user system more than one client can be
+        started up.</para>
+
+        <para>To allow the client to connect to a remote server the
+        <literal>address</literal> property needs to be specified. For
+        simplicity this can be added the <filename class="directory"
+        moreinfo="none">isis.properties</filename> file, but it may
+        alternatively be placed in a separate file called <filename
+        class="directory"
+        moreinfo="none">transport_sockets.properties</filename>.</para>
+
+        <programlisting format="linespecific">isis.transport.sockets.host = server.mycompanyname.com</programlisting>
+      </section>
+    </section>
+
+    <section>
+      <title>Running Client-Server over HTTP</title>
+
+      <section>
+        <title>Running [[NAME]] as a HTTP server</title>
+
+        <literallayout>$ isis.sh --type server --viewer encoding-http --persistor xml</literallayout>
+
+        <para>This command runs [[NAME]] as a server. The
+        <literal>viewer</literal> command line parameter specifies that the
+        server will listen using http using the encoding marshalling
+        mechanism. The <literal>persistor</literal> property XML object store
+        as the persistence mechanism - a very simple persistence mechanism
+        useful for initial prototyping. (In fact, the XML object store is the
+        default persistence mechanism, so this property may be omitted from
+        the command).</para>
+
+        <para>Alternatively the remoting servlet
+        <literal>EncodingOverHttpRemotingServlet</literal> can be added to the
+        <filename moreinfo="none">web.xml</filename> in the webapp project and
+        the [[NAME]] run as a web app, see below.</para>
+      </section>
+
+      <section>
+        <title>Running [[NAME]] as socket client</title>
+
+        <literallayout>$ isis.sh --type client --viewer dnd --connector encoding-http </literallayout>
+
+        <para>This commands starts up [[NAME]] as a client, using the DND
+        viewer. The <literal>connector</literal> command line option indicates
+        to use submit requests using http and with the encoding marshalling
+        mechanism. Again, as we are now running a multi-user system more than
+        one client can be started up.</para>
+
+        <para>To allow the client to connect to a remote server the
+        <literal>address</literal> property needs to be specified. For
+        simplicity this can be added the <filename class="directory"
+        moreinfo="none">isis.properties</filename> file, but it may
+        alternatively be placed in a separate file called <filename
+        class="directory"
+        moreinfo="none">transport_http.properties</filename>.</para>
+
+        <programlisting format="linespecific">isis.transport.http.url = http://server.mycompanyname.com:8080/remoting.svc</programlisting>
+      </section>
+    </section>
+
+    <section>
+      <title>Running as a WebApp</title>
+
+      <para>[[NAME]] provides three different ways to run as a
+      webapp:</para>
+
+      <section>
+        <title>Using isis.sh</title>
+
+        <literallayout>$ isis.sh --type server --viewer html --persistor xml
+2007-08-09 12:37:13.671::INFO:  Logging to STDERR via org.mortbay.log.StdErrLog
+2007-08-09 12:37:13.801::INFO:  jetty-6.0.2
+2007-08-09 12:37:13.954::INFO:  Started SocketConnector @ 0.0.0.0:8080
+</literallayout>
+
+        <para>This command runs the [[NAME]] with the HTML viewer,
+        allowing multiple clients to access it via a browser. As for the
+        standalone version the users need to access the URL
+        http://<emphasis>server/logon.app</emphasis> to access the log on
+        page.</para>
+      </section>
+
+      <section>
+        <title>Using WebServer bootstrap</title>
+
+        <para>The next mechanism uses the
+        <literal>org.apache.isis.webserver.WebServer</literal> bootstrap to
+        run [[NAME]]. This loads up whatever is in the webapp project's
+        <filename moreinfo="none">web.xml</filename> file.</para>
+
+        <para><emphasis>TODO: we don't have a webserver.sh script to show this
+        in action; we probably should.</emphasis></para>
+
+        <para>Ordinarily the web.xml will be configured to run the same HTML
+        viewer, so the end result will be the same. However, if necessary the
+        remoting servlet can also be configured</para>
+      </section>
+
+      <section>
+        <title>Deploying as a WAR</title>
+
+        <para>The final mechanism is to use Maven to package up the webapp
+        project as a WAR file, packaging up whatever is in the web.xml file.
+        As above, ordinarily the web.xml will be configured to run the same
+        HTML viewer, so the end result will be the same. However, if necessary
+        the remoting servlet can also be configured</para>
+
+        <para>Packaging up is done using:</para>
+
+        <literallayout>$ cd webapp
+$ mvn clean package</literallayout>
+
+        <para>This should result in a WAR file in <filename
+        moreinfo="none">target</filename> directory. This can be deployed to
+        an existing servlet containerd</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Setting up perspectives</title>
+
+      <para>Perspectives allow the set of services available to a user (eg as
+      icons in the DnD viewer) to be customized for that user. Since these
+      services represent the "start points" for the user to interact with the
+      domain model, they in a sense define an application on a per-user
+      basis.</para>
+
+      <para>The perspectives are stored in user-profiles, which are a
+      persistence mechanism independent of the object store. (The intent is
+      for user profiles to store additional information for use by viewers,
+      for example allowing a user to reskin an application or change colors or
+      fonts. As of NOF 4.0 the functionality provided is still limited,
+      however).</para>
+
+      <para>The key here is that if a user logs in and no perspective exists
+      for that user then one will be created for them. The new perspective
+      will be a copy of the 'template' perspective, or, if none was defined, a
+      perspective containing all the known services. To create a template
+      perspective add a perspective fixture that calls
+      <literal>saveAsDefault()</literal>, rather than
+      <literal>saveForUser()</literal> for a named user, as shown
+      below.</para>
+
+      <programlisting format="linespecific">public class PerspectivesFixture extends UserProfileFixture {
+    @Override
+    protected void installProfiles() {
+        Profile profile = newUserProfile();
+        Perspective perspective = profile.newPerspective("ECS");
+        perspective.addToServices(LocationFactory.class);
+        perspective.addToServices(CustomerRepository.class);
+        perspective.addToServices(PaymentMethodFactory.class);
+        
+        saveAsDefault(profile);
+    }
+}
+</programlisting>
+
+      <para>With that set up, when a new user now logs in they will see three
+      service icons on the screen for locations, customers and payment
+      methods. On the drag and drop user interface the user can add and remove
+      services from their perspective. To remove a service icon right-click on
+      the grey border and select the close option. To add a service select the
+      Services... option from the application menu (accessed by right-clicking
+      on the application background) and drag the required service onto the
+      desktop. Unfortunately there is no similar mechanism available on the
+      HTML user interface so you will need to modify the created perspectives
+      via the DND UI.</para>
+    </section>
+
+    <section>
+      <title>Adding authentication and authorization</title>
+
+      <para><emphasis>TODO: this material seems to repeat a lot of what is in
+      "managing_security", should be merged and simplified.</emphasis></para>
+
+      <para></para>
+
+      <para>Starting [[NAME]] requires a user name and password . (The
+      exception is when running in exploration mode, which uses default
+      values). The simplest way to specify the list of user names and
+      passwords is in a passwords file.</para>
+
+      <section>
+        <title>Authentication using a passwords file</title>
+
+        <para>Create a file called <filename class="directory"
+        moreinfo="none">password</filename>s, and place into the <filename
+        class="directory" moreinfo="none">config</filename> directory as the
+        following example shows.</para>
+
+        <literallayout>config/
+   passwords
+</literallayout>
+
+        <para>The following example shows how user names (sven and dick) and
+        corresponding passwords (passwd1 and passwd2) should be specified in
+        the password file.</para>
+
+        <programlisting format="linespecific">sven:passwd1
+dick:passwd2</programlisting>
+      </section>
+
+      <section>
+        <title>Authorization using Allow and/or Disallow files</title>
+
+        <para>Authorization allows access to actions and properties to be
+        controlled by configuration. Authorization is entirely optional and is
+        disabled by default - in which case every user is given access to all
+        actions and properties. A prerequisite for authorization is for users
+        to have roles. These should be added to the password file as
+        follows.</para>
+
+        <programlisting format="linespecific">sven:passwd1:ordinary_user
+dick:passwd2:special_user|admin</programlisting>
+
+        <para>Sven has the role 'ordinary_user', dick has the two roles
+        'special_user' and 'admin'.</para>
+
+        <para>[[NAME]] needs to be told which actions and properties are
+        authorised for which roles. The simplest way to do this is in a file
+        i.e. <filename class="directory" moreinfo="none">allow</filename> in
+        the config directory.</para>
+
+        <literallayout>config/
+   <emphasis role="strong">password</emphasis>
+      <emphasis role="strong">allow</emphasis>
+   </literallayout>
+
+        <para>Each entry in the <filename class="directory"
+        moreinfo="none">allow</filename> file specifies either a class, or a
+        particular action or property within a class, together with the roles
+        that are allowed to access it. E.g.</para>
+
+        <literallayout>example.dom.PhoneNumber#Number:ordinary_user|special_user
+example.dom.Contact#Phones:ordinary_user|special_user
+example.dom.Contact#FullName:ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository#FindByTitle(java.lang.String):ordinary_user|special_user
+example.dom.PhoneNumber#Type:ordinary_user|special_user
+example.dom.Contact#KnownAs:ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository#NewPersistentInstance():ordinary_user|special_user
+example.dom.Contact#CreatePhone():special_user
+org.apache.isis.nof.core.service.SimpleRepository#NewTransientInstance():ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository#AllInstances():ordinary_user|special_user
+</literallayout>
+
+        <para>The above file allows 'example.dom.Contact#CreatePhone()' only
+        for users with role 'special_user' all other actions and properties
+        are allowed for roles 'ordinary_user' and 'special_user'. A different,
+        terser implementation of this would be to use separate <filename
+        class="directory" moreinfo="none">allow</filename> and <filename
+        class="directory" moreinfo="none">disallow</filename> files, or
+        example, the <filename class="directory"
+        moreinfo="none">allow</filename> file:</para>
+
+        <literallayout>example.dom.PhoneNumber:ordinary_user|special_user
+example.dom.Contact:ordinary_user|special_user
+org.apache.isis.nof.core.service.SimpleRepository:ordinary_user|special_user
+</literallayout>
+
+        <para>and the <filename class="directory"
+        moreinfo="none">disallow</filename> file:</para>
+
+        <literallayout>example.dom.Contact#CreatePhone():ordinary_user</literallayout>
+
+        <para>For more details, see the section on Managing Security.</para>
+      </section>
+    </section>
+
+    <section>
+      <title>Configuration</title>
+
+      <para>No configuration is necessary for the simplest (file-based)
+      authentication mechanism. For authorization the reflector needs to be
+      decorated to look up the permissions every time the framework needs
+      information about the visibility of fields and menus. To include the
+      decorator add the following to a properties file.</para>
+
+      <programlisting format="linespecific">isis.reflector.facet-decorators=file-security</programlisting>
+
+      <para>If a <filename class="directory"
+      moreinfo="none">disallow</filename> file is to be used, this needs to be
+      specified explicitly (the <filename class="directory"
+      moreinfo="none">allow</filename> file will be picked up
+      automatically):</para>
+
+      <programlisting format="linespecific">isis.security.blacklist.file=config/disallow</programlisting>
+    </section>
+
+    <section>
+      <title>Adding support for internationalisation</title>
+
+      <para>All the text that appears to the user comes from the domain object
+      model. Any literal text used within the code may be externalised, and
+      localised using the standard Java mechanism of resource bundles. However
+      as all field and menu names are derived from the method names the
+      framework provides a mechanism to adapt these names using resource
+      bundles as well.</para>
+
+      <section>
+        <title>Localisation files</title>
+
+        <para>Create a file for each required language, e.g., <filename
+        class="directory" moreinfo="none">i18n_en_GB.properties</filename> for
+        English in Great Britain, and place them into the project such that
+        they will be included in the class path. For the project structures we
+        have already seen the files could be added to the <filename
+        class="directory" moreinfo="none">resources</filename> directory, as
+        the following example shows.</para>
+
+        <literallayout>resources/
+   <emphasis role="strong">i18n_en_GB.properties
+   i18n_de_DE.properties
+   i18n_fr_FR.properties</emphasis>
+   </literallayout>
+
+        <para>The following example is part of one of those translation file
+        and shows how property and action names and descriptions may be
+        specified.</para>
+
+        <programlisting format="linespecific">example.dom.Contact.property.Phone.name=Téléphone
+example.dom.Contact.action.NewPhone.name=Nouveau téléphone
+example.dom.Contact.property.FullName.description=Le nom complet du client</programlisting>
+
+        <para>For more details on defining localisation files, see section
+        about <ulink url="./configuration.html#i18n-files">I18N
+        files</ulink>.</para>
+      </section>
+
+      <section>
+        <title>Configuration</title>
+
+        <para>The reflector needs to be decorated with a facet decorator to
+        look up the translated names every time the framework needs
+        information about the fields and menus. To include the decorator add
+        the following to a properties file.</para>
+
+        <programlisting format="linespecific">isis.reflector.facet-decorators=resource-i18n</programlisting>
+
+        <para>If the application is being accessed via the web (html) viewer,
+        then the server will need to perform the localisation, so the above
+        property should be included in one of isis.properties read by
+        the server; if the application is being accessed by a client (e.g. the
+        DND viewer) then the localisation will be performed within the client,
+        and the property should be specified in one of the properties files
+        read by the client e.g. <filename class="directory"
+        moreinfo="none">facet-decorator_i18n.properties</filename>.</para>
+
+        <para>The locale will be picked up automatically from the machine on
+        which the code is executing. You may override this by specifying the
+        <ulink url="./configuration.html#locale">locale</ulink> in a
+        properties file.</para>
+      </section>
+    </section>
+  </section>
+</article>

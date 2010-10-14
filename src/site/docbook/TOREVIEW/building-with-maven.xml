@@ -1,0 +1,399 @@
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE article PUBLIC "-//OASIS//DTD Simplified DocBook XML V1.1//EN"
+"http://www.oasis-open.org/docbook/xml/simple/1.1/sdocbook.dtd">
+<article>
+  <articleinfo>
+    <title></title>
+
+    <author>
+      <firstname></firstname>
+
+      <surname></surname>
+
+      <affiliation>
+        <orgname></orgname>
+      </affiliation>
+    </author>
+
+    <pubdate></pubdate>
+  </articleinfo>
+
+  <section>
+    <title>Building a [[NAME]] application with Maven</title>
+
+    <section>
+      <title>Creating new applications using Maven archetypes</title>
+
+      <para>Using Maven archetype plugin we can generate a new [[NAME]]
+      application very quickly. These are multi-moduled projects with separate
+      sections for the domain code, fixtures, web interfaces and so on.</para>
+
+      <para>One option is to create the archetype from the commandline. Note
+      that if you are using Eclipse and have installed the m2eclipse plugin
+      then it provides a dialog to create the project from an archetype; this
+      is discussed below.</para>
+
+      <para><emphasis>TODO: update the listing below, it is out of date. The
+      archetype to use is called
+      'org.apache.isis:application-archetype'.</emphasis></para>
+
+      <literallayout>[rcm@localhost ~]$ <emphasis role="bold">mvn archetype:generate -DarchetypeCatalog=http://isis.apache.org</emphasis>
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'archetype'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Default Project
+[INFO]    task-segment: [archetype:generate] (aggregator-style)
+[INFO] ------------------------------------------------------------------------
+[INFO] Preparing archetype:generate
+[INFO] No goals needed for project - skipping
+[INFO] Setting property: classpath.resource.loader.class =&gt; 'org.codehaus.plexus.velocity.ContextClassLoaderResourceLoader'.
+[INFO] Setting property: velocimacro.messages.on =&gt; 'false'.
+[INFO] Setting property: resource.loader =&gt; 'classpath'.
+[INFO] Setting property: resource.manager.logwhenfound =&gt; 'false'.
+[INFO] [archetype:generate]
+[INFO] Generating project in Interactive mode
+[INFO] No archetype defined. Using maven-archetype-quickstart (org.apache.maven.archetypes:maven-archetype-quickstart:1.0)
+Choose archetype:
+1: local -&gt; isis-application ([[NAME]] Application (Archetype))
+2: local -&gt; isis-icons ([[NAME]] Icons (Archetype))
+3: local -&gt; htmlviewer-war ([[NAME]] WAR (Archetype))
+4: local -&gt; hibernate-support (Hibernate Support (Archetype))
+5: local -&gt; remoting-support ([[NAME]] Remoting Support (Archetype))
+Choose a number:  (1/2/3/4/5): <emphasis role="bold">1</emphasis></literallayout>
+
+      <para>To create a project from an archetype you must specify a
+      <emphasis>groupId</emphasis> and <emphasis>artifactId</emphasis>, a
+      <emphasis>version</emphasis> and a <emphasis>Java
+      package</emphasis>.</para>
+
+      <para>After choosing the archetype number and pressing enter you are
+      prompted for the project's details. The <emphasis>groupId</emphasis> is
+      an identifier representing your company/group; ours would typically be
+      "org.apache.isis" for the domain followed by a name for the group of
+      products. The <emphasis>artifactId</emphasis> identifies the projects
+      that we are creating. The <emphasis>version</emphasis> indicates how
+      mature the project is, and should be left as the default, e.g.
+      1.0-SNAPSHOT. Finally, the <emphasis>package</emphasis> is the base
+      package name used for all Java files. After these have been entered you
+      are prompted to confirm by entering Y, as shown below.</para>
+
+      <para>Be wary of using invalid names. The <emphasis>groupId</emphasis>
+      should be alphanumeric with dots to separate the words. The
+      <emphasis>artifactId</emphasis> should also be alphanumeric, with '-'
+      (hyphens) to separate the words. The <emphasis>package</emphasis> name
+      should be a valid Java package name, i.e. should have no spaces or
+      dashes. Maven does little to check these things.</para>
+
+      <literallayout>Define value for groupId: : <emphasis role="bold">org.example</emphasis>
+Define value for artifactId: : <emphasis role="bold">expenses</emphasis>
+Define value for version:  1.0-SNAPSHOT: : 
+Define value for package: : <emphasis role="bold">org.example.expenses</emphasis>
+Confirm properties configuration:
+groupId: org.example
+artifactId: expenses
+version: 1.0-SNAPSHOT
+package: org.example.expenses
+ Y: : <emphasis role="bold">y</emphasis>
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1 minute 13 seconds
+[INFO] Finished at: Thu Oct 02 20:42:50 BST 2008
+[INFO] Final Memory: 13M/247M
+[INFO] ------------------------------------------------------------------------
+</literallayout>
+
+      <para>This will create a new directory with the name of the
+      <emphasis>artifactId</emphasis>. So in this example this is <filename
+      moreinfo="none">expenses</filename> as shown below.</para>
+
+      <literallayout>expenses
+|-- pom.xml
+|-- dom
+|   |-- pom.xml
+|   `-- src
+|-- commandline
+|   |-- config
+|   |-- ide
+|   |-- pom.xml
+|   `-- src
+|-- fixture
+|   |-- pom.xml
+|   `-- src
+|-- service
+|   |-- pom.xml
+|   `-- src
+`-- webapp
+    |-- pom.xml
+    `-- src</literallayout>
+    </section>
+
+    <section>
+      <title>Building a [[NAME]] application</title>
+
+      <para>Once an archetype is created it can be built using Maven and run.
+      Build using the <emphasis>install</emphasis> goal as shown here.</para>
+
+      <literallayout>[rcm@localhost expenses]$ <emphasis role="bold">mvn clean install</emphasis>
+[INFO] Scanning for projects...
+[INFO] Reactor build order: 
+[INFO]   [[NAME]] Application
+[INFO]   Domain Model
+[INFO]   Services
+[INFO]   Fixtures
+[INFO]   Exploration
+[INFO] ------------------------------------------------------------------------
+[INFO] Building [[NAME]] Application
+[INFO]    task-segment: [clean, install]
+[INFO] ------------------------------------------------------------------------
+[INFO] [clean:clean]
+[INFO] [site:attach-descriptor]
+[INFO] [install:install]
+[INFO] Installing /home/rcm/tmp/bearingpoint/expenses/pom.xml to /home/rcm/.m2/repository/org/example/expenses/1.0-SNAPSHOT/expenses-1.0-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Domain Model
+[INFO]    task-segment: [clean, install]
+[INFO] ------------------------------------------------------------------------
+[INFO] [clean:clean]
+[INFO] Deleting directory /home/rcm/tmp/bearingpoint/expenses/dom/target
+[INFO] [resources:resources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] [compiler:compile]
+[INFO] Compiling 7 source files to /home/rcm/tmp/bearingpoint/expenses/dom/target/classes
+[INFO] [resources:testResources]
+[INFO] Using default encoding to copy filtered resources.
+:
+:
+[INFO] [resources:testResources]
+[INFO] Using default encoding to copy filtered resources.
+[INFO] [compiler:testCompile]
+[INFO] No sources to compile
+[INFO] [surefire:test]
+[INFO] No tests to run.
+[INFO] [jar:jar]
+[INFO] Building jar: /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses.jar
+[INFO] [assembly:attached {execution: default}]
+[INFO] Reading assembly descriptor: src/main/assembly/descriptor.xml
+[INFO] Processing DependencySet (output=lib)
+[INFO] Copying files to /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses-exploration-1.0-SNAPSHOT-prototype.dir
+[WARNING] Assembly file: /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses-exploration-1.0-SNAPSHOT-prototype.dir is not a regular file (it may be a directory). It cannot be attached to the project build for installation or deployment.
+[INFO] [install:install]
+[INFO] Installing /home/rcm/tmp/bearingpoint/expenses/exploration/target/expenses.jar to /home/rcm/.m2/repository/org/example/expenses-exploration/1.0-SNAPSHOT/expenses-exploration-1.0-SNAPSHOT.jar
+[INFO] 
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary:
+[INFO] ------------------------------------------------------------------------
+[INFO] [[NAME]] Application .............................. SUCCESS [6.087s]
+[INFO] Domain Model .......................................... SUCCESS [8.711s]
+[INFO] Services .............................................. SUCCESS [2.432s]
+[INFO] Fixtures .............................................. SUCCESS [2.283s]
+[INFO] Commandline ........................................... SUCCESS [10.774s]
+[INFO] ------------------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 31 seconds
+[INFO] Finished at: Tue Mar 03 11:59:50 GMT 2009
+[INFO] Final Memory: 40M/495M
+[INFO] ------------------------------------------------------------------------
+[rcm@localhost expenses]$ </literallayout>
+
+      <para>Once the project is built the results can be found in the
+      <filename moreinfo="none">exploration/target</filename> directory, which
+      contains both a zipped distribution (in this example <filename
+      moreinfo="none">expenses-exploration-1.0-SNAPSHOT-prototype.zip</filename>)
+      and an expanded distribution (again for this example, <filename
+      moreinfo="none">expenses-exploration-1.0-SNAPSHOT</filename>). Using the
+      contained script files the application can be run from the command
+      line.</para>
+
+      <literallayout>exploration
+|-- config
+|-- ide
+|-- pom.xml
+|-- src
+`-- target
+    |-- archive-tmp
+    |-- classes
+    |-- expenses-exploration-1.0-SNAPSHOT-prototype.dir
+    |   `-- expenses-exploration-1.0-SNAPSHOT
+    |       |-- config
+    |       |-- images
+    |       |-- expenses.jar
+    |       |-- isis.bat
+    |       |-- isis.sh
+    |       |-- lib
+    |-- expenses-exploration-1.0-SNAPSHOT-prototype.zip
+    |-- expenses.jar
+    `-- maven-archiver</literallayout>
+    </section>
+
+    <section>
+      <title>Using Eclipse for development</title>
+
+      <para>There are two approaches for using Eclipse in development.</para>
+
+      <para>The recommended approach is to use the Eclipse's Maven plug-in,
+      m2eclipse, obtainable from <ulink
+      url="???">http://m2eclipse.sonatype.org/</ulink>. This then allows the
+      Maven projects to be imported directly using File &gt; Import &gt; Maven
+      Projects.</para>
+
+      <para></para>
+
+      <para><emphasis>TODO: would be good to have some screenshots of using
+      m2eclipse to import projects here.</emphasis></para>
+
+      <para></para>
+
+      <para>In fact, you can use m2eclipse to create the project from the
+      archetype in a single go:</para>
+
+      <para></para>
+
+      <para><emphasis>TODO: would be good to have a screenshot of using
+      m2eclipse to generate project using archetype here.</emphasis></para>
+
+      <para></para>
+
+      <para>Alternatively you can use Maven's Eclipse plug-in to generate
+      .project and .classpath files. These can then be imported into Eclipse
+      using File &gt; Import &gt; Existing Projects. The remainder of this
+      section discusses this alternative approach; to reiterate the m2eclipse
+      approach is more straightforward and generally preferred.</para>
+
+      <literallayout>[rcm@localhost ~]$ <emphasis role="bold">cd expenses/</emphasis>
+[rcm@localhost expenses]$ <emphasis role="bold">mvn eclipse:eclipse</emphasis>
+[INFO] Scanning for projects...
+[INFO] Reactor build order: 
+[INFO]   [[NAME]] Application
+[INFO]   Domain Model
+[INFO]   Fixtures
+[INFO]   Services
+[INFO]   Exploration
+[INFO]   Hibernate Object Store
+[INFO]   Web App
+[INFO]   Client Distribution
+[INFO]   Server Distribution
+[INFO] Searching repository for plugin with prefix: 'eclipse'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building [[NAME]] Application
+[INFO]    task-segment: [eclipse:eclipse]
+[INFO] ------------------------------------------------------------------------
+[INFO] Preparing eclipse:eclipse
+:
+:
+:
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 1 minute 22 seconds
+[INFO] Finished at: Thu Oct 02 20:44:41 BST 2008
+[INFO] Final Memory: 32M/247M
+[INFO] ------------------------------------------------------------------------</literallayout>
+
+      <para>This downloads all the required libraries and creates <filename
+      moreinfo="none">.project</filename> and <filename
+      moreinfo="none">.classpath</filename> files for Eclipse to use. After
+      this is complete we can start up Eclipse and import the projects.</para>
+
+      <literallayout>[rcm@localhost expenses]$ <emphasis role="bold">eclipse -data .</emphasis></literallayout>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/eclipse-platform.png" width="40%" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The workspace starts off empty as this is a new project. First we
+      need to import the modules using the <command
+      moreinfo="none">File/Import...</command> menu. On the first page of this
+      dialog select the <emphasis role="strong">Existing Project into
+      Workspace</emphasis> option.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/eclipse-Import.png" width="40%" />
+        </imageobject>
+      </mediaobject>
+
+      <para>After selecting the same directory that we are running in, then
+      you select all the modules in the list as Eclipse projects to
+      import.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/eclipse-Import2.png" width="40%" />
+        </imageobject>
+      </mediaobject>
+
+      <para>All the libraries are referenced using a the variable M2_REPO, so
+      this needs to be set up in the Classpath variables in the main
+      preferences. In the <emphasis>Classpath Variable</emphasis> tab press
+      the <command moreinfo="none">New...</command> button.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/eclipse-Preferences%20.png" width="40%" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Enter the name <emphasis>M2_REPO</emphasis> and find the path to
+      <filename moreinfo="none">.m2/repository</filename>.</para>
+
+      <para>Now to run the application select <command moreinfo="none">Run/Run
+      Configuration...</command> on the commandline project and browse for the
+      class <literal>org.apache.isis.runtime.Isis</literal>. With
+      that selected press the <command moreinfo="none">Run</command>
+      button.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/eclipse-Run%20Configurations%20.png"
+                     width="40%" />
+        </imageobject>
+      </mediaobject>
+
+      <para>After a short while the login dialog should appear. Logon with a
+      valid user name and password, like <emphasis>sven</emphasis> and
+      <emphasis>pass</emphasis>.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/example-Login.png" width="12%" />
+        </imageobject>
+      </mediaobject>
+
+      <para>When the application has finished starting up you should the
+      services on the DnD user interface.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/example-screen.png" width="40%" />
+        </imageobject>
+      </mediaobject>
+
+      <para></para>
+    </section>
+  </section>
+</article>
