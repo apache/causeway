@@ -18,6 +18,10 @@
     	Provides file based persistence for a standalone application using a NOSQL database.
     </description>
 
+    <properties>
+        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+    </properties>
+
     <build>
         <plugins>
             <plugin>

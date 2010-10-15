@@ -17,8 +17,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
-
+        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        
 		<docbkx.title>Apache Isis Headless Viewer and Unit Testing</docbkx.title>
 		<docbkx.outputName>isis-headless</docbkx.outputName>
 	</properties>

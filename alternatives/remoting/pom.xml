@@ -16,23 +16,16 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<pdf.title>Overview</pdf.title>
-    	<pdf.outputName>${project.artifactId}-overview</pdf.outputName>
-
-    	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
-
-		<checkstyle.configLocation>../src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
-		<pmd.ruleset>../src/main/pmd/pmd.xml</pmd.ruleset>
+        <trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
 	</properties>
-
 
 	<modules>
 		<module>common</module>
-		<module>transport-http</module>
-		<module>transport-sockets</module>
 		<module>marshalling-xstream</module>
 		<module>marshalling-encode</module>
 		<module>marshalling-serialize</module>
+		<module>transport-http</module>
+		<module>transport-sockets</module>
 	</modules>
 	
 	<reporting>

@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>claims-webapp</artifactId>
-	<name>Example Claims Web Application</name>
+	<name>Example Claims WebApp (HTML)</name>
     
 	<packaging>war</packaging>
 

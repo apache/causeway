@@ -1,98 +1,104 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>isis-parent</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis</groupId>
+        <artifactId>isis-parent</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-	<artifactId>defaults</artifactId>
+    <artifactId>defaults</artifactId>
 
-	<name>Isis Defaults</name>
-	
-	<description>
+    <name>Isis Defaults</name>
+
+    <description>
 		Default implementations for core APIs.
 	</description>
 
-	<packaging>pom</packaging>
+    <packaging>pom</packaging>
 
-	<properties>
-    	<pdf.title>Overview</pdf.title>
-    	<pdf.outputName>${project.artifactId}-overview</pdf.outputName>
+    <properties>
+        <trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
 
-    	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
+        <docbkx.title>Apache Isis Default Implementations</docbkx.title>
+        <docbkx.outputName>apache-isis-defaults-${project.version}</docbkx.outputName>
+    </properties>
 
-		<checkstyle.configLocation>../src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
-		<pmd.ruleset>../src/main/pmd/pmd.xml</pmd.ruleset>
-	</properties>
+    <modules>
+        <module>bytecode</module>
+        <module>security</module>
+        <module>objectstore</module>
+        <module>progmodel</module>
+    </modules>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <inherited>true</inherited>
+                <reportSets>
+                    <reportSet>
+                        <inherited>true</inherited>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>dependency-convergence</report>
+                            <report>plugins</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>core</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.defaults</groupId>
+                <artifactId>bytecode</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.defaults</groupId>
+                <artifactId>progmodel</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.defaults</groupId>
+                <artifactId>objectstore</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.isis.defaults</groupId>
+                <artifactId>security</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
 
 
-	<modules>
-		<module>bytecode</module>
-		<module>security</module>
-		<module>objectstore</module>
-		<module>progmodel</module>
-	</modules>
-	
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<inherited>true</inherited>
-				<reportSets>
-					<reportSet>
-						<inherited>true</inherited>
-						<reports>
-							<report>dependencies</report>
-							<report>dependency-convergence</report>
-							<report>plugins</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-		</plugins>
-	</reporting>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>core</artifactId>
-				<version>0.1-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			
-			<dependency>
-				<groupId>org.apache.isis.defaults</groupId>
-				<artifactId>bytecode</artifactId>
-				<version>0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.defaults</groupId>
-				<artifactId>progmodel</artifactId>
-				<version>0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.defaults</groupId>
-				<artifactId>objectstore</artifactId>
-				<version>0.1-SNAPSHOT</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.apache.isis.defaults</groupId>
-				<artifactId>security</artifactId>
-				<version>0.1-SNAPSHOT</version>
-			</dependency>
-
-
-		</dependencies>
-	</dependencyManagement>
+        </dependencies>
+    </dependencyManagement>
 
 </project>	
 

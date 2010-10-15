@@ -20,7 +20,7 @@
     	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
 
 		<docbkx.title>Apache Isis Application Library</docbkx.title>
-		<docbkx.outputName>isis-applib</docbkx.outputName>
+		<docbkx.outputName>isis-applib-${project.version}</docbkx.outputName>
 	</properties>
 	
 	<build>
@@ -28,18 +28,8 @@
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
             </plugin>
-		
-			<!-- this may be redundant because this module is now parented by trunk -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<preparationGoals>clean install</preparationGoals>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<tagBase>https://apache.isis.svn/svnroot/tags/applib</tagBase>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 

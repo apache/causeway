@@ -17,7 +17,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
 
 		<docbkx.title>Apache Isis HTTP Transport</docbkx.title>
 		<docbkx.outputName>isis-remoting-transport-http</docbkx.outputName>

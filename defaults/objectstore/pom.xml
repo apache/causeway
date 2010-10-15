@@ -9,7 +9,7 @@
 
 	<groupId>org.apache.isis.defaults</groupId>
 	<artifactId>objectstore</artifactId>
-	<name>Default ObjectStore (in-memory)</name>
+	<name>Default ObjectStore (In-Memory)</name>
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>

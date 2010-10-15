@@ -7,7 +7,7 @@
     <artifactId>library</artifactId>
     <version>0.1-SNAPSHOT</version>
 
-    <name>Scimpi Demo Library (all-in-one)</name>
+    <name>Example Library (Scimpi) (all-in-one)</name>
 
     <packaging>war</packaging>
 

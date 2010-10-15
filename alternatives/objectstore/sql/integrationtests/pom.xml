@@ -20,8 +20,8 @@
         <hsqldb.version>1.8.0.10</hsqldb.version>
         <mysql.version>5.0.5</mysql.version>
 
-        <pdf.title>Configuration Guide</pdf.title>
-        <pdf.outputName>${project.artifactId}-configuration-guide</pdf.outputName>
+        <pdf.title>SQL ObjectStore Integration Tests</pdf.title>
+        <pdf.outputName>sql-objectstore-integration-tests-${project.version}</pdf.outputName>
 
         <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
     </properties>

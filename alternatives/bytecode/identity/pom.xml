@@ -14,7 +14,7 @@
 	<name>Identity Bytecode Implementation</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+    	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
 	</properties>
 
 	<dependencies>

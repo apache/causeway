@@ -2,16 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.core</groupId>
-	<artifactId>runtime</artifactId>
-	<name>Core Runtime</name>
-
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>core</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 	
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>runtime</artifactId>
+	<name>Core Runtime</name>
+
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
 	</properties>
@@ -21,7 +21,7 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<includes>
-					<include>nof-version.properties</include>
+					<include>isis-version.properties</include>
 				</includes>
 				<filtering>true</filtering>
 			</resource>

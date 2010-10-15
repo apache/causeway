@@ -37,7 +37,7 @@ final class NofMetaModel {
      * The generated XML schema references the NOF metamodel schema. This is the default location for this
      * schema.
      */
-    public static final String DEFAULT_NOF_SCHEMA_LOCATION = "nof.xsd";
+    public static final String DEFAULT_NOF_SCHEMA_LOCATION = "isis.xsd";
     /**
      * The base of the namespace URI to use for application namespaces if none explicitly supplied in the
      * constructor.

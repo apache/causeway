@@ -9,10 +9,10 @@
 
 	<groupId>org.apache.isis.alternatives.remoting</groupId>
 	<artifactId>common</artifactId>
-    <name>Remoting APIs</name>
+    <name>Remoting Common and APIs</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
 	</properties>
 
 	<dependencies>
@@ -39,7 +39,6 @@
             <artifactId>easymock</artifactId>
             <scope>test</scope>
         </dependency>
-        
 	</dependencies>
 
 </project>

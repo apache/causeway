@@ -12,8 +12,8 @@
 	<name>SQL ObjectStore Implementation</name>
 
 	<properties>
-    	<pdf.title>Configuration Guide</pdf.title>
-    	<pdf.outputName>${project.artifactId}-configuration-guide</pdf.outputName>
+    	<pdf.title>SQL ObjectStore Configuration Guide</pdf.title>
+    	<pdf.outputName>sql-objectstore-config-guide</pdf.outputName>
 
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
 	</properties>

@@ -20,15 +20,8 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<pdf.title>Overview</pdf.title>
-    	<pdf.outputName>${project.artifactId}-overview</pdf.outputName>
-
     	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
-
-		<checkstyle.configLocation>../src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
-		<pmd.ruleset>../src/main/pmd/pmd.xml</pmd.ruleset>
 	</properties>
-
 
 	<modules>
 		<module>bytecode</module>

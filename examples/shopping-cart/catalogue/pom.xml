@@ -11,7 +11,7 @@
     </parent>
 
     <artifactId>shoppingcart-catalogue</artifactId>
-    <name>Example ShoppingCart (Scimpi) Catalogue</name>
+    <name>Example ShoppingCart Catalogue (Scimpi)</name>
     
     <packaging>war</packaging>
 
