@@ -22,8 +22,8 @@
 		</menu>
 
 		<menu name="Documentation">
-			<item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName.pdf" />
-			<item name=${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
+			<item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName}.pdf" />
+			<item name="${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
 		</menu>
 
 		<menu name="Maven Reports" ref="reports" />
