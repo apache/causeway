@@ -23,7 +23,7 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkx.guideTitle}?></title>
-    <subtitle>Programmer, Configuration and Deployment Guide</subtitle>
+    <subtitle>Configuration and Deployment Guide</subtitle>
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
@@ -62,11 +62,7 @@
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-    <para>This guide is written for programmers who want to use the 
-    <emphasis>SQL Object Store</emphasis> to persist domain objects running
-    within the <emphasis>Apache Isis</emphasis> framework.  Specifically, it
-    covers how to write repository implementations, how to configure the
-    object store, and how to deploy your applications using the object store.</para>
+    <para>This guide is written for ...</para>
   </preface>
 
   <!-- main content -->

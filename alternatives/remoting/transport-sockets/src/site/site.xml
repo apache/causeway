@@ -13,15 +13,14 @@
 	</bannerRight>
 
 	<body>
-
 		<breadcrumbs>
-			<item name="Implementation" href="index.html" />
+			<item name="Sockets Transport" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="SQL ObjectStore">
+		<menu name="Sockets Transport">
 			<item name="About" href="index.html" />
 		</menu>
 
-		<menu name="Maven Reports" ref="reports" />
+		<menu name="Maven Reports" ref="reports"/>
 	</body>
 </project>

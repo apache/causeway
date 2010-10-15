@@ -16,10 +16,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
+    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+        
     	<pdf.title>Alternative Programming Models</pdf.title>
     	<pdf.outputName>alternative-progmodels-${project.version}</pdf.outputName>
-
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
 	</properties>
 
 

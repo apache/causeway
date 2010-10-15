@@ -18,7 +18,7 @@
 			<item name="Tests" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="SQL Persistor Tests">
+		<menu name="SQL ObjectStore Tests">
 			<item name="About" href="index.html" />
 		</menu>
 

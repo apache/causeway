@@ -2,26 +2,26 @@
 <project>
 
 	<bannerLeft>
-		<name>[[NAME]]</name>
+		<name>Apache Isis</name>
 		<src>../../images/banner-left.png</src>
-		<href>http://isis.apache.org/index.html</href>
+		<href>http://incubator.apache.org/isis/index.html</href>
 	</bannerLeft>
 
 	<bannerRight>
 		<src>../../images/sflogo.png</src>
-		<href>http://sourceforge.net/projects/isis</href>
+		<href>http://www.apache.org</href>
 	</bannerRight>
 
 	<body>
-
 		<breadcrumbs>
-			<item name="Implementation" href="index.html" />
+			<item name="Identity" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="SQL ObjectStore">
+		<menu name="Identity ByteCode">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
-		<menu name="Maven Reports" ref="reports" />
+		<menu name="Maven Reports" ref="reports"/>
 	</body>
 </project>

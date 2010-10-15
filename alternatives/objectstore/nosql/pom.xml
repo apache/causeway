@@ -40,6 +40,9 @@
                 </configuration>
             </plugin>
 
+            <!--
+            REVIEW: have removed, cos for some bizarre reason causes maven
+            to restart the build??? 
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
@@ -79,6 +82,7 @@
                     </execution>
                 </executions>
             </plugin>
+             -->
         </plugins>
     </build>
 

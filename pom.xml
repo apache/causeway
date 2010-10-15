@@ -47,11 +47,11 @@
         <!-- override in each module (used by locate global resources) -->
         <trunk.baseDir>${project.build.directory}/..</trunk.baseDir>
 
-        <!-- used by docbkx-maven-plugin for DocBook docs; override as required -->
+        <!-- used by docbkx-maven-plugin for DocBook guide; override as required -->
         <docbkx.guideTitle>Apache Isis</docbkx.guideTitle>
-        <docbkx.guideName>apache-isis-${project.version}</docbkx.guideName>
+        <docbkx.guideName>apache-isis</docbkx.guideName>
 
-        <!-- used by maven-pdf-plugin for site PDFS; override as required -->
+        <!-- used by maven-pdf-plugin for site PDFs; override as required -->
         <pdf.title>Apache Isis</pdf.title>
         <pdf.outputName>apache-isis-${project.version}</pdf.outputName>
 

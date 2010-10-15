@@ -17,14 +17,8 @@
 
 	<dependencies>
 		<dependency>
-        <groupId>org.apache.isis.alternatives.progmodel</groupId>
+            <groupId>org.apache.isis.alternatives.progmodel</groupId>
 			<artifactId>headless-applib</artifactId>
-        </dependency>
-		<dependency>
-        <groupId>org.apache.isis.alternatives.progmodel</groupId>
-			<artifactId>headless-applib</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
         </dependency>
 
 		<dependency>

@@ -13,15 +13,19 @@
 	</bannerRight>
 
 	<body>
-
 		<breadcrumbs>
-			<item name="Implementation" href="index.html" />
+			<item name="LDAP Security" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="SQL ObjectStore">
+		<menu name="LDAP Security">
 			<item name="About" href="index.html" />
 		</menu>
 
-		<menu name="Maven Reports" ref="reports" />
+        <menu name="Documentation">
+            <item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName}.pdf" />
+            <item name="${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
+        </menu>
+
+		<menu name="Maven Reports" ref="reports"/>
 	</body>
 </project>

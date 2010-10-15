@@ -15,6 +15,9 @@
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        
+        <docbkx.title>Apache Isis LDAP Security</docbkx.title>
+        <docbkx.outputName>isis-ldap-security</docbkx.outputName>
 	</properties>
 
 	<dependencies>
