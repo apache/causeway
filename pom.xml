@@ -11,6 +11,7 @@
 	<groupId>org.apache.isis</groupId>
     <artifactId>isis-parent</artifactId>
     <version>0.1-SNAPSHOT</version>
+    
     <packaging>pom</packaging>
     
     <name>Apache Isis</name>
@@ -1034,7 +1035,7 @@ TODO: is there a CI server for ASF?  I've asked on isis-dev.
 			</dependency>
 
 			<!--
-				Testing libraries (not scope=test because used by headless-junit)
+				Testing libraries (not scope=test because used by viewer/junit)
 			-->
 			<dependency>
 				<groupId>junit</groupId>

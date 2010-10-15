@@ -2,18 +2,21 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis</groupId>
-	<artifactId>defaults</artifactId>
-
-	<name>Default Implementations</name>
-
-	<packaging>pom</packaging>
-
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>isis-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
+
+	<artifactId>defaults</artifactId>
+
+	<name>Isis Defaults</name>
+	
+	<description>
+		Default implementations for core APIs.
+	</description>
+
+	<packaging>pom</packaging>
 
 	<properties>
     	<pdf.title>Overview</pdf.title>

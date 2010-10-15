@@ -5,7 +5,7 @@
 
     <parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>trunk</artifactId>
+		<artifactId>isis-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>  
 

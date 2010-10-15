@@ -65,10 +65,36 @@
 				<scope>import</scope>
 			</dependency>
 
-			<!--
-				unlike core, there's no need to list all the submodules because each
-				plugin should be independent of the others.
-			-->
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>common</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>marshalling-encode</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>marshalling-serialize</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>marshalling-xstream</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>transport-sockets</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>transport-http</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 

@@ -11,7 +11,11 @@
 	<groupId>org.apache.isis</groupId>
 	<artifactId>alternatives</artifactId>
 
-	<name>Alternative Implementations</name>
+	<name>Isis Alternatives</name>
+	
+	<description>
+		Alternative implementations for the core APIs.
+	</description>
 
 	<packaging>pom</packaging>
 

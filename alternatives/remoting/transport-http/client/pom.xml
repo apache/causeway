@@ -28,8 +28,8 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>remoting</artifactId>
+			<groupId>org.apache.isis.alternatives.remoting</groupId>
+			<artifactId>common</artifactId>
 		</dependency>
 		<dependency>
 		    <groupId>commons-httpclient</groupId>

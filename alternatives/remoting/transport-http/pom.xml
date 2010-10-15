@@ -37,4 +37,20 @@
 		<module>client</module>
 		<module>server</module>
 	</modules>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>transport-http-client</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.alternatives.remoting</groupId>
+				<artifactId>transport-http-server</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+		</dependencies>
+	
+	</dependencyManagement>
 </project>

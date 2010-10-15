@@ -2,27 +2,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis</groupId>
-	<artifactId>applib</artifactId>
-	
-	<name>Application Library</name>
-	
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>trunk</artifactId>
+		<artifactId>isis-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<!-- this may be redundant because this module is now parented by trunk -->
-	<scm>
-		<connection>scm:svn:http://apache.isis.svn/svnroot/trunk/applib</connection>
-		<developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/applib</developerConnection>
-		<url>http://dev.isis.apache.org/trac/browser/framework/trunk/applib</url>
-	</scm>
-
-	<!-- used in Site generation for relative references -->
-	<url>http://isis.apache.org/applib</url>
-
+	<artifactId>applib</artifactId>
+	
+	<name>Isis AppLib</name>
+	<description>
+		Isis application library, defining annotations and utilities for the
+		default (Java) programming model.
+	</description>
+	
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
 

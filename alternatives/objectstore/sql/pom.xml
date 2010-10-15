@@ -40,13 +40,13 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.apache.isis.plugins</groupId>
-				<artifactId>sql-persistor</artifactId>
+				<groupId>org.apache.isis.alternatives.objectstore</groupId>
+				<artifactId>sql</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 			<!-- 
 			<dependency>
-				<groupId>org.apache.isis.plugins</groupId>
+				<groupId>org.apache.isis.alternatives.objectstore</groupId>
 				<artifactId>sql-integrationtests</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
