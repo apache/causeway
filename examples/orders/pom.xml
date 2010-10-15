@@ -1,19 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.distribution</groupId>
-		<artifactId>examples</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+    <groupId>org.apache.isis.examples.apps</groupId>
+    <artifactId>orders</artifactId>
+    <version>0.1-SNAPSHOT</version>
 
-	<name>Example Orders DOM</name>
-	<description>[[NAME]] example of an very basic application comprising customer, product and order objects</description>
-	<artifactId>example-orders</artifactId>
+    <name>Example Orders (all-in-one)</name>
+    <description>
+        Example of an very basic application comprising customer, product and order objects
+    </description>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Apache Isis -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>release</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -31,71 +53,75 @@
                     <finalName>sample</finalName>
                 </configuration>
             </plugin>
-            
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>single</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<descriptors>
-						<descriptor>src/main/assembly/descriptor.xml</descriptor>
-					</descriptors>
-					<finalName>orders-demo-${version}</finalName>
+
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <descriptors>
+                        <descriptor>src/main/assembly/descriptor.xml</descriptor>
+                    </descriptors>
+                    <finalName>orders-demo-${version}</finalName>
                     <attach>false</attach>
-				</configuration>
-			</plugin>
-            
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis</groupId>
+            <artifactId>applib</artifactId>
+        </dependency>
 
-
-	<dependencies>
+		<!-- Isis Core and Defaults -->
 		<dependency>
-			<groupId>org.apache.isis</groupId>
-			<artifactId>applib</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>webserver</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
+		</dependency>
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>bytecode-javassist</artifactId>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
         </dependency>
 
+        <!-- Isis Viewers -->
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>dnd</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
+		</dependency>
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>bytecode-cglib</artifactId>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>scimpi-servlet</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>webserver</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>dnd-viewer</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>html-viewer</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>xml-persistor</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>xstream-marshalling</artifactId>
-        </dependency>
-	</dependencies>
+        
+        <!-- Isis Alternatives -->
+		<dependency>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
+		</dependency>
+    </dependencies>
 </project>
 

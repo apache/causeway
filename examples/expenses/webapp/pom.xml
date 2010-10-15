@@ -2,13 +2,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-	    <groupId>org.apache.isis.distribution</groupId>
-	    <artifactId>example-expenses</artifactId>
+	    <groupId>org.apache.isis.examples.apps</groupId>
+	    <artifactId>expenses</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>Example Expenses Web App</name>
 	<artifactId>expenses-webapp</artifactId>
+	<name>Example Expenses Web App</name>
+    
 	<packaging>war</packaging>
 
 	<build>
@@ -107,14 +108,34 @@
 			<version>${project.version}</version>
         </dependency>
 
+		<!-- Isis Core and Defaults -->
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
 
+        <!-- Isis Viewers -->
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xstream-marshalling</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
+		</dependency>
+        
+        <!-- Isis Alternatives -->
+		<dependency>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
 		</dependency>
 	</dependencies>
 

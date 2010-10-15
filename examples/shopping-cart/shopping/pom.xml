@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-    	<groupId>org.apache.isis.distribution</groupId>
-    	<artifactId>example-shopping-cart</artifactId>
+    	<groupId>org.apache.isis.examples.apps</groupId>
+    	<artifactId>shoppingcart</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>example-shopping-dom</artifactId>
-    <name>Example Shopping DOM</name>
+    <artifactId>shoppingcart-dom</artifactId>
+    <name>Example ShoppingCart DOM</name>
     <packaging>jar</packaging>
 
     <dependencies>

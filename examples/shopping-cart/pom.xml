@@ -2,18 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>org.apache.isis.examples.apps</groupId>
+	<artifactId>shoppingcart</artifactId>
+	<version>0.1-SNAPSHOT</version>
+    
 	<name>Example Shopping Cart</name>
 	<description>Scimpi example of an shopping cart application</description>
-	<groupId>org.apache.isis.distribution</groupId>
-	<artifactId>example-shopping-cart</artifactId>
+    
 	<packaging>pom</packaging>
 
-	<parent>
-		<groupId>org.apache.isis.distribution</groupId>
-		<artifactId>examples</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
-	
 	<build>
 		<plugins>
 			<plugin>
@@ -30,8 +27,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.5</source>
-					<target>1.5</target>
+					<source>1.6</source>
+					<target>1.6</target>
 				</configuration>
 				<executions>
 					<execution>
@@ -98,6 +95,36 @@
 		<module>cart</module>
 	</modules>
 
+    <dependencyManagement>
+        <dependencies>
+            <!-- Apache Isis -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>release</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <!-- modules in this project -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>shoppingcart-dom</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>shoppingcart-catalogue</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>shoppingcart-cart</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+            
 	<reporting>
 		<plugins>
 
@@ -144,20 +171,6 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>webserver</artifactId>
-        </dependency>
-
-         <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>xml-persistor</artifactId>
-        </dependency>
-    </dependencies>
-
-
 </project>
 
 

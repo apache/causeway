@@ -1,39 +1,39 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis.alternatives</groupId>
-		<artifactId>objectstore</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+        <groupId>org.apache.isis.alternatives</groupId>
+        <artifactId>objectstore</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-	<groupId>org.apache.isis.alternatives.objectstore</groupId>
-	<artifactId>nosql</artifactId>
-	<version>0.1-SNAPSHOT</version>
+    <groupId>org.apache.isis.alternatives.objectstore</groupId>
+    <artifactId>nosql</artifactId>
+    <version>0.1-SNAPSHOT</version>
 
-	<name>NOSQL ObjectStore</name>
-	
-	<description>
+    <name>NOSQL ObjectStore</name>
+
+    <description>
     	Provides file based persistence for a standalone application using a NOSQL database.
     </description>
 
     <build>
         <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <configuration>
-            	<testFailureIgnore>true</testFailureIgnore>
-              <excludes>
-                <exclude>**/MongoStateReaderTest.java</exclude>
-                <exclude>**/MongoDbTest.java</exclude>
-                <exclude>**/MongoStateWriterTest.java</exclude>
-              </excludes>
-            </configuration>
-          </plugin>
-        
-          <plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <excludes>
+                        <exclude>**/MongoStateReaderTest.java</exclude>
+                        <exclude>**/MongoDbTest.java</exclude>
+                        <exclude>**/MongoStateWriterTest.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
                 <executions>
                     <execution>
@@ -60,11 +60,13 @@
                         </goals>
                         <configuration>
                             <tasks>
-                                <copy todir="target/config" preservelastmodified="true">
+                                <copy todir="target/config"
+                                    preservelastmodified="true">
                                     <fileset dir="config" />
                                 </copy>
-                                <copy file="server.sh" todir="target"/>
-                                <chmod file="target/server.sh" perm="ugo+rx"/>
+                                <copy file="server.sh" todir="target" />
+                                <chmod file="target/server.sh"
+                                    perm="ugo+rx" />
                             </tasks>
                         </configuration>
                     </execution>
@@ -72,42 +74,42 @@
             </plugin>
         </plugins>
     </build>
-	
-	<dependencyManagement>
-		<dependencies>
+
+    <dependencyManagement>
+        <dependencies>
             <dependency>
                 <groupId>org.mongodb</groupId>
                 <artifactId>mongo-java-driver</artifactId>
                 <version>1.3</version>
             </dependency>
-		</dependencies>
-	</dependencyManagement>
-	
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>runtime</artifactId>
-		</dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>runtime</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20090211</version>
         </dependency>
-        
+
         <dependency>
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
             <version>1.6</version>
         </dependency>
-        
-                
-        
+
+
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>runtime</artifactId>
@@ -126,6 +128,6 @@
             <artifactId>jmock-legacy</artifactId>
             <scope>test</scope>
         </dependency>
-        
-	</dependencies>
+
+    </dependencies>
 </project>

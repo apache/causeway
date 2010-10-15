@@ -1,39 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-	    <groupId>org.apache.isis.distribution</groupId>
-        <artifactId>examples</artifactId>
-        <version>0.1-SNAPSHOT</version>
-    </parent>
+    <groupId>org.apache.isis.examples.apps</groupId>
+    <artifactId>ecs</artifactId>
+    <version>0.1-SNAPSHOT</version>
 
-    <name>Example Car Service</name>
-    <artifactId>example-ecs</artifactId>
+    <name>Example Executive Car Service (all-in-one)</name>
     <packaging>war</packaging>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Apache Isis -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>release</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>scimpi-servlet</artifactId>
-        </dependency>
-        
+        <!-- Isis Core and Defaults -->
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>webserver</artifactId>
         </dependency>
-
-         <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>xml-persistor</artifactId>
-        </dependency>
-        
         <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>dnd-viewer</artifactId>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
         </dependency>
-        
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+
+        <!-- Isis Viewers -->
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>dnd</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>html</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>scimpi-servlet</artifactId>
+        </dependency>
+
+        <!-- Isis Alternatives -->
+        <dependency>
+            <groupId>org.apache.isis.alternatives.objectstore</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+
     </dependencies>
 </project>

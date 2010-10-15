@@ -5,25 +5,25 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.apache.isis.distribution</groupId>
-    	<artifactId>example-shopping-cart</artifactId>
+        <groupId>org.apache.isis.examples.apps</groupId>
+    	<artifactId>shoppingcart</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>example-cart</artifactId>
-    <name>Example Scimpi Cart</name>
+    <artifactId>shoppingcart-cart</artifactId>
+    <name>Example ShoppingCart (Scimpi) Cart</name>
+    
     <packaging>war</packaging>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
+            <groupId>org.apache.isis.viewer</groupId>
             <artifactId>scimpi-servlet</artifactId>
         </dependency>
         
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>example-shopping-dom</artifactId>
-            <version>${project.version}</version>
+            <artifactId>shoppingcart-dom</artifactId>
         </dependency>
 
     </dependencies>

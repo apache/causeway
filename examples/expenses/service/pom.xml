@@ -2,8 +2,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-	    <groupId>org.apache.isis.distribution</groupId>
-	    <artifactId>example-expenses</artifactId>
+	    <groupId>org.apache.isis.examples.apps</groupId>
+	    <artifactId>expenses</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
@@ -35,22 +35,5 @@
 			<artifactId>mail</artifactId>
 			<version>1.4</version>
 		</dependency>
-
-
-
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.0.5</version>
-		</dependency>
-		
-		<dependency>
-			<groupId>postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-			<version>8.1-407.jdbc3</version>
-		</dependency>
-
-
 	</dependencies>
-
 </project>

@@ -1,18 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Examples</name>
-	<groupId>org.apache.isis.distribution</groupId>
+	<groupId>org.apache.isis</groupId>
 	<artifactId>examples</artifactId>
     <version>0.1-SNAPSHOT</version>
+    
+    <name>Isis Examples</name>
+    
     <packaging>pom</packaging>
 
-    <parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>release</artifactId>
-        <version>0.1-SNAPSHOT</version>
-    </parent>
-
+    <!--  ???REVIEW: is the intent to formally release these as Maven modules??? -->
+    <!-- 
+    for now, I've commented out stuff relating to release.
     <scm>
         <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/distribution/examples</connection>
         <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/distribution/examples</developerConnection>
@@ -42,6 +41,7 @@
             </plugin>
 	    </plugins>
 	</build>
+     -->
 
     <modules>
         <module>orders</module>

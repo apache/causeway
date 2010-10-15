@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.distribution</groupId>
-		<artifactId>example-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>Example Claims Command Line</name>
 	<artifactId>claims-commandline</artifactId>
+	<name>Example Claims Command Line</name>
 
 	<build>
 		<plugins>
@@ -55,53 +55,47 @@
 	<dependencies>
 
 		<!-- other modules in this project -->
-
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>claims-fixture</artifactId>
 		</dependency>
 
-		<!-- [[NAME]] -->
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-cglib</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-javassist</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>remoting</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>dnd-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>headless-embedded</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
-		</dependency>
+		<!-- Isis Core and Defaults -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>webserver</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+
+        <!-- Isis Viewers -->
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>dnd</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
+		</dependency>
+        
+        <!-- Isis Alternatives -->
+		<dependency>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
 		</dependency>
 
 	</dependencies>

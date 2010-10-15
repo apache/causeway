@@ -1,25 +1,82 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<name>Example Expenses</name>
-	<description>[[NAME]] example of an expenses processing application</description>
-	<groupId>org.apache.isis.distribution</groupId>
-	<artifactId>example-expenses</artifactId>
-	<packaging>pom</packaging>
+    <groupId>org.apache.isis.examples.apps</groupId>
+    <artifactId>expenses</artifactId>
+    <version>0.1-SNAPSHOT</version>
 
-	<parent>
-		<groupId>org.apache.isis.distribution</groupId>
-		<artifactId>examples</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
-    	
+    <name>Example Expenses</name>
+    <description>Example of an expenses processing application</description>
+
+    <packaging>pom</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Apache Isis -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>release</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- modules in this project -->
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>expenses-commandline</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>expenses-dom</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>expenses-fixture</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>expenses-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>expenses-scimpi</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>expenses-webapp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <modules>
         <module>dom</module>
-		<module>fixture</module>
-		<module>service</module>
-		<module>commandline</module>
-		<module>webapp</module>
-		<module>scimpi</module>
-	</modules>
+        <module>fixture</module>
+        <module>service</module>
+        <module>commandline</module>
+        <module>webapp</module>
+        <module>scimpi</module>
+    </modules>
 
 </project>

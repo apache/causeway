@@ -2,13 +2,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-	    <groupId>org.apache.isis.distribution</groupId>
-	    <artifactId>example-expenses</artifactId>
+	    <groupId>org.apache.isis.examples.apps</groupId>
+	    <artifactId>expenses</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>Example Expenses Command Line</name>
 	<artifactId>expenses-commandline</artifactId>
+	<name>Example Expenses Command Line</name>
 
 	<build>
 		<plugins>
@@ -73,40 +73,46 @@
 			<version>${project.version}</version>
         </dependency>
 
+		<!-- Isis Core and Defaults -->
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-javassist</artifactId>
+			<artifactId>webserver</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-cglib</artifactId>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
 		</dependency>
-
         <dependency>
-            <groupId>org.apache.isis.core</groupId>
-            <artifactId>webserver</artifactId>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
         </dependency>
 
-
+        <!-- Isis Viewers -->
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>dnd-viewer</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>dnd</artifactId>
 		</dependency>
-
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
 		</dependency>
-
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>scimpi-servlet</artifactId>
+        </dependency>
+        
+        <!-- Isis Alternatives -->
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
-		</dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xstream-marshalling</artifactId>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
 		</dependency>
 	</dependencies>
 

@@ -3,13 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-        <groupId>org.apache.isis.distribution</groupId>
-        <artifactId>example-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>Example Claims Web Application</name>
 	<artifactId>claims-webapp</artifactId>
+	<name>Example Claims Web Application</name>
+    
 	<packaging>war</packaging>
 
 	<build>
@@ -20,55 +21,4 @@
             </plugin>
 		</plugins>
 	</build>
-
-	<dependencies>
-	
-		<!-- other modules in this project -->
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>claims-fixture</artifactId>
-		</dependency>
-
-
-		<!-- [[NAME]] -->
-
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-cglib</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-javassist</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>remoting</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.plugins</groupId>
-	        <artifactId>headless-embedded</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
-		</dependency>
-		<!--
-		comment in to run simple web server (uses Jetty)
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>webserver</artifactId>
-		</dependency>
-		-->
-
-	</dependencies>
-
 </project>

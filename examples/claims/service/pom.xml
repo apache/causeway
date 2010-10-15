@@ -3,16 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-        <groupId>org.apache.isis.distribution</groupId>
-        <artifactId>example-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>Example Claims Services</name>
 	<artifactId>claims-service</artifactId>
+	<name>Example Claims Services</name>
 
 	<dependencies>
-	
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>

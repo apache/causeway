@@ -1,64 +1,60 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
     <parent>
-		<groupId>org.apache.isis.alternatives</groupId>
-		<artifactId>objectstore</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+        <groupId>org.apache.isis.alternatives</groupId>
+        <artifactId>objectstore</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-	<groupId>org.apache.isis.alternatives.objectstore</groupId>
-	<artifactId>sql</artifactId>
-	<version>0.1-SNAPSHOT</version>
-	
-	<name>SQL ObjectStore</name>
-	
-	<description>
+    <groupId>org.apache.isis.alternatives.objectstore</groupId>
+    <artifactId>sql</artifactId>
+    <version>0.1-SNAPSHOT</version>
+
+    <name>SQL ObjectStore</name>
+
+    <description>
     	Provides JDBC-based persistence.
     </description>
-	
-	<packaging>pom</packaging>
 
-	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+    <packaging>pom</packaging>
 
-		<docbkx.title>Apache Isis SQL Object Store</docbkx.title>
-		<docbkx.outputName>isis-sql-objectstore</docbkx.outputName>
-	</properties>
-	
-	<build>
-		<plugins>
+    <properties>
+        <trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+
+        <docbkx.title>Apache Isis SQL Object Store</docbkx.title>
+        <docbkx.outputName>isis-sql-objectstore</docbkx.outputName>
+    </properties>
+
+    <build>
+        <plugins>
             <plugin>
                 <groupId>com.agilejava.docbkx</groupId>
                 <artifactId>docbkx-maven-plugin</artifactId>
-				<inherited>false</inherited>
+                <inherited>false</inherited>
             </plugin>
-		</plugins>
-	</build>
+        </plugins>
+    </build>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.isis.alternatives.objectstore</groupId>
-				<artifactId>sql</artifactId>
-				<version>0.1-SNAPSHOT</version>
-			</dependency>
-			<!-- 
-			<dependency>
-				<groupId>org.apache.isis.alternatives.objectstore</groupId>
-				<artifactId>sql-integrationtests</artifactId>
-				<version>0.1-SNAPSHOT</version>
-			</dependency>
-			 -->
-		</dependencies>
-	</dependencyManagement>
-	
-	<modules>
-		<module>persistor</module>
-		<!-- 
-		<module>integrationtests</module>
-		 -->
-	</modules>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.objectstore</groupId>
+                <artifactId>sql-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.objectstore</groupId>
+                <artifactId>sql-integrationtests</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <modules>
+        <module>persistor</module>
+        <module>integrationtests</module>
+    </modules>
 
 </project>
