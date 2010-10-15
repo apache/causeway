@@ -17,18 +17,15 @@
 
 
 
-Javassist Bytecode Support
+Core Framework
  
- The <Javassist Bytecode Support> module enables transparent lazy loading and object dirtying 
- support.
+ The <core> module is the parent of a set of submodules that collectively form the core of [[NAME]].
+ Specifically, they provide:
  
-Configuring Javassist
-
- TODO... <<<isis.properties>>>
-
-Alternatives
-
- As an alternative to Javassist you can use {{{../../defaults/bytecode/index.html}CGLib}}.
+ * metamodel
  
- Some object stores (for example the {{{../objectstore/jpa}JPA ObjectStore}} do not need the use of this
- bytecode module, because they hook into the lazy loading of the underlying ORM.
+ * runtime instance management
+ 
+ * persistence of domain objects (delegates to an object store implementation)
+ 
+ []

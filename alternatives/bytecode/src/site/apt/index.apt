@@ -17,15 +17,9 @@
 
 
 
-Core Framework
+Alternative Bytecode Implementations
  
- The <core> module is the parent of a set of submodules that collectively form the core of [[NAME]].
- Specifically, they provide:
+ The <alternative bytecode implementations> module is ...
  
- * metamodel
- 
- * runtime instance management
- 
- * persistence of domain objects (delegates to an object store implementation)
  
  []

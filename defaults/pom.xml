@@ -21,8 +21,8 @@
     <properties>
         <trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
 
-        <docbkx.title>Apache Isis Default Implementations</docbkx.title>
-        <docbkx.outputName>apache-isis-defaults-${project.version}</docbkx.outputName>
+        <docbkx.guideTitle>Apache Isis Default Implementations</docbkx.guideTitle>
+        <docbkx.guideName>isis-defaults</docbkx.guideName>
     </properties>
 
     <modules>

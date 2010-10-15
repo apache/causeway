@@ -15,30 +15,14 @@
 	<body>
 
 		<breadcrumbs>
-			<item name="SQL Persistor" href="../index.html" />
+			<item name="SQL ObjectStore" href="../index.html" />
 			<item name="Implementation" href="index.html" />
 		</breadcrumbs>
 
-
 		<menu name="SQL Persistor">
 			<item name="About" href="index.html" />
-			<!--
-			Parent module has all documentation.
-			-->
-			<item name="${pdf.title} (PDF)" href="../${pdf.outputName}.pdf" />
 		</menu>
-
-		<!--
-		<menu name="Documentation">
-		</menu>
-		-->
 
 		<menu name="Maven Reports" ref="reports" />
-
-		<!--
-		<menu name="For Contributors">
-		</menu>
-		-->
-
 	</body>
 </project>

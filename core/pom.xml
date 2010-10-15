@@ -30,9 +30,9 @@
         
     	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
 		
-		<docbkx.title>Apache Isis Core</docbkx.title>
-		<docbkx.outputName>isis-core</docbkx.outputName>
-	</properties>
+		<docbkx.guideTitle>Apache Isis Core</docbkx.guideTitle>
+		<docbkx.guideName>isis-core</docbkx.guideName>	
+    </properties>
 
 	<modules>
 		<module>commons</module>

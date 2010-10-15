@@ -18,20 +18,7 @@
 
 	<properties>
         <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
-
-		<docbkx.title>Apache Isis HTTP Transport</docbkx.title>
-		<docbkx.outputName>isis-remoting-transport-http</docbkx.outputName>
-	</properties>
-
-	<build>
-		<plugins>
-            <plugin>
-                <groupId>com.agilejava.docbkx</groupId>
-                <artifactId>docbkx-maven-plugin</artifactId>
-				<inherited>false</inherited>
-            </plugin>
-		</plugins>
-	</build>
+    </properties>
 
 	<modules>
 		<module>client</module>

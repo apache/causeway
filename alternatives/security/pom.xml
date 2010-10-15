@@ -16,10 +16,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<pdf.title>Overview</pdf.title>
-    	<pdf.outputName>${project.artifactId}-overview</pdf.outputName>
-
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+
+    	<pdf.title>Alternative Security Implementations</pdf.title>
+    	<pdf.outputName>apache-isis-alternatives-security-${project.version}</pdf.outputName>
 	</properties>
 
 

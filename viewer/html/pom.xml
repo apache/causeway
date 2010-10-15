@@ -17,9 +17,9 @@
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
 
-		<docbkx.title>Apache Isis HTML Viewer</docbkx.title>
-		<docbkx.outputName>isis-html-viewer</docbkx.outputName>
-	</properties>
+		<docbkx.guideTitle>Apache Isis HTML Viewer</docbkx.guideTitle>
+		<docbkx.guideName>isis-html-viewer</docbkx.guideName>
+    </properties>
 
 	<build>
 		<plugins>

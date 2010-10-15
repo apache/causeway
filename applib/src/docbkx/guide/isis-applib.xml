@@ -21,7 +21,7 @@
 -->
 <book>
   <bookinfo>
-    <title><?eval ${docbkx.title}?></title>
+    <title><?eval ${docbkx.guide}?></title>
     <subtitle>Programming conventions, annotations and utilities</subtitle>
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
@@ -56,7 +56,7 @@
 
     <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
     rapidly develop domain-driven applications following the <ulink
-    url="http://en.wikipedia.org/wiki/[[NAME]]_objects">[[NAME]]</ulink>
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
     pattern. It is made up of a core framework plus a number of alternate
     implementations, and supports various viewers and object stores.  Apache 
     Isis is hosted at the 

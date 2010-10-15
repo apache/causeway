@@ -18,14 +18,8 @@
 
 		<menu name="XStream Marshalling">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
-
-		<menu name="Documentation">
-			<item name="${docbkx.title} (PDF)" href="docbkx/pdf/${docbkx.outputName}.pdf" />
-			<item name="${docbkx.title} (HTML)" href="docbkx/html/guide/${docbkx.outputName}.html" />
-		</menu>
-
+        
 		<menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

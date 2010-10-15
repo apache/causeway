@@ -17,7 +17,7 @@
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
         
-    	<pdf.title>Isis Viewers</pdf.title>
+    	<pdf.title>Apache Isis Viewers</pdf.title>
     	<pdf.outputName>apache-isis-viewers-${project.version}</pdf.outputName>
 	</properties>
 
@@ -66,7 +66,7 @@
 
 			<!--
 				unlike core, there's no need to list all the submodules because each
-				plugin should be independent of the others.
+				viewer is versioned independently of the others.
 			-->
 		</dependencies>
 	</dependencyManagement>

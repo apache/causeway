@@ -23,8 +23,8 @@
     <properties>
         <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
 
-        <docbkx.title>Apache Isis SQL Object Store</docbkx.title>
-        <docbkx.outputName>isis-sql-objectstore</docbkx.outputName>
+        <docbkx.guideTitle>Apache Isis SQL ObjectStore</docbkx.guideTitle>
+        <docbkx.guideName>isis-sql-objectstore</docbkx.guideName>
     </properties>
 
     <build>

@@ -14,18 +14,13 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="[[NAME]]" href="../index.html" />
-			<item name="Core" href="index.html" />
+			<item name="Alternatives" href="../index.html" />
+			<item name="Object Stores" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="Core Framework">
+		<menu name="Alternative ObjectStores">
 			<item name="About" href="index.html" />
 			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
-		</menu>
-
-		<menu name="Documentation">
-			<item name="${docbkx.title} (PDF)" href="docbkx/pdf/${docbkx.outputName}.pdf" />
-			<item name="${docbkx.title} (HTML)" href="docbkx/html/guide/${docbkx.outputName}.html" />
 		</menu>
 	</body>
 </project>

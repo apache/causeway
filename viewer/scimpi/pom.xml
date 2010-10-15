@@ -20,9 +20,9 @@
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
 
-		<docbkx.title>Apache Isis Scimpi Viewer</docbkx.title>
-		<docbkx.outputName>isis-scimpi-viewer</docbkx.outputName>
-	</properties>
+		<docbkx.guideTitle>Apache Isis Scimpi</docbkx.guideTitle>
+		<docbkx.guideName>isis-scimpi-viewer</docbkx.guideName>
+    </properties>
 
 	<build>
 		<plugins>

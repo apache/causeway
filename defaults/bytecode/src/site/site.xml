@@ -14,25 +14,13 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="CgLib Bytecode" href="index.html" />
+			<item name="Bytecode" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="CgLib ByteCode Support">
+		<menu name="Default ByteCode">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
-
-		<!--
-		<menu name="Documentation">
-		</menu>
-		-->
 
 		<menu name="Maven Reports" ref="reports"/>
-
-		<!--
-		<menu name="For Contributors">
-		</menu>
-		-->
-
 	</body>
 </project>

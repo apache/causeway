@@ -17,7 +17,20 @@
 
 	<properties>
         <trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+
+        <docbkx.title>Apache Isis Remoting Guide</docbkx.title>
+        <docbkx.outputName>isis-remoting</docbkx.outputName>
 	</properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.agilejava.docbkx</groupId>
+                <artifactId>docbkx-maven-plugin</artifactId>
+                <inherited>false</inherited>
+            </plugin>
+        </plugins>
+    </build>
 
 	<modules>
 		<module>common</module>

@@ -14,25 +14,13 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Implementation" href="index.html" />
+			<item name="Viewer" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="Headless Viewer Impl.">
+		<menu name="Headless Viewer">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
-
-		<!--
-		<menu name="Documentation">
-		</menu>
-		-->
 
 		<menu name="Maven Reports" ref="reports" />
-
-		<!--
-		<menu name="For Contributors">
-		</menu>
-		-->
-
 	</body>
 </project>

@@ -17,6 +17,9 @@
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+
+        <pdf.title>Apache Isis Alternative ObjectStores</pdf.title>
+        <pdf.outputName>apache-isis-alternatives-objectstores-${project.version}</pdf.outputName>
 	</properties>
 
 

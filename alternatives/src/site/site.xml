@@ -14,11 +14,10 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="[[NAME]]" href="../index.html" />
-			<item name="Plugins" href="index.html" />
+			<item name="Alternatives" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="Plugins">
+		<menu name="Alternatives">
 			<item name="About" href="index.html" />
 			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>

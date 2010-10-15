@@ -15,6 +15,9 @@
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
     	<headless-viewer.version>0.1-SNAPSHOT</headless-viewer.version>
+
+        <docbkx.guideTitle>Apache Isis JUnit Support</docbkx.guideTitle>
+        <docbkx.guideName>isis-junit-support</docbkx.guideName>
 	</properties>
 
 	<dependencies>

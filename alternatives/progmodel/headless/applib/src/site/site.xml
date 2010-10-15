@@ -18,20 +18,8 @@
 
 		<menu name="Headless AppLib">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
-
-		<!--
-		<menu name="Documentation">
-		</menu>
-		-->
 
 		<menu name="Maven Reports" ref="reports"/>
-
-		<!--
-		<menu name="For Contributors">
-		</menu>
-		-->
-
 	</body>
 </project>

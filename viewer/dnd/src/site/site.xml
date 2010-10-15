@@ -14,17 +14,16 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="DnD Viewer" href="index.html" />
+			<item name="DnD" href="index.html" />
 		</breadcrumbs>
 
 		<menu name="DnD Viewer">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
 
-		<menu name="Documentation">
-			<item name="${docbkx.title} (PDF)" href="docbkx/pdf/${docbkx.outputName}.pdf" />
-			<item name="${docbkx.title} (HTML)" href="docbkx/html/guide/${docbkx.outputName}.html" />
+        <menu name="Documentation">
+            <item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName.pdf" />
+            <item name=${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
 			<!-- 
 			<menu name="For Contributors">
 				<item name="Design Notes" href="design-notes.html" />
@@ -34,7 +33,5 @@
 		</menu>
 
 		<menu name="Maven Reports" ref="reports" />
-
-
 	</body>
 </project>

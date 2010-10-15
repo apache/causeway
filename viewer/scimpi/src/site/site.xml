@@ -20,14 +20,13 @@
 
 		<menu name="Scimpi">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
 
 		<menu name="Modules" ref="modules" />
 
 		<menu name="Documentation">
-			<item name="${docbkx.title} (PDF)" href="docbkx/pdf/${docbkx.outputName}.pdf" />
-			<item name="${docbkx.title} (HTML)" href="docbkx/html/guide/${docbkx.outputName}.html" />
+			<item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName.pdf" />
+			<item name=${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
 			<!--
 			<item name="Getting Started" href="getting-started.html" />
 			<item name="Creating a Scimpi Webapp" href="creating-webapp.html" />
@@ -45,9 +44,5 @@
 			</menu>
 			-->
 		</menu>
-
-
-
-
 	</body>
 </project>

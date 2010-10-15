@@ -14,21 +14,18 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Headless Viewer" href="index.html" />
+			<item name="Headless" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="Headless Viewer">
+		<menu name="Headless ProgModel">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
 
-
 		<menu name="Documentation">
-			<item name="${docbkx.title} (PDF)" href="docbkx/pdf/${docbkx.outputName}.pdf" />
-			<item name="${docbkx.title} (HTML)" href="docbkx/html/guide/${docbkx.outputName}.html" />
+			<item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName.pdf" />
+			<item name=${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
 		</menu>
 
 		<menu name="Modules" ref="modules" />
-
 	</body>
 </project>

@@ -19,9 +19,9 @@
 	<properties>
         <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
         
-		<docbkx.title>Apache Isis Headless Viewer and Unit Testing</docbkx.title>
-		<docbkx.outputName>isis-headless</docbkx.outputName>
-	</properties>
+        <docbkx.title>Apache Isis Headless Programming Model</docbkx.title>
+        <docbkx.outputName>isis-headless</docbkx.outputName>
+    </properties>
 
 	<build>
 		<plugins>

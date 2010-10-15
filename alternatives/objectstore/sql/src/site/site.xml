@@ -15,17 +15,16 @@
 	<body>
 
 		<breadcrumbs>
-			<item name="SQL Persistor" href="index.html" />
+			<item name="SQL ObjectStore" href="index.html" />
 		</breadcrumbs>
 
-		<menu name="SQL Persistor">
+		<menu name="SQL ObjectStore">
 			<item name="About" href="index.html" />
-			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
 
 		<menu name="Documentation">
-			<item name="${docbkx.title} (PDF)" href="docbkx/pdf/${docbkx.outputName}.pdf" />
-			<item name="${docbkx.title} (HTML)" href="docbkx/html/guide/${docbkx.outputName}.html" />
+			<item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName.pdf" />
+			<item name=${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
 		</menu>
 
 		<menu name="Modules" ref="modules" />

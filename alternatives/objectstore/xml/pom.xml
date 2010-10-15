@@ -16,9 +16,9 @@
 	<properties>
         <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
 
-		<docbkx.title>Apache Isis XML Object Store</docbkx.title>
-		<docbkx.outputName>isis-xml-objectstore</docbkx.outputName>
-	</properties>
+        <docbkx.guideTitle>Apache Isis XML ObjectStore</docbkx.guideTitle>
+        <docbkx.guideName>isis-xml-objectstore</docbkx.guideName>
+    </properties>
 
 	<build>
 		<plugins>

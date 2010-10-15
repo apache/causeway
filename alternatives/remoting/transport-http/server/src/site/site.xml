@@ -19,23 +19,8 @@
 
 		<menu name="HTTP Remoting on Server">
 			<item name="About" href="index.html" />
-			<!--
-			Parent module has all documentation.
-			-->
-			<item name="${pdf.title} (PDF)" href="../${pdf.outputName}.pdf" />
 		</menu>
-
-		<!--
-		<menu name="Documentation">
-		</menu>
-		-->
 
 		<menu name="Maven Reports" ref="reports"/>
-
-		<!--
-		<menu name="For Contributors">
-		</menu>
-		-->
-
 	</body>
 </project>

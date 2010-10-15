@@ -21,7 +21,7 @@
 -->
 <book>
   <bookinfo>
-    <title><?eval ${docbkx.title}?></title>
+    <title><?eval ${docbkx.guideTitleTitleTitleTitle}?></title>
     <subtitle>Programmer, Configuration and Deployment Guide</subtitle>
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 

@@ -19,8 +19,8 @@
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
 
-		<docbkx.title>Apache Isis Application Library</docbkx.title>
-		<docbkx.outputName>isis-applib-${project.version}</docbkx.outputName>
+		<docbkx.guideTitle>Apache Isis Application Library</docbkx.guideTitle>
+		<docbkx.guideName>isis-applib</docbkx.guideName>
 	</properties>
 	
 	<build>

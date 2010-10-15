@@ -17,8 +17,10 @@
 
 	<properties>
     	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
-	</properties>
 
+        <docbkx.guideTitle>Apache Isis Alternative Bytecode Implementations</docbkx.guideTitle>
+        <docbkx.guideName>isis-alternatives-bytecode</docbkx.guideName>
+	</properties>
 
 	<modules>
 		<module>javassist</module>
