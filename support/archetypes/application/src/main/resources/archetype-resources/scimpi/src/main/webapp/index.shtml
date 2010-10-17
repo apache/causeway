@@ -1,0 +1,5 @@
+<swf:page-title>Application template</swf:page-title>
+<swf:template  file="style/template.shtml" />
+
+<swf:services />
+ 

@@ -55,7 +55,6 @@ Building an exploration application from archetype
 	To enable full Maven integration, right-click on the project in Eclipse and choose 
 	"M2 Maven -> Enable dependency management".
 	
-	KM 2010-10-17
 	
 Application Archetype
 	Has a different project layout to exploration, above.
@@ -66,4 +65,13 @@ Application Archetype
 	
 	Note: I have changed the default launch type to "prototype" and used the xml persistor.
 	
+Scimpi Archetype
+	[I haven't figured this one out fully - it seems to be wanting to generate a 
+	sub-project, but you can't specify enough parameters via the mvn command line.
+	I'm merging it into the application archetype]
 	
+Maven Eclipse Plugin
+	I have to run "mvn install" before I can run "mvn eclipse:eclipse".
+	If I don't, it fails with "unable to find resources" kind of error.
+	
+	KM 2010-10-17

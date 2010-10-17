@@ -165,6 +165,14 @@
 				<artifactId>${rootArtifactId}-webapp</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			
+			<!-- Scimpi -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>${rootArtifactId}-scimpi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			
 
 		</dependencies>
 	</dependencyManagement>

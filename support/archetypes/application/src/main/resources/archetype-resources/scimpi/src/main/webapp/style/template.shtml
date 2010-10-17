@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>${title}</title>
+<link rel="stylesheet" title="Style 1" href="${_context}/style/screen.css" type="text/css" media="all" />
+</head>
+
+<body>
+
+<div id="banner">
+	<img class="logo" src="${_context}/images/logo.png"/><span class="title">Example application</span> 
+</div>
+
+<div id="content">
+	<div id="side">
+		<ul>
+            <li><a href="${_context}/index.shtml">Home</a></li>
+		</ul>
+        <!--
+            uncomment if using NOF users 
+            <swf:user login-view="generic/login.shtml" logout-view="index.shtml" />
+         -->
+	</div>
+	<div id="main">
+        <swf:feedback />
+		<swf:content />
+        
+        <swf:diagnostics />
+	</div>
+</div>
+
+
+</body>
+</html>

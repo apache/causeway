@@ -40,5 +40,25 @@
     <resource>webapp/src/main/webapp/WEB-INF/web.xml</resource>
     <resource>webapp/src/main/webapp/default.css</resource>
     <resource>webapp/pom.xml</resource>
+    <resource>scimpi/pom.xml</resource>
+	<resource>scimpi/src/main/webapp/login.shtml</resource>
+	<resource>scimpi/src/main/webapp/index.shtml</resource>
+	<resource>scimpi/src/main/webapp/generic/action.shtml</resource>
+	<resource>scimpi/src/main/webapp/generic/collection.shtml</resource>
+	<resource>scimpi/src/main/webapp/generic/edit.shtml</resource>
+	<resource>scimpi/src/main/webapp/generic/object.shtml</resource>
+	<resource>scimpi/src/main/webapp/images/banner.png</resource>
+	<resource>scimpi/src/main/webapp/images/bg-button.gif</resource>
+	<resource>scimpi/src/main/webapp/images/banner-bg.png</resource>
+	<resource>scimpi/src/main/webapp/images/Default.png</resource>
+	<resource>scimpi/src/main/webapp/images/logo.png</resource>
+	<resource>scimpi/src/main/webapp/META-INF/MANIFEST.MF</resource>
+	<resource>scimpi/src/main/webapp/style/screen.css</resource>
+	<resource>scimpi/src/main/webapp/style/template.shtml</resource>
+	<resource>scimpi/src/main/webapp/WEB-INF/logging.properties</resource>
+	<resource>scimpi/src/main/webapp/WEB-INF/web.xml</resource>
+	<resource>scimpi/src/main/webapp/WEB-INF/isis.properties</resource>
+	<resource>scimpi/src/main/webapp/WEB-INF/allow</resource>
+	<resource>scimpi/src/main/webapp/WEB-INF/passwords</resource>
   </resources>
 </archetype>
