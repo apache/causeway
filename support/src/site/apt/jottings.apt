@@ -56,3 +56,14 @@ Building an exploration application from archetype
 	"M2 Maven -> Enable dependency management".
 	
 	KM 2010-10-17
+	
+Application Archetype
+	Has a different project layout to exploration, above.
+	Exploration has a single project that includes "dom", "commandline", etc.
+	Application creates a project for each.
+
+	Generate from archetype and create eclipse projects, as above.
+	
+	Note: I have changed the default launch type to "prototype" and used the xml persistor.
+	
+	
