@@ -11,7 +11,7 @@
 
     <parent>
         <groupId>org.apache.isis</groupId>
-        <artifactId>trunk</artifactId>
+        <artifactId>isis-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
@@ -40,7 +40,9 @@
 
     <modules>
         <module>archetypes</module>
+			<!--
         <module>domain-services</module>
+			-->
     </modules>
 
     <build>
@@ -100,7 +102,7 @@
 
             <!-- domainservices -->
             <dependency>
-                <groupId>org.apache.isis.support</groupId>
+                <groupId>org.apache.isis.core</groupId>
                 <artifactId>domainservices</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
@@ -110,7 +112,7 @@
                 <version>0.1-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
-
+			
         </dependencies>
     </dependencyManagement>
 

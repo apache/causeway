@@ -4,14 +4,14 @@
 	<name>Archetypes</name>
     <groupId>org.apache.isis.archetypes</groupId>
 	<artifactId>archetypes</artifactId>
-    <version>4.0</version>
+	<version>0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
 	<parent>
 	    <groupId>org.apache.isis</groupId>
 	    <artifactId>isis-parent</artifactId>
-        <version>7</version>
-        <relativePath>../../pom/pom.xml</relativePath>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
    <scm>
@@ -24,7 +24,11 @@
     	<!-- 
     	the 'application' module is intentionally not referenced; 
     	it should be released separately after the main release.
+		[Check this]
     	-->
+		<module>application</module>
+		<module>exploration</module>
+		<module>scimpi</module>
         <module>hibernate-support</module>
     </modules>
 </project>

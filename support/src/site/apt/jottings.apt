@@ -1,0 +1,58 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+Exploration Archetype
+
+
+  To review: 
+  The banner.png in
+  support/archetypes/exploration/src/main/resources/archetype-resources/src/main/webapp/images
+  still refers to Naked Objects
+  
+Building an exploration application from archetype
+	I am assuming that you are building from source. Perhaps this works if you are using Maven managed
+	binaries too?
+	
+	At the command prompt...
+	
+	[In all cases, you can use "mvn -o ..." to force maven to run offline.
+	
+	
+	In the trunk/support directory: Run "mvn install" to install the archetypes.
+	Thereafter, run "mvn archetype:crawl" to populate your local archetype catalogue.
+	
+	To create the project, either use the Eclipse "File -> New -> Project -> Maven -> Maven Project" route
+	or do it from the command line. Since the Eclipse route didn't populate all the builders, I used
+	the command line:
+	In your (future) Eclipse workspace directory, run the following:
+	
+	"mvn archetype:generate -DarchetypeGroupId=org.apache.isis -DarchetypeArtifactId=exploration-archetype"
+	
+	When prompted, for groupId, specify your package name. For artifactId, specify your application name.
+	Use the defaults for the next questions (version, package, accept).
+	
+	Change into your newly created appliction directory.
+	
+	Create the Eclipse project files with: "mvn eclipse:eclipse"
+	
+	In eclipse, import the project using "File ->Import -> General -> Existing Projects into Workspace"
+	and navigate to the directory where you created the application from the archetype.
+	
+	To enable full Maven integration, right-click on the project in Eclipse and choose 
+	"M2 Maven -> Enable dependency management".
+	
+	KM 2010-10-17

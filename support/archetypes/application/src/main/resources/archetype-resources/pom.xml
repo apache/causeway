@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>[[NAME]] Application</name>
+	<name>Apache Isis Application</name>
 	<groupId>${groupId}</groupId>
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
@@ -124,7 +124,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<aggregate>true</aggregate>
-					<doctitle>[[NAME]] Application</doctitle>
+					<doctitle>Apache Isis Application</doctitle>
 					<splitindex>false</splitindex>
 				</configuration>
 			</plugin>
@@ -183,7 +183,7 @@
         <checksumPolicy>fail</checksumPolicy>
       </snapshots>
       <id>snapshots</id>
-      <name>[[NAME]] Snapshots</name>
+      <name>Apache Isis Snapshots</name>
       <url>http://isis.apache.org/m2-repo/snapshot/</url>
       <layout>default</layout>
     </repository>

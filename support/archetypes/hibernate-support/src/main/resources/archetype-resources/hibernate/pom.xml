@@ -25,7 +25,7 @@
 		</dependency>
 
 
-		<!-- [[NAME]]' hibernate support -->
+		<!-- Apache Isis' hibernate support -->
 		<dependency>
 			<groupId>${isis.groupId}</groupId>
 			<artifactId>hibernate</artifactId>

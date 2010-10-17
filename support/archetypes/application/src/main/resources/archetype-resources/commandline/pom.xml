@@ -60,7 +60,7 @@
 			<artifactId>${rootArtifactId}-fixture</artifactId>
 		</dependency>
 
-		<!-- [[NAME]] -->
+		<!-- Apache Isis -->
 
 	    <dependency>
 	        <groupId>org.apache.isis.core</groupId>

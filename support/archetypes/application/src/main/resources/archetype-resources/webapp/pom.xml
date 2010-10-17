@@ -30,7 +30,7 @@
 		</dependency>
 
 
-		<!-- [[NAME]] -->
+		<!-- Apache Isis -->
 	    <dependency>
 	        <groupId>org.apache.isis.core</groupId>
 	        <artifactId>bytecode-cglib</artifactId>

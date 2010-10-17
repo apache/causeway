@@ -10,8 +10,8 @@
  	<parent>
 	    <groupId>org.apache.isis</groupId>
 	    <artifactId>isis-parent</artifactId>
-        <version>7</version>
-        <relativePath>../pom/pom.xml</relativePath>
+        <version>0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <scm>

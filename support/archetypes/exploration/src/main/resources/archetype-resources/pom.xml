@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<name>[[NAME]] exploration application</name>
+	<name>Apache Isis exploration application</name>
 	<groupId>${groupId}</groupId>
 	<artifactId>${artifactId}</artifactId>
 	<version>${version}</version>
@@ -52,48 +52,29 @@
 	</build>
 
 	<dependencies>
-		<!-- [[NAME]] -->
-
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-cglib</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-javassist</artifactId>
-	    </dependency>
+		<!-- Apache Isis -->
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>remoting</artifactId>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>webserver</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>dnd-viewer</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>dnd</artifactId>
 		</dependency>
+		<!-- To be tested: -->
+		<!-- 
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-client</artifactId>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.plugins</groupId>
-	        <artifactId>headless-embedded</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
-		</dependency>
-		
+		 -->
 	</dependencies>
 </project>

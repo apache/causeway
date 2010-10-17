@@ -1,12 +1,12 @@
 @echo off
 
 rem
-rem update DEPLOYMENT_FLAGS to customize the way that [[NAME]] is run for a particular
+rem update DEPLOYMENT_FLAGS to customize the way that Apache Isis is run for a particular
 rem deployment.  For example, to run as a client in client/server mode, use:
 rem 
 rem DEPLOYMENT_FLAGS=--type client --connector encoding-sockets
 rem
-rem Consult the [[NAME]] documentation for the various options available.
+rem Consult the Apache Isis documentation for the various options available.
 rem
 
 set DEPLOYMENT_FLAGS=

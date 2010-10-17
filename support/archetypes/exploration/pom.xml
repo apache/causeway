@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <name>[[NAME]] exploration archetype</name>
+    <name>Apache Isis exploration archetype</name>
     <groupId>org.apache.isis</groupId>
     <artifactId>exploration-archetype</artifactId>
     <version>0.1-SNAPSHOT</version>
@@ -43,13 +43,13 @@
     <distributionManagement>
         <snapshotRepository>
             <id>snapshot-repository</id>
-            <name>[[NAME]] Build Server</name>
+            <name>Apache Isis Build Server</name>
             <url>file:///srv/repo/snapshot</url>
             <uniqueVersion>false</uniqueVersion>
         </snapshotRepository>
         <repository>
             <id>repository</id>
-            <name>[[NAME]] Repository</name>
+            <name>Apache Isis Repository</name>
     	    <url>sftp://www.apache.isis.dev/htdocs/m2-repo/release</url>
         </repository>
     </distributionManagement>
