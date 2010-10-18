@@ -26,8 +26,9 @@ import org.apache.isis.metamodel.adapter.version.Version;
 public class DefaultVersionMapping implements VersionMapping {
 
     public String mapVersion(Version version) {
-        SerialNumberVersion v = (SerialNumberVersion) version;
-        return Long.toHexString(v.getSequence());
+        //SerialNumberVersion v = (SerialNumberVersion) version;
+        //return Long.toHexString(v.getSequence());
+    	return version.sequence();
     }
 
     public Version getVersion(String id) {
