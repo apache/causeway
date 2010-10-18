@@ -1,34 +1,42 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-	<name>Archetypes</name>
-    <groupId>org.apache.isis.archetypes</groupId>
-	<artifactId>archetypes</artifactId>
-	<version>0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
 
-	<parent>
-	    <groupId>org.apache.isis</groupId>
-	    <artifactId>isis-parent</artifactId>
+    <parent>
+        <groupId>org.apache.isis</groupId>
+        <artifactId>support</artifactId>
         <version>0.1-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-   <scm>
-        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/archetypes</connection>
-        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/archetypes</developerConnection>
-        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/archetypes</url>
-    </scm>
+    <groupId>org.apache.isis.support</groupId>
+    <artifactId>archetypes</artifactId>
+    <name>Isis Archetypes</name>
+    <version>0.1-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
 
     <modules>
-    	<!-- 
-    	the 'application' module is intentionally not referenced; 
-    	it should be released separately after the main release.
-		[Check this]
-    	-->
-		<module>application</module>
-		<module>exploration</module>
-		<module>scimpi</module>
-        <module>hibernate-support</module>
+        <module>application</module>
+        <module>exploration</module>
+        <module>scimpi</module>
     </modules>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.archetype</groupId>
+                    <artifactId>archetype-packaging</artifactId>
+                    <version>2.0-alpha-4</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>2.0-alpha-4</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
 </project>

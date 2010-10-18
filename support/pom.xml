@@ -2,68 +2,30 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.apache.isis</groupId>
-    <artifactId>support</artifactId>
-    
-    <name>Support</name>
-    
-    <packaging>pom</packaging>
-
     <parent>
         <groupId>org.apache.isis</groupId>
         <artifactId>isis-parent</artifactId>
         <version>0.1-SNAPSHOT</version>
     </parent>
 
-    <!-- this may be redundant because this module is now parented by trunk -->
-    <scm>
-        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/support</connection>
-        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/support</developerConnection>
-        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/support</url>
-    </scm>
+    <artifactId>support</artifactId>
+    <name>Isis Support</name>
 
-    <!-- used in Site generation for relative references -->
-    <url>http://isis.apache.org/support/</url>
+    <packaging>pom</packaging>
 
     <properties>
         <current40xVersion>4.0</current40xVersion>
         <dependency.locations.enabled>false</dependency.locations.enabled>
-        
-        <pdf.title>Users Guide</pdf.title>
-        <pdf.outputName>users-guide</pdf.outputName>
 
         <trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
         
-        <checkstyle.configLocation>../src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
-        <pmd.ruleset>../src/main/pmd/pmd.xml</pmd.ruleset>
+        <pdf.title>Isis Support Guide</pdf.title>
+        <pdf.outputName>isis-support-guide</pdf.outputName>
     </properties>
 
     <modules>
         <module>archetypes</module>
-			<!--
-        <module>domain-services</module>
-			-->
     </modules>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-            </plugin>
-
-            <!-- this may be redundant because this module is now parented by trunk -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <configuration>
-                    <preparationGoals>clean install</preparationGoals>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <tagBase>https://apache.isis.svn/svnroot/tags/support</tagBase>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <reporting>
         <plugins>
@@ -99,20 +61,6 @@
                 <version>0.1-SNAPSHOT</version>
                 <type>test-jar</type>
             </dependency>
-
-            <!-- domainservices -->
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>domainservices</artifactId>
-                <version>0.1-SNAPSHOT</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.core</groupId>
-                <artifactId>domainservices</artifactId>
-                <version>0.1-SNAPSHOT</version>
-                <type>test-jar</type>
-            </dependency>
-			
         </dependencies>
     </dependencyManagement>
 

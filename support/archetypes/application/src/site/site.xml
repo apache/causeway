@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+
+	<bannerLeft>
+		<name>[[NAME]]</name>
+		<src>../images/banner-left.png</src>
+		<href>../index.html</href>
+	</bannerLeft>
+
+	<bannerRight>
+		<src>../images/sflogo.png</src>
+		<href>http://sourceforge.net/projects/isis</href>
+	</bannerRight>
+
+	<body>
+		<breadcrumbs>
+			<item name="Support" href="index.html" />
+		</breadcrumbs>
+
+		<menu name="Support">
+			<item name="About" href="index.html" />
+			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
+		</menu>
+	</body>
+</project>
