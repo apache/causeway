@@ -31,7 +31,7 @@ import java.awt.Window;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.commons.about.AboutIsis;
+import org.apache.isis.runtime.about.AboutIsis;
 import org.apache.isis.runtime.imageloader.TemplateImage;
 import org.apache.isis.runtime.imageloader.TemplateImageLoader;
 

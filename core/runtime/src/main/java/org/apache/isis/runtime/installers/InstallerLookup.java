@@ -62,9 +62,9 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
     // framework
     // /////////////////////////////////////////////////////////
 
-    AuthenticationManagerInstaller authenticationManagerInstaller(String requested, boolean isExploring);
+    AuthenticationManagerInstaller authenticationManagerInstaller(String requested, final DeploymentType deploymentType);
 
-    AuthorizationManagerInstaller authorizationManagerInstaller(String requested, boolean isExploring);
+    AuthorizationManagerInstaller authorizationManagerInstaller(String requested, final DeploymentType deploymentType);
 
     FixturesInstaller fixturesInstaller(String requested);
 

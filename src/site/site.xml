@@ -41,7 +41,7 @@
 			<item name="License" href="license.html" />
 		</menu>
 
-		<menu name="The [[NAME]] Pattern">
+		<menu name="The Naked Objects Pattern">
 			<item name="An Introduction" href="isis-pattern.html" />
 			<item name="OOUIs" href="oouis.html" />
 			<item name="Benefits" href="isis-pattern-benefits.html" />

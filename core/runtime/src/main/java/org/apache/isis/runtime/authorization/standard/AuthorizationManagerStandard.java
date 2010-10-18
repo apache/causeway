@@ -25,7 +25,6 @@ import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authorization.AuthorizationManagerAbstract;
-import org.apache.isis.runtime.authorization.standard.noop.NoopAuthorizor;
 
 public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
 
@@ -37,7 +36,26 @@ public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {
     
 	public AuthorizationManagerStandard(final IsisConfiguration configuration) {
     	super(configuration);
-    	authorizor = new NoopAuthorizor(); // avoid null pointers
+    	// avoid null pointers
+    	authorizor = new Authorizor(){
+
+			@Override
+			public void init() {
+			}
+
+			@Override
+			public void shutdown() {
+			}
+
+			@Override
+			public boolean isVisibleInRole(String user, Identifier identifier) {
+				return true;
+			}
+
+			@Override
+			public boolean isUsableInRole(String role, Identifier identifier) {
+				return true;
+			}}; 
     }
 
     ///////////////////////////////////////////////////////////

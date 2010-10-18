@@ -1236,6 +1236,19 @@
                 <module>support</module>
             </modules>
         </profile>
+        <profile>
+            <id>all</id>
+            <modules>
+                <module>applib</module>
+                <module>core</module>
+                <module>defaults</module>
+                <module>alternatives</module>
+                <module>viewer</module>
+                <module>release</module>
+                <module>examples</module>
+                <module>support</module>
+            </modules>
+        </profile>
     </profiles>
 
 </project>

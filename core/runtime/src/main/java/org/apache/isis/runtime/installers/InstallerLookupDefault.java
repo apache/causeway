@@ -31,7 +31,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.components.Installer;
 import org.apache.isis.commons.ensure.Assert;
 import org.apache.isis.commons.ensure.Ensure;
@@ -42,17 +41,15 @@ import org.apache.isis.commons.factory.InstanceFactory;
 import org.apache.isis.commons.factory.UnavailableClassException;
 import org.apache.isis.commons.lang.CastUtils;
 import org.apache.isis.commons.lang.StringUtils;
-import org.apache.isis.metamodel.commons.about.AboutIsis;
-import org.apache.isis.metamodel.commons.about.ComponentDetails;
 import org.apache.isis.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.config.NotFoundPolicy;
 import org.apache.isis.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.runtime.about.AboutIsis;
+import org.apache.isis.runtime.about.ComponentDetails;
 import org.apache.isis.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.runtime.authentication.standard.noop.NoopAuthenticationManagerInstaller;
 import org.apache.isis.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.runtime.authorization.standard.noop.NoopAuthorizationManagerInstaller;
 import org.apache.isis.runtime.fixturesinstaller.FixturesInstaller;
 import org.apache.isis.runtime.imageloader.TemplateImageLoaderInstaller;
 import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
@@ -63,6 +60,7 @@ import org.apache.isis.runtime.system.SystemConstants;
 import org.apache.isis.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.runtime.viewer.IsisViewerInstaller;
 import org.apache.isis.runtime.web.EmbeddedWebServerInstaller;
+import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;
 
@@ -181,14 +179,14 @@ public class InstallerLookupDefault implements InstallerLookup {
     // Type-safe Lookups
     // ////////////////////////////////////////////////////////
 
-    public AuthenticationManagerInstaller authenticationManagerInstaller(String requested, boolean useNoOp) {
+    public AuthenticationManagerInstaller authenticationManagerInstaller(String requested, final DeploymentType deploymentType) {
         return getInstaller(AuthenticationManagerInstaller.class, requested, SystemConstants.AUTHENTICATION_INSTALLER_KEY, 
-               useNoOp ? NoopAuthenticationManagerInstaller.class.getName() : SystemConstants.AUTHENTICATION_DEFAULT );
+               deploymentType.isExploring() ? SystemConstants.AUTHENTICATION_EXPLORATION_DEFAULT : SystemConstants.AUTHENTICATION_DEFAULT );
     }
 
-    public AuthorizationManagerInstaller authorizationManagerInstaller(String requested, boolean useNoOp) {
+    public AuthorizationManagerInstaller authorizationManagerInstaller(String requested, final DeploymentType deploymentType) {
         return getInstaller(AuthorizationManagerInstaller.class, requested, SystemConstants.AUTHORIZATION_INSTALLER_KEY,
-                useNoOp ? NoopAuthorizationManagerInstaller.class.getName() : SystemConstants.AUTHORIZATION_DEFAULT);
+                !deploymentType.isProduction() ? SystemConstants.AUTHORIZATION_NON_PRODUCTION_DEFAULT : SystemConstants.AUTHORIZATION_DEFAULT);
     }
 
     public FixturesInstaller fixturesInstaller(String requested) {
@@ -337,8 +335,8 @@ public class InstallerLookupDefault implements InstallerLookup {
         }
         T installer = getInstaller(requiredType, reqImpl);
         if (installer == null) {
-            throw new InstanceCreationException("Failed to load installer class " + reqImpl + " (of type "
-                    + requiredType.getName());
+            throw new InstanceCreationException("Failed to load installer class '" + reqImpl + "' (of type "
+                    + requiredType.getName() + ")");
         }
         return installer;
     }

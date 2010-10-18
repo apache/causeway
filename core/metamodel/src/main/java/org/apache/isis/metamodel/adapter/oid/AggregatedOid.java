@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.encoding.DataInputExtended;
 import org.apache.isis.metamodel.encoding.DataOutputExtended;
 

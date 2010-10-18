@@ -20,7 +20,7 @@
 
 package org.apache.isis.webapp.view.form;
 
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.webapp.processor.Request;
 import org.apache.isis.webapp.view.display.Errors;
 

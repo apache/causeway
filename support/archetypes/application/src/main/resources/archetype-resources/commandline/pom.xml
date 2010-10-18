@@ -19,7 +19,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.apache.isis.runtime.Isis</mainClass>
+							<mainClass>org.apache.isis.Isis</mainClass>
 							<addClasspath>true</addClasspath>
 							<addExtensions>false</addExtensions>
 							<classpathPrefix>lib</classpathPrefix>
@@ -54,55 +54,69 @@
 	<dependencies>
 	
 		<!-- other modules in this project -->
-
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>${rootArtifactId}-fixture</artifactId>
 		</dependency>
 
-		<!-- Apache Isis -->
+		<!-- Isis Core -->
 		<dependency>
-			<groupId>org.apache.isis.defaults</groupId>
-			<artifactId>bytecode</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>html</artifactId>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>runtime</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>webserver</artifactId>
 		</dependency>
+		
+		<!-- Isis Defaults -->
+		<dependency>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>objectstore</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>progmodel</artifactId>
+		</dependency>
+		
+		<!-- Isis Alternatives -->
+		<dependency>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.isis.alternatives.security</groupId>
+			<artifactId>file</artifactId>
+		</dependency>
+		
+		<!-- Isis Viewers -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>dnd</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.alternatives.objectstore</groupId>
-			<artifactId>xml</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
 		</dependency>
 
-		<!-- to be confirmed
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.plugins</groupId>
-	        <artifactId>headless-embedded</artifactId>
-	    </dependency>
-		-->
-		
 		<!-- missing dependency -->
+        <!--
+        shouldn't be needed, cos of transitive dependency on o.a.i.defaults:bytecode;
+        I've commented out and works for me
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+        -->
 		
 	</dependencies>
 

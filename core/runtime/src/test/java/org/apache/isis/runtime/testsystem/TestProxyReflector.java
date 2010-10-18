@@ -25,8 +25,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.services.ServicesInjector;
 import org.apache.isis.metamodel.services.ServicesInjectorNoop;

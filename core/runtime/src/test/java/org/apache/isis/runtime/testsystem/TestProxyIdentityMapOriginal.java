@@ -26,10 +26,10 @@ import java.util.Vector;
 
 import org.apache.isis.commons.debug.DebugString;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.spec.identifier.Identified;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.context.IsisContext;

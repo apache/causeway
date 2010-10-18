@@ -21,8 +21,8 @@
 package org.apache.isis.extensions.dnd.view.action;
 
 import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.BackgroundTask;

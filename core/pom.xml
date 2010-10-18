@@ -35,6 +35,7 @@
     </properties>
 
 	<modules>
+        <module>testsupport</module>
 		<module>commons</module>
 		<module>metamodel</module>
 		<module>runtime</module>
@@ -92,6 +93,19 @@
 				<version>0.1-SNAPSHOT</version>
 				<type>test-jar</type>
 			</dependency>
+
+            <!-- testsupport -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>testsupport</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>testsupport</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
 
 			<!-- commons -->
 			<dependency>

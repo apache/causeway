@@ -63,6 +63,13 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>defaults</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
 
 			<!--
 				unlike core, there's no need to list all the submodules because each

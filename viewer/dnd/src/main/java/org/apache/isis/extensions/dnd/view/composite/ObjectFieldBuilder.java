@@ -22,9 +22,9 @@ package org.apache.isis.extensions.dnd.view.composite;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.filters.Filter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociationFilters;

@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.java5.ImperativeFacet;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;

@@ -24,10 +24,10 @@ import java.util.Enumeration;
 
 import org.apache.isis.commons.ensure.Assert;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;

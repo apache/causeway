@@ -37,6 +37,18 @@
     </build>
 
     <dependencies>
+        <!--  Required for TestProxy -->
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        
         <dependency>
             <groupId>org.apache.isis.alternatives.objectstore</groupId>
             <artifactId>sql-impl</artifactId>

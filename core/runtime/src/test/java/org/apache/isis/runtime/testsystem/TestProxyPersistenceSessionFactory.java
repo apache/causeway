@@ -23,7 +23,7 @@ package org.apache.isis.runtime.testsystem;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;

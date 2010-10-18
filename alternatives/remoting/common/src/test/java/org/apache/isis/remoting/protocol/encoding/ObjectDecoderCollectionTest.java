@@ -25,8 +25,8 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacetAbstract;
 import org.apache.isis.metamodel.testspec.TestProxySpecification;

@@ -26,12 +26,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.factory.InstanceFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

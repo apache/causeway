@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.ApplicationException;
+import org.apache.isis.commons.exceptions.IsisApplicationException;
 import org.apache.isis.commons.lang.WrapperUtils;
-import org.apache.isis.metamodel.commons.exceptions.IsisApplicationException;
 import org.apache.isis.metamodel.exceptions.ReflectionException;
 import org.apache.isis.metamodel.specloader.internal.introspector.MethodFinderUtils;
 

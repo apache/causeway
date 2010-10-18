@@ -22,12 +22,12 @@ package org.apache.isis.extensions.nosql;
 
 import java.util.List;
 
+import org.apache.isis.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

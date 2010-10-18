@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.help;
 
-import org.apache.isis.metamodel.commons.about.AboutIsis;
+import org.apache.isis.runtime.about.AboutIsis;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;

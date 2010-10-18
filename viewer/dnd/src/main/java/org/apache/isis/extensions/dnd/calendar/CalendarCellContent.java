@@ -24,10 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.Veto;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.collection.AbstractCollectionContent;
 import org.apache.isis.runtime.context.IsisContext;

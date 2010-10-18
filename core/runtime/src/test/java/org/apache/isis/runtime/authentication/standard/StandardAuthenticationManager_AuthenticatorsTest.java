@@ -26,16 +26,15 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
+import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.runtime.authentication.NoAuthenticatorException;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.authentication.NoAuthenticatorException;
-import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtime.authentication.standard.noop.AuthenticatorNoop;
 
 @RunWith(JMock.class)
 public class StandardAuthenticationManager_AuthenticatorsTest {
@@ -44,11 +43,12 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
 
 	private IsisConfiguration mockConfiguration;
 	private AuthenticationManagerStandard authenticationManager;
+	private Authenticator mockAuthenticator;
     
     @Before
     public void setUp() throws Exception {
         mockConfiguration = mockery.mock(IsisConfiguration.class);
-
+        mockAuthenticator = mockery.mock(Authenticator.class);
     	authenticationManager = new AuthenticationManagerStandard(mockConfiguration);
     }
 
@@ -64,16 +64,15 @@ public class StandardAuthenticationManager_AuthenticatorsTest {
 
     @Test
     public void shouldBeAbleToAddAuthenticators() throws Exception {
-        Authenticator authenticator = new AuthenticatorNoop(mockConfiguration);
-        authenticationManager.addAuthenticator(authenticator);
+        authenticationManager.addAuthenticator(mockAuthenticator);
         assertThat(authenticationManager.getAuthenticators().size(), is(1));
-        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(authenticator)));
+        assertThat(authenticationManager.getAuthenticators().get(0), is(sameInstance(mockAuthenticator)));
     }
 
     @Test(expected=UnsupportedOperationException.class)
     public void shouldNotBeAbleToModifyReturnedAuthenticators() throws Exception {
         List<Authenticator> authenticators = authenticationManager.getAuthenticators();
-        authenticators.add(new AuthenticatorNoop(mockConfiguration));
+        authenticators.add(mockAuthenticator);
     }
 
 }

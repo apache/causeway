@@ -22,8 +22,8 @@ package org.apache.isis.webapp.view.edit;
 
 import java.util.Iterator;
 
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.webapp.AbstractElementProcessor;

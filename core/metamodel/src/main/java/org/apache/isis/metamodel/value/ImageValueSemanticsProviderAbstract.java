@@ -28,8 +28,8 @@ import java.awt.image.PixelGrabber;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;

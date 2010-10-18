@@ -23,7 +23,7 @@ package org.apache.isis.extensions.mongo;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.metamodel.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.extensions.nosql.StateReader;
 import org.apache.isis.runtime.persistence.ObjectNotFoundException;
 

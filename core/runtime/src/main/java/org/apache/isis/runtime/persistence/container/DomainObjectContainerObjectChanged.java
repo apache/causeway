@@ -23,7 +23,6 @@ package org.apache.isis.runtime.persistence.container;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.services.ServicesInjector;
 import org.apache.isis.runtime.context.IsisContext;
-import org.apache.isis.runtime.objectstore.inmemory.InMemoryObjectStore;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 

@@ -27,7 +27,6 @@ import org.apache.isis.metamodel.services.ServicesInjector;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.runtime.context.IsisContext;
-import org.apache.isis.runtime.objectstore.inmemory.InMemoryObjectStore;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 /**

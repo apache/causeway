@@ -27,10 +27,10 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.commons.exceptions.IsisApplicationException;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.commons.exceptions.IsisApplicationException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.html.action.Action;
 import org.apache.isis.extensions.html.action.ActionException;

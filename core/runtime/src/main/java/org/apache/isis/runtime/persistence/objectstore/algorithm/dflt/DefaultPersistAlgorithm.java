@@ -21,10 +21,10 @@
 package org.apache.isis.runtime.persistence.objectstore.algorithm.dflt;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.PersistingCallbackFacet;

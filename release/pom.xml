@@ -47,6 +47,7 @@
         <isis.alternatives-remoting-marshalling-xstream.version>0.1-SNAPSHOT</isis.alternatives-remoting-marshalling-xstream.version>
 
         <isis.alternatives-security-ldap.version>0.1-SNAPSHOT</isis.alternatives-security-ldap.version>
+        <isis.alternatives-security-file.version>0.1-SNAPSHOT</isis.alternatives-security-file.version>
     </properties>
 
     <dependencyManagement>
@@ -169,6 +170,11 @@
                 <groupId>org.apache.isis.alternatives.security</groupId>
                 <artifactId>ldap</artifactId>
                 <version>${isis.alternatives-security-ldap.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.security</groupId>
+                <artifactId>file</artifactId>
+                <version>${isis.alternatives-security-file.version}</version>
             </dependency>
 
 

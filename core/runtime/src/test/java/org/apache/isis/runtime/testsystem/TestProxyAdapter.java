@@ -23,13 +23,13 @@ package org.apache.isis.runtime.testsystem;
 import java.util.Hashtable;
 
 import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.Instance;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.Specification;

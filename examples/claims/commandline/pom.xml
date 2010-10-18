@@ -20,7 +20,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.apache.isis.runtime.Isis</mainClass>
+							<mainClass>org.apache.isis.Isis</mainClass>
 							<addClasspath>true</addClasspath>
 							<addExtensions>false</addExtensions>
 							<classpathPrefix>lib</classpathPrefix>

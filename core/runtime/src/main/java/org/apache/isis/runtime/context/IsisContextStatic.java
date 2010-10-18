@@ -22,9 +22,9 @@ package org.apache.isis.runtime.context;
 
 import org.apache.isis.commons.debug.DebugInfo;
 import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.commons.lang.Maybe;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.runtime.system.DeploymentType;

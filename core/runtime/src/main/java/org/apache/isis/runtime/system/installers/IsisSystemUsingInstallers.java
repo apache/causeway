@@ -179,13 +179,13 @@ public class IsisSystemUsingInstallers extends IsisSystemAbstract {
 
 	private void lookupAndSetAuthenticatorAndAuthorizationInstallers(DeploymentType deploymentType) {
 		// use the one specified in configuration
-		final AuthenticationManagerInstaller authenticationInstaller = installerLookup.authenticationManagerInstaller(null, deploymentType.isExploring());
+		final AuthenticationManagerInstaller authenticationInstaller = installerLookup.authenticationManagerInstaller(null,deploymentType);
 		if (authenticationInstaller != null) {
 		    setAuthenticationInstaller(authenticationInstaller);
 		}
 
 		// use the one specified in configuration
-		final AuthorizationManagerInstaller authorizationInstaller = installerLookup.authorizationManagerInstaller(null, !deploymentType.isProduction());
+		final AuthorizationManagerInstaller authorizationInstaller = installerLookup.authorizationManagerInstaller(null, deploymentType);
 		if (authorizationInstaller != null) {
 		    setAuthorizationInstaller(authorizationInstaller);
 		}

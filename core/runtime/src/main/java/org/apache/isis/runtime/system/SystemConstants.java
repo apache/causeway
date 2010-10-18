@@ -105,9 +105,13 @@ public final class SystemConstants {
      */
     public static final String AUTHENTICATION_INSTALLER_KEY = ConfigurationConstants.ROOT + AuthenticationManagerInstaller.TYPE;
     /**
-     * Default for {@link #AUTHENTICATION_INSTALLER_KEY}
+     * Default for {@link #AUTHENTICATION_INSTALLER_KEY} if not exploring.
      */
     public static final String AUTHENTICATION_DEFAULT = "file";
+    /**
+     * Default for {@link #AUTHENTICATION_INSTALLER_KEY} if exploring.
+     */
+	public static final String AUTHENTICATION_EXPLORATION_DEFAULT = "noop";
 
     /**
      * Key used to lookup {@link AuthorizationManager authorization manager} in
@@ -116,9 +120,14 @@ public final class SystemConstants {
      */
     public static final String AUTHORIZATION_INSTALLER_KEY = ConfigurationConstants.ROOT + AuthorizationManagerInstaller.TYPE;
     /**
-     * Default for {@link #AUTHORIZATION_DEFAULT}
+     * Default for {@link #AUTHORIZATION_DEFAULT} if production.
      */
     public static final String AUTHORIZATION_DEFAULT = "file";
+
+    /**
+     * Default for {@link #AUTHORIZATION_DEFAULT} if not production.
+     */
+	public static final String AUTHORIZATION_NON_PRODUCTION_DEFAULT = "noop";
 
     /**
      * Key used to lookup {@link ServicesInstaller services installer} in {@link IsisConfiguration},
@@ -202,6 +211,8 @@ public final class SystemConstants {
     public static final boolean NOSPLASH_DEFAULT = false;
 
     public static final String LOCALE_KEY = ConfigurationConstants.ROOT + "locale";
+
+
 
     private SystemConstants() {}
 

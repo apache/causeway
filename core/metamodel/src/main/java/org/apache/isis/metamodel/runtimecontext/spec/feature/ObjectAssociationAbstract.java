@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.runtimecontext.spec.feature;
 
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;

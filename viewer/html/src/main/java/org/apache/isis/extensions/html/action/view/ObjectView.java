@@ -21,11 +21,11 @@
 package org.apache.isis.extensions.html.action.view;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.SpecificationFacets;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.commons.exceptions.UnknownTypeException;
 import org.apache.isis.extensions.html.component.Block;
 import org.apache.isis.extensions.html.component.Component;
 import org.apache.isis.extensions.html.component.ComponentFactory;

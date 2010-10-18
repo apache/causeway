@@ -43,7 +43,7 @@
                     <archive>
                         <manifest>
                             <mainClass>
-                                org.apache.isis.runtime.Isis
+                                org.apache.isis.Isis
                             </mainClass>
                             <addClasspath>true</addClasspath>
                             <addExtensions>false</addExtensions>

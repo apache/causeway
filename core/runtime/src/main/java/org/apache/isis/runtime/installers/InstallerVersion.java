@@ -26,8 +26,8 @@ import java.util.Properties;
 
 import org.apache.isis.commons.components.Installer;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.commons.about.AboutIsis;
-import org.apache.isis.metamodel.commons.about.ComponentDetails;
+import org.apache.isis.runtime.about.AboutIsis;
+import org.apache.isis.runtime.about.ComponentDetails;
 
 /**
  * Details name and version of installer.

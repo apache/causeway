@@ -28,8 +28,8 @@ import java.util.Hashtable;
 import junit.framework.AssertionFailedError;
 
 import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.commons.resource.ResourceStreamSource;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 
 

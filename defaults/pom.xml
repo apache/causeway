@@ -89,6 +89,12 @@
                 <artifactId>objectstore</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.isis.defaults</groupId>
+                <artifactId>objectstore</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
 
             <dependency>
                 <groupId>org.apache.isis.defaults</groupId>

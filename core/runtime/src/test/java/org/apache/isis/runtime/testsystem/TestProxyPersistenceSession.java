@@ -27,10 +27,10 @@ import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

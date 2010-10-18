@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.sql.objectstore.jdbc.JdbcGeneralValueMapper;

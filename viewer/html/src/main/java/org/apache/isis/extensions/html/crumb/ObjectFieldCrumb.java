@@ -21,8 +21,8 @@
 package org.apache.isis.extensions.html.crumb;
 
 import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.commons.lang.ToString;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.extensions.html.request.Request;
 
 

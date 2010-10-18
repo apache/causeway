@@ -40,20 +40,26 @@ Building an exploration application from archetype
 	the command line:
 	In your (future) Eclipse workspace directory, run the following:
 	
-	"mvn archetype:generate -DarchetypeGroupId=org.apache.isis -DarchetypeArtifactId=exploration-archetype"
+	"mvn archetype:generate -DarchetypeGroupId=org.apache.isis.support.archetypes -DarchetypeArtifactId=exploration"
 	
 	When prompted, for groupId, specify your package name. For artifactId, specify your application name.
 	Use the defaults for the next questions (version, package, accept).
 	
-	Change into your newly created appliction directory.
+	Change into your newly created application directory.
 	
-	Create the Eclipse project files with: "mvn eclipse:eclipse"
+	Either:
 	
-	In eclipse, import the project using "File ->Import -> General -> Existing Projects into Workspace"
+	* Create the Eclipse project files with: "mvn eclipse:eclipse"
+	
+	* In eclipse, import the project using "File ->Import -> General -> Existing Projects into Workspace"
 	and navigate to the directory where you created the application from the archetype.
 	
-	To enable full Maven integration, right-click on the project in Eclipse and choose 
+	* Enable full Maven integration, right-click on the project in Eclipse and choose 
 	"M2 Maven -> Enable dependency management".
+	
+	Or rather more simply:
+	
+	* In eclipse, import the project using "File -> Import -> Maven -> Existing Maven Projects
 	
 	
 Application Archetype

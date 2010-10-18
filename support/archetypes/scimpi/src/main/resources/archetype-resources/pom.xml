@@ -5,10 +5,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <name>Scimpi Web App</name>
-    <artifactId>${parent.artifactId}-${artifactId}</artifactId>
     <groupId>${groupId}</groupId>
-    <version>0.1-SNAPSHOT</version>
+    <artifactId>${parent.artifactId}-${artifactId}</artifactId>
+    <version>${version}</version>
+    
+    <name>Scimpi Web App</name>
+    
     <packaging>war</packaging>
 
     <build>
@@ -16,19 +18,31 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
+                <version>2.5.1</version>
                 <configuration>
-                    <wtpversion>1.5</wtpversion>
-                    <wtpContextName>${artifactId}</wtpContextName>
+                    <downloadSources>true</downloadSources>
+                    <downloadJavadocs>true</downloadJavadocs>
                 </configuration>
             </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.1</version>
                 <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
+                    <source>1.6</source>
+                    <target>1.6</target>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>source</id>
+                        <phase>compile</phase>
+                    </execution>
+                    <execution>
+                        <id>test</id>
+                        <phase>test-compile</phase>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
@@ -43,61 +57,68 @@
         </plugins>
     </build>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.isis.plugins</groupId>
-            <artifactId>scimpi-servlet</artifactId>
-            <version>0.1-SNAPSHOT</version>
-        </dependency>
-        
+     <dependencyManagement>
+        <dependencies>
+            <!-- Apache Isis -->
+            <dependency>
+                <groupId>org.apache.isis</groupId>
+                <artifactId>release</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
+    <dependencies>
 		<dependency>
 			<groupId>${groupId}</groupId>
 			<artifactId>${parent.artifactId}-fixture</artifactId>
 		</dependency>
 
-		<!-- Apache Isis -->
+        <!-- Isis Core -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>runtime</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>webserver</artifactId>
+        </dependency>
 
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-cglib</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-javassist</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>remoting</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>webserver</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>dnd-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.plugins</groupId>
-	        <artifactId>headless-embedded</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
-		</dependency>
+        <!-- Isis Defaults -->
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+
+        <!-- Isis Alternatives -->
+        <dependency>
+            <groupId>org.apache.isis.alternatives.objectstore</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.alternatives.security</groupId>
+            <artifactId>file</artifactId>
+        </dependency>
+
+        <!-- Isis Viewers -->
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>scimpi-servlet</artifactId>
+        </dependency>
 
     </dependencies>
 </project>

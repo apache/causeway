@@ -23,9 +23,9 @@ package org.apache.isis.extensions.dnd.view.collection;
 import java.util.Enumeration;
 
 import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
-import org.apache.isis.metamodel.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.ConsentAbstract;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
