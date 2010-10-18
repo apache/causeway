@@ -14,13 +14,12 @@
 
     <build>
         <plugins>
-			<!-- what are these for?
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
                 <configuration>
                     <wtpversion>1.5</wtpversion>
-                    <wtpContextName>${artifactId}</wtpContextName>
+                    <wtpContextName>apparchtest2-scimpi</wtpContextName>
                 </configuration>
             </plugin>
 
@@ -32,8 +31,6 @@
                     <target>1.5</target>
                 </configuration>
             </plugin>
-			-->
-
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
