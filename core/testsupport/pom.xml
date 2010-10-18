@@ -1,0 +1,30 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>core</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+    
+	<groupId>org.apache.isis.core</groupId>
+	<artifactId>testsupport</artifactId>
+	<name>Core Test Support</name>
+
+	<description>
+		Support for writing unit tests; should be added as a dependency 
+		with scope=test only
+	</description>
+
+	<properties>
+    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+	</properties>
+
+	<dependencies>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+            </dependency>
+	</dependencies>
+
+</project>
