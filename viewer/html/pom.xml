@@ -36,11 +36,13 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>metamodel</artifactId>
 			<type>test-jar</type>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>runtime</artifactId>
 			<type>test-jar</type>
+            <scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
