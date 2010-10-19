@@ -13,12 +13,12 @@
 
 	<bannerLeft>
 		<name>Apache Isis</name>
-		<src>./images/banner-left.png</src>
-		<href>./index.html</href>
+		<src>${trunk.baseDir}/images/banner-left.png</src>
+		<href>${trunk.baseDir}/index.html</href>
 	</bannerLeft>
 
 	<bannerRight>
-		<src>./images/apache-incubator-logo.png</src>
+		<src>${trunk.baseDir}/images/apache-incubator-logo.png</src>
 		<href>http://incubator.apache.org/isis</href>
 	</bannerRight>
 	
