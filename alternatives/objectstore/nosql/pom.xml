@@ -103,6 +103,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
         </dependency>
