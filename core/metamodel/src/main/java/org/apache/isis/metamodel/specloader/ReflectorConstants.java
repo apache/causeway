@@ -25,9 +25,7 @@ import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
@@ -39,15 +37,13 @@ public final class ReflectorConstants {
      * Key used to lookup implementation of {@link ClassSubstitutor} in {@link IsisConfiguration}.
      */
     public static final String CLASS_SUBSTITUTOR_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.class-substitutor";
-    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = ClassSubstitutorIdentity.class.getName();
+    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.bytecode.cglib.specloader.classsubstitutor.CglibClassSubstitutorIdentity";
 
     /**
      * Key used to lookup implementation of {@link SpecificationTraverser} in {@link IsisConfiguration}.
      */
     public static final String SPECIFICATION_TRAVERSER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.traverser";
     public static final String SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT = SpecificationTraverserDefault.class.getName();
-
-	
 
     /**
      * Key used to lookup implementation of {@link ProgrammingModelFacets} in {@link IsisConfiguration}.
@@ -56,7 +52,7 @@ public final class ReflectorConstants {
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
      */
     public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.facets";
-    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT = ProgrammingModelFacetsJava5.class.getName();
+    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT = "org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5";
 
     /**
      * Key used to lookup comma-separated list of {@link FacetFactory}s to include
@@ -88,8 +84,6 @@ public final class ReflectorConstants {
     public static final String META_MODEL_VALIDATOR_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.validator";
     public static final String META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT = MetaModelValidatorNoop.class.getName();
 
-	
-    
     private ReflectorConstants() {
     }
 

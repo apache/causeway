@@ -38,6 +38,7 @@
         <module>testsupport</module>
 		<module>commons</module>
 		<module>metamodel</module>
+        <module>progmodel</module>
 		<module>runtime</module>
 		<module>webapp</module>
 		<module>webserver</module>

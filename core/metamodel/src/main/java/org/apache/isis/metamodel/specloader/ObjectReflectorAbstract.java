@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.specloader;
 
+import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +31,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.debug.DebugInfo;
 import org.apache.isis.commons.debug.DebugString;
 import org.apache.isis.commons.ensure.Assert;
@@ -58,12 +57,12 @@ import org.apache.isis.metamodel.specloader.internal.cache.SpecificationCache;
 import org.apache.isis.metamodel.specloader.internal.facetprocessor.FacetProcessor;
 import org.apache.isis.metamodel.specloader.internal.instances.InstanceCollectionSpecification;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.log4j.Logger;
 
 /**
- * Builds the meta-model for Java 5 programming model.
+ * Builds the meta-model.
  * 
  * <p>
  * The implementation provides for a degree of pluggability:
