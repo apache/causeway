@@ -1,27 +1,18 @@
 package org.apache.isis.testsupport;
 
-import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
 
-public class ValueTypeContractTestAbstract_StringIntegerTest extends ValueTypeContractTestAbstract {
+public class ValueTypeContractTestAbstract_StringIntegerTest extends ValueTypeContractTestAbstract<String> {
 
 	@Override
-	protected Object getObject() {
-		return new String("1");
+	protected List<String> getObjectsWithSameValue() {
+		return Arrays.asList(new String("1"), new String("1"));
 	}
 
 	@Override
-	protected Object getObjectWithSameValue() {
-		return new String("1");
-	}
-
-	@Override
-	protected Object getAnotherObjectWithSameValue() {
-		return new String("1");
-	}
-
-	@Override
-	protected Object getObjectWithDifferentValue() {
-		return new String("2");
+	protected List<String> getObjectsWithDifferentValue() {
+		return Arrays.asList(new String("1 "), new String(" 1"), new String("2"));
 	}
 
 }
