@@ -19,7 +19,7 @@
     </description>
 
     <properties>
-        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        <siteBaseDir>../../..</siteBaseDir>
 
         <docbkx.guideTitle>Apache Isis NOSQL ObjectStore</docbkx.guideTitle>
         <docbkx.guideName>isis-nosql-objectstore</docbkx.guideName>

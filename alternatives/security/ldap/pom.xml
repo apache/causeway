@@ -14,7 +14,7 @@
 	<name>LDAP Security Implementation</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        <siteBaseDir>../../..</siteBaseDir>
         
         <docbkx.title>Apache Isis LDAP Security</docbkx.title>
         <docbkx.outputName>isis-ldap-security</docbkx.outputName>

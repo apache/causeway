@@ -13,20 +13,19 @@
 
 	<bannerLeft>
 		<name>Apache Isis</name>
-		<src>${trunk.baseDir}/images/banner-left.png</src>
-		<href>${trunk.baseDir}/index.html</href>
+		<src>${siteBaseDir}/images/banner-left.png</src>
+		<href>${siteBaseDir}/index.html</href>
 	</bannerLeft>
 
 	<bannerRight>
-		<src>${trunk.baseDir}/images/apache-incubator-logo.png</src>
-		<href>http://incubator.apache.org/isis</href>
+		<src>${siteBaseDir}/images/apache-incubator-logo.png</src>
+		<href>${project.url}</href>
 	</bannerRight>
 	
 	<body>
 		<breadcrumbs>
 			<item name="Apache Isis" href="index.html" />
 		</breadcrumbs>
-
 
 		<menu name="Apache Isis">
 			<item name="About" href="index.html" />
@@ -129,15 +128,14 @@
 
 		<menu name="Other Resources">
 			<item name="Further Reading">
-				<item name="Books on [[NAME]]" href="books.html" />
-				<item name="Richard Pawson's Thesis" href="Pawson-[[NAME]]-Objects-thesis.pdf" />
+				<item name="Books on Naked Objects" href="books.html" />
+				<item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
 			</item>
 			<item name="Blogs">
-				<item name="Blog/News" href="http://blog.isis.apache.org/" />
 				<item name="Dan Haywood's blog" href="http://danhaywood.com/" />
 			</item>
-			<item name="Development Wiki" href="http://dev.isis.apache.org/trac/wiki" />
-			<item name="[[NAME]] for .NET" href="http://www.isis.net/" />
+			<item name="Isis Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
+			<item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
 		</menu>
 
 		<menu name="For Contributors">

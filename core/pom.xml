@@ -28,7 +28,7 @@
         <!-- REVIEW -->
 		<dependency.locations.enabled>false</dependency.locations.enabled>
         
-    	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
+        <siteBaseDir>..</siteBaseDir>
 		
 		<docbkx.guideTitle>Apache Isis Core</docbkx.guideTitle>
 		<docbkx.guideName>isis-core</docbkx.guideName>	

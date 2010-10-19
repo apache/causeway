@@ -17,7 +17,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        <siteBaseDir>../../..</siteBaseDir>
     </properties>
 
 	<modules>

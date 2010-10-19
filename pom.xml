@@ -37,7 +37,8 @@
     <!-- 2. building site/docs -->
 
     <!-- 2.1 prereqs -->
-    <!-- mvn install:install-file -D groupId=com.java -D artifactId=jimi -D version=1.0 -D packaging=jar -D file=/path/to/file -->
+    <!-- mvn install:install-file -D groupId=com.java -D artifactId=jimi 
+        -D version=1.0 -D packaging=jar -D file=/path/to/file -->
     <!-- mvn clean install -P site-skin -->
 
     <!-- 2.2 site/docs -->
@@ -54,7 +55,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- override in each module (used by locate global resources) -->
-        <trunk.baseDir>${project.build.directory}/..</trunk.baseDir>
+        <siteBaseDir>.</siteBaseDir>
 
         <!-- used by docbkx-maven-plugin for DocBook guide; override as required -->
         <docbkx.guideTitle>Apache Isis</docbkx.guideTitle>
@@ -67,9 +68,10 @@
         <!-- used by maven-pdf-plugin for site PDFS; do not change -->
         <pdf.author>Apache Isis Contributors</pdf.author>
 
-        <!-- should not need to be modified -->        
-        <checkstyle.configLocation>${trunk.baseDir}/src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
-        <pmd.ruleset>${trunk.baseDir}/src/main/pmd/pmd.xml</pmd.ruleset>
+        <!-- should not need to be modified -->
+        <trunkBaseDir>${project.build.directory}/${siteBaseDir}/..</trunkBaseDir>
+        <checkstyle.configLocation>${trunkBaseDir}/src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
+        <pmd.ruleset>${trunkBaseDir}/src/main/pmd/pmd.xml</pmd.ruleset>
     </properties>
 
     <scm>
@@ -136,9 +138,9 @@
         <url>https://issues.apache.org/jira/browse/ISIS</url>
     </issueManagement>
 
-    <!-- TODO: is there a CI server for ASF? I've asked on isis-dev. <ciManagement> 
-        <system>Hudson</system> <url>http://isis.apache.org/hudson/</url> <notifiers> 
-        <notifier> <type>mail</type> <address>rmatthews@nakedobjects.org</address> 
+    <!-- TODO: is there a CI server for ASF? I've asked on isis-dev. -->
+    <!-- <ciManagement> <system>Hudson</system> <url>http://isis.apache.org/hudson/</url> 
+        <notifiers> <notifier> <type>mail</type> <address>rmatthews@nakedobjects.org</address> 
         <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration 
         /> </notifier> <notifier> <type>mail</type> <address>dan@haywood-associates.co.uk</address> 
         <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration 
@@ -1202,6 +1204,12 @@
             <id>site-skin</id>
             <modules>
                 <module>site-skin</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>applib</id>
+            <modules>
+                <module>applib</module>
             </modules>
         </profile>
         <profile>

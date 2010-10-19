@@ -16,7 +16,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+        <siteBaseDir>../..</siteBaseDir>
 
         <docbkx.guideTitle>Apache Isis Alternative Bytecode Implementations</docbkx.guideTitle>
         <docbkx.guideName>isis-alternatives-bytecode</docbkx.guideName>

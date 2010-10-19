@@ -14,7 +14,7 @@
 	<name>XStream Marshalling</name>
 
 	<properties>
-        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        <siteBaseDir>../../..</siteBaseDir>
     </properties>
     
 	<dependencyManagement>

@@ -12,8 +12,8 @@
 	<name>Core Webapp Bootstrapper</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
-	</properties>
+        <siteBaseDir>../..</siteBaseDir>
+    </properties>
 
 	<build>
 		<plugins>

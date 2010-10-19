@@ -16,7 +16,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+        <siteBaseDir>../..</siteBaseDir>
 
         <docbkx.title>Apache Isis Remoting Guide</docbkx.title>
         <docbkx.outputName>isis-remoting</docbkx.outputName>

@@ -20,7 +20,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
+        <siteBaseDir>..</siteBaseDir>
 
         <pdf.title>Apache Isis Alternatives</pdf.title>
         <pdf.outputName>apache-isis-alternatives-${project.version}</pdf.outputName>

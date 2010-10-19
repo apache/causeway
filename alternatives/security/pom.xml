@@ -16,7 +16,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+        <siteBaseDir>../..</siteBaseDir>
 
     	<pdf.title>Alternative Security Implementations</pdf.title>
     	<pdf.outputName>apache-isis-alternatives-security-${project.version}</pdf.outputName>

@@ -15,7 +15,7 @@
 	<name>Drag-n-Drop Viewer</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
+        <siteBaseDir>../..</siteBaseDir>
 
 		<docbkx.guideTitle>Apache Isis DnD Viewer</docbkx.guideTitle>
 		<docbkx.guideName>isis-dnd-viewer</docbkx.guideName>

@@ -14,10 +14,12 @@
     <packaging>pom</packaging>
 
     <properties>
+        <!-- REVIEW -->
         <current40xVersion>4.0</current40xVersion>
+        <!-- REVIEW -->
         <dependency.locations.enabled>false</dependency.locations.enabled>
 
-        <trunk.baseDir>${project.build.directory}/../..</trunk.baseDir>
+        <siteBaseDir>..</siteBaseDir>
         
         <pdf.title>Isis Support Guide</pdf.title>
         <pdf.outputName>isis-support-guide</pdf.outputName>

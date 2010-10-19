@@ -13,7 +13,8 @@
 	<name>JUnit Viewer</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        <siteBaseDir>../..</siteBaseDir>
+        
         <core.version>0.1-SNAPSHOT</core.version>
     	<headless-viewer.version>0.1-SNAPSHOT</headless-viewer.version>
 

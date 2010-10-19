@@ -27,7 +27,7 @@
  The framework is designed around two patterns:
  
  * the first is the 
-   {{{http://en.wikipedia.org/wiki/[[NAME]]_objects}[[NAME]] pattern}}, 
+   {{{http://en.wikipedia.org/wiki/naked_objects}Naked Objects pattern}}, 
    whereby the framework automatically generates an object-oriented user 
    interface (OOUI) for your domain objects.  If required, this OOUI can then 
    be customized.  

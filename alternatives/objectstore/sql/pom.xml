@@ -21,7 +21,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        <siteBaseDir>../../..</siteBaseDir>
 
         <docbkx.guideTitle>Apache Isis SQL ObjectStore</docbkx.guideTitle>
         <docbkx.guideName>isis-sql-objectstore</docbkx.guideName>

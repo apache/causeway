@@ -11,7 +11,7 @@
 	<name>HTTP Transport (Client-side)</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../../../..</trunk.baseDir>
+        <siteBaseDir>../../../..</siteBaseDir>
 	</properties>
 
 	<dependencies>

@@ -14,7 +14,7 @@
 	<name>XML ObjectStore</name>
 
 	<properties>
-        <trunk.baseDir>${project.build.directory}/../../../..</trunk.baseDir>
+        <siteBaseDir>../../..</siteBaseDir>
 
         <docbkx.guideTitle>Apache Isis XML ObjectStore</docbkx.guideTitle>
         <docbkx.guideName>isis-xml-objectstore</docbkx.guideName>

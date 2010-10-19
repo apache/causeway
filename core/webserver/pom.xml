@@ -12,8 +12,8 @@
 	<name>Core WebServer (Jetty)</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
-	</properties>
+        <siteBaseDir>../..</siteBaseDir>
+    </properties>
 
 	<dependencies>
 		<dependency>

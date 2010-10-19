@@ -13,8 +13,8 @@
 	<name>Core Runtime</name>
 
 	<properties>
-    	<trunk.baseDir>${project.build.directory}/../../..</trunk.baseDir>
-	</properties>
+        <siteBaseDir>../..</siteBaseDir>
+    </properties>
 
 	<build>
 		<resources>
