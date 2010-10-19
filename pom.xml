@@ -24,18 +24,27 @@
 		(eg for testing and logging frameworks).
 	</description>
 
-    <!-- typical usage: -->
+    <!-- 1. building code: -->
 
     <!-- mvn clean install -->
-    <!-- mvn clean install -P build-all -->
+    <!-- mvn clean install -P standard,build-all -->
 
-    <!-- mvn deploy -P build-all,deploy-remote -->
-    <!-- mvn deploy -P build-all,apache-release -->
+    <!-- mvn deploy -P standard,build-all,deploy-remote -->
+    <!-- mvn deploy -P standard,build-all,apache-release -->
 
-    <!-- mvn site-deploy -P deploy-local -->
 
-    <!-- mvn site-deploy -P site-all,deploy-local -->
-    <!-- mvn site-deploy -P site-all,apache-release -->
+
+    <!-- 2. building site/docs -->
+
+    <!-- 2.1 prereqs -->
+    <!-- mvn install:install-file -D groupId=com.java -D artifactId=jimi -D version=1.0 -D packaging=jar -D file=/path/to/file -->
+    <!-- mvn clean install -P site-skin -->
+
+    <!-- 2.2 site/docs -->
+    <!-- mvn site-deploy -P standard,deploy-local -->
+
+    <!-- mvn site-deploy -P standard,site-all,deploy-local -->
+    <!-- mvn site-deploy -P standard,site-all,apache-release -->
 
     <inceptionYear>2010</inceptionYear>
 

@@ -2,7 +2,7 @@
 <project>
 
 	<bannerLeft>
-		<name>[[NAME]]</name>
+		<name>Apache Isis</name>
 		<src>images/banner-left.png</src>
 		<href>../index.html</href>
 	</bannerLeft>
@@ -14,7 +14,6 @@
 	
 	<body>
 		<breadcrumbs>
-			<item name="Apache Isis" href="../index.html" />
 			<item name="AppLib" href="index.html" />
 		</breadcrumbs>
 
