@@ -20,31 +20,39 @@
 
 package org.apache.isis.metamodel.runtimecontext.spec.feature;
 
-import org.junit.Before;
-import org.junit.Test;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.apache.isis.metamodel.adapter.Instance;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.metamodel.facets.hide.HiddenFacetAlways;
-import org.apache.isis.metamodel.facets.propcoll.derived.DerivedFacetInferred;
-import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAnnotation;
-import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacetAbstract;
-import org.apache.isis.metamodel.facets.propparam.validate.mandatory.MandatoryFacetDefault;
+import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacet;
+import org.apache.isis.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract.MemberType;
 import org.apache.isis.metamodel.spec.identifier.IdentifiedImpl;
 import org.apache.isis.metamodel.testspec.TestProxySpecification;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
-
+@RunWith(JMock.class)
 public class ObjectAssociationAbstractTest {
 
     private ObjectAssociationAbstract objectAssociation;
     private IdentifiedImpl facetHolder;
+    
+    private Mockery context = new JUnit4Mockery();
 
     @Before
     public void setup() {
@@ -96,13 +104,16 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void notPersistedWhenDerived() throws Exception {
-        facetHolder.addFacet(new DerivedFacetInferred(facetHolder));
+    	// TODO: ISIS-5, need to reinstate DerivedFacet
+        final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
+		facetHolder.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
     @Test
     public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
-        facetHolder.addFacet(new NotPersistedFacetAnnotation(facetHolder));
+    	NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
+        facetHolder.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
@@ -118,10 +129,11 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void hidden() throws Exception {
-        facetHolder.addFacet(new HiddenFacetAlways(facetHolder));
+    	HiddenFacet mockFacet = mockFacetIgnoring(HiddenFacet.class);
+        facetHolder.addFacet(mockFacet);
         assertTrue(objectAssociation.isAlwaysHidden());
     }
-    
+
     @Test
     public void optional() throws Exception {
         assertFalse(objectAssociation.isMandatory());
@@ -129,7 +141,8 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void mandatory() throws Exception {
-        facetHolder.addFacet(new MandatoryFacetDefault(facetHolder));
+    	MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class);
+        facetHolder.addFacet(mockFacet);
         assertTrue(objectAssociation.isMandatory());
     }
 
@@ -140,12 +153,22 @@ public class ObjectAssociationAbstractTest {
 
     @Test
     public void hasChoices() throws Exception {
-        facetHolder.addFacet(new PropertyChoicesFacetAbstract(facetHolder) {
-            public Object[] getChoices(ObjectAdapter adapter) {
-                return null;
-            }
-        });
+    	PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class);
+        facetHolder.addFacet(mockFacet);
         assertTrue(objectAssociation.hasChoices());
     }
+
+
+	private <T extends Facet> T mockFacetIgnoring(final Class<T> typeToMock) {
+		final T facet = context.mock(typeToMock);
+		context.checking(new Expectations() {
+			{
+				allowing(facet).facetType();
+				will(returnValue(typeToMock));
+				ignoring(facet);
+			}
+		});
+		return facet;
+	}
 }
 

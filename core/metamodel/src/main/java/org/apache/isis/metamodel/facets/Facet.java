@@ -20,9 +20,6 @@
 
 package org.apache.isis.metamodel.facets;
 
-import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
-
-
 public interface Facet {
 
     /**

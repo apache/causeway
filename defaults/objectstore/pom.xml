@@ -40,6 +40,11 @@
             <artifactId>progmodel</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
+            <scope>test</scope>
+        </dependency>
         
         
 	</dependencies>

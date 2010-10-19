@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.specloader.internal.facetprocessor;
 
+import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -46,7 +46,6 @@ import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.metamodel.specloader.internal.introspector.JavaIntrospector;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 
 
@@ -147,8 +146,8 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * This is <tt>public</tt> so that can be used for <tt>@Facets</tt> processing in
-     * {@link JavaIntrospector}.
+     * This is <tt>public</tt> so that can be used for <tt>@Facets</tt> processing 
+     * (eg in <tt>JavaIntrospector</tt>).
      *
      * <p>
      * See bug-517.

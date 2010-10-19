@@ -37,7 +37,6 @@ import org.apache.isis.commons.ensure.Assert;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.lang.JavaClassUtils;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectList;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.metamodel.facetdecorator.FacetDecoratorSet;
@@ -46,7 +45,6 @@ import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.metamodel.spec.IntrospectableSpecification;
-import org.apache.isis.metamodel.spec.JavaSpecification;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.SpecificationFacets;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -55,7 +53,6 @@ import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTyp
 import org.apache.isis.metamodel.specloader.internal.cache.SimpleSpecificationCache;
 import org.apache.isis.metamodel.specloader.internal.cache.SpecificationCache;
 import org.apache.isis.metamodel.specloader.internal.facetprocessor.FacetProcessor;
-import org.apache.isis.metamodel.specloader.internal.instances.InstanceCollectionSpecification;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
@@ -381,18 +378,10 @@ public abstract class ObjectReflectorAbstract implements
 
 
 	/**
-	 * Overridable method for language-specific subclass to create the
-	 * appropriate type of {@link ObjectSpecification}.
+	 * Mandatory hook method to create the
+	 * appropriate (sub)type of {@link ObjectSpecification}.
 	 */
-	protected ObjectSpecification createSpecification(final Class<?> cls) {
-
-		if (ObjectList.class.isAssignableFrom(cls)) {
-			return new InstanceCollectionSpecification(this,
-					getRuntimeContext());
-		}
-
-		return new JavaSpecification(cls, this, getRuntimeContext());
-	}
+	protected abstract ObjectSpecification createSpecification(final Class<?> cls);
 
 	private Class<?> loadBuiltIn(final String className)
 			throws ClassNotFoundException {

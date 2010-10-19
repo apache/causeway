@@ -167,22 +167,16 @@ public class TextParseableField_ParseTextEntry {
         fieldImpl.parseTextEntry("foo");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidEntryException.class)
     public void parsedTextIsInvalidAccordingToAssociation() {
 
         context.checking(new Expectations() {
             {
                 allowing(mockParseableFacet).parseTextEntry(mockChild, "foo");
                 will(returnValue(mockParsedText));
-
-                allowing(mockOtoa).getFacets(with(any(Filter.class)));
-                will(returnValue(new Facet[] {}));
-
+                
                 one(mockOtoa).isAssociationValid(mockParent, mockParsedText);
                 will(returnValue(Veto.DEFAULT));
-
-                allowing(mockOtoa).isMandatory();
-                allowing(returnValue(true));
             }
         });
 

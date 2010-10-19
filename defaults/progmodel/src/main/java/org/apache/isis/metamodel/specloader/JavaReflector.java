@@ -23,10 +23,14 @@ package org.apache.isis.metamodel.specloader;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.metamodel.adapter.ObjectList;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.metamodel.spec.JavaSpecification;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.metamodel.specloader.internal.instances.InstanceCollectionSpecification;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
@@ -51,6 +55,20 @@ public class JavaReflector extends ObjectReflectorAbstract {
             final MetaModelValidator metaModelValidator) {
         super(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
     }
+
+	/**
+	 * Overridable method for language-specific subclass to create the
+	 * appropriate type of {@link ObjectSpecification}.
+	 */
+	protected ObjectSpecification createSpecification(final Class<?> cls) {
+
+		if (ObjectList.class.isAssignableFrom(cls)) {
+			return new InstanceCollectionSpecification(this,
+					getRuntimeContext());
+		}
+
+		return new JavaSpecification(cls, this, getRuntimeContext());
+	}
 
 
 }

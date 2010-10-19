@@ -53,16 +53,22 @@
 			<scope>test</scope>
 		</dependency>
 
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>metamodel</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>metamodel</artifactId>
+			<artifactId>progmodel</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>metamodel</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>progmodel</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
 
 		<dependency>
 			<groupId>commons-lang</groupId>

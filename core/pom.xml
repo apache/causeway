@@ -134,6 +134,19 @@
 				<type>test-jar</type>
 			</dependency>
 
+            <!-- progmodel -->
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>progmodel</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.core</groupId>
+                <artifactId>progmodel</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <type>test-jar</type>
+            </dependency>
+
 			<!-- remoting -->
 			<dependency>
 				<groupId>org.apache.isis.core</groupId>

@@ -29,7 +29,7 @@ import static org.junit.Assert.assertThat;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.commons.jmock.AbstractJMockForInterfacesTest;
+import org.apache.isis.common.jmock.AbstractJMockForInterfacesTest;
 
 import com.google.inject.CreationException;
 import com.google.inject.Guice;

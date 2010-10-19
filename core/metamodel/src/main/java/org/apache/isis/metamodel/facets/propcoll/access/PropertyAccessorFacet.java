@@ -22,7 +22,6 @@ package org.apache.isis.metamodel.facets.propcoll.access;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacet;
 
 
 /**
@@ -31,8 +30,6 @@ import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacet;
  * <p>
  * In the standard [[NAME]] Programming Model, corresponds to invoking the accessor method for a
  * property.
- * 
- * @see PropertySetterFacet
  */
 public interface PropertyAccessorFacet extends Facet {
 

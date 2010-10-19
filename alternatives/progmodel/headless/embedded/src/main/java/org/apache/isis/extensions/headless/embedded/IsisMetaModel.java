@@ -41,6 +41,7 @@ import org.apache.isis.metamodel.spec.IntrospectableSpecification;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.services.ServicesInjector;
 import org.apache.isis.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.metamodel.specloader.JavaReflector;
 import org.apache.isis.metamodel.specloader.ObjectReflectorAbstract;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -123,7 +124,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 
 	public void init() {
 		ensureNotInitialized();
-		reflector = new ObjectReflectorAbstract(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator){};
+		reflector = new JavaReflector(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
 		
 		services = createServices(serviceTypes);
 		runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
