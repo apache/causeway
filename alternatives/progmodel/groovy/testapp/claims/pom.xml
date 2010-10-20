@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>release</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.extensions</groupId>
+	<artifactId>groovy-testapp-claims</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	
+	<name>Groovy Support TestApp: Claims</name>
+	
+	<packaging>pom</packaging>
+
+	<properties>
+		<groovy.version>1.7.2</groovy.version>
+		<gmaven.version>1.2</gmaven.version>
+		<gmaven.runtime>1.7</gmaven.runtime>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.gmaven</groupId>
+					<artifactId>gmaven-plugin</artifactId>
+					<version>${gmaven.version}</version>
+					<executions>
+						<execution>
+							<goals>
+								<goal>compile</goal>
+								<goal>testCompile</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<providerSelection>${gmaven.runtime}</providerSelection>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+				<executions>
+					<execution>
+						<id>source</id>
+						<phase>compile</phase>
+					</execution>
+					<execution>
+						<id>test</id>
+						<phase>test-compile</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<excludes>
+						<exclude>**/Test*.java</exclude>
+					</excludes>
+					<useFile>true</useFile>
+					<printSummary>false</printSummary>
+					<outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/Test*.java</exclude>
+					</excludes>
+					<showSuccess>false</showSuccess>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<modules>
+		<module>dom</module>
+		<module>fixture</module>
+		<module>service</module>
+		<module>commandline</module>
+		<module>webapp</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- this project's own modules -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>groovy-testapp-claims-dom</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>groovy-testapp-claims-fixture</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>groovy-testapp-claims-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>groovy-testapp-claims-commandline</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>groovy-testapp-claims-webapp</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+
+			<!-- Groovy Support -->
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>groovy-applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>groovy-metamodel</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- Groovy -->
+			<dependency>
+				<groupId>org.codehaus.groovy</groupId>
+				<artifactId>groovy-all</artifactId>
+				<version>${groovy.version}</version>
+			</dependency>
+		</dependencies>
+
+
+	</dependencyManagement>
+
+
+</project>

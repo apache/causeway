@@ -1,0 +1,101 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+    <display-name>Naked Objects HTML Viewer</display-name>
+
+	<filter>
+		<filter-name>NakedObjectsSessionFilter</filter-name>
+		<filter-class>org.nakedobjects.webapp.NakedObjectsSessionFilter</filter-class>
+		<init-param>
+			<param-name>logonPage</param-name>
+			<param-value>/logon.app</param-value>
+		</init-param>
+	</filter>
+
+	<filter>
+		<filter-name>StaticContentFilter</filter-name>
+		<filter-class>org.nakedobjects.webapp.StaticContentFilter</filter-class>
+		<init-param>
+			<param-name>CacheTime</param-name>
+			<param-value>86400</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>StaticContentFilter</filter-name>
+		<url-pattern>*.css</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>StaticContentFilter</filter-name>
+		<url-pattern>*.png</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>StaticContentFilter</filter-name>
+		<url-pattern>*.jpg</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>StaticContentFilter</filter-name>
+		<url-pattern>*.gif</url-pattern>
+	</filter-mapping>
+    
+    <filter-mapping>
+    	<filter-name>NakedObjectsSessionFilter</filter-name>
+    	<url-pattern>*.app</url-pattern>
+    </filter-mapping>
+
+    <listener>
+        <listener-class>org.nakedobjects.webapp.NakedObjectsWebAppBootstrapper</listener-class>
+    </listener>
+
+    <servlet>
+        <servlet-name>Logon</servlet-name>
+        <servlet-class>org.nakedobjects.plugins.html.servlet.LogonServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Controller</servlet-name>
+        <servlet-class>org.nakedobjects.plugins.html.servlet.ControllerServlet</servlet-class>
+    </servlet>
+
+    <servlet>
+        <servlet-name>Resource</servlet-name>
+        <servlet-class>org.nakedobjects.webapp.servlets.ResourceServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Logon</servlet-name>
+        <url-pattern>/logon.app</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Controller</servlet-name>
+        <url-pattern>*.app</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+		<url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+		<url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+		<url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Resource</servlet-name>
+		<url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+ 	
+	<welcome-file-list>
+		<welcome-file>logon.app</welcome-file>
+	</welcome-file-list>
+	
+</web-app>
+
+
+
