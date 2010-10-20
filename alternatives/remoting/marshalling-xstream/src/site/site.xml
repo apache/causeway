@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 	<bannerLeft>
-		<name>[[NAME]]</name>
-		<src>../../images/banner-left.png</src>
-		<href>http://isis.apache.org/index.html</href>
+		<name>&nbsp;</name>
+        <href>http://incubator.apache.org/isis</href>
 	</bannerLeft>
 
 	<bannerRight>
-		<src>../../images/sflogo.png</src>
-		<href>http://sourceforge.net/projects/isis</href>
+        <name>&nbsp;</name>
+        <href>http://incubator.apache.org</href>
 	</bannerRight>
 
 	<body>

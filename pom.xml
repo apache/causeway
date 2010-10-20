@@ -49,6 +49,15 @@
 
     <inceptionYear>2010</inceptionYear>
 
+    <scm>
+        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk</connection>
+        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk</developerConnection>
+        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk</url>
+    </scm>
+
+    <!-- used in Site generation for relative references -->
+    <url>http://incubator.apache.org/isis</url>
+
     <properties>
         <compileSource>1.6</compileSource>
         <compileTarget>1.6</compileTarget>
@@ -72,16 +81,9 @@
         <trunkBaseDir>${project.build.directory}/${siteBaseDir}/..</trunkBaseDir>
         <checkstyle.configLocation>${trunkBaseDir}/src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
         <pmd.ruleset>${trunkBaseDir}/src/main/pmd/pmd.xml</pmd.ruleset>
+        
+        <projectUrl>${project.url}</projectUrl>
     </properties>
-
-    <scm>
-        <connection>scm:svn:http://svn.apache.org/repos/asf/incubator/isis/trunk</connection>
-        <developerConnection>scm:svn:https://svn.apache.org/repos/asf/incubator/isis/trunk</developerConnection>
-        <url>http://svn.apache.org/repos/asf/incubator/isis/trunk</url>
-    </scm>
-
-    <!-- used in Site generation for relative references -->
-    <url>http://incubator.apache.org/isis</url>
 
 
     <mailingLists>

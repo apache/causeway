@@ -19,10 +19,10 @@
 
 HTTP Remoting
  
- Client/server deployments of [[NAME]] (eg using the {{{../plugins/dnd-viewer/index.html}DnD viewer}} on the front-end
- require a remoting mechanism to communicate between client and server.
+~~ Client/server deployments of [[NAME]] (eg using the {{{../plugins/dnd-viewer/index.html}DnD viewer}} on the front-end
+~~ require a remoting mechanism to communicate between client and server.
  
- The {{{../core/index.html}core}} framework provides a simple <<<java.net.Socket>>> implementation; this plugin
- provides an implementation based on HTTP.
+~~ The {{{../core/index.html}core}} framework provides a simple <<<java.net.Socket>>> implementation; this plugin
+~~ provides an implementation based on HTTP.
  
- There are two submodules, one for the {{{client/index.html}client}}, the other for the {{{server/index.html}server}}.
+~~ There are two submodules, one for the {{{client/index.html}client}}, the other for the {{{server/index.html}server}}.

@@ -15,6 +15,9 @@
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
+        
+        <docbkx.title>Apache Isis File Security</docbkx.title>
+        <docbkx.outputName>isis-file-security</docbkx.outputName>
 	</properties>
 
 	<dependencies>

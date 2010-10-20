@@ -17,9 +17,22 @@
  * under the License.
  */
 
-body {
-  padding: 0px 0px 10px 0px;
+html {
+  background: AntiqueWhite;
 }
+
+body {
+  align: center;
+  text-align: center;
+  background: white;
+  width: 1024px;
+  margin: 0 auto;
+}
+
+#banner, #breadcrumbs, #leftColumn, #bodyColumn, #footer {
+  text-align: left;
+}
+
 body, td, select, input, li{
   font-family: Verdana, Helvetica, Arial, sans-serif;
   font-size: 13px;
@@ -158,3 +171,16 @@ dt {
   background-image: url(../images/icon_info_sml.gif);
 }
 
+#bannerLeft {
+  background: url(../images/logos/banner-left.png) left top no-repeat;
+  height: 85px;
+  width: 627px;
+  float: left;
+}
+
+#bannerRight {
+  background: url(../images/logos/apache-incubator-logo.png) right top no-repeat;
+  height: 85px;
+  width: 240px;
+  float: right;
+}

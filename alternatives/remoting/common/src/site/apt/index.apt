@@ -17,8 +17,6 @@
 
 
 
-Remoting Support
+Remoting Common Support
 
- Certain viewers for [[NAME]] can be run in client/server mode.  The <core>
- module defines the API and provides a simple implementation that uses sockets.  See
- {{{../plugin/index.html}plugins}} for alternative implementations.
+  The <common> module for remoting ...

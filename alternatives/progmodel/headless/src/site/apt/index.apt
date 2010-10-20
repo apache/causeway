@@ -17,11 +17,11 @@
 
 
 
-Headless Viewer
+Headless Programming Model
  
- The <headless> viewer allows one domain object to interact with another <as if> through a viewer.  That is, 
+ The <headless> programming model allows one domain object to interact with another <as if> through a viewer.  That is, 
  if a property or action is unusable, then the calling domain object will be receive an exception indicating the fact.
  
- The headless viewer is provided as an implementation of [[NAME]]' <<<DomainObjectContainer>>> interface.
+ The headless programming model is provided as an implementation of [[NAME]]' <<<DomainObjectContainer>>> interface.
  This can be downcast into <<<HeadlessViewer>>>, from which the domain object is wrapped in cglib proxy.  This proxy
  implements the "see it, use it, do it" business rules.

@@ -17,8 +17,6 @@
 
 
 
-SQL Persistor Implementation
+SQL ObjectStore Implementation
 
-* ALPHA
- 
- This module holds the implementation of the {{{../index.html}SQL Persistor}}.
+ This module holds the implementation of the {{{../index.html}SQL ObjectStore}}.

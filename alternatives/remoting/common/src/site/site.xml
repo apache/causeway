@@ -1,23 +1,22 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 
-	<bannerLeft>
-		<name>[[NAME]]</name>
-		<src>../../images/banner-left.png</src>
-		<href>http://isis.apache.org/index.html</href>
-	</bannerLeft>
+    <bannerLeft>
+        <name>&nbsp;</name>
+        <href>http://incubator.apache.org/isis</href>
+    </bannerLeft>
 
-	<bannerRight>
-		<src>../../images/sflogo.png</src>
-		<href>http://sourceforge.net/projects/isis</href>
-	</bannerRight>
+    <bannerRight>
+        <name>&nbsp;</name>
+        <href>http://incubator.apache.org</href>
+    </bannerRight>
 
 	<body>
 		<breadcrumbs>
-			<item name="Remoting" href="index.html" />
+			<item name="Common"/>
 		</breadcrumbs>
 
-		<menu name="Remoting">
+		<menu name="Common">
 			<item name="About" href="index.html" />
 		</menu>
 

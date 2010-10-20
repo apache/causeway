@@ -17,34 +17,23 @@
 
 
 
-Viewers and Object Stores
+Alternatives
  
- <Apache Isis> defines APIs and implementations for two main APIs: 
+ The <alternatives> module is a parent for alternative implementations of the
+ following APIs:
   
- * {{{./viewers/index.html}viewers}}
- 
-   The viewer API provides different ways for domain objects to be 
-   rendered as an object-oriented UI.
-   
  * {{{./objectstores/index.html}object stores}}
  
    The object store API allows Isis to persist domain objects using different 
    technologies.
    
- []
- 
-Other APIs
- 
- As well as viewers and object store, the framework provides a number of other 
- more fine-grained APIs:
-
  * programming model / other language support
  
    The Isis programming model is well-defined (see the 
    {{{../applib/index.html}applib}} module for details) and generally should
    not require adjusting; but can be modified if required.
 
- * authentication & authorization
+ * security (authentication & authorization)
  
    The mechanisms for authentication ("who are you"?) and authorization 
    ("what can you do?") are both pluggable.
@@ -56,6 +45,5 @@ Other APIs
  
  []
  
- The <alternates> module acts as the parent for the available alternates.  Note that plugins are versioned
- separately from the main {{{../core/index.html}core}} framework.
+ Note that alternatives are versioned separately from the main {{{../core/index.html}core}} framework.
  

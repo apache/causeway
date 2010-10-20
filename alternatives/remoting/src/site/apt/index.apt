@@ -17,15 +17,10 @@
 
 
 
-Core Framework
+Remoting
  
- The <core> module is the parent of a set of submodules that collectively form the core of [[NAME]].
- Specifically, they provide:
+ The <remoting> module is the parent of a set of submodules that collectively provide a remoting
+ infrastructure for client/server deployments.
  
- * metamodel
- 
- * runtime instance management
- 
- * persistence of domain objects (delegates to an object store implementation)
  
  []

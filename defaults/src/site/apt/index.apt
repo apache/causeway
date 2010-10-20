@@ -17,15 +17,9 @@
 
 
 
-Core Framework
+Default Implementations
  
- The <core> module is the parent of a set of submodules that collectively form the core of [[NAME]].
- Specifically, they provide:
- 
- * metamodel
- 
- * runtime instance management
- 
- * persistence of domain objects (delegates to an object store implementation)
+ The <defaults> module is the parent of a set of submodules that collectively provide the default
+ implementations for key APIs of the <core> framework.
  
  []

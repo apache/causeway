@@ -17,10 +17,10 @@
 
 
 
-XML Persistor
+XML ObjectStore
 
- The XML persistor provides a simple way to persist domain objects to file storage.  The format of this file is a
+ The <xml> object store provides a simple way to persist domain objects to file storage.  The format of this file is a
  proprietary XML schema.
  
- Note that the XML persistor is suitable for single-user standalone apps, but is not intended for multi-user deployments.
+ Note that the XML object store is suitable for single-user standalone apps, but is not intended for multi-user deployments.
  

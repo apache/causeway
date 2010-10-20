@@ -17,9 +17,9 @@
 
 
 
-CGLib Bytecode Support
+Default (CGLib) Bytecode Support
  
- The <CGLib Bytecode Support> module enables transparent lazy loading and object dirtying 
+ The <Default Bytecode Support> module enables transparent lazy loading and object dirtying 
  support.
  
 Configuring CGLib
@@ -28,7 +28,9 @@ Configuring CGLib
 
 Alternatives
 
- As an alternative to CGLib you can use {{{../bytecode-javassist/index.html}Javassist}}.
+ * As an alternative to CGLib you can use {{{../../alternatives/bytecode/javassist/index.html}Javassist}}.
  
- Some object stores (for example <JPA Objects> sister project) do not need the use of this
- bytecode module, because they hook into the lazy loading of the underlying ORM.
+ * Some object stores do not need the use of this
+   bytecode module, because they hook into the lazy loading of the underlying ORM.  For these, you should
+   use the {{{../../alternatives/bytecode/identity/index.html}Identity}} (aka no-op) implementation.
+

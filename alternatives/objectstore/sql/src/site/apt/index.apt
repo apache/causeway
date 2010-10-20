@@ -17,10 +17,11 @@
 
 
 
-SQL Persistor
+SQL ObjectStore
 
-* ALPHA
+ The <sql> object store module provides the ability to persist domain objects into an RDBMS.  It has no external dependencies, using simply JDBC.
  
- The SQL Persistor provides the ability to persist domain objects into an RDBMS.  It has no external dependencies, using simply JDBC.
  
- A more sophisticated but also more complex alternative is the {{{http://jpaobjects.sourceforge.net}JPA Objects}} persistor.
+Alternatives
+
+ A more sophisticated but also more complex alternative is the {{{../jpa/index.html}JPA}} object store.

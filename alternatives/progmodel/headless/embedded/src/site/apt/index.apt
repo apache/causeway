@@ -19,5 +19,5 @@
 
 Headless Embedded
  
- The <headless embedded> provides the ability to embed the [[NAME]] metamodel without depending on
+ The <headless embedded> provides the ability to embed the Isis metamodel without depending on
  the runtime.

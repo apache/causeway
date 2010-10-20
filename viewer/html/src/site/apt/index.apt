@@ -24,8 +24,10 @@ HTML Viewer
  hyperlinks used to navigate between objects.  In addition, object actions can also be invoked,
  with hyperlinks bringing up a page for action parameters if required.
  
+Alternatives
+
  One limitation of the HTML viewer is that it is not customizable, other than through CSS.  
- If you want the ability for more far-reaching customization, then consider {{{./scimpi/index.html}Scimpi}} webapp viewer
- or the {{{http://wicketobjects.sourceforge.net}Wicket Objects}} (webapp viewer.
+ If you want the ability for more far-reaching customization, then consider {{{../scimpi/index.html}Scimpi}} webapp viewer
+ or the {{{../wicket/index.html}Wicket}} viewer.
     
  

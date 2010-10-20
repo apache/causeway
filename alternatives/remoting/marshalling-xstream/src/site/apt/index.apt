@@ -19,8 +19,8 @@
 
 XStream Marshalling
  
- Client/server deployments of [[NAME]] require a marshalling mechanism to 
-   "take apart" the domain objects and then reassemble them.  The core API and standard implementation for marshalling
-   is defined in {{{../core/runtime/index.html}runtime}}; this module provides an alternative implementation based
-   on {{{http://xstream.codehaus.org}XStream}}.
+~~ Client/server deployments of [[NAME]] require a marshalling mechanism to 
+~~ "take apart" the domain objects and then reassemble them.  The core API and standard implementation for marshalling
+~~ is defined in {{{../core/runtime/index.html}runtime}}; this module provides an alternative implementation based
+~~ on {{{http://xstream.codehaus.org}XStream}}.
  

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project>
+
+	<bannerLeft>
+		<name>&nbsp;</name>
+        <href>http://incubator.apache.org/isis</href>
+	</bannerLeft>
+
+	<bannerRight>
+        <name>&nbsp;</name>
+        <href>http://incubator.apache.org</href>
+	</bannerRight>
+
+	<body>
+		<breadcrumbs>
+			<item name="NoSQL"/>
+		</breadcrumbs>
+
+		<menu name="NoSQL ObjectStore">
+			<item name="About" href="index.html" />
+		</menu>
+
+        <menu name="Documentation">
+            <item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName}.pdf" />
+            <item name="${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
+        </menu>
+
+	</body>
+</project>

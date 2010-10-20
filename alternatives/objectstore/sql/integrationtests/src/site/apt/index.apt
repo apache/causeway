@@ -17,8 +17,8 @@
 
 
 
-SQL Persistor Integration Tests
+SQL ObjectStore Integration Tests
 
 * ALPHA
  
- This module holds the integration tests for the {{{../index.html}SQL Persistor}}.
+ This module holds the integration tests for the {{{../index.html}SQL ObjectStore}}.

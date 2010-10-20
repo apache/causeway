@@ -28,7 +28,8 @@ Configuring Javassist
 
 Alternatives
 
- As an alternative to Javassist you can use {{{../../defaults/bytecode/index.html}CGLib}}.
+ * As an alternative to Javassist you can use {{{../../defaults/bytecode/index.html}CGLib}}.
  
- Some object stores (for example the {{{../objectstore/jpa}JPA ObjectStore}} do not need the use of this
- bytecode module, because they hook into the lazy loading of the underlying ORM.
+ * Some object stores do not need the use of this
+   bytecode module, because they hook into the lazy loading of the underlying ORM.  For these,
+   use the {{{../identity/index.html}Identity}} (no-op) implementation.

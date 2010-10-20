@@ -2,14 +2,13 @@
 <project>
 
 	<bannerLeft>
-		<name>Apache Isis</name>
-		<src>../../images/banner-left.png</src>
-		<href>http://incubator.apache.org/isis/index.html</href>
+		<name>&nbsp;</name>
+        <href>http://incubator.apache.org/isis</href>
 	</bannerLeft>
 
 	<bannerRight>
-		<src>../../images/sflogo.png</src>
-		<href>http://www.apache.org</href>
+        <name>&nbsp;</name>
+        <href>http://incubator.apache.org</href>
 	</bannerRight>
 
 	<body>
