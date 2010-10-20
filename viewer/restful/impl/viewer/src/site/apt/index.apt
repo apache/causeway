@@ -1,0 +1,3 @@
+Viewer
+
+  The <viewer> module provides a set of servlets that serve up the domain objects as RESTful resources. 

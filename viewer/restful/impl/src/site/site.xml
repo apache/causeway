@@ -1,0 +1,56 @@
+<project name="${project.name}">
+    <version position="right"/>
+    <bannerLeft>
+        <name>HAL</name>
+        <src>images/hal-logo-for-maven-site.jpg</src>
+        <href>.</href>
+    </bannerLeft>
+
+    <poweredBy>
+        <logo name="Naked Objects" href="http://nakedobjects.org"
+              img="images/logo_NO_website_set1.png"/>
+    </poweredBy>
+
+    <skin>
+        <groupId>org.starobjects.star</groupId>
+        <artifactId>skin</artifactId>
+        <version>1</version>
+    </skin>
+
+    <body>
+        <links>
+          <item name="Naked Objects" href="http://www.nakedobjects.org/"/>
+          <item name="Sister Projects" href="http://starobjects.sourceforge.net"/>
+        </links>
+
+        <menu ref="modules" inherit="top"/>
+
+        <menu name="Documentation">
+            <item name="User Guide (PDF)" href="documentation/docbkx/pdf/user-guide.pdf"/>
+            <item name="User Guide (HTML)" href="documentation/docbkx/html/user-guide/user-guide.html"/>
+            <item name="Developers Guide (PDF)" href="documentation/docbkx/pdf/developers-guide.pdf"/>
+            <item name="Developers Guide (HTML)" href="documentation/docbkx/html/developers-guide/developers-guide.html"/>
+        </menu>
+
+        <menu name="Project Resources">
+            <item name="SF Trac Wiki" href="http://sourceforge.net/apps/trac/restfulobjects"/>
+            <item name="SF Project Page" href="http://sourceforge.net/projects/restfulobjects"/>
+        </menu>
+
+        <menu name="Sister Projects">
+            <item name="Home" href="http://starobjects.sourceforge.net"/>
+            <item name="Maven Repo" href="http://starobjects.sourceforge.net/m2-repo"/>
+        </menu>
+
+        <menu name="Other Resources">
+            <item name="Dan Haywood's blog" href="http://danhaywood.com"/>
+            <item name="Naked Objects" href="http://www.nakedobjects.org"/>
+            <item name="Naked Objects blog" href="http://blog.nakedobjects.org"/>
+            <item name="Naked Objects for .NET" href="http://www.nakedobjects.net"/>
+            <item name="Scimpi" href="http://www.scimpi.org/" />
+        </menu>
+
+
+    </body>
+
+</project>

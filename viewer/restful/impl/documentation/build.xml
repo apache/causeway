@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+
+<project name="documentation" default="copy" basedir=".">
+	<property name="dest.dir" value="target" />
+<!--
+	<property name="src.dir" value="src" />
+	<property name="dist.dir" value="${dest.dir}/dist" />
+	<property file="ant.properties" />
+	<property name="document.name" value="document" />
+	<dirname property="base.dir" file="${ant.file.documentation}"/>
+	<property name="lib.dir" value="${base.dir}/lib" />
+-->
+	<target name="clean">
+		<delete failonerror="false" includeemptydirs="true">
+			<fileset dir="${dest.dir}">
+				<include name="javadoc.xml" />
+			</fileset>
+		</delete>
+	</target>
+
+	<target name="clean-all">
+		<delete failonerror="false" dir="${dest.dir}" />
+	</target>
+
+	<target name="-init">
+		<mkdir dir="${dest.dir}" />
+	</target>
+
+	<target name="javadoc" description="Generates Javadoc for AppLib" depends="-init">
+		<javadoc destdir="${dest.dir}" 
+				doclet="com.jeldoclet.JELDoclet" 
+				docletpath="jeldoclet-1.0.jar">
+
+			<sourcepath>
+				<dirset dir="../../..">
+					<!-- APPLIB 
+					<include name="core/applib/src/main/java/**" />
+-->
+
+					<!-- CORE -->
+					<include name="core/bytecode-cglib/src/main/java/**"/>
+					<include name="core/bytecode-javassist/src/main/java/**"/>
+					<include name="core/metamodel/src/main/java/**" />
+					<include name="core/remoting/src/main/java/**"/>
+					<include name="core/runtime/src/main/java/**/*.java"/>
+					<include name="core/webapp/src/main/java/**"/>
+					<include name="core/webserver/src/main/java/**"/>
+					
+					<!-- Plugins -->
+					<!--
+					<include name="plugins/sql-persistor/src/main/java/**"/>
+					<include name="plugins/xml-persistor/src/main/java/**"/>
+					<include name="plugins/dnd-viewer/src/main/java/**"/>
+					-->
+					
+					<!--
+					<include name="XXX nof-reflector-java/src/main/java/**"/>
+-->
+				</dirset>
+			</sourcepath>
+			<package name="org.nakedobjects.*" />
+		</javadoc>
+		
+		<xslt basedir="." destdir="." includes="target/jel.xml"
+            extension=".cxml" style="convert.xsl">
+        </xslt>
+
+	</target>
+	
+	<target name="xslt" depends="javadoc">
+		<xslt basedir="." destdir="." includes="target/jel.xml"
+            extension=".html" style="api.xsl">
+        </xslt>
+        <copy file="style.css" todir="target"/>
+    </target>
+
+	<target name="copy" depends="xslt">
+		<copy overwrite="true" file="target/jel.html" tofile="target/api.html">
+			<filterchain>
+				<!-- remove paragraphs -->
+				<replaceregex flags="g" byline="false" pattern="&amp;lt;p&amp;gt;" replace="&lt;p&gt;" />
+
+				<!-- restore brackets around tags -->
+				<replaceregex flags="g" byline="false" pattern="&amp;lt;" replace="&lt;" />
+				<replaceregex flags="g" byline="false" pattern="&amp;gt;" replace="&gt;" />
+
+				<replaceregex flags="g" byline="false" pattern="&amp;quot;" replace="&quot;" />
+
+				<!-- unbracket Javadoc links and mark as code  -->
+				<replaceregex flags="g" byline="true" pattern="\{@link ([^\}]*)\}" replace="&lt;strong&gt;\1&lt;/strong&gt;" />
+			</filterchain>
+		</copy>
+	</target>
+<!--
+	<target name="pdf" depends="-init" description="Generates a single PDF file">
+		<property name="fop.dir" value="${lib.dir}" />
+		<taskdef name="fop" classname="org.apache.fop.tools.anttasks.Fop">
+			<classpath>
+				<pathelement location="${lib.dir}/fop.jar" />
+				<pathelement location="${fop.dir}/avalon-framework-cvs-20020806.jar" />
+				<pathelement location="${fop.dir}/batik.jar" />
+				<pathelement location="${fop.dir}/jimi-1.0.jar" />
+			</classpath>
+		</taskdef>
+
+		<xslt in="${src.dir}/${document.name}.xml" 
+				out="${dest.dir}/${document.name}-merged.xml" 
+				style="${base.dir}/merge.xsl" />
+
+		<xslt in="${dest.dir}/${document.name}-merged.xml" 
+				out="${dest.dir}/${document.name}-outline.fo" 
+				style="${base.dir}/outline-fo.xsl" classpath="lib/xalan2.jar" />
+
+		<xslt in="${dest.dir}/${document.name}-merged.xml" 
+				out="${dest.dir}/${document.name}.fo" 
+				style="${base.dir}/document-fo.xsl">
+			<param name="draft" expression="" />
+		</xslt>
+
+		<fop format="application/pdf" 
+				fofile="${dest.dir}\${document.name}-outline.fo" 
+				outfile="${dest.dir}\${document.name}-outline.pdf" />
+
+		<fop basedir="${dest.dir}" 
+				format="application/pdf" 
+				fofile="${dest.dir}\${document.name}.fo" 
+				outfile="${dist.dir}\${document.name}.pdf" />
+
+		<delete> 
+			<fileset dir="${dest.dir}">
+				<include name="*.fo"/>
+				<include name="merge.xml"/>
+				<include name="images"/>
+			</fileset>
+		</delete>
+	</target>
+-->
+
+<!--
+	<target name="html">
+		<xslt 
+			in="${src.dir}/${document.name}.xml" 
+			out="${dest.dir}/${document.name}-merge.xml" 
+			style="${base.dir}/merge.xsl" />
+-->
+		<!--
+			Note the Saxon8 jar needs to be added to the ANT_HOME/lib directory
+		-->
+<!--		<xslt 
+				in="${dest.dir}/${document.name}-merge.xml" 
+				out="${dest.dir}/${document.name}/${document.name}.html" 
+				style="${base.dir}/new-html.xsl" 
+				processor="trax" 
+				classpath="${lib.dir}/saxon8.jar">
+			<factory name="net.sf.saxon.TransformerFactoryImpl" />
+			<param name="root-doc" expression="${document.name}.html" />
+		</xslt>
+
+
+		<copy todir="${dest.dir}/${document.name}">
+			<fileset file="${src.dir}/*.css" />
+
+			<fileset dir="${src.dir}">
+				<include name="**/*.png" />
+				<include name="**/*.svg" />
+			</fileset>
+		</copy>
+		<delete dir="${dest.dir}" includes="*-document.html" />
+	</target>
+-->
+</project>
