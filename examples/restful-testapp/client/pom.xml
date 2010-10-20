@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.starobjects.restful</groupId>
+		<artifactId>testapp</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<name>Client</name>
+	<artifactId>testapp-client</artifactId>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.nakedobjects.runtime.boot.cmdline.NakedObjects</mainClass>
+							<addClasspath>true</addClasspath>
+							<addExtensions>false</addExtensions>
+							<classpathPrefix>lib</classpathPrefix>
+						</manifest>
+					</archive>
+					<finalName>testapp</finalName>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<descriptors>
+						<descriptor>src/main/assembly/descriptor.xml</descriptor>
+					</descriptors>
+					<finalName>testapp-exploration-0.0.1-SNAPSHOT</finalName>
+				</configuration>
+			</plugin>
+
+		</plugins>
+	</build>
+
+
+
+	<dependencies>
+	
+		<!-- other modules in this project -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>testapp-fixture</artifactId>
+		</dependency>
+
+
+		<!-- restfulobjects -->
+
+		<dependency>
+			<groupId>org.starobjects.restful</groupId>
+			<artifactId>applib</artifactId>
+		</dependency>
+
+		<!-- naked objects -->
+
+	    <dependency>
+	        <groupId>org.nakedobjects.core</groupId>
+	        <artifactId>bytecode-cglib</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.nakedobjects.core</groupId>
+	        <artifactId>bytecode-javassist</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.nakedobjects.core</groupId>
+	        <artifactId>headless-viewer</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>org.nakedobjects.core</groupId>
+			<artifactId>embedded</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nakedobjects.plugins</groupId>
+			<artifactId>dnd-viewer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nakedobjects.plugins</groupId>
+			<artifactId>html-viewer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nakedobjects.plugins</groupId>
+			<artifactId>xml-persistor</artifactId>
+		</dependency>
+
+		 
+		<dependency>
+			<groupId>xom</groupId>
+			<artifactId>xom</artifactId>
+		</dependency>
+
+	</dependencies>
+
+</project>
