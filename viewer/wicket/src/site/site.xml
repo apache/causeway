@@ -1,0 +1,55 @@
+<project name="${project.name}">
+
+    <version position="right"/>
+    <bannerLeft>
+        <name>HAL</name>
+        <src>images/hal-logo-for-maven-site.jpg</src>
+        <href>.</href>
+    </bannerLeft>
+
+    <poweredBy>
+        <logo name="Naked Objects" href="http://nakedobjects.org"
+              img="images/NO-powered-by-logo.png"/>
+    </poweredBy>
+
+    <skin>
+        <groupId>org.starobjects.star</groupId>
+        <artifactId>skin</artifactId>
+        <version>1</version>
+    </skin>
+
+    <body>
+        <links>
+          <item name="Naked Objects" href="http://www.nakedobjects.org/"/>
+          <item name="Sister Projects" href="http://starobjects.sourceforge.net"/>
+        </links>
+
+        <menu ref="modules" inherit="top"/>
+
+        <menu name="Getting Started">
+            <item name="Screenshots" href="docbkx/html/user-guide/ch02.html"/>
+            <item name="Quick Start" href="quick-start.html"/>
+        </menu>
+
+        <menu name="Documentation">
+            <item name="User Guide (PDF)" href="docbkx/pdf/user-guide.pdf"/>
+            <item name="User Guide (HTML)" href="docbkx/html/user-guide/user-guide.html"/>
+        </menu>
+
+		<menu ref="reports"/>
+
+        <menu name="Project Resources">
+            <item name="SF Trac Wiki" href="http://sourceforge.net/apps/trac/wicketobjects"/>
+            <item name="SF Project Page" href="http://sourceforge.net/projects/wicketobjects"/>
+        </menu>
+
+
+        <menu name="Other Resources">
+            <item name="Apache Wicket" href="http://wicket.apache.org" />
+            <item name="Dan Haywood's blog" href="http://danhaywood.com"/>
+            <item name="Naked Objects for .NET" href="http://www.nakedobjects.net"/>
+        </menu>
+
+    </body>
+
+</project>

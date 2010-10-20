@@ -1,0 +1,42 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Overview
+
+  <Apache Isis Wicket Viewer> is a viewer extension for the 
+  <Apache Isis> framework, providing a customizable web app using the
+  {{{http://wicket.apache.org}Apache Wicket}} web framework.
+  
+  Using the <Apache Isis Wicket Viewer>, you can quickly developing domain-driven applications and run them as
+  <Apache Wicket> webapps.  You simply write your domain objects as pojos, and the viewer automatically
+  renders them as a webapp.  Later, you can start to customize the GUI by writing your own <Apache Wicket> <<<Component>>>s 
+  and plugging them into the infrastructure provided by <Apache Isis Wicket Viewer>. 
+
+  The diagram below shows how <Apache Isis Wicket Viewer> relates to the rest of <Apache Isis>, in terms 
+  of the {{{http://alistair.cockburn.us/Hexagonal+architecture}hexagonal architecture}}.
+
+[images/HexagonalArchitectureOverview.png] Apache Isis.
+
+Status
+
+  See the {{{todo.html}ToDo list}}
+
+Color Scheme
+
+  See {{{color-scheme.html}color scheme}}.

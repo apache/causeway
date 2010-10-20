@@ -1,0 +1,37 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
+
+
+Quick Start
+
+  Here's the quickest way to get started with <Wicket Objects>:
+  
+  * If required, install {{{http://subversion.org}Subversion}} and {{{http://maven.apache.org}Maven}}
+  
+  * Using <Subversion>, check out the test application (used for the walkthrough in the {{{../../documentation/docbkx/user-guide.html}user guide}}) from the Subversion repository:
+  
+    <<<svn co https://wicketobjects.svn.sourceforge.net/svnroot/wicketobjects/trunk/testapp/claims .>>>
+  
+  * Using <Maven>, build the claims app:
+  
+    <<<mvn clean install>>>
+  
+  * Start the claims app under jetty:
+  
+    <<<cd webapp>>>\
+    <<<mvn jetty:run>>>

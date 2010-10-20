@@ -1,0 +1,13 @@
+<project name="${project.name}">
+	<version position="right"/>
+    <body>
+        <menu ref="parent"/>
+
+        <menu name="Documentation">
+            <item name="User Guide (PDF)" href="../documentation/docbkx/pdf/user-guide.pdf"/>
+            <item name="User Guide (HTML)" href="../documentation/docbkx/html/user-guide/user-guide.html"/>
+        </menu>
+
+		<menu ref="reports"/>
+    </body>
+</project>

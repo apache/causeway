@@ -1,0 +1,161 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+
+package org.apache.isis.extensions.wicket.ui.components.entity.blocks.action;
+
+import java.util.List;
+
+import org.apache.isis.extensions.wicket.model.mementos.ActionMemento;
+import org.apache.isis.extensions.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.extensions.wicket.model.models.ActionModel;
+import org.apache.isis.extensions.wicket.model.models.EntityModel;
+import org.apache.isis.extensions.wicket.model.models.ActionModel.SingleResultsMode;
+import org.apache.isis.extensions.wicket.model.util.Actions;
+import org.apache.isis.extensions.wicket.ui.app.registry.ComponentFactoryRegistry;
+import org.apache.isis.extensions.wicket.ui.app.registry.ComponentFactoryRegistryAccessor;
+import org.apache.isis.extensions.wicket.ui.components.entity.blocks.summary.EntitySummaryPanel;
+import org.apache.isis.extensions.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
+import org.apache.isis.extensions.wicket.ui.pages.PageClassRegistry;
+import org.apache.isis.extensions.wicket.ui.pages.PageClassRegistryAccessor;
+import org.apache.isis.extensions.wicket.ui.pages.PageType;
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.runtime.persistence.PersistenceSession;
+import org.apache.wicket.Application;
+import org.apache.wicket.Page;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+import org.apache.wicket.markup.html.link.Link;
+
+public final class EntityActionLinkFactory implements CssMenuLinkFactory {
+
+	private static final long serialVersionUID = 1L;
+	
+	private final EntitySummaryPanel summaryPanel;
+
+	public EntityActionLinkFactory(EntityModel entityModel, EntitySummaryPanel summaryPanel) {
+		this.summaryPanel = summaryPanel;
+	}
+
+	public LinkAndLabel newLink(final ObjectAdapterMemento adapterMemento,
+			ObjectAction action, final String linkId) {
+		final ObjectAdapter adapter = adapterMemento.getObjectAdapter();
+
+		final Link<?> link = createLink(adapterMemento, action, linkId, adapter);
+        final ObjectAdapter contextAdapter = summaryPanel.getEntityModel().getObject();
+		final String label = Actions.labelFor(action, contextAdapter);
+
+		return new LinkAndLabel(link, label);
+	}
+
+    private Link<?> createLink(final ObjectAdapterMemento adapterMemento,
+            final ObjectAction action, final String linkId,
+            final ObjectAdapter adapter) {
+        Boolean persistent = adapter.isPersistent();
+		if (persistent) {
+            return createLinkForPersistent(linkId, adapterMemento,
+					action);
+		} else {
+            return createLinkForTransient(linkId, adapterMemento,
+					action);
+		}
+    }
+
+	private Link<?> createLinkForPersistent(final String linkId,
+			final ObjectAdapterMemento adapterMemento,
+			final ObjectAction action) {
+		final ObjectAdapter adapter = adapterMemento.getObjectAdapter();
+		final ObjectAdapter contextAdapter = summaryPanel.getEntityModel().getObject();
+		
+		PageParameters pageParameters = ActionModel
+				.createPageParameters(adapter, action,
+						getOidStringifier(), contextAdapter,
+						ActionModel.SingleResultsMode.REDIRECT);
+		Class<? extends Page> pageClass = getPageClassRegistry().getPageClass(PageType.ACTION);
+		return newBookmarkablePageLink(linkId, pageClass,
+				pageParameters);
+	}
+
+	/*
+	 * Separate method in order to capture the generic
+	 */
+	private <T extends Page> Link<T> newBookmarkablePageLink(
+			final String linkId, Class<T> pageClass,
+			PageParameters pageParameters) {
+		return new BookmarkablePageLink<T>(linkId, pageClass,
+				pageParameters);
+	}
+
+	private Link<?> createLinkForTransient(final String linkId,
+			final ObjectAdapterMemento adapterMemento,
+			ObjectAction action) {
+		final ActionMemento actionMemento = new ActionMemento(action);
+		final ActionModel.Mode actionMode = ActionModel
+		.determineMode(action);
+		return new Link<String>(linkId) {
+			private static final long serialVersionUID = 1L;
+			
+			public void onClick() {
+				// TODO: seems like can't use REDIRECT, since won't
+				// let multiple setResponsePage() calls once
+				// committed to redirecting (I'm guessing)
+				ActionModel actionModel = ActionModel.create(
+						adapterMemento, actionMemento, actionMode,
+						SingleResultsMode.INLINE);
+				summaryPanel.onClick(actionModel);
+			}
+		};
+	}
+	
+
+	// ///////////////////////////////////////////////////////////////////
+	// Dependencies (from IsisContext)
+	// ///////////////////////////////////////////////////////////////////
+
+	public IsisContext getIsisContext() {
+		return IsisContext.getInstance();
+	}
+	
+	public PersistenceSession getPersistenceSession() {
+		return IsisContext.getPersistenceSession();
+	}
+
+	protected OidStringifier getOidStringifier() {
+		return getPersistenceSession().getOidGenerator().getOidStringifier();
+	}
+
+
+	// ///////////////////////////////////////////////////////////////////
+	// Convenience
+	// ///////////////////////////////////////////////////////////////////
+
+	protected ComponentFactoryRegistry getComponentFactoryRegistry() {
+		final ComponentFactoryRegistryAccessor cfra = (ComponentFactoryRegistryAccessor)Application.get();
+        return cfra.getComponentFactoryRegistry();
+	}
+
+	protected PageClassRegistry getPageClassRegistry() {
+		final PageClassRegistryAccessor pcra = (PageClassRegistryAccessor)Application.get();
+        return pcra.getPageClassRegistry();
+	}
+
+}

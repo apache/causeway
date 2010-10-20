@@ -1,0 +1,29 @@
+.entityLink table.findUsing {
+	display: inline;
+	float: right;
+}
+
+a.entityDetailsLink {
+	text-align: left;
+	display:inline;
+	border: 1px  #bfaea6 solid;
+	white-space:nowrap;
+	margin:0em;
+	padding: 1px;
+	padding-right: 1.6em;
+	padding-left: 0.4em;
+	font-weight: normal;
+	cursor:default;
+	
+	color: #A66144;
+	background-color: #C4D9EA;
+	text-decoration:none;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+}
+
+a.entityDetailsLink:hover {
+	color: #D7E7F5;
+	background-color: #407098;
+}
