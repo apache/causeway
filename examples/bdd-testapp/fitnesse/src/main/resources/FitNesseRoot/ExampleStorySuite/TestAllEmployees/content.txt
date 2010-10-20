@@ -1,0 +1,17 @@
+!|using naked objects viewer|
+|on object|alias result as|perform|using member|
+|employees|list1|invoke action|All Employees|
+
+
+!|check list|list1|contains|
+|Name|
+|Fred Smith|
+|Tom Brown|
+
+
+!|check list|list1|precisely contains|
+|Name|
+|Fred Smith|
+|Tom Brown|
+|Sam Jones|
+

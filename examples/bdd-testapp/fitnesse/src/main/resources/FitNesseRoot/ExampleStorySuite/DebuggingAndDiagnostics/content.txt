@@ -1,0 +1,17 @@
+!|debug clock|
+|value|
+||
+
+!|debug object store|
+
+!|debug services|
+
+!|check specifications loaded|
+|short name|
+|EmployeeRepositoryInMemory|
+|ClaimRepositoryInMemory|
+|Claimant|
+|ClaimItem|
+|Employee|
+|Approver|
+|Claim|

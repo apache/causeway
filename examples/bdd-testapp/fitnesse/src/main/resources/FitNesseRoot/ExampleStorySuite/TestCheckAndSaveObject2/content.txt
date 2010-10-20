@@ -1,0 +1,13 @@
+!|using naked objects viewer|
+|on object|alias as|perform|using member|
+|Employee:Tom Brown|tomsClaim2|invoke action|New Claim|
+
+
+change status so invalid:
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|with arguments|
+|tomsClaim2|invoke action|Change Status||Incomplete|
+|tomsClaim2|check object||is not valid|
+
+

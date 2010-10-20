@@ -1,0 +1,24 @@
+!2 Description
+Logs on as a specific user.  Part of the initialization for a particular story's setup, and typically referenced in the test suite or story's own setup page.  Unlike Naked Objects' own !-LogonFixture-!, the login specified is ''not'' remembered to the end of the setup.  In order to run tests as a particular login it should therefore appear towards the end of the setup.
+
+!2 Variants
+ * SwitchUser
+   * is effectively a synonym.
+
+!2 Arguments
+ * login name
+   * as returned !-DomainObjectContainer#getUser()-!
+ * role name(s)
+   * can specify up to four.
+
+!2 Columns
+ * none
+
+!2 Example Usage
+!|logon as|fsmith|
+
+with roles
+
+!|logon as|fsmith|with roles|rpt_mgr_role,admin_role|
+
+

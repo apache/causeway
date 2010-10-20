@@ -1,0 +1,22 @@
+!include -c .DateIs2Mar2007
+!include -c .LogonAsFsmith
+!include -c .AliasServices
+!include -c EmployeesSuite.SetUpEmployees
+
+!|debug clock|
+|value|
+||
+
+!|debug services|
+
+!|debug object store|
+
+!|check specifications loaded|
+|short name|
+|EmployeeRepositoryInMemory|
+|ClaimRepositoryInMemory|
+|Claimant|
+|ClaimItem|
+|Employee|
+|Approver|
+|Claim|

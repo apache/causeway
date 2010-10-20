@@ -1,0 +1,5 @@
+!|using naked objects viewer|
+|on object|alias as|perform|using member|
+|Employee:Tom Brown|somePropertyDefault|get property default|Some Property With Default|
+
+there doesn't seem to be any easy way in the Java version of FitNesse to verify a simple strings or primitives (ie non-JavaBeans)...

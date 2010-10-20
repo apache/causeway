@@ -1,0 +1,11 @@
+!2 Description
+Lists service class names (as picked up from configuration).  Useful with AliasServices.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * none
+
+!2 Example Usage
+|debug services|

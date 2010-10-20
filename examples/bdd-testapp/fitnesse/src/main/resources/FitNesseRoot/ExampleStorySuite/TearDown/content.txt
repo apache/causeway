@@ -1,0 +1,3 @@
+!*> shutdown
+!|shutdown naked objects|
+*!

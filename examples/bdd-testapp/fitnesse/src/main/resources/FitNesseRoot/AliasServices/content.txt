@@ -1,0 +1,4 @@
+!|alias services|
+|class name|alias=|
+|org.starobjects.tested.fitnesse.testapp.service.claim.ClaimRepositoryInMemory|claims|
+|org.starobjects.tested.fitnesse.testapp.service.employee.EmployeeRepositoryInMemory|employees|

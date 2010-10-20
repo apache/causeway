@@ -1,0 +1,33 @@
+!2 Description
+Initializes objects.  Can use for either reference data or operational data.  Used to initialize a particular story's setup.  Typically referenced in the test suite or story's own setup page.
+
+!2 Variations
+ * SetUpObject, SetUpObjects, SetUpTransientObject, SetUpTransientObjects
+   * the 'transient' variations do not persist the instantiated object
+   * occasionally useful for complex setup where there is no action that can be invoked
+   * can be persisted later through its alias
+
+!2 Arguments
+ * fully qualified class name of object to instantiate
+
+!2 Columns
+ * property names of the domain object
+   * not all properties need to be specified
+ * alias=
+   * assigns an alias to each instance (saves having to lookup the object in the test proper)
+   * can be left blank, aliases will be automatically assigned
+   * if no alias column is provided, one will be appended and aliases automatically assigned
+   * can also use 'alias as'
+
+!2 Example Usage
+!|set up objects|com.mycompany.foobar.dom.employee.Employee|
+|Name|Approver|alias as|
+|Fred Smith||Employee:Fred Smith|
+|Tom Brown|Employee:Fred Smith|Employee:Tom Brown|
+|Sam Jones|Employee:Fred Smith|Employee:Sam Jones|
+
+
+!|set up transient object|com.mycompany.foobar.dom.employee.Employee|
+|Name|Approver|alias as|
+|Bill Jackson||Employee: Bill Jackson|
+

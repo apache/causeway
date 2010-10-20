@@ -1,0 +1,10 @@
+!include -c <GivenNewlyCreatedClaimSuite.TheGiven
+!include -c <WhenModifyAndSaveClaimSuite.TheWhen
+
+then...
+
+!|using naked objects viewer|
+|on object|alias result as|perform|on member|that it|value|
+|tomsClaim1||check object||is saved|
+|tomsClaim1||check property|Date|contains|04-Jan-2007|
+|tomsClaim1||check property|Description|contains|lunch with client|

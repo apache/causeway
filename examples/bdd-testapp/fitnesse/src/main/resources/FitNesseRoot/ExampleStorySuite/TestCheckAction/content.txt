@@ -1,0 +1,17 @@
+!|using naked objects viewer|
+|on object|perform|using member|that it|value|
+|Employee:Fred Smith|check action|Some Hidden Action|is hidden|
+|Employee:Fred Smith|check action|New Claim|is visible|
+|Employee:Fred Smith|check action|Some Disabled Action|is disabled|
+|Employee:Fred Smith|check action|New Claim|is usable|
+
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|
+|Employee:Fred Smith|check action|New Claim|is valid|
+
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|with arguments|
+|Employee:Fred Smith|check action|Add Two Positive Numbers|is valid for|3|4|
+|Employee:Fred Smith|check action|Add Two Positive Numbers|is not valid for|-3|4|

@@ -1,0 +1,37 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion"
+      xmlns:testedobjects="http://testedobjects.sourceforge.net/2010/concordion">
+<link href="../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+<h3>Operational Data</h3>
+<p>With Employees (<span concordion:set="#className">org.apache.isis.extensions.bdd.testapp.claims.dom.employee.Employee</span>):
+</p>
+<table testedobjects:execute="#result=setUpObject(#className, #aliasAs, #name, #approver)">
+	<tr>
+		<th concordion:set="#name">Name</th>
+		<th concordion:set="#approver">Approver</th>
+		<th concordion:set="#aliasAs">aliasAs</th>
+		<th concordion:assertEquals="#result"/>
+	</tr>
+	<tr>
+		<td>Fred Smith</td>
+		<td></td>
+		<td>Employee:Fred Smith</td>
+		<td>ok</td>
+	</tr>
+	<tr>
+		<td>Tom Brown</td>
+		<td>Employee:Fred Smith</td>
+		<td>Employee:Tom Brown</td>
+		<td>ok</td>
+	</tr>
+	<tr>
+		<td>Sam Jones</td>
+		<td>Employee:Fred Smith</td>
+		<td>Employee:Sam Jones</td>
+		<td>ok</td>
+	</tr>
+</table>
+
+</body>
+</html>

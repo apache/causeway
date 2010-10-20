@@ -1,0 +1,27 @@
+!2 Description
+Check items in list, either precisely or just for presence.  Lists are either aliased results of actions, or aliased collections within objects.  See also AliasItemsInList.
+
+!2 Arguments
+ * list alias
+ * qualifier
+   * either 'contains' or 'precisely contains'
+
+!2 Columns
+ * Title
+ * Type
+   * optional, concrete type
+
+!2 Example Usage
+!|check list|list1|contains|
+|Title|
+|Fred Smith|
+|Tom Brown|
+
+and
+!|check list|list1|precisely contains|
+|Title|
+|Fred Smith|
+|Tom Brown|
+|Sam Jones|
+
+

@@ -1,0 +1,3 @@
+!|using naked objects viewer|
+|on object|alias result as|perform|using member|
+|employees|allEmployeesList|invoke action|All Employees|

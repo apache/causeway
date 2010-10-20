@@ -1,0 +1,14 @@
+!include -c <GivenEmployeeWithApproverSuite.TheGiven
+!include -c <WhenCreateClaimSuite.TheWhen
+
+then ...
+
+!|using naked objects viewer|
+|on object|alias result as|perform|on member|that it|value|
+|tomsClaim1||check object||is not saved||
+|||check property|Date|contains|Mar 2, 2007|
+||||Description|is empty|
+||||Status|contains|New|
+||||Claimant||tomEmployee|
+||||Approver||tomsApprover|
+|||check collection|Items|is empty||

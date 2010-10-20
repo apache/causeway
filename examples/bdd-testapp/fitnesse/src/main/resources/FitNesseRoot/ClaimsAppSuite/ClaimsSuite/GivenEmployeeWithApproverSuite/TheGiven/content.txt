@@ -1,0 +1,19 @@
+!include -c .DateIs2Mar2007
+!include -c .LogonAsFsmith
+!include -c .AliasServices
+
+!include -c <ClaimsAppSuite.EmployeesSuite.SetUpEmployees
+
+Locate and alias Tom and his approver:
+
+!|using naked objects viewer|
+|on object|alias result as|perform|using member|
+|employees|list1|invoke action|All Employees|
+
+!|alias items in list|list1|
+|title|alias as|
+|Tom Brown|tomEmployee|
+
+!|using naked objects viewer|
+|on object|alias result as|perform|on member|that it|value|
+|tomEmployee|tomsApprover|check property|Approver|is|Employee:Fred Smith|

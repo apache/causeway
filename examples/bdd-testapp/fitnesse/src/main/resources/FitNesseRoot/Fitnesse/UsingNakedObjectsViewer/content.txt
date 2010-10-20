@@ -1,0 +1,113 @@
+!2 Description
+Simulates interacting with the domain objects as if through a viewer.  Interact with objects, check their state, alias referenced objects
+
+!2 Variations
+ * UsingNakedObjectsViewer, UsingNakedObjectsViewerForSetUp
+   * the '!-ForSetUp-!' version disables checks for visibility and usability
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * on object
+   * the (alias of) the object to interact with
+   * can also use 'object', or 'on'
+ * alias result as
+   * alias to assign to any result of interaction
+     * either a reference, a property or the result of an action
+   * can also use 'result=', 'alias=', 'alias as'
+ * perform
+   * the interaction to perform (see below for further details)
+   * can also use 'do', 'interaction', 'interaction type'
+ * on member
+   * the property, collection or action to use
+   * can also use 'member', 'using member', 'using'
+ * that it
+   * optional qualifier for interactions that make checks (see below for further details)
+   * can also use 'that', 'verb'
+ * with arguments
+   * optional argument for interactions that make checks (see below for further details)
+   * optional argument(s) for actions
+   * can also use 'with', 'arguments', 'parameters', 'with parameters', 'for', 'for arguments', 'for parameters', 'value', 'reference'
+
+!2 Example Usage
+!|using naked objects viewer|
+|on object|alias result as|perform|using member|
+|employees|list1|invoke action|All Employees|
+
+
+!|using naked objects viewer for set up|
+|on object|alias result as|perform|using member|
+|employees|list1|invoke action|All Employees|
+
+
+Alternate column headers (more formal style):
+!|using naked objects viewer|
+|object|result=|interaction type|member|
+|employees|list1|invoke action|All Employees|
+
+
+!2 Perform
+!3 on properties
+|on object|alias as|perform|using member|that it|value|
+|''object alias''||check property|''property name''|is hidden|
+|''object alias''||check property|''property name''|is visible|
+|''object alias''||check property|''property name''|is disabled|
+|''object alias''||check property|''property name''|is enabled|
+|''object alias''||check property|''property name''|is empty|
+|''object alias''||check property|''property name''|is not empty|
+|''object alias''||check property|''property name''|contains|''value or object alias''|
+|''object alias''||check property|''property name''|does not contain|''value or object alias''|
+|''object alias''||check set property|''property name''|is valid for|''value or object alias''|
+|''object alias''||check set property|''property name''|is not valid for|''value or object alias''|
+|''object alias''||check clear property|''property name''|is valid|
+|''object alias''||check clear property|''property name''|is not valid|
+|''object alias''|''alias for default object''|get property default|''property name''||
+|''object alias''|''alias for list of choices''|get property choices|''property name''||
+|''object alias''|''alias for referenced object''|get property|''property name''||
+|''object alias''|''alias for referenced object''|set property|''property name''||''value or object alias''|
+|''object alias''||clear property|''property name''||
+
+!3 on collections
+|on object|alias as|perform|using member|that it|reference|
+|''object alias''||check collection|''collection name''|is hidden|
+|''object alias''||check collection|''collection name''|is visible|
+|''object alias''||check collection|''collection name''|is disabled|
+|''object alias''||check collection|''collection name''|is enabled|
+|''object alias''||check collection|''collection name''|is empty|
+|''object alias''||check collection|''collection name''|is not empty|
+|''object alias''||check collection|''collection name''|contains|''object alias''|
+|''object alias''||check collection|''collection name''|does not contain|''object alias''|
+|''object alias''||check add to collection|''collection name''|is valid for|''object alias''|
+|''object alias''||check add to collection|''collection name''|is not valid for|''object alias''|
+|''object alias''||check remove from collection|''collection name''|is valid for|''object alias''|
+|''object alias''||check remove from collection|''collection name''|is not valid for|''object alias''|
+|''object alias''|''alias for collection''|get collection|''collection name''|
+|''object alias''|''alias for collection''|add to collection|''collection name''||''object alias''|
+|''object alias''|''alias for collection''|remove from collection|''collection name''||''object alias''|
+
+!3 on actions
+|on object|alias result as|perform|using member|that it|with arguments|
+|''object alias''||check action|''action name''|is hidden|
+|''object alias''||check action|''action name''|is visible|
+|''object alias''||check action|''action name''|is disabled|
+|''object alias''||check action|''action name''|is usable|
+|''object alias''||check action|''action name''|is valid for|''argument list''|
+|''object alias''||check action|''action name''|is not valid for|''argument list''|
+|''object alias''|''alias for parameter default''|get action parameter default|''action name''||''param number (0-based)''|
+|''object alias''|''alias for list of parameter choices''|get action parameter choices|''action name''||''param number (0-based)''|
+|''object alias''|''alias for returned object''|invoke action|''action name''||''argument list''|
+
+If the action is a contributed action and takes 
+ * a single argument (ie the object contributed to), then no argument is required
+ * more than one argument, then all arguments are required (including the object being contributed to)
+
+!3 on objects themselves
+|on object|perform|that it|
+|''object alias''|check object|is valid|
+|''object alias''|check object|is not valid|
+|''object alias''|check object|is saved|
+|''object alias''|check object|is not saved|
+|''object alias''|save object||
+
+

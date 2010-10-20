@@ -1,0 +1,19 @@
+!include .BootstrapNakedObjects
+
+
+
+Set up for these stories
+
+!|time is now|2 mar 2007 09:20|
+
+!|logon as|fsmith|
+
+
+Operational data
+
+!|set up objects|org.starobjects.tested.fitnesse.testapp.dom.employee.Employee|
+|Name|Approver|alias as|
+|Fred Smith||Employee:Fred Smith|
+|Tom Brown|Employee:Fred Smith|Employee:Tom Brown|
+|Sam Jones|Employee:Fred Smith|Employee:Sam Jones|
+

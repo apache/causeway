@@ -1,0 +1,5 @@
+!*> shutdown
+#currently disabled, bug in NOF 4.0-beta-X
+#|shutdown naked objects|
+
+*!

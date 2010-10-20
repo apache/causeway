@@ -1,0 +1,11 @@
+create a claim for Tom and for Sam
+
+!|using naked objects viewer|
+|on object|alias as|perform|using member|
+|Employee:Tom Brown|tomsClaim1|invoke action|New Claim|
+|Employee:Sam Jones|samsClaim1|invoke action|New Claim|
+
+!|using naked objects viewer|
+|on object|alias as|perform|
+|tomsClaim1||save|
+|samsClaim1||save|

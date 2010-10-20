@@ -1,0 +1,28 @@
+!include CommonCreateClaimForTomAndSam
+
+should not be possible to add Sam's claim to Tom's collection
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|with arguments|
+|Employee:Tom Brown|check add to collection|Most Recent Claims|is not valid for|samsClaim1|
+
+
+should be possible to add Tom's claim to Tom's collection (bit nonsensical, but what the hey)
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|with arguments|
+|Employee:Tom Brown|check add to collection|Most Recent Claims|is valid for|tomsClaim1|
+
+
+should not be possible to remove Sam's claim to Tom's collection
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|with arguments|
+|Employee:Tom Brown|check remove from collection|Most Recent Claims|is not valid for|samsClaim1|
+
+
+should be possible to remove Tom's claim to Tom's collection
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|with arguments|
+|Employee:Tom Brown|check remove from collection|Most Recent Claims|is valid for|tomsClaim1|

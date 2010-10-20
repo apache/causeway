@@ -1,0 +1,7 @@
+!|org.starobjects.tested.fitnesse.StoryFixture|
+
+!|set config directory|../exploration/config|
+
+!|enable exploration|
+
+!|init naked objects|

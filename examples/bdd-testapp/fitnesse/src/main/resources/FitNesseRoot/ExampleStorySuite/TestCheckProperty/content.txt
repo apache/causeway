@@ -1,0 +1,25 @@
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|value|
+|Employee:Fred Smith|check property|SomeHiddenProperty|is hidden|
+|Employee:Fred Smith|check property|SomeHiddenProperty|is not visible|
+|Employee:Fred Smith|check property|Approver|is visible|
+|Employee:Fred Smith|check property|Approver|is not hidden|
+|Employee:Fred Smith|check property|SomeDisabledProperty|is disabled|
+|Employee:Fred Smith|check property|SomeDisabledProperty|is not usable|
+|Employee:Fred Smith|check property|SomeDisabledProperty|is not enabled|
+|Employee:Fred Smith|check property|Approver|is usable|
+|Employee:Fred Smith|check property|Approver|is enabled|
+|Employee:Fred Smith|check property|Approver|is not disabled|
+|Employee:Fred Smith|check property|Approver|is empty|
+|Employee:Tom Brown|check property|Approver|is not empty|
+|Employee:Tom Brown|check property|Approver|contains|Employee:Fred Smith|
+|Employee:Tom Brown|check property|Approver|does not contain|Employee:Sam Jones|
+
+!|using naked objects viewer|
+|on object|alias as|perform|using member|that it|value|
+|Employee:Tom Brown|tomsApproverViaCheckProperty|check property|Approver|contains|Employee:Fred Smith|
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|value|
+|tomsApproverViaCheckProperty|check property|Name|is|Fred Smith|

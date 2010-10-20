@@ -1,0 +1,12 @@
+cannot clear approver (is mandatory):
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|
+|Employee:Tom Brown|check clear property|Approver|is not valid|
+
+can clear favorite (is optional):
+
+!|using naked objects viewer|
+|on object|perform|using member|that it|value|
+|Employee:Tom Brown|check clear property|Favorite|is valid|
+

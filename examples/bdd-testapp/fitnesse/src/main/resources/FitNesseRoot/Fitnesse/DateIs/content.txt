@@ -1,0 +1,16 @@
+!2 Description
+Sets the clock to a specific date and time.  Part of the initialization for a particular story's setup, and typically referenced in the test suite or story's own setup page.
+
+!2 Variations
+ * DateIs, DateIsNow, TimeIs, TimeIsNow
+   * all behave in the same way
+
+!2 Arguments
+ * date
+   * in format d MMM yyyy hh:mm
+
+!2 Columns
+ * none
+
+!2 Example Usage
+!|date is|2 mar 2007 09:20|

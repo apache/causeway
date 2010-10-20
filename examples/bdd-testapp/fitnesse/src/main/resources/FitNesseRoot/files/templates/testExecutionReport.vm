@@ -1,0 +1,39 @@
+#set ($page_title="Test Execution Report")
+#parse("pageHead.vm")
+#if($testExecutionReport)
+<table border="1" cellspacing="0">
+  <tr>
+    <td>$testExecutionReport.Date</td>
+    <td class="meta">FitNesse Version: $testExecutionReport.Version</td>
+  </tr>
+</table>
+
+#foreach($testResult in $testExecutionReport.Results)
+<p/>
+<hr/>
+<p/>
+<table border="1" cellspacing="0">
+  <tr class="$testExecutionReport.summaryClass($testResult.TestSummary)">
+    <td>
+      <strong><span STYLE="font-size: 16pt">
+        <a name="$testResult.RelativePageName">$testResult.RelativePageName</a>
+      </span></strong>
+    </td>
+    <td>
+      $testResult.Right Right
+    </td>
+    <td>
+      $testResult.Wrong Wrong
+    </td>
+    <td>
+      $testResult.Ignores Ignores
+    </td>
+    <td>
+      $testResult.Exceptions Exceptions
+    </td>
+  </tr>
+</table>
+<div>$testResult.Content</div>
+#end
+#end
+  #parse("pageFooter.vm")

@@ -1,0 +1,5 @@
+!|using naked objects viewer|
+|on object|alias as|perform|using member|
+|Employee:Tom Brown|somePropertyChoices|get property choices|Some Property With Choices|
+
+there doesn't seem to be any easy way in the Java version of FitNesse to use the ''check list'' (ArrayFixture) to verify collections of strings and primitives (ie non-JavaBeans)...

@@ -1,0 +1,42 @@
+<html xmlns:concordion="http://www.concordion.org/2007/concordion"
+	xmlns:testedobjects="http://testedobjects.sourceforge.net/2010/concordion">
+<link href="../concordion.css" rel="stylesheet" type="text/css" />
+<body>
+
+<p>
+The system:
+</p>
+<ul>
+<li>
+<p concordion:execute="#result=initNakedObjects(#configDir,#deploymentType)">
+<span concordion:assertTrue="#result">bootstrapped</span> from
+config directory <span concordion:set="#configDir">../exploration/config</span>
+and running in <span concordion:set="#deploymentType">exploration</span>
+mode,
+</p>
+</li>
+<li>
+<p>with services: </p>
+<table testedobjects:execute="#result=aliasServices(#className, #aliasAs)">
+	<tr>
+		<th concordion:set="#className">Class Name</th>
+		<th concordion:set="#aliasAs">aliasAs</th>
+		<th concordion:assertTrue="#result"/>
+	</tr>
+	<tr>
+		<td>org.apache.isis.extensions.bdd.testapp.claims.service.claim.ClaimRepositoryInMemory</td>
+		<td>claims</td>
+		<td>ok</td>
+	</tr>
+	<tr>
+		<td>org.apache.isis.extensions.bdd.testapp.claims.service.employee.EmployeeRepositoryInMemory</td>
+		<td>employees</td>
+		<td>ok</td>
+	</tr>
+</table>
+</li>
+</ul>
+
+</body>
+
+</html>

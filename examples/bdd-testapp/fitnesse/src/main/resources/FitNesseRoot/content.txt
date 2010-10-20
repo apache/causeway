@@ -1,0 +1,14 @@
+!contents
+
+!*> Class Path & Global Defines
+'''Caution:''' Don't remove or modify these path statements unless you know what you are doing!
+
+!define COLLAPSE_SETUP {true}
+!define COLLAPSE_TEARDOWN {true}
+
+!path target/classes/
+!path target/test-classes/
+!path target/dependency/*.jar
+
+*!
+

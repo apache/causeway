@@ -1,0 +1,11 @@
+!include -c <GivenSomeEmployeesSuite.TheGiven
+!include -c <WhenListAllEmployeesSuite.TheWhen
+
+then ...
+
+!|check list|allEmployeesList|precisely contains|
+|Title|
+|Fred Smith|
+|Tom Brown|
+|Sam Jones|
+

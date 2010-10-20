@@ -1,0 +1,25 @@
+!1 Formatting
+See WikiFormatting for examples of supported wiki markup.
+
+!1 Fixture Tables
+|Type|Table Name|Purpose|
+|Bootstrapping|''Used for bootstrapping the test framework itself.  These are typically referenced in .BootstrapNakedObjects which is included in the test suite's setup page.''|
+||StoryFixture|Sets up the workflow story test.  Should appear first.|
+||SetConfigDirectory|Specifies the config directory containing nakedobjects.properties|
+||EnableExploration|Enables exploration actions if required|
+||InitNakedObjects|Use to initialize Naked Objects runtime.|
+|Setup|''Used to initialize a particular story's setup.  Typically referenced in the test suite or story's own setup page''|
+||DateIs|Sets the clock to a specific date and time|
+||LogonAs or SwitchUser|Logs on as a specific user|
+||AliasServices|Aliases services so that actions can be invoked upon them|
+||SetUpObjects|Initializes objects.  Can use for either reference data or operational data|
+|User interaction|''Appear in the main body of the test''|
+||UsingNakedObjectsViewer|Simulates interacting with the domain objects as if through a viewer.  Also use to assert on objects' state, and to alias objects|
+||CheckList|Check items in list, either precisely or just for presence|
+||AliasItemsInList|Provide an alias to items in list, which are presumed to exist (see also CheckList)|
+|Debugging|''Debugging and diagnostics.  Useful for checking setup is correct, for example''|
+||DebugServices|Lists service class names, as picked up from configuration.  Useful with AliasServices|
+||DebugClock|Reads current value of the clock|
+||DebugObjectStore|Dumps contents of the object store|
+||CheckSpecificationsLoaded|Verifies that listed !-NakedObjectSpecification-!s have been loaded into the metamodel|
+

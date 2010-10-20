@@ -1,0 +1,12 @@
+!2 Description
+Sets up the workflow story test.  Part of the bootstrapping of the test framework itself, typically referenced in .BootstrapNakedObjects included in the test suite's setup page.  Should appear first within this setup.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * none
+
+!2 Example Usage
+
+!|org.starobjects.tested.fitnesse.StoryFixture|

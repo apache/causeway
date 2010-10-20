@@ -1,0 +1,21 @@
+!2 Description
+Specifies an alias to services in order to invoke actions upon them.  Note that the services are ''not'' defined by this fixture, instead they are read from the config directory.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * class name
+   * the fully qualified name of the service implementation
+ * alias=
+   * assigns an alias to the service instance
+   * can also use 'alias as'
+
+!2 Example Usage
+!|alias services|
+|class name|alias=|
+|com.mycompany.myapp.service.claim.ClaimRepositoryInMemory|claims|
+|com.mycompany.myapp.service.claim.EmployeeRepositoryInMemory|claims|
+
+
+

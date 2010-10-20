@@ -1,0 +1,7 @@
+Create new claim, but don't save:
+
+!|using naked objects viewer|
+|on object|alias result as|perform|on member|using arguments|
+|tomEmployee|tomsClaim1|invoke action|New Claim||
+
+

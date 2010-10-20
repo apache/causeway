@@ -1,0 +1,22 @@
+!2 Description
+Provide an alias to items in list, which are presumed to exist.  See also CheckList.
+
+!2 Arguments
+ * list alias
+
+!2 Columns
+ * title
+ * type
+   * the required class name (can be fully qualified, but does not need to be) 
+   * optional; useful for collections of roles where the title given to each role might be that of the parent, and only the type differs 
+ * alias as
+   * can also use 'alias='
+
+!2 Example Usage
+
+!|alias items in list|list1|
+|title|alias as|
+|Tom Brown|tomEmployee|
+
+
+

@@ -1,0 +1,5 @@
+!include -c .DateIs2Mar2007
+!include -c .LogonAsFsmith
+!include -c .AliasServices
+
+!include -c <ClaimsAppSuite.EmployeesSuite.SetUpEmployees

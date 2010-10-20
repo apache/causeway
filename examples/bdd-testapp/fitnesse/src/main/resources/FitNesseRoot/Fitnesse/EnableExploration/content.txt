@@ -1,0 +1,11 @@
+!2 Description
+Enables exploration actions if required.  Part of the bootstrapping of the test framework itself, typically referenced in .BootstrapNakedObjects, prior to calling InitNakedObjects.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * none
+
+!2 Example Usage
+|enable exploration|
