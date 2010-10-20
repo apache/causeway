@@ -20,8 +20,8 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 
-		<docbkx.guideTitle>Apache Isis Scimpi</docbkx.guideTitle>
-		<docbkx.guideName>isis-scimpi-viewer</docbkx.guideName>
+		<docbkxGuideTitle>Apache Isis Scimpi</docbkxGuideTitle>
+		<docbkxGuideName>isis-scimpi-viewer</docbkxGuideName>
     </properties>
 
 	<build>

@@ -30,8 +30,8 @@
         
         <siteBaseDir>..</siteBaseDir>
 		
-		<docbkx.guideTitle>Apache Isis Core</docbkx.guideTitle>
-		<docbkx.guideName>isis-core</docbkx.guideName>	
+		<docbkxGuideTitle>Apache Isis Core</docbkxGuideTitle>
+		<docbkxGuideName>isis-core</docbkxGuideName>	
     </properties>
 
 	<modules>

@@ -18,8 +18,8 @@
         <core.version>0.1-SNAPSHOT</core.version>
     	<headless-viewer.version>0.1-SNAPSHOT</headless-viewer.version>
 
-        <docbkx.guideTitle>Apache Isis JUnit Support</docbkx.guideTitle>
-        <docbkx.guideName>isis-junit-support</docbkx.guideName>
+        <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
+        <docbkxGuideName>isis-junit-support</docbkxGuideName>
 	</properties>
 
 	<dependencies>

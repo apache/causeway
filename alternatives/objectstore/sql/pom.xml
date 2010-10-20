@@ -23,8 +23,8 @@
     <properties>
         <siteBaseDir>../../..</siteBaseDir>
 
-        <docbkx.guideTitle>Apache Isis SQL ObjectStore</docbkx.guideTitle>
-        <docbkx.guideName>isis-sql-objectstore</docbkx.guideName>
+        <docbkxGuideTitle>Apache Isis SQL ObjectStore</docbkxGuideTitle>
+        <docbkxGuideName>isis-sql-objectstore</docbkxGuideName>
     </properties>
 
     <build>

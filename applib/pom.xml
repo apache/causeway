@@ -19,8 +19,8 @@
 	<properties>
         <siteBaseDir>..</siteBaseDir>
 
-		<docbkx.guideTitle>Apache Isis Application Library</docbkx.guideTitle>
-		<docbkx.guideName>isis-applib</docbkx.guideName>
+		<docbkxGuideTitle>Apache Isis Application Library</docbkxGuideTitle>
+		<docbkxGuideName>isis-applib</docbkxGuideName>
 	</properties>
 	
 	<build>
@@ -38,7 +38,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<inherited>true</inherited>
+				<inherited>false</inherited>
 				<reportSets>
 					<reportSet>
 						<inherited>true</inherited>
@@ -46,6 +46,7 @@
 							<report>dependencies</report>
 							<report>dependency-convergence</report>
 							<report>plugins</report>
+                            <report>summary</report>
 						</reports>
 					</reportSet>
 				</reportSets>

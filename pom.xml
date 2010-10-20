@@ -67,8 +67,8 @@
         <siteBaseDir>.</siteBaseDir>
 
         <!-- used by docbkx-maven-plugin for DocBook guide; override as required -->
-        <docbkx.guideTitle>Apache Isis</docbkx.guideTitle>
-        <docbkx.guideName>apache-isis</docbkx.guideName>
+        <docbkxGuideTitle>Apache Isis</docbkxGuideTitle>
+        <docbkxGuideName>apache-isis</docbkxGuideName>
 
         <!-- used by maven-pdf-plugin for site PDFs; override as required -->
         <pdf.title>Apache Isis</pdf.title>
@@ -493,7 +493,7 @@
                     </configuration>
 
                     <!-- goal:generate-html has not binding; explicitly bind 
-                        to phase:package -->
+                        to phase:site -->
                     <executions>
                         <execution>
                             <id>html-docs</id>
@@ -506,7 +506,7 @@
                                 <excludes>old-src</excludes>
                                 <chunkedOutput>true</chunkedOutput>
                                 <htmlStylesheet>screen.css</htmlStylesheet>
-                                <htmlCustomization>${basedir}/src/docbkx/style/html-cust.xsl</htmlCustomization>
+                                <htmlCustomization>src/docbkx/style/html-cust.xsl</htmlCustomization>
                                 <sectionAutolabel>1</sectionAutolabel>
                                 <sectionLabelIncludesComponentLabel>1</sectionLabelIncludesComponentLabel>
                                 <highlightSource>1</highlightSource>
@@ -532,7 +532,7 @@
                         </execution>
 
                         <!-- goal:generate-pdf has not binding; explicitly 
-                            bind to phase:package -->
+                            bind to phase:site -->
                         <execution>
                             <id>pdf-docs</id>
                             <phase>site</phase>
@@ -542,8 +542,7 @@
                             <configuration>
                                 <argLine>-Xmx1024m</argLine>
                                 <imgSrcPath>${basedir}/target/docbkx/pdf/</imgSrcPath>
-                                <foCustomization>${basedir}/src/docbkx/style/fop-cust.xsl
-								</foCustomization>
+                                <foCustomization>src/docbkx/style/fop-cust.xsl</foCustomization>
                                 <highlightSource>1</highlightSource>
                                 <doubleSided>1</doubleSided>
 
@@ -632,7 +631,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>2.1.2</version>
+                    <version>2.2</version>
                     <!-- main configuration in reporting section (in inheriting 
                         modules) -->
                 </plugin>
@@ -739,25 +738,43 @@
     </build>
 
     <reporting>
+        <excludeDefaults>true</excludeDefaults>
         <plugins>
+            <!--
+            top-level pom (this pom) should have inherited=false, and: 
+            license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management, plugin-management, modules, summary   
+             -->
+            <!--
+            packaging=pom should have inherited=false, and: 
+            dependency-management, plugin-management, modules, summary   
+            -->
+            <!-- 
+            packaging=jar should have inherited=false, and: 
+            dependencies, dependencyConvergence, plugins, summary
+             -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <inherited>false</inherited>
+                <inherited>true</inherited>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
                             <report>license</report>
                             <report>project-team</report>
-                            <report>dependency-management</report>
                             <report>issue-tracking</report>
                             <report>scm</report>
                             <report>cim</report>
                             <report>mailing-list</report>
                             <report>dependency-management</report>
                             <report>plugin-management</report>
+                            <report>modules</report>
                             <report>summary</report>
+                            <!--   
+                            <report>dependencies</report>
+                            <report>dependencyConvergence</report>
+                            <report>plugins</report>
+                            -->
                         </reports>
                     </reportSet>
                 </reportSets>

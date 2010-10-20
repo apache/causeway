@@ -17,8 +17,8 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 
-		<docbkx.guideTitle>Apache Isis DnD Viewer</docbkx.guideTitle>
-		<docbkx.guideName>isis-dnd-viewer</docbkx.guideName>
+		<docbkxGuideTitle>Apache Isis DnD Viewer</docbkxGuideTitle>
+		<docbkxGuideName>isis-dnd-viewer</docbkxGuideName>
     </properties>
 
 	<build>

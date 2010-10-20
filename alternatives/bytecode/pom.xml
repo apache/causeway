@@ -18,8 +18,8 @@
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
 
-        <docbkx.guideTitle>Apache Isis Alternative Bytecode Implementations</docbkx.guideTitle>
-        <docbkx.guideName>isis-alternatives-bytecode</docbkx.guideName>
+        <docbkxGuideTitle>Apache Isis Alternative Bytecode Implementations</docbkxGuideTitle>
+        <docbkxGuideName>isis-alternatives-bytecode</docbkxGuideName>
 	</properties>
 
 	<modules>
