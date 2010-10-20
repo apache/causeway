@@ -1,0 +1,18 @@
+A ''Map'' is a mathematical function, specifying the relation between a ''key'' and a ''value''. There is at most one ''value'' for a ''key''.
+
+Let's look at an example. We may record the amount owed to us by different friends. We'll assume that our friends have distinct names, and that we record the full amount owed by that friend. Here's a table that checks the amounts owing. The order of the rows don't matter.
+!**>
+!define amounts (|ryan|200.00|
+|anmol|5.00|
+|sally|15.00|
+)
+**!
+|!-fitlibrary.eg.Owing-!|
+----
+----
+|''amounts owing''|${amounts}|
+ * There is a row for each element, with the ''key'' in the first cell and the ''value'' in the second.
+ * Notice that there is no header row, as they're unnecessary.
+^ProgramCode
+---- * ''Copyright (c) 2006, 2007 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

@@ -1,0 +1,8 @@
+!|org.starobjects.tested.fitnesse.StoryFixture|
+
+!|set up services|
+|class name|alias=|
+|org.starobjects.tested.fitnesse.exampleapp.service.claim.ClaimRepositoryInMemory|claims|
+|org.starobjects.tested.fitnesse.exampleapp.service.employee.EmployeeRepositoryInMemory|employees|
+
+!|init naked objects|

@@ -1,0 +1,11 @@
+!2 Description
+Use to initialize Naked Objects runtime.  Part of the bootstrapping of the test framework itself, typically referenced in .BootstrapNakedObjects included in the test suite's setup page.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * none
+
+!2 Example Usage
+|init naked objects|

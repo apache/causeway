@@ -1,0 +1,41 @@
+There are several ways in which nested tables can be defined in ${fitNesse}. If you're not familiar with the finer details of editing a wiki, you may like to ask for technical assistance from someone who does.
+ 1 Use ''defines''
+ 1 Include tables from another page
+ 1 Write HTML within tables
+I've found that the first option is the best, weighing up the various pros and cons. Let's look at these options, using the same table as example for each. Click the '''Edit'' button to see the wiki markup for these.
+!3 ''defines''
+Variable defines are used for inner tables. Eg:
+!define inner (|''name''|In Ner|
+|''owes''|100.00|
+)
+|''add debt''|${inner}|
+ * Each inner table is defined using a wiki variable
+ * Care is needed with spacing of defines (eg, the space between the variable name and the "(" is important)
+ * With multiple nesting of tables, it's best to use the "("...")" form of defines, because the "{"..."}" form leads to confusion with the !-${inner}-! form
+ * The variable definitions clutter up the page. So, instead we can use:
+!3 ''defines'' with variables hidden
+Variable defines are used for inner tables. Eg:
+!**> defines
+!define inner (|''name''|In Ner|
+|''owes''|100.00|
+)
+**!
+|''add debt''|${inner}|
+ * So now the variable definitions are (mostly) hidden, with the "!-!**> **!-!" folding form
+ * Care is also needed with the folding characters
+!3 ''Includes''
+Inner tables are included from another page
+|''add debt''|!include InnerPage|
+ * But this leads to another sort of clutter
+ * This can be avoided with a special notation (I can't remember it), but it makes it very hard to make changes to an inner table
+!3 html
+|''add debt''|!-<table>
+<tr><td><i>name</i></td><td><i>In Ner</i></td></tr>
+<tr><td><i>owes</i></td><td><i>100.00</i></td></tr>
+</table>-!|
+ * This can be unpleasant. The first version of the .FitLibrary.SpecifiCations were written in this way. I was pleased to move to using defines
+ * This depends on characters between "!-!--!" and "-!" being left alone
+ * Otherwise the HTML gets escaped
+
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www.rimuresearch.com''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

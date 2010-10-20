@@ -1,0 +1,17 @@
+SetUpFixture tables allow data to be entered, usually for the initial setup phase of a test.
+
+For example:
+
+|!-fitbook.DiscountGroupsSetUp-!|
+|future value|max balance|min purchase|discount %|
+|low|0.00|0.00|0|
+|medium|0.00|500.00|5|
+
+When this is tested, the table is only colored if something goes wrong.
+
+^WritingFixtures
+----The following specifies the expected counts of passes, fails, etc for the page. This is used here to avoid manually checking, as here the storytests are written to fail. You'll probably not use this technique, as you'd expect all your storytests to pass. There are other techniques to use with ''!-FitLibrary-!'' to test for expected failures (eg, the ''not'' action of ''!-DoFixture-!'').
+|!-fitlibrary.DoFixture-!|
+|''expected test results''|0|''right''|0|''wrong''|0|''ignored''|0|''exceptions''|
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

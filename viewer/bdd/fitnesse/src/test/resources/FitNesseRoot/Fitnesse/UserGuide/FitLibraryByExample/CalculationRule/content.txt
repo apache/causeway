@@ -1,0 +1,10 @@
+A CalculationRule specifies business rules that involve calculations.
+
+!3 Example
+^DiscountExample
+!3 Code
+^DiscountCode
+^CodeInGeneral
+^DomainAdapter
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www.rimuresearch.com.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

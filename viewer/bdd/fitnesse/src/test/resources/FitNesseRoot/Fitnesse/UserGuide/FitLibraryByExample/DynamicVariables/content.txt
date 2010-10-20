@@ -1,0 +1,27 @@
+Dynamic variables allow for storytests to take different values, depending on the values that have been defined.
+
+Dynamic variables  can be loaded from a properties file, as well as being set within storytests.
+
+!2 Using Dynamic variables
+ * The value of a dynamic variable is accessed using the @{} form. Eg:
+|''with''|//input|''set text''|@{simone.name}|
+ * They may be nested. Eg:
+|''with''|//input|''set text''|@{@{person.manager}.name}|
+ * And they may be used within defined actions. Eg, where PERSON is a parameter, the value of the variable is resolved before resolving the dynamic variable value:
+|''with''|//input|''set text''|@{PERSON.name}|
+ * To show the value of one or more dynamic variables:
+|'''show'''|''get''|@{simone.name} with card @{simone.credit card.number}|
+ * If a dynamic variable doesn't have a value, the @{} form remains
+!2 Changing Dynamic variables
+ * Load dynamic variables from a file:
+|''add dynamic variables from file''|c:/props.txt|
+ * Set a dynamic variable in a storytest:
+|'''set'''|simone.name|''to''|Simone|
+ * Set several dynamic variables at once in a storytest:
+|''set variables''|
+|simone.name|Simone|
+|simone.credit card.number|41111111|
+ * Clear all dynamic properties:
+|''clear dynamic variables''|
+!2 Specification
+|.FitLibrary.SpecifiCations.DynamicVariables|

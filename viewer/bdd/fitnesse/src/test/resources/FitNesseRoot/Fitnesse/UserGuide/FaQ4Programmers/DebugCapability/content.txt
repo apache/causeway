@@ -1,0 +1,16 @@
+${fitLibrary} includes the class ''!-DebugPage-!'' to allow the use of a debugger.
+
+Write your own class to make use of that. For example:
+----{{{ public class Debug {
+	public static void main(String[] args) throws Exception {
+		String url = "http://localhost:8086/";
+		String[] pageNames = new String[] {
+				"MyProject.MySuite.MyPage"
+		};
+		new DebugPage(url).runs(pageNames);
+	}
+}
+}}}----
+Include the URL for your ''!-FitNesse system-!'', which needs to be running. The ''runs()'' method takes an array of ''!-FitNesse-!'' page names.
+
+''!-DebugPage-!'' retrieves each of the pages through HTTP and runs them through ''!-FitLibraryServer-!'' directly. This means that you can use a debugger, such as in Eclipse, putting in breakpoints, etc in your code.

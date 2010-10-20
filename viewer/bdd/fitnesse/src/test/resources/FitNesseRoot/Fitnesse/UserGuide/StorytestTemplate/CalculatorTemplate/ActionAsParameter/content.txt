@@ -1,0 +1,42 @@
+This illustrates several things:
+ * An action name may be passed as a parameter
+ * There may be several tables that use a template
+ * There may be other text with a parameter in a table cell in the defined template's storytest (there is a "0" in front of the parameter in the third row)
+ * The parameter names in the ''use template'' don't have to be the same as those in the template definition
+ * When the parameters in the template are replaced in the body of the template, the longer parameter names (eg OPERAND) are replaced before shorter ones (eg OP). We wouldn't get what we want if they were replaced in parameter order, as OP would replace the OP of OPERAND.
+ * In ''!-FitNesse-!'', the easiest way to define the body of a template is to include it from anopther page
+!|fitlibrary.eg.Calculator|
+----
+|''use template''|calculator|
+|Initial|OP|OPERAND|TOTAL|
+|0|+|0|0|
+|-11|+|1|-10|
+
+|''use template''|calculator|
+|INITIAL|OP|OPERAND|TOTAL|
+|2|-|3|-1|
+
+|''template''|calculator|
+|INITIAL|OP|OPERAND|TOTAL|
+|!include CalcTemplate|
+----
+Further details:
+ * Embedded tables cannot be passed as arguments at this stage.
+ * A later version will allow for this.
+Technical details:
+ * See .FitLibrary.SpecifiCations.SpecialisedTables.StorytestTemplate for the specifications
+ * A macro approach is taken to parameter replacement.
+ * However, there are some confusing problems that can arise with simple approaches to parameter replacement.
+ * One problem is the one mentioned above, in which one parameter matches a part of another
+ * Another problem can arise with cascading macro replacements when applied to parameters.
+  * This arises when the result of one macro expansion results in text that includes a parameter that is in turn replaced later, yet that's not expected.
+  * Whether this occurs or not depends on the order of applying the replacements.
+  * Such problems can be hard to track down
+  * Note that cascading macro replacement can be very powerful, if used with care.
+   * They're needed in a full macro system, as in the ''!-!define-!'' approach of ''!-FitNesse-!''
+ * The approach used in ''!-FitLibrary-!'' with templates avoids the above problems:
+  * The replacements are carried out in reverse String-sort order, so that longer parameter names are replaced before shorter ones.
+  * The results of macro expansion of one parameter are not "seen" in other replacements
+----
+----
+|''expected test results''|2|''right''|2|''wrong''|0|''ignored''|0|''exceptions''|

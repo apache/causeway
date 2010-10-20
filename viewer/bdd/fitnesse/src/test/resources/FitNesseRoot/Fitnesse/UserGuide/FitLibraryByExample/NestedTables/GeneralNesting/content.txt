@@ -1,0 +1,16 @@
+Nested tables may be used in general with ''!-FitLibrary-!'' fixtures. Tables may be nested to arbitrary level, and mixed in arbitrary ways.
+!3 When an expected value is a collection, array or object
+In this case, the actual value is checked against the expected value, by colouring the nested table. Eg:
+ * As the ''check'' value in a ''!-DoFixture-!'' action
+ * In a value in a checked collection, set, array or map
+ * In a property check with ''!-DomainObjectCheckFixture-!''
+ * As the expected value in a ''!-CalculationFixture-!'' table
+!3 When a given (or supplied) value is a collection, array or object.
+In this case, the value is set up from the data in the nested table. Eg:
+ * In a parameter value in a ''!-DoFixture-!'' action
+ * In a property set with ''!-DomainObjectSetUpFixture-!''
+ * As a ''given'' in a ''!-CalculationFixture-!'' table
+!3 Setup Tables and Methods
+ * Consider when a setup method is needed when ''!-FitLibrary-!'' runs, but it doesn't yet exist. An error message gives the method name and the arguments required, as well as the class in which the method needs to appear.
+ * When a etup table is nested several levels deep, the setup method is expected in the fixture at the top level.
+

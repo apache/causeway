@@ -1,0 +1,63 @@
+!2 Nested lists and sets
+The use of nested tables is easiest to see by example. Let's look at a simple example and see how it's implemented. We'll define an action that takes a list as given and returns a set as a result.
+
+!**> test
+!define list (|''name''|
+|anna|
+|anna|
+|luke|
+)
+!define set (|''name''|
+|luke|
+|anna|
+)
+**!
+|!-fitlibrary.eg.ListToSet-!|
+|'''check'''|''list''|${list}|''to set''|${set}|
+
+The method ''listToSet()'' is defined as follows:
+----{{{	public Set listToSet(List list) {
+		return new HashSet(list);
+	}
+}}}----
+But what's the type of the components of the List, the argument of the method? Pre-jdk1.5, ''!-FitLibrary-!'' can't tell. So the ''!-ListToSet-!'' fixture is required to provide a setup method to create each element of the List. As the header of the List table is ''name'', the method ''name()'' is expected, with one argument. Here's what the fixture provides:
+----{{{ public Person name(String name) {
+		return new Person(name);
+	}
+}}}----
+That's all that's needed to create the List. What about checking the result? The method ''listToSet()'' returns a ''Set'', and so that is auto-wrapped with a ''!-SetFixture-!'', which checks the elements of the set against the second inner table. Obviously, the Set contains objects of class ''Person'', and that class has a property ''name''. Here's the whole of the code:
+----{{{public class ListToSet extends DoFixture {
+	public Set listToSet(List list) {
+		return new HashSet(list);
+	}
+	public Person name(String name) {
+		return new Person(name);
+	}
+	public static class Person {
+		private String name;
+
+		public Person(String name) {
+			this.name = name;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public int hashCode() {
+			return name.hashCode();
+		}
+		public boolean equals(Object obj) {
+			if (!(obj instanceof Person))
+				return false;
+			return name.equals(((Person)obj).name);
+		}
+	}
+}
+}}}----
+Notice that:
+ * We don't need to mention any fixtures other than ''!-ListToSet-!''; the rest is handled automatically by ''!-FitLibrary-!''. Behind the scenes, it makes use of a ''!-SetUpFixture-!'' and a ''!-SetFixture-!'' to do some of the work.
+ * We do need to define the ''name()'' method to create the elements of the List. These are assembled automatically by ''!-SetUpFixture-!''.
+ * The ''hashCode()'' and ''equals()'' methods are needed in ''Person'' so a Set can be constructued correctly.
+Let's look at another example, this time using arrays: NestedArrays

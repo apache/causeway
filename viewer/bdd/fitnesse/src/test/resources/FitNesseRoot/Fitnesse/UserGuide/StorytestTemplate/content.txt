@@ -1,0 +1,14 @@
+Consider again the calculator example.
+!|fitlibrary.eg.Calculator|
+
+|''total''|10|
+----
+|+|5|
+----
+|''total''|15|
+
+Now it would be painful to write a separate storytest for the calculator adding correctly with lots of different numbers.
+
+We look at one approach, using templates. The idea is to generalise the storytest above and allow different numbers to be plugged into it.
+ * This is shown here: ^CalculatorTemplate.
+Another approach is to use a calculation rule (as shown in .FitLibrary.UserGuide.FitLibraryByExample.CalculationRule).

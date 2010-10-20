@@ -1,0 +1,11 @@
+As we carry out actions, we can check the total. So we don't need a separate ${checks} in that case.
+---- * ${setup}
+!|fitlibrary.eg.Calculator|
+
+|''total''|10|
+---- * ${actions}
+|'''check'''|+|5|15|
+
+We don't need a ${setup} either, if we start the calculator in it's initial default state, with a total of 0.
+!3 Next
+ * See NoSetUpNeeded

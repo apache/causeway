@@ -1,0 +1,12 @@
+''!-FitNesse-!'' provides a way to run tests in batch with ''!-TestRunner-!'', rather than through a browser. However, this doesn't run some of the latest ''!-FitLibrary-!'' facilities:
+ * It doesn't support suite fixtures
+ * It doesn't support domain adapters
+This release provides for batch testing capability that fixes these limitations.
+
+To run in batch, run
+{{{
+    java -cp fitnesse.jar;fitlibrary.jar fitlibrary.suite.TestRunner [options] host port page
+}}}
+with the same arguments as with the ''!-TestRunner-!'' in ''!-FitNesse-!'', which is documented at http://www.fitnesse.org/FitNesse.CommandLineTestRunner.
+
+

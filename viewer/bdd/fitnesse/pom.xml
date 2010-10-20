@@ -1,0 +1,76 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.extensions</groupId>
+		<artifactId>bdd</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>bdd-fitnesse</artifactId>
+	<name>BDD Viewers: FitNesse</name>
+
+	<packaging>jar</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.agilejava.docbkx</groupId>
+				<artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<fitnesse.version>20100103</fitnesse.version>
+		<fitlibrary.version>20091020</fitlibrary.version>
+	</properties>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- 3rd party dependencies -->
+
+			<!-- download from http://fitnesse.org/fitnesse.jar?responder=releaseDownload&release=20100103 
+				and install using mvn install:install-file -->
+			<dependency>
+				<groupId>org.fitnesse</groupId>
+				<artifactId>fitnesse</artifactId>
+				<version>${fitnesse.version}</version>
+			</dependency>
+
+			<!-- download from http://sourceforge.net/projects/fitlibrary/files/ and 
+				install using mvn install:install-file -->
+			<dependency>
+				<groupId>org.fitnesse</groupId>
+				<artifactId>fitlibrary</artifactId>
+				<version>${fitlibrary.version}</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>bdd-common</artifactId>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.fitnesse</groupId>
+			<artifactId>fitnesse</artifactId>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.fitnesse</groupId>
+			<artifactId>fitlibrary</artifactId>
+			<type>jar</type>
+		</dependency>
+
+	</dependencies>
+
+</project>

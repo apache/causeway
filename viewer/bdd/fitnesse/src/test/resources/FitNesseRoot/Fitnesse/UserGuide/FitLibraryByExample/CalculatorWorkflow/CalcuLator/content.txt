@@ -1,0 +1,17 @@
+We start with a very simple example, a calculator. This ${workflow} ${storytest} consists of three phases, each with tables, separated by horizontal lines:
+ * ${setup}, where we specify the initial state of the calculator
+ * ${actions}, where we specify some actions that are carried out on the calculator
+ * ${checks}, where we specify the final, expected state of the calculator
+We can include explanatory text around our tables.
+---- * ${setup}
+!|fitlibrary.eg.Calculator|
+ * Let's start with a ''total'' value of 10 already in the calculator
+|''total''|10|
+---- * ${actions}
+ * Now we carry out an action: add 5
+|+|5|
+---- * ${checks}
+ * We expect that the ''total'' will now be 15
+|''total''|15|
+!3 Next
+ * We can CheckAsWeGo

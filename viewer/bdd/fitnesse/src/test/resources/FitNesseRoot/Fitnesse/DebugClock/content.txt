@@ -1,0 +1,11 @@
+!2 Description
+Reads current value of the clock.  Useful for debugging and diagnostics.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * none
+
+!2 Example Usage
+!|debug clock|

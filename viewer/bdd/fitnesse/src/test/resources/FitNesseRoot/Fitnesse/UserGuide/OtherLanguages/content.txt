@@ -1,0 +1,8 @@
+!3 Support in Java
+ * The Java ''!-FitLibrary-!'' only works with the !-FitNesse-!-supported Java version of Fit
+ * It does '''not''' work with the core Fit version from http://fit.c2.com).
+!3 Support in Python, C# and other programming languages
+ * John Roth has added ''!-FitLibrary-!'' to the Python version of Fit (for both core Fit and ''!-FitNesse-!''). This is available at www.python.org/pypi
+ * Mike Stockdale has released a C# port for much of ''!-FitLibrary-!'' at https://sourceforge.net/projects/fitlibrary/
+ * Randy Coulman has ported it to Smalltalk
+ * Work is underway on ports for PHP (and possibly Ruby and C++).

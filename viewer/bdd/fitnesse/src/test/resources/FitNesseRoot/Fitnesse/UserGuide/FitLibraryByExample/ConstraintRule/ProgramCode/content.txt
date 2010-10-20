@@ -1,0 +1,11 @@
+The class ''Constraints'' is as follows:
+----{{{public class Constraints {
+	public boolean aB(int a, int b) {
+		return a < b;
+	}
+	public boolean positive(int a) {
+		return a > 0;
+	}
+} }}}----
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www/rimuresearch.com.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

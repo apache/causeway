@@ -1,0 +1,32 @@
+TaggedStrings allow you retain tags (HTML or XML) in Fit table cells.
+
+For example, in the following tests, the tags are included in the comparison between the expected and actual values:
+
+!|fitlibrary.specify.DoWithTags|
+
+|''actions''|
+
+|check|tag text|!-<b>bold</b>-!|!-<b>bold</b>-!|
+
+|check|tag text|!-<table><tr><td>one</td></tr></table>-!|!-<table><tr><td>one</td></tr></table>-!|
+
+|check|tag text|!-<ul><li>one</li></li>two</li></ul>-!|!-<ul><li>one</li></li>two</li></ul>-!|
+
+These fail because the tags differ:
+
+|check|tag text|!-<b>bold</b>-!|bold|
+|check|tag text|bold|!-<b>bold</b>-!|
+
+In order for the tags to be retained, the underlying type needs to be a ''!-TaggedString-!'', as shown in the following class:
+----{{{public class DoWithTags {
+	public TaggedString tagText(TaggedString s) {
+		return s;
+	}
+}
+}}}----
+Because the argument to the method ''tagText()'' is a ''!-TaggedString-!'', the ''!-FitLibrary-!'' fixtures retain the tags in the string. The same applies to the return type of the method.
+----The following specifies the expected counts of passes, fails, etc for the page. This is used here to avoid manually checking, as here the storytests are written to fail. You'll most probably not use this technique, as you'd expect all your storytests to pass. There are other approaches to testing for errors, etc.
+|''expected test results''|3|''right''|2|''wrong''|0|''ignored''|0|''exceptions''|
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www.rimuresearch.com''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''
+

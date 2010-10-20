@@ -1,0 +1,12 @@
+Here's the corresponding code:
+----{{{  public class Owing {
+	public Map getAmountsOwing() {
+		HashMap map = new HashMap();
+		map.put("anmol", new Double(5.00));
+		map.put("sally", new Double(15.00));
+		map.put("ryan", new Double(200.00));
+		return map;
+	}
+}  }}}----
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

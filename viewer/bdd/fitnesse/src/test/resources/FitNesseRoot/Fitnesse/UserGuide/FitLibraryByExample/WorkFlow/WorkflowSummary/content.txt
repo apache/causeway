@@ -1,0 +1,28 @@
+!3 Workflow Action ''keywords''
+ * An workflow action has a ''keyword'' in the first cell and in every second cell. The other cells hold values (parameters).
+ * A ''keyword'' can contain any characters, such as "+", "Total $", "active!", "if", "(ok)". See ${extendedCamelCase}.
+ * A ''keyword'' cell can be empty.
+ * The last ''keyword'' is optional.
+!3 Special actions
+Some special actions apply to the rest of their row:
+ * ''check'' checks whether the result of the action in the rest of the row matches the value in the last cell of the row. That last cell is colored green, red, etc accordingly.
+ * ''reject'' checks that the action in the rest of the row fails, as expected.
+ * ''not'' acts the same as ''reject''.
+ * ''ensure'' checks that the action  in the rest of the row succeeds.
+ * ''show'' displays the result of the action in the rest of the row by adding an extra cell in the report.
+ * ''show dot'' displays the result of the action in the rest of the row by adding an extra cell in the report. This is shown as a Dot graph.
+ * ''note'' ignores the rest of the row, allowing notes to be included in tables
+Other special actions apply to the rest of the table
+ * ''calculate'' specifies that the rest of the table holds examples for a calculation rule.
+ * ''constraint'' specifies that the rest of the table holds examples for a constraint rule.
+ * ''failing constraint'' specifies that the rest of the table holds examples for a failing constraint.
+ * ''comment'' ignores the rest of the table
+ * ''ignored'' ignores the rest of the table, but colours it as ignored in the report
+ * ''abandon storytest'' to ignore the rest of the storytest (without colouring it as ignored)
+!3 More Examples
+Lots more examples of using ''!-DoFixture-!'' for workflow are provided in ''Fit for Developing Software'' by Rick Mugridge and Ward Cunningham, Prentice-Hall, 2005. The tables and fixture code for these examples are available on the [[Fit website][http://fit.w2.com]].
+!3 Program Code
+Let's now look at WorkflowCode for such tables.
+
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

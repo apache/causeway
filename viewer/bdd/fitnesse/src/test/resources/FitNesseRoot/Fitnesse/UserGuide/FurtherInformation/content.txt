@@ -1,0 +1,18 @@
+!3 Future Developments of ${fitLibrary}
+ * Evolution of ${fitLibrary} continues.
+ * Here's some PlannedFuture
+Some parts of ${fitLibrary} are experimental:
+ * ExperimentalExtensions
+!3 Further Information
+ * Join the fitlibrary-user email group at https://sourceforge.net/projects/fitlibrary/
+ * ${fitLibrary} is specified here: .FitLibrary.SpecifiCations
+  * This serves as a technical manual
+!3 Acknowledgements
+Special thanks to:
+ * Ward Cunningham for developing ''Fit'' in 2002
+ * Brian Marick for his ideas on "business-facing" tests and for encouraging me to make ''!-DoFixture-!'' public in 2004
+Many thanks to:
+ * Those who have ported/implemented ${fitLibrary} to/in other languages:
+  * John Roth in ''Python'', Randy Coulman in ''Smalltalk'', and Mike Stockdale in ''C#''.
+ * Micah and Bob Martin for ''!-FitNesse-!''
+ * The many people who have used ${fitLibrary}, provided feedback and asked interesting questions.

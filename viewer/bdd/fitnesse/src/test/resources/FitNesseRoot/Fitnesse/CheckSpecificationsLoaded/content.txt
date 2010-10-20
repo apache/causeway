@@ -1,0 +1,20 @@
+!2 Description
+Verifies that listed !-NakedObjectSpecification-!s have been loaded into the metamodel.  Useful for debugging and diagnostics.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * short name
+   * name of class
+
+!2 Example Usage
+!|check specifications loaded|
+|short name|
+|EmployeeRepositoryInMemory|
+|ClaimRepositoryInMemory|
+|Claimant|
+|ClaimItem|
+|Employee|
+|Approver|
+|Claim|

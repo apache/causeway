@@ -1,0 +1,25 @@
+Let's start by looking at the code for the previous example, shown in part again:
+
+|!-fitlibrary.eg.Discount-!|
+
+|''actions''|
+
+|''calculate''|
+|''$''||''discount''|
+|0.00||0.00|
+|1000.00||0.00|
+
+The code is as follows:
+----{{{  public class Discount {
+	public double discountDollar(double dollar) {
+		if (dollar <= 1000)
+			return 0;
+		return dollar * 0.05;
+	}
+  } }}}----The method ''discountDollar()'' is called for each of the rows. The ${given} value is supplied as an argument to the method and the result is compared to the ${expected} value.
+
+The header ${label}s are used to determine the ${ruleMethod} name. Each of the ${given} column labels is appended to the ${expected} column label ("discount" + "$"). This name is converted into a valid Java method name based on ${extendedCamelCase}. While this can result in some weird method names, it does given the storytest writer considerable freedom of expression.
+
+Such weird names means that a ${domainAdapter} is usually needed with calculation rules.
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

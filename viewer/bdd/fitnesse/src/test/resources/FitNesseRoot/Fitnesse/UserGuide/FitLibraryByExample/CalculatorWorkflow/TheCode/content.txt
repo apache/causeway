@@ -1,0 +1,32 @@
+Here's the first ${storytest} again:
+---- * ${setup}
+ * An object of the following class is created and wrapped with a ${traverse} to handle ${workflow}
+!|fitlibrary.eg.Calculator|
+ * The following calls the ${setter} method for ''total'', ''setTotal()''
+|''total''|10|
+---- * ${actions}
+ * The following calls the ${actionMethod} ''plus()'', which is derived from the ${keywords} of the action
+|+|5|
+---- * ${checks}
+ * The following calls the ${getter} method for ''total'', ''getTotal()'' and compares the actual and expected values
+|''total''|15|
+
+The class Calculator is as follows:
+----{{{  public class Calculator {
+	private int total;
+
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
+	public int plus(int i) {
+		total += i;
+		return total;
+	}
+}  }}}----
+In general:
+ * In the ${setup}, the tables consist of property-value pairs. For each such pair, the value is passed as an argument to the ${setter} of the property.
+ * In the ${actions}, each row of a table is treated as an ${action}, with a call to an ${actionMethod}.
+ * In the ${checks}, the tables consist of property-value pairs. For each such pair, the value is matched against the value returned by the ${getter} of the property.

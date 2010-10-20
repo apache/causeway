@@ -1,0 +1,639 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title>Tested Objects 1.0: FitNesse: Developers Guide</title>
+
+    <subtitle>FitNesse Integration for Naked Objects 4.0.x</subtitle>
+
+    <releaseinfo>0.1</releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><ulink url="http://testedobjects.sourceforge.net">Tested
+    Objects</ulink> is a <ulink url="http://starobjects.org">sister
+    project</ulink> for the <ulink url="http://nakedobjects.org">Naked
+    Objects</ulink> framework, providing integration with <ulink
+    url="http://fitnesse.info">FitNesse</ulink> to enable agile acceptance (or
+    scenario) testing. The integration bundles the
+    <emphasis>FitNesse</emphasis> wiki server and provides a set of generic
+    <emphasis>Fitnesse</emphasis> fixtures that interact with the domain model
+    in the same manner that a <emphasis>Naked Objects</emphasis> viewer does.
+    It also provides a <ulink url="http://maven.apache.org">Maven</ulink>
+    archetype to get you started quickly.</para>
+
+    <para>This developers' guide explains how to build <emphasis>Tested
+    Objects</emphasis> from source, allowing you to contribute back and extend
+    the range of capabilities.</para>
+
+    <para>If you are simply interested in using <emphasis>Tested
+    Objects</emphasis> as-is, please consult the user guide. (Note that the
+    archetype also has a built-in user guide).</para>
+
+    <para><emphasis>Tested Objects</emphasis> is hosted on <ulink
+    url="http://testedobjects.sourceforge.net">SourceForge</ulink>, and is
+    licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>. <emphasis>Naked Objects</emphasis> is also hosted on
+    <ulink
+    url="http://sourceforge.net/projects/nakedobjects">SourceForge</ulink>,
+    and is also licensed under Apache Software License v2.</para>
+  </preface>
+
+  <!-- main content -->
+
+  <chapter>
+    <title>Introduction</title>
+
+    <abstract>
+      <para>This chapter introduces the organization of this developers'
+      guide.</para>
+    </abstract>
+
+    <para><emphasis>Tested Objects</emphasis> is one of a number of sister
+    projects for Naked Objects. Each of these sister projects are organized
+    along the same general lines: they have the same directory structure, the
+    same coding conventions, a shared "corporate" Maven <acronym>POM</acronym>
+    to define build artifacts, the same release process and so on.</para>
+
+    <para>The <ulink url="http://starobjects.sourceforge.net">Star Objects
+    project</ulink> is an umbrella for all of these sister projects. As such
+    it holds the corporate <acronym>POM</acronym> and a number of other shared
+    artifacts, such as a site template so that the Maven sites for all sister
+    projects have the same general look-n-feel. It also hosts a Maven snapshot
+    repository and release repository.</para>
+
+    <para>In addition, the <emphasis>Star Objects</emphasis> also has a
+    developers guide (available online <ulink
+    url="http://starobjects.sourceforge.net/m2-site/main/documentation/docbkx/pdf/developers-guide.pdf">here</ulink>).
+    This describes how to build any given sister project from source, how to
+    be a contributor, and how (as a project admin) to release code artifacts
+    to the repositories and how to deploy the site.</para>
+
+    <para><emphasis>This</emphasis> developers guide therefore provides only a
+    high level outline of the structure of the modules, and provides only
+    summary steps for how to build and deploy the sister projects. Any
+    variations from the standard procedures described in the <emphasis>Star
+    Objects</emphasis> developers guide are also given.</para>
+
+    <para>Tihs guide also provides design/implementation notes, in <xref
+    linkend="chp.DesignNotes" />. If you are thinking about or fixing a bug or
+    contributing a new feature, you might find some starting points here (over
+    and above reading the Javadocs, tests and code, of course).</para>
+  </chapter>
+
+  <part>
+    <title>FitNesse Integration</title>
+
+    <partintro>
+      <para>Currently Tested Objects provides only a FitNesse integration, so
+      this developers guide consists of a single part.</para>
+    </partintro>
+
+    <chapter id="chp.Modules">
+      <title>Modules</title>
+
+      <abstract>
+        <para>This chapter describes the modules that make up <emphasis>Tested
+        Objects</emphasis>' FitNesse integration.</para>
+      </abstract>
+
+      <para>The modules that make up <emphasis>Tested Objects</emphasis>'
+      FitNesse integration follow the general conventions of sister projects,
+      with a <emphasis>main</emphasis> module, a <emphasis>support</emphasis>
+      module and a <emphasis>testapp</emphasis> module. You can read more
+      about this in the <emphasis>Star Objects</emphasis> developer guide.
+      However, the directory structure this does not quite follow the standard
+      layout for sister projects: the <emphasis>main</emphasis> and
+      <emphasis>support</emphasis> modules are nested under
+      <filename>trunk/fitnesse/</filename> (as opposed to directly under
+      <filename>trunk/</filename>). That's because <emphasis>Tested
+      Objects</emphasis> may be extended to support other testing frameworks
+      (eg <ulink url="http://concordion.org">Concordion</ulink>) in the
+      future.</para>
+
+      <sect1>
+        <title>Directory Structure</title>
+
+        <para>The source code directory structure for <emphasis>Tested
+        Objects</emphasis> is as follows:</para>
+
+        <screen>trunk/
+  fitnesse/           # FitNesse support
+    main/               # main release for FitNesse, including Maven site
+      fixtures/           # the FIT fixtures that integrate NO with FitNesse
+      documentation/      # this documentation
+    support/            # support - built after main release
+      release/            # defines dependencies for projects using the 'fixtures' module
+      archetype/          # archetype
+    testapp/            # application for testing - not released
+tags/
+  fitnesse/main       # tags for trunk/fitnesse/main
+  fitnesse/support    # tags for trunk/fitnesse/support</screen>
+
+        <para>Note that this directory structure is nested under
+        <filename>trunk/fitnesse/</filename> (as opposed to directly under
+        <filename>trunk/</filename>). As is usual, though, to ensure that tags
+        go into the correct location when releasing, the
+        <classname>mvn-release-plugin</classname> plugin has been configured
+        (using <sgmltag>&lt;tagBase&gt;</sgmltag>) to override its default
+        location.</para>
+
+        <para>You can checkout the entire trunk using Subversion:</para>
+
+        <para><screen>svn co https://testedobjects.svn.sourceforge.net/svnroot/testedobjects/trunk ~/testedobjects/trunk</screen></para>
+      </sect1>
+
+      <sect1>
+        <title>Main Modules</title>
+
+        <para>As the above shows, there are two separate released
+        artifacts:</para>
+
+        <para>The <emphasis>main</emphasis>
+        (<classname>org.starobjects.tested.fitnesse:main</classname>) is a
+        multimodule project that defines the main artifacts that implement
+        <emphasis>Tested Objects</emphasis>' FitNesse support. It
+        contains:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the fitnesse <emphasis>fixtures</emphasis>
+            (<classname>org.starobjects.tested.fitnesse:fixtures</classname>)</para>
+
+            <para>This contains implementations of
+            <emphasis>FitNesse</emphasis>'s fixture <acronym>API</acronym>
+            which in turn interact with the domain application.</para>
+
+            <para>It uses
+            <classname>org.starobjects.tested.fitnesse:main</classname> as its
+            parent  (and thus inherits transitively from the corporate
+            <acronym>POM</acronym>).</para>
+          </listitem>
+
+          <listitem>
+            <para>the <emphasis>documentation</emphasis>
+            (<classname>org.starobjects.tested.fitnesse:documentation</classname>)</para>
+
+            <para>The documentation submodule contains the user and
+            developers' guides</para>
+
+            <para>It also uses
+            <classname>org.starobjects.tested.fitnesse:main</classname> as its
+            parent.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>It uses the corporate <acronym>POM</acronym>
+        (<package>org.starobjects.star:corporate</package>) as its
+        parent.</para>
+      </sect1>
+
+      <sect1>
+        <title>Support Modules</title>
+
+        <para>The <emphasis>support</emphasis>
+        (<classname>org.starobjects.tested.fitnesse:support</classname>) is a
+        multimodule project that provides a number of supporting artifacts. It
+        contains:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>an additional <emphasis>release</emphasis> module
+            (<classname>org.starobjects.tested.fitnesse:release</classname>)</para>
+
+            <para>This is a convenience module that can be used as a parent by
+            projects using the <emphasis>FitNesse</emphasis> integration
+            provided by <emphasis>Tested Objects</emphasis> (for example, as
+            generated by the archetype, below). Its primary purpose is to
+            define a consistent set of versions in
+            <sgmltag>&lt;dependencyManagement&gt;</sgmltag> tag.</para>
+
+            <para>Note that this module does not inherit from the
+            <emphasis>main</emphasis> POM, instead it inherits from the
+            <emphasis>Naked Objects Framework</emphasis>'s equivalent
+            <classname>org.nakedobjects:release</classname> module (thus
+            defining a stack of dependencies).</para>
+          </listitem>
+
+          <listitem>
+            <para>the <emphasis>archetype</emphasis>
+            (<classname>org.starobjects.tested.fitnesse:archetype</classname>)</para>
+
+            <para>This is released after the main release, since it needs to
+            be updated to depend on the released versions of
+            <classname>org.starobjects.tested.fitnesse:main</classname>. Its
+            version numbers are the same as those of
+            <classname>org.starobjects.tested.fitnesse:main</classname>.</para>
+
+            <para>This module also inherits from the starobjects corporate POM
+            (<classname>org.starobjects.star:corporate</classname>).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Like <emphasis>main</emphasis>, the <emphasis>support</emphasis>
+        module also uses the corporate <acronym>POM</acronym>
+        (<package>org.starobjects.star:corporate</package>) as its
+        parent.</para>
+      </sect1>
+
+      <sect1>
+        <title>TestApp Module</title>
+
+        <para>The testapp module is a test application for adhoc testing of
+        FitNesse. It is not a released artifact.</para>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.BuildingFromSource">
+      <title>Building, Documenting and Deploying</title>
+
+      <abstract>
+        <para>This chapter outlines how to build, document and deploy
+        <emphasis>Tested Objects</emphasis>.</para>
+      </abstract>
+
+      <para>The build, documentation and deployment process follows the
+      general standard for sister projects, as documented in the
+      <emphasis>Star Objects</emphasis> developers' guide. The one exception
+      is that deploying Tested Objects also involves deploying FitNesse
+      itself; FitNesse is not formally released into Maven central repo, so
+      the starobjects repo hosts it instead.</para>
+
+      <para>The sections in this chapter correspond to the parts one, two and
+      three of <emphasis>Star Objects</emphasis> developers' guide.</para>
+
+      <sect1>
+        <title>Building from Source</title>
+
+        <para>There are no special steps required for building
+        <emphasis>Tested Objects</emphasis> from source.</para>
+
+        <para>In particular, note that the FitNesse jar is
+        <emphasis>not</emphasis> prerequisite software; instead it is managed
+        as a Maven module (see <xref linkend="sec.ReleaseProcess" />).</para>
+
+        <para>You can therefore just follow the processes described in
+        <emphasis>Star Objects</emphasis> developers' guide:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>build the main:</para>
+
+            <screen>$ cd ~/testedobjects/trunk/fitnesse/main
+$ mvn clean install</screen>
+          </listitem>
+
+          <listitem>
+            <para>build the support:</para>
+
+            <screen>$ cd ~/testedobjects/trunk/fitnesse/support
+$ mvn clean install</screen>
+          </listitem>
+        </itemizedlist>
+      </sect1>
+
+      <sect1>
+        <title>Contributing Changes</title>
+
+        <para>There are no special considerations for contributing changes for
+        <emphasis>Tested Objects</emphasis>. You can therefore just follow the
+        processes described in <emphasis>Star Objects</emphasis> developers'
+        guide.</para>
+      </sect1>
+
+      <sect1 id="sec.ReleaseProcess">
+        <title>Release Process</title>
+
+        <para>There is one special consideration for releasing/deploying for
+        <emphasis>Tested Objects</emphasis>. Specifically, neither
+        <emphasis>FitNesse</emphasis> nor the supporting
+        <emphasis>FitLibrary</emphasis> are currently available through Maven
+        central repository. They must therefore be uploaded into the
+        <emphasis>Star Objects</emphasis> Maven repo, at <ulink
+        url="http://starobjects.sourceforge.net/m2-repo/release">http://starobjects.sourceforge.net/m2-repo/release/</ulink>.
+        This is what is referenced from the <emphasis>Tested
+        Objects</emphasis> <acronym>POM</acronym>s.</para>
+
+        <sect2>
+          <title>Deploying FitNesse</title>
+
+          <para>The <emphasis>FitNesse</emphasis> binary
+          (<acronym>JAR</acronym>) distribution is downloadable available from
+          the <ulink
+          url="http://fitnesse.org/FrontPage.FitNesseDevelopment.DownLoad">FitNesse.org</ulink>
+          website, but the source code is available from <ulink
+          url="http://github.com/unclebob/fitnesse/downloads">http://github.com/unclebob/fitnesse/downloads</ulink>,
+          being a <acronym>TAR.GZ</acronym> (or <acronym>ZIP</acronym>) of the
+          Maven/Ant project. The binary and source distributions do seem to be
+          kept in sync.</para>
+
+          <para>You might think that the next step would be to build FitNesse
+          from source; but you'd be wrong...</para>
+
+          <sect3>
+            <title>Don't (!) Build FitNesse</title>
+
+            <para>Although <emphasis>FitNesse</emphasis> comes with its own
+            <filename>pom.xml</filename>, it seems that FitNesse is actually
+            built using Ant. There certainly do seem to be a number of
+            problems with attempting to build FitNesse using this Maven
+            <filename>pom.xml</filename> (at least, as of v20100101):</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>first, it fails its tests
+                (-Dmaven.test.failure.ignore=true can be used to get it to
+                build to the end, but isn't recommended)</para>
+              </listitem>
+
+              <listitem>
+                <para>second, it depends upon org.json:json:1.0 as a system
+                dependency (in lib/json.jar). Why is this a system dependency?
+                And what is 1.0 anyway? Looking at the central Maven
+                repository, the latest version is
+                org:json:json:20090211;</para>
+              </listitem>
+
+              <listitem>
+                <para>third, I checked the file sizes and the json.jar that
+                comes with FitNesse is not the same as any of the three
+                versions up on central Maven repo. There is no source code
+                around either for this json.jar; so basically FitNesse as
+                distributed seems to depend on byte code for which no obvious
+                source exists;</para>
+              </listitem>
+
+              <listitem>
+                <para>fourth, the JAR created by Maven does not contain as the
+                binary distribution. For example, the aforementioned json
+                classes are present in the binary distribution (which itself
+                is somewhat suspect) but are missing in the Maven JAR</para>
+              </listitem>
+
+              <listitem>
+                <para>fifth (rather more trivially), there is no use of
+                maven-source-plugin to create a source JAR.</para>
+              </listitem>
+            </itemizedlist>
+
+            <para>Therefore, the best thing to do is to ignore this
+            <filename>pom.xml</filename>, and instead install the binary JAR
+            (as created by Ant) by hand.</para>
+          </sect3>
+
+          <sect3>
+            <title>Install FitNesse Locally</title>
+
+            <para>Since we can't build <emphasis>FitNesse</emphasis>, instead
+            just just download and install the binary <acronym>JAR</acronym>
+            file using:</para>
+
+            <para><screen>$ mvn install:install-file      \
+  -D file=fitnesse-20100103.jar \
+  -D groupId=org.fitnesse       \
+  -D artifactId=fitnesse        \
+  -D version=20100103           \
+  -D packaging=jar              \
+  -D generatePom=true</screen></para>
+
+            <para>Then, download the source code and zip up contents of the
+            <filename>src/</filename> folder, and save as
+            <filename>fitnesse-YYYYMMDD-sources.jar</filename>. Install this
+            locally using:</para>
+
+            <screen>$ mvn install:install-file              \
+  -D file=fitnesse-20100103-sources.jar \
+  -D groupId=org.fitnesse               \
+  -D artifactId=fitnesse                \
+  -D version=20100103                   \
+  -D packaging=jar                      \
+  -D classifier=sources                 \
+  -D generatePom=true</screen>
+          </sect3>
+
+          <sect3>
+            <title>Deploying FitNesse</title>
+
+            <para>With the <emphasis>FitNesse</emphasis>
+            <acronym>JAR</acronym>s hacked into our local Maven repository, we
+            next need to deploy them up to the Star Objects repository. Use
+            <acronym>SCP</acronym> to copy them from:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><filename>~/.m2/repository/org/fitnesse/fitnesse/yyyymmdd</filename></para>
+              </listitem>
+            </itemizedlist>
+
+            <para>to:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><filename>http://web.sourceforge.net/home/s/st/starobjects/htdocs/m2-repo/release/org/fitnesse/fitnesse/.</filename></para>
+              </listitem>
+            </itemizedlist>
+
+            <para>On Windows, use WinSCP. On the Mac, Fugu is an
+            option:</para>
+
+            <screenshot>
+              <screeninfo>Manually uploading FitNesse to StarObjects'
+              repository</screeninfo>
+
+              <mediaobject>
+                <imageobject>
+                  <imagedata fileref="images/UsingFuguToUploadFitNesse.png"
+                             scale="40" />
+                </imageobject>
+              </mediaobject>
+            </screenshot>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Deploying FitLibrary</title>
+
+          <para>The <emphasis>FitLibrary</emphasis> (<acronym>JAR</acronym>)
+          distribution is downloadable from its <ulink
+          url="http://fitlibrary.sourceforge.net">sourceforge</ulink> website.
+          Like <emphasis>FitNesse</emphasis>, we install it locally and the
+          deploy.</para>
+
+          <sect3>
+            <title>Installing FitLibrary Locally</title>
+
+            <para>The steps are:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para>download <filename>FitLibrary20091020.zip</filename>,
+                and unzip</para>
+              </listitem>
+
+              <listitem>
+                <para>install, using:</para>
+
+                <screen>$ mvn install:install-file        \
+  -D file=fitnesse/fitlibrary.jar \
+  -D groupId=org.fitnesse         \
+  -D artifactId=fitlibrary        \
+  -D version=20091020             \
+  -D packaging=jar                \
+  -D generatePom=true</screen>
+              </listitem>
+
+              <listitem>
+                <para>install sources, using:</para>
+
+                <screen>$ mvn install:install-file                   \
+  -D file=fitnesse/lib/src/fitlibrarySrc.jar \
+  -D groupId=org.fitnesse                    \
+  -D artifactId=fitlibrary                   \
+  -D version=20091020                        \
+  -D packaging=jar                           \
+  -D classifier=sources                      \
+  -D generatePom=true</screen>
+              </listitem>
+            </itemizedlist>
+
+            <para>Note that there are several third-party libraries that
+            <emphasis>FitLibrary</emphasis> depends on. However, since
+            <emphasis>Tested Objects</emphasis> does not make use of the
+            functionlity of these libraries, there is no need install
+            them.</para>
+          </sect3>
+
+          <sect3>
+            <title>Deploying FitLibrary</title>
+
+            <para>With the <emphasis>FitLibrary</emphasis>
+            <acronym>JAR</acronym>s hacked into our local Maven repository, we
+            next need to deploy them up to the Star Objects repository. Use
+            <acronym>SCP</acronym> to copy them from:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><filename>~/.m2/repository/org/fitnesse/fitlibrary/yyyymmdd</filename></para>
+              </listitem>
+            </itemizedlist>
+
+            <para>to:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><filename>http://web.sourceforge.net/home/s/st/starobjects/htdocs/m2-repo/release/org/fitnesse/fitlibrary/.</filename></para>
+              </listitem>
+            </itemizedlist>
+
+            <para>Again, on Windows you could also use WinSCP; on Mac you
+            could use Fugu.</para>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>Deploying Tested Objects' FitNesse support</title>
+
+          <para>Once <emphasis>FitNesse</emphasis> itself has been deployed,
+          the remaining steps to deploy <emphasis>Tested Objects</emphasis>
+          itself is basically the processes described in <emphasis>Star
+          Objects</emphasis> developers' guide. In brief:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>for deployments, update
+              <filename>~/.m2/settings.xml</filename>:</para>
+
+              <screen>&lt;servers&gt;
+  &lt;server&gt;
+    &lt;id&gt;testedobjects-site&lt;/id&gt;
+    &lt;username&gt;xxx&lt;/username&gt;
+    &lt;password&gt;xxx&lt;/password&gt;
+  &lt;/server&gt;
+&lt;/servers&gt;</screen>
+            </listitem>
+
+            <listitem>
+              <para>make documentation changes to DocBook and to the
+              site</para>
+            </listitem>
+
+            <listitem>
+              <para>deploy the site locally</para>
+
+              <screen>$ cd ~/testedobjects/trunk/fitnesse/main
+$ mvn site-deploy -D dist=local</screen>
+
+              <para>This will deploy to
+              <filename>/tmp/m2-sites/testedobjects</filename>.</para>
+            </listitem>
+
+            <listitem>
+              <para>deploy a code snapshot</para>
+
+              <para>First, deploy <emphasis>main</emphasis>:</para>
+
+              <screen>$ cd ~/testedobjects/trunk/fitnesse/main
+$ mvn clean install deploy -D dist=remote</screen>
+
+              <para>Then, deploy <emphasis>support</emphasis>:</para>
+
+              <screen>$ cd ~/testedobjects/trunk/fitnesse/support
+$ mvn clean install deploy -D dist=remote</screen>
+            </listitem>
+
+            <listitem>
+              <para>tag a release and then deploy a code release</para>
+
+              <remark>TODO: ydetails required here.</remark>
+            </listitem>
+
+            <listitem>
+              <para>deploy a site remotely</para>
+
+              <para>then, deploy the site (you'll also need a sourceforge
+              terminal session running; see <emphasis>Star Objects</emphasis>
+              developers guide for details):</para>
+
+              <screen>$ cd ~/testedobjects/trunk/fitnesse/main
+$ mvn site-deploy -D dist=remote</screen>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Design Notes</title>
+
+      <abstract>
+        <para>This chapter will contain design notes on the implementation of
+        the FitNesse integration.</para>
+      </abstract>
+
+      <para><remark>TODO: describe the internal design/architecture
+      here...</remark></para>
+    </chapter>
+  </part>
+</book>

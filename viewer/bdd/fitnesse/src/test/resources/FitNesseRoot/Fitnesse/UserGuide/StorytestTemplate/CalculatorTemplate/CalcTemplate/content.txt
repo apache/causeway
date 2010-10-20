@@ -1,0 +1,7 @@
+!|fitlibrary.eg.Calculator|
+
+|''total''|INITIAL|
+----
+|OP|0OPERAND|
+----
+|''total''|TOTAL|

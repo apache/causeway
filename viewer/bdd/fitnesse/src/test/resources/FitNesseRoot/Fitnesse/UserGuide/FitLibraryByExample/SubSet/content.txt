@@ -1,0 +1,26 @@
+Sometimes in a ${storytest}, we only are interested in some of the elements of a collection. See the ${fitBook} for motivation and examples.
+
+To check for a subset of the actual elements in a collection, we have to do it in the ${actions} part. That's because we need to be explicit that we're only interested in some of the elements of the unordered collection or set.
+
+!|fitlibrary.eg.Collections|
+
+|''actions''|
+
+|list is|1,2,3|
+ * Some:
+|''subset''|
+|''item''|
+|3|
+ * All:
+|''subset''|
+|''item''|
+|3|
+|1|
+|2|
+ * None:
+|''subset''|
+|''item''|
+
+For programming details, see CollectionsCode.
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

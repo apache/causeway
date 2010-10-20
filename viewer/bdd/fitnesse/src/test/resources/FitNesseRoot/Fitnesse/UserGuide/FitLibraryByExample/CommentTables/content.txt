@@ -1,0 +1,10 @@
+!|fitlibrary.DoFixture|
+
+|''comment''|
+|any old|stuff|
+|is|completely|ignored|
+|and|not even|coloured as|ignored|
+----The following specifies the expected counts of passes, fails, etc for the page. This is used here to avoid manually checking, as here the storytests are written to fail. You'll most probably not use this technique, as you'd expect all your storytests to pass. There are other approaches to testing for errors, etc.
+|''expected test results''|0|''right''|0|''wrong''|0|''ignored''|0|''exceptions''|
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, http://www.rimuresearch.com''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

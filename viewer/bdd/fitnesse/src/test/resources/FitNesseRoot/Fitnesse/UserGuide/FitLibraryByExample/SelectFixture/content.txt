@@ -1,0 +1,38 @@
+A SelectFixture allow more than one do fixture to be used in a single storytest.
+
+For example, a storytest may consist of several parts:
+ * Create database tables
+ * Call SOAP web services
+ * Emulate the user at a browser connected to a web application
+ * Check database tables
+
+Each of these may be managed by distinct fixtures.
+
+Here's a simple example of the use of SelectFixture, below.
+
+Two fixtures are added, with names (''first'' and ''second''). Actions are provided to select between the fixtures by name.
+----
+!|fitlibrary.SelectFixture|
+
+|''add''|!-fitlibrary.specify.select.FirstSelect-!|''as''|first|
+|''add''|!-fitlibrary.specify.select.SecondSelect-!|''as''|second|
+
+|''select''|first|
+
+|''count''|'''is'''|1|
+
+|''select''|second|
+
+|''count''|'''is'''|2|
+
+|''select''|first|
+
+|''count''|'''is'''|1|
+
+|''select''|second|
+
+|''count''|'''is'''|2|
+----
+!3 Programmer detail
+ * The ''setUp()'' method, if any, is called for each of the do fixtures as they are added
+ * The ''tearDown()'' method, if any, is called for each of the do fixtures once the storytest has completed.

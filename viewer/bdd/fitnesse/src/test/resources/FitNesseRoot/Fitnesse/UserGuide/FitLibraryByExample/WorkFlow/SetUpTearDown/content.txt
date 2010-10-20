@@ -1,0 +1,14 @@
+!3 Doing your own processing before and/or after a table has been processsed
+For example, it may be necessary to:
+ * Open a database connection, socket, file, or browser
+ * Start a transaction or session
+ * Close a database connection, socket, file, or browser
+ * Commit/abort a transaction or session
+ * Clean up some objects, data or database tables after a storytest (although it's often not good practice to do this)
+Include the methods ''setUp()'' and/or ''tearDown()'' in your class if you want to do this with a table in a storytest.
+ * ''setUp()'' is called before the table is processed
+ * ''tearDown()'' is called afterwards
+However, the first object of a storytest is different. These methods are called before and/or after all of the tables have been processed.
+ * ''setUp()'' is called before any of the tables are processed
+ * ''tearDown()'' is called after all of the tables have been processed (or after it is prematurely stopped)
+It's also possible to do before and after processing across a suite of storytests. See ${suite}.

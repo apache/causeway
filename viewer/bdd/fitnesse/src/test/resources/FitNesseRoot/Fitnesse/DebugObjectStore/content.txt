@@ -1,0 +1,11 @@
+!2 Description
+Dumps contents of the object store.  Useful for debugging and diagnostics.
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * none
+
+!2 Example Usage
+!|debug object store|

@@ -1,0 +1,9 @@
+
+ * ExampleStorySuite
+   * Fitnesse test suite for Naked Objects application-archetype (claims).
+
+ * .FitNesse.UserGuide
+   * Descriptions of table fixtures available for testing Naked Objects applications.
+   * also accessible via 'User Guide' button on left hand side.
+
+

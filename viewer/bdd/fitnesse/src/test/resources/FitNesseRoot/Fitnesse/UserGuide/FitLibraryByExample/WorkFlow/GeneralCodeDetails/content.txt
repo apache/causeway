@@ -1,0 +1,35 @@
+!3 Creating a method name from an action
+The ${keywords} of an action are concatentated together, with spaces between and converted into a valid Java identifier. Eg:
+ * "first example" is mapped to "firstExample"
+ * "%age" is mapped to "percentAge"
+ * "while" is mapped to "_while"
+There's no need to work out the mapping. Run the storytest and ${fitLibrary} will tell you the name of the method that it expects (if it doesn't exist), along with its arguments. Eg, run this:
+
+| !-fitlibrary.eg.chat.ChatSystem-! |
+----
+|''1 some mix''|1|''of %age''|3|''and .^&''|chat|
+
+||1||2||
+
+The mapping is done using ${extendedCamelCase}.
+!3 Rules for coloring Cells in the Report
+ * If the called method returns a boolean value, the ''keywords'' of that action are colored green if the returns true. If the method returns false or throws an exception, it colors it red.
+ * A 'check'' special action colors the last cell, containing the expected value
+ * A 'reject' or 'not' special action color the action green if the action returns false or throws an exception. Otherwise it colors it red.
+ * An 'ensure' special action colors the action red if the action returns false or throws an exception. Otherwise it colors it green.
+!3 Auto-Wrapping
+The value returned by the method called for an action may be auto-wrapped with a Traverse for interpreting the rest of the table. Objects are auto-wrapped as follows:
+ * A ''Map'' objects is auto-wrapped with a ${mapTraverse}.
+ * A ''Set'' object is auto-wrapped with a ${setTraverse}.
+ * A primitive array, such as int[], Integer[], etc is wrapped with an ${arrayTraverse}
+ * An ''Object[]'', ''Collection'' or ''Iterator'' is wrapped with a ${listTraverse}.
+ * An 'Object' is wrapped with a ${workflow}'. But only if it's not one of the above, nor a ${traverse} nor ${fixture}, and doesn't have a ''static Object parse(String)'' method.
+This ${traverse} object, or the one returned explicitly, is used to interpret the rest of the table.
+
+FInally, see SetUpTearDown
+----The following specifies the expected counts of passes, fails, etc for the page. This is used here to avoid manually checking, as here the storytests are written to fail. You'll most probably not use this technique, as you'd expect all your storytests to pass. There are other approaches to testing for errors, etc.
+----
+----
+|''expected test results''|0|''right''|0|''wrong''|0|''ignored''|2|''exceptions''|
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www.rimuresearch.com.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

@@ -1,0 +1,13 @@
+Plans for extensions to ${fitLibrary} include:
+ * Permit xpath expressions for access into domain objects
+ * ''!-SpiderFixture-!'', which can be used for web testing through various drivers (htmlUnit, firefox, google chrome, selenium, watij).
+ * Generalise ${suite}
+ * Handle nested sets - this doesn't work correctly at present because matching is not deterministic
+ * Handle mixed-type (polymorphic) collections
+ * Handle polymorphic objects
+ * If you have ideas you'd like to see in ${fitLibrary}, contact me (Rick Mugridge)
+  * See http://www.rimuresearch.com for my email address
+ * However, I will only consider changes that are consistent with the rest of ${fitLibrary} and that add sufficient value
+ * I am unlikely to add:
+  * Strings/characters that have special meaning in tables. I am unhappy that I've introduced one (''class'', for distinguishing different types in a mixed-type collection).
+  * Capability that pushes away from the notion of storytests as specification by example and towards general programming. Some may argue that ${fitLibrary} already goes too far. I believe that we must take account of the people who will be writing/reading the storytests and choose the power of expression to suit.

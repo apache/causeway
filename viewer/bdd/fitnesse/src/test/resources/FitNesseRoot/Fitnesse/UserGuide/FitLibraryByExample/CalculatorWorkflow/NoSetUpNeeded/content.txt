@@ -1,0 +1,9 @@
+!|fitlibrary.eg.Calculator|
+---- * ${actions}
+|'''check'''|+|-75|-75|
+|'''check'''|+|76|1|
+
+|'''check'''|+|0|1|
+ * Notice that the action rows can be combined together in a table or they can be in separate tables
+!3 Next for Programmers
+Here's TheCode in Java for the ''Calculator'' class.

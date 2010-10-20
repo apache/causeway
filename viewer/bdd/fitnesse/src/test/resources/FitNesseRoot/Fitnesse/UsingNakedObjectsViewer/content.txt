@@ -1,0 +1,86 @@
+!2 Description
+Simulates interacting with the domain objects as if through a viewer.  Interact with objects, check their state, alias referenced objects
+
+!2 Arguments
+ * none
+
+!2 Columns
+ * on object
+   * the (alias of) the object to interact with
+   * can also use 'object', or 'on'
+ * alias result as
+   * alias to assign to any result of interaction
+     * either a reference, a property or the result of an action
+   * can also use 'result=', 'alias=', 'alias as'
+ * perform
+   * the interaction to perform (see below for further details)
+   * can also use 'do', 'interaction', 'interaction type'
+ * on member
+   * the property, collection or action to use
+   * can also use 'member', 'using member', 'using'
+ * that it
+   * optional qualifier for interactions that make checks (see below for further details)
+   * can also use 'that', 'verb'
+ * with arguments
+   * optional argument for interactions that make checks (see below for further details)
+   * optional argument(s) for actions
+   * can also use 'with', 'arguments', 'parameters', 'with parameters', 'for', 'for arguments', 'for parameters', 'value', 'reference'
+
+!2 Example Usage
+!|using naked objects viewer|
+|on object|alias result as|perform|using member|
+|employees|list1|invoke action|All Employees|
+
+Alternate (more formal) usage
+!|using naked objects viewer|
+|object|result=|interaction type|member|
+|employees|list1|invoke action|All Employees|
+
+
+!2 Perform
+on properties
+|on object|perform|using member|that it|value|
+|''object alias''|check property|''property name''|is hidden|
+|''object alias''|check property|''property name''|is visible|
+|''object alias''|check property|''property name''|is disabled|
+|''object alias''|check property|''property name''|is enabled|
+|''object alias''|check property|''property name''|contains|''value or object alias''|
+|''object alias''|check property|''property name''|is empty|
+|''object alias''|check set property|''property name''|is|''value or object alias''|
+|''object alias''|check clear property|''property name''||
+|''object alias''|set property|''property name''||''value or object alias''|
+|''object alias''|clear property|''property name''||
+
+on collections
+|on object|perform|using member|that it|reference|
+|''object alias''|check collection|''collection name''|is hidden|
+|''object alias''|check collection|''collection name''|is visible|
+|''object alias''|check collection|''collection name''|is disabled|
+|''object alias''|check collection|''collection name''|is enabled|
+|''object alias''|check add to collection|''collection name''|is valid for|''object alias''|
+|''object alias''|check add to collection|''collection name''|is not valid for|''object alias''|
+|''object alias''|check remove from collection|''collection name''|is valid for|''object alias''|
+|''object alias''|check remove from collection|''collection name''|is not valid for|''object alias''|
+|''object alias''|check collection|''collection name''|contains|''object alias''|
+|''object alias''|check collection|''collection name''|does not contain|''object alias''|
+|''object alias''|check collection|''collection name''|is empty|
+|''object alias''|check collection|''collection name''|is not empty|
+|''object alias''|add to collection|''collection name''||''object alias''|
+|''object alias''|remove from collection|''collection name''||''object alias''|
+
+on actions
+|on object|perform|using member|that it|with arguments|
+|''object alias''|check action|''action name''|is hidden|
+|''object alias''|check action|''action name''|is visible|
+|''object alias''|check action|''action name''|is disabled|
+|''object alias''|check action|''action name''|is enabled|
+|''object alias''|check action|''action name''|is valid for|''argument list''|
+|''object alias''|invoke action|''action name''||''argument list''|
+
+on objects themselves
+|on object|perform|that it|
+|''object alias''|check object|is valid|
+|''object alias''|check object|is not valid|
+|''object alias''|check object|is saved|
+|''object alias''|check object|is not saved|
+|''object alias''|save object||

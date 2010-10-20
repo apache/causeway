@@ -1,0 +1,24 @@
+A collection can be checked within the ${actions}. This was the standard way to carry out checks in previous versions of ${fitLibrary}
+!**>
+!define list (|''item''|
+|1|
+|2|
+|3|
+|4|
+)
+**!
+|!-fitlibrary.eg.Collections-!|
+
+|''actions''|
+ * Create a list with 4 elements
+|list is|1,2,3,4|
+
+|''ordered list''|
+|''item''|
+|1|
+|2|
+|3|
+|4|
+
+|''checks''|
+

@@ -1,0 +1,71 @@
+!3 Tables for business processes (workflow with ${domainTraverse})
+Workflow storytests specify the step-by-step processing of a business process, or part of such a process. Such storytests are best expressed in a more abstract form than the actions through a user interface. For example, the actions may correspond to those to be carried out by a user, a part of the system, or through interactions with other systems.
+
+We start with some simple workflow storytests.
+
+|^CalculatorWorkflow|'' Storytests for a trivial calculator''|
+|^WorkFlow.ChatSystem|''Storytests for a little chat system''|
+
+This can also be done using ^DoFixture tables, which don't have the three explicit phases. This was how it was done in previous versions of ${fitLibrary}. It was necessary to explicitly use ^SetUpFixture to create collections (lists, sets, etc) as there was no direct support for a ${setup}, as with [[''work flow''][.FitLibrary.UserGuide.FitLibraryByExample]].
+
+|^SetUpFixture |''To create collections (lists, sets, etc)''|
+
+An earlier version of ^DoFixture was ^SequenceFixture, which doesn't have inter-leaved keywords in actions.
+
+|^SequenceFixture|''For workflow storytests without keywords in actions''|
+
+!3 Tables for checking (and creating) collections (lists, sets, arrays, etc)
+Tables are often used in the ${checks} to check that collections, such as lists, are as expected. Here's some more detail of checking (and creating) the different sorts of collections:
+
+|^OrderedList|''A list, array, etc''|
+|^UnorderedList|''A set''|
+|^SubSet|''for part of an ^UnorderedList''|
+|^SimpleArray|''for arrays''|
+|^MapHandling|''for maps''|
+
+A ${domainObject} can appear in all three phases.
+
+Nested tables show the relationships of ${domainObject}s, with a layout a little like a user interface. For more details, see ^NestedTables
+!3 Tables for calculation rules and constraints:
+Calculation and constraint rules focus on expressing specific business rules that will impact, indirectly, on workflow. Rather than having lots of workflow storytests to express such business rules, we isolate and express the business rules in a compact form. Extracting such business rules is a significant element of developing a domain model with storytests.
+
+|^CalculationRule|''Rules for calculations, such as the discount''|
+|^ConstraintRule|''Rules for constraints, such as valid and invalid date ranges''|
+
+A minor variant of these two is a combination rule.
+
+|^CombinationRule|''Rules for possible combinations''|
+!3 Specialised Tables
+|^CommentTables|''Tables for comments''|
+|^GridTables|''Tables for testing grids''|
+|^ImageGrids|''Tables for testing grids containing images''|
+| ^FileComparison|''Tables for comparing files and directories''|
+|^DotGraphics|''Tables for testing inter-connected data in a visible form''|
+|^TaggedStrings|''Tables for directly testing html text''|
+|^TreeList|''Tables for testing nested html lists''|
+
+!3 Select Fixture
+|^SelectFixture|''Allows several do fixtures to be used in the same storytest, switching between them.''|
+
+!3 Suite Fixture
+|.FitLibrary.SuiteFixture|''A suite fixture ...''|
+|.FitLibrary.SuiteFixture.DetailsAndRationale|''Rationale for suitte fixtures''|
+|.FitLibrary.SpecifiCations.SuiteFixture|''See here for further details''|
+
+!3 Templates, Defined Actions and Dynamic Variables
+|StorytestTemplate|''A template is a storytest that can be used multiple times with different values filled in, for calculation business rules. ''|
+|^DefinedActions|''A defined action defines a sequence of actions (parameterised)  that can be reused in workflow storytests.''|
+|^DynamicVariables|''Dynamic variables allow values to be read from property files and used in storytests''|
+
+!3 Handling Special Values (for Programmers)
+Here are some situations where a special value needs to be handled in storytests:
+ * An empty cell should mean a null String, rather than an empty one
+ * Dates are formatted in a special way, and not according to the current locale
+ * Enum values are used
+ * An entity is referred to by a "key"
+Here's how we can deal with these ^SpecialValues.
+!3 Variables (for Programmers)
+Consider a system in which the id for an account is auto-generated when the account is created. We want to specify that the id is created and that it can be used to refer to the account later in the storytest.
+ * ^VariAble
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www.rimuresearch.com''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

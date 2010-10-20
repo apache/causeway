@@ -1,0 +1,40 @@
+Here's the code for the various collection examples.
+----{{{  public class Collections {
+	private List elements = new ArrayList();
+	private int[] ints;
+
+	public void listIs(int[] array) {
+		for (int i = 0; i < array.length; i++)
+			elements.add(new Element(array[i]));
+	}
+	public void intsAre(int[] array) {
+		ints = array;
+	}
+	public int[] getInts() {
+		return ints;
+	}
+	public List getOrderedList() {
+		return elements;
+	}
+	public Set getUnorderedList() {
+		return new HashSet(elements);
+	}
+	public Traverse subset() {
+		return FitLibrarySelector.selectSubset(elements);
+	}
+	public static class Element {
+		private int item;
+
+		public Element(int i) {
+			this.item = i;
+		}
+		public int getItem() {
+			return item;
+		}
+		public void setItem(int item) {
+			this.item = item;
+		}
+	}
+}  }}}
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

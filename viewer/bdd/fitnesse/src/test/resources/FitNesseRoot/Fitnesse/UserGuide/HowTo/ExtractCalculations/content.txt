@@ -1,0 +1,5 @@
+You may be tempted to copy and paste a ${workflow} storytest to make minor variations on it, such as to show how the calculations that result differ or to show when constraints apply to actions or to input data.
+
+Instead, build calculation tables that focus on the underlying business rule related to the calculations or constraints.
+
+See the ${fitBook} for more on this process.

@@ -1,0 +1,11 @@
+ * The following are additions to ''!-FitLibrary-!'' that are somewhat experimental in nature.
+ * Or they may simply be incomplete
+ * There is no guarantee that these features will remain unaltered, or that they will even remain in ''!-FitLibrary-!''.
+!3 State-based extension of ''!-DoFixture-!'' (State pattern)
+ * Allows exactly the same table to be used in workflow storytests for setup or checking (ie, initial state or final state)
+ * When a setup fixture is installed in a ''!-DoFixture-!'', all actions are delegated to it until the setup state is completed.
+ * See .FitLibrary.SpecifiCations.DoWorkflow.StatefulWorkflow
+ * This approach is most likely to be removed, as ${domainTraverse} provides a more general mechanism
+
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www.rimuresearch.com''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

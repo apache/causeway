@@ -1,0 +1,30 @@
+!2 Tables in a workflow storytest (ie, ''!-DoFixture-!''-based) can be ignored in several ways:
+----
+!3 The table has nothing to do with Fit, so it shouldn't treat it as a part of the storytest
+ * Add a first row to the table with ''comment''.
+ * The rest of the table is ignored, but it's not coloured as being ignored. Eg.
+!|fitlibrary.DoFixture|
+----
+|comment|
+|This is ignored|
+!3 The table is a part of the storytest but we want to hide it for now, while we get other things done. However, we want to be reminded that it needs to be dealt with later
+ * Add a first row to the table with ''ignored''
+ * The rest of the table is ignored, and it's coloured as being ignored. Eg.
+|ignored|
+|This is ignored|and the first row is coloured as being ignored|
+|And so is this|
+----The following specifies the expected counts of passes, fails, etc for the page. This is used here to avoid manually checking, as here the storytests are written to fail. You'll most probably not use this technique, as you'd expect all your storytests to pass. There are other approaches to testing for errors, etc.
+|''expected test results''|0|''right''|0|''wrong''|1|''ignored''|0|''exceptions''|
+----!3 The rest of the storytest is ignored, but the following tables should be coloured as ignored.
+ * There's no capability for this at the moment. Would it be useful?
+----
+!3 The rest of the storytest is to be ignored
+ * Insert a single table with ''abandon storytest''
+ * Or call the method ''abandonStorytests()'' in the fixture concerned
+ * The rest of the tables are ignored (they're not coloured) and are not shown in the !-FitNesse-! report. Eg.
+|abandon storytest|
+
+|This is ignored|and marked as such|
+
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, http://www.rimuresearch.com.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

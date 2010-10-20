@@ -1,0 +1,19 @@
+Usually, a ''domain adapter'' is needed for calculation rules, given that the method names are unlikely to match those used in the domain (if any such methods exist in the domain). The discount example could be handled as followed, so that the adapter code and domain code doesn't get mixed up:
+|!-fitlibrary.eg.DiscountAdapter-!|
+
+|''actions''|
+
+|''calculate''|
+|''$''||''discount''|
+|0.00||0.00|
+|1000.00||0.00|
+
+The code for the domain adapter is as follows:
+----{{{public class DiscountAdapter implements DomainAdapter {
+	private Discount discount = new Discount();
+
+	public Object getSystemUnderTest() {
+		return discount;
+	}
+}  }}}----
+CodeInGeneral

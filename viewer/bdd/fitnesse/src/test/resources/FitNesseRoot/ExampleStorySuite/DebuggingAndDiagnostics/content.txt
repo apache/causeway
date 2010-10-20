@@ -1,0 +1,15 @@
+!|debug clock|
+|value|
+||
+
+!|debug object store|
+
+!|check specifications loaded|
+|short name|
+|EmployeeRepositoryInMemory|
+|ClaimRepositoryInMemory|
+|Claimant|
+|ClaimItem|
+|Employee|
+|Approver|
+|Claim|

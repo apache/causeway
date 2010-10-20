@@ -1,0 +1,21 @@
+!2 20081020
+ * SelectFixture allows for the use in flow of several DoFixtures to be interleaved
+ * Can get into flow part-way through a storytest (but need to use FitLibraryServer)
+!2 20080702
+ * Added support for defined actions. See .FitLibrary.SpecifiCations.DefinedActions
+ * Enabled the use of fixture class names while in flow
+ * Included ''!-FitNesse-!'' plugin support for suite fixtures and macros. This means that a ''!-SuiteSetUp-!'' page is run, if it exists up the page hierarchy, when a single storytest is run.
+!2 20060930
+ * When running a suite with ${fitLibrary}, the only report tables shown in full are on the first page and those that don't pass
+ * To see the full report for a ${storytest}, run it as a single Test
+ * '''Perhaps''' I should provide another fitLibraryServer that doesn't have this behaviour
+!2 20060906delta
+!3 The three phases of ${workflow}
+ * This version enables the three phases of ${workflow} to be made more explicit.
+ * With this approach, the structure of tables for setup and checking have changed
+  * Tables for setup and checking are based on the notion of property-value pairs, as we see in .FitLibrary.UserGuide.FitLibraryByExample.WorkFlow
+!3 Nested Tables
+ * The biggest change is the addition of nested tables.
+ * See the examples in FitLibraryByExample.
+ * These allow ${storytest}s to look more like user interfaces in the way that they're laid out
+EditingNestedTablesInFitNesse

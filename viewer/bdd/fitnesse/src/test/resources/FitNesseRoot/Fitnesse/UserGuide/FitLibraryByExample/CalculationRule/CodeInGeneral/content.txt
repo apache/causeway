@@ -1,0 +1,4 @@
+!3 In General
+ * For each ''expected'' column in a calculation rule table, a distinct method is called. The name of the method is created from that ''expected'' column label followed by each of the ''given'' column labels. The method will have a parameter for each of the ''given'' columns and returns a result which is compared against the ''expected'' value.
+ * To enable a specific string to signify repeating of the previous ''given'' value, you will need to use a subclass of ''!-CalculateTraverse-!'' instead of a DomainAdapter. Call the inherited method ''setRepeatString()'' with the string to use.
+ * To enable a specific string to signify an exception is ''expected , you will need to use a subclass of ''!-CalculateTraverse-!'' instead of a DomainAdapter. Call the inherited method ''setExceptionString()'' with the string to use.

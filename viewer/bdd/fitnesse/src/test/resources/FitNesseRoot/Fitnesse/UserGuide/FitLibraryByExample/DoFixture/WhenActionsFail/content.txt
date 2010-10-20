@@ -1,0 +1,35 @@
+Let's look at what happens when an action fails.
+
+| !-fitbook.ChatStart-! |
+
+|''connect user''|sarah|
+
+|''user''|sarah|''creates''|fit|''room''|
+
+There should be no occupants in the "fitNesse" room:
+
+|check|''occupants''|fit|0|
+
+Sarah can't enter an unknown room:
+
+|''user''|sarah|''enters''|unfit|''room''|
+
+We can expect that, by putting ''reject'' in the first cell:
+
+|reject|''user''|sarah|''enters''|unfit|''room''|
+
+and an unknown user can't create a room:
+
+|reject|''user''|george|''creates''|unfit|''room''|
+
+Sarah hasn't entered the room, so she can't be in there:
+
+|''users in room''|fit|
+|''name''|
+|sarah|
+
+Here's a ''DoFixtureSummary''.
+----The following specifies the expected counts of passes, fails, etc for the page. This is used here to avoid manually checking, as here the storytests are written to fail. You'll probably not use this technique, as you'd expect all your storytests to pass. There are other techniques to use with ''!-FitLibrary-!'' to test for expected failures (eg, the ''not'' action of ''!-DoFixture-!'').
+|''expected test results''|7|''right''|4|''wrong''|0|''ignored''|0|''exceptions''|
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, Rimu Research.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

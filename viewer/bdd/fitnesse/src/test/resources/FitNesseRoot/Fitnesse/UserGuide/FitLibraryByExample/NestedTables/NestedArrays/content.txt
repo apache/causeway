@@ -1,0 +1,29 @@
+In this example, we show some calculations. Again we keep it very simple, illustrating how an array may be expressed in a comma-separated form and in a table.
+!**> test
+!define array1 (|1|
+|2|
+|3|
+)
+!define array2 (|0|
+)
+
+**!
+|!-fitlibrary.eg.NestedArray-!|
+
+|''calculate''|
+|comma array||array|
+|1,2,3||${array1}|
+|0||${array2}|
+
+The method ''arrayCommaArray()'' is called for each row. The whole of the ''!-NestedArray-!'' class is as follows:
+----{{{public class NestedArray extends DoFixture {
+	public int[] arrayCommaArray(int[] array) {
+		return array;
+	}
+}
+}}}----
+Notice that:
+ * The nested table for an array doesn't have a header
+ * The fixture is a ''!-DoFixture-!''. We make use of the ''calculate'' action so that the calculations are handled by a ''!-CalculateFixture-!''.
+ * The comma-separated list form of the array is handled automatically (''!-FitLibrary-!'' can determine the component-type of the array from the argument of the method ''arrayCommaArray()''
+Let's now look at NestedObjects.

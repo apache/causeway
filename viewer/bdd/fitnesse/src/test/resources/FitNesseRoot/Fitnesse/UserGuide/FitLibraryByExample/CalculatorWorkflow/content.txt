@@ -1,0 +1,9 @@
+!3 A Simple Example of Workflow
+A workflow storytest shows what happens when an action is carried out on the system. The action could be carried out by:
+ * A user through a user interface
+ * Another system that sends or requests data and gives some signal
+ * An automatic background process that happens at certain times, such as every 10 minutes or at the end of the day
+We express such storytests in terms of three phases, as we show in the first example:
+
+^CalcuLator
+

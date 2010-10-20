@@ -1,0 +1,14 @@
+Here are some situations where a special value needs to be handled in storytests:
+ * An empty cell should mean a null String, rather than an empty one
+ * Dates are formatted in a special way, and not according to the current locale
+ * Enum values are used
+ * An entity is referred to by a "key"
+
+${fitLibrary} needs to convert from the text in a table cell to some value (object or primitive value).
+ * It includes ${parser}s for the standard primitive types, their class equivalents (eg Integer), and String.
+ * It determines the type of value required by reflectively looking at method signatures.
+ * For example, a ${workflow} action corresponds to a method. The return type and parameter types of the method are used to work out the type of the corresponding cells in the table, and a suitable ${parser} is used.
+
+One approach ${fitLibrary} uses to parsing the text in a cell is to use a ${finder).
+ * This can be a good way to handle special values, whether for your own classes or those of others.
+ * For further details, see ${finder}

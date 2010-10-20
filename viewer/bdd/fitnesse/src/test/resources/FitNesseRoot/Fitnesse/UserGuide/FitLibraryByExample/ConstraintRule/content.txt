@@ -1,0 +1,27 @@
+Constraint rules are a variation of calculation rules. Constraint rules don't specify any ''expected'' value, because they have an implied expected value of true (or false).
+
+For example, the following constraint rule table is checking the constraint that the ''a'' value is less than the ''b'' value. It only has ''given'' columns:
+
+|!-fitlibrary.eg.Constraints-!|
+----
+|''constraint''|
+|''a''|''b''|
+|1|2|
+|2|5|
+
+The two rows are colored green because the constraint is satisfied. For each value row, the method ''aB()'' is called in the class ''!-Constraints-!'' below. If the method returns ''true'' the row passes, otherwise it is colored red.
+
+In general, it's useful to show passing and failing constraint rules. Here we show some numbers that fail to meet out constraint (> 0):
+
+|''constraint''|
+|positive|
+|1|
+|435|
+
+|''failing constraint''|
+|positive|
+|0|
+|-3|
+Here's the ^ProgramCode
+---- * ''Copyright (c) 2004, 2005, 2006 Rick Mugridge, http://www/rimuresearch.com.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

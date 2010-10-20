@@ -1,0 +1,35 @@
+!**>
+!define list (|''item''|
+|1|
+|2|
+|3|
+|4|
+)
+**!
+Let's consider a table for  specifying an ordered list that's expected.
+ * The left cell of the table identifies the property (an ordered list)
+ * The right cell contains a table for the ordered list:
+  * The first row contains the ''labels'', the names of the fields of elements of the list.
+  * The rest of the rows contain the expected elements, in order. If there are no elements at all in the collection, there's no further rows
+ * This passes:
+|!-fitlibrary.eg.Collections-!|
+----
+ * Create a list with 4 elements
+|list is|1,2,3,4|
+
+|''ordered list''|
+|''item''|
+|1|
+|2|
+|3|
+|4|
+----
+ * Here's the list to be checked
+|''ordered list''|${list}|
+And here's further details:
+ * ^OneWithNoElements
+ * One ^ThatFails
+ * How to include checks within the ${actions} ^CheckInActions
+ * The code: CollectionsCode
+---- * ''Copyright (c) 2004, 2005 Rick Mugridge, http://www.rimuresearch.com.''
+ * ''Released under the terms of the GNU General Public License version 2 or later.''

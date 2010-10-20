@@ -1,0 +1,16 @@
+|!-fitlibrary.specify.calculate.WithLists-!|
+
+|''actions''|
+
+|''calculate''|
+|1|2||+|
+|a|b||!-<ul><li>a</li><li>b</li></ul>-!|
+|!-A<ul><li>a</li></ul>-!|!-B<ul><li>b</li></ul>-!||!-<ul><li>A<ul><li>a</li></ul></li><li>B<ul><li>b</li></ul></li></ul>-!|
+
+Here's the code:
+----{{{ public class WithLists {
+	public ListTree plus12(ListTree t1, ListTree t2) {
+		return new ListTree("", new ListTree[]{ t1, t2 });
+	}
+} }}}----
+
