@@ -1,0 +1,19 @@
+Overview
+
+  <Groovy Objects> is a {{{http://starobjects.org}sister project}} for the {{{http://nakedobjects.org}Naked Objects}} framework, providing support for domain objects to be written in {{{http://groovy.codehaus.org}Groovy}}.
+  The diagram below shows how Groovy Objects relates to the Naked Objects framework, in terms of the {{{http://alistair.cockburn.us/Hexagonal+architecture}hexagonal architecture}}.
+
+[images/HexagonalArchitectureOverview.png] Naked Objects & Groovy Objects.
+
+  There are a number of other sister projects; for details see the {{{http://starobjects.sourceforge.net}Star Objects}} umbrella project.
+
+Getting Started
+
+  Full instructions on how to configure a regular Naked Objects application to support Groovy are provided in the users' guide.
+
+  <Groovy Objects> is distributed using {{{http://maven.apache.org}Maven}}, downloadable from the Maven repo hosted at the <Star Objects> umbrella project.
+
+Contributing to this project
+
+  If you are interested in contributing to or improving this project, please contact Dan Haywood.
+

@@ -1,0 +1,6 @@
+<project name="${project.name}">
+	<version position="right"/>
+    <body>
+        <menu ref="parent"/>
+    </body>
+</project>

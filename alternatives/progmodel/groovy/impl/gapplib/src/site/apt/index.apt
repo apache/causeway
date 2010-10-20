@@ -1,0 +1,11 @@
+Documentation
+
+  The <Groovy Objects> applib defines:
+  
+  * helper classes for writing fixtures
+
+  * a transitive dependency to the <Naked Objects> applib
+ 
+  []
+   
+  See the {{{../gdocumentation}user guide}} for more information.

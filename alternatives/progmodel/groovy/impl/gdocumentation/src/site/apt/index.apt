@@ -1,0 +1,11 @@
+Documentation
+
+  The main documentation for <Groovy Objects> consists of a user guide that explains:
+  
+  * how to configure a Maven <Naked Objects> application so that domain objects can be written in Groovy
+  
+  * provides examples of what a Groovy domain objects looks like when following the <Naked Objects> conventions.
+  
+  []
+   
+  See the links in the menu to the left (also available on the {{{..}main site}}).

@@ -1,0 +1,80 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>plugins</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.apache.isis.extensions</groupId>
+	<artifactId>groovy</artifactId>
+	<version>0.1-SNAPSHOT</version>
+
+	<name>Isis Groovy Support</name>
+
+	<packaging>pom</packaging>
+
+	<properties>
+		<groovy.version>1.7.2</groovy.version>
+	</properties>
+
+	<modules>
+		<module>gapplib</module>
+		<module>gmetamodel</module>
+		<module>gdocumentation</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.agilejava.docbkx</groupId>
+				<artifactId>docbkx-maven-plugin</artifactId>
+				<inherited>false</inherited>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Groovy Support -->
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>groovy-applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.extensions</groupId>
+				<artifactId>groovy-metamodel</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- Apache Isis -->
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.isis.core</groupId>
+				<artifactId>metamodel</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- Groovy -->
+			<dependency>
+				<groupId>org.codehaus.groovy</groupId>
+				<artifactId>groovy-all</artifactId>
+				<version>${groovy.version}</version>
+				<scope>compile</scope>
+				<optional>true</optional>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+
+
+</project>
