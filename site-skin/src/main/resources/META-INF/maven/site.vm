@@ -466,43 +466,53 @@
     $headContent
   </head>
   <body class="composite">
-    <div id="banner">
-      #banner( $decoration.bannerLeft "bannerLeft" )
-      #banner( $decoration.bannerRight "bannerRight" )
+    <div id="wrapper">
+      <div id="banner">
+        <a href="http://incubator.apache.org/isis" id="bannerLeft">&nbsp;</a>
+        <a href="http://incubator.apache.org" id="bannerRight">&nbsp;</a>
+        <div class="clear">
+          <hr/>
+        </div>
+      </div>
+      <div id="breadcrumbs">
+        #publishDate( "left" $decoration.publishDate $decoration.version )
+        <div class="xright">#links( $decoration.body.links )#publishDate( "right" $decoration.publishDate $decoration.version )</div>
+        <div class="clear">
+          <hr/>
+        </div>
+      </div>
+      <div id="leftColumn">
+        <div id="navcolumn">
+         #publishDate( "navigation-top" $decoration.publishDate $decoration.version )
+         #mainMenu( $decoration.body.menus )
+         #poweredByLogo( $decoration.poweredBy )
+         #publishDate( "navigation-bottom" $decoration.publishDate $decoration.version )
+        </div>
+      </div>
+      <div id="bodyColumn">
+		<div id="searchBox">
+  <form action="http://www.google.com/cse" id="cse-search-box">
+    <div>
+    <input type="hidden" name="cx" value="001500763902520246267:purt3m54z98" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="q" size="31" />
+    <input type="submit" name="sa" value="Search" />
+  </div>
+</form>
+<script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&lang=en"></script>
+        </div>
+        <div id="contentBox">
+          $bodyContent
+        </div>
+      </div>
       <div class="clear">
         <hr/>
       </div>
-    </div>
-    <div id="breadcrumbs">
-      #publishDate( "left" $decoration.publishDate $decoration.version )
-      <div class="xright">#links( $decoration.body.links )#publishDate( "right" $decoration.publishDate $decoration.version )</div>
-      <div class="clear">
-        <hr/>
-      </div>
-    </div>
-    <div id="leftColumn">
-      <div id="navcolumn">
-       #publishDate( "navigation-top" $decoration.publishDate $decoration.version )
-       #mainMenu( $decoration.body.menus )
-       #poweredByLogo( $decoration.poweredBy )
-       #publishDate( "navigation-bottom" $decoration.publishDate $decoration.version )
-      </div>
-    </div>
-    <div id="bodyColumn">
-      <div id="search">
-            <script src="http://www.gmodules.com/ig/ifr?url=http://www.google.com/cse/api/005069477555199136918/cse/jkgqidbdxcc/gadget&amp;synd=open&amp;w=278&amp;h=73&amp;border=%23ffffff%7C3px%2C1px+solid+%23999999&amp;output=js"></script>
-      </div>
-      <div id="contentBox">
-        $bodyContent
-      </div>
-    </div>
-    <div class="clear">
-      <hr/>
-    </div>
-    <div id="footer">
-      <div class="xright">Copyright &#169;#copyright()All Rights Reserved.#publishDate( "bottom" $decoration.publishDate $decoration.version )</div>
-      <div class="clear">
-        <hr/>
+      <div id="footer">
+        <div class="xright">Copyright &#169;#copyright()All Rights Reserved.#publishDate( "bottom" $decoration.publishDate $decoration.version )</div>
+        <div class="clear">
+          <hr/>
+        </div>
       </div>
     </div>
   </body>

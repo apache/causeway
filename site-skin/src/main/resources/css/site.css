@@ -1,3 +1,36 @@
+body {
+  background: AntiqueWhite;
+  text-align: center;
+}
+#wrapper {
+  width: 1024px;
+  margin: 0 auto;
+  text-align: left;
+  background: white;
+}
+
+.gsc-branding {
+	display: none;
+}
+
+#searchBox {
+	text-align: right;
+}
+
+#bannerLeft {
+  background: url(../images/logos/banner-left.png) left top no-repeat;
+  height: 85px;
+  width: 627px;
+  float: left;
+}
+
+#bannerRight {
+  background: url(../images/logos/apache-incubator-logo.png) right top no-repeat;
+  height: 85px;
+  width: 240px;
+  float: right;
+}
+
 img.wrap-left {
     float: left;
     padding-top: 2px;

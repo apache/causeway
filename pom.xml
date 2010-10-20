@@ -192,6 +192,7 @@
                     <configuration>
                         <downloadSources>true</downloadSources>
                         <downloadJavadocs>true</downloadJavadocs>
+                        <projectNameTemplate>[groupId].[artifactId]</projectNameTemplate>
                     </configuration>
                     <!-- use mvn eclipse:eclipse (no goals bound to phases) -->
                 </plugin>

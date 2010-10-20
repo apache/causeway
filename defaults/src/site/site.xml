@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 
-	<bannerLeft>
-		<name>&nbsp;</name>
-        <href>http://incubator.apache.org/isis</href>
-	</bannerLeft>
-
-	<bannerRight>
-        <name>&nbsp;</name>
-        <href>http://incubator.apache.org</href>
-	</bannerRight>
-
 	<body>
 		<breadcrumbs>
 			<item name="Defaults"/>
@@ -22,7 +12,7 @@
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
-			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/${docbkxGuideName}/${docbkxGuideName}.html" />
+			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />
 		</menu>
 	</body>
 </project>

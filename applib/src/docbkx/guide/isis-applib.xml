@@ -1606,12 +1606,1771 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
     </section>
   </chapter>
 
-  <chapter id="chp.Xxx">
-    <title>Fixtures</title>
+  <chapter id="chp.RecognisedAnnotations">
+    <title>Recognised Annotations</title>
 
     <abstract>
-      <para>*** yada yada</para>
+      <para>Defines the set of annotations that are recognised by the Apache
+      Isis (Java) Programming Model.</para>
     </abstract>
+
+    <para>This chapter defines the set of annotations that are recognised by
+    the Apache Isis (Java) Programming Model.</para>
+
+    <section>
+      <title>@ActionOrder</title>
+
+      <para>Note: The recommended mechanism for specifying the order in which
+      actions are listed to the user is <literal>@MemberOrder</literal> (see
+      below). <literal>@ActionOrder</literal> provides an alternative
+      mechanism, in which the order is specified in one place in the class,
+      with the added advantage (currently) that you can easily specify
+      groupings (which may be rendered by the viewer as sub-menus). However,
+      <literal>@ActionOrder</literal> is more 'brittle' to change: if you
+      change the name of an existing action you will need to ensure that the
+      corresponding name within the <literal>@ActionOrder</literal> annotation
+      is also changed.</para>
+
+      <para>The syntax is: <literal moreinfo="none">@ActionOrder("&lt;comma
+      separated list of action names&gt;")</literal> (the action names are not
+      case sensitive).</para>
+
+      <para>For example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@ActionOrder("PlaceNewOrder, CheckCredit")</emphasis>
+public class Customer {
+
+    public Order placeNewOrder() {}
+
+    public CreditRating checkCredit() {}
+
+...
+}</programlisting>
+
+      <para>Actions can be grouped together by surrounding the group with
+      brackets, and prefixing the group with name and colon. This information
+      may be used by the viewing mechanism to render actions into sub-menus.
+      For example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@ActionOrder("(Account Management: PlaceOrder, CheckCredit), (Personal Details: ChangeOfAddress, AddEmail)")</emphasis>
+public class Customer {
+
+    public Order placeNewOrder() {}
+
+    public CreditRating checkCredit() {}
+
+    public void changeOfAddress() {}
+
+    public void addEmail(String emailAddress) {}
+
+    ...
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@Bounded</title>
+
+      <para>For immutable objects where there is a bounded set of instances,
+      the <literal moreinfo="none">@Bounded</literal> annotation can be used.
+      For example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@Bounded</emphasis>
+public class County {
+    // members and actions here
+}</programlisting>
+
+      <para>The number of instances is expected to be small enough that all
+      instance can be held in memory. The viewer will use this information to
+      render all the instances of this class in a drop-down list or
+      equivalent. (Note: Although this is not enforced, <literal
+      moreinfo="none">@Bounded</literal> is intended for use on <literal
+      moreinfo="none">final</literal> classes. Its behaviour when used on
+      interfaces, or classes with sub-classes is not specified).</para>
+    </section>
+
+    <section>
+      <title>@Debug</title>
+
+      <para>The <literal>@Debug </literal>annotation marks an action method as
+      available in debug mode only, and so will not normally be displayed by
+      the user interface.</para>
+    </section>
+
+    <section>
+      <title>@DescribedAs</title>
+
+      <para>The <literal moreinfo="none">@DescribedAs</literal> annotation is
+      used to provide a short description of something that features on the
+      user interface. How this description is used will depend upon the
+      viewing mechanism - but it may be thought of as being like a 'tool tip'.
+      Descriptions may be provided for objects, members (properties,
+      collections and actions), and for individual parameters within an action
+      method. <literal moreinfo="none">@DescribedAs</literal> therefore works
+      in a very similar manner to <literal
+      moreinfo="none">@Named</literal>.</para>
+
+      <para><emphasis>Providing a description for an object</emphasis></para>
+
+      <para>To provide a description for an object, use the <literal
+      moreinfo="none">@DescribedAs</literal> annotation immediately before the
+      declaration of that object class. For example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@DescribedAs("A Customer who may have originally become known to us via " +
+             "the marketing system or who may have contacted us directly.")</emphasis>
+public class ProspectiveSale {
+   ...
+}</programlisting>
+
+      <para><emphasis>Providing a description for a member</emphasis></para>
+
+      <para>Any member (property, collection or action) may provide a
+      description. To specify this description, use the <literal
+      moreinfo="none">@DescribedAs</literal> annotation immediately before the
+      declaration of that member. For example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    <emphasis role="strong">@DescribedAs("The name that the customer has indicated that they wish to be " +
+                 "addressed as (e.g. Johnny rather than Jonathan)")</emphasis>
+    public String getFirstName() { ... }
+}</programlisting>
+
+      <para><emphasis>Providing a description for an action
+      parameter</emphasis></para>
+
+      <para>To provide a description for an individual action parameter, use
+      the <literal moreinfo="none">@DescribedAs</literal> annotation in-line
+      i.e. immediately before the parameter declaration. For example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    public Order placeOrder(
+                      Product product,
+                      @Named("Quantity")
+                      <emphasis role="strong">@DescribedAs("The quantity of the product being ordered")</emphasis>
+                      int quantity) {
+
+        Order order = new Order();
+        order.modifyCustomer(this);
+        order.modifyProduct(product);
+        order.setQuantity(quantity);        
+        return order;
+    }
+    ...
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@Disabled</title>
+
+      <para>The <literal moreinfo="none">@Disabled</literal> annotation means
+      that the member cannot be used in any instance of the class. When
+      applied to the property it means that the user may not modify the value
+      of that property (though it may still be modified programmatically).
+      When applied to an action method, it means that the user cannot invoke
+      that method. For example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    <emphasis role="strong">@Disabled</emphasis>
+    public void assessCreditWorthiness() { ... }
+
+    <emphasis role="strong">@Disabled</emphasis>
+    public int getInitialCreditRating(){ ... }
+    public void setInitialCreditRating(int initialCreditRating) { ... }
+}</programlisting>
+
+      <para>Note that if an action is marked as <literal
+      moreinfo="none">@Disabled</literal>, it will be shown on the user
+      interface but cannot ever be invoked. One possible reason to do this is
+      during prototyping, to indicate an action that is still to be developed.
+      If a method is intended for programmatic use, but not intended ever to
+      be invoked directly by a user, then it should be marked as <literal
+      moreinfo="none">@Hidden</literal> instead.</para>
+
+      <para>This annotation can also take a single parameter indicating when
+      it is to be hidden, for example the following code would disable the
+      action until the object has been saved.</para>
+
+      <programlisting format="linespecific">public class Customer {
+    <emphasis role="strong">@Disabled</emphasis>(When.UNTIL_PERSISTED)
+    public void assessCreditWorthiness() { ... }
+}</programlisting>
+
+      <para>The acceptable values for the parameter are:
+      <literal>When.ALWAYS</literal>, <literal>When.NEVER</literal>,
+      <literal>When.ONCE_PERSISTED</literal> and
+      <literal>When.UNTIL_PERSISTED</literal>. By default the annotated
+      property or action is always disabled i.e. it is implicitly
+      <literal>When.ALWAYS.</literal></para>
+    </section>
+
+    <section>
+      <title>@Executed</title>
+
+      <para>The <literal>@Executed</literal> annotation overrides the default
+      location where a method is executed.</para>
+
+      <para><emphasis>Forcing a method to be executed on the
+      client</emphasis></para>
+
+      <para>The <literal>@Executed(Where.LOCALLY)</literal> annotation marks
+      an action method so that it executes on the client, rather than being
+      forwarded to the server for execution. This is useful for methods that
+      invoke a service that must be run client-side, for example spawning off
+      a separate process (such as a web browser or Acrobat Reader).</para>
+
+      <para><emphasis>Forcing a method to be executed on the
+      server</emphasis></para>
+
+      <para>The <literal>@Executed(Where.REMOTELY)</literal> annotation marks
+      an action method so that it executes on the server, even though it would
+      normally be executed on the client (as methods for transient objects
+      are). This is useful for methods that although based on transient
+      objects need access to persistent objects.</para>
+    </section>
+
+    <section>
+      <title>@Exploration</title>
+
+      <para>The <literal>@Exploration</literal> annotation marks an action
+      method as available in exploration mode only, and therefore not intended
+      for use in the production system</para>
+    </section>
+
+    <section>
+      <title>@FieldOrder</title>
+
+      <para>Note: The recommended mechanism for specifying the order in which
+      fields are listed to the user is <literal>@MemberOrder</literal> (see
+      below). <literal>@FieldOrder</literal> provides an alternative
+      mechanism, in which the order is specified in one place in the class.
+      However, <literal>@FieldOrder</literal> is more 'brittle' to change: if
+      you change the name of an existing property you will need to ensure that
+      the corresponding name within the <literal>@FieldOrder</literal>
+      annotation is also changed.</para>
+
+      <para>The syntax is: <literal moreinfo="none">@FieldOrder("&lt;comma
+      separated list of field names&gt;") </literal>(the field names are not
+      case sensitive.).</para>
+
+      <para>For example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@FieldOrder("Name, Address, DateOfBirth, RecentOrders")</emphasis>
+public class Customer {
+
+    public Date getDateOfBirth() {...}
+
+    public List&lt;Order&gt; getRecentOrders() {...}
+
+    public String getAddress() {...}
+
+    public String getName() {...}
+
+    ...
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@Hidden</title>
+
+      <para>The <literal moreinfo="none">@Hidden</literal> annotation
+      indicates that the member (property, collection or action) to which it
+      is applied should never be visible to the user. For example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    private int internalId;
+
+    <emphasis role="strong">@Hidden</emphasis>
+    public int getInternalId() {
+        return internalId;
+    }
+
+    <emphasis role="strong">@Hidden</emphasis>
+    public void updateStatus() { ... }
+}</programlisting>
+
+      <para>This annotation can also take a single parameter indicating when
+      it is to be hidden, for example the following code would show the Id
+      until the object has been saved, and then would hide it.</para>
+
+      <programlisting format="linespecific">public class Customer {
+    private int internalId;
+
+    <emphasis role="strong">@Hidden</emphasis>(When.ONCE_PERSISTED)
+    public int getInternalId() {
+        return internalId;
+    }
+}</programlisting>
+
+      <para>The acceptable values for the parameter are:
+      <literal>When.ALWAYS</literal>, <literal>When.NEVER</literal>,
+      <literal>When.ONCE_PERSISTED</literal> and
+      <literal>When.UNTIL_PERSISTED</literal>. By default the annotated
+      property or action is always hidden i.e. it is implicitly
+      <literal>When.ALWAYS.</literal></para>
+    </section>
+
+    <section>
+      <title>@Immutable</title>
+
+      <para>The <literal moreinfo="none">@Immutable</literal> annotation may
+      be applied to a class. The framework does not allow the state of such
+      objects to be changed through the UI, and it should be considered a
+      programmer error to do so programmatically. The ObjectStorePersistor, as
+      used to run the in-memory and Hibernate object stores will actually fail
+      if the programmer tries to change an object in a way that cause the
+      persistor to try and save it. For example the following class would
+      prevent the user from changing the object even when transient:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@Immutable</emphasis>
+public class Country {
+    ...
+}</programlisting>
+
+      <para>This annotation can also take a single parameter indicating when
+      it is to become immutable, for example the following code would allow
+      the user to create an email object and set it up, and then prevent any
+      changes once it has been saved.</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@Immutable</emphasis>(When.ONCE_PERSISTED)
+public class Email {
+    ...
+}</programlisting>
+
+      <para>The acceptable values for the parameter are:
+      <literal>When.ALWAYS</literal>, <literal>When.NEVER</literal>,
+      <literal>When.ONCE_PERSISTED</literal> and
+      <literal>When.UNTIL_PERSISTED</literal>. By default the annotated
+      property or action is always immutable i.e. it is implicitly
+      <literal>When.ALWAYS.</literal></para>
+    </section>
+
+    <section>
+      <title id="mask-annotation">@Mask</title>
+
+      <para>The <literal moreinfo="none">@Mask </literal>annotation may be
+      applied to any property, or to any parameter within an action method,
+      that allows the user to type in text as input. The mask serves to
+      validate, and potentially to normalise, the format of the input. The
+      characters that can be used are based on Swing's MaskFormatter, and also
+      Java's SimpleDateFormat. When applying a mask to a value property, the
+      annotation should be applied to the 'getter'. For example:</para>
+
+      <programlisting format="linespecific">public class Email {
+    private String telNo;
+
+    <emphasis role="strong">@Mask("(NNN)NNN-NNNN")</emphasis>
+    public String getTelephoneNumber() {...}
+
+    public void setTelephoneNumber(String telNo) {...}
+    ...
+}</programlisting>
+
+      <para>When applying a mask to a value parameter within an action method,
+      the annotation should be applied 'in-line' before that parameter). For
+      example:</para>
+
+      <programlisting format="linespecific">public void newContact(
+     @Named("Contact Name")
+     String contactName,
+     @Named("Telephone Number")
+     <emphasis role="strong">@Mask("(NNN)NNN-NNNN")</emphasis>
+     String telNo) {}</programlisting>
+    </section>
+
+    <section>
+      <title>@MaxLength</title>
+
+      <para>The <literal moreinfo="none">@MaxLength</literal> annotation
+      indicates the maximum number of characters that the user may enter into
+      a <literal moreinfo="none">String</literal> property, or a <literal
+      moreinfo="none">String</literal> parameter in an action. (It is ignored
+      if applied to a property or parameter of any other type.) For
+      example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+
+    <emphasis role="strong">@MaxLength(30)</emphasis>
+    public String getFirstName() { ... }
+    public void setFirstName(String firstName) { ... }
+    ...
+}</programlisting>
+
+      <para>If the model is being persisted on a relational database then
+      <literal moreinfo="none">@MaxLength</literal> should be specified for
+      all <literal moreinfo="none">String</literal> properties and action
+      parameters.</para>
+    </section>
+
+    <section>
+      <title>@MemberOrder</title>
+
+      <para><literal>@MemberOrder</literal> is the recommended mechanism for
+      specifying the order in which fields and/or actions are presented to the
+      user. (<literal>@ActionOrder</literal> and
+      <literal>@FieldOrder</literal> provide alternative mechanisms).</para>
+
+      <para><literal>@MemberOrder</literal> is specified at the individual
+      member level, on a 'relative' basis. The syntax is:</para>
+
+      <programlisting format="linespecific">@MemberOrder(sequence = "&lt;relative order&gt;")</programlisting>
+
+      <para>where <literal>&lt;relative order&gt;</literal> may be any string.
+      The actual sequence is determined by comparing all the values of the
+      sequence specifier string, using the standard <literal>String</literal>
+      comparator.</para>
+
+      <para>The simplest convention is to use numbers - 1, 2, 3 - though it is
+      a better idea to leave gaps in the numbers - 10, 20, 30 perhaps - such
+      that a new member may be added without having to edit existing numbers.
+      A useful alternative is to adopt the 'dot-decimal' notation - 1, 1.1,
+      1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 - which allows for an indefinite
+      amount of future insertion. For example:</para>
+
+      <programlisting format="linespecific">Public Class Customer {
+    @MemberOrder(sequence="2.1")
+    Public String getAddress() {...}
+    Public void setAddress(value as String) {...}
+
+    @MemberOrder(sequence="1.1")
+    Public String getFirstName() {...}
+    Public void setFirstName(value as String) {...}
+
+    @MemberOrder(sequence="1.2")
+    Public String getLastName() {...}
+    Public void setLastName(value as String) {...}
+
+    @MemberOrder(sequence="3")
+    Public Date getDateOfBirth() {...}
+    Public void setDateOfBirth(value as Date) {...}
+    ...
+}   </programlisting>
+
+      <para>If a member does not have a specified order then it will be placed
+      after those that are specified. Two members may have the same sequence
+      specifier, but in such a case the relative ordering of those members
+      will be indeterminate.</para>
+
+      <para>This approach is especially useful when dealing with inheritance
+      hierarchies, as it allows sub-classes to specify where their additional
+      members should be placed in relation to those inherited from the
+      super-class.</para>
+
+      <para>Note that certain styles of user interface will lay out an
+      object's properties and its collections separately, in which case the
+      relative member order of properties and collections will be evaluated
+      separately. However, since other styles of user interface may interleave
+      properties and collections, it is safer to assume the latter.</para>
+    </section>
+
+    <section>
+      <title>@MultiLine</title>
+
+      <para>The <literal moreinfo="none">@MultiLine</literal> annotation
+      provides information about the carriage returns in a <literal
+      moreinfo="none">String</literal> property or action parameter. The
+      annotation indicates that:</para>
+
+      <para>- the <literal>String</literal> property or parameter may contain
+      carriage returns, and</para>
+
+      <para>- (optionally) the typical number of such carriage returns,
+      and</para>
+
+      <para>- (optionally) that the text should be wrapped (the default is
+      that text is not wrapped).</para>
+
+      <note>
+        <para>Currently the <literal moreinfo="none">preventWrapping</literal>
+        functionality is not fully implemented.</para>
+      </note>
+
+      <para>This may be used by the viewing mechanism to render the property
+      as a multi-line textbox (or text-editor when changes are permitted),
+      with appropriate wrapping and/or scrollbars. The syntax is:</para>
+
+      <para><literal
+      moreinfo="none">@MultiLine([numberOfLines=&lt;typicalNumberOfCRs&gt;]
+      [,preventWrapping=&lt;false|true&gt;])</literal></para>
+
+      <para>For example:</para>
+
+      <programlisting format="linespecific">public class BugReport {
+    <emphasis role="strong">@MultiLine(numberOfLines=10)</emphasis>
+    public String getStepsToReproduce() { ... }
+    public void setStepsToReproduce(String stepsToReproduce) { ... }
+    ...
+}</programlisting>
+
+      <para>Here the <literal moreinfo="none">stepsToReproduce</literal> may
+      be displayed in a text area of 10 rows, with no wrapping. A horizontal
+      scrollbar may appear if the number of characters on any given row
+      exceeds the width. Another example:</para>
+
+      <programlisting format="linespecific">public class Email {
+    <emphasis role="strong">@MultiLine(numberOfLines=20, preventWrapping=false)</emphasis>
+    public String getBody() { ... }
+    public void setBody(String body) { ... }
+    ...
+}</programlisting>
+
+      <para>Here the body should be displayed in a text area of 20 rows, with
+      wrapping. If this attribute is combined with the <literal
+      moreinfo="none">&lt;TypicalLength&gt;</literal>, then the expected width
+      of the text area in the user interface will be determined by the value
+      of the typical length divided by the number of specified lines. For
+      example:</para>
+
+      <programlisting format="linespecific">public class Email {
+    <emphasis role="strong">@MultiLine(numberOfLines=20, preventWrapping=false)</emphasis>
+    @TypicalLength(800)
+    public String getBody() { ... }
+    public void setBody(String body) { ... }
+    ...
+}</programlisting>
+
+      <para>Here the body will (likely be) displayed in a text area of 20
+      rows, with 40 columns.</para>
+    </section>
+
+    <section>
+      <title>@MustSatisfy</title>
+
+      <para>The <literal moreinfo="none">@MustSatisfy</literal> annotation
+      allows validation to be applied to properties using an (implementation
+      of a) <literal>org.apache.isis.applib.spec.Specification</literal>
+      object.</para>
+
+      <para>For example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    <emphasis role="strong">@MustSatisfy(StartWithCapitalLetterSpecification.class)</emphasis>
+    public String getFirstName() { ... }
+
+    ...
+}</programlisting>
+
+      <para>The <literal>Specification</literal> is consulted during
+      validation, being passed the proposed value.</para>
+    </section>
+
+    <section>
+      <title>@Named</title>
+
+      <para>The <literal moreinfo="none">@Named</literal> annotation is used
+      when you want to specify the way something is named on the user
+      interface i.e. when you do not want to use the name generated
+      automatically by the system. It can be applied to objects, members
+      (properties, collections, and actions) and to parameters within an
+      action method.</para>
+
+      <note>
+        <title>Warning</title>
+
+        <para>Generally speaking it is better to rename the property,
+        collection or action. The only common case where @Named is common is
+        to rename parameters for built-in value types. Even here though a
+        custom value type can be defined using @Value so that the value type
+        is used as the parameter name. @Named may also be used if the name
+        needs punctuation or other symbols in the name presented to the
+        user.</para>
+      </note>
+
+      <para><emphasis>Specifying the name of an object</emphasis></para>
+
+      <para>By default the name of an object is derived, reflectively from the
+      class name. To specify a different name for an object, use the <literal
+      moreinfo="none">@Named</literal> annotation in front of the class
+      declaration. For example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@Named("Customer")</emphasis>
+public class CustomerImpl implements Customer{
+   ...
+}</programlisting>
+
+      <para>See also: <literal moreinfo="none">@Plural</literal>.</para>
+
+      <para><emphasis>Specifying the name of a member</emphasis></para>
+
+      <para>By default, the name of a member (a property, collection or
+      action) presented to the user is derived, reflectively, from the name of
+      the member defined in the program code. To specify a different name use
+      the <literal moreinfo="none">@Named </literal>annotation immediately
+      before the member declaration. For example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    <emphasis role="strong">@Named("Given Name")</emphasis>
+    public String getFirstName() { ... }
+
+    <emphasis role="strong">@Named("Family Name")</emphasis>
+    public String getSurname() { ... }
+
+    public CreditRating getCreditRating() { ... }
+}</programlisting>
+
+      <para>Note that the framework provides a separate and more powerful
+      mechanism for internationalisation.</para>
+
+      <para><emphasis>Specifying the name for an action
+      parameter</emphasis></para>
+
+      <para>The most common usage of <literal moreinfo="none">@Named
+      </literal>will be to specify names for the parameters of an action:
+      because, by default, the user interface will use the type of the
+      parameter as the name. (This is because the parameter name declared in
+      the code for the action method cannot be picked up reflectively.) To
+      specify the name of a parameter, the <literal
+      moreinfo="none">@Named</literal> annotation is applied 'in-line' (i.e.
+      preceding the individual parameter declaration). For example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+
+    public Order placeOrder(
+                      Product product,
+                      <emphasis role="strong">@Named("Quantity")</emphasis>
+                      int quantity) {
+
+        Order order = new Order();
+        order.modifyCustomer(this);
+        order.modifyProduct(product);
+        order.setQuantity(quantity);        
+        return order;
+    }
+    ...
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@NotPersistable</title>
+
+      <para>This annotation indicates that transient instances of this class
+      may be created but may not be persisted. The framework will not provide
+      the user with an option to 'save' the object, and attempting to persist
+      such an object programmatically would be an error. For example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@NotPersistable</emphasis>
+public class InputForm {
+    // members and actions here
+}</programlisting>
+
+      <para>This annotation can also take a single parameter indicating
+      whether it is only the user that cannot persist the object, for example
+      the following code would prevent the user from saving the object (via
+      the viewer) but still allow the program to persist the object. By
+      default the annotated object is effectively transient, e.g. it is
+      implicitly
+      <literal>By</literal>.<literal>USER_OR_PROGRAM</literal>.</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@NotPersistable</emphasis>(By.USER)
+public class InputForm {
+    ...
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@NotPersisted</title>
+
+      <para>This indicates that the property is not to be persisted. Note that
+      in many cases the same thing could be achieved by providing the property
+      with a 'getter' but no 'setter'. For example:</para>
+
+      <para><emphasis>Check that this is acceptable for
+      Hibernate</emphasis></para>
+
+      <programlisting format="linespecific">public class Order {
+
+    private Order previousOrder;
+
+    <emphasis role="strong">@NotPersisted</emphasis>
+    public Order getPreviousOrder() {...}
+
+    public void setPreviousOrder(Order previousOrder) {...}
+
+    // rest of code
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@Optional</title>
+
+      <para>By default, the system assumes that all properties of an object
+      are required, and therefore will not let the user save a new object
+      unless a value has been specified for each property. Similarly, by
+      default, the system assumes that all parameters in an action are
+      required and will not let the user execute that action unless values
+      have been specified for each parameter. To indicate that either a
+      property, or an action parameter, is optional, use the <literal
+      moreinfo="none">@Optional</literal> annotation.</para>
+
+      <para><emphasis>Making a property optional</emphasis></para>
+
+      <para>To indicate that a property is optional (i.e. that the user may
+      save the object without necessarily specifying a value for this
+      property), use the @Optional annotation immediately before the
+      declaration of that property. For example:</para>
+
+      <programlisting format="linespecific">public class Order {
+    public Product getProduct() { ... }
+    
+    public java.util.Date getShipDate() { ... }
+    public void setShipDate(Date java.util.shipDate) { ... }
+
+    <emphasis role="strong">@Optional</emphasis>
+    public String getComments() { ... }
+    public void setComments(String comments) { ... }
+}</programlisting>
+
+      <para>Here the <literal moreinfo="none">product</literal> and <literal
+      moreinfo="none">shipDate</literal> properties are both required, but the
+      <literal moreinfo="none">comments</literal> property is optional.</para>
+
+      <para><emphasis>Making an action parameter optional</emphasis></para>
+
+      <para>To indicate that an action may be invoked without having to
+      specify a value for a particular parameter, the <literal
+      moreinfo="none">@Optional</literal> annotation should be used in-line
+      i.e. immediately before the declaration of that parameter. For
+      example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    public Order placeOrder(
+              Product product,
+              @Named("Quantity") int quantity, 
+              @Optional @Named("Special Instructions") String instr) {
+        ....
+    }
+    ...
+}</programlisting>
+
+      <para>Note that the <literal
+      moreinfo="none">@Optional</literal>annotation has no meaning for a
+      primitive property (or parameter) such as <literal
+      moreinfo="none">int</literal> - because primitives will always return a
+      default value (e.g. zero). If optionality is required, then use the
+      corresponding wrapper class (e.g. java.lang.Integer).</para>
+    </section>
+
+    <section>
+      <title>@Plural</title>
+
+      <para>When Apache Isis displays a collection of several objects it may
+      use the plural form of the object type in the title. By default the
+      plural name will be created by adding an 's' to the end of the singular
+      name (whether that is the class name or another name specified using
+      <literal moreinfo="none">@Named</literal>). Where the single name ends
+      in 'y' then the default plural name will end in 'ies' - for example a
+      collection of <literal moreinfo="none">Country</literal> objects will be
+      titled 'Countries'. Where these conventions do not work, the programmer
+      may specify the plural form of the name using @Plural. For
+      example:</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@Plural("Children")</emphasis>
+public class Child {
+    // members and actions here
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@RegEx</title>
+
+      <para>The <literal moreinfo="none">@RegEx</literal> annotation may be
+      applied to any property, or to any parameter within an action method,
+      that is a value type (i.e. that allows the user to type in text as
+      input). It serves both to validate and potentially to normalise the
+      format of the input. <literal moreinfo="none">@Regex</literal> is
+      therefore similar in use to <literal moreinfo="none">@Mask</literal> but
+      provides more flexibility. The syntax is:</para>
+
+      <para><literal moreinfo="none">@RegEx(validation = &lt;regEx string&gt;,
+      format = &lt;regEx string&gt;, caseSensitive =
+      &lt;true|false&gt;)</literal></para>
+
+      <para>The first parameter is required; the format defaults to 'no
+      formatting'; caseSensitive defaults to false. When applying Regex to a
+      value property, the annotation should be applied to the 'getter'. For
+      example:</para>
+
+      <programlisting format="linespecific">    private String email;
+
+<emphasis role="strong">    @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")</emphasis>
+    public String getEmail() {}
+
+    public void setEmail(String email) {}</programlisting>
+
+      <para>When applying a RegEx expression to a value parameter within an
+      action method, the annotation should precede that parameter:</para>
+
+      <programlisting format="linespecific">    public void newContact(
+        @Named("Contact Name")
+        String contactName,
+        @Named("Email")
+        <emphasis role="strong">@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")</emphasis>
+        String email) {}</programlisting>
+    </section>
+
+    <section>
+      <title>@TypeOf</title>
+
+      <para>The <literal moreinfo="none">@TypeOf</literal> annotation is used
+      to specify the type of elements in a collection, when it is not possible
+      to use generics - for example when invoking an external method that does
+      not use generics.</para>
+
+      <programlisting format="linespecific"><emphasis role="strong">@TypeOf(Customer.class)</emphasis>
+public List allNewCustomers() {
+    return CustomerDatabase.allNewCustomers();
+}</programlisting>
+    </section>
+
+    <section>
+      <title>@TypicalLength</title>
+
+      <para>The <literal moreinfo="none">@TypicalLength</literal> annotation
+      indicates the typical length of a <literal
+      moreinfo="none">String</literal> property or <literal
+      moreinfo="none">String</literal> parameter in an action. This may be
+      used by the viewing mechanism to determine the space that should be
+      given to that property or parameter in the appropriate view. For
+      example:</para>
+
+      <programlisting format="linespecific">public class Customer {
+    @MaxLength(30)
+    <emphasis role="strong">@TypicalLength(20)</emphasis>
+    public String getFirstName() { ... }
+    public void setFirstName(String firstName) { ... }
+}</programlisting>
+
+      <para>If the typical length is the same as the <literal
+      moreinfo="none">&lt;MaxLength&gt;</literal> then there is no need to
+      specify <literal moreinfo="none">&lt;TypicalLength&gt;</literal> as
+      well. If the value specified is zero or negative then it will be
+      ignored.</para>
+    </section>
+
+    <section>
+      <title>@Value</title>
+
+      <para>The <literal moreinfo="none">@Value</literal> annotation indicates
+      that a class should be treated as a value type rather than as a
+      reference (or entity) type. It does this providing an implementation of
+      a
+      <literal>org.apache.isis.applib.adapters.ValueSemanticsProvider</literal>.</para>
+
+      <para>For example:</para>
+
+      <programlisting format="linespecific">@Value(semanticsProviderClass=ComplexNumberValueSemanticsProvider.class)
+public class ComplexNumber {
+    ...
+}</programlisting>
+
+      <para>The <literal>ValueSemanticsProvider</literal> allows the framework
+      to interact with the value, parsing strings and displaying as text, and
+      encoding/decoding (for serialization).</para>
+    </section>
+  </chapter>
+
+  <chapter id="chp.RecognisedMethods">
+    <title>Recognised Methods</title>
+
+    <abstract>
+      <para>Lists the explicit methods that are recognised within the Apache
+      Isis programming model</para>
+    </abstract>
+
+    <para>The programming model allows the domain modeller to define
+    behaviourally complete domain objects, provide maximum feedback to the
+    user, and control any interaction that may take place (rather than place
+    that code in each and every user interface and back-end). This chapter
+    lists the explicit methods that are recognised within the Apache Isis
+    programming model. All methods must be <literal>public</literal> to be
+    recognised.</para>
+
+    <para>Methods that do not get matched with any of the listed rules are
+    deemed to be action methods that we expect the user to invoke via the user
+    interface. These are public methods, of the following format</para>
+
+    <programlisting format="linespecific">public void &lt;actionName&gt;([&lt;property type&gt; param]...)
+public &lt;type&gt; &lt;actionName&gt;([&lt;property type&gt; param]...)</programlisting>
+
+    <para>that are not used for fields, titles, or for controlling other
+    methods. Essentially they are the methods left over from generating all
+    other aspects of the class.</para>
+
+    <para>When such a method returns a reference the framework will attempt to
+    display that object. If an action method returns <literal
+    moreinfo="none">null</literal> then nothing will be displayed.</para>
+
+    <section>
+      <title id="addto-method">addTo</title>
+
+      <programlisting format="linespecific">public void addTo&lt;PropertyName&gt;(&lt;collection element type&gt; param)</programlisting>
+
+      <para>Used in conjunction with a collection, the <literal
+      moreinfo="none">addTo</literal> method is called by the framework when
+      the user adds an element to the collection. By providing this method in
+      conjunction with a non-generic collection it will be limited to a
+      specific type (rather than being used to store references of type
+      <literal>Object</literal>). This behaviour is similar to that of the
+      <literal>modify</literal> method for properties.</para>
+
+      <para>See also <xref linkend="modify-method" /> and <xref
+      linkend="removefrom-method" /></para>
+    </section>
+
+    <section>
+      <title>choices</title>
+
+      <para><emphasis>On a property</emphasis></para>
+
+      <programlisting format="linespecific">public &lt;property type&gt;[] choices&lt;PropertyName&gt;([&lt;property type&gt; param])
+
+public List&lt;property type&gt; choices&lt;PropertyName&gt;([&lt;property type&gt; param])</programlisting>
+
+      <para>Used in conjunction with a property, the
+      <literal>choices</literal> method provides the user with a set of
+      options for setting a property. This method is called when the user
+      interface makes the options available, hence its return value can be
+      based on the current state of the object. Note - this does not limit the
+      state of the field, see the <literal>validate</literal> methods for a
+      way to do that.</para>
+
+      <para><emphasis>On parameters on an action</emphasis></para>
+
+      <para>Either:</para>
+
+      <programlisting format="linespecific">public Object[] choicesN&lt;actionName&gt;()
+
+public List&lt;parameter type&gt; choicesN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
+
+      <para>where N is the 0-based parameter number.</para>
+
+      <para>Or:</para>
+
+      <programlisting format="linespecific">public Object[] choices&lt;actionName&gt;([&lt;parameter type&gt; param]...)
+
+public List&lt;parameter type&gt; choices&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
+
+      <para>Complements an action method, or a specific paramter within an
+      action.</para>
+
+      <para>The <literal>choices</literal> method provides a set of options
+      for the parameters of an action. This method is called when the user
+      interface prompts for the parameters from the user, so the options
+      cannot depend on the state of any of the other parameters. Note - this
+      does not limit the state of the parameter, see the
+      <literal>validate</literal> methods for a way to do that.</para>
+
+      <para>For each parameter the array should contain either <literal
+      moreinfo="none">null</literal>, an array, or a collection.</para>
+    </section>
+
+    <section>
+      <title id="clear-method">clear</title>
+
+      <programlisting format="linespecific">public void clear&lt;PropertyName&gt;()</programlisting>
+
+      <para>Used in conjunction with a property, the <literal>clear</literal>
+      method is called when the user (rather than the framework) clears a
+      reference field, or blanks (so there is no entry) a value field.</para>
+
+      <para>See also <xref linkend="modify-method" /></para>
+    </section>
+
+    <section>
+      <title>created</title>
+
+      <programlisting format="linespecific">public void created()</programlisting>
+
+      <para>Life cycle method called by framework when an object is first
+      created. This is the instance's logical creation. This method will
+      <emphasis>not</emphasis> be called when the object is recreated during
+      persistence or remoting.</para>
+    </section>
+
+    <section>
+      <title>default</title>
+
+      <para><emphasis>For a property</emphasis></para>
+
+      <programlisting format="linespecific">public &lt;parameter type&gt; default&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements a get/set method for a reference or value
+      property.</para>
+
+      <para>Provides the default reference or value for a property to be set
+      to when an object is first created, or the user asks for a property to
+      be reset.</para>
+
+      <para><emphasis>For parameters on an action</emphasis></para>
+
+      <para>Either:</para>
+
+      <programlisting format="linespecific">public Object[] defaultN&lt;actionName&gt;()
+
+public List&lt;parameter type&gt; defaultN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
+
+      <para>where N is the 0-based parameter number.</para>
+
+      <para>Or:</para>
+
+      <programlisting format="linespecific">public Object[] default&lt;actionName&gt;([&lt;parameter type&gt; param]...)
+
+public List&lt;parameter type&gt; default&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
+
+      <para>Complements an action method, or a specific parameter on an action
+      method.</para>
+
+      <para>Provides the defaults that should be used for the parameters
+      expected by an action method. The values should be provided as an array
+      with the same number of elements as the number of parameters. Any
+      parameter that does not have a default should have its corresponding
+      element in the array set to null.</para>
+    </section>
+
+    <section>
+      <title>deleted</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>removed()</literal></para>
+
+      <programlisting format="linespecific">public void deleted()</programlisting>
+
+      <para>Life cycle method called by framework when an object has just been
+      removed from the persistent store. At this point the object will exist
+      in memory, but no longer exist in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>deleting</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>removing()</literal></para>
+
+      <programlisting format="linespecific">public void deleting()</programlisting>
+
+      <para>Life cycle method called by framework when an object is just about
+      to be removed from the persistent store. At this point the object still
+      exists in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>disable</title>
+
+      <programlisting format="linespecific">public String disable&lt;PropertyName&gt;([&lt;property type&gt; param])
+
+public String disable&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements a get/set method for a field, or an action
+      method.</para>
+
+      <para>The <literal moreinfo="none">disable</literal> dynamically
+      controls whether a field is editable, or an action can be initiated. If
+      a <literal>String</literal> object is returned the field or action is
+      disabled and the string is made visible to user to inform them why it is
+      disabled. If the method returns <literal moreinfo="none">null</literal>
+      then field or action remains enabled.</para>
+    </section>
+
+    <section>
+      <title>get</title>
+
+      <para><emphasis>Value or reference property</emphasis></para>
+
+      <programlisting format="linespecific">public &lt;property type&gt; get&lt;PropertyName&gt;()</programlisting>
+
+      <para>A standard JavaBean accessor/mutator pair will be recognised as a
+      field for a value or reference. Values include Java primitives,
+      <literal>String</literal>s and <literal>Date</literal>s, and also the
+      value types provided by the AppLib (see <xref
+      linkend="chp.RecognisedTypes" />).</para>
+
+      <para>If there is no mutator method then the field is flagged as being
+      derived and will not be persisted or editable.</para>
+
+      <para><emphasis>Collection property</emphasis></para>
+
+      <para>A collection is picked up via an accessor method with the
+      following signature. Java arrays, <literal>Vector</literal>s and
+      <literal>List</literal>s (including generic lists) are the only types
+      that are recognised at the moment.</para>
+
+      <programlisting format="linespecific">public &lt;collection type&gt; get&lt;PropertyName&gt;()</programlisting>
+    </section>
+
+    <section>
+      <title>getId</title>
+
+      <programlisting format="linespecific">public String getId()</programlisting>
+
+      <para>The <literal>getId</literal> method is used by service objects to
+      provide an identity for a particular service type. This should be the
+      same for all implementations of a specific service allowing them to be
+      swapped for one another.</para>
+    </section>
+
+    <section>
+      <title>hide</title>
+
+      <programlisting format="linespecific">public boolean hide&lt;PropertyName&gt;([&lt;property type&gt; param])
+
+public boolean hide&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements a get/set method for a field, or an action
+      method.</para>
+
+      <para>The <literal moreinfo="none">hide</literal> method allows a
+      property or action to be dynamically hidden from the user. This is
+      typically used for security reasons, such as hiding a field once it is
+      set up. Returning <literal moreinfo="none">true</literal> makes the
+      property or action invisible.</para>
+    </section>
+
+    <section>
+      <title>iconName</title>
+
+      <programlisting format="linespecific">public String iconName()</programlisting>
+
+      <para>The <literal moreinfo="none">iconName</literal> is used to
+      over-ride the framework's default mechanism for determining the icon to
+      display based on the class name. The name returned by this method should
+      be simply a name and not a filepath: it should not have an file
+      extension. The framework will look for an acceptable type of image using
+      this name, deriving possible filenames from it. See the section on
+      <ulink url="images.html">images</ulink> for more information.</para>
+    </section>
+
+    <section>
+      <title>loaded</title>
+
+      <programlisting format="linespecific">public void loaded()</programlisting>
+
+      <para>Life cycle method called by framework when an object has just been
+      loaded in from the persistent store. At this point the object has it's
+      correct persisted state.</para>
+    </section>
+
+    <section>
+      <title>loading</title>
+
+      <programlisting format="linespecific">public void loading()</programlisting>
+
+      <para>Life cycle method called by framework when an object is just about
+      to be loaded from the persistent store. At this point the object exists
+      in memory but has not had its state restored.</para>
+    </section>
+
+    <section>
+      <title id="modify-method">modify</title>
+
+      <programlisting format="linespecific">public void modify&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a property.</para>
+
+      <para>The <literal moreinfo="none">modify</literal> method is called
+      when the user (rather than the framework) sets a reference or value
+      field. This is typically used to initialise an association (where an
+      association is combination of references, such as a back link), or to
+      trigger other behaviours such as adding the new value to a total.</para>
+
+      <para>See also <xref linkend="clear-method" />.</para>
+    </section>
+
+    <section>
+      <title>persisted</title>
+
+      <para>Replaces <literal>saved()</literal></para>
+
+      <programlisting format="linespecific">public void persisted()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object has
+      just been added to the persistent store. At this point the object exists
+      in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>persisting</title>
+
+      <para>Replaces <literal>saving()</literal></para>
+
+      <programlisting format="linespecific">public void persisting()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object is
+      just about to be added to the persistent store. At this point the object
+      exists only in memory and not in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>removed</title>
+
+      <para>Replaces <literal>deleted()</literal></para>
+
+      <programlisting format="linespecific">public void removed()</programlisting>
+
+      <para>Life cycle method called by framework when an object has just been
+      removed from the persistent store. At this point the object will exist
+      in memory, but no longer exist in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>removing</title>
+
+      <para>Replaces <literal>deleting()</literal></para>
+
+      <programlisting format="linespecific">public void removing()</programlisting>
+
+      <para>Life cycle method called by framework when an object is just about
+      to be removed from the persistent store. At this point the object still
+      exists in the persistent store.</para>
+    </section>
+
+    <section>
+      <title id="removefrom-method">removeFrom</title>
+
+      <programlisting format="linespecific">public void removeFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a collection.</para>
+
+      <para>The <literal moreinfo="none">removeFrom</literal> method is called
+      by the framework when the user removes an element from the collection.
+      By providing this method in conjunction with a non-generic collection
+      interactions with that collection become limited to a specific type
+      (rather than being used to store references of type
+      <literal>Object</literal>). This signature is similar to the <literal
+      moreinfo="none">clear</literal> method for properties.</para>
+
+      <para>See also <xref linkend="clear-method" /> and <xref
+      linkend="addto-method" />.</para>
+    </section>
+
+    <section>
+      <title>saved</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>persisted()</literal></para>
+
+      <programlisting format="linespecific">public void saved()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object has
+      just been added to the persistent store. At this point the object exists
+      in the persistent store..</para>
+    </section>
+
+    <section>
+      <title>saving</title>
+
+      <para>Deprecated but still supported; replaced by
+      <literal>persisting()</literal></para>
+
+      <programlisting format="linespecific">public void saving()</programlisting>
+
+      <para>Life cycle method called by framework when a transient object is
+      just about to be added to the persistent store. At this point the object
+      exists only in memory and not in the persistent store.</para>
+    </section>
+
+    <section>
+      <title>set</title>
+
+      <programlisting format="linespecific">public void set&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a <literal>get</literal> method.</para>
+
+      <para>The <literal moreinfo="none">set</literal> method is called when
+      the property is changed, either by the user or the framework. As the
+      framework calls the same method when recreating the object from
+      persistent data it is important to avoid doing any work in the
+      <literal>set</literal> method other than setting up the property
+      variable. A typical set method would be:</para>
+
+      <programlisting format="linespecific">private String name;
+
+public void setName(String name) {
+    this.name = name;
+}</programlisting>
+    </section>
+
+    <section>
+      <title>toString</title>
+
+      <programlisting format="linespecific">public String toString()</programlisting>
+
+      <para>The <literal>toString</literal> method is used to get a title for
+      the object. If the <literal>toString</literal> method cannot serve as
+      the title, because it is being used for alternative purposes (such as
+      debugging) then you may define a <literal>title</literal> method instead
+      (below).</para>
+    </section>
+
+    <section>
+      <title>title</title>
+
+      <programlisting format="linespecific">public String title()</programlisting>
+
+      <para>If a <literal>title</literal> method is defined then the framework
+      will use this in preference to the <literal>toString</literal> method
+      for displaying the object's title.</para>
+    </section>
+
+    <section>
+      <title>updated</title>
+
+      <programlisting format="linespecific">public void updated()</programlisting>
+
+      <para>Life cycle method called by framework when a modified persistent
+      object has just been saved to the persistent store. At this point the
+      object's state in the persistent store will be in its new state.</para>
+    </section>
+
+    <section>
+      <title>updating</title>
+
+      <programlisting format="linespecific">public void updating()</programlisting>
+
+      <para>Life cycle method called by framework when a persistent object has
+      just been modified and is about to be saved to the persistent store. At
+      this point the object's state in the persistent store will still be in
+      its pre-modified state.</para>
+    </section>
+
+    <section>
+      <title>validate</title>
+
+      <para><emphasis>Ensure value or reference is valid</emphasis></para>
+
+      <programlisting format="linespecific">public String validate&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a get/set method for a value or reference
+      property.</para>
+
+      <para>This <literal>validate</literal> method is used to check the
+      value/reference that is to be used to set a property. Using such a
+      mechanism the programmer can guarantee that a field never becomes
+      invalid. If a <literal>String</literal> object is returned the
+      value/reference is consider to be invalid and the field will not be set.
+      The string itself will then be made visible to the user to inform them
+      why it is invalid. If the method returns <literal
+      moreinfo="none">null</literal> then property will be set, that is, its
+      <literal>set</literal> or <literal>modify</literal> method will be
+      called with the same parameter.</para>
+
+      <para><emphasis>Ensure collection can have an element added or
+      removed</emphasis></para>
+
+      <programlisting format="linespecific">public String validateAddTo&lt;PropertyName&gt;(&lt;property type&gt; param)
+public String validateRemoveFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
+
+      <para>Complements a get method for a collection property.</para>
+
+      <para>This <literal>validate</literal> method is used to check that the
+      specified object can be added to or removed from a collection. Using
+      such a mechanism the programmer can guarantee that the collection never
+      becomes invalid. If a <literal>String</literal> object is returned then
+      adding/removing the specified object is not valid and the collection
+      will not be changed. The string itself will then be made visible to the
+      user to inform them why changing the collection with the object would be
+      invalid. If the method returns <literal moreinfo="none">null</literal>
+      then the object will be added to/removed from the collection, that is,
+      from the collection object directly if there is no
+      <literal>addTo</literal>/<literal>removeFrom</literal> method, or via a
+      call to the <literal>addTo</literal>/<literal>removeFrom</literal>
+      method, with the same parameter, if they do exist.</para>
+
+      <para><emphasis>Ensure it is valid to invoke an action</emphasis></para>
+
+      <programlisting format="linespecific">public String validate&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+
+      <para>Complements an action method.</para>
+
+      <para>This <literal>validate</literal> method is used to check that the
+      actions parameters are all valid and that the action method can be
+      safely invoked, that is, if it is invoked that it will not fail. If a
+      <literal>String</literal> object is returned then the action should not
+      be invoked. The string itself will then be made visible to the user to
+      inform them why the method cannot be invoked. If the method returns
+      <literal moreinfo="none">null</literal> then the action method will be
+      invoked with the same set of parameters.</para>
+
+      <para><emphasis>Ensure object is in a valid state to be
+      saved</emphasis></para>
+
+      <para>A validate() method may be added to provided validation at object
+      level - prior to making an object persistent.</para>
+
+      <programlisting format="linespecific">public String validate()</programlisting>
+
+      <para>This is particularly useful for validating fields in relation to
+      each other, as in the following example:</para>
+
+      <programlisting format="linespecific">public class Booking {
+    private Date fromDate;
+    public Date getFromDate() {...}
+    public void setFromDate(Date d) {...}
+    
+    private Date toDate;
+    public Date getToDate() {...}
+    public void setToDate(Date d) {...}
+
+    public String validate() {
+        if (fromDate &gt; toDate) {
+            return "From Date cannot be after To Date";
+        }
+        return null;
+    }
+    ...
+}</programlisting>
+
+      <para>This will prevent the user from saving a transient
+      <literal>Booking</literal> where the From Date falls after the To Date.
+      Note that in this example, the two date properties could also have their
+      own individual validate methods - for example in order to test that each
+      date was after today.</para>
+
+      <note>
+        <para>At the time of writing, the <literal>validate</literal> method
+        is called only when the object is first saved, not when it is
+        subsequently updated. For validation of subsequent updates, it is
+        necessary to build the validation logic into the individual property
+        validation methods, though these could delegate to a common
+        <literal>validate</literal> method.</para>
+      </note>
+    </section>
+  </chapter>
+
+  <chapter id="chp.RecognisedTypes">
+    <title>Recognised Types</title>
+
+    <abstract>
+      <para>Lists the different categories of types that are recognized by
+      Apache Isis.</para>
+    </abstract>
+
+    <para>Apache Isis creates an adapter for every domain object. There are
+    three categories of objects that are recognised: value, reference and
+    collection. Value and collection objects are dealt with on a class by
+    class basis, while all reference objects are dealt with in the same way
+    where the properties are seen as fields, and public methods as actions.
+    Listed below are all the recognised types.</para>
+
+    <section>
+      <title>Value objects</title>
+
+      <para>The following are built-in types. In addition to these any type
+      either annotated using <literal>@Value</literal>, or registered as a
+      value type using <filename moreinfo="none">isis.properties</filename>,
+      will also be treated as a value type.</para>
+
+      <section>
+        <title>Primitive types</title>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal moreinfo="none">boolean</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal moreinfo="none">byte</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal moreinfo="none">char</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal moreinfo="none">double</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal moreinfo="none">float</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal moreinfo="none">int</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal moreinfo="none">long</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal moreinfo="none">short</literal></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Number classes</title>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>java.lang.Boolean</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.math.BigInteger</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.math.BigDecimal</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.lang.Byte</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.lang.Character</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.lang.Double</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.lang.Float</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.lang.Integer</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.lang.Long</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.lang.Short</literal></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Java Classes</title>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>java.lang.String</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.util.Date</literal> (date and time)</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.sql.Date</literal> (date only)</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.sql.Time</literal> (time only)</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.sql.Timestamp</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>java.awt.Image</literal></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+
+      <section>
+        <title>Application Library</title>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.Color</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.Date</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.DateTime</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.Image</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.Money</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.Password</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.Percentage</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.Time</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>org.apache.isis.applib.value.TimeStamp</literal></para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section>
+      <title>Collection objects</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><literal>java.util.Collection</literal> (usually
+          <literal>java.util.ArrayList</literal>,
+          <literal>java.util.LinkedList</literal>,
+          <literal>java.util.LinkedHashSet</literal> or
+          <literal>java.util.TreeSet</literal>)</para>
+        </listitem>
+
+        <listitem>
+          <para>arrays</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Note that <literal>java.util.Map</literal> is not supported as a
+      collection type.</para>
+    </section>
+
+    <section>
+      <title>Reference objects</title>
+
+      <itemizedlist>
+        <listitem>
+          <para>all other domain classes (not annotated with <literal
+          moreinfo="none">@Value</literal> / registered as a value using
+          <filename moreinfo="none">isis.properties</filename>).</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </chapter>
+
+  <chapter id="chp.Services">
+    <title>Services</title>
+
+    <abstract>
+      <para>Describes Apache Isis' support for domain services</para>
+    </abstract>
+
+    <para>Services, which are automatically injected into any domain object
+    that needs them, are just ordinary domain objects but with an
+    <literal>getId()</literal> identity method. The method recognised
+    is:</para>
+
+    <programlisting format="linespecific">public String getId()</programlisting>
+
+    <para>This identity method is currently used only by perspectives, when
+    registering services. (Strictly speaking the <literal>getId()</literal>
+    method is optional; if not present then the fully qualified class name is
+    used as the Id).</para>
+
+    <para>All the other methods are processed as for domain objects, as
+    described in a previous section.</para>
+
+    <para>To simplify the process of writing service objects the following
+    abstract classes are available from within the application library:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>AbstractFactoryAndRepository</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>AbstractService</literal></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In addition there are classes within the framework that assist
+    building services that need to integrate with the framework.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><literal>RepositoryHelper</literal></para>
+      </listitem>
+
+      <listitem>
+        <para><literal>ServiceException</literal></para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Registering services</title>
+
+      <para>Services are registered with the Framework at startup via the
+      properties file, using the services properties. The
+      <literal>services</literal> property itself dictates which service
+      classes are to be instantiated at startup, for example:</para>
+
+      <programlisting format="linespecific">isis.services = bom.BookingFactory, bom.CustomerFactoryAndRepository, \
+  bom.LocationFactoryAndRepository
+</programlisting>
+
+      <para>The <literal>prefix</literal> property allows you to specify the
+      common package once and, hence omit them from the classes in the list.
+      The following set of properties is therefore equivalent to the previous
+      example.</para>
+
+      <programlisting format="linespecific">isis.services.prefix = bom
+isis.services = BookingFactory, CustomerFactoryAndRepository, \
+  LocationFactoryAndRepository
+</programlisting>
+
+      <section>
+        <title>System repositories</title>
+
+        <para>As well as services defined programmatically, it is possible to
+        use a repository provided by the framework that will, for a configured
+        object type, provide methods to:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Create a new transient instance</para>
+          </listitem>
+
+          <listitem>
+            <para>Create a new persisted instance</para>
+          </listitem>
+
+          <listitem>
+            <para>Find all persisted instances</para>
+          </listitem>
+
+          <listitem>
+            <para>Find instances with a specified title</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To register such a service prefix the class name with
+        'repository#', for example:</para>
+
+        <programlisting format="linespecific">isis.services = repository#bom.Booking</programlisting>
+      </section>
+    </section>
+
+    <section>
+      <title>Factories/Repositories</title>
+
+      <para></para>
+
+      <para><remark>TODO: discuss the service that combines factory and
+      repository</remark></para>
+
+      <para></para>
+    </section>
+
+    <section>
+      <title>Other services</title>
+
+      <para></para>
+
+      <para><remark>TODO: discuss the use of business vs technology
+      services</remark></para>
+
+      <para></para>
+    </section>
   </chapter>
 
   <appendix>

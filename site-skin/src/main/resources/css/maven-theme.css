@@ -17,20 +17,8 @@
  * under the License.
  */
 
-html {
-  background: AntiqueWhite;
-}
-
 body {
-  align: center;
-  text-align: center;
-  background: white;
-  width: 1024px;
-  margin: 0 auto;
-}
-
-#banner, #breadcrumbs, #leftColumn, #bodyColumn, #footer {
-  text-align: left;
+  padding: 0px 0px 10px 0px;
 }
 
 body, td, select, input, li{
@@ -171,16 +159,3 @@ dt {
   background-image: url(../images/icon_info_sml.gif);
 }
 
-#bannerLeft {
-  background: url(../images/logos/banner-left.png) left top no-repeat;
-  height: 85px;
-  width: 627px;
-  float: left;
-}
-
-#bannerRight {
-  background: url(../images/logos/apache-incubator-logo.png) right top no-repeat;
-  height: 85px;
-  width: 240px;
-  float: right;
-}

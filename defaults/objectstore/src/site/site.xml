@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
 
-   	<bannerLeft>
-		<name>&nbsp;</name>
-        <href>http://incubator.apache.org/isis</href>
-	</bannerLeft>
-
-	<bannerRight>
-        <name>&nbsp;</name>
-        <href>http://incubator.apache.org</href>
-	</bannerRight>
-    
 	<body>
 		<breadcrumbs>
 			<item name="Default ObjectStore"/>

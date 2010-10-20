@@ -10,16 +10,6 @@
 	<version position="right" />
 	<publishDate position="bottom" />
 
-	<bannerLeft>
-		<name>&nbsp;</name>
-        <href>http://incubator.apache.org/isis</href>
-	</bannerLeft>
-
-	<bannerRight>
-        <name>&nbsp;</name>
-        <href>http://incubator.apache.org</href>
-	</bannerRight>
-	
 	<body>
 		<breadcrumbs>
 			<item name="Apache Isis" />
@@ -30,7 +20,6 @@
 			<item name="Where to start" href="where-to-start.html" />
 			<item name="Who we are" href="who-we-are.html" />
 			<item name="Roadmap" href="roadmap.html" />
-			<item name="Core Docs (PDF)" href="./core/docbkx/pdf/isis-core.pdf" />
 		</menu>
 		
 		<menu name="Get Apache Isis">
