@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.isis.extensions</groupId>
+        <artifactId>wicket-testapp-claims</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>wicket-testapp-claims-webapp</artifactId>
+	<name>Wicket Viewer TestApp: Claims WebApp</name>
+	
+	<packaging>war</packaging>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+            </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+	
+		<!-- other modules in this project -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>wicket-testapp-claims-fixture</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>wicket-testapp-claims-ui</artifactId>
+		</dependency>
+
+
+		<!-- Isis -->
+	    <dependency>
+	        <groupId>org.apache.isis.core</groupId>
+	        <artifactId>bytecode-cglib</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.isis.core</groupId>
+	        <artifactId>bytecode-javassist</artifactId>
+	    </dependency>
+		<dependency>
+	        <groupId>org.apache.isis.core</groupId>
+			<artifactId>remoting</artifactId>
+		</dependency>
+		<dependency>
+	        <groupId>org.apache.isis.plugins</groupId>
+			<artifactId>html-viewer</artifactId>
+		</dependency>
+		<dependency>
+	        <groupId>org.apache.isis.plugins</groupId>
+			<artifactId>http-remoting-server</artifactId>
+		</dependency>
+	    <dependency>
+	        <groupId>org.apache.isis.plugins</groupId>
+	        <artifactId>headless-embedded</artifactId>
+	    </dependency>
+		<dependency>
+	        <groupId>org.apache.isis.plugins</groupId>
+			<artifactId>xml-persistor</artifactId>
+		</dependency>
+		<!--
+		comment in to run simple web server (uses Jetty)
+		<dependency>
+	        <groupId>org.apache.isis.core</groupId>
+			<artifactId>webserver</artifactId>
+		</dependency>
+		-->
+
+		<!-- Isis Wicket -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>wicket-viewer</artifactId>
+		</dependency>
+
+		<!-- Isis Wicket views -->
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>wicket-view-gmap2-view</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>wicket-view-googlecharts-view</artifactId>
+		</dependency>
+
+		<!--
+		<dependency>
+			<groupId>org.starobjects.wicket</groupId>
+			<artifactId>view-calendarviews-view</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.extensions</groupId>
+			<artifactId>wicket-view-cooldatasoftmenu</artifactId>
+		</dependency>
+		-->
+
+
+	</dependencies>
+
+</project>

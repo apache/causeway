@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+	  	<groupId>za.co.kmz</groupId>
+	  	<artifactId>simpleapp</artifactId>
+	  	<version>0.0.1-SNAPSHOT</version>
+  </parent>
+  
+  <name>Wicket</name>
+  <artifactId>simpleapp-wicket</artifactId>
+  <packaging>war</packaging>
+  
+	<properties>
+		<wicketobjects.version>0.1-SNAPSHOT</wicketobjects.version>
+		<jetty.version>6.1.4</jetty.version>
+	</properties>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+            </plugin>
+		</plugins>
+	</build>
+	
+	<repositories>
+        <!-- bootstrap parent corporate POM -->
+		<repository>
+			<id>starobjects-release</id>
+			<url>http://starobjects.sourceforge.net/m2-repo/release</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+        </repository>
+		<!-- latest-n-greatest -->
+		<repository>
+			<id>starobjects-snapshot</id>
+			<url>http://starobjects.sourceforge.net/m2-repo/snapshot</url> 
+			<!-- <url>file://L:/Dev/java/.m2/repository</url> -->
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+        </repository>
+	</repositories>
+
+  <dependencies>
+		<!-- other modules in this project -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>simpleapp-service</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>simpleapp-fixture</artifactId>
+		</dependency>
+		
+		<!-- naked objects -->
+
+	    <dependency>
+	        <groupId>org.nakedobjects.core</groupId>
+	        <artifactId>bytecode-cglib</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.nakedobjects.core</groupId>
+	        <artifactId>bytecode-javassist</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>org.nakedobjects.core</groupId>
+			<artifactId>remoting</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nakedobjects.plugins</groupId>
+			<artifactId>html-viewer</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nakedobjects.plugins</groupId>
+			<artifactId>http-remoting-server</artifactId>
+		</dependency>
+	    <dependency>
+	        <groupId>org.nakedobjects.plugins</groupId>
+	        <artifactId>headless-embedded</artifactId>
+	    </dependency>
+		<dependency>
+			<groupId>org.nakedobjects.plugins</groupId>
+			<artifactId>xml-persistor</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.nakedobjects.core</groupId>
+			<artifactId>webserver</artifactId>
+		</dependency>
+		
+			<!-- WicketObjects -->
+			<dependency>
+				<groupId>org.starobjects.wicket</groupId>
+				<artifactId>applib</artifactId>
+				<version>${wicketobjects.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.starobjects.wicket</groupId>
+				<artifactId>viewer</artifactId>
+				<version>${wicketobjects.version}</version>
+			</dependency>
+
+		<!--  JETTY DEPENDENCIES FOR TESTING  -->
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>jetty-management</artifactId>
+			<version>${jetty.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.starobjects.wicket</groupId>
+			<artifactId>main</artifactId>
+			<version>0.1-SNAPSHOT</version>
+			<type>pom</type>
+		</dependency>
+		
+  </dependencies>
+</project>
