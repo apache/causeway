@@ -12,16 +12,6 @@
     <groupId>org.apache.isis.skins</groupId>
     <artifactId>classic-skin</artifactId>
     <version>1.0</version>
-    <name>Classic Skin</name>
+    <name>Isis Skin</name>
 
-   <scm>
-        <connection>scm:svn:http://apache.isis.svn/svnroot/trunk/site-skin</connection>
-        <developerConnection>scm:svn:https://apache.isis.svn/svnroot/trunk/site-skin</developerConnection>
-        <url>http://dev.isis.apache.org/trac/browser/framework/trunk/site-skin</url>
-    </scm>
-
-	<properties>
-		<checkstyle.configLocation>../src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
-		<pmd.ruleset>../src/main/pmd/pmd.xml</pmd.ruleset>
-	</properties>
 </project>

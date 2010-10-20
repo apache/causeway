@@ -15,6 +15,27 @@
         <siteBaseDir>../..</siteBaseDir>
     </properties>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>dependencies</report>
+                            <report>dependency-convergence</report>
+                            <report>plugins</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis</groupId>
@@ -37,7 +58,6 @@
 			<artifactId>testsupport</artifactId>
 		    <scope>test</scope>
         </dependency>
-
 	</dependencies>
 
 </project>

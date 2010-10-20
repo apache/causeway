@@ -81,7 +81,7 @@
         <trunkBaseDir>${project.build.directory}/${siteBaseDir}/..</trunkBaseDir>
         <checkstyle.configLocation>${trunkBaseDir}/src/main/checkstyle/checkstyle.xml</checkstyle.configLocation>
         <pmd.ruleset>${trunkBaseDir}/src/main/pmd/pmd.xml</pmd.ruleset>
-        
+
         <projectUrl>${project.url}</projectUrl>
     </properties>
 
@@ -740,22 +740,25 @@
     <reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>
-            <!--
-            top-level pom (this pom) should have inherited=false, and: 
-            license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management, plugin-management, modules, summary   
-             -->
-            <!--
-            packaging=pom should have inherited=false, and: 
-            dependency-management, plugin-management, modules, summary   
-            -->
-            <!-- 
-            packaging=jar should have inherited=false, and: 
-            dependencies, dependencyConvergence, plugins, summary
-             -->
+            <!-- top-level pom (this pom) should have a reportSet with inherited=false, 
+                and: license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management, 
+                plugin-management, plugins, modules, summary -->
+            <!-- parent pom of submodules should have a reportSet with inherited=false, 
+                and: dependency-management (*), plugins, modules, summary. -->
+            <!-- packaging=jar should have a reportSet with inherited=false, 
+                and: dependency-management (*), dependencies, dependency-convergence, plugins, 
+                summary -->
+            <!-- (*) dependency-management should only be added if there 
+                is a dependencyManagement section present -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <inherited>true</inherited>
+                <!-- it seems to be necessary to set inherited=false, otherwise 
+                    the default reportSet seems to be inherited even if explicitly overridden 
+                    in the inheriting POM by a different reportSet. In practice this is no great 
+                    hardship, because each level will have a different reportSet anyway (see 
+                    comment above) -->
+                <inherited>false</inherited>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
@@ -768,13 +771,11 @@
                             <report>mailing-list</report>
                             <report>dependency-management</report>
                             <report>plugin-management</report>
+                            <report>plugins</report>
                             <report>modules</report>
                             <report>summary</report>
-                            <!--   
-                            <report>dependencies</report>
-                            <report>dependencyConvergence</report>
-                            <report>plugins</report>
-                            -->
+                            <!-- <report>dependencies</report> -->
+                            <!-- <report>dependency-convergence</report> -->
                         </reports>
                     </reportSet>
                 </reportSets>

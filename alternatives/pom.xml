@@ -39,14 +39,15 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<inherited>true</inherited>
+				<inherited>false</inherited>
 				<reportSets>
 					<reportSet>
-						<inherited>true</inherited>
+						<inherited>false</inherited>
 						<reports>
-							<report>dependencies</report>
-							<report>dependency-convergence</report>
-							<report>plugins</report>
+                            <report>dependency-management</report>
+                            <report>plugins</report>
+							<report>modules</report>
+                            <report>summary</report>
 						</reports>
 					</reportSet>
 				</reportSets>

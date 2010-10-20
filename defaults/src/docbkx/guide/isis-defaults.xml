@@ -22,7 +22,7 @@
 "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
 <book>
   <bookinfo>
-    <title><?eval ${docbkx.guideTitle}?></title>
+    <title><?eval ${docbkxGuideTitle}?></title>
 
     <subtitle>Developers Guide</subtitle>
 

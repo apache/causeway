@@ -37,6 +37,32 @@
         </plugins>
     </build>
 
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>dependency-management</report>
+                            <report>plugins</report>
+                            <report>modules</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <modules>
+        <module>persistor</module>
+        <module>integrationtests</module>
+    </modules>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -51,10 +77,5 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <modules>
-        <module>persistor</module>
-        <module>integrationtests</module>
-    </modules>
 
 </project>

@@ -28,25 +28,26 @@
 		<module>file</module>
 	</modules>
 	
-	<reporting>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<inherited>true</inherited>
-				<reportSets>
-					<reportSet>
-						<inherited>true</inherited>
-						<reports>
-							<report>dependencies</report>
-							<report>dependency-convergence</report>
-							<report>plugins</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-		</plugins>
-	</reporting>
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>dependency-management</report>
+                            <report>plugins</report>
+                            <report>modules</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
 	<dependencyManagement>
 		<dependencies>

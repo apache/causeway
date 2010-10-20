@@ -24,8 +24,8 @@
 		<menu name="Modules" ref="modules" />
 
 		<menu name="Documentation">
-			<item name="${docbkx.guideTitle} (PDF)" href="docbkx/pdf/${docbkx.guideName}.pdf" />
-			<item name="${docbkx.guideTitle} (HTML)" href="docbkx/html/${docbkx.guideName}/${docbkx.guideName}.html" />
+			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
+			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/${docbkxGuideName}/${docbkxGuideName}.html" />
 			<!--
 			<item name="Getting Started" href="getting-started.html" />
 			<item name="Creating a Scimpi Webapp" href="creating-webapp.html" />

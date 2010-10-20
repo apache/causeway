@@ -22,7 +22,6 @@
         <pdf.outputName>apache-isis-alternatives-objectstores-${project.version}</pdf.outputName>
 	</properties>
 
-
 	<modules>
 		<module>xml</module>
 		<module>sql</module>
@@ -37,38 +36,20 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<inherited>true</inherited>
+				<inherited>false</inherited>
 				<reportSets>
 					<reportSet>
-						<inherited>true</inherited>
+						<inherited>false</inherited>
 						<reports>
-							<report>dependencies</report>
-							<report>dependency-convergence</report>
-							<report>plugins</report>
+                            <report>plugins</report>
+							<report>modules</report>
+                            <report>summary</report>
 						</reports>
 					</reportSet>
 				</reportSets>
 			</plugin>
 		</plugins>
 	</reporting>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>core</artifactId>
-				<version>0.1-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-
-			<!--
-				unlike core, there's no need to list all the submodules because each
-				plugin should be independent of the others.
-			-->
-		</dependencies>
-	</dependencyManagement>
-
 
 </project>	
 

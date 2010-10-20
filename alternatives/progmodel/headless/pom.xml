@@ -17,7 +17,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <siteBaseDir>../..</siteBaseDir>
+        <siteBaseDir>../../..</siteBaseDir>
         
         <docbkx.title>Apache Isis Headless Programming Model</docbkx.title>
         <docbkx.outputName>isis-headless</docbkx.outputName>
@@ -38,6 +38,27 @@
 		<module>viewer</module>
 		<module>embedded</module>
 	</modules>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <inherited>false</inherited>
+                <reportSets>
+                    <reportSet>
+                        <inherited>false</inherited>
+                        <reports>
+                            <report>dependency-management</report>
+                            <report>plugins</report>
+                            <report>modules</report>
+                            <report>summary</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+        </plugins>
+    </reporting>
 
 	<dependencyManagement>
 		<dependencies>
