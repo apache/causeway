@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
+		<groupId>org.apache.isis.viewer</groupId>
 		<artifactId>wicket</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
@@ -44,14 +44,13 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
+			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>wicket-ui</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>commons</artifactId>
-			<type>test-jar</type>
+			<artifactId>testsupport</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

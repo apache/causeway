@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
 
+
 public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
 
     private static final long serialVersionUID = 1L;

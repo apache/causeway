@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>wicket-testapp-claims</artifactId>
+    	<groupId>org.apache.isis.examples.apps</groupId>
+    	<artifactId>wicket-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>wicket-testapp-claims-commandline</artifactId>
+	<artifactId>wicket-claims-commandline</artifactId>
 	<name>Wicket Viewer TestApp: Claims Commandline</name>
 
 	<properties>
@@ -19,82 +19,68 @@
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>wicket-testapp-claims-fixture</artifactId>
+			<artifactId>wicket-claims-fixture</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>wicket-testapp-claims-ui</artifactId>
+			<artifactId>wicket-claims-ui</artifactId>
 		</dependency>
 
 		<!-- apache isis -->
-	    <dependency>
-			<groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-cglib</artifactId>
-	    </dependency>
-	    <dependency>
-			<groupId>org.apache.isis.core</groupId>
-	        <artifactId>bytecode-javassist</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>remoting</artifactId>
-		</dependency>
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
             <artifactId>webserver</artifactId>
         </dependency>
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>dnd-viewer</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>dnd</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-client</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-	    <dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-	        <artifactId>headless-embedded</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
 		</dependency>
 
+	    <dependency>
+			<groupId>org.apache.isis.defaults</groupId>
+	        <artifactId>bytecode</artifactId>
+	    </dependency>
+	    <dependency>
+			<groupId>org.apache.isis.alternatives.bytecode</groupId>
+	        <artifactId>javassist</artifactId>
+	    </dependency>
+
+		<dependency>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
+		</dependency>
+        
 		<!-- Wicket Viewer -->
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
+			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>wicket-viewer</artifactId>
 		</dependency>
 
 		<!-- Wicket Viewer View API Implementations -->
 		<!-- 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>wicket-view-gmap2-view</artifactId>
+			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+			<artifactId>view-gmap2-view</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>wicket-view-googlecharts-view</artifactId>
+			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+			<artifactId>view-googlecharts-view</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>wicket-view-calendarviews-view</artifactId>
+			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+			<artifactId>view-calendarviews-view</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-			<artifactId>wicket-view-cooldatasoftmenu-view</artifactId>
+			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+			<artifactId>view-cooldatasoftmenu-view</artifactId>
 		</dependency>
 		-->
 

@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>wicket-testapp-claims</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis.examples.apps</groupId>
+        <artifactId>wicket-claims</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
 	<name>Wicket Viewer TestApp: Claims UI</name>
-	<artifactId>wicket-testapp-claims-ui</artifactId>
+	<artifactId>wicket-claims-ui</artifactId>
 
 	<properties>
 		<jetty.version>6.1.4</jetty.version>
@@ -39,12 +39,12 @@
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>wicket-testapp-claims-dom</artifactId>
+			<artifactId>wicket-claims-dom</artifactId>
 		</dependency>
 
 		<!-- Wicket Viewer -->
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
+			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>wicket-viewer</artifactId>
 		</dependency>
 	</dependencies>

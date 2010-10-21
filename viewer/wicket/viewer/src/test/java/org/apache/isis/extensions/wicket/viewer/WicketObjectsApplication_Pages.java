@@ -23,11 +23,10 @@ package org.apache.isis.extensions.wicket.viewer;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.jmock.FixtureMockery;
+import org.apache.isis.common.jmock.FixtureMockery;
 import org.apache.isis.extensions.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.extensions.wicket.ui.pages.PageType;
 import org.apache.isis.extensions.wicket.ui.pages.home.HomePage;
-import org.apache.isis.extensions.wicket.viewer.WicketObjectsApplication;
 import org.apache.wicket.Page;
 import org.apache.wicket.markup.html.WebPage;
 import org.jmock.Expectations;

@@ -27,8 +27,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.isis.extensions.wicket.ui.ComponentFactory;
-import org.apache.isis.extensions.wicket.ui.ComponentType;
 import org.apache.isis.extensions.wicket.ui.ComponentFactory.ApplicationAdvice;
+import org.apache.isis.extensions.wicket.ui.ComponentType;
 import org.apache.isis.extensions.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.isis.extensions.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.wicket.Component;

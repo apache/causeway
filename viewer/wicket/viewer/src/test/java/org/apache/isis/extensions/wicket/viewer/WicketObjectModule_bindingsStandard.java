@@ -31,7 +31,6 @@ import org.apache.isis.extensions.wicket.ui.app.registry.ComponentFactoryList;
 import org.apache.isis.extensions.wicket.ui.app.registry.ComponentFactoryRegistry;
 import org.apache.isis.extensions.wicket.ui.pages.PageClassList;
 import org.apache.isis.extensions.wicket.ui.pages.PageClassRegistry;
-import org.apache.isis.extensions.wicket.viewer.WicketObjectsModule;
 import org.apache.isis.extensions.wicket.viewer.registries.components.ComponentFactoryListDefault;
 import org.apache.isis.extensions.wicket.viewer.registries.components.ComponentFactoryRegistryDefault;
 import org.apache.isis.extensions.wicket.viewer.registries.pages.PageClassListDefault;

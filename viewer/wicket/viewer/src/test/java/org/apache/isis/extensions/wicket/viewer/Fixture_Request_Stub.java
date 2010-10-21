@@ -25,8 +25,8 @@ package org.apache.isis.extensions.wicket.viewer;
 
 import java.util.Locale;
 
-import org.apache.isis.commons.jmock.MockFixture;
-import org.apache.isis.commons.jmock.MockFixtureAdapter;
+import org.apache.isis.common.jmock.MockFixture;
+import org.apache.isis.common.jmock.MockFixtureAdapter;
 import org.apache.wicket.Request;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

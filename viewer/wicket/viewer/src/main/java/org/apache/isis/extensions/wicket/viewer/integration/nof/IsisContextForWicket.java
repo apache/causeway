@@ -24,9 +24,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.extensions.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;

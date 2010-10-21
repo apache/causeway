@@ -29,6 +29,7 @@
         <isis.viewer-dnd.version>0.1-SNAPSHOT</isis.viewer-dnd.version>
         <isis.viewer-html.version>0.1-SNAPSHOT</isis.viewer-html.version>
         <isis.viewer-scimpi.version>0.1-SNAPSHOT</isis.viewer-scimpi.version>
+        <isis.viewer-wicket.version>0.1-SNAPSHOT</isis.viewer-wicket.version>
         <isis.viewer-junit.version>0.1-SNAPSHOT</isis.viewer-junit.version>
 
         <isis.alternatives-objectstore-xml.version>0.1-SNAPSHOT</isis.alternatives-objectstore-xml.version>
@@ -116,19 +117,21 @@
             </dependency>
 
 
-            <!-- viewers -->
+            <!-- viewer: dnd -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>dnd</artifactId>
                 <version>${isis.viewer-dnd.version}</version>
             </dependency>
 
+            <!-- viewer: html -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>html</artifactId>
                 <version>${isis.viewer-html.version}</version>
             </dependency>
 
+            <!-- viewer: scimpi -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>scimpi</artifactId>
@@ -145,10 +148,43 @@
                 <version>${isis.viewer-scimpi.version}</version>
             </dependency>
 
+            <!-- viewer: junit -->
             <dependency>
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>junit</artifactId>
                 <version>${isis.viewer-junit.version}</version>
+            </dependency>
+
+            <!-- viewer: wicket -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>wicket</artifactId>
+                <version>${isis.viewer-wicket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>wicket-applib</artifactId>
+                <version>${isis.viewer-wicket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>wicket-facets</artifactId>
+                <version>${isis.viewer-wicket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>wicket-model</artifactId>
+                <version>${isis.viewer-wicket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>wicket-ui</artifactId>
+                <version>${isis.viewer-wicket.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>wicket-viewer</artifactId>
+                <version>${isis.viewer-wicket.version}</version>
             </dependency>
 
 

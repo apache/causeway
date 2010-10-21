@@ -20,6 +20,7 @@
 
 package org.apache.isis.extensions.wicket.testapp.claims.ui.claimwizard;
 
+
 import org.apache.isis.extensions.wicket.model.models.EntityModel;
 import org.apache.isis.extensions.wicket.testapp.claims.dom.claim.ClaimWizard;
 import org.apache.isis.extensions.wicket.ui.ComponentType;

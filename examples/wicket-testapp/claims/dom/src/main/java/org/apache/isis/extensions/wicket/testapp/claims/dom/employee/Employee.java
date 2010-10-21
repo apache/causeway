@@ -26,11 +26,9 @@ import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.extensions.wicket.testapp.claims.dom.claim.Approver;
 import org.apache.isis.extensions.wicket.testapp.claims.dom.claim.Claimant;
-import org.apache.isis.extensions.wicket.view.gmap2.applib.Locatable;
-import org.apache.isis.extensions.wicket.view.gmap2.applib.Location;
 
 public class Employee extends AbstractDomainObject implements Claimant,
-        Approver, Locatable {
+        Approver /* , Locatable */{
 
     // {{ Title
     public String title() {
@@ -74,19 +72,19 @@ public class Employee extends AbstractDomainObject implements Claimant,
 
     // }}
 
-    // {{ Location
-    private Location location;
-
-    @Disabled
-    @MemberOrder(sequence = "1")
-    public Location getLocation() {
-        return location;
-    }
-
-    public void setLocation(final Location location) {
-        this.location = location;
-    }
-    // }}
+//    // {{ Location
+//    private Location location;
+//
+//    @Disabled
+//    @MemberOrder(sequence = "1")
+//    public Location getLocation() {
+//        return location;
+//    }
+//
+//    public void setLocation(final Location location) {
+//        this.location = location;
+//    }
+//    // }}
     
 
     

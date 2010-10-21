@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>wicket-testapp-claims</artifactId>
+	<groupId>org.apache.isis.examples.apps</groupId>
+	<artifactId>wicket-claims</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
 	<name>Wicket Viewer TestApp: Claims</name>
@@ -101,64 +101,66 @@
 			<!-- this project's own modules -->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wicket-testapp-claims-dom</artifactId>
+				<artifactId>wicket-claims-dom</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wicket-testapp-claims-fixture</artifactId>
+				<artifactId>wicket-claims-fixture</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wicket-testapp-claims-service</artifactId>
+				<artifactId>wicket-claims-service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wicket-testapp-claims-ui</artifactId>
+				<artifactId>wicket-claims-ui</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wicket-testapp-claims-commandline</artifactId>
+				<artifactId>wicket-claims-commandline</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>wicket-testapp-claims-webapp</artifactId>
+				<artifactId>wicket-claims-webapp</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<!-- Isis Wicket Viewer: view API extensions -->
+            <!-- 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>wicket-view-gmap2-applib</artifactId>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-gmap2-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>wicket-view-gmap2-view</artifactId>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-gmap2-view</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>wicket-view-googlecharts-applib</artifactId>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-googlecharts-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>wicket-view-googlecharts-view</artifactId>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-googlecharts-view</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
+            -->            
 
 			<dependency>
 				<groupId>org.apache.isis.extensions</groupId>

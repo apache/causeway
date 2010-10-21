@@ -25,9 +25,8 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.jmock.FixtureMockery;
+import org.apache.isis.common.jmock.FixtureMockery;
 import org.apache.isis.extensions.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.extensions.wicket.viewer.WicketObjectsApplication;
 import org.apache.isis.extensions.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.isis.extensions.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;

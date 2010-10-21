@@ -22,7 +22,8 @@
 package org.apache.isis.extensions.wicket.ui.components.widgets.cssmenu;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Collections;
@@ -30,8 +31,6 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.extensions.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.extensions.wicket.ui.components.widgets.cssmenu.CssMenuItem;
-import org.apache.isis.extensions.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
 import org.apache.isis.extensions.wicket.ui.fixtures.ActionFixtures;
 import org.apache.isis.extensions.wicket.ui.fixtures.AdapterFixtures;
 import org.apache.isis.extensions.wicket.ui.fixtures.Customers;

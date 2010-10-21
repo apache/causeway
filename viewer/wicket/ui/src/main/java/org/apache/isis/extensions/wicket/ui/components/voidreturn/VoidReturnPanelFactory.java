@@ -20,10 +20,10 @@
 
 package org.apache.isis.extensions.wicket.ui.components.voidreturn;
 
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.extensions.wicket.ui.ComponentFactory;
 import org.apache.isis.extensions.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.extensions.wicket.ui.ComponentType;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
 

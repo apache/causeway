@@ -32,16 +32,15 @@ import org.apache.isis.applib.value.Money;
 import org.apache.isis.extensions.wicket.testapp.claims.dom.claim.Claim;
 import org.apache.isis.extensions.wicket.testapp.claims.dom.claim.ClaimItem;
 import org.apache.isis.extensions.wicket.testapp.claims.dom.employee.Employee;
-import org.apache.isis.extensions.wicket.view.gmap2.applib.Location;
 
 
 public class ClaimsFixture extends AbstractFixture {
 
     @Override
     public void install() {
-        Employee fred = createEmployee("Fred Smith", null, new Location().north(0.5));
-        Employee tom = createEmployee("Tom Brown", fred, new Location().west(0.5));
-        createEmployee("Sam Jones", fred, new Location().west(1).south(0.25));
+        Employee fred = createEmployee("Fred Smith", null /*, new Location().north(0.5)*/);
+        Employee tom = createEmployee("Tom Brown", fred /*, new Location().west(0.5)*/);
+        createEmployee("Sam Jones", fred /*, new Location().west(1).south(0.25)*/);
 
         Claim claim = createClaim(tom, -16, "Meeting with client");
         addItem(claim, -16, 38.50, "Lunch with client");
@@ -57,12 +56,12 @@ public class ClaimsFixture extends AbstractFixture {
 
     }
     
-    private Employee createEmployee(String name, Employee approver, Location location) {
+    private Employee createEmployee(String name, Employee approver /*, Location location*/) {
         Employee claimant;
         claimant = newTransientInstance(Employee.class);
         claimant.setName(name);
         claimant.setApprover(approver);
-        claimant.setLocation(location);
+        //claimant.setLocation(location);
         persist(claimant);
         return claimant;
     }

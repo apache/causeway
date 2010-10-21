@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
-import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Named;
@@ -34,10 +33,8 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.applib.util.Reasons;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
-import org.apache.isis.extensions.wicket.view.calendarviews.applib.CalendarEvent;
-import org.apache.isis.extensions.wicket.view.calendarviews.applib.Calendarable;
 
-public class Claim extends AbstractDomainObject implements Calendarable {
+public class Claim extends AbstractDomainObject /* implements Calendarable */ {
 
     // {{ Title
     public String title() {
@@ -252,10 +249,10 @@ public class Claim extends AbstractDomainObject implements Calendarable {
         return null;
     }
 
-    @Ignore
-    @Override
-    public CalendarEvent getCalendarEvent() {
-        return CalendarEvent.newAllDayEvent(getDate().dateValue());
-    }
-
+//    @Ignore
+//    @Override
+//    public CalendarEvent getCalendarEvent() {
+//        return CalendarEvent.newAllDayEvent(getDate().dateValue());
+//    }
+     
 }

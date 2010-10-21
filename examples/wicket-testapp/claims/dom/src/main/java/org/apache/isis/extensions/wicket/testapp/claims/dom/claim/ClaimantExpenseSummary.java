@@ -25,11 +25,10 @@ import org.apache.isis.applib.annotation.Ignore;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.value.Money;
-import org.apache.isis.extensions.wicket.view.googlecharts.applib.PieChartable;
 
 @NotPersistable
-public class ClaimantExpenseSummary implements PieChartable,
-        Comparable<ClaimantExpenseSummary> {
+public class ClaimantExpenseSummary /* implements  PieChartable, 
+        Comparable<ClaimantExpenseSummary> */ {
 
     // {{ Identification
     public String title() {
@@ -79,28 +78,27 @@ public class ClaimantExpenseSummary implements PieChartable,
 
     // }}
 
-    // {{ PieChartable impl
-    @Ignore
-    @Override
-    public double getPieChartValue() {
-        return getAmount().doubleValue();
-    }
-
-    @Ignore
-    @Override
-    public String getPieChartLabel() {
-        return title();
-    }
-
-    // }}
-
-    @Override
-    public int compareTo(ClaimantExpenseSummary o) {
-        if (getPieChartValue() < o.getPieChartValue())
-            return -1;
-        if (getPieChartValue() > o.getPieChartValue())
-            return +1;
-        return 0;
-    }
+//    // {{ PieChartable impl
+//    @Ignore
+//    @Override
+//    public double getPieChartValue() {
+//        return getAmount().doubleValue();
+//    }
+//
+//    @Ignore
+//    @Override
+//    public String getPieChartLabel() {
+//        return title();
+//    }
+//
+//    // }}
+//    @Override
+//    public int compareTo(ClaimantExpenseSummary o) {
+//        if (getPieChartValue() < o.getPieChartValue())
+//            return -1;
+//        if (getPieChartValue() > o.getPieChartValue())
+//            return +1;
+//        return 0;
+//    }
 
 }

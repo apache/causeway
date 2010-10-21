@@ -26,9 +26,9 @@
 		<module>dnd</module>
 		<module>html</module>
 		<module>scimpi</module>
+		<module>wicket</module>
 		<!-- 
 		<module>restful</module>
-		<module>wicket</module>
 		<module>bdd</module>
 		-->
 		<module>junit</module>

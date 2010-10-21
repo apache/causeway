@@ -24,8 +24,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.commons.jmock.AbstractJMockForInterfacesTest;
-import org.apache.isis.extensions.wicket.viewer.WicketObjectsApplication;
+import org.apache.isis.common.jmock.AbstractJMockForInterfacesTest;
 import org.apache.wicket.settings.IResourceSettings;
 import org.apache.wicket.settings.ISecuritySettings;
 import org.junit.Before;
