@@ -5,11 +5,11 @@
 	
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
+		<artifactId>viewer</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.extensions</groupId>
+	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>restful</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
@@ -52,23 +52,23 @@
 
 			<!-- Restful Viewer -->
 	   		<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>restful-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 	   		<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>restful-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
                 <type>test-jar</type>
 			</dependency>
 	   		<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>restful-viewer</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 	   		<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>restful-viewer</artifactId>
 				<version>0.1-SNAPSHOT</version>
                 <type>test-jar</type>

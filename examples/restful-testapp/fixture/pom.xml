@@ -3,18 +3,18 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>restful-testapp-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>restful-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>restful-testapp-claims-fixture</artifactId>
+	<artifactId>restful-claims-fixture</artifactId>
 	<name>Restful Viewer TestApp: Claim Fixtures</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>restful-testapp-claims-service</artifactId>
+			<artifactId>restful-claims-service</artifactId>
 		</dependency>
 
 	</dependencies>

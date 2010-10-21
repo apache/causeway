@@ -30,6 +30,7 @@
         <isis.viewer-html.version>0.1-SNAPSHOT</isis.viewer-html.version>
         <isis.viewer-scimpi.version>0.1-SNAPSHOT</isis.viewer-scimpi.version>
         <isis.viewer-wicket.version>0.1-SNAPSHOT</isis.viewer-wicket.version>
+        <isis.viewer-restful.version>0.1-SNAPSHOT</isis.viewer-restful.version>
         <isis.viewer-junit.version>0.1-SNAPSHOT</isis.viewer-junit.version>
 
         <isis.alternatives-objectstore-xml.version>0.1-SNAPSHOT</isis.alternatives-objectstore-xml.version>
@@ -185,6 +186,23 @@
                 <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>wicket-viewer</artifactId>
                 <version>${isis.viewer-wicket.version}</version>
+            </dependency>
+
+            <!-- viewer: restful -->
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>restful</artifactId>
+                <version>${isis.viewer-restful.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>restful-applib</artifactId>
+                <version>${isis.viewer-restful.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.viewer</groupId>
+                <artifactId>restful-viewer</artifactId>
+                <version>${isis.viewer-restful.version}</version>
             </dependency>
 
 

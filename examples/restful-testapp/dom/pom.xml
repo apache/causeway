@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>restful-testapp-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>restful-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>restful-testapp-claims-dom</artifactId>
+	<artifactId>restful-claims-dom</artifactId>
 	<name>Restful Viewer TestApp: Claims DOM</name>
 
 	<dependencies>

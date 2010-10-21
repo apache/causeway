@@ -8,8 +8,8 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>restful-testapp-claims</artifactId>
+	<groupId>org.apache.isis.examples.apps</groupId>
+	<artifactId>restful-claims</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
 	<name>Restful Viewer TestApp: Claims</name>
@@ -82,38 +82,38 @@
 
 			<!-- this project's own modules -->
 			<dependency>
-	            <groupId>org.apache.isis.extensions</groupId>
-				<artifactId>restful-testapp-claims-commandline</artifactId>
+	            <groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>restful-claims-commandline</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-	            <groupId>org.apache.isis.extensions</groupId>
-				<artifactId>restful-testapp-claims-dom</artifactId>
+	            <groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>restful-claims-dom</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-	            <groupId>org.apache.isis.extensions</groupId>
-				<artifactId>restful-testapp-claims-fixture</artifactId>
+	            <groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>restful-claims-fixture</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
-	            <groupId>org.apache.isis.extensions</groupId>
-				<artifactId>restful-testapp-claims-service</artifactId>
+	            <groupId>org.apache.isis.examples.apps</groupId>
+				<artifactId>restful-claims-service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<!-- Isis Restful Viewer -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>restful-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.examples.apps</groupId>
 				<artifactId>restful-viewer</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
