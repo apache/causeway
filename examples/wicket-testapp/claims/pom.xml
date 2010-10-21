@@ -87,13 +87,13 @@
 
 			<!-- Isis Wicket Viewer -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-viewer</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
@@ -160,25 +160,25 @@
 				<artifactId>view-googlecharts-view</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
-            -->            
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>wicket-view-calendarviews-applib</artifactId>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-calendarviews-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 		
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>wicket-view-calendarviews-view</artifactId>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-calendarviews-view</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 		
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
-				<artifactId>wicket-view-cooldatasoftmenu-view</artifactId>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-cooldatasoftmenu-view</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
+            -->            
 
 			<!-- 3rd party -->
 			<dependency>

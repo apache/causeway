@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>bdd-testapp-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>bdd-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>bdd-testapp-claims-dom</artifactId>
+	<artifactId>bdd-claims-dom</artifactId>
 	<name>BDD Viewers TestApp: Claims Domain Model</name>
 
 	<dependencies>

@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>bdd-testapp-claims-concordion</artifactId>
+	<groupId>org.apache.isis.examples.apps</groupId>
+	<artifactId>bdd-claims-concordion</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
 	<name>BDD Viewers TestApp: Claims Concordion Integration</name>
@@ -48,14 +48,14 @@
 
 		<!-- this project's dependencies -->
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
-            <artifactId>bdd-testapp-claims-commandline</artifactId>
+			<groupId>org.apache.isis.examples.apps</groupId>
+            <artifactId>bdd-claims-commandline</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
 		<!-- BDD Viewers concordion dependencies -->
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
+			<groupId>org.apache.isis.viewer</groupId>
             <artifactId>bdd-concordion</artifactId>
             <version>0.1-SNAPSHOT</version>
             <scope>test</scope>

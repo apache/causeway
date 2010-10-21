@@ -3,23 +3,23 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>bdd-testapp-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>bdd-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>bdd-testapp-claims-fixture</artifactId>
+	<artifactId>bdd-claims-fixture</artifactId>
 	<name>BDD Viewers TestApp: Claims Fixtures</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>bdd-testapp-claims-dom</artifactId>
+			<artifactId>bdd-claims-dom</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>bdd-testapp-claims-service</artifactId>
+			<artifactId>bdd-claims-service</artifactId>
 		</dependency>
 
 		<dependency>

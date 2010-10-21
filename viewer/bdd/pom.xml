@@ -3,11 +3,11 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
+		<artifactId>viewer</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-    <groupId>org.apache.isis.extensions</groupId>
+    <groupId>org.apache.isis.viewer</groupId>
     <artifactId>bdd</artifactId>
     <version>0.1-SNAPSHOT</version>
     
@@ -20,12 +20,12 @@
 
             <!-- BDD Viewer -->
             <dependency>
-			    <groupId>org.apache.isis.extensions</groupId>
+			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-common</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-			    <groupId>org.apache.isis.extensions</groupId>
+			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-common</artifactId>
                 <version>0.1-SNAPSHOT</version>
                 <scope>test</scope>
@@ -33,12 +33,12 @@
             </dependency>
 
             <dependency>
-			    <groupId>org.apache.isis.extensions</groupId>
+			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-concordion</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-			    <groupId>org.apache.isis.extensions</groupId>
+			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-concordion</artifactId>
                 <version>0.1-SNAPSHOT</version>
                 <scope>test</scope>
@@ -46,12 +46,12 @@
             </dependency>
 
             <dependency>
-			    <groupId>org.apache.isis.extensions</groupId>
+			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-fitnesse</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-			    <groupId>org.apache.isis.extensions</groupId>
+			    <groupId>org.apache.isis.viewer</groupId>
                 <artifactId>bdd-fitnesse</artifactId>
                 <version>0.1-SNAPSHOT</version>
                 <scope>test</scope>
@@ -87,11 +87,12 @@
     </dependencyManagement>
 
 
-    <!-- USE -pl xxx TO SELECT A SINGLE MODULE -->
     <modules>
 	    <module>common</module>
 	    <module>concordion</module>
+        <!-- 
 	    <module>fitnesse</module>
+        -->
 	</modules>
 
 </project>

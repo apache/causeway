@@ -3,12 +3,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>bdd-testapp-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>bdd-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>bdd-testapp-claims-commandline</artifactId>
+	<artifactId>bdd-claims-commandline</artifactId>
 	<name>BDD Viewers TestApp: CommandLine</name>
 
 	<dependencies>
@@ -16,28 +16,27 @@
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>bdd-testapp-claims-service</artifactId>
+			<artifactId>bdd-claims-service</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>bdd-testapp-claims-fixture</artifactId>
+			<artifactId>bdd-claims-fixture</artifactId>
 		</dependency>
 
 
 		<!-- Apache Isis -->
-
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>dnd-viewer</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>dnd</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-cglib</artifactId>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-javassist</artifactId>
+			<groupId>org.apache.isis.alternatives.bytecode</groupId>
+			<artifactId>javassist</artifactId>
 		</dependency>
 
 	</dependencies>

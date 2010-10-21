@@ -27,10 +27,8 @@
 		<module>html</module>
 		<module>scimpi</module>
 		<module>wicket</module>
-		<!-- 
 		<module>restful</module>
 		<module>bdd</module>
-		-->
 		<module>junit</module>
 	</modules>
 	

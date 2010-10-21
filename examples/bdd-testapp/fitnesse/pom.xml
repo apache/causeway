@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>bdd-testapp-claims-fitnesse</artifactId>
+	<groupId>org.apache.isis.examples.apps</groupId>
+	<artifactId>bdd-claims-fitnesse</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	<name>BDD Viewers TestApp: Claims FitNesse</name>
 
@@ -52,13 +52,13 @@
 		<!-- this project's dependencies -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>jpa-testapp-claims-commandline</artifactId>
+			<artifactId>bdd-claims-commandline</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>
 
 		<!-- BDD Viewers fitnesse dependencies -->
 		<dependency>
-			<groupId>org.apache.isis.extensions</groupId>
+			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>bdd-fitnesse</artifactId>
             <version>0.1-SNAPSHOT</version>
         </dependency>

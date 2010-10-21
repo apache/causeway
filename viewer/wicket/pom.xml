@@ -118,12 +118,12 @@
 				<type>test-jar</type>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-viewer</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.viewer</groupId>
 				<artifactId>wicket-viewer</artifactId>
 				<version>0.1-SNAPSHOT</version>
 				<scope>test</scope>
