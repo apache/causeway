@@ -22,10 +22,6 @@ Default (CGLib) Bytecode Support
  The <Default Bytecode Support> module enables transparent lazy loading and object dirtying 
  support.
  
-Configuring CGLib
-
- TODO... <<<isis.properties>>>
-
 Alternatives
 
  * As an alternative to CGLib you can use {{{../../alternatives/bytecode/javassist/index.html}Javassist}}.

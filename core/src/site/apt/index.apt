@@ -34,10 +34,11 @@ Core Framework
 
   []
   
-  Across these modules a number of APIs are defined:  
+  Across these modules a number of APIs are defined, each of which have {{{../default/index.html}default}} 
+  and {{{../alternatives.html}alternative}} implementations:  
   
   * persistence (object store API)
-   
+  
   * bytecode enhancement
    
   * security (authentication and authorization)
@@ -45,6 +46,3 @@ Core Framework
   * programming model definition
    
   []
-
- 
- []

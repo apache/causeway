@@ -24,6 +24,4 @@ Runtime
  object specification (cf <<<java.lang.Class>>>) can be obtained.
  
  The <runtime> also manages persistence and transactions, with the actual
- persistence being delegated to an object store.  The <runtime> module does provide
- one implementation of an object store, namely the in-memory object store useful
- for prototyping. 
+ persistence being delegated to an object store.

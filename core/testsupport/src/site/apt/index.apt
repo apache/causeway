@@ -19,4 +19,6 @@
 
 Test Support
  
- The <testsupport> module ...
+ The <testsupport> module holds helper classes to support writing unit
+ tests in either {{{http://junit.org}JUnit}} or {{{http://jmock.org}JMock}}.
+ It should only ever be added as a dependency with a <<<scope>>> of <test>.

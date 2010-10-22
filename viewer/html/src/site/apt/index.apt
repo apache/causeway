@@ -19,15 +19,24 @@
 
 HTML Viewer
 
- The HTML viewer provides a web interface to a [[NAME]] domain model. 
+ The HTML viewer provides a simple webapp interface for interacting with an Isis domain model.
+  
  It renders each domain object or collection of domain objects as a web page, with
  hyperlinks used to navigate between objects.  In addition, object actions can also be invoked,
  with hyperlinks bringing up a page for action parameters if required.
  
+Customization
+ 
+  The HTML viewer offers only very limited customization opportunities; the CSS can be
+  altered, but that's about it. 
+ 
 Alternatives
 
- One limitation of the HTML viewer is that it is not customizable, other than through CSS.  
- If you want the ability for more far-reaching customization, then consider {{{../scimpi/index.html}Scimpi}} webapp viewer
- or the {{{../wicket/index.html}Wicket}} viewer.
+  There are two other webapp viewers which provide more far wider customization opportunities:
+  
+  * the {{{../scimpi/index.html}Scimpi}} viewer uses a JSF-like markup metaphor
+  
+  * the {{{../wicket/index.html}Wicket}} viewer uses a {{{http://wicket/apache.org}Apache Wicket}} components
+    (and allows you to define your own components also).
     
- 
+  []

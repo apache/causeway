@@ -1,7 +1,5 @@
 package org.apache.isis.extensions.bdd.common.story.bootstrapping;
 
-import java.util.List;
-
 import org.apache.isis.extensions.bdd.common.Story;
 import org.apache.isis.extensions.bdd.common.components.StoryAuthenticationManagerInstaller;
 import org.apache.isis.extensions.bdd.common.components.StoryInMemoryPersistenceMechanismInstaller;
@@ -10,10 +8,7 @@ import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.fixturesinstaller.FixturesInstallerNoop;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.installers.InstallerLookupDefault;
-import org.apache.isis.runtime.options.standard.OptionHandlerDeploymentType;
 import org.apache.isis.runtime.runner.IsisModule;
-import org.apache.isis.runtime.runner.IsisRunner;
-import org.apache.isis.runtime.runner.options.OptionHandler;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.IsisSystem;
 import org.apache.isis.runtime.system.SystemConstants;

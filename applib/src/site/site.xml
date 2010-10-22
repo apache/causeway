@@ -6,6 +6,8 @@
 			<item name="AppLib"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+        
 		<menu name="Application Library">
 			<item name="About" href="index.html" />
 		</menu>

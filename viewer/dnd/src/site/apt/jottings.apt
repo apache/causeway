@@ -22,3 +22,17 @@ Jottings
   This page is to capture any random jottings relating to this module prior 
   to being moved into formal documentation. 
  
+
+Useful tools for the DND developer
+
+  When space is limited us the limitText method in the TextUtils class.  This will return the maximum amount of text to fit a specified space.
+
+------
+TextUtils.limitText(title, TITLE_STYLE, availableWidth);
+----
+ 
+ 
+User Profiles
+
+  When the DND viewer is exited (DndViewer.quit()) a call is made to saveDesktop() that will 
+  cause the UserProifile to be persisted under the user's name. This is stored using the UserProfileStore

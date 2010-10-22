@@ -19,7 +19,11 @@
 
 Alternative Bytecode Implementations
  
- The <alternative bytecode implementations> module is ...
+ This module is module is the parent for a
+ number of alternative implementations for the bytecode enhancement API
+ as defined in the {{{../../core/index.html}core}} framework.
+
+
  
  
  []

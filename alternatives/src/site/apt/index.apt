@@ -22,26 +22,38 @@ Alternatives
  The <alternatives> module is a parent for alternative implementations of the
  following APIs:
   
- * {{{./objectstores/index.html}object stores}}
+ * {{{./objectstore/index.html}object stores}}
  
    The object store API allows Isis to persist domain objects using different 
    technologies.
    
- * programming model / other language support
+ * {{{./progmodel/index.html}programming model}} / other language support
  
-   The Isis programming model is well-defined (see the 
-   {{{../applib/index.html}applib}} module for details) and generally should
-   not require adjusting; but can be modified if required.
+   These either refine the Isis programming model (as described in the 
+   {{{../applib/index.html}applib}} module) or could replace it (for example, if supporting
+   another language).
 
- * security (authentication & authorization)
+ * {{{./security/index.html}security}} (authentication & authorization)
  
    The mechanisms for authentication ("who are you"?) and authorization 
    ("what can you do?") are both pluggable.
  
- * remoting APIs
+ * {{{./bytecode/index.html}bytecode}} enhancement
  
-   Client/server deployments require both a transport protocol and a 
-   marshalling mechanism for network interactions.
+   This API allows the framework to automatically perform lazy loading and
+   dirty object tracking
+ 
+ * {{{./remoting/index.html}remoting}} APIs
+ 
+   The above items in this list are straightforward alternatives to {{{../defaults/index.html}default}}
+   implementations.  Remoting though is slightly different; it is an alternative implementation of 
+   several internal APIs that are defined within the {{{../core/index.html}core}} (specifically,
+   <<<ObjectPersistor>>> and <<<Viewer>>>).  It provides implementations of these APIs in order to 
+   allow two instances of the application to interact across the nework in client/server mode.
+   
+   These implementations also define their own APIs, one being the transport protocol, the other a 
+   marshalling mechanism for network interactions.  The <remoting> component both defines these APIs
+   and provides several implementations.
  
  []
  

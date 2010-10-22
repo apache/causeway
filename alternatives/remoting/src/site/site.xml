@@ -13,7 +13,7 @@
             <item name="Jottings" href="jottings.html" />
 		</menu>
         
-        <menu ref="module"/>
+        <menu ref="modules"/>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

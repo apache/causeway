@@ -22,7 +22,7 @@ WebServer (Jetty)
  The <webserver> module bundles up {{{http://jetty.codehaus.org/jetty/}Jetty}} to make it easy to any application that's
  in webapp format.
  
- There are a couple of use case:
+ There are a couple of use cases:
  
  * if using the {{{../webapp/index.html}webapp}} module to deploy your application
    as a webapp, then you can check that your deployment runs ok an on webserver

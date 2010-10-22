@@ -9,7 +9,7 @@
 
 	<groupId>org.apache.isis.defaults</groupId>
 	<artifactId>progmodel</artifactId>
-	<name>Default Programming Model (Java)</name>
+	<name>Default ProgModel (Java)</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>

@@ -19,5 +19,23 @@
 
 Default Programming Model (Java)
  
- The <Default Programming Model> module enables ...
+ The <default progmodel> module defines an implementation of the default programming model as described by the
+ {{{../../../applib/index.html}applib}} documentation.
  
+ This programming model is defined by specifying a collection of <<<FacetFactory>>>s, which are
+ used to build up the metamodel.  The actual <<<FacetFactory>>>s are defined within the
+ {{{../../../core/index.html}core}} framework (in the <<<progmodel>>> module).
+ 
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../../alternatives/progmodel/headless/index.html}headless}} programming model.
+  
+    This extends the default programming model by providing the ability for domain objects to
+    interact with each other <as if> through the user interface (that is, obeying any business
+    rules that would otherwise be enforced at the application layer).
+
+  * the {{{../../alternatives/progmodel/groovy/index.html}Groovy}} programming model.
+  
+    This provides the ability to write domain objects using {{{http://groovy.codehaus.org}Groovy}}.

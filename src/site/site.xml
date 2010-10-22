@@ -51,15 +51,7 @@
 		<!-- Components menu is inherited -->
 		<menu name="Components" inherit="bottom" href="core/index.html">
 			<item name="Application Library" href="applib/index.html" />
-			<item name="Core Framework" href="core/index.html">
-	            <item name="Commons" href="core/commons/index.html" />
-	            <item name="Meta Model" href="core/metamodel/index.html" />
-                <item name="Prog Model" href="core/progmodel/index.html" />
-	            <item name="Runtime &amp; CmdLine" href="core/runtime/index.html" />
-	            <item name="Webapp Support" href="core/webapp/index.html" />
-	            <item name="Web Server (Jetty)" href="core/webserver/index.html" />
-	            <item name="Test Support" href="core/testsupport/index.html" />
-			</item>
+			<item name="Core Framework" href="core/index.html"/>
             <item name="Defaults" href="defaults/index.html">
                 <item name="Object Store" href="defaults/objectstore/index.html">
                 </item>

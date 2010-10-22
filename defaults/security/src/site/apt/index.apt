@@ -19,5 +19,22 @@
 
 Default Security (No-op)
  
- The <Default Security> module enables ...
+ The <default security> module provides a stub implementation of Isis' authentication and
+ authorization APIs.  The authentation will accept any credentials as valid, and authorization will
+ grant all permissions.
+ 
+ This makes the default security implementation only suitable for prototyping and unit testing,
+ when security is not of concern.  For deployment you will typically need to configure one of 
+ the {{{../../alternatives/security/index.html}alternative}} implementations. 
+ 
+
+Alternatives
+
+  Alternatives include:
+  
+  * the {{{../../alternatives/security/file/index.html}file-based}} security (reading from simple flat files)
+
+  * the {{{../../alternatives/security/ldap/index.html}LDAP}} security
+
+
  

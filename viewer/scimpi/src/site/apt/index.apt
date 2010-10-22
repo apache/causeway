@@ -16,46 +16,25 @@
 ~~  under the License.
 
 
- -----
- Welcome to Scimpi
- -----
- The [[NAME]] Team
- -----
+Scimpi Viewer
 
-Welcome to Scimpi
-
+  The <scimpi> module provides a webapp viewer that out-of-the-box provides a similar
+  interface to that provided by the {{{../html/index.html}HTML}} viewer.
   
+  However, unlike the HTML viewer it allows the user interface to be extensively customized. 
   
- Scimpi is an ultra-lightweight framework for developing web 
-      applications that are based on strong domain models. It will appeal strongly 
-      to any developer who identifies with the principles of {{{http://en.wikipedia.org/wiki/Domain_driven_design}domain-driven 
-      design}} and/or {{{http://agilemanifesto.org/} agile      development}}.
+Customization
+
+  Scimpi works by searching for a specific page to render the domain object, eg <<<Customer.shtml>>>
+  to render a <<<Customer>>> object.  If none is found, it always falls back to a generic page, 
+  which can render any object.
+  
+  Customization therefore is accomplished by providing a specific page.  The elements of this
+  page can be any of the tags that Scimpi understands. 
+
+Alternatives
+
+  An alternative to Scimpi which offers similar customization though through a different
+  means is the {{{../wicket/index.html}Wicket}} viewer.
+ 
       
-      
- <<A Scimpi web-application has just two elements:>>
-
-	* <<Domain objects>>, written as {{{http://en.wikipedia.org/wiki/POJO} Plain 
-      Old Java Objects (POJOs)}}, that follow a few simple conventions, and 
-      which are persisted via {{{http://www.hibernate.org/} Hibernate}}.
-
-	* <<Web pages>>, written as pure HTML, with embedded 
-      tags to display information from the domain objects, and/or to invoke their 
-      methods.
-
- <<The benefits are:>> 
-
-    * Very rapid prototyping. As soon as you have any domain objects you 
-          view them and invoke their actions via a generic Scimpi web page. Then 
-          you add customised web pages and navigation only as you need them.
-
-    * Much less code to write, and to maintain, as business requirements 
-          change
-
-    * Supports an agile, iterative, approach to development.
-
-    * No need to keep multiple layers in synch using complex configuration 
-          files.
-
-    *<All> business logic is encapsulated on the domain objects, 
-          instead of being scattered across multiple layers, making them more 
-          re-usable between applications

@@ -20,6 +20,6 @@
 Default Implementations
  
  The <defaults> module is the parent of a set of submodules that collectively provide the default
- implementations for key APIs of the <core> framework.
+ implementations for key APIs of the {{{../core/index.html}core}} framework.
  
  []

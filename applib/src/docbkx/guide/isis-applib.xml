@@ -810,8 +810,7 @@
       <title>Authentication and Authorization</title>
 
       <para><emphasis>Apache Isis</emphasis> provides an
-      <acronym>API</acronym>s for both authentication and authorization, see
-      <xref linkend="chp.SecurityApi" />.</para>
+      <acronym>API</acronym>s for both authentication and authorization.</para>
 
       <para>The core implementation of these <acronym>API</acronym>s are very
       basic file-based authentication and authorization mechanisms, the

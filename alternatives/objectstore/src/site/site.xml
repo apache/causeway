@@ -14,7 +14,7 @@
 			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
 
-        <menu ref="module"/>
+        <menu ref="modules"/>
 
         <menu name="Maven Reports" ref="reports" />
 	</body>

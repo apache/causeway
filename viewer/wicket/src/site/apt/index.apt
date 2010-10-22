@@ -17,21 +17,24 @@
 
 
 
-Overview
+Wicket Viewer
 
-  <Apache Isis Wicket Viewer> is a viewer extension for the 
-  <Apache Isis> framework, providing a customizable web app using the
-  {{{http://wicket.apache.org}Apache Wicket}} web framework.
+  The <wicket> module provides a customizable webapp viewer for an Isis domain model, 
+  implemented using the {{{http://wicket.apache.org}Apache Wicket}} web framework.
   
   Using the <Apache Isis Wicket Viewer>, you can quickly developing domain-driven applications and run them as
   <Apache Wicket> webapps.  You simply write your domain objects as pojos, and the viewer automatically
   renders them as a webapp.  Later, you can start to customize the GUI by writing your own <Apache Wicket> <<<Component>>>s 
   and plugging them into the infrastructure provided by <Apache Isis Wicket Viewer>. 
 
-  The diagram below shows how <Apache Isis Wicket Viewer> relates to the rest of <Apache Isis>, in terms 
-  of the {{{http://alistair.cockburn.us/Hexagonal+architecture}hexagonal architecture}}.
+Customization
 
-[images/HexagonalArchitectureOverview.png] Apache Isis.
+  TODO: explain 
+
+Alternatives
+
+  An alternative to Wicket which offers similar customization though through a different
+  means is the {{{../scimpi/index.html}Scimpi}} viewer.
 
 Status
 
@@ -40,3 +43,4 @@ Status
 Color Scheme
 
   See {{{color-scheme.html}color scheme}}.
+  

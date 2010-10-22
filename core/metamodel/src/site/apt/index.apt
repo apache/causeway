@@ -21,4 +21,3 @@ MetaModel
 
  Defines a metamodel API and an extensible and customizable implementation.
  
- The provided implementation is based on the {{{../applib/index.html}AppLib}}.

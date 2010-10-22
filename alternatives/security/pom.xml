@@ -19,7 +19,7 @@
         <siteBaseDir>../..</siteBaseDir>
 
     	<pdf.title>Alternative Security Implementations</pdf.title>
-    	<pdf.outputName>apache-isis-alternatives-security-${project.version}</pdf.outputName>
+    	<pdf.outputName>apache-isis-alternatives-security</pdf.outputName>
 	</properties>
 
 
