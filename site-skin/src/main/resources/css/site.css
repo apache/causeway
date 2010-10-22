@@ -128,6 +128,7 @@ contentBox + section {
     background-color:transparent;
     border: none;
     border-right:1px solid #EEEEEE;
+    min-height: 800px; 
 }
 
 #navcolumn {

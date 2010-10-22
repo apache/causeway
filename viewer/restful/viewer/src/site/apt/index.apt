@@ -18,3 +18,8 @@
 Restful Viewer
 
   The <viewer> module provides a set of servlets that serve up the domain objects as RESTful resources. 
+
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-restful-viewer.html}user guide}} for more information.
+  

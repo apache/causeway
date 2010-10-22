@@ -19,5 +19,11 @@
 
 JUnit Viewer
  
- The <junit viewer> module provides JUnit4 integration, allowing unit tests to be written exercising business
+ The <junit> viewer module provides JUnit4 integration, allowing 
+ unit tests to be written exercising business
  rules by catching the exceptions thrown by proxied domain objects.
+
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{docbkx/html/guide/isis-junit-viewer.html}user guide}} for more information.
+ 

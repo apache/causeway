@@ -16,8 +16,12 @@
 ~~  under the License.
 
 
-
 Scimpi Dispatcher
 
  The <dispatcher> module provides much of the core implementation of scimpi, including
  the handling for the generic view definitions and tag handling.
+ 
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-scimpi-viewer.html}user guide}} for more information.
+ 

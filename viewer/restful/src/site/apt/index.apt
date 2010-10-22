@@ -16,10 +16,38 @@
 ~~  under the License.
 
 
-
 Restful Viewer
 
- The Restful viewer provides ...
-  
+ The <restful> viewer provides a RESTful interface to the domain object model,
+ running over the HTTP protocol, and implemented as a webapp (servlet).
+ 
+ Each domain object (or part of object) is exposed as a RESTful resource, as
+ defined by the following table:
+ 
++-----------------+------------------+------------------+------------------+------------------+
+|Method \ Resource|Object            |Property          |Collection        |Action            |
++-----------------+------------------+------------------+------------------+------------------+
+|GET              |List all property |n/a               |List all objects  |n/a               |
+|                 |values for object |                  |in collection     |                  |
++-----------------+------------------+------------------+------------------+------------------+
+|PUT              |Add new object    |Set value         |Add object into   |n/a               |
+|                 |                  |                  |collection        |                  |
++-----------------+------------------+------------------+------------------+------------------+
+|DELETE           |Delete            |Clear value       |Remove object     |n/a               |
+|                 |existing object   |                  |collection        |                  |
++-----------------+------------------+------------------+------------------+------------------+
+|POST             |                  |                  |                  |Invoke            |
++-----------------+------------------+------------------+------------------+------------------+
+ 
+
+Representation
+
+  The viewer currently represents all domain object as XHTML, meaning that it can be rendered by
+  browers.  This XHTML also serves up a small amount of JavaScript which enables the HTTP PUT
+  and HTTP DELETE methods.  This allows the developer to interact with the system through
+  the browser.   
     
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{docbkx/html/guide/isis-restful-viewer.html}user guide}} for more information.
  

@@ -22,3 +22,22 @@ Jottings
   This page is to capture any random jottings relating to this module prior 
   to being moved into formal documentation. 
  
+
+ Color Scheme
+
+  The color scheme for the <Wicket> viewer can be customized using CSS, but if you 
+  want to use it as is in your own custom components, then here are the values: 
+  
+  * <<<#C4D9EA>>>   - light blue, ties in with banner
+  * <<<#D7E7F5>>>   - even lighter blue, also in banner
+  * <<<#407098>>>   - darker blue, font in banner
+  * <<<#A66144>>>   - brown, accent color
+  
+  Other compatible colors:
+  * <<<#fff4d3>>>   - yellow
+  * <<<#fff9e7>>>   - pale yellow
+  * <<<#ffe0d3>>>   - pink(ish)
+  * <<<#ffeee7>>>   - pale pink(ish)
+  * <<<#bfaea6>>>   - grey/pink (to tone with brown accent)
+  
+  {{{http://colorschemedesigner.com/#3y31T5AT.w0w0}ColorSchemeDesigner}}

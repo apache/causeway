@@ -19,7 +19,13 @@
 
 BDD Common
 
- The BDD common module provides ...
-  
+ The BDD <common> module provides integration logic with <Apache Isis>, 
+ independent of any particular BDD testing framework.   Although
+ the {{{../concordion/index.html}concordion}} module is the only user,
+ it is separate from that module in order to enable integrations with other 
+ BDD frameworks in the future.
     
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-bdd-viewer.html}user guide}} for more information.
  

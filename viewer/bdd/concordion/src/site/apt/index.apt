@@ -17,12 +17,12 @@
 
 
 
-BDD Viewer
+BDD Concordion support
 
- The BDD viewer provides ...
+ The <concordion> module provides an integration between the Isis (via {{{../common/index.html}common})
+ and the {{{http://concordion.org}Concordion}} framework itself.
+ 
+Further Info
   
-Alternatives
-
- JUnit viewer ...
-    
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-bdd-viewer.html}user guide}} for more information.
  

@@ -21,3 +21,8 @@ Scimpi Servlet
 
  The <servlet> module provides implementations of the JEE <<<HttpServlet>>> interface
  as the entry point and bootstrapping of a Scimpi webapp.
+ 
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-scimpi-viewer.html}user guide}} for more information.
+ 

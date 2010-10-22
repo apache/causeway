@@ -19,8 +19,12 @@
 
 Viewer
 
-  The <viewer> module for <Apache Isis Wicket Viewer> extension is used to bootstrap the webapp, providing an implementation of <Apache Wicket>'s <<<WebApplication>>> class that
-  also bootstraps the <Apache Isis> runtime.  It also provides login/logout pages, and registers default sets of
+  The <viewer> module for <wicket> viewer is used to bootstrap 
+  the webapp, providing an implementation of <Apache Wicket>'s 
+  <<<WebApplication>>> class that also bootstraps the <Apache Isis> 
+  runtime.  It also provides login/logout pages, and registers default sets of
   views which ultimately determine the look-n-feel of the running webapp.
   
-  See this module's {{{apidocs/index.html}Javadoc}} and the {{{../docbkx/html/user-guide/user-guide.html}user guide}} for more information.
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-wicket-viewer.html}user guide}} for more information.

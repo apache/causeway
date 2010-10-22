@@ -25,10 +25,13 @@ DnD Viewer
  and keyboard. Dragging and dropping domain objects plays a major role in
  this interface, hence its name.
  
-
- 
 Customization
 
   The DnD viewer defines its own API to allow new views to be defined.  These can be for
   entities, for entity properties (and action parameters), for entity collections, and
   for collections of entities.
+  
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{docbkx/html/guide/isis-dnd-viewer.html}user guide}} for more information.
+  

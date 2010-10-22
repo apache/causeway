@@ -812,16 +812,19 @@
       <para><emphasis>Apache Isis</emphasis> provides an
       <acronym>API</acronym>s for both authentication and authorization.</para>
 
-      <para>The core implementation of these <acronym>API</acronym>s are very
-      basic file-based authentication and authorization mechanisms, the
-      configuration of which is described in <xref
-      linkend="chp.SecurityApi" />. These default mechanisms are suitable for
-      simple applications, but are unlikely to meet the security requirements
-      of larger enterprises.</para>
+      <para>The core implementation of these <acronym>API</acronym>s are simple
+      basic noop-based authentication and authorization mechanisms.  For 
+      deployment into production, you'll need to configure with another
+      alternative implementation.</para>
 
-      <para>As an alternative, you can use implementations that integrate with
-      <acronym>LDAP</acronym> (in <filename>alternates/ldap-auth</filename>)
-      module, or consider writing your own.</para>
+      <para>One option is the file-based implementation (in <filename>alternatives/security/file</filename>), 
+      that stores the security information in flat files.  This is simple, but unlikely
+      to be robust enough for enterprise use.</para>
+
+      <para>Another alternative is to use the LDAP implementation (in 
+      <filename>alternatives/security/ldap</filename>), which can integrate with an
+      LDAP infrastructure if you have one.  If you have a different security infrastructure,
+      then you might consider to write your own implementation (the API is not complex).</para>
     </sect1>
 
     <sect1 id="sec.DeployingAnIsisApplication">

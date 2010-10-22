@@ -15,10 +15,10 @@
 ~~  specific language governing permissions and limitations
 ~~  under the License.
 
-
-
 Application Library
 
   The Wicket viewer applib holds annotations that can be applied to your domain object and that will alter the rendering of your domain objects.
+
+Further Info
   
-  See this module's {{{apidocs/index.html}Javadoc}} and the {{{../documentation/docbkx/html/guide/isis-wicket-viewer.html}user guide}} for more information.
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-wicket-viewer.html}user guide}} for more information.

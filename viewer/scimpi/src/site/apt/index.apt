@@ -37,4 +37,7 @@ Alternatives
   An alternative to Scimpi which offers similar customization though through a different
   means is the {{{../wicket/index.html}Wicket}} viewer.
  
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{./docbkx/html/guide/isis-scimpi-viewer.html}user guide}} for more information.
       

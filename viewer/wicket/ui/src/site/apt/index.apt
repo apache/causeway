@@ -16,10 +16,12 @@
 ~~  under the License.
 
 
-
 UI
 
-  The <ui> module for <Wicket Objects> holds/is intended to hold the implementations of <Wicket> <<<Component>>>s, using 
-  <<<IModel>>>s from the <model> module.
+  The <ui> module for the <wicket> viewer holds the implementations of 
+  <Wicket> <<<Component>>>s, using <<<IModel>>>s from the {{{../model/index.html}model}} module.
   
-  See this module's {{{apidocs/index.html}Javadoc}} and the {{{../documentation/docbkx/html/user-guide/user-guide.html}user guide}} for more information.
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-wicket-viewer.html}user guide}} for more information.
+    

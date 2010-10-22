@@ -19,10 +19,16 @@
 
 BDD Viewer
 
- The BDD viewer provides ...
+ The <bdd> viewer provides the ability to story-test the functionality
+ in your domain objects, using a behaviour-driven design (BDD)
+ framework.
+ 
+ Currently the only framework supported is {{{http://concordion.org}Concordion}},
+ though we expect others to be supported in the future.
   
 Alternatives
 
- JUnit viewer ...
-    
- 
+ The {{{../junit/index.html}JUnit}} viewer can also be used for testing.
+ However, with the junit viewer the actual test is written in {{{http://junit.org}JUnit}}
+ (rather than XHTML as is the case for Concordion) and so is closer to a 
+ developer test than a story test.

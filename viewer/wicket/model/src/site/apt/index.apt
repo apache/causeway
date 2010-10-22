@@ -19,12 +19,14 @@
 
 Model
 
-  The <model> module for <Apache Isis Wicket Viewer> holds the implementations of <Apache Wicket> <<<IModel>>>s, with these 
-  <<<IModel>>>s wrapping <Apache Isis> domain objects.  These <<<IModel>>>s are shared among different views 
-  defined in the {{{.../ui}ui}} module.
+  The <model> module for the <wicket> viewer holds the implementations of <Apache Wicket> <<<IModel>>>s, with these 
+  <<<IModel>>>s wrapping <Apache Isis> domain objects.  The <<<IModel>>>s are shared among different views 
+  defined in the {{{../ui/index.html}ui}} module.
   
   The <<<IModel>>>s also handle serialization issues required by <Wicket>'s stateful architecture,
   storing the state of these domain objects transparently in mementos (even if the underlying pojos are not
   serializable).
 
-  See this module's {{{apidocs/index.html}Javadoc}} and the {{{../docbkx/html/user-guide/user-guide.html}user guide}} for more information.
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-wicket-viewer.html}user guide}} for more information.

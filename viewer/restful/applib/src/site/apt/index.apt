@@ -17,4 +17,12 @@
 
 Restful AppLib
 
-  The Restful AppLib module ...
+  The restful viewer's <applib> module defines (among other things) the
+  JAX-RS (JSR-311) compliant interfaces which define the URIs exposed by
+  the viewer.  These do allow frameworks (such as JBoss' {{{http://jboss.org/resteasy}RestEasy}}
+  framework) to generate client-side bindings.  
+
+Further Info
+  
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-restful-viewer.html}user guide}} for more information.
+  

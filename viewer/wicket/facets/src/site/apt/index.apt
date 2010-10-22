@@ -19,9 +19,9 @@
 
 Facets
 
-  The <facets> module for <Apache Isis Wicket Viewer> extends the standard <Apache Isis> programming model so that it picks up annotations defined 
-  in the {{{../applib/index.html}applib}}.
+  The <facets> module for the <wicket> Viewer extends the standard Apache Isis programming model so 
+  that it picks up annotations defined in Wicket's own {{{../applib/index.html}applib}}.
   
-  These facets are enabled by editing the <<<isis.properties>>> configuration file.  
+Further Info
   
-  See this module's {{{apidocs/index.html}Javadoc}} and the {{{../docbkx/html/user-guide/user-guide.html}user guide}} for more information.
+  See this module's {{{./apidocs/index.html}Javadoc}} and the {{{../docbkx/html/guide/isis-wicket-viewer.html}user guide}} for more information.
