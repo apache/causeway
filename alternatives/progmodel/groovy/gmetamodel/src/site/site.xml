@@ -1,6 +1,16 @@
 <project name="${project.name}">
-	<version position="right"/>
-    <body>
+	<body>
+		<breadcrumbs>
+			<item name="MetaModel"/>
+		</breadcrumbs>
+
         <menu ref="parent"/>
-    </body>
+
+		<menu name="Groovy MetaModel">
+			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
+		</menu>
+
+        <menu name="Maven Reports" ref="reports" />
+	</body>
 </project>

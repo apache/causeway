@@ -19,13 +19,32 @@
 
 Core Framework
  
- The <core> module is the parent of a set of submodules that collectively form the core of [[NAME]].
- Specifically, they provide:
+  The <core> module is the parent of a set of submodules that collectively form the core of Apache Isis.
+  Specifically, they provide:
  
- * metamodel
- 
- * runtime instance management
- 
- * persistence of domain objects (delegates to an object store implementation)
+  * metamodel
+
+  * reusable programming model elements
+
+  * runtime instance management
+  
+  * bootstrapping/deployment support for commandline or webapp
+  
+  * JUnit/JMock testing support
+
+  []
+  
+  Across these modules a number of APIs are defined:  
+  
+  * persistence (object store API)
+   
+  * bytecode enhancement
+   
+  * security (authentication and authorization)
+   
+  * programming model definition
+   
+  []
+
  
  []

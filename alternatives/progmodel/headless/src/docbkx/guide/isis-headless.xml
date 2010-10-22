@@ -22,7 +22,7 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
-    <subtitle>Configuring, using and testing with the Headless Viewer</subtitle>
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>

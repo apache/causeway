@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<project name="The [[NAME]] Framework">
+<project name="Apache Isis">
 
 	<skin>
 		<groupId>org.apache.isis.skins</groupId>
@@ -16,7 +16,7 @@
 		</breadcrumbs>
 
 		<menu name="Apache Isis">
-			<item name="About" href="index.html" />
+			<item name="Home" href="index.html" />
 			<item name="Where to start" href="where-to-start.html" />
 			<item name="Who we are" href="who-we-are.html" />
 			<item name="Roadmap" href="roadmap.html" />
@@ -27,19 +27,26 @@
 			<item name="License" href="license.html" />
 		</menu>
 
-		<menu name="The Naked Objects Pattern">
-			<item name="An Introduction" href="isis-pattern.html" />
-			<item name="OOUIs" href="oouis.html" />
-			<item name="Benefits" href="isis-pattern-benefits.html" />
-			<item name="Case Study" href="isis-case-study.html" />
-		</menu>
-
 		<menu name="Help">
-			<item name="Forums"
-				href="http://sourceforge.net/projects/isis/forums/" />
-			<item name="Bugs" href="http://dev.isis.apache.org/trac/query" />
+            <item name="Isis Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
+			<item name="Isis JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
+            <item name="Mailing List">
+                <item name="Post to"
+                    href="mailto:isis-dev@incubator.apache.org" />
+                <item name="Archives"
+                    href="http://mail-archives.apache.org/mod_mbox/incubator-isis-dev/" />
+                <item name="Subscribe"
+                    href="mailto:isis-dev-subscribe@incubator.apache.org" />
+            </item>
 			<item name="IDE Support" href="ide-support.html"/>
 		</menu>
+
+        <menu name="The Naked Objects Pattern">
+            <item name="An Introduction" href="naked-objects-pattern.html" />
+            <item name="OOUIs" href="oouis.html" />
+            <item name="Benefits" href="naked-objects-pattern-benefits.html" />
+            <item name="Case Study" href="naked-objects-case-study.html" />
+        </menu>
 
 		<!-- Components menu is inherited -->
 		<menu name="Components" inherit="bottom" href="core/index.html">
@@ -47,97 +54,61 @@
 			<item name="Core Framework" href="core/index.html">
 	            <item name="Commons" href="core/commons/index.html" />
 	            <item name="Meta Model" href="core/metamodel/index.html" />
+                <item name="Prog Model" href="core/progmodel/index.html" />
 	            <item name="Runtime &amp; CmdLine" href="core/runtime/index.html" />
-	            <item name="Remoting" href="core/remoting/index.html" />
 	            <item name="Webapp Support" href="core/webapp/index.html" />
 	            <item name="Web Server (Jetty)" href="core/webserver/index.html" />
-	            <item name="CGLib Bytecode" href="core/bytecode-cglib/index.html" />
-	            <item name="JavaAssist Bytecode" href="core/bytecode-javassist/index.html" />
+	            <item name="Test Support" href="core/testsupport/index.html" />
 			</item>
-			<item name="Viewers" href="plugins/index.html">
-				<item name="DnD Viewer" href="plugins/dnd-viewer/index.html" />
-				<item name="HTML Viewer" href="plugins/html-viewer/index.html" />
-				<item name="Scimpi Viewer" href="plugins/scimpi/index.html" />
-			</item>
-			<item name="Object Stores" href="plugins/index.html">
-				<item name="XML Persistor" href="plugins/xml-persistor/index.html" />
-				<item name="SQL Persistor (alpha)" href="plugins/sql/index.html" />
-				<item name="Berkeley Persistor (alpha)" href="plugins/berkeley-persistor/index.html" />
-			</item>
-			<item name="Other Alternates" href="plugins/index.html">
-				<item name="Headless" href="plugins/headless/index.html" />
-				<item name="HTTP Remoting" href="plugins/http-remoting/index.html" />
-				<item name="XStream Marshalling" href="plugins/xstream-marshalling/index.html" />
-			</item>
-			<item name="Sister Projects" href="http://starobjects.org">
-				<item name="Wicket Viewer" href="http://wicketobjects.sourceforge.net" />
-				<item name="Restful Viewer" href="http://restfulobjects.sourceforge.net" />
-				<item name="FitNesse Viewer" href="http://testedobjects.sourceforge.net" />
-				<item name="JPA Persistor" href="http://jpaobjects.sourceforge.net" />
-				<item name="Groovy Support" href="http://groovyobjects.sourceforge.net" />
-			</item>
+            <item name="Defaults" href="defaults/index.html">
+                <item name="Object Store" href="defaults/objectstore/index.html">
+                </item>
+                <item name="Programming Model" href="defaults/progmodel/index.html">
+                </item>
+                <item name="Bytecode Provider" href="defaults/bytecode/index.html">
+                </item>
+                <item name="Security" href="defaults/security/index.html">
+                </item>
+            </item>
+            <item name="Alternatives" href="alternatives/index.html">
+                <item name="Object Stores" href="alternatives/objectstore/index.html">
+                </item>
+                <item name="Programming Models" href="alternatives/progmodel/index.html">
+                </item>
+                <item name="Bytecode Providers" href="alternatives/bytecode/index.html">
+                </item>
+                <item name="Security" href="alternatives/security/index.html">
+                </item>
+                <item name="Remoting" href="alternatives/remoting/index.html">
+                </item>
+            </item>
+            <item name="Viewers" href="viewer/index.html">
+                <item name="DnD" href="viewer/dnd/index.html" />
+                <item name="HTML" href="viewer/html/index.html" />
+                <item name="Scimpi" href="viewer/scimpi/index.html" />
+                <item name="Wicket" href="viewer/wicket/index.html" />
+                <item name="Restful" href="viewer/restful/index.html" />
+                <item name="BDD (Concordion)" href="viewer/bdd/index.html" />
+                <item name="JUnit" href="viewer/junit/index.html" />
+            </item>
 		</menu>
 
-		<!--
-		TODO: tidy up
-		-->
-		<!--
-			<menu name="TODO - Docs to tidy up"> <item name="Getting Started">
-			<item name="A quick tutorial" href="quick-tutorial.html" /> <item
-			name="Examples" href="examples.html" /> <item name="How it works"
-			href="how-it-works.html" /> </item> <item name="Screen Shots"
-			href="screenshots.html" /> <item name="Security"> <item
-			name="Applications for Enterprise use"
-			href="enterprise-applications.html" /> <item name="Managing Security"
-			href="managing-security.html" /> </item> <item name="Reference">
-			<item name="Filename conventions" href="file-nameconvention.html" />
-			<item name="Fixtures" href="fixtures.html" /> <item name="Images"
-			href="images.html" /> </item> <item name="Runtime stuff"> <item
-			name="Command Line Parameters" href="command-line-parameters.html" />
-			<item name="Installation" href="installation.html" /> <item
-			name="Building Apps with Ant" href="building-with-ant.html" /> <item
-			name="Building Apps with Maven" href="building-with-maven.html" />
-			<item name="Running as a Prototype" href="running-prototype.html" />
-			<item name="Configuration" href="configuration.html" /> </item>
-			</menu>
-		-->
-
-		<!--
-			TODO: tidy up <menu name="TODO - contributors"> <item
-			name="Contributing" href="contributing.html" /> <item name="Source
-			code" href="source-code.html" /> <item name="Previous/unfinished
-			documentation" collapse="false"> <item name="Notes"
-			href="notes-on-nof.html" /> <item name="Framework"
-			href="framework.html" /> <item name="System" href="system.html" />
-			<item name="New Material" href="new material to add.html" /> </item>
-			</menu>
-		-->
-
 		<menu name="Other Resources">
-			<item name="Further Reading">
-				<item name="Books on Naked Objects" href="books.html" />
-				<item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
-			</item>
 			<item name="Blogs">
 				<item name="Dan Haywood's blog" href="http://danhaywood.com/" />
 			</item>
-			<item name="Isis Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
-			<item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
+			<item name="Naked Objects">
+				<item name="Books on Naked Objects" href="books.html" />
+				<item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
+    			<item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
+			</item>
 		</menu>
 
 		<menu name="For Contributors">
+            <item name="Dev Env" href="contributors-devenv.html" />
 			<item name="Building" href="contributors-building.html" />
+            <item name="Writing Docs" href="contributors-writing-docs.html" />
 			<item name="Deploying" href="contributors-deploying.html" />
-			<item name="Mailing List">
-				<item name="Post to"
-					href="mailto:isis-dev@incubator.apache.org" />
-					<!-- 
-				<item name="Archives"
-					href="http://sourceforge.net/mailarchive/forum.php?forum_name=isis-contributors" />
-				<item name="Manage subscription"
-					href="https://lists.sourceforge.net/lists/listinfo/isis-contributors" />
-					-->
-			</item>
 			<item name="Jottings" href="jottings.html" />
 		</menu>
 

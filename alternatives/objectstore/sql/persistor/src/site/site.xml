@@ -6,10 +6,13 @@
 			<item name="Implementation"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="SQL ObjectStore Implementation">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
-		<menu name="Maven Reports" ref="reports" />
+        <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

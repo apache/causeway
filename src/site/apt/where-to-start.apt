@@ -29,102 +29,44 @@ Where's to Start?
   On the other hand, it can be difficult to know exactly where to go in the 
   first place... hence these notes.
   
-  <<Your first port of call should be the {{{./core/docbkx/pdf/isis-core.pdf}core}}  
-  documentation>>.  In particular:
+  <<Your first port of call should be the {{{./applib/docbkx/pdf/isis-applib.pdf}applib}}  
+  documentation>>.  This describes how to go about writing a domain application following
+  Isis' programming model.
   
-  * the first chapter provide a general overview of some of the principles and 
-    patterns of <Apache Isis>
-    
-  * the second chapter will take you through our recommended process of
-    developing an Isis application.  The focus is on using the default 
-    settings of the core framework, but there's plenty of signposting to 
-    alternate implementations of Isis' various components.
-    
+  After that, you probably should look through the {{{./core/docbkx/pdf/isis-core.pdf}core}}
+  documentation.  This provides more detail on the design and architecture of Isis, along
+  with the key APIs.  It also describes how to deploy your application in various configurations
+  (webapp, standalone or client/server).
+  
+  Once you have an understanding of those APIs, you may want to start using customizing the
+  {{{./default}default}} implementations (where supported), or start to use some of the 
+  {{{./alternative}alternative}} implementations.  The alternative implementations tend to be
+  more sophisticated and offer more in the way of customization.  In either case, you'll find 
+  the information you need in the user guides for each of the components.
+  
+What Else is There?  
+  
+  Isis comes with a couple of Maven archetypes to help you get started quickly: 
+  
+  * the {{{./support/archetypes/demo/index.html}demo}} archetype
+  
+    is a multi-module archetype that creates a small but complete demo <Apache Isis> application (<<<Customer>>>,
+    <<<Order>>>, <<<OrderItem>>>, <<<Product>>>).  It has child modules for all of the main 
+    components, giving you a good idea of how they are meant to work in practice.
+   
+  * the {{{./support/archetypes/isis-app/index.html}isis-app}} archetype
+  
+    is almost identical to the <demo> archetype, but has a very minimal domain model.
+    The idea is that you use this archetype to create your project, then delete (or ignore) the child modules that
+    you don't care about.
+
   []
+  
+  You might also be interested in the {{{./support/domain/index.html}domain}} library, which 
+  provides off-the-shelf domain services and value types integrations for you to reuse.  
 
-  That documentation also covers the core APIs and their default 
-  implementations, and it also details how to deploy your application in 
-  various configurations (webapp or client/server) with those default
-  implementations. 
-     
-  If you were only going to use the default implementations, then the above
-  core documentation ought to be all you would need to read.  However, chances 
-  are that you'll want to use one of the alternates, which means you'll also
-  need to refer to other documentation.
-  
-What Else to Read?  
-  
-  The remaining documentation is specific to each module, either giving
-  guidance and support on how to develop Isis applications, or describing how
-  to configure some alternate implementation:
-  
-  * the {{{./support/archetypes/application/index.html}application}} archetype
-  
-    is used to create an initial <Apache Isis> application to get you started.
-    set up using the in-memory object 
-    store, the {{{./plugins/dnd-viewer/index.html}DnD viewer}}, and the
-    {{{./plugins/html-viewer/index.html}HTML viewer}}.
-   
-  * the {{{./applib/index.html}applib}} module
-  
-    describes Isis' <programming model> along with the use of fixtures 
-    during prototyping and testing;
-  
-  * the {{{./alternates/storytests/index.html}storytests}} module
-  
-    is used for writing story tests using FitNesse or Concordion;
+  Finally, to speed up your coding we provide some templates and other help for IDEs; check out
+  the {{{./ide-support.html}IDE support}} page.  
     
-  * the {{{./alternates/headless/index.html}headless}} module 
-  
-    has support for writing unit tests with various JUnit integrations. This
-    module can also be used for domain objects that collaborate with each other
-    through 
-    
-  * the {{{./support/domain/index.html}domain}} library
-  
-    provides using off-the-shelf services, values and entities for you to reuse
-    
-  * the various object stores:
-  
-    * {{{./alternates/objectstores/xml/index.html}XML Object Store}}
-  
-    * {{{./alternates/objectstores/berkeley/index.html}Berkeley Object Store}}
-  
-    * {{{./alternates/objectstores/sql/index.html}SQL Object Store}}
-  
-    * {{{./alternates/objectstores/jpa/index.html}JPA Object Store}}
-  
-    * {{{./alternates/objectstores/couchdb/index.html}CouchDB Object Store}}
-  
-    []
-    
-  * the various viewers:
-  
-    * {{{./alternates/viewers/dnd/index.html}DnD}} viewer
-
-    * {{{./alternates/viewers/html/index.html}HTML}} viewer
-
-    * {{{./alternates/viewers/scimpi/index.html}Scimpi}} viewer
-
-    * {{{./alternates/viewers/wicket/index.html}Wicket}} viewer
-
-    * {{{./alternates/viewers/restful/index.html}RESTful}} viewer
-    
-    []
-
-  * using {{{./alternates/http-remoting/index.html}http-remoting}}
-  
-    for the network transport in client/server deployments (the default is 
-    plain sockets);
-  
-  * using {{{./alternates/xstream-marshalling/index.html}xstream-marshalling}}
-   
-    for the marshalling mechanism in client/server deployments (the default
-    is encoding/serialization);
-    
-  * using {{{./alternates/ldap-auth/index.html}LDAP auth}} 
-  
-    for the authentication and authorization using LDAP (the default is a simple
-    file-based implementation)
    
   []

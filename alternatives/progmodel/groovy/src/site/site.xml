@@ -1,55 +1,25 @@
 <project name="${project.name}">
 
-    <version position="right"/>
-    <bannerLeft>
-        <name>HAL</name>
-        <src>images/hal-logo-for-maven-site.jpg</src>
-        <href>.</href>
-    </bannerLeft>
+	<body>
+		<breadcrumbs>
+			<item name="Groovy"/>
+		</breadcrumbs>
 
-    <poweredBy>
-        <logo name="Naked Objects" href="http://nakedobjects.org"
-              img="images/NO-powered-by-logo.png"/>
-    </poweredBy>
+        <menu ref="parent"/>
 
-    <skin>
-        <groupId>org.starobjects.star</groupId>
-        <artifactId>skin</artifactId>
-        <version>1</version>
-    </skin>
-
-    <body>
-        <links>
-          <item name="Naked Objects" href="http://www.nakedobjects.org/"/>
-          <item name="Sister Projects" href="http://starobjects.sourceforge.net"/>
-        </links>
-
-        <menu ref="modules" inherit="top"/>
-
-        <menu name="Documentation">
-            <item name="User Guide (PDF)" href="gdocumentation/docbkx/pdf/user-guide.pdf"/>
-            <item name="User Guide (HTML)" href="gdocumentation/docbkx/html/user-guide/user-guide.html"/>
-        </menu>
-
-        <menu name="Project Resources">
-            <item name="SF Trac Wiki" href="http://sourceforge.net/apps/trac/groovyobjects"/>
-            <item name="SF Project Page" href="http://sourceforge.net/projects/groovyobjects"/>
-        </menu>
-
-        <menu name="Sister Projects">
-            <item name="Home" href="http://starobjects.sourceforge.net"/>
-            <item name="Maven Repo (Snapshot)" href="http://sourceforge.net/projects/starobjects/m2-repo/snapshot"/>
-            <item name="Maven Repo (Release)" href="http://sourceforge.net/projects/starobjects/m2-repo/release"/>
-        </menu>
-
-        <menu name="Other Resources">
+		<menu name="Groovy Support">
+			<item name="About" href="index.html" />
             <item name="Groovy" href="http://groovy.codehaus.org" />
-            <item name="Dan Haywood's blog" href="http://danhaywood.com"/>
-            <item name="Naked Objects" href="http://www.nakedobjects.org"/>
-            <item name="Naked Objects blog" href="http://blog.nakedobjects.org"/>
-            <item name="Naked Objects for .NET" href="http://www.nakedobjects.net"/>
-        </menu>
+		</menu>
+		
+        <menu ref="modules"/>
 
-    </body>
+		<menu name="Documentation">
+			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
+			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />
+		</menu>
+
+		<menu name="Maven Reports" ref="reports" />
+	</body>
 
 </project>

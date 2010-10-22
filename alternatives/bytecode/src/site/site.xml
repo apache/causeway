@@ -6,13 +6,19 @@
 			<item name="Bytecode"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="Alternative Bytecode Implementations">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
-
+        <menu ref="modules"/>
+        
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
 			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />
 		</menu>
+
+        <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

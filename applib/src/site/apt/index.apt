@@ -15,11 +15,9 @@
 ~~  specific language governing permissions and limitations
 ~~  under the License.
 
-
-
 Application Library
  
- The [[NAME]] Application Library - or AppLib - is the only dependency that your 
- domain objects have with the [[NAME]] framework.  It holds a set of interfaces
+ The Apache Isis Application Library - or AppLib - is the only dependency that your 
+ domain objects have with Apache Isis itself.  It holds a set of interfaces
  and annotations that are used by the framework to infer business rules and constraints.
  

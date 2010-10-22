@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project>
-
 	<body>
 		<breadcrumbs>
 			<item name="Encodeable Marshalling"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="Encodeable Marshalling">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
-		<menu name="Maven Reports" ref="reports"/>
+        <menu name="Maven Reports" ref="reports" />
 	</body>
+
 </project>

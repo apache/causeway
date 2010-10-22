@@ -1,22 +1,25 @@
-Overview
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
 
-  <Restful Objects> is a sister project for the {{{http://nakedobjects.org}Naked Objects}} framework, providing an implementation of an {{{viewer}viewer}} that serves up the domain model as a set of RESTful resources.
+
+
+Restful Viewer
+
+ The Restful viewer provides ...
   
-  The usual HTTP verbs are understood (GET, POST, PUT, DELETE); the resources themselves are represented 
-  as XHTML using a CSS {{{http://microformats.org/wiki/rest}microformat}}.
-  
-  The diagram below shows how Restful Objects relates to the Naked Objects framework, in terms of the {{{http://alistair.cockburn.us/Hexagonal+architecture}hexagonal architecture}}.
-
-[images/HexagonalArchitectureOverview.png] Naked Objects & Restful Objects.
-
-  There are a number of other sister projects; for details see the {{{http://starobjects.sourceforge.net}Star Objects}} umbrella project.
-
-Getting Started
-
-  This site contains a users' guide to get you started, describing for example how the {{{applib}application library}} defines the resources available using JAX-RS annotations.
-
-  Restful Objects distributed using {{{http://maven.apache.org}Maven}}, downloadable from the Maven repo hosted at the Star Objects umbrella project.
-
-Contributing to this project
-
-  If you are interested in contributing enhancements or bug fixes, please see the developers guide.
+    
+ 

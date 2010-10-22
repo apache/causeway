@@ -22,7 +22,7 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
-    <subtitle>Programmer, Configuration and Deployment Guide</subtitle>
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>

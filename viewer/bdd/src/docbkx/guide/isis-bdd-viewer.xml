@@ -1,0 +1,1256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><ulink url="http://starobjects.org">Tested Objects</ulink> is a
+    sister project for the <ulink url="http://nakedobjects.org">Naked
+    Objects</ulink> framework, providing integration with <ulink
+    url="http://fitnesse.org">FitNesse</ulink> to enable agile acceptance (or
+    scenario) testing. The integration bundles the FitNesse wiki server and
+    provides a set of generic Fitnesse fixtures that interact with the domain
+    model in the same manner that a Naked Objects viewer does. It also
+    provides a Maven archetype to get you started quickly.</para>
+
+    <para>This user guide describes how to use Tested Objects to test your
+    Naked Objects domain applications through FitNesse. Much of this guidance
+    relates to using the Maven archetype; for ease of reference the archetype
+    creates an online user guide within the FitNesse wiki. If you are
+    interested in building Tested Objects from source code (perhaps with a
+    view to contributing to or extending the capabilities of Tested Objects
+    itself) then please see the developers' guide.</para>
+
+    <para>Tested Objects is hosted on <ulink
+    url="http://testedobjects.sourceforge.net">SourceForge</ulink>, and is
+    licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>. Naked Objects is also hosted on SourceForge, and is
+    also licensed under Apache Software License v2.</para>
+  </preface>
+
+  <!-- main content -->
+
+  <chapter>
+    <title>Introduction</title>
+
+    <sect1>
+      <title>Scenario Testing (aka Agile Acceptance Testing)</title>
+
+      <para>Prior to agile development, requirements gathering for systems was
+      traditionally performed by business analysts discussing requirements
+      with the business, and expressing those requirements in documentation,
+      such as Word specs and perhaps spreadsheets. The acceptance criteria for
+      such requirements were often only sketched out, if at all; it would
+      normally fall to the system testers to write acceptance tests for the
+      requirements, through a mixture of consulting the original (by now
+      out-of-date) requirements documentation and (as often as not)
+      reverse-engineering the implementation.</para>
+
+      <para>Scenario testing combines the requirements capture and the
+      acceptance test criteria in a single form, through scenarios. As before,
+      these requirements are in a form that a non-technical domain expert from
+      the business can understand. What differs though is that these scenarios
+      can be used directly exercise the system, and so also represent the
+      acceptance tests for the scenario. Moreover, the results of these tests
+      are rendered in such a way that the business can understand, and thus
+      can help determine if the code is at fault or the test. Once
+      implemented, the acceptance tests also act as a regression suite for the
+      system.</para>
+
+      <para>Scenario tests tend to act against a complete system, or sometimes
+      at a subsystem-level. At any rate at a granularity that makes sense to a
+      non-technical businesss person. Compare this to unit testing which
+      exercises the behaviour / method of a single class.</para>
+
+      <para>Scenario testing is more usually called "agile acceptance
+      testing", but I find that term rather clumsy. Other names also exist,
+      including behaviour-driven development, and example-driven development.
+      Here we use our own term "scenario testing".</para>
+    </sect1>
+
+    <sect1>
+      <title>Introduction to FitNesse</title>
+
+      <para><ulink url="http://fitnesse.org">FitNesse</ulink> is an framework
+      to enable scenario testing. It builds upon the earlier <ulink
+      url="http://fit.c2.com/">FIT</ulink> framework, which executes tests
+      expressed in terms of tables. FitNesse sits on top of FIT<footnote>
+          <para>In fact, FitNesse as of end 2008 has a replacement test
+          execution architecture, called <ulink
+          url="http://fitnesse.org/FitNesse.UserGuide.SliM">SLIM</ulink>.</para>
+        </footnote>, allowing the tables to be written within a Wiki, and
+      spawning off FIT to run the tests. The results of the tests are shown as
+      annotated tests, as shown below.</para>
+
+      <screenshot>
+        <screeninfo>The ClaimsAppSuite test results</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/ClaimsAppSuite-TestResults.png"
+                       scale="37" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>This makes it easy for non-technical business users to both author
+      new tests, and to view their execution. It also creates an efficient
+      feedback loop; a FitNesse test will "keep on going" even if it hits a
+      failure. Thus the developer can identify several issues and fix them in
+      a single pass.</para>
+
+      <para>Another way to think of FitNesse is as a replacement presentation
+      layer, hitting the underlying domain model in the same way that the
+      regular UI would.</para>
+
+      <para>If using FitNesse on a "regular" project then the developer writes
+      glue code that in effect take the values out of the wiki page, and use
+      them to interact with the system. They then return a success/failure
+      response which FitNesse then uses to annotate the results page. FitNesse
+      calls this glue code a "fixture". There is some overlap with Naked
+      Objects' own use of that term. However, whereas a Naked Objects fixture
+      is only used to setup the initial state of a test, a FitNesse fixture
+      not only does that but it also is used to execute the test
+      proper.</para>
+
+      <para>It is relatively straightforward to integrate FitNesse into a
+      continuous integration environment; see <xref
+      linkend="sec.SettingUpContinuousIntegration" /> for further
+      details.</para>
+    </sect1>
+
+    <sect1>
+      <title>How Tested Objects' Integration Works</title>
+
+      <para>Although you could test a Naked Objects application using vanilla
+      FitNesse, this would entail you having to write all the FitNesse
+      fixtures to interact with the domain objects. You would also need to
+      come up with a representation for the tables.</para>
+
+      <para>Tested Objects' FitNesse integration is designed to let you use
+      FitNesse to test your Naked Objects application without all this hassle.
+      We can use the same Naked Objects metamodel that is used for the
+      auto-generation of its generic OOUIs to create a set of generic fixtures
+      that interact with the domain object similarly. Using Tested Objects is
+      therefore just a matter of using these fixtures out-of-the-box.</para>
+
+      <para>There are many such fixtures, but the one you will use the most
+      often is the UsingNakedObjectsViewer fixture (see <xref
+      linkend="sec.UsingNakedObjectsViewer" />). The screenshot below shows it
+      in use for checking assertions at the end of a test (the "Then").</para>
+
+      <screenshot>
+        <screeninfo>Before</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/UsingNakedObjectsViewerBefore.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>To explain this: the "tomsClaim1" is an alias to an object that
+      has been created or obtained previously. The "perform" column lists the
+      verb to do, in this case all checks. Other things that can be done
+      include invoke actions, set properties and so forth. The "on member"
+      column specifies the property, collection or action of the domain object
+      being interacted with.</para>
+
+      <para>The following screenshot shows how the test is annotated after a
+      successful run:</para>
+
+      <screenshot>
+        <screeninfo>After</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/UsingNakedObjectsViewerAfter.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>The end-user should be able to follow this test and could, if they
+      want, run through the same set of steps manually themselves. Or, of
+      course, they could just look at the test results.</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.UsingTheFitNesseArchetype">
+    <title>Using the FitNesse Archetype</title>
+
+    <para>Like Naked Objects, Tested Objects provides a Maven archetype to get
+    you up and running with quickly. Tested Objects' FitNesse archetype runs
+    against any Naked Objects application, and provides a new
+    <filename>xxx-fitnesse</filename> project (where <literal>xxx</literal> is
+    the root artifact Id). This project bundles FitNesse, contains the
+    FitNesse wiki pages that contain the tests (and also a user guide), and
+    allows the FitNesse wiki server to be run.</para>
+
+    <para>Out-of-the-box the archetype will generate a set of tests for the
+    example claims application in the
+    <filename>nakedobjects-4.0.x-for-maven.zip</filename> download<footnote>
+        <para>See <ulink
+        url="http://sourceforge.net/projects/nakedobjects">http://sourceforge.net/projects/nakedobjects</ulink></para>
+      </footnote>, under <filename>examples/claims</filename>). These are
+    great to try out <emphasis>Tested Objects</emphasis> for the first time,
+    and they also provide some ideas for you to structure your own test
+    suite.</para>
+
+    <para>The <filename>xxx-fitnesse</filename> project generated by the
+    archetype is intended to be included as a module of the parent pom
+    (<filename>xxx/pom.xml</filename>) --- in Maven parlance, it is a partial
+    archetype. Providing that your run the archetype in the correct directory,
+    Maven will automatically include the newly generated project in the parent
+    project.</para>
+
+    <sect1>
+      <title>Prerequisites</title>
+
+      <para>To use the archetype you'll need to install <ulink
+      url="http://maven.apache.org">Maven</ulink> (and there's a good chance
+      you've done this already if you're using the Naked Objects Maven
+      archetype).</para>
+
+      <para>Optionally (and recommended) you can install the <ulink
+      url="http://m2eclipse.sonatype.org/">m2eclipse</ulink> plugin for <ulink
+      url="http://eclipse.org">Eclipse</ulink> IDE (again, there's a good
+      chance you've done this too).</para>
+    </sect1>
+
+    <sect1>
+      <title>Running the Archetype</title>
+
+      <para>You can either run the archetype from the command line (and then
+      import into Eclipse if using m2eclipse), or run the archetype using
+      m2eclipse straight off.</para>
+
+      <sect2>
+        <title>Running the archetype from the command line</title>
+
+        <para>Navigate to the parent directory of the project (that holds the
+        parent pom.xml). The directions here are for the examples/claims
+        project.</para>
+
+        <remark>TODO: Naked Objects 4.0.0 released examples/claims as
+        org.nakedobjects.distribution:examples-claims. In 4.0.1 (the plan is)
+        for it to be released as org.nakedobjects.examples:claims. In the
+        screenshots that follow I've hacked the 4.0.0 pom to change the
+        groupId and artifactId. However, I've provided the command that kicks
+        the whole thing for both 4.0.0 and 4.0.1</remark>
+
+        <para>To run the archetype from the command line (against NOF
+        4.0.0):</para>
+
+        <screen>$ cd $NO_HOME/examples-claims
+$ mvn archetype:generate \
+  -D archetypeCatalog=http://starobjects.sourceforge.net/m2-repo/snapshot \
+  -D archetypeGroupId=org.starobjects.tested.fitnesse \
+  -D archetypeArtifactId=archetype \
+  -D archetypeVersion=1.0-beta-3-SNAPSHOT \
+  -D groupId=org.nakedobjects.distribution \
+  -D artifactId=claims-fitnesse \
+  -D parentArtifactId=claims \
+  -D package=org.nakedobjects.examples.claims.fitnesse \
+  -D version=4.0.0</screen>
+
+        <para>or against NOF 4.0.1:</para>
+
+        <screen>$ cd $NO_HOME/examples-claims
+$ mvn archetype:generate \
+  -D archetypeCatalog=http://starobjects.sourceforge.net/m2-repo/snapshot \
+  -D archetypeGroupId=org.starobjects.tested.fitnesse \
+  -D archetypeArtifactId=archetype \
+  -D archetypeVersion=1.0-beta-3-SNAPSHOT \
+  -D groupId=org.nakedobjects.examples \
+  -D artifactId=claims-fitnesse \
+  -D parentArtifactId=claims \
+  -D package=org.nakedobjects.examples.claims.fitnesse \
+  -D version=4.0.1</screen>
+
+        <para>The groupId:parentArtifactId:version tuple should correspond to
+        the parent pom (so, for 4.0.0, that is
+        <classname>org.nakedobjects.distribution:claims:4.0.0</classname>, and
+        for 4.0.1 it is
+        <classname>org.nakedobjects.examples:claims:4.0.1</classname>). Note
+        that the parentArtifactId is not one of the standard Maven properties,
+        instead it is an additional property mandates by the Tested Objects'
+        archetype. (The archetype uses this property to derive the names of
+        some the other projects to include in the dependencies).</para>
+
+        <para>The artifactId then is the artifact of the FitNesse project
+        being generated, so is typically
+        <emphasis>parentname</emphasis>-fitnesse (so here:
+        <classname>claims-fitnesse</classname>).</para>
+
+        <para>The output is shown below:</para>
+
+        <para><screenshot>
+            <screeninfo>Generating the Maven Archetype from the command
+            line</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/RunningMavenArchetypeFromCommandLine.png"
+                           scale="40" />
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
+
+        <para>This will generate a claims-fitnesse directory, and update the
+        parent pom.xml file.</para>
+
+        <para>We can then import into project into Eclipse, using File &gt;
+        Import &gt; Maven</para>
+
+        <screenshot>
+          <screeninfo>Importing the generated Maven Archetype into Eclipse (1
+          of 2)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/ImportingMavenProject.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <screenshot>
+          <screeninfo>Importing the generated Maven Archetype into Eclipse (2
+          of 2)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/ImportingMavenProject2.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2>
+        <title>Running the archetype from m2eclipse</title>
+
+        <para>As an alternative to running the archetype from the command
+        line, you can instead run the archetype using m2eclipse.</para>
+
+        <para>However, m2eclipse does not (seem to) understand partial
+        archetypes, and so the project cannot be generated in a subfolder of
+        the parent project. Instead, I recommend you create the project
+        alongside the parent (eg in
+        <filename>examples/claims-fitnesse</filename>).</para>
+
+        <remark>TODO: These notes are slightly incomplete; it is also
+        necessary to specify the archetype catalog in the
+        Windows&gt;Preferences. However, m2eclipse 0.9.8 (the latest 'stable'
+        version at the time of writing) fails to pick up snapshot archetypes
+        from remote catalogs. The workaround is either to use the command line
+        once (this will copy the archetype into your local repository) or
+        alternatively achieve the same thing by building the FitNesse code
+        from scratch, as described in the developers' guide.</remark>
+
+        <para>So, use File &gt; New &gt; Project, then Maven &gt; Maven
+        Project to bring up the wizard:</para>
+
+        <screenshot>
+          <screeninfo>Generating the Maven Archetype using m2eclipse (1 of
+          4)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/m2eclipse.GenerateProject1.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>Specify the directory. Note that this cannot be a directory that
+        contains a pom.xml file.</para>
+
+        <screenshot>
+          <screeninfo>Generating the Maven Archetype using m2eclipse (2 of
+          4)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/m2eclipse.GenerateProject2.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>Select the archetype. (Note that the screenshot here shows the
+        archetype in the "Default Local" catalog ... that's because I've built
+        the archetype from source. ).</para>
+
+        <screenshot>
+          <screeninfo>Generating the Maven Archetype using m2eclipse (3 of
+          4)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/m2eclipse.GenerateProject3.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>Specify the groupId, artifactId (eg
+        <classname>claims-fitnesse</classname>), version and package. Also
+        specify the parentArtifactId as the parent project's artifactId (eg
+        <classname>claims</classname>):</para>
+
+        <screenshot>
+          <screeninfo>Generating the Maven Archetype using m2eclipse (4 of
+          4)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/m2eclipse.GenerateProject4.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>Hit Finish and you will be in more-or-less the same place as if
+        you had generated the archetype from the command line and then
+        imported. The only thing different is that the new fitnesse project
+        will not be in the parent project's modules.</para>
+
+        <para>Therefore, navigate to the parent project's
+        <sgmltag>&lt;modules&gt;</sgmltag> region, and add:</para>
+
+        <para><screen>&lt;modules&gt;
+    &lt;module&gt;dom&lt;/module&gt;
+    &lt;module&gt;fixture&lt;/module&gt;
+    &lt;module&gt;service&lt;/module&gt;
+    &lt;module&gt;commandline&lt;/module&gt;
+    &lt;module&gt;webapp&lt;/module&gt;
+    &lt;module&gt;../claims-fitnesse&lt;/module&gt;
+&lt;/modules&gt;</screen>The instructions in the wiki <emphasis>do</emphasis>
+        assume that you have done this.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Starting FitNesse Wiki</title>
+
+      <para>Once the fitnesse project has been imported you can start the
+      wiki. Navigate to <filename>ide/eclipse/launch</filename> and there will
+      be a launch configuration:</para>
+
+      <screenshot>
+        <screeninfo>Launch Configuratoin for the FitNesse wiki</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/FitNesseWikiLaunchConfiguration.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Start by right clicking and selecting run as. The FitNesse wiki
+      should start on port 9090:</para>
+
+      <screenshot>
+        <screeninfo>FitNesse Wiki running in the Eclipse console</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/Console.FitNesseWikiServer.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </sect1>
+
+    <sect1>
+      <title>Setting up to Run Tests</title>
+
+      <para>Using your favorite browser, navigate to <ulink
+      url="http://localhost:9090/FrontPage">http://localhost:9090/FrontPage</ulink>;
+      you should see the introductory page:</para>
+
+      <screenshot>
+        <screeninfo>The FitNesse Wiki FrontPage</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/FitNesseWikiFrontPage.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>Before we can run the generated tests there are a couple of things
+      we need to take care of (both are documented on FrontPage). First, we
+      need to copy the application into a location so that FitNesse can find
+      it. This is done by simply running mvn clean install on the
+      project:</para>
+
+      <screenshot>
+        <screeninfo>Running mvn clean install</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/RunningMvnCleanInstall.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>(Note, if for any reason you didn't include the xxx-fitnesse
+      project into the parent project, you'll need to run mvn clean install
+      for the xxx-fitnesse project as well).</para>
+
+      <para>Secondly, the pages generated by the archetype use the
+      <filename>nakedobjects.properties</filename> to bootstrap Naked Objects.
+      By default, this is assumed to be in
+      <filename>../commandline/config/nakedobjects.properties</filename>. If
+      this isn't the case, then edit the BootStrapNakedObjects page as
+      required:</para>
+
+      <screenshot>
+        <screeninfo>Edit BootstrapNakedObjects if required</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/EditBootstrapNakedObjects.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+    </sect1>
+
+    <sect1>
+      <title>Running the Tests</title>
+
+      <para>If you are trying out the archetype against the examples/claims
+      application then you'll probably want to run the existing tests to check
+      everything works.</para>
+
+      <para>The tests are organized into a single application suite,
+      ClaimsAppSuite. This in turn defines two subsuites:</para>
+
+      <screenshot>
+        <screeninfo>The ClaimsAppSuite</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/ClaimsAppSuite.png" scale="35" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>FitNesse will automatically invoke all tests in the hierarchy,
+      therefore just press the Suite button on the left:</para>
+
+      <screenshot>
+        <screeninfo>The ClaimsAppSuite test results</screeninfo>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/ClaimsAppSuite-TestResults.png"
+                       scale="35" />
+          </imageobject>
+        </mediaobject>
+      </screenshot>
+
+      <para>If you've run the archetype against your own project though, then
+      you can either delete these ClaimsAppSuites, or leave them around for
+      reference. To ensure that they don't accidentally run, use the
+      Properties button (on the left hand side) and deselect the Suite and
+      Test properties.</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.HintsAndTips">
+    <title>Hints and Tips</title>
+
+    <para>This chapter contains a collection of hints, tips and suggestions
+    for writing your own tests.</para>
+
+    <para>For further guidance, check out Gojko Adzic's book, <ulink
+    url="http://www.acceptancetesting.info/the-book/">Bridging the
+    Communication Gap</ulink>.</para>
+
+    <sect1>
+      <title>Separate In-Progress Stories from the Backlog</title>
+
+      <para>If you are using an agile methodology then you will be
+      implementing a number of stories per iteration; the remainder will be in
+      a backlog. When you select a story for implementation, create a new page
+      for it in a "CurrentIteration" suite. The objective for the team is
+      therefore to get the entire CurrentIteration suite green.</para>
+
+      <para>Other stories that you may have identified but not selected for
+      the iteration can remain in a Backlog suite.</para>
+    </sect1>
+
+    <sect1>
+      <title>Use a Story Page to Collect A Set of Scenario Tests</title>
+
+      <para>Part of estimating the size of a story includes identifying the
+      acceptance criteria. These can be created as children of the story page
+      as placeholders, so that the story page becomes a suite. The child
+      scenario tests can be fleshed out as required with plain text during the
+      estimation meeting, and with actual FitNesse tests once the iteration
+      starts. The FitNesse <ulink
+      url="http://fitnesse.org/FitNesse.UserGuide.MarkupContents">!contents</ulink>
+      instruction will then list all the acceptance criteria for the
+      story.</para>
+
+      <para>For the story page itself, the "as a ... I want ... so that... "
+      template is a good way to summarize the intent of the story.</para>
+    </sect1>
+
+    <sect1>
+      <title>Organize Completed Stories by Component</title>
+
+      <para>Once you have completed an iteration and implements its stories,
+      move those stories out to the relevant component that the story relates
+      to. The scenario tests for stories ultimately <emphasis>are</emphasis>
+      the documentation of the behaviour of the system. A year on you won't
+      remember (and won't care) which iteration you implemented a story,
+      you'll be searching for it by the component whose behaviour you want to
+      understand.</para>
+    </sect1>
+
+    <sect1>
+      <title>Structure your test using Given/When/Then</title>
+
+      <para>A standard template for organizing structuring tests is
+      given/when/then<footnote>
+          <para>As first described, I believe, by Dan North in a blog post,
+          <ulink url="http://dannorth.net/introducing-bdd">Introducing
+          BDD</ulink>.</para>
+        </footnote>:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>given ... the system is in this particular state</para>
+        </listitem>
+
+        <listitem>
+          <para>when ... this interesting thing happens</para>
+        </listitem>
+
+        <listitem>
+          <para>then ... these are the consequences</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This structure is readily understood by non-technical business
+      users, and helps them (and the team) focus on the point of the
+      test.</para>
+
+      <para>In terms of mechanics, one approach is to put the "given" into the
+      setup page for a test, with the "when" and the "then" in separate pages.
+      Alternatively, as the archetype does (see <xref
+      linkend="chp.UsingTheFitNesseArchetype" />), you could separate out the
+      "given", the "when" and the "then" into a hierarchy of pages.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Separating out the "given" from the rest of the test makes it
+          easy to include that given in other tests (discussed further in
+          <xref linkend="sec.FactorOutCommonGivens" />), and it also allows us
+          to run up the viewer to inspect the setup (see <xref
+          linkend="sec.UsingTheFixtureViewer" />).</para>
+        </listitem>
+
+        <listitem>
+          <para>Separating out the "then" from the "when" makes it easy to
+          identify the individual post conditions. A new requirement might
+          mean only the addition of a new post condition. A downside is that
+          the "given" and "when" will be run for each post-condition, leading
+          to longer test turn-around times.</para>
+        </listitem>
+      </itemizedlist>
+    </sect1>
+
+    <sect1 id="sec.UsingTheFixtureViewer">
+      <title>Using the RunViewer fixture</title>
+
+      <para>One reason that the archetype (<xref
+      linkend="chp.UsingTheFitNesseArchetype" />) separates out the "given",
+      "when" and "then" is so that the "given" - which is often the hardest
+      part to get setup - can be verified independently from the rest of the
+      test.</para>
+
+      <para>To do this, we can use the RunViewer fixture (see <xref
+      linkend="sec.RunViewer" />). This will run up the drag-n-drop viewer at
+      the specified point in the test; a visual equivalent of
+      <code>System.out.println()</code>, really. We can therefore take the
+      Given page and add a RunViewer fixture at the end.</para>
+
+      <para>Note that to do this you must temporarily mark the Given page as a
+      <ulink url="http://fitnesse.org/FitNesse.UserGuide.PageProperties">test
+      page</ulink>.</para>
+    </sect1>
+
+    <sect1 id="sec.FactorOutCommonGivens">
+      <title>Factor out common "Given"s</title>
+
+      <para>Just like code, tests need to be actively managed, because if the
+      tests become hard to maintain, they'll end up being deleted. In fact, we
+      probably should take even more care with the tests than the code if they
+      represent the primary documentation of the behaviour of the
+      system.</para>
+
+      <para>In terms of size, the "given" is far larger than either the "when"
+      or the "then", and therefore this is the area where tests can quickly
+      become unmaintainable. So instead, factor out your givens into separate
+      pages, and then use FitNesse's <ulink
+      url="http://fitnesse.org/FitNesse.UserGuide.MarkupPageInclude">!include</ulink>
+      directive to assemble the pages you need (as done by the archetype,
+      <xref linkend="chp.UsingTheFitNesseArchetype" />).</para>
+
+      <para>The names of these pages should also follow a declarative style,
+      see <xref linkend="sec.UseADeclarativeStyle" />.</para>
+    </sect1>
+
+    <sect1 id="sec.UseADeclarativeStyle">
+      <title>Use a Declarative Style for Page Names</title>
+
+      <para>When factoring out "given"s (see <xref
+      linkend="sec.FactorOutCommonGivens" />), or indeed when writing the
+      "when"s and the "then"s, use a declarative style for the pages. The page
+      should describe what it does, not how it does it.</para>
+
+      <para>For example, a good page would be "SetUpCountries". It's clear
+      that this will set up all <classname>Country</classname> reference data
+      classes. This could be included into a "SetUpReferenceData" page. For
+      transaction data, we could have a page "JoeBloggsCustomer"; another one
+      again could be "JoeBloggsFiveOrders".</para>
+    </sect1>
+
+    <sect1>
+      <title>Run against a real database</title>
+
+      <para>The Tested Objects' integration exercises the Naked Objects domain
+      model as configured in nakedobjects.properties (as per the
+      SetUpConfigDirectory fixture, <xref
+      linkend="sec.SetUpConfigDirectory" />). Out-of-the-box, of course, Naked
+      Objects uses an in-memory object store, and so there are no issues
+      running one scenario test against another.</para>
+
+      <para>You can if you want though configure Naked Objects to go against a
+      real database, for example by using the Hibernate-based object store
+      provided by the <ulink url="http://jpaobjects.sourceforge.net">JPA
+      Objects</ulink> sister project. In this case you will need to ensure
+      that you reset the database at the end; Tested Objects doesn't provide
+      any fixtures to help you though, so you are on your own here. An
+      alternative might be to use JPA Objects against HSQLDB configured to for
+      in-memory use. This would let you verify your database mappings, but
+      without no need to tear anything down.</para>
+    </sect1>
+
+    <sect1 id="sec.SettingUpContinuousIntegration">
+      <title>Set up Continuous Integration</title>
+
+      <para>Since Tested Objects is a Maven application, it is easy enough to
+      configure it to run under a CI server, such as <ulink
+      url="http://hudson-ci.org/">Hudson</ulink>. If you google around you
+      should be able find <ulink
+      url="http://andypalmer.com/2009/04/showing-fitnesse-test-results-in-hudson/">a
+      way</ulink> to publish the FitNesse test results through Hudson.</para>
+    </sect1>
+  </chapter>
+
+  <appendix id="apx.Reference">
+    <title>Reference (Online User Guide)</title>
+
+    <para>For convenience when writing tests the FitNesse wiki pages created
+    by the Maven archetype (see <xref
+    linkend="chp.UsingTheFitNesseArchetype" />) also include an online user
+    guide:</para>
+
+    <screenshot>
+      <screeninfo>The in-built user guide</screeninfo>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/UserGuide.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+    </screenshot>
+
+    <para>Rather than repeat the text here, this reference guide just consists
+    of screenshotsof the various pages.</para>
+
+    <sect1>
+      <title>Bootstrapping</title>
+
+      <para>The bootstrapping fixtures are used to bootstrap the test
+      framework itself. These are typically referenced in a
+      "BootstrapNakedObjects" page, included in the test's setup page. One
+      option is to use the FitNesse <ulink
+      url="http://fitnesse.org/FitNesse.UserGuide.SpecialPages">SetUp</ulink>
+      page.</para>
+
+      <sect2 id="sec.StoryFixture">
+        <title>StoryFixture</title>
+
+        <para>Sets up the workflow story test. Boilerplate, should always be
+        the first FitNesse fixture included in a page.</para>
+
+        <screenshot>
+          <screeninfo>StoryFixture</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/StoryFixture.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.SetConfigDirectory">
+        <title>SetConfigDirectory</title>
+
+        <para>Specifies the config directory containing
+        <filename>nakedobjects.properties</filename>. Called after
+        StoryFixture (see <xref linkend="sec.StoryFixture" />), and before
+        InitNakedObjects (see <xref linkend="sec.InitNakedObjects" />). The
+        DebugServices fixture (<xref linkend="sec.DebugServices" />) can be
+        used to debug the set of services specified (after Naked Objects has
+        been initialized).</para>
+
+        <screenshot>
+          <screeninfo>SetConfigDirectory</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/SetConfigDirectory.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.EnableExploration">
+        <title>EnableExploration</title>
+
+        <para>Enables exploration actions if required. Should be called before
+        InitNakedObjects (see <xref linkend="sec.InitNakedObjects" />).</para>
+
+        <para>Note that when using the DnD or HTML viewers, exploration mode
+        means that there is no need to logon. For FitNesse tests though you
+        should specify who to login as, see <xref
+        linkend="sec.LogonAs" />.</para>
+
+        <screenshot>
+          <screeninfo>EnableExploration</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/EnableExploration.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.InitNakedObjects">
+        <title>InitNakedObjects</title>
+
+        <para>Initializes the Naked Objects runtime using the services
+        specified through the UseConfigDirectory fixture (see <xref
+        linkend="sec.SetConfigDirectory" />).</para>
+
+        <para>The CheckSpecificationsLoaded fixture (<xref
+        linkend="sec.CheckSpecificationsLoaded" />) can be used to check which
+        classes have been located from the services as a result of
+        initialization.</para>
+
+        <screenshot>
+          <screeninfo>InitNakedObjects</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/InitNakedObjects.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>SetUp</title>
+
+      <para>The setup fixtures are used to specify the running application for
+      a particular story's setup. Specifically, this means setting up the
+      services that define the application, the effective date and the
+      effective user. It also allows the setup of arbitrary objects (typically
+      reference/static data objects; for transactional objects see <xref
+      linkend="sec.UsingNakedObjectsViewer" />).</para>
+
+      <sect2>
+        <title>DateIs</title>
+
+        <para>Sets the clock to a specific date and time. This installs the
+        <classname>FixtureClock</classname> as the implementation of the
+        <classname>Clock</classname> singleton (in the applib). If this
+        fixture is not called, then the default system clock is used, which
+        gets the time from the host computer. The DebugClock fixture (<xref
+        linkend="sec.DebugClock" />) can be used to verify the clock
+        state.</para>
+
+        <screenshot>
+          <screeninfo>DateIs</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/DateIs.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.LogonAs">
+        <title>LogonAs</title>
+
+        <para>Logs on as a specific user.</para>
+
+        <para>Unlike Naked Objects' own <classname>LogonFixture</classname>,
+        the login specified is not remembered to the end of the setup. In
+        order to run tests as a particular login it should therefore appear
+        towards the end of the setup.</para>
+
+        <screenshot>
+          <screeninfo>LogonAs</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/LogonAs.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.AliasServices">
+        <title>AliasServices</title>
+
+        <para>Specifies an alias to services in order to invoke actions upon
+        them. Note that the services are <emphasis>not</emphasis> defined by
+        this fixture; for that see SetConfigDirectory fixture, section <xref
+        linkend="sec.SetConfigDirectory" />. See also DebugServices (<xref
+        linkend="sec.DebugServices" />) to verify the services that have been
+        identified.</para>
+
+        <screenshot>
+          <screeninfo>AliasServices</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/AliasServices.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.SetUpObjects">
+        <title>SetUpObjects</title>
+
+        <para id="sec.UsingNakedObjectsForViewer">Initializes objects.
+        Typically used for immutable reference/standing data objects). Can
+        also be to setup used for transaction/operational data objects (though
+        UsingNakedObjectsViewerForSetup, <xref
+        linkend="sec.UsingNakedObjectsViewer" />, is preferable). The
+        DebugObjectStore fixture (<xref linkend="sec.DebugObjectStore" />) can
+        be used to check the state of objects created.</para>
+
+        <screenshot>
+          <screeninfo>SetUpObjects</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/SetUpObjects.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>User Interaction</title>
+
+      <para>User interaction fixtures appear in the main body of the test, for
+      the "given" (to setup the rest of the state of the system, typically
+      transactional objects), for the "when" (the interaction being tested) or
+      the "then" (assertions on the state after the interaction being
+      tested).</para>
+
+      <sect2 id="sec.UsingNakedObjectsViewer">
+        <title>UsingNakedObjectsViewer /
+        UsingNakedObjectsViewerForSetup</title>
+
+        <para>Simulates interacting with domain objects as if through a
+        viewer. Interact with objects, check their state, alias referenced or
+        returned objects.</para>
+
+        <para>The "ForSetup" version disables checks for visibility and
+        usability, making it easier to reuse functionality for setting up
+        objects prior to a test scenario (the "given"). The DebugObjectStore
+        fixture (<xref linkend="sec.DebugObjectStore" />) can be used to check
+        the state of objects created.</para>
+
+        <screenshot>
+          <screeninfo>UsingNakedObjectsViewer</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/UsingNakedObjectsViewer.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>Example usage:</para>
+
+        <screenshot>
+          <screeninfo>ExampleUsage</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/UsingNakedObjectsViewer.ExampleUsage.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>On properties:</para>
+
+        <screenshot>
+          <screeninfo>On Properties</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnProperties.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>On collections:</para>
+
+        <screenshot>
+          <screeninfo>On Collections</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnCollections.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>On actions:</para>
+
+        <screenshot>
+          <screeninfo>On Actions</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnActions.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para>On objects:</para>
+
+        <screenshot>
+          <screeninfo>On Objects</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnObjects.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.CheckList">
+        <title>CheckList</title>
+
+        <para>Check items in list, either precisely or just for presence,
+        using their title. Lists are either aliased results of actions, or
+        aliased collections within objects.</para>
+
+        <para>Typically used in the "Then", though can be helpful as a way of
+        confirming/documenting a "Given".</para>
+
+        <para>See also AliasItemsInList (<xref
+        linkend="sec.AliasItemsInList" />), which also performs an implicit
+        check (will fail if the objects are not in the list) and aliases them
+        for further use.</para>
+
+        <screenshot>
+          <screeninfo>CheckList</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/CheckList.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.AliasItemsInList">
+        <title>AliasItemsInList</title>
+
+        <para>Allows an alias to be associated with items in a list. The list
+        items are located by their title, and are presumed to exist. This
+        fixture can therefore also be used as a way of checking for presence
+        of items in a list (similar to CheckList, <xref
+        linkend="sec.CheckList" />).</para>
+
+        <para>Typically used both in the "Given" (to simplify writing the rest
+        of a test).</para>
+
+        <screenshot>
+          <screeninfo>AliasItemsInList</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/AliasItemsInList.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Debugging</title>
+
+      <para>Debugging and diagnostics. Useful for checking setup, for
+      example.</para>
+
+      <sect2 id="sec.DebugServices">
+        <title>DebugServices</title>
+
+        <para>Lists service class names, as picked up from configuration.
+        Useful with AliasServices (see <xref
+        linkend="sec.AliasServices" />).</para>
+
+        <screenshot>
+          <screeninfo>DebugServices</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/DebugServices.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.DebugClock">
+        <title>DebugClock</title>
+
+        <para>Reads the current value of the clock. Useful for debugging and
+        diagnostics.</para>
+
+        <screenshot>
+          <screeninfo>DebugClock</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/DebugClock.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.DebugObjectStore">
+        <title>DebugObjectStore</title>
+
+        <para>Dumps the contents of the object store. Useful for debugging
+        setup (through SetupObjects, <xref linkend="sec.SetUpObjects" />, and
+        UsingNakedObjectsViewerForSetup, <xref
+        linkend="sec.UsingNakedObjectsViewer" />).</para>
+
+        <screenshot>
+          <screeninfo>DebugObjectStore</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/DebugObjectStore.png" scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.CheckSpecificationsLoaded">
+        <title>CheckSpecificationsLoaded</title>
+
+        <para>Verifies that listed NakedObjectSpecifications have been loaded
+        into the metamodel.</para>
+
+        <screenshot>
+          <screeninfo>CheckSpecificationsLoaded</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/CheckSpecificationsLoaded.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+      </sect2>
+
+      <sect2 id="sec.RunViewer">
+        <title>RunViewer</title>
+
+        <para>Runs up the DnD viewer with the current state of the objects.
+        This is a great way to inspect the state of the system, for example if
+        a test is failing and you can't see why.</para>
+
+        <para>Of course, other alternatives are writing unit tests and
+        debugging with break points. But failing scenario tests usually arise
+        because of an integration issue between two different bits of the
+        system. Being able to have a "poke around" can be invaluable.</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Tear Down</title>
+
+      <para>The opposite of setting up...</para>
+
+      <sect2>
+        <title>ShutDownNakedObjects</title>
+
+        <para>This fixture shuts down the Naked Objects runtime, releasing
+        memory and so on. A good place to put this is in the test's <ulink
+        url="http://fitnesse.org/FitNesse.UserGuide.SpecialPages">TearDown</ulink>
+        page (which could be inherited).</para>
+      </sect2>
+    </sect1>
+  </appendix>
+</book>

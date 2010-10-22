@@ -17,10 +17,10 @@
 
 
  
-Benefits of the [[NAME]] pattern
+Benefits of the Naked Objects pattern
 
  Developing a business application using a framework such as Isis that
- uses the [[NAME]] pattern offers four principal benefits:
+ uses the naked objects pattern offers four principal benefits:
  
  * <<A faster development cycle>>
  
@@ -44,13 +44,13 @@ Benefits of the [[NAME]] pattern
         
  * <<Easier requirements analysis>>.
  
- With the [[NAME]] pattern, the domain objects form a 
+ With the naked objects pattern, the domain objects form a 
    common, "ubiquitous" language between users and developers. This common language facilitates the process of
    discussing requirements - because there are no other representations to discuss. Combined with the faster
    development cycle, it becomes possible to prototype functional applications in real time.
  
  []
  
- These benefits are clearly brought out in the {{{./isis-case-study.html}case study}} on the use of a [[NAME]] system in the
- Irish government. For a more formal analysis of the benefits, see Richard Pawson's {{{./Pawson-[[NAME]]-Objects-thesis.pdf}PhD thesis on [[NAME]]
+ These benefits are clearly brought out in the {{{./isis-case-study.html}case study}} on the use of a naked objects system in the
+ Irish government. For a more formal analysis of the benefits, see Richard Pawson's {{{./Pawson-Naked-Objects-thesis.pdf}PhD thesis on Naked
  Objects}}.  

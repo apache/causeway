@@ -4,12 +4,12 @@
 <document>
 	<properties>
 		<title>Case Study</title>
-		<author email="isis-contributors@lists.sourceforge.net">[[NAME]] Contributors</author>
+		<author email="isis-dev@incubator.apache.org">Apache Isis Contributors</author>
 	</properties>
 
 	<body>
 		<section
-			name="Case Study: How the Irish Government uses [[NAME]] to administer social benefits worth over &amp;euro;5bn a year">
+			name="Case Study: How the Irish Government uses Naked Objects to administer social benefits worth over &amp;euro;5bn a year">
 
 			<p>
 				The
@@ -44,7 +44,7 @@
 				business object model or BOM, that encapsulated all business
 				behaviour on the business entity objects. They also became aware of
 				the
-				<a href="http://en.wikipedia.org/wiki/[[NAME]]_objects">[[NAME]]
+				<a href="http://en.wikipedia.org/wiki/Naked_objects">Naked Objects
 					pattern</a>
 				(little more than a research idea at that stage) and
 				recognised that
@@ -56,19 +56,19 @@
 				the first
 				pilot project going live in 2002,
 				based on their own proprietary
-				implementation of the [[NAME]] pattern
+				implementation of the Naked Objects pattern
 				(developed under contract
 				by
 				<a href="http://www.fujitsu.com/ie/casestudies/dsaf.html">Fujitsu</a>
 				).
 				The project was hugely successful from a business perspective. In
-				the meantime the [[NAME]] framework had become available;
+				the meantime the Naked Objects framework had become available;
 				recognising that the latter offered a more powerful capability and
-				was open source, the DSP subequently made the decision to switch all
-				future application development onto [[NAME]].
+				was open source, the DSP subsequently made the decision to switch all
+				future application development onto Naked Objects.
 			</p>
 			<p>
-				In June 2004 the DSP awarded a contract to [[NAME]] Group, in
+				In June 2004 the DSP awarded a contract to Naked Objects Group, in
 				partnership with
 				<a href="http://www.bearingpoint.ie">BearingPoint</a>
 				, to revise the architecture and develop a series of large-scale
@@ -86,7 +86,7 @@
 				(You can view a
 				<a href="./movies/DSFA_CB_Demo.htm">screen movie</a>
 				of the DSFA's Child
-				Benefit administration running on [[NAME]].)
+				Benefit administration running on Naked Objects.)
 			</p>
 			<subsection name="Benefits"></subsection>
 			<p>The primary intended benefit of agility
@@ -123,7 +123,7 @@
 				has proven to be
 				far
 				more successful than they dared to hope for, and
-				[[NAME]] has is
+				Naked Objects has is
 				key
 				to this. When the Child Benefit system was
 				re-written for the new

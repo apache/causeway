@@ -15,6 +15,14 @@
 
     <packaging>pom</packaging>
 
+    <properties>
+        <siteBaseDir>../..</siteBaseDir>
+
+        <docbkxGuideTitle>Apache Isis BDD Testing Guide</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Concordion Integration with Apache Isis</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-bdd-viewer</docbkxGuideName>
+    </properties>
+
     <dependencyManagement>
         <dependencies>
 

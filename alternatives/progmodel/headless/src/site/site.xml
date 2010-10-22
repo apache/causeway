@@ -6,15 +6,20 @@
 			<item name="Headless"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="Headless ProgModel">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
+        
+        <menu ref="modules"/>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
 			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />
 		</menu>
 
-		<menu name="Modules" ref="modules" />
+        <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

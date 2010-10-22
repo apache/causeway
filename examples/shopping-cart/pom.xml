@@ -165,7 +165,7 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<configuration>
 					<aggregate>true</aggregate>
-					<doctitle>[[NAME]] Application</doctitle>
+					<doctitle>Apache Isis Application</doctitle>
 					<splitindex>false</splitindex>
 				</configuration>
 			</plugin>

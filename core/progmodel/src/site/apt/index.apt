@@ -19,5 +19,5 @@
 
 ProgModel
 
- Defines a programming model API...
+ Defines facets of programming model, that can be reused across any programming model definition.
  

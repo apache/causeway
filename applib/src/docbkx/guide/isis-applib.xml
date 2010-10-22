@@ -23,7 +23,7 @@
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
 
-    <subtitle>Programming conventions, annotations and utilities</subtitle>
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
 
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
@@ -82,7 +82,872 @@
   <!-- main content -->
 
   <chapter id="chp.Intro">
-    <title>Introduction</title>
+    <title>Overview</title>
+
+    <abstract>
+      <para>This chapter gives an overview of the main principles and patterns
+      that underly the Apache Isis approach.</para>
+    </abstract>
+
+    <sect1>
+      <title>Introduction</title>
+
+      <para><emphasis>Apache Isis</emphasis> is a full-stack open source
+      application development framework, designed to let you rapidly develop
+      enterprise business applications following a domain-driven philosophy.
+      Developing an application in Isis is - at least initially - about
+      focusing on the bit that matters to the business, the core domain logic.
+      It</para>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Principles</title>
+
+      <para><emphasis></emphasis></para>
+
+      <para><emphasis></emphasis><note>
+          <para>TODO: distill some of the material on the trunk site.</para>
+
+          <para></para>
+        </note></para>
+
+      <sect2>
+        <title>Ubiquitous Language</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Rapid Application Development</title>
+
+        <para></para>
+
+        <para></para>
+
+        <note>
+          <para>TODO: discuss</para>
+        </note>
+
+        <para>feedback loop</para>
+
+        <para>requirements traceability</para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Problem Solver, not Process Follower</title>
+
+        <para></para>
+
+        <para></para>
+
+        <note>
+          <para>TODO: discuss</para>
+        </note>
+
+        <para>Sovereign Applications vs Transient Applications</para>
+
+        <para></para>
+
+        <para>for sovereign applications</para>
+
+        <para></para>
+
+        <para>incredible machine</para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Commonly Trodden Paths</title>
+
+        <para></para>
+
+        <para></para>
+
+        <note>
+          <para>TODO: discuss</para>
+        </note>
+
+        <para>for transient apps</para>
+
+        <para></para>
+
+        <para>Civil engineering analogy.... put in the paths afterwards</para>
+
+        <para></para>
+
+        <para>Christopher Alexander - cardboard cutouts of where the windows
+        go</para>
+
+        <para></para>
+
+        <para>Database denormalization</para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Opinionated</title>
+
+        <para></para>
+
+        <para></para>
+
+        <note>
+          <para>TODO: discuss</para>
+        </note>
+
+        <para></para>
+
+        <para>convention over configuration</para>
+
+        <para></para>
+
+        <para>framework, domain services, dependency injection</para>
+
+        <para></para>
+
+        <para>JSR-299</para>
+
+        <para>don't want too many degrees of freedom. Work out of the box,
+        specify alternates later as needed</para>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Patterns</title>
+
+      <para>The framework is designed around two patterns:</para>
+
+      <para></para>
+
+      <sect2>
+        <title>Naked Objects Pattern</title>
+
+        <para>The first architectural pattern is the naked objects pattern,
+        whereby the framework automatically generates an object-oriented user
+        interface (OOUI) for your domain objects. If required, this OOUI can
+        then be customized.</para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Hexagonal Architecture</title>
+
+        <para>The second core pattern implemented by <emphasis>Apache
+        Isis</emphasis> is the hexagonal architecture. This means it allows
+        the same domain model to be run with different viewers, either as a
+        desktop app or as a webapp. Equally, you can choose which object store
+        to use in order to persist your domain objects. The diagram below
+        shows the hexagonal architecture as it is implemented by Apache
+        Isis.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <note>
+          <para>TODO: discuss</para>
+        </note>
+
+        <para>*** picture of the hexagonal architecture here.</para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Dependency Injection</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Benefits and Consequences</title>
+
+      <para></para>
+
+      <para><note>
+          <para>TODO: review stuff below, copied-n-pasted from site
+          docs.</para>
+        </note></para>
+
+      <para>As you might imagine, not needing to write any GUI code
+      substantially speeds up development, and shortens the feedback loop to
+      allow you to improve your core domain model without lots of GUI code
+      slowing you down.</para>
+
+      <para>The OOUIs generated by Apache Isis are especially suitable to
+      "expert" users, typically those internal to your organization who have a
+      good understanding of the domain and just want to get their job done.
+      But for less expert users (or for a webapp deployed on the internet), a
+      more scripted UI may be called for. Isis therefore lets you customize
+      the user interface according to your users' needs.</para>
+
+      <para>Alternatively, you might want to just use Isis as a design tool.
+      The framework goes to a lot of trouble to ensure that the domain objects
+      you build have no dependencies on the framework: they are basically
+      annotated pojos that follow a number of straightforward programming
+      conventions. So, you can use Isis to rapidly evolve your domain objects,
+      and then deploy them within some other runtime framework if you
+      wish.</para>
+
+      <para></para>
+
+      <para></para>
+
+      <note>
+        <para>TODO: include some of the benefits cited for NO pattern, from
+        website: faster development cycle, greater agility, empowering style
+        of UI, requirements analysis/traceability; play to developer
+        strengths</para>
+      </note>
+
+      <para></para>
+
+      <sect2>
+        <title>Playing to Developer Strengths</title>
+
+        <para></para>
+
+        <para></para>
+
+        <note>
+          <para>TODO: discuss</para>
+        </note>
+
+        <para>domain programmer/business analyst</para>
+
+        <para></para>
+
+        <para>application integration expert (domain services)</para>
+
+        <para></para>
+
+        <para>customizer (UI expert)</para>
+
+        <para></para>
+
+        <para>architectural integration</para>
+
+        <para></para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Developing Isis Applications</title>
+
+    <abstract>
+      <para>This chapter describes the general approach to follow that we
+      recommend for developing domain-driven applications on Isis.</para>
+    </abstract>
+
+    <sect1>
+      <title>Where to Start?</title>
+
+      <para>There's quite a lot to <emphasis>Apache Isis</emphasis>, with lots
+      of optional components (which we call alternates, in keeping with
+      JSR-299 terminology). To keep things manageable, the Isis documentation
+      is scoped closest to where it's relevant.</para>
+
+      <para>On the other hand, it can be difficult to know exactly where to go
+      in the first place... hence these notes. If you read them from top to
+      bottom then you'll (a) have a pretty good idea of the general process we
+      recommend for developing domain applications in <emphasis>Apache
+      Isis</emphasis> and (b) know where to look for more detailed
+      documentation.</para>
+    </sect1>
+
+    <sect1 id="sec.ApplicationArchetypes">
+      <title>Application Archetypes</title>
+
+      <para>We tend to structure Apache Isis applications following a standard
+      structure, and you can use the <emphasis>application</emphasis> Maven
+      archetype (in <filename>support/archetypes/application</filename>) to
+      set this up for you. Some of the optional plugins also provide their own
+      Maven archetypes which you can run afterwards, for example to setup a
+      particular new viewer or object store. The idea is that these are run
+      alongside your own application, and provide additional Maven
+      (sub)modules which you can then reference.</para>
+
+      <para>Going back to the application archetype though, this sets up a
+      simple application that can be run out-of-the-box in exploration mode
+      (that is, with the in-memory object store), and using one of the two
+      main viewers:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the Drag-n-Drop (<acronym>DnD</acronym>) viewer is a
+          client-side viewer that renders the domain objects to a desktop
+          metaphor.</para>
+        </listitem>
+
+        <listitem>
+          <para>the <acronym>HTML</acronym> viewer is designed to run within a
+          webapp, and renders a single domain object per page.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Each of these can be run from the command line (the
+      <acronym>HTML</acronym> viewer boots up an instance of Jetty web
+      server); the archetype documentation explains how; there's further
+      documentation on these particular viewers themselves in their respective
+      module documentation (see <xref linkend="sec.Viewers" />).</para>
+
+      <para>Later on you'll want to deploy the application more formally, for
+      example as a <acronym>WAR</acronym> archive (see <xref
+      linkend="sec.DeployingAnIsisApplication" /> for more details).</para>
+    </sect1>
+
+    <sect1>
+      <title>Programming Model</title>
+
+      <para>Once you've got the archetype application running, you're ready to
+      start developing your own domain objects. But no matter what application
+      you are developing, you'll need to understand the <emphasis>Isis
+      programming model</emphasis>.</para>
+
+      <para>The programming model is the set of annotations and programming
+      conventions that Isis recognizes. You'll find the programming model is
+      documented in the Application Library module (in
+      <filename>applib</filename>).</para>
+
+      <para>In addition, the applib contains a small number of utilities which
+      can be useful when writing your application: one such is the ability to
+      create XML snapshots of your domain object graphs.</para>
+
+      <para>The applib documentation also provides pointers to other features
+      that can have an impact on the way in which you write your code, namely
+      the cglib and javassist bytecode providers modules (<xref
+      linkend="sec.BytecodeProviders" />), the
+      <filename>alternates/headless</filename> viewer plugin (<xref
+      linkend="sec.Headless" />), and the <ulink
+      url="http://groovy.codehaus.org">Groovy</ulink> language support (<xref
+      linkend="sec.OtherLanguages" />).</para>
+    </sect1>
+
+    <sect1>
+      <title>Fixtures and Prototyping</title>
+
+      <para>We suggest that the fastest way to develop your application is to
+      start prototyping using the in-memory object store (that is, as set up
+      by the application archetype, see <xref
+      linkend="sec.ApplicationArchetypes" />). The nice thing about working
+      this way is that there is no database schema to slow you down; you can
+      make changes and then rapidly try them out.</para>
+
+      <para>On the other hand, the in-memory object store doesn't persist
+      objects between runs, so you'll soon tire of continually recreating test
+      objects to try out your changes. You should therefore use fixtures:
+      blocks of code that are used to setup objects in the in-memory object
+      store prior to the app running.</para>
+
+      <para>You can find more information about using fixtures in the
+      <filename>applib</filename> module. It's also worth knowing about them
+      because they are used when writing tests for your domain application
+      (see <xref linkend="sec.AgileTesting" />).</para>
+    </sect1>
+
+    <sect1 id="sec.AgileTesting">
+      <title>Agile Testing</title>
+
+      <para><emphasis>Apache Isis</emphasis> is very much aligned to agile
+      development practices, and provides two complementary mechanisms for you
+      to test-drive the development of your application.</para>
+
+      <sect2>
+        <title>Story Testing</title>
+
+        <para>Many agile practitioners use story tests as a means to capture
+        the acceptance (or completion) criteria for high-level user stories.
+        These story tests are typically captured in a non-programmatic form so
+        that is understandable to domain experts as well as
+        programmers.</para>
+
+        <para>Isis provides integrations with two story testing
+        frameworks:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><ulink url="http://fitnesse.org">FitNesse</ulink>, where the
+            story test is captured within a wiki, and</para>
+          </listitem>
+
+          <listitem>
+            <para><ulink url="http://concordion.org">Concordion</ulink>, where
+            the story test is captured as HTML.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For more information on using these integrations and their
+        supporting archetypes, see the <filename>storytests</filename>
+        module.</para>
+      </sect2>
+
+      <sect2 id="sec.UnitTesting">
+        <title>Unit Testing</title>
+
+        <para>Unlike story tests, unit tests are normally written in a
+        programming language, typically in a framework such as <ulink
+        url="http://junit.org">JUnit</ulink>. <emphasis>A story test ensures
+        that the right system is built, while a unit tests ensures the system
+        is built right</emphasis>.</para>
+
+        <para>When writing unit tests, you have a choice. Since all the
+        business logic in [[NAME]] applications is encapsulated in domain
+        object pojos, you can just write unit tests using nothing more than
+        JUnit and perhaps also a mocking library such as <ulink
+        url="http://jmock.org">JMock</ulink>.</para>
+
+        <para>A slightly more sophisticated approach is to use the JUnit
+        integrations and supporting classes of the (so-called) Headless module
+        (in <filename>alternates/headless</filename>) . The idea of these
+        utilities is to wrap your domain objects in proxies that apply the
+        same rules as an <emphasis>Apache Isis</emphasis> viewer. For example,
+        if you try to change a property or invoke an action that is disabled,
+        then the proxy will throw an exception. You write your test to pass if
+        the exception is thrown, and failed otherwise (eg using
+        <code>@Test(expected=DisabledException.class)</code>).</para>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>A Domain Library</title>
+
+      <para>The idea behind the <filename>domain</filename> module is to
+      provide some off-the-shelf code for you to use and adapt in your own
+      applications. This code is fully tested (comes with tests), and is
+      intended to be well-designed. Using code from the library should give
+      you a kick-start in writing your own domain applications.</para>
+
+      <note>
+        <para>The library is currently very modest, but we hope it might build
+        up in time.</para>
+      </note>
+
+      <para>Of course, there's a limit to the complexity of the code that's
+      included in the library, because every domain is different. But having a
+      full set of tests should allow you to safely refactor the code to your
+      own requirements.</para>
+
+      <para>There's also no guarantee that the library will contain code for
+      your specific requirement. But if you do write some domain logic that
+      you think might be reusable by others, why not consider donating it back
+      to Isis when you've done so?</para>
+
+      <para>The domain library breaks out into three: services, entities and
+      values.</para>
+
+      <sect2>
+        <title>Domain Services</title>
+
+        <para><emphasis>Apache Isis</emphasis> applications use
+        <emphasis>domain service</emphasis>s (a domain-driven design pattern)
+        to allow objects to interact with other domains (or <emphasis>bounded
+        context</emphasis>s, to use the correct term). These domain services
+        are automatically injected into each domain object as it is
+        instantiated.</para>
+
+        <para>Domain services split into two: those that interact with
+        technical domains (such as sending email, or rendering
+        <acronym>PDF</acronym>s), and those that interact with business
+        domains (such as general ledger, <acronym>CRM</acronym>s or legacy
+        systems).</para>
+
+        <para>Obviously domain services that bridge to business domain
+        services are always likely to be specific to each individual
+        application. So the services in the
+        <filename>domain/services</filename> module focus on providing
+        off-the-shelf implementations for some of the more common
+        <emphasis>technical</emphasis> domain services.</para>
+      </sect2>
+
+      <sect2>
+        <title>Domain Values</title>
+
+        <para></para>
+
+        <note>
+          <para>TODO</para>
+        </note>
+      </sect2>
+
+      <sect2>
+        <title>Domain Entities</title>
+
+        <para></para>
+
+        <note>
+          <para>TODO</para>
+        </note>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Object Stores</title>
+
+      <para>Although you can go a long way in developing your application
+      using only fixtures and the in-memory object store, eventually you will
+      need to integrate with a "real" object store that persists object to
+      some sort of serialized store.</para>
+
+      <para>There are several object stores to choose from. Some are easy to
+      configure, some more complex; some are only suitable for single-user
+      apps, others for multi-users. Each of the object stores has its own
+      documentation, so you can select the correct object store to
+      choose:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the <acronym>XML</acronym> object store (in
+          <filename>alternates/objectstores/xml</filename>) is designed for
+          single-user systems, and persists to its own internal (proprietary)
+          <acronym>XML</acronym> format;</para>
+        </listitem>
+
+        <listitem>
+          <para>the Berkeley object store (in
+          <filename>alternates/objectstores/berkeley</filename>) is a
+          multi-user object store, persists using <ulink
+          url="http://www.oracle.com/technetwork/database/berkeleydb/overview/index.html">Berkeley
+          DB</ulink>;</para>
+        </listitem>
+
+        <listitem>
+          <para>the <acronym>SQL</acronym> object store (in
+          <filename>alternates/objectstores/sql</filename>) is a multi-user
+          object store that persists to an <acronym>RDBMS</acronym> (direct
+          over <acronym>JDBC</acronym>);</para>
+        </listitem>
+
+        <listitem>
+          <para>the <acronym>JPA</acronym> object store (in
+          <filename>alternates/objectstores/</filename>jpa) is a multi-user
+          object store, persists to an <acronym>RDBMS</acronym> (using a
+          <acronym>JPA</acronym> provider for the heavy lifting);</para>
+        </listitem>
+
+        <listitem>
+          <para>the <acronym>CouchDB</acronym> object store (in
+          <filename>alternates/objectstores/</filename>couchdb) is a
+          multi-user object store that persists to <ulink
+          url="http://couchdb.apache.org">CouchDB</ulink>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>At the time of writing some of these object stores were still
+      alpha/beta; check the documentation for each of the above object stores
+      to confirm their exact status.</para>
+
+      <para>You'll also find coverage of the object store
+      <acronym>API</acronym> itself in this document, see <xref
+      linkend="chp.ObjectStoreApi" />. Most users of the framework are
+      unlikely to write their own object store, of course, though we hope that
+      over time new implementations will be written by the community.</para>
+    </sect1>
+
+    <sect1 id="sec.Viewers">
+      <title>Viewers</title>
+
+      <para>In the same way that object stores provide pluggability for the
+      "back-end", <emphasis>Apache Isis</emphasis> also offers pluggability on
+      the front-end too.</para>
+
+      <para>We already noted that there are two main viewers, the
+      <acronym>DnD</acronym> viewer and the <acronym>HTML</acronym> viewer
+      (configured by the application archetype, see <xref
+      linkend="sec.ApplicationArchetypes" />). In addition, there are a number
+      of other viewers. Here's the full list:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The <acronym>DnD</acronym> viewer (in
+          <filename>alternates/viewers/dnd</filename>) is one of the two main
+          viewers setup by the application archetype, and is currently the
+          only viewer designed to run client-side (ie not as a webapp).</para>
+
+          <para>Out-of-the-box it provides a generic view of all domain
+          objects, but provides its own API to allow more sophisticated views
+          to be constructed.</para>
+        </listitem>
+
+        <listitem>
+          <para>The <acronym>HTML</acronym> viewer (in
+          <filename>alternates/viewers/html</filename>) is the second of the
+          two main viewers setup by the application archetype, running as a
+          webapp.</para>
+
+          <para>Other than tweaking <acronym>CSS</acronym>, the views that it
+          provides of objects cannot be customized.</para>
+        </listitem>
+
+        <listitem>
+          <para>Scimpi (in <filename>alternates/viewers/scimpi</filename>)
+          allows your application to be deployed as a webapp.</para>
+
+          <para>Out-of-the-box you get a generic view (very similar to that
+          provided by HTML viewer); you can then customize the view by
+          providing custom pages that use Scimpi tags.</para>
+        </listitem>
+
+        <listitem>
+          <para>The Wicket viewer (in
+          <filename>alternates/viewers/wicket</filename>) uses <ulink
+          url="http://wicket.apache.org">Apache Wicket</ulink> to render
+          generic views of your domain objects in a webapp.</para>
+
+          <para>Like Scimpi, it allows these views to be customized, this time
+          by leveraging the Wicket <classname>Component</classname>
+          <acronym>API</acronym>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The RESTful viewer (in
+          <filename>alternates/viewers/restful</filename>) is designed to
+          expose your domain objects through a <ulink
+          url="http://en.wikipedia.org/wiki/Representational_State_Transfer">RESTful</ulink>
+          interface.</para>
+
+          <para>The intention is to allow programmatic access to your domain
+          objects from other (perhaps non-Java) clients. The viewer does also
+          render as <acronym>XHTML</acronym> for debugging purposes.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If deploying with the <acronym>DnD</acronym> viewer you also need
+      to decide whether to deploy standalone (ie, each user has their own
+      private object store) or in client/server mode (so all users share a
+      server-based object store). If the latter case then you will need to set
+      up remoting (see <xref linkend="sec.Remoting" />).</para>
+    </sect1>
+
+    <sect1 id="sec.Remoting">
+      <title>Remoting</title>
+
+      <para>If deploying the <acronym>DnD</acronym> viewer in client/server
+      mode then you will need to set up remoting. The main consideration is
+      what transport to use:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>sockets</para>
+
+          <para>In this configuration both client and server run as
+          command-line programs. No plugins are needed, this is the
+          default;</para>
+        </listitem>
+
+        <listitem>
+          <para>http</para>
+
+          <para>In this configuration the server runs as a webapp with a
+          servlet used to listen for client-side requests. The client,
+          meanwhile, is configured to send its requests via
+          <acronym>HTTP</acronym>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In addition, you can choose the marshalling mechanism by which
+      objects are serialized across the wire to be varied. There are (again),
+      two options:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>encoding/serialization</para>
+
+          <para>In this configuration <emphasis>Apache Isis</emphasis>
+          encodes/serializes all objects into a succession of bytestreams.
+          This is the default</para>
+        </listitem>
+
+        <listitem>
+          <para>xstream</para>
+
+          <para>In this configuration the <ulink
+          url="http://xstream.codehaus.org">Xstream</ulink> library is used to
+          serialize objects</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>You'll find further coverage of the remoting APIs in <xref
+      linkend="chp.RemotingApi" />. Detailed documentation of the
+      <acronym>http</acronym> transport implementation in the HTTP Remoting
+      module (in <filename>alternates/http-remoting</filename>) module, and
+      documentation for the xstream implementation is in the XStream
+      Marshalling module (in
+      <filename>alternates/xstream-marshalling</filename>).</para>
+
+      <para>There's also further coverage of deploying applications in
+      client/server mode in <xref
+      linkend="chp.DeployingIsisApplications" />.</para>
+    </sect1>
+
+    <sect1>
+      <title>Authentication and Authorization</title>
+
+      <para><emphasis>Apache Isis</emphasis> provides an
+      <acronym>API</acronym>s for both authentication and authorization, see
+      <xref linkend="chp.SecurityApi" />.</para>
+
+      <para>The core implementation of these <acronym>API</acronym>s are very
+      basic file-based authentication and authorization mechanisms, the
+      configuration of which is described in <xref
+      linkend="chp.SecurityApi" />. These default mechanisms are suitable for
+      simple applications, but are unlikely to meet the security requirements
+      of larger enterprises.</para>
+
+      <para>As an alternative, you can use implementations that integrate with
+      <acronym>LDAP</acronym> (in <filename>alternates/ldap-auth</filename>)
+      module, or consider writing your own.</para>
+    </sect1>
+
+    <sect1 id="sec.DeployingAnIsisApplication">
+      <title>Deploying an Isis Application</title>
+
+      <para>Deploying your application depends on whether it is a webapp,
+      client/server (DnD) or standalone (DnD). With the current set of
+      deployment options it is likely to be one of:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>standalone client running with DnD viewer and a local object
+          store</para>
+        </listitem>
+
+        <listitem>
+          <para>client/server over sockets</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>client running DnD viewer, sockets connection</para>
+            </listitem>
+
+            <listitem>
+              <para>server running as a standalone app, listening on
+              sockets</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>client/server over HTTP</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>client running DnD viewer, HTTP requests</para>
+            </listitem>
+
+            <listitem>
+              <para>server running as a webapp, with HTTP servlet listening
+              for requests</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>webapp, meaning any of:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>HTML viewer</para>
+            </listitem>
+
+            <listitem>
+              <para>Scimpi</para>
+            </listitem>
+
+            <listitem>
+              <para>Wicket</para>
+            </listitem>
+
+            <listitem>
+              <para>RESTful</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>Indeed, it's theoretically possible to combine the various webapp
+      viewers; for example the server-side HTTP, Scimpi and RESTful might all
+      be colocated.</para>
+
+      <para>In all cases you're likely to want to enable authentication and
+      authorization; the exact configuration to use here will depend both on
+      the implementation chosen (file-based, LDAP or some other) and whether
+      running in client/server mode or not.</para>
+
+      <para>The main coverage of the topic of deployment options (which
+      repeats some of the above) can be found in this document, in <xref
+      linkend="chp.DeployingIsisApplications" />.</para>
+    </sect1>
+
+    <sect1>
+      <title>Other Features</title>
+
+      <para></para>
+
+      <para></para>
+
+      <note>
+        <para>TODO: discuss other features, x-ref elsewhere in this doc</para>
+      </note>
+
+      <para></para>
+
+      <sect2 id="sec.BytecodeProviders">
+        <title>Lazy Loading / Dirty Tracking</title>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Extending the Isis Meta Model</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2 id="sec.Headless">
+        <title>Using the Headless Viewer</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2 id="sec.OtherLanguages">
+        <title>Other Languages</title>
+
+        <para></para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.OrigDocs">
+    <title>TODO: move old NOF docs here</title>
 
     <abstract>
       <para>*** yada yada</para>
@@ -93,3284 +958,6 @@
 
       <para><emphasis>*** yada yada</emphasis></para>
     </sect1>
-  </chapter>
-
-  <chapter id="chp.HowToGuide">
-    <title>Developing Domain Objects - A How-To Guide</title>
-
-    <abstract>
-      <para>Describes a set of conventions for writing domain objects, that
-      are together known as the 'Apache Isis (Java) Programming Model'.</para>
-    </abstract>
-
-    <para>This chapter describes a set of conventions for writing domain
-    objects, that are together known as the 'Apache Isis (Java) Programming
-    Model'.</para>
-
-    <para>Following these conventions does not tie your domain objects to
-    Apache Isis or to any other framework: the resulting domain objects may be
-    run within any framework or platform that supports POJOs (Plain Old Java
-    Objects). A few of the conventions do make use of Interfaces or
-    Annotations that are necessarily defined somewhere - in this case they are
-    in the application library (AppLib). However, the AppLib is not itself
-    dependent upon the rest of the framework (and in theory another framework
-    implementation could support the same applib).</para>
-
-    <para>The conventions of the programming model are best described as
-    'intentional' - they convey an intention as to how domain objects, their
-    properties and behaviours, are to be made available to users. The specific
-    way in which those intentions are interpreted or implemented will depend
-    upon the framework, and/or the particular components or options selected
-    within that framework.</para>
-
-    <para>To pick a single example, marking up a domain class with the
-    annotation <literal>@Bounded</literal> is an indication that the class is
-    intended to have only a small number of instances and that the set does
-    not change very often - such as the class <literal>Country</literal>. This
-    is an indication to any interested framework that the whole set of
-    instances might be offered to the user in a convenient form such as a
-    drop-down list. The programming convention has <emphasis>not</emphasis>
-    been defined as <literal>@DropDownList</literal> because the user
-    interface might not support drop-down-lists - but it might provide a
-    capability to select from an <literal>@Bounded</literal> class by typing
-    the initial letters of the desired instance.</para>
-
-    <section>
-      <title>Object-level specifications</title>
-
-      <para>The first set of conventions are concerned with the capabilities
-      or behaviour of an object as a whole.</para>
-
-      <section>
-        <title>How to specify a title for an object</title>
-
-        <para>A title is used to identify an object to the user in the user
-        interface. For example, a <classname>Customer</classname>'s title
-        might be the organization's customer reference, or perhaps (more
-        informally) their first and last names. By default, the framework will
-        use the object's <literal moreinfo="none">toString()</literal> method
-        as the title. However, if a <literal moreinfo="none">title()
-        </literal>method (returning a <literal
-        moreinfo="none">String</literal>) is present, then that is used
-        instead, thus:</para>
-
-        <programlisting format="linespecific">public String toString()</programlisting>
-
-        <para>or</para>
-
-        <programlisting format="linespecific">public String title()</programlisting>
-
-        <para>The reason for providing the option to use a <literal
-        moreinfo="none">title</literal> method is in case the programmer needs
-        to make use of the <literal moreinfo="none">toString</literal> method
-        for other purposes, such as for debugging.</para>
-      </section>
-
-      <section>
-        <title>How to specify the icon for an object</title>
-
-        <para>By default, the framework will look for an image in the
-        <filename class="directory" moreinfo="none">images</filename>
-        directory (which must be on the classpath) that has the same name as
-        the object class. So for an object of type
-        <classname>Customer</classname>, it will look for <filename
-        class="directory" moreinfo="none">Customer.gif</filename> or <filename
-        class="directory" moreinfo="none">Customer.png</filename>. If it finds
-        no such file, then it will work up the inheritance hierarchy to see if
-        there is an icon matching the name of any of the super-classes, and
-        use that instead. If no matching icon is found then the framework will
-        look for an image called <filename class="directory"
-        moreinfo="none">default</filename> in the images directory, and if
-        this has not been specified, then the framework will use its own
-        default image for an icon.</para>
-
-        <para>We strongly recommend that you adopt 'camel case' as the
-        convention for icon file names: if you have a class called
-        <literal>OrderLine</literal>, then call the icon <filename
-        class="directory" moreinfo="none">OrderLine.gif</filename> or
-        <filename class="directory" moreinfo="none">OrderLine.png</filename>
-        (JPEG suffixes <filename moreinfo="none">OrderLine.jpg</filename> or
-        <filename moreinfo="none">OrderLine.jpeg</filename> will also be
-        recognized but generally GIF or PNG are to be preferred). Actually,
-        the framework will also recognise <filename class="directory"
-        moreinfo="none">orderline.gif</filename>, but some operating systems
-        and deployment environments are case sensitive, so it is good practice
-        to adopt an unambiguous convention.</para>
-
-        <para>The programmer may choose to specify, manually, which icon to
-        use, by specifying an <literal moreinfo="none">iconName</literal>
-        method:</para>
-
-        <programlisting format="linespecific">public String iconName() {
-    return "Person";
-}</programlisting>
-
-        <para>This makes it easy for more than one class to use the same icon,
-        without having to duplicate the image file.</para>
-
-        <para>The <literal>iconName</literal> method may also be used to
-        specify an individual icon for each instance. For example, an instance
-        of <literal>Product</literal> could use a photograph of the product as
-        an icon, using:</para>
-
-        <programlisting format="linespecific">public String iconName() {
-    return getProductName() + "-photograph";
-}</programlisting>
-
-        <para>or to vary the icon according to the status of the
-        object:</para>
-
-        <programlisting format="linespecific">    public String iconName() {
-        return "Order-" + getStatus();
-    }</programlisting>
-      </section>
-
-      <section>
-        <title>How to specify a name and/or description for an object</title>
-
-        <para>By default, the name (or type) of an object, as displayed to the
-        user will be the class name. However, if an <literal
-        moreinfo="none">@Named</literal> annotation is included, then this
-        will override the default name. This might be used to include
-        punctuation or other characters that may not be used within a class
-        name.</para>
-
-        <para>By default the framework will create a plural version of the
-        object name by adding an 's' to singular name, or a 'ies' to names
-        ending 'y'. For irregular nouns or other special case, the
-        <literal>@Plural</literal> annotation may be used to specify the
-        plural form of the name explicitly.</para>
-
-        <para>(Note that there is an entirely separate mechanism for dealing
-        with Internationalisation, which is described elsewhere).</para>
-
-        <para>The programmer may optionally also provide a <literal
-        moreinfo="none">@DescribedAs</literal> annotations, containing a brief
-        description of the object's purpose, from a user perspective. The
-        framework will make this available to the user in a form appropriate
-        to the user interface style - for example as 'balloon' help.</para>
-      </section>
-
-      <section>
-        <title>How to specify that an object should not be persisted</title>
-
-        <para>Use the <literal moreinfo="none">@NotPersistable</literal>
-        annotation.</para>
-      </section>
-
-      <section>
-        <title>How to specify that an object should never be modified by the
-        user</title>
-
-        <para>Use the <literal moreinfo="none">@Immutable</literal>
-        annotation.</para>
-      </section>
-
-      <section>
-        <title>How to specify that a class of objects has a limited number of
-        instances</title>
-
-        <para>Use the <literal moreinfo="none">@Bounded</literal> annotation.
-        A common way of describing this is that the whole (limited) set of
-        instances may be rendered to the user as a drop down list - but the
-        actual interpretation will depend upon the form of the user
-        interface.</para>
-      </section>
-
-      <section>
-        <title>How to specify that an object should always be hidden from the
-        user</title>
-
-        <para>Use the <literal moreinfo="none">@Hidden</literal>
-        annotation.</para>
-      </section>
-    </section>
-
-    <section>
-      <title>The object lifecycle</title>
-
-      <para>These conventions are concerned with the creation, retrieval,
-      updating and deletion of objects.</para>
-
-      <section>
-        <title>How to create or delete objects within your code</title>
-
-        <para>When you create any domain object within your application code,
-        it is important that the framework is made aware of the existence of
-        this new object - in order that it may be persisted to the object
-        store, and in order that any services that the new object needs are
-        injected into it. Just specifying <literal moreinfo="none">new
-        Customer()</literal>, for example, will create a
-        <classname>Customer</classname> object, but that object will
-        <emphasis>not</emphasis> be known to the framework. However, since we
-        do not want to tie our domain objects to a particular framework, we
-        use the idea of a 'container' to intermediate. The application library
-        provides an interface:</para>
-
-        <para><literal
-        moreinfo="none">org.apache.isis.applib.DomainObjectContainer</literal>
-        which in turn defines the following methods for managing domain
-        objects:</para>
-
-        <para><literal moreinfo="none">&lt;T&gt; T newTransientInstance(final
-        Class&lt;T&gt; ofClass)</literal> returns a new instance of the
-        specified class, that is transient (unsaved). This may subsequently
-        saved either by the user invoking the Save action (that will
-        automatically be rendered on the object view) or programmatically by
-        calling <literal moreinfo="none">void makePersistent(Object
-        transientObject)</literal></para>
-
-        <para><literal moreinfo="none">&lt;T&gt; T newPersistentInstance(final
-        Class&lt;T&gt; ofClass)</literal> creates a new object already
-        persisted.</para>
-
-        <para><literal moreinfo="none">boolean isPersistent()</literal>checks
-        whether an object has already been persisted. (Useful in controlling
-        visibility or availability of properties or actions).</para>
-
-        <para><literal moreinfo="none">void remove(Object object)</literal>
-        deletes a persistent object from the object store.</para>
-
-        <para>Any framework that recognises the Isis Programming Model will
-        provide an implementation of <literal>DomainObjectContainer</literal>
-        and will take responsibility to inject a reference to that Container
-        into any domain object that needs it.</para>
-
-        <para>A domain object specifies that it needs to have a reference to
-        the Container injected into by including the following code:</para>
-
-        <programlisting format="linespecific">    private DomainObjectContainer container;
-
-    protected DomainObjectContainer getContainer() {
-        return this.container;
-    }
-    public final void setContainer(final DomainObjectContainer container) {
-        this.container = container;
-    }</programlisting>
-
-        <para>Creating or deleting objects is then done by invoking those
-        methods on the Container. For example the following code would then
-        create a new Customer object within another method:</para>
-
-        <programlisting format="linespecific">    Customer newCust = (Customer) getContainer().newTransientInstance(Customer.class);
-    newCust.setName("Charlie");
-    getContainer().persist(newCust);</programlisting>
-
-        <para>If you are able to make your domain object inherit from <literal
-        moreinfo="none">org.apache.isis.applib.AbstractDomainObject</literal>
-        then you have direct access to those methods, so the code would
-        become:</para>
-
-        <programlisting format="linespecific">    Customer newCust = (Customer) newTransientInstance(Customer.class);
-    newCust.setName("Charlie");
-    persist(newCust);</programlisting>
-
-        <para>These methods are actually provided by the
-        <literal>org.apache.isis.applib.AbstractContainedObject</literal> and
-        so are also available on <literal
-        moreinfo="none">org.apache.isis.applib.AbstractService</literal> (and,
-        hence, on <literal
-        moreinfo="none">org.apache.isis.applib.AbstractFactoryAndRepository</literal>)
-        for creating objects within a service.</para>
-
-        <note>
-          <para>It is possible to create a transient object within another
-          transient object. When the framework persists any transient object,
-          it will automatically persist any other transient object referenced
-          by that object. However, if any of these transient objects are to be
-          exposed to the user (while in their transient state), then you need
-          to write your code very carefully - anticipating the fact that the
-          user could elect to save any of the transient objects at any point -
-          which could cause the graph of related objects to be persisted in an
-          invalid state.</para>
-
-          <para>The recommended approach is, if possible, to mark these
-          supplementary classes as not persistable by the user, or not to
-          permit the user to create a new transient object that is a child of
-          an existing transient object, but, rather, to require the user to
-          save the parent object first.</para>
-        </note>
-      </section>
-
-      <section>
-        <title>How to insert behaviour into the object life cycle</title>
-
-        <para>The following is a list of methods that correspond to various
-        events in the life-cycle of a domain object. If a domain object
-        implements any of these methods (they are all optional) then the
-        framework will call that method whenever the corresponding event
-        occurs. For example, <literal
-        moreinfo="none"><literal>persisted</literal></literal> is called after
-        an object has been persisted. One reason for implementing the <literal
-        moreinfo="none"><literal>persisted</literal></literal> method might be
-        to set up a reverse association that we do not want to be set up until
-        the new object has been persisted.</para>
-
-        <para><literal moreinfo="none">public void created() </literal>will be
-        called by the framework at logical creation of the object</para>
-
-        <para><literal moreinfo="none">public void loading()</literal> will be
-        called by the framework when a persistent object is about to be loaded
-        into memory</para>
-
-        <para><literal moreinfo="none">public void loaded()</literal> will be
-        called by the framework when a persistent object has just been loaded
-        into memory</para>
-
-        <para><literal moreinfo="none">public void persisting() </literal>will
-        be called by the framework just before a transient object is first
-        persisted. (For backwards compatibility <literal>saving()</literal> is
-        also supported).</para>
-
-        <para><literal moreinfo="none">public void persisted() </literal> will
-        be called by the framework just after a transient object is first
-        persisted. (For backwards compatibility <literal>saved()</literal> is
-        also supported).</para>
-
-        <para><literal moreinfo="none">public void updating() </literal>will
-        be called by the framework after any property on a persistent object
-        has been changed and just before this change is persisted</para>
-
-        <para><literal moreinfo="none">public void updated() </literal>will be
-        called by the framework just after a changed property on a persistent
-        object has been persisted</para>
-
-        <para><literal moreinfo="none">public void removing()</literal> will
-        be called by the framework when a persistent object is just about to
-        be deleted from the persistent object store. (For backwards
-        compatibility <literal>deleting()</literal> is also supported).</para>
-
-        <para><literal moreinfo="none">public void removed()</literal> will be
-        called by the framework when a persistent object has just been deleted
-        from the persistent object store. (For backwards compatibility
-        <literal>deleted()</literal> is also supported).</para>
-      </section>
-    </section>
-
-    <section>
-      <title>Properties</title>
-
-      <para>The following conventions are concerned with specifying the
-      properties of an object, and the way in which users can interact with
-      those properties.</para>
-
-      <section>
-        <title>How to add a property to an object</title>
-
-        <para>Properties are specified using the JavaBean conventions,
-        recognizing a standard accessor/mutator pair (<literal>get</literal>
-        and <literal>set</literal>). The syntax is:</para>
-
-        <programlisting format="linespecific">public &lt;property type&gt; get&lt;PropertyName&gt;() 
-
-public void set&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>where <literal moreinfo="none">&lt;property type&gt;</literal>
-        is a primitive, a value object or an entity object.</para>
-
-        <para>Properties may reference either a value or another domain
-        object. Values include Java primitives, and JDK classes with value
-        semantics (<literal moreinfo="none">java.lang.Strings</literal> and
-        <literal moreinfo="none">java.util.Dates</literal>). A property
-        referencing another domain object is sometimes called an
-        association.</para>
-
-        <para>For example, the following example contains both a value
-        (<literal moreinfo="none">String</literal>) property and a reference
-        (<literal moreinfo="none">Organisation</literal>) property:</para>
-
-        <programlisting format="linespecific">public class Customer {
-    private String firstName;
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    private Organisation organisation;
-    public Organisation getOrganisation() {
-        return organisation;
-    }
-    public void setOrganisation(Organisation organisation) { 
-        this.organisation = organisation;
-    }
-
-    ...
-}</programlisting>
-      </section>
-
-      <section>
-        <title>How to prevent the user from modifying a property</title>
-
-        <para>Preventing the user from modifying a property value is known as
-        'disabling' the property.</para>
-
-        <section>
-          <title>Disabling a property always</title>
-
-          <para>Use the <literal moreinfo="none">@Disabled</literal>
-          annotation.</para>
-        </section>
-
-        <section>
-          <title>Disabling a property under certain conditions</title>
-
-          <para>A <literal moreinfo="none">disable</literal> method can be
-          used to disable a particular instance's member under certain
-          conditions. The syntax is:</para>
-
-          <para><literal moreinfo="none">public String
-          disable&lt;PropertyName&gt;()</literal> A non-null return value
-          indicates the reason why the property cannot be modified. The
-          framework is responsible for providing this feedback to the user.
-          For example:</para>
-
-          <programlisting format="linespecific">public class OrderLine {
-    public String getQuantity() { ... }
-    public void setQuantity(int quantity) { ... }
-
-    public String disableFirstName() { 
-        if (this.hasBeenSubmitted()) {
-            return "Cannot alter any quantity after Order has been submitted"; 
-        }
-        return null;
-    }
-}</programlisting>
-        </section>
-
-        <section>
-          <title>Disabling a property for specific users or roles</title>
-
-          <para>Generally it is not good practice to embed knowledge of roles
-          and/or users into the domain classes. This is the responsibility of
-          the framework or platform and should be specified and administered
-          externally to the domain model.</para>
-
-          <para>However, in rare circumstances it might be necessary or
-          pragmatic to implement access control within the domain model using
-          the inherited <literal>getUser()</literal> method:</para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">import org.apache.isis.applib.UserMemento;
-
-public class Employee {
-    public BigDecimal getSalary() { ... }
-    public void setSalary(BigDecimal salary) { ... }
-
-    public String validateSalary(BigDecimal salary) {
-        return salary.doubleValue() &gt;= 30000 &amp;&amp;
-              !getUser().hasRole("MODIFY_SALARY")?
-              "Need MODIFY_SALARY role to increase salary above 30000": null;
-    }
-}</programlisting>
-        </section>
-      </section>
-
-      <section>
-        <title>How to make a property optional (when saving an object)</title>
-
-        <para>By default, when a new transient (unsaved) object is presented
-        to the user, values must be specified for all properties before the
-        object may be saved. To specify that a particular property is
-        optional, use the <literal moreinfo="none">@Optional</literal>
-        annotation.</para>
-      </section>
-
-      <section>
-        <title>How to specify the size of String properties</title>
-
-        <para>Use the <literal moreinfo="none">@MaxLength</literal>, <literal
-        moreinfo="none">@TypicalLength</literal> and <literal
-        moreinfo="none">@MultiLine</literal> annotations.</para>
-      </section>
-
-      <section>
-        <title>How to validate user input to a property</title>
-
-        <para>A <literal moreinfo="none">validate</literal> method is used to
-        check that a new value for a property is valid. If the proffered value
-        is deemed to be invalid then the property will not be changed. A
-        non-null return <literal>String</literal> indicates the reason why the
-        member cannot be modified/action be invoked; the framework is
-        responsible for providing this feedback to the user.</para>
-
-        <para>The syntax is:</para>
-
-        <programlisting format="linespecific">public String validate&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Exam {
-    public int getMark() { ... }
-    public void setMark(int mark) { ... }
-    public validateMark(int mark) {
-        return !(mark &gt;= 0 &amp;&amp; mark &lt;= 30)?
-            "Mark must be in range 0 to 30"
-            :null;
-    }
-}</programlisting>
-
-        <section>
-          <title>Format validation</title>
-
-          <para>For properties that accept a text input string, such as
-          <literal>String</literal> and <literal>Date</literal>, there are
-          convenient mechanisms to validate and/or normalise the values typed
-          in.</para>
-
-          <para>For <literal moreinfo="none">Date</literal> and number values
-          the <literal moreinfo="none">@Mask</literal> annotation may be
-          used.</para>
-
-          <para>For <literal moreinfo="none">String</literal> properties the
-          <literal moreinfo="none">@RegEx</literal> annotation may be
-          used.</para>
-        </section>
-      </section>
-
-      <section>
-        <title>How to specify a set of choices and or a default value for a
-        property</title>
-
-        <para>The simplest way to provide the user with a set of choices for a
-        property (possibly rendered as a drop-down list, for example) is to
-        ensure that the type used by the property is marked up as
-        <literal>@Bounded</literal>. However, this is not always appropriate.
-        For example you might wish to provide the user with the choice of all
-        the Addresses known for that Customer, with the most recently-used
-        address as the default.</para>
-
-        <para>The syntax for specifying a default value is:</para>
-
-        <programlisting format="linespecific">public &lt;property type&gt; default&lt;PropertyName&gt;()</programlisting>
-
-        <para>And for specifying a list of choices is:</para>
-
-        <programlisting format="linespecific">public &lt;array or collection of property type&gt; choices&lt;PropertyName&gt;()</programlisting>
-
-        <para>The full code for our example above is:</para>
-
-        <programlisting format="linespecific">public class Order {
-    public Address getShippingAddress() { ... }
-    public void setShippingAddress() { ... }
-    public Address defaultShippingAddress() {
-        return getCustomer().normalAddress();
-    }
-    public List&lt;Address&gt; choicesShippingAddress() {
-        return getCustomer().allActiveAddresses();
-    }
-}</programlisting>
-      </section>
-
-      <section>
-        <title>How to set up the initial value of a property
-        programmatically</title>
-
-        <para>Initial values for properties may be set up programmatically
-        within the <literal moreinfo="none">created()</literal> method on the
-        object. (See Object: Life Cycle).</para>
-      </section>
-
-      <section>
-        <title>How to trigger other behaviour when a property is
-        changed</title>
-
-        <para>If you want to invoke functionality whenever a property is
-        changed by the user, then you should create a <literal
-        moreinfo="none">modify</literal> <literal
-        moreinfo="none">&lt;propertyName&gt;</literal> and include the
-        functionality within that. For example:</para>
-
-        <programlisting format="linespecific">public int getAmount() {}
-public void setAmount(int amount) {}
-
-public void modifyAmount(int amount) {
-     setAmount(amount);
-     addToTotal(amount);
-}</programlisting>
-
-        <para>The reason for the <literal
-        moreinfo="none">modifyAmount</literal> method is that it would not be
-        a good idea to include the <literal
-        moreinfo="none">addToTotal</literal> call within the <literal
-        moreinfo="none">setAmount</literal> method , because that method may
-        be called by the persistence mechanism when an object is retrieved
-        from storage.</para>
-
-        <para>You may optionally also specify a
-        <literal>clear&lt;PropertyName&gt;</literal> which works the same way
-        as modify <literal moreinfo="none">modify</literal> <literal
-        moreinfo="none">&lt;propertyName&gt;</literal> but is called when the
-        property is cleared by the user (i.e. the current value replaced by
-        nothing).</para>
-
-        <para>These methods may also be used for setting up bidirectional
-        relationships (using the 'mutual registration pattern'). For
-        example:</para>
-
-        <programlisting format="linespecific">public class Employee {
-    private Department department;
-    public Department getDepartment() {
-        return department;
-    }
-    public void setDepartment(Department department) { 
-        this.department = department;
-    }
-    public void modifyDepartment(Department department) {
-        setDepartment(department);
-        department.addToStaff(this);
-    }
-    public void clearDepartment(Department department) {
-        setDepartment(null);
-        department.removeFromStaff(this);
-    }
-
-    ...
-}</programlisting>
-      </section>
-
-      <section>
-        <title>How to control the order in which properties are
-        displayed</title>
-
-        <para>Use the <literal moreinfo="none">@MemberOrder</literal>
-        annotation.</para>
-      </section>
-
-      <section>
-        <title>How to specify a name and/or description for a property</title>
-
-        <section>
-          <title>Specifying the name for a property</title>
-
-          <para>By default the framework will use the property name itself to
-          label the property on the user interface. If you wish to over-ride
-          this, use the <literal moreinfo="none">@Named </literal>annotation
-          on the property.</para>
-        </section>
-
-        <section>
-          <title>Specifying a description for a property</title>
-
-          <para>Use the <literal moreinfo="none">@DescribedAs</literal>
-          annotation on the property itself.</para>
-
-          <para>The framework will take responsibility to make this
-          description available to the user, for example in the form of a
-          'balloon help'.</para>
-        </section>
-      </section>
-
-      <section>
-        <title>How to hide a property from the user</title>
-
-        <section>
-          <title>Hiding a property always</title>
-
-          <para>Use the <literal moreinfo="none">@Hidden</literal>
-          annotation.</para>
-        </section>
-
-        <section>
-          <title>Hiding a property under certain conditions</title>
-
-          <para>A <literal moreinfo="none">hide</literal> method can be used
-          to indicate that a particular instance's member should be hidden
-          (rendered invisible to the user) under certain conditions. The
-          syntax is:</para>
-
-          <para><literal moreinfo="none">public boolean
-          hide&lt;PropertyName&gt;()</literal> A true return value indicates
-          that the property is hidden. For example:</para>
-
-          <programlisting format="linespecific">public class Order {
-    public String getShippingInstructions() { ... }
-    public void setShippingInstructions(String shippingInstructions) { ... }
-    public boolean hideShippingInstructions() {
-        return hasShipped();
-    }
-}</programlisting>
-        </section>
-
-        <section>
-          <title>Hiding a property for specific users or roles</title>
-
-          <para><emphasis role="strong">Important</emphasis>: see the comments
-          under 'Disabling a property for specific users or roles'.</para>
-
-          <para>Session controls provide a way for the class to hide
-          properties from specific users, or users not in specific roles. The
-          syntax is: <literal moreinfo="none">public boolean
-          hide&lt;PropertyName&gt;(Session session)</literal> For
-          example:</para>
-
-          <programlisting format="linespecific">public class Employee {
-    public BigDecimal getSalary() { ... }
-    public void setSalary(BigDecimal salary) { ... }
-    public boolean hideSalary(UserMemento user, BigDecimal salary) {
-        return !user.hasRole("VIEW_SALARY");
-    }
-}</programlisting>
-        </section>
-      </section>
-
-      <section>
-        <title>How to make a property non-persisted</title>
-
-        <para>If there is no mutator (<literal>set</literal>) method then the
-        field is not only unmodifiable but will also <emphasis>not</emphasis>
-        be persisted. This approach is by design and also happens to be
-        compatible with Java Persistence Api (JPA) semantics. This may be used
-        to derive a property from other information available to the object,
-        for example:</para>
-
-        <programlisting format="linespecific">public class Employee {
-    public Department getDepartment() { ... }
-    public void setDepartment(Department department) { ... }
-    public void modifyDepartment(Department department) { ... }
-    public void clearDepartment(Department department) { ... }
-
-    // this is the derived property
-    public Employee getManager() {
-        if (getDepartment() == null) { return null; }
-        return getDepartment().getManager();
-    }
-
-    ...
-}</programlisting>
-
-        <para>If you need to have a <literal moreinfo="none">get</literal> and
-        <literal moreinfo="none">set</literal> method for the property but do
-        not wish to have that property persisted, use the <literal
-        moreinfo="none">@NotPersisted</literal> annotation.</para>
-      </section>
-    </section>
-
-    <section>
-      <title>Actions</title>
-
-      <para>An 'action' is a method that we expect the user to be able to
-      invoke via the user interface, though it may also be invoked
-      programmatically within the object model. The following conventions are
-      used to determine when and how methods are made available to the user as
-      actions.</para>
-
-      <section>
-        <title>How to add an action to an object</title>
-
-        <para>By default, any <literal moreinfo="none">public</literal>
-        instance method that you add to a class will be treated as a user
-        action, unless it represents a property, collection, or another
-        reserved method defined in this manual.</para>
-
-        <para>If you have a method that you don't want to be made available as
-        a user-action you should either make it <literal
-        moreinfo="none">protected</literal> or <literal
-        moreinfo="none">private</literal> or use the <literal
-        moreinfo="none">@Hidden</literal> annotation. Note also that <literal
-        moreinfo="none">static</literal> methods are ignored: such
-        functionality should reside in a service, such as a Repository or
-        Factory.</para>
-
-        <para>We refer to all methods that are intended to be invoked by users
-        as 'action methods'.</para>
-
-        <para>The syntax is:</para>
-
-        <programlisting format="linespecific">public void &lt;actionName&gt;([&lt;value or entity type&gt; param]...)</programlisting>
-
-        <para>or</para>
-
-        <programlisting format="linespecific">public &lt;return type&gt; &lt;actionName&gt;([&lt;value or entity type&gt; param]...)</programlisting>
-
-        <para>When a method returns a reference the viewer will attempt to
-        display that object. If the return value is <literal>null</literal>
-        then nothing is displayed.</para>
-      </section>
-
-      <section>
-        <title>How to specify parameters for an action</title>
-
-        <para>If an action method takes parameters, the viewing mechanism will
-        automatically require the user to specify these parameters (for
-        example, in the form of a dialog box) - and ensure that they are of
-        the correct type.</para>
-
-        <section>
-          <title>Specifying parameter names and/or descriptions</title>
-
-          <para>Unlike with properties, the framework cannot pick up the names
-          of parameters that you use within the domain code. By default
-          parameters will be labelled only with the type of the object
-          required (e.g. 'String:' or 'Customer:) If you want a parameter to
-          have a different name (such as 'First Name', 'Last Name') then that
-          parameter should be marked up with an <literal
-          moreinfo="none">@Named</literal> annotation - very often taking the
-          same form as the parameter name used in the code. (This is one of
-          the few forms of duplication that we cannot eliminate; the parameter
-          name is not available in the class' bytecode and so cannot be
-          inferred automatically. Alternatively though, you could create a
-          user-defined value type, using <literal
-          moreinfo="none">@Value</literal>).</para>
-
-          <para>Similarly, any parameter may be given a short user-description
-          using the <literal moreinfo="none">@DescribedAs</literal>
-          annotation. The framework takes responsibility to make this
-          available to the user.</para>
-        </section>
-
-        <section>
-          <title>How to make a parameter optional</title>
-
-          <para>By default, the framework assumes that when an action method
-          is to be invoked, all the parameters are mandatory. You may
-          over-ride this behaviour by marking up one or more of the paramaters
-          with the <literal moreinfo="none">@Optional</literal>
-          annotation.</para>
-        </section>
-
-        <section>
-          <title>How to specify default values for parameters</title>
-
-          <para>When an action is about to be invoked, then default values can
-          be provided for any or all of its parameters.</para>
-
-          <para>There are two different ways to specify parameters; either per
-          parameter, or for all parameters. The per-parameter form is simpler
-          and probably preferred; the syntax is:</para>
-
-          <programlisting format="linespecific">public &lt;parameter type&gt; defaultN&lt;ActionName&gt;()</programlisting>
-
-          <para>where N indicates the 0-based parameter number. For
-          example:</para>
-
-          <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {
-        ...
-    }
-    public Product default0PlaceOrder() {
-        return productMostRecentlyOrderedBy(this.getCustomer());
-    }
-}</programlisting>
-
-          <para>The syntax for specifying all the parameter default values in
-          one go is:</para>
-
-          <programlisting format="linespecific">public Object[] default&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-          <para>returning an array (which must have one element per parameter
-          in the action method signature) of corresponding default values. For
-          example:</para>
-
-          <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {y
-        ...
-    }
-    public Object[] defaultPlaceOrder(
-                      Product product,
-                      int quantity) {
-        return new Object[] {productMostRecentlyOrderedBy(this.getCustomer()), 1};
-    }
-}</programlisting>
-        </section>
-
-        <section>
-          <title>How to specify a set of choices for parameter values</title>
-
-          <para>The programmer may provide a set of choices for the value of
-          any or all of the parameters of an action. These will be made
-          available to the user - for example as a drop-down list.</para>
-
-          <para>As for defaults, there are two different ways to specify
-          parameters; either per parameter, or for all parameters. The
-          per-parameter form is simpler and probably preferred; the syntax
-          is:</para>
-
-          <programlisting format="linespecific">public List&lt;parameter type&gt; choicesN&lt;ActionName&gt;()</programlisting>
-
-          <para>where N indicates the 0-based parameter number. For
-          example:</para>
-
-          <programlisting format="linespecific">public class Order {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {
-        ...
-    }
-
-    public List&lt;Product&gt; choices0PlaceOrder() {
-        return lastFiveProductsOrderedBy(this.getCustomer());
-    }
-}</programlisting>
-
-          <para>The alternative mechanism is to supply all the parameter
-          choices in one go:</para>
-
-          <programlisting format="linespecific">public Object[] choices&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-          <para>returning an array, which must have one element per parameter
-          in the method signature. Each element of the array should itself
-          either be an array or a list, containing the set of values
-          representing the choices for that parameter, or <literal
-          moreinfo="none">null</literal> if there are no choices to be
-          specified for that parameter.</para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Order {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {
-        ...
-    }
-
-    public Object[] choicesPlaceOrder(
-                      Product product,
-                      int quantity) {
-        return new Object[] {lastFiveProductsOrderedBy(this.getCustomer()).toArray(), null};
-    }
-}</programlisting>
-
-          <para>(Note that if the type of the property is annotated with
-          <literal moreinfo="none">@Bounded</literal>, then it is not
-          necessary to specify the choices for that parameter, as the user
-          will automatically be offered the full set to choose from.)</para>
-        </section>
-
-        <section>
-          <title>How to specify the length or format for text-input
-          parameters</title>
-
-          <para>Use the <literal moreinfo="none">@MaxLength</literal>,
-          <literal moreinfo="none">@TypicalLength</literal>, <literal
-          moreinfo="none">@MultiLine</literal>, <literal
-          moreinfo="none">@Mask</literal> or <literal
-          moreinfo="none">@RegEx</literal> annotations.</para>
-        </section>
-
-        <section>
-          <title>How to validate parameter values</title>
-
-          <para>A <literal moreinfo="none">validate</literal> method is used
-          to check that the set of arguments used by an action method is
-          valid. If the arguments are invalid then the framework will not
-          invoke the action. A non-null return String indicates the reason why
-          the member cannot be modified/action be invoked, and the viewing
-          mechanism will display this feedback to the user.</para>
-
-          <para>The syntax is:</para>
-
-          <programlisting format="linespecific">public String validate&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(Product p, int quantity) { ... }
-    public String validatePlaceOrder(Product p, int quantity) {
-        if (p.isOutOfStock()) { return "Product is out of stock"; }
-        if (quantity &lt;= 0) { return "Quantity must be a positive value"; }
-        return null;
-    }</programlisting>
-        </section>
-      </section>
-
-      <section>
-        <title>How to specify conditions for invoking an action</title>
-
-        <section>
-          <title>Disabling an action based on the state of the object</title>
-
-          <para>There may be circumstances in which we do not want the user to
-          be able to initiate the action at all - for example because that
-          action is not appropriate to the current state of the object on
-          which the action resides. Such rules are enforced by means of a
-          <literal moreinfo="none">disable</literal> method.</para>
-
-          <para>The syntax is:</para>
-
-          <programlisting format="linespecific">public String disable&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-          <para>A non-null return <literal>String</literal> indicates the
-          reason why the action may not be invoked. The framework takes
-          responsibility to provide this feedback to the user. For
-          example:</para>
-
-          <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(Product p, int quantity) { ... }
-    public String disablePlaceOrder(Product p, int quantity) { 
-        return isBlackListed()?
-            "Blacklisted customers cannot place orders"
-            :null;
-    }</programlisting>
-
-          <para>It is also possible to permanently disable an action using the
-          <literal moreinfo="none">@Disabled</literal> annotation. One
-          possible reason for doing this might be during prototyping - to
-          indicate to the user that an action is planned, but has not yet been
-          implemented.</para>
-        </section>
-
-        <section>
-          <title>Disabling an action for certain users or roles</title>
-
-          <para>See 'Properties: Disabling a property for specific users or
-          roles'. The same technique can be applied to actions. However, the
-          caveats apply.</para>
-        </section>
-      </section>
-
-      <section>
-        <title>How to control the order in which actions appear on the
-        menu</title>
-
-        <para>Use the <literal moreinfo="none">@MemberOrder</literal>
-        annotation.</para>
-      </section>
-
-      <section>
-        <title>How to hide actions</title>
-
-        <section>
-          <title>Hiding an action always</title>
-
-          <para>Use the <literal moreinfo="none">@Hidden</literal> annotation.
-          (This is generally used where a <literal
-          moreinfo="none">public</literal> method on an object is not intended
-          to be a user action).</para>
-        </section>
-
-        <section>
-          <title>Hiding an action under certain conditions</title>
-
-          <para>A <literal moreinfo="none">hide</literal> method can be used
-          to indicate that an action should be hidden under certain
-          conditions. The syntax is:</para>
-
-          <programlisting format="linespecific">public boolean hide&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-          <para>A <literal moreinfo="none">true</literal> return value
-          indicates that the action should not be shown. For example:</para>
-
-          <programlisting format="linespecific">public class Order {
-    
-    public void applyDiscount(int percentage) { ... }
-    
-    public boolean hideApplyDiscount() {
-        return isWholesaleOrder();
-    }
-}</programlisting>
-        </section>
-
-        <section>
-          <title>Hiding an action for certain users or roles</title>
-
-          <para>See 'Properties: Hiding a property for specific users or
-          roles'. The same technique can be applied to actions. However, the
-          caveats apply.</para>
-        </section>
-      </section>
-
-      <section>
-        <title>How to pass a message back to the user</title>
-
-        <para>Sometimes, within an action it is necessary or desirable to pass
-        a message to the user, for example to inform them of the results of
-        their action ('5 payments have been issued') or that the action was
-        not successful ('No Customer found with name John Smith').
-        <literal>DomainObjectContainer</literal> defines two methods for this
-        purpose:</para>
-
-        <programlisting format="linespecific">void informUser(String message)
-
-void warnUser(String message)</programlisting>
-
-        <para>These two methods provide different ways to send a message to
-        the user, representing increasing levels of severity. How each of
-        these messages is rendered visible to the user is determined by the
-        framework.</para>
-
-        <para>These two methods are also available on
-        <literal>AbstractDomainObject </literal>as a shortcut.</para>
-      </section>
-    </section>
-
-    <section>
-      <title>Collections</title>
-
-      <para>A collection is a list of references to several entity objects
-      that have a common type.</para>
-
-      <section>
-        <title>How to add a collection to an object</title>
-
-        <para>A collection is recognized via an accessor/mutator method pair
-        (<literal>get</literal> and set) for any type of collection provided
-        by the programming language. The syntax is:</para>
-
-        <programlisting format="linespecific">public &lt;collection type&gt; get&lt;CollectionName&gt;()
-
-private void set&lt;CollectionName&gt;(&lt;collection type&gt; param)</programlisting>
-
-        <para>It is recommended that the collections be specified using
-        generics (for example: <literal
-        moreinfo="none">List&lt;Customer&gt;</literal> ). That way the
-        framework will be able to display the collection based on that type
-        definition. (Generics are also required by some persistence
-        mechanisms). For example the viewer might display the collection as a
-        table, with the columns defined by the visible properties of that
-        type. The viewer will then automatically prevent the user from adding
-        objects not of that type. If generics are not used then the type may
-        be inferred from the <literal moreinfo="none">addTo</literal> /
-        <literal moreinfo="none">removeFrom</literal> methods, if specified
-        (see below).</para>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Employee { ... }
-
-public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List &lt;Employee&gt; getEmployees() {
-        return employees;
-    }
-    private void setEmployees(List&lt;Employee&gt; employees) { 
-        this.employees = employees;
-    }
-    ...
-}</programlisting>
-      </section>
-
-      <section>
-        <title>How to trigger other behaviour when an object is added or
-        removed</title>
-
-        <para>A collection may have a corresponding <literal
-        moreinfo="none">addTo</literal> and/or <literal
-        moreinfo="none">removeFrom</literal> method. This is equivalent to the
-        <literal moreinfo="none">modify</literal> and <literal
-        moreinfo="none">clear</literal> methods for properties. The syntax
-        is:</para>
-
-        <programlisting format="linespecific">public void addTo&lt;CollectionName&gt;(&lt;entity type&gt; param)
-
-public void removeFrom&lt;CollectionName&gt;(&lt;entity type&gt; param)</programlisting>
-
-        <para>where <literal moreinfo="none">&lt;entity type&gt;</literal> is
-        the same type as the generic collection type. For example:</para>
-
-        <programlisting format="linespecific">public class Employee { ... }
-
-public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List &lt;Employee&gt; getEmployees() {
-        return employees;
-    }
-    private void setEmployees(List&lt;Employee&gt; employees) { 
-        this.employees = employees;
-    }
-    public void addToEmployees(Employee employee) {
-        employees.add(employee);
-    }
-    public void removeFromEmployees(Employee employee) {
-        employees.remove(employee);
-    }
-
-    ...
-}</programlisting>
-
-        <para>The addTo / removeFrom and modify / clear methods are
-        particularly useful in setting up bidirectional relationships using
-        the 'mutual registration pattern'; for a write-up of this pattern, see
-        <ulink
-        url="???">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.</para>
-      </section>
-
-      <section>
-        <title>How to prevent the user from modifying a collection</title>
-
-        <para>Preventing the user from adding to or removing from a collection
-        is known as 'disabling' the collection.</para>
-
-        <section>
-          <title>Disabling a collection permanently</title>
-
-          <para>Use the <literal moreinfo="none">@Disabled</literal>
-          annotation.</para>
-        </section>
-
-        <section>
-          <title>Disabling a collection under certain conditions</title>
-
-          <para>A <literal moreinfo="none">disable</literal> method can be
-          used to disable a particular instance's collection under certain
-          conditions: The syntax is:</para>
-
-          <para><literal moreinfo="none">public String
-          disable&lt;CollectionName&gt;()</literal> For example:</para>
-
-          <programlisting format="linespecific">public class Department {
-    public List&lt;Employee&gt; getEmployees() { ... }
-    public void addToEmployees(Employee employee) { ... }
-    public void removeFromEmployees(Employee employee) { ... }
-    public void disableEmployees() {
-        return isClosed()? "This department is closed" : null;
-    }
-}</programlisting>
-        </section>
-
-        <section>
-          <title>Disabling a collection for specific users or roles</title>
-
-          <para>See Properties: Disabling a property for specific users or
-          roles'. The same technique can be applied to collections, with the
-          same caveats applying.</para>
-        </section>
-      </section>
-
-      <section>
-        <title>How to validate an object to be added or removed</title>
-
-        <para>A <literal moreinfo="none">validate</literal> method is used to
-        check that an object to be added or removed from a collection is
-        valid. A non-null return <literal>String</literal> indicates the
-        reason why the object cannot be added/removed, and the viewing
-        mechanism will display this to the user. The syntax is:</para>
-
-        <programlisting format="linespecific">public String validateAddTo&lt;CollectionName&gt;(&lt;property type&gt; param) 
-
-public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List&lt;Employee&gt; getEmployees() { ... }
-    private void setEmployees(List&lt;Employee&gt; employees) { ... }
-    public String validateAddToEmployee(Employee employee) {
-        return employee.isRetired()?
-            "Cannot add retired employees to department"
-            :null;
-}</programlisting>
-      </section>
-
-      <section>
-        <title>How to control the order in which collections are
-        displayed</title>
-
-        <para>Use the <literal moreinfo="none">@MemberOrder</literal>
-        annotation.</para>
-      </section>
-
-      <section>
-        <title>How to specify a name and/or description for a
-        collection</title>
-
-        <para>Use the <literal moreinfo="none">@Named</literal> and/or
-        <literal moreinfo="none">@DescribedAs</literal> annotations.</para>
-      </section>
-
-      <section>
-        <title>How to hide a collection</title>
-
-        <para>See 'Properties: How to hide a property'. The same approaches
-        work for collections.</para>
-      </section>
-
-      <section>
-        <title>How to create a derived collection</title>
-
-        <para>Collections can be derived, in the same way as properties. These
-        are not persisted, but are represented as read only collections. For
-        example:</para>
-
-        <programlisting format="linespecific">public class Department {
-    // Standard collection
-    List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List&lt;Employee&gt; getEmployees() { ... }
-    private void setEmployees(List&lt;Employee&gt;) { ... }
-    void addToEmployees(final Employee employee) { ... }
-    void removeFromEmployees(final Employee employee) { ... }
-
-    // Derived collection
-    public List&lt;Employee&gt; getTerminatedEmployees() {
-        List&lt;Employee&gt; terminatedEmployees = new ArrayListt&lt;Employee&gt;();
-        for(Employee e: employees) {
-            if (e.isTerminated()) {
-                addTo(terminatedEmployees, e);
-            }
-        }
-        return terminatedEmployees;
-    }
-}</programlisting>
-      </section>
-    </section>
-
-    <section>
-      <title>Repositories and Factories</title>
-
-      <para>The Isis AppLib provides a class</para>
-
-      <para><literal
-      moreinfo="none">org.apache.isis.applib.AbstractFactoryAndRepository</literal></para>
-
-      <para>that makes it easy to write a Repository and/or Factory to work
-      entirely in memory. This is very useful during prototyping, as you can
-      quickly get your system up and running without having to deal with a
-      database. Refer to the JavaDoc documentation for that class for a full
-      list of methods available. However, the following describes some of the
-      most commonly-used methods:</para>
-
-      <para><literal moreinfo="none">&lt;T&gt; T newTransientInstance(final
-      Class&lt;T&gt; ofClass)</literal> returns a new instance of the
-      specified class, that is transient (unsaved). This may subsequently be
-      saved either by the user invoking the Save action (that will
-      automatically be rendered on the object view) or programmatically by
-      calling . . .</para>
-
-      <para><literal moreinfo="none">void makePersistent(Object
-      transientObject)</literal></para>
-
-      <para><literal moreinfo="none">&lt;T&gt; T newPersistentInstance(final
-      Class&lt;T&gt; ofClass)</literal> creates a new object already
-      persisted.</para>
-
-      <para><literal moreinfo="none">void disposeInstance(Object
-      persistentObject)</literal></para>
-
-      <para><literal moreinfo="none">&lt;T&gt; List&lt;T&gt;
-      allInstances(final Class&lt;T&gt; cls, final boolean
-      includeSubclasses)</literal> these may be iterated through for a
-      specific match.</para>
-
-      <para><literal moreinfo="none">&lt;T&gt; T firstMatch(final
-      Class&lt;T&gt; cls, final String title, final boolean
-      includeSubclasses)</literal>looks for an object with the title
-      specified.</para>
-
-      <para>There are a number of useful matching and filtering methods in
-      AbstractFactoryAndRepository.</para>
-
-      <section>
-        <title>Finding by pattern</title>
-
-        <para><emphasis>TODO: Complete this section to cover pattern-based
-        searching, including the fact that this works for both InMemory and
-        Hibernate repositories.</emphasis></para>
-      </section>
-    </section>
-
-    <section>
-      <title>@MustSatisfy specification</title>
-
-      <para>The <literal moreinfo="none">@MustSatisfy</literal> annotation is
-      an alternative to using imperative validation, allowing validation rules
-      to be captured in an (implementation of a)
-      <literal>org.apache.isis.applib.spec.Specification</literal>.</para>
-
-      <para>For example:</para>
-
-      <programlisting format="linespecific">public class DomainObjectWithMustSatisfyAnnotations extends AbstractDomainObject {
-
-    private String lastName;
-    @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
-    public String getLastName() {
-        resolve(lastName);
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-        objectChanged();
-    }
-
-    public void changeLastName(
-            @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
-            String lastName
-            ) {
-        setLastName(lastName);
-    }
-
-}</programlisting>
-
-      <para><emphasis>TODO: @MustSatisfy may not work for action parameters;
-      see http://dev.isis.apache.org/trac/ticket/669.</emphasis></para>
-    </section>
-
-    <section>
-      <title>Value Types</title>
-
-      <para>In addition to the built-in value types it is also possible to
-      define user-defined value types. This is typically done using the
-      <literal>@Value</literal> annotation.</para>
-
-      <para>The <literal moreinfo="none">@Value</literal> annotation is used
-      to provide an implementation of the
-      <literal>ValueSemanticsProvider</literal> interface. In turn this
-      provides objects that allow the framework to interact with the value, in
-      particular for parsing (parsing strings into values and display values
-      as strings), and for encoding/decoding (for serialization for
-      client/server and used by some persistors).</para>
-
-      <para>For more details, explore the built-in types within the applib,
-      for example
-      <literal>org.apache.isis.applib.value.Money</literal>.</para>
-
-      <programlisting format="linespecific">@Value(semanticsProviderName = "org.apache.isis.metamodel.value.MoneyValueSemanticsProvider")
-public class Money extends Magnitude {
-    ...
-}</programlisting>
-
-      <para>where <literal>MoneyValueSemanticsProvider</literal> is the
-      implementation of <literal>ValueSemanticsProvider</literal> described
-      above.</para>
-
-      <para>Using value types generally removes the need for using <literal
-      moreinfo="none">@MustSatisfy</literal> annotation; the rules can instead
-      move down into a <literal>validate</literal> method on the value type
-      itself.</para>
-
-      <para>TODO: need to beef up this discussion. Also, note that it is
-      possible to register value types using isis.properties rather than the
-      @Value annotation; this is particularly useful for third-party value
-      types.</para>
-    </section>
-
-    <section>
-      <title>Resolve and ObjectChanged</title>
-
-      <para>In previous versions of the framework it was necessary to call the
-      inherited <literal>resolve()</literal> method within every property or
-      collection's getter, and <literal>objectChanged()</literal> within every
-      property's setter and every collection's addTo or removeFrom.</para>
-
-      <para>These methods still exist in
-      <literal>AbstractDomainObject</literal>, but no longer need to be called
-      explicitly. Instead Isis uses bytecode enhancement (using either cglib
-      or javassist) to automatically call these methods. This bytecode
-      enhancement can be disabled in <filename
-      moreinfo="none">isis.properties</filename> file; if it is then the
-      methods must be called manually as they were in earlier versions of the
-      framework.</para>
-    </section>
-  </chapter>
-
-  <chapter id="chp.Fixtures">
-    <title>Fixtures</title>
-
-    <abstract>
-      <para>Setup the object store for prototyping or testing</para>
-    </abstract>
-
-    <para>Fixtures are simple classes that are used to set up the object store
-    with sample objects. This is a time-saver when using the in-memory object
-    store, either for prototyping or testing, because it means there is always
-    a known set of objects to work with. Object stores that actually persist
-    data may also support fixtures, though the typical behaviour is to only
-    install the fixtures the very first time, ie to seed the object store. On
-    subsequent runs the fixture is ignored.</para>
-
-    <para>The code for a fixture should be placed in the
-    <literal>install</literal> method, which is run when the system installs
-    the fixtures. Fixtures are only installed if the
-    <literal>ObjectAdapterPersistor</literal> flags that it is uninitialised
-    via its <literal>isInitialized</literal> method. For the in memory object
-    store this will be every time it is started, and for other object stores
-    will only be when they detect they have no persistent data.</para>
-
-    <section>
-      <title>Registering fixtures</title>
-
-      <para>Fixtures are registered with the Framework at startup via the
-      properties file, using the fixtures properties. The
-      <literal>fixtures</literal> property itself dictates which fixture
-      classes are to be instantiated at startup, for example:</para>
-
-      <programlisting format="linespecific">isis.fixtures = fixture.BookingsFixture, fixture.PerspectivesFixture</programlisting>
-
-      <para>The <literal>prefix</literal> property allows you specify the
-      common package name once and, hence omit them from the classes in the
-      list. The following set of properties is therefore equivalent to the
-      previous example.</para>
-
-      <programlisting format="linespecific">isis.fixtures.prefix = fixture
-isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
-    </section>
-  </chapter>
-
-  <chapter id="chp.RecognisedAnnotations">
-    <title>Recognised Annotations</title>
-
-    <abstract>
-      <para>Defines the set of annotations that are recognised by the Apache
-      Isis (Java) Programming Model.</para>
-    </abstract>
-
-    <para>This chapter defines the set of annotations that are recognised by
-    the Apache Isis (Java) Programming Model.</para>
-
-    <section>
-      <title>@ActionOrder</title>
-
-      <para>Note: The recommended mechanism for specifying the order in which
-      actions are listed to the user is <literal>@MemberOrder</literal> (see
-      below). <literal>@ActionOrder</literal> provides an alternative
-      mechanism, in which the order is specified in one place in the class,
-      with the added advantage (currently) that you can easily specify
-      groupings (which may be rendered by the viewer as sub-menus). However,
-      <literal>@ActionOrder</literal> is more 'brittle' to change: if you
-      change the name of an existing action you will need to ensure that the
-      corresponding name within the <literal>@ActionOrder</literal> annotation
-      is also changed.</para>
-
-      <para>The syntax is: <literal moreinfo="none">@ActionOrder("&lt;comma
-      separated list of action names&gt;")</literal> (the action names are not
-      case sensitive).</para>
-
-      <para>For example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@ActionOrder("PlaceNewOrder, CheckCredit")</emphasis>
-public class Customer {
-
-    public Order placeNewOrder() {}
-
-    public CreditRating checkCredit() {}
-
-...
-}</programlisting>
-
-      <para>Actions can be grouped together by surrounding the group with
-      brackets, and prefixing the group with name and colon. This information
-      may be used by the viewing mechanism to render actions into sub-menus.
-      For example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@ActionOrder("(Account Management: PlaceOrder, CheckCredit), (Personal Details: ChangeOfAddress, AddEmail)")</emphasis>
-public class Customer {
-
-    public Order placeNewOrder() {}
-
-    public CreditRating checkCredit() {}
-
-    public void changeOfAddress() {}
-
-    public void addEmail(String emailAddress) {}
-
-    ...
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@Bounded</title>
-
-      <para>For immutable objects where there is a bounded set of instances,
-      the <literal moreinfo="none">@Bounded</literal> annotation can be used.
-      For example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@Bounded</emphasis>
-public class County {
-    // members and actions here
-}</programlisting>
-
-      <para>The number of instances is expected to be small enough that all
-      instance can be held in memory. The viewer will use this information to
-      render all the instances of this class in a drop-down list or
-      equivalent. (Note: Although this is not enforced, <literal
-      moreinfo="none">@Bounded</literal> is intended for use on <literal
-      moreinfo="none">final</literal> classes. Its behaviour when used on
-      interfaces, or classes with sub-classes is not specified).</para>
-    </section>
-
-    <section>
-      <title>@Debug</title>
-
-      <para>The <literal>@Debug </literal>annotation marks an action method as
-      available in debug mode only, and so will not normally be displayed by
-      the user interface.</para>
-    </section>
-
-    <section>
-      <title>@DescribedAs</title>
-
-      <para>The <literal moreinfo="none">@DescribedAs</literal> annotation is
-      used to provide a short description of something that features on the
-      user interface. How this description is used will depend upon the
-      viewing mechanism - but it may be thought of as being like a 'tool tip'.
-      Descriptions may be provided for objects, members (properties,
-      collections and actions), and for individual parameters within an action
-      method. <literal moreinfo="none">@DescribedAs</literal> therefore works
-      in a very similar manner to <literal
-      moreinfo="none">@Named</literal>.</para>
-
-      <para><emphasis>Providing a description for an object</emphasis></para>
-
-      <para>To provide a description for an object, use the <literal
-      moreinfo="none">@DescribedAs</literal> annotation immediately before the
-      declaration of that object class. For example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@DescribedAs("A Customer who may have originally become known to us via " +
-             "the marketing system or who may have contacted us directly.")</emphasis>
-public class ProspectiveSale {
-   ...
-}</programlisting>
-
-      <para><emphasis>Providing a description for a member</emphasis></para>
-
-      <para>Any member (property, collection or action) may provide a
-      description. To specify this description, use the <literal
-      moreinfo="none">@DescribedAs</literal> annotation immediately before the
-      declaration of that member. For example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@DescribedAs("The name that the customer has indicated that they wish to be " +
-                 "addressed as (e.g. Johnny rather than Jonathan)")</emphasis>
-    public String getFirstName() { ... }
-}</programlisting>
-
-      <para><emphasis>Providing a description for an action
-      parameter</emphasis></para>
-
-      <para>To provide a description for an individual action parameter, use
-      the <literal moreinfo="none">@DescribedAs</literal> annotation in-line
-      i.e. immediately before the parameter declaration. For example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity")
-                      <emphasis role="strong">@DescribedAs("The quantity of the product being ordered")</emphasis>
-                      int quantity) {
-
-        Order order = new Order();
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);        
-        return order;
-    }
-    ...
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@Disabled</title>
-
-      <para>The <literal moreinfo="none">@Disabled</literal> annotation means
-      that the member cannot be used in any instance of the class. When
-      applied to the property it means that the user may not modify the value
-      of that property (though it may still be modified programmatically).
-      When applied to an action method, it means that the user cannot invoke
-      that method. For example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@Disabled</emphasis>
-    public void assessCreditWorthiness() { ... }
-
-    <emphasis role="strong">@Disabled</emphasis>
-    public int getInitialCreditRating(){ ... }
-    public void setInitialCreditRating(int initialCreditRating) { ... }
-}</programlisting>
-
-      <para>Note that if an action is marked as <literal
-      moreinfo="none">@Disabled</literal>, it will be shown on the user
-      interface but cannot ever be invoked. One possible reason to do this is
-      during prototyping, to indicate an action that is still to be developed.
-      If a method is intended for programmatic use, but not intended ever to
-      be invoked directly by a user, then it should be marked as <literal
-      moreinfo="none">@Hidden</literal> instead.</para>
-
-      <para>This annotation can also take a single parameter indicating when
-      it is to be hidden, for example the following code would disable the
-      action until the object has been saved.</para>
-
-      <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@Disabled</emphasis>(When.UNTIL_PERSISTED)
-    public void assessCreditWorthiness() { ... }
-}</programlisting>
-
-      <para>The acceptable values for the parameter are:
-      <literal>When.ALWAYS</literal>, <literal>When.NEVER</literal>,
-      <literal>When.ONCE_PERSISTED</literal> and
-      <literal>When.UNTIL_PERSISTED</literal>. By default the annotated
-      property or action is always disabled i.e. it is implicitly
-      <literal>When.ALWAYS.</literal></para>
-    </section>
-
-    <section>
-      <title>@Executed</title>
-
-      <para>The <literal>@Executed</literal> annotation overrides the default
-      location where a method is executed.</para>
-
-      <para><emphasis>Forcing a method to be executed on the
-      client</emphasis></para>
-
-      <para>The <literal>@Executed(Where.LOCALLY)</literal> annotation marks
-      an action method so that it executes on the client, rather than being
-      forwarded to the server for execution. This is useful for methods that
-      invoke a service that must be run client-side, for example spawning off
-      a separate process (such as a web browser or Acrobat Reader).</para>
-
-      <para><emphasis>Forcing a method to be executed on the
-      server</emphasis></para>
-
-      <para>The <literal>@Executed(Where.REMOTELY)</literal> annotation marks
-      an action method so that it executes on the server, even though it would
-      normally be executed on the client (as methods for transient objects
-      are). This is useful for methods that although based on transient
-      objects need access to persistent objects.</para>
-    </section>
-
-    <section>
-      <title>@Exploration</title>
-
-      <para>The <literal>@Exploration</literal> annotation marks an action
-      method as available in exploration mode only, and therefore not intended
-      for use in the production system</para>
-    </section>
-
-    <section>
-      <title>@FieldOrder</title>
-
-      <para>Note: The recommended mechanism for specifying the order in which
-      fields are listed to the user is <literal>@MemberOrder</literal> (see
-      below). <literal>@FieldOrder</literal> provides an alternative
-      mechanism, in which the order is specified in one place in the class.
-      However, <literal>@FieldOrder</literal> is more 'brittle' to change: if
-      you change the name of an existing property you will need to ensure that
-      the corresponding name within the <literal>@FieldOrder</literal>
-      annotation is also changed.</para>
-
-      <para>The syntax is: <literal moreinfo="none">@FieldOrder("&lt;comma
-      separated list of field names&gt;") </literal>(the field names are not
-      case sensitive.).</para>
-
-      <para>For example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@FieldOrder("Name, Address, DateOfBirth, RecentOrders")</emphasis>
-public class Customer {
-
-    public Date getDateOfBirth() {...}
-
-    public List&lt;Order&gt; getRecentOrders() {...}
-
-    public String getAddress() {...}
-
-    public String getName() {...}
-
-    ...
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@Hidden</title>
-
-      <para>The <literal moreinfo="none">@Hidden</literal> annotation
-      indicates that the member (property, collection or action) to which it
-      is applied should never be visible to the user. For example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    private int internalId;
-
-    <emphasis role="strong">@Hidden</emphasis>
-    public int getInternalId() {
-        return internalId;
-    }
-
-    <emphasis role="strong">@Hidden</emphasis>
-    public void updateStatus() { ... }
-}</programlisting>
-
-      <para>This annotation can also take a single parameter indicating when
-      it is to be hidden, for example the following code would show the Id
-      until the object has been saved, and then would hide it.</para>
-
-      <programlisting format="linespecific">public class Customer {
-    private int internalId;
-
-    <emphasis role="strong">@Hidden</emphasis>(When.ONCE_PERSISTED)
-    public int getInternalId() {
-        return internalId;
-    }
-}</programlisting>
-
-      <para>The acceptable values for the parameter are:
-      <literal>When.ALWAYS</literal>, <literal>When.NEVER</literal>,
-      <literal>When.ONCE_PERSISTED</literal> and
-      <literal>When.UNTIL_PERSISTED</literal>. By default the annotated
-      property or action is always hidden i.e. it is implicitly
-      <literal>When.ALWAYS.</literal></para>
-    </section>
-
-    <section>
-      <title>@Immutable</title>
-
-      <para>The <literal moreinfo="none">@Immutable</literal> annotation may
-      be applied to a class. The framework does not allow the state of such
-      objects to be changed through the UI, and it should be considered a
-      programmer error to do so programmatically. The ObjectStorePersistor, as
-      used to run the in-memory and Hibernate object stores will actually fail
-      if the programmer tries to change an object in a way that cause the
-      persistor to try and save it. For example the following class would
-      prevent the user from changing the object even when transient:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@Immutable</emphasis>
-public class Country {
-    ...
-}</programlisting>
-
-      <para>This annotation can also take a single parameter indicating when
-      it is to become immutable, for example the following code would allow
-      the user to create an email object and set it up, and then prevent any
-      changes once it has been saved.</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@Immutable</emphasis>(When.ONCE_PERSISTED)
-public class Email {
-    ...
-}</programlisting>
-
-      <para>The acceptable values for the parameter are:
-      <literal>When.ALWAYS</literal>, <literal>When.NEVER</literal>,
-      <literal>When.ONCE_PERSISTED</literal> and
-      <literal>When.UNTIL_PERSISTED</literal>. By default the annotated
-      property or action is always immutable i.e. it is implicitly
-      <literal>When.ALWAYS.</literal></para>
-    </section>
-
-    <section>
-      <title id="mask-annotation">@Mask</title>
-
-      <para>The <literal moreinfo="none">@Mask </literal>annotation may be
-      applied to any property, or to any parameter within an action method,
-      that allows the user to type in text as input. The mask serves to
-      validate, and potentially to normalise, the format of the input. The
-      characters that can be used are based on Swing's MaskFormatter, and also
-      Java's SimpleDateFormat. When applying a mask to a value property, the
-      annotation should be applied to the 'getter'. For example:</para>
-
-      <programlisting format="linespecific">public class Email {
-    private String telNo;
-
-    <emphasis role="strong">@Mask("(NNN)NNN-NNNN")</emphasis>
-    public String getTelephoneNumber() {...}
-
-    public void setTelephoneNumber(String telNo) {...}
-    ...
-}</programlisting>
-
-      <para>When applying a mask to a value parameter within an action method,
-      the annotation should be applied 'in-line' before that parameter). For
-      example:</para>
-
-      <programlisting format="linespecific">public void newContact(
-     @Named("Contact Name")
-     String contactName,
-     @Named("Telephone Number")
-     <emphasis role="strong">@Mask("(NNN)NNN-NNNN")</emphasis>
-     String telNo) {}</programlisting>
-    </section>
-
-    <section>
-      <title>@MaxLength</title>
-
-      <para>The <literal moreinfo="none">@MaxLength</literal> annotation
-      indicates the maximum number of characters that the user may enter into
-      a <literal moreinfo="none">String</literal> property, or a <literal
-      moreinfo="none">String</literal> parameter in an action. (It is ignored
-      if applied to a property or parameter of any other type.) For
-      example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-
-    <emphasis role="strong">@MaxLength(30)</emphasis>
-    public String getFirstName() { ... }
-    public void setFirstName(String firstName) { ... }
-    ...
-}</programlisting>
-
-      <para>If the model is being persisted on a relational database then
-      <literal moreinfo="none">@MaxLength</literal> should be specified for
-      all <literal moreinfo="none">String</literal> properties and action
-      parameters.</para>
-    </section>
-
-    <section>
-      <title>@MemberOrder</title>
-
-      <para><literal>@MemberOrder</literal> is the recommended mechanism for
-      specifying the order in which fields and/or actions are presented to the
-      user. (<literal>@ActionOrder</literal> and
-      <literal>@FieldOrder</literal> provide alternative mechanisms).</para>
-
-      <para><literal>@MemberOrder</literal> is specified at the individual
-      member level, on a 'relative' basis. The syntax is:</para>
-
-      <programlisting format="linespecific">@MemberOrder(sequence = "&lt;relative order&gt;")</programlisting>
-
-      <para>where <literal>&lt;relative order&gt;</literal> may be any string.
-      The actual sequence is determined by comparing all the values of the
-      sequence specifier string, using the standard <literal>String</literal>
-      comparator.</para>
-
-      <para>The simplest convention is to use numbers - 1, 2, 3 - though it is
-      a better idea to leave gaps in the numbers - 10, 20, 30 perhaps - such
-      that a new member may be added without having to edit existing numbers.
-      A useful alternative is to adopt the 'dot-decimal' notation - 1, 1.1,
-      1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 - which allows for an indefinite
-      amount of future insertion. For example:</para>
-
-      <programlisting format="linespecific">Public Class Customer {
-    @MemberOrder(sequence="2.1")
-    Public String getAddress() {...}
-    Public void setAddress(value as String) {...}
-
-    @MemberOrder(sequence="1.1")
-    Public String getFirstName() {...}
-    Public void setFirstName(value as String) {...}
-
-    @MemberOrder(sequence="1.2")
-    Public String getLastName() {...}
-    Public void setLastName(value as String) {...}
-
-    @MemberOrder(sequence="3")
-    Public Date getDateOfBirth() {...}
-    Public void setDateOfBirth(value as Date) {...}
-    ...
-}   </programlisting>
-
-      <para>If a member does not have a specified order then it will be placed
-      after those that are specified. Two members may have the same sequence
-      specifier, but in such a case the relative ordering of those members
-      will be indeterminate.</para>
-
-      <para>This approach is especially useful when dealing with inheritance
-      hierarchies, as it allows sub-classes to specify where their additional
-      members should be placed in relation to those inherited from the
-      super-class.</para>
-
-      <para>Note that certain styles of user interface will lay out an
-      object's properties and its collections separately, in which case the
-      relative member order of properties and collections will be evaluated
-      separately. However, since other styles of user interface may interleave
-      properties and collections, it is safer to assume the latter.</para>
-    </section>
-
-    <section>
-      <title>@MultiLine</title>
-
-      <para>The <literal moreinfo="none">@MultiLine</literal> annotation
-      provides information about the carriage returns in a <literal
-      moreinfo="none">String</literal> property or action parameter. The
-      annotation indicates that:</para>
-
-      <para>- the <literal>String</literal> property or parameter may contain
-      carriage returns, and</para>
-
-      <para>- (optionally) the typical number of such carriage returns,
-      and</para>
-
-      <para>- (optionally) that the text should be wrapped (the default is
-      that text is not wrapped).</para>
-
-      <note>
-        <para>Currently the <literal moreinfo="none">preventWrapping</literal>
-        functionality is not fully implemented.</para>
-      </note>
-
-      <para>This may be used by the viewing mechanism to render the property
-      as a multi-line textbox (or text-editor when changes are permitted),
-      with appropriate wrapping and/or scrollbars. The syntax is:</para>
-
-      <para><literal
-      moreinfo="none">@MultiLine([numberOfLines=&lt;typicalNumberOfCRs&gt;]
-      [,preventWrapping=&lt;false|true&gt;])</literal></para>
-
-      <para>For example:</para>
-
-      <programlisting format="linespecific">public class BugReport {
-    <emphasis role="strong">@MultiLine(numberOfLines=10)</emphasis>
-    public String getStepsToReproduce() { ... }
-    public void setStepsToReproduce(String stepsToReproduce) { ... }
-    ...
-}</programlisting>
-
-      <para>Here the <literal moreinfo="none">stepsToReproduce</literal> may
-      be displayed in a text area of 10 rows, with no wrapping. A horizontal
-      scrollbar may appear if the number of characters on any given row
-      exceeds the width. Another example:</para>
-
-      <programlisting format="linespecific">public class Email {
-    <emphasis role="strong">@MultiLine(numberOfLines=20, preventWrapping=false)</emphasis>
-    public String getBody() { ... }
-    public void setBody(String body) { ... }
-    ...
-}</programlisting>
-
-      <para>Here the body should be displayed in a text area of 20 rows, with
-      wrapping. If this attribute is combined with the <literal
-      moreinfo="none">&lt;TypicalLength&gt;</literal>, then the expected width
-      of the text area in the user interface will be determined by the value
-      of the typical length divided by the number of specified lines. For
-      example:</para>
-
-      <programlisting format="linespecific">public class Email {
-    <emphasis role="strong">@MultiLine(numberOfLines=20, preventWrapping=false)</emphasis>
-    @TypicalLength(800)
-    public String getBody() { ... }
-    public void setBody(String body) { ... }
-    ...
-}</programlisting>
-
-      <para>Here the body will (likely be) displayed in a text area of 20
-      rows, with 40 columns.</para>
-    </section>
-
-    <section>
-      <title>@MustSatisfy</title>
-
-      <para>The <literal moreinfo="none">@MustSatisfy</literal> annotation
-      allows validation to be applied to properties using an (implementation
-      of a) <literal>org.apache.isis.applib.spec.Specification</literal>
-      object.</para>
-
-      <para>For example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@MustSatisfy(StartWithCapitalLetterSpecification.class)</emphasis>
-    public String getFirstName() { ... }
-
-    ...
-}</programlisting>
-
-      <para>The <literal>Specification</literal> is consulted during
-      validation, being passed the proposed value.</para>
-    </section>
-
-    <section>
-      <title>@Named</title>
-
-      <para>The <literal moreinfo="none">@Named</literal> annotation is used
-      when you want to specify the way something is named on the user
-      interface i.e. when you do not want to use the name generated
-      automatically by the system. It can be applied to objects, members
-      (properties, collections, and actions) and to parameters within an
-      action method.</para>
-
-      <note>
-        <title>Warning</title>
-
-        <para>Generally speaking it is better to rename the property,
-        collection or action. The only common case where @Named is common is
-        to rename parameters for built-in value types. Even here though a
-        custom value type can be defined using @Value so that the value type
-        is used as the parameter name. @Named may also be used if the name
-        needs punctuation or other symbols in the name presented to the
-        user.</para>
-      </note>
-
-      <para><emphasis>Specifying the name of an object</emphasis></para>
-
-      <para>By default the name of an object is derived, reflectively from the
-      class name. To specify a different name for an object, use the <literal
-      moreinfo="none">@Named</literal> annotation in front of the class
-      declaration. For example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@Named("Customer")</emphasis>
-public class CustomerImpl implements Customer{
-   ...
-}</programlisting>
-
-      <para>See also: <literal moreinfo="none">@Plural</literal>.</para>
-
-      <para><emphasis>Specifying the name of a member</emphasis></para>
-
-      <para>By default, the name of a member (a property, collection or
-      action) presented to the user is derived, reflectively, from the name of
-      the member defined in the program code. To specify a different name use
-      the <literal moreinfo="none">@Named </literal>annotation immediately
-      before the member declaration. For example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@Named("Given Name")</emphasis>
-    public String getFirstName() { ... }
-
-    <emphasis role="strong">@Named("Family Name")</emphasis>
-    public String getSurname() { ... }
-
-    public CreditRating getCreditRating() { ... }
-}</programlisting>
-
-      <para>Note that the framework provides a separate and more powerful
-      mechanism for internationalisation.</para>
-
-      <para><emphasis>Specifying the name for an action
-      parameter</emphasis></para>
-
-      <para>The most common usage of <literal moreinfo="none">@Named
-      </literal>will be to specify names for the parameters of an action:
-      because, by default, the user interface will use the type of the
-      parameter as the name. (This is because the parameter name declared in
-      the code for the action method cannot be picked up reflectively.) To
-      specify the name of a parameter, the <literal
-      moreinfo="none">@Named</literal> annotation is applied 'in-line' (i.e.
-      preceding the individual parameter declaration). For example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-
-    public Order placeOrder(
-                      Product product,
-                      <emphasis role="strong">@Named("Quantity")</emphasis>
-                      int quantity) {
-
-        Order order = new Order();
-        order.modifyCustomer(this);
-        order.modifyProduct(product);
-        order.setQuantity(quantity);        
-        return order;
-    }
-    ...
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@NotPersistable</title>
-
-      <para>This annotation indicates that transient instances of this class
-      may be created but may not be persisted. The framework will not provide
-      the user with an option to 'save' the object, and attempting to persist
-      such an object programmatically would be an error. For example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@NotPersistable</emphasis>
-public class InputForm {
-    // members and actions here
-}</programlisting>
-
-      <para>This annotation can also take a single parameter indicating
-      whether it is only the user that cannot persist the object, for example
-      the following code would prevent the user from saving the object (via
-      the viewer) but still allow the program to persist the object. By
-      default the annotated object is effectively transient, e.g. it is
-      implicitly
-      <literal>By</literal>.<literal>USER_OR_PROGRAM</literal>.</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@NotPersistable</emphasis>(By.USER)
-public class InputForm {
-    ...
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@NotPersisted</title>
-
-      <para>This indicates that the property is not to be persisted. Note that
-      in many cases the same thing could be achieved by providing the property
-      with a 'getter' but no 'setter'. For example:</para>
-
-      <para><emphasis>Check that this is acceptable for
-      Hibernate</emphasis></para>
-
-      <programlisting format="linespecific">public class Order {
-
-    private Order previousOrder;
-
-    <emphasis role="strong">@NotPersisted</emphasis>
-    public Order getPreviousOrder() {...}
-
-    public void setPreviousOrder(Order previousOrder) {...}
-
-    // rest of code
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@Optional</title>
-
-      <para>By default, the system assumes that all properties of an object
-      are required, and therefore will not let the user save a new object
-      unless a value has been specified for each property. Similarly, by
-      default, the system assumes that all parameters in an action are
-      required and will not let the user execute that action unless values
-      have been specified for each parameter. To indicate that either a
-      property, or an action parameter, is optional, use the <literal
-      moreinfo="none">@Optional</literal> annotation.</para>
-
-      <para><emphasis>Making a property optional</emphasis></para>
-
-      <para>To indicate that a property is optional (i.e. that the user may
-      save the object without necessarily specifying a value for this
-      property), use the @Optional annotation immediately before the
-      declaration of that property. For example:</para>
-
-      <programlisting format="linespecific">public class Order {
-    public Product getProduct() { ... }
-    
-    public java.util.Date getShipDate() { ... }
-    public void setShipDate(Date java.util.shipDate) { ... }
-
-    <emphasis role="strong">@Optional</emphasis>
-    public String getComments() { ... }
-    public void setComments(String comments) { ... }
-}</programlisting>
-
-      <para>Here the <literal moreinfo="none">product</literal> and <literal
-      moreinfo="none">shipDate</literal> properties are both required, but the
-      <literal moreinfo="none">comments</literal> property is optional.</para>
-
-      <para><emphasis>Making an action parameter optional</emphasis></para>
-
-      <para>To indicate that an action may be invoked without having to
-      specify a value for a particular parameter, the <literal
-      moreinfo="none">@Optional</literal> annotation should be used in-line
-      i.e. immediately before the declaration of that parameter. For
-      example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(
-              Product product,
-              @Named("Quantity") int quantity, 
-              @Optional @Named("Special Instructions") String instr) {
-        ....
-    }
-    ...
-}</programlisting>
-
-      <para>Note that the <literal
-      moreinfo="none">@Optional</literal>annotation has no meaning for a
-      primitive property (or parameter) such as <literal
-      moreinfo="none">int</literal> - because primitives will always return a
-      default value (e.g. zero). If optionality is required, then use the
-      corresponding wrapper class (e.g. java.lang.Integer).</para>
-    </section>
-
-    <section>
-      <title>@Plural</title>
-
-      <para>When Apache Isis displays a collection of several objects it may
-      use the plural form of the object type in the title. By default the
-      plural name will be created by adding an 's' to the end of the singular
-      name (whether that is the class name or another name specified using
-      <literal moreinfo="none">@Named</literal>). Where the single name ends
-      in 'y' then the default plural name will end in 'ies' - for example a
-      collection of <literal moreinfo="none">Country</literal> objects will be
-      titled 'Countries'. Where these conventions do not work, the programmer
-      may specify the plural form of the name using @Plural. For
-      example:</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@Plural("Children")</emphasis>
-public class Child {
-    // members and actions here
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@RegEx</title>
-
-      <para>The <literal moreinfo="none">@RegEx</literal> annotation may be
-      applied to any property, or to any parameter within an action method,
-      that is a value type (i.e. that allows the user to type in text as
-      input). It serves both to validate and potentially to normalise the
-      format of the input. <literal moreinfo="none">@Regex</literal> is
-      therefore similar in use to <literal moreinfo="none">@Mask</literal> but
-      provides more flexibility. The syntax is:</para>
-
-      <para><literal moreinfo="none">@RegEx(validation = &lt;regEx string&gt;,
-      format = &lt;regEx string&gt;, caseSensitive =
-      &lt;true|false&gt;)</literal></para>
-
-      <para>The first parameter is required; the format defaults to 'no
-      formatting'; caseSensitive defaults to false. When applying Regex to a
-      value property, the annotation should be applied to the 'getter'. For
-      example:</para>
-
-      <programlisting format="linespecific">    private String email;
-
-<emphasis role="strong">    @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")</emphasis>
-    public String getEmail() {}
-
-    public void setEmail(String email) {}</programlisting>
-
-      <para>When applying a RegEx expression to a value parameter within an
-      action method, the annotation should precede that parameter:</para>
-
-      <programlisting format="linespecific">    public void newContact(
-        @Named("Contact Name")
-        String contactName,
-        @Named("Email")
-        <emphasis role="strong">@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")</emphasis>
-        String email) {}</programlisting>
-    </section>
-
-    <section>
-      <title>@TypeOf</title>
-
-      <para>The <literal moreinfo="none">@TypeOf</literal> annotation is used
-      to specify the type of elements in a collection, when it is not possible
-      to use generics - for example when invoking an external method that does
-      not use generics.</para>
-
-      <programlisting format="linespecific"><emphasis role="strong">@TypeOf(Customer.class)</emphasis>
-public List allNewCustomers() {
-    return CustomerDatabase.allNewCustomers();
-}</programlisting>
-    </section>
-
-    <section>
-      <title>@TypicalLength</title>
-
-      <para>The <literal moreinfo="none">@TypicalLength</literal> annotation
-      indicates the typical length of a <literal
-      moreinfo="none">String</literal> property or <literal
-      moreinfo="none">String</literal> parameter in an action. This may be
-      used by the viewing mechanism to determine the space that should be
-      given to that property or parameter in the appropriate view. For
-      example:</para>
-
-      <programlisting format="linespecific">public class Customer {
-    @MaxLength(30)
-    <emphasis role="strong">@TypicalLength(20)</emphasis>
-    public String getFirstName() { ... }
-    public void setFirstName(String firstName) { ... }
-}</programlisting>
-
-      <para>If the typical length is the same as the <literal
-      moreinfo="none">&lt;MaxLength&gt;</literal> then there is no need to
-      specify <literal moreinfo="none">&lt;TypicalLength&gt;</literal> as
-      well. If the value specified is zero or negative then it will be
-      ignored.</para>
-    </section>
-
-    <section>
-      <title>@Value</title>
-
-      <para>The <literal moreinfo="none">@Value</literal> annotation indicates
-      that a class should be treated as a value type rather than as a
-      reference (or entity) type. It does this providing an implementation of
-      a
-      <literal>org.apache.isis.applib.adapters.ValueSemanticsProvider</literal>.</para>
-
-      <para>For example:</para>
-
-      <programlisting format="linespecific">@Value(semanticsProviderClass=ComplexNumberValueSemanticsProvider.class)
-public class ComplexNumber {
-    ...
-}</programlisting>
-
-      <para>The <literal>ValueSemanticsProvider</literal> allows the framework
-      to interact with the value, parsing strings and displaying as text, and
-      encoding/decoding (for serialization).</para>
-    </section>
-  </chapter>
-
-  <chapter id="chp.RecognisedMethods">
-    <title>Recognised Methods</title>
-
-    <abstract>
-      <para>Lists the explicit methods that are recognised within the Apache
-      Isis programming model</para>
-    </abstract>
-
-    <para>The programming model allows the domain modeller to define
-    behaviourally complete domain objects, provide maximum feedback to the
-    user, and control any interaction that may take place (rather than place
-    that code in each and every user interface and back-end). This chapter
-    lists the explicit methods that are recognised within the Apache Isis
-    programming model. All methods must be <literal>public</literal> to be
-    recognised.</para>
-
-    <para>Methods that do not get matched with any of the listed rules are
-    deemed to be action methods that we expect the user to invoke via the user
-    interface. These are public methods, of the following format</para>
-
-    <programlisting format="linespecific">public void &lt;actionName&gt;([&lt;property type&gt; param]...)
-public &lt;type&gt; &lt;actionName&gt;([&lt;property type&gt; param]...)</programlisting>
-
-    <para>that are not used for fields, titles, or for controlling other
-    methods. Essentially they are the methods left over from generating all
-    other aspects of the class.</para>
-
-    <para>When such a method returns a reference the framework will attempt to
-    display that object. If an action method returns <literal
-    moreinfo="none">null</literal> then nothing will be displayed.</para>
-
-    <section>
-      <title id="addto-method">addTo</title>
-
-      <programlisting format="linespecific">public void addTo&lt;PropertyName&gt;(&lt;collection element type&gt; param)</programlisting>
-
-      <para>Used in conjunction with a collection, the <literal
-      moreinfo="none">addTo</literal> method is called by the framework when
-      the user adds an element to the collection. By providing this method in
-      conjunction with a non-generic collection it will be limited to a
-      specific type (rather than being used to store references of type
-      <literal>Object</literal>). This behaviour is similar to that of the
-      <literal>modify</literal> method for properties.</para>
-
-      <para>See also <xref linkend="modify-method" /> and <xref
-      linkend="removefrom-method" /></para>
-    </section>
-
-    <section>
-      <title>choices</title>
-
-      <para><emphasis>On a property</emphasis></para>
-
-      <programlisting format="linespecific">public &lt;property type&gt;[] choices&lt;PropertyName&gt;([&lt;property type&gt; param])
-
-public List&lt;property type&gt; choices&lt;PropertyName&gt;([&lt;property type&gt; param])</programlisting>
-
-      <para>Used in conjunction with a property, the
-      <literal>choices</literal> method provides the user with a set of
-      options for setting a property. This method is called when the user
-      interface makes the options available, hence its return value can be
-      based on the current state of the object. Note - this does not limit the
-      state of the field, see the <literal>validate</literal> methods for a
-      way to do that.</para>
-
-      <para><emphasis>On parameters on an action</emphasis></para>
-
-      <para>Either:</para>
-
-      <programlisting format="linespecific">public Object[] choicesN&lt;actionName&gt;()
-
-public List&lt;parameter type&gt; choicesN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
-
-      <para>where N is the 0-based parameter number.</para>
-
-      <para>Or:</para>
-
-      <programlisting format="linespecific">public Object[] choices&lt;actionName&gt;([&lt;parameter type&gt; param]...)
-
-public List&lt;parameter type&gt; choices&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
-
-      <para>Complements an action method, or a specific paramter within an
-      action.</para>
-
-      <para>The <literal>choices</literal> method provides a set of options
-      for the parameters of an action. This method is called when the user
-      interface prompts for the parameters from the user, so the options
-      cannot depend on the state of any of the other parameters. Note - this
-      does not limit the state of the parameter, see the
-      <literal>validate</literal> methods for a way to do that.</para>
-
-      <para>For each parameter the array should contain either <literal
-      moreinfo="none">null</literal>, an array, or a collection.</para>
-    </section>
-
-    <section>
-      <title id="clear-method">clear</title>
-
-      <programlisting format="linespecific">public void clear&lt;PropertyName&gt;()</programlisting>
-
-      <para>Used in conjunction with a property, the <literal>clear</literal>
-      method is called when the user (rather than the framework) clears a
-      reference field, or blanks (so there is no entry) a value field.</para>
-
-      <para>See also <xref linkend="modify-method" /></para>
-    </section>
-
-    <section>
-      <title>created</title>
-
-      <programlisting format="linespecific">public void created()</programlisting>
-
-      <para>Life cycle method called by framework when an object is first
-      created. This is the instance's logical creation. This method will
-      <emphasis>not</emphasis> be called when the object is recreated during
-      persistence or remoting.</para>
-    </section>
-
-    <section>
-      <title>default</title>
-
-      <para><emphasis>For a property</emphasis></para>
-
-      <programlisting format="linespecific">public &lt;parameter type&gt; default&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-      <para>Complements a get/set method for a reference or value
-      property.</para>
-
-      <para>Provides the default reference or value for a property to be set
-      to when an object is first created, or the user asks for a property to
-      be reset.</para>
-
-      <para><emphasis>For parameters on an action</emphasis></para>
-
-      <para>Either:</para>
-
-      <programlisting format="linespecific">public Object[] defaultN&lt;actionName&gt;()
-
-public List&lt;parameter type&gt; defaultN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
-
-      <para>where N is the 0-based parameter number.</para>
-
-      <para>Or:</para>
-
-      <programlisting format="linespecific">public Object[] default&lt;actionName&gt;([&lt;parameter type&gt; param]...)
-
-public List&lt;parameter type&gt; default&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
-
-      <para>Complements an action method, or a specific parameter on an action
-      method.</para>
-
-      <para>Provides the defaults that should be used for the parameters
-      expected by an action method. The values should be provided as an array
-      with the same number of elements as the number of parameters. Any
-      parameter that does not have a default should have its corresponding
-      element in the array set to null.</para>
-    </section>
-
-    <section>
-      <title>deleted</title>
-
-      <para>Deprecated but still supported; replaced by
-      <literal>removed()</literal></para>
-
-      <programlisting format="linespecific">public void deleted()</programlisting>
-
-      <para>Life cycle method called by framework when an object has just been
-      removed from the persistent store. At this point the object will exist
-      in memory, but no longer exist in the persistent store.</para>
-    </section>
-
-    <section>
-      <title>deleting</title>
-
-      <para>Deprecated but still supported; replaced by
-      <literal>removing()</literal></para>
-
-      <programlisting format="linespecific">public void deleting()</programlisting>
-
-      <para>Life cycle method called by framework when an object is just about
-      to be removed from the persistent store. At this point the object still
-      exists in the persistent store.</para>
-    </section>
-
-    <section>
-      <title>disable</title>
-
-      <programlisting format="linespecific">public String disable&lt;PropertyName&gt;([&lt;property type&gt; param])
-
-public String disable&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-      <para>Complements a get/set method for a field, or an action
-      method.</para>
-
-      <para>The <literal moreinfo="none">disable</literal> dynamically
-      controls whether a field is editable, or an action can be initiated. If
-      a <literal>String</literal> object is returned the field or action is
-      disabled and the string is made visible to user to inform them why it is
-      disabled. If the method returns <literal moreinfo="none">null</literal>
-      then field or action remains enabled.</para>
-    </section>
-
-    <section>
-      <title>get</title>
-
-      <para><emphasis>Value or reference property</emphasis></para>
-
-      <programlisting format="linespecific">public &lt;property type&gt; get&lt;PropertyName&gt;()</programlisting>
-
-      <para>A standard JavaBean accessor/mutator pair will be recognised as a
-      field for a value or reference. Values include Java primitives,
-      <literal>String</literal>s and <literal>Date</literal>s, and also the
-      value types provided by the AppLib (see <xref
-      linkend="chp.RecognisedTypes" />).</para>
-
-      <para>If there is no mutator method then the field is flagged as being
-      derived and will not be persisted or editable.</para>
-
-      <para><emphasis>Collection property</emphasis></para>
-
-      <para>A collection is picked up via an accessor method with the
-      following signature. Java arrays, <literal>Vector</literal>s and
-      <literal>List</literal>s (including generic lists) are the only types
-      that are recognised at the moment.</para>
-
-      <programlisting format="linespecific">public &lt;collection type&gt; get&lt;PropertyName&gt;()</programlisting>
-    </section>
-
-    <section>
-      <title>getId</title>
-
-      <programlisting format="linespecific">public String getId()</programlisting>
-
-      <para>The <literal>getId</literal> method is used by service objects to
-      provide an identity for a particular service type. This should be the
-      same for all implementations of a specific service allowing them to be
-      swapped for one another.</para>
-    </section>
-
-    <section>
-      <title>hide</title>
-
-      <programlisting format="linespecific">public boolean hide&lt;PropertyName&gt;([&lt;property type&gt; param])
-
-public boolean hide&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-      <para>Complements a get/set method for a field, or an action
-      method.</para>
-
-      <para>The <literal moreinfo="none">hide</literal> method allows a
-      property or action to be dynamically hidden from the user. This is
-      typically used for security reasons, such as hiding a field once it is
-      set up. Returning <literal moreinfo="none">true</literal> makes the
-      property or action invisible.</para>
-    </section>
-
-    <section>
-      <title>iconName</title>
-
-      <programlisting format="linespecific">public String iconName()</programlisting>
-
-      <para>The <literal moreinfo="none">iconName</literal> is used to
-      over-ride the framework's default mechanism for determining the icon to
-      display based on the class name. The name returned by this method should
-      be simply a name and not a filepath: it should not have an file
-      extension. The framework will look for an acceptable type of image using
-      this name, deriving possible filenames from it. See the section on
-      <ulink url="images.html">images</ulink> for more information.</para>
-    </section>
-
-    <section>
-      <title>loaded</title>
-
-      <programlisting format="linespecific">public void loaded()</programlisting>
-
-      <para>Life cycle method called by framework when an object has just been
-      loaded in from the persistent store. At this point the object has it's
-      correct persisted state.</para>
-    </section>
-
-    <section>
-      <title>loading</title>
-
-      <programlisting format="linespecific">public void loading()</programlisting>
-
-      <para>Life cycle method called by framework when an object is just about
-      to be loaded from the persistent store. At this point the object exists
-      in memory but has not had its state restored.</para>
-    </section>
-
-    <section>
-      <title id="modify-method">modify</title>
-
-      <programlisting format="linespecific">public void modify&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-      <para>Complements a property.</para>
-
-      <para>The <literal moreinfo="none">modify</literal> method is called
-      when the user (rather than the framework) sets a reference or value
-      field. This is typically used to initialise an association (where an
-      association is combination of references, such as a back link), or to
-      trigger other behaviours such as adding the new value to a total.</para>
-
-      <para>See also <xref linkend="clear-method" />.</para>
-    </section>
-
-    <section>
-      <title>persisted</title>
-
-      <para>Replaces <literal>saved()</literal></para>
-
-      <programlisting format="linespecific">public void persisted()</programlisting>
-
-      <para>Life cycle method called by framework when a transient object has
-      just been added to the persistent store. At this point the object exists
-      in the persistent store.</para>
-    </section>
-
-    <section>
-      <title>persisting</title>
-
-      <para>Replaces <literal>saving()</literal></para>
-
-      <programlisting format="linespecific">public void persisting()</programlisting>
-
-      <para>Life cycle method called by framework when a transient object is
-      just about to be added to the persistent store. At this point the object
-      exists only in memory and not in the persistent store.</para>
-    </section>
-
-    <section>
-      <title>removed</title>
-
-      <para>Replaces <literal>deleted()</literal></para>
-
-      <programlisting format="linespecific">public void removed()</programlisting>
-
-      <para>Life cycle method called by framework when an object has just been
-      removed from the persistent store. At this point the object will exist
-      in memory, but no longer exist in the persistent store.</para>
-    </section>
-
-    <section>
-      <title>removing</title>
-
-      <para>Replaces <literal>deleting()</literal></para>
-
-      <programlisting format="linespecific">public void removing()</programlisting>
-
-      <para>Life cycle method called by framework when an object is just about
-      to be removed from the persistent store. At this point the object still
-      exists in the persistent store.</para>
-    </section>
-
-    <section>
-      <title id="removefrom-method">removeFrom</title>
-
-      <programlisting format="linespecific">public void removeFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-      <para>Complements a collection.</para>
-
-      <para>The <literal moreinfo="none">removeFrom</literal> method is called
-      by the framework when the user removes an element from the collection.
-      By providing this method in conjunction with a non-generic collection
-      interactions with that collection become limited to a specific type
-      (rather than being used to store references of type
-      <literal>Object</literal>). This signature is similar to the <literal
-      moreinfo="none">clear</literal> method for properties.</para>
-
-      <para>See also <xref linkend="clear-method" /> and <xref
-      linkend="addto-method" />.</para>
-    </section>
-
-    <section>
-      <title>saved</title>
-
-      <para>Deprecated but still supported; replaced by
-      <literal>persisted()</literal></para>
-
-      <programlisting format="linespecific">public void saved()</programlisting>
-
-      <para>Life cycle method called by framework when a transient object has
-      just been added to the persistent store. At this point the object exists
-      in the persistent store..</para>
-    </section>
-
-    <section>
-      <title>saving</title>
-
-      <para>Deprecated but still supported; replaced by
-      <literal>persisting()</literal></para>
-
-      <programlisting format="linespecific">public void saving()</programlisting>
-
-      <para>Life cycle method called by framework when a transient object is
-      just about to be added to the persistent store. At this point the object
-      exists only in memory and not in the persistent store.</para>
-    </section>
-
-    <section>
-      <title>set</title>
-
-      <programlisting format="linespecific">public void set&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-      <para>Complements a <literal>get</literal> method.</para>
-
-      <para>The <literal moreinfo="none">set</literal> method is called when
-      the property is changed, either by the user or the framework. As the
-      framework calls the same method when recreating the object from
-      persistent data it is important to avoid doing any work in the
-      <literal>set</literal> method other than setting up the property
-      variable. A typical set method would be:</para>
-
-      <programlisting format="linespecific">private String name;
-
-public void setName(String name) {
-    this.name = name;
-}</programlisting>
-    </section>
-
-    <section>
-      <title>toString</title>
-
-      <programlisting format="linespecific">public String toString()</programlisting>
-
-      <para>The <literal>toString</literal> method is used to get a title for
-      the object. If the <literal>toString</literal> method cannot serve as
-      the title, because it is being used for alternative purposes (such as
-      debugging) then you may define a <literal>title</literal> method instead
-      (below).</para>
-    </section>
-
-    <section>
-      <title>title</title>
-
-      <programlisting format="linespecific">public String title()</programlisting>
-
-      <para>If a <literal>title</literal> method is defined then the framework
-      will use this in preference to the <literal>toString</literal> method
-      for displaying the object's title.</para>
-    </section>
-
-    <section>
-      <title>updated</title>
-
-      <programlisting format="linespecific">public void updated()</programlisting>
-
-      <para>Life cycle method called by framework when a modified persistent
-      object has just been saved to the persistent store. At this point the
-      object's state in the persistent store will be in its new state.</para>
-    </section>
-
-    <section>
-      <title>updating</title>
-
-      <programlisting format="linespecific">public void updating()</programlisting>
-
-      <para>Life cycle method called by framework when a persistent object has
-      just been modified and is about to be saved to the persistent store. At
-      this point the object's state in the persistent store will still be in
-      its pre-modified state.</para>
-    </section>
-
-    <section>
-      <title>validate</title>
-
-      <para><emphasis>Ensure value or reference is valid</emphasis></para>
-
-      <programlisting format="linespecific">public String validate&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-      <para>Complements a get/set method for a value or reference
-      property.</para>
-
-      <para>This <literal>validate</literal> method is used to check the
-      value/reference that is to be used to set a property. Using such a
-      mechanism the programmer can guarantee that a field never becomes
-      invalid. If a <literal>String</literal> object is returned the
-      value/reference is consider to be invalid and the field will not be set.
-      The string itself will then be made visible to the user to inform them
-      why it is invalid. If the method returns <literal
-      moreinfo="none">null</literal> then property will be set, that is, its
-      <literal>set</literal> or <literal>modify</literal> method will be
-      called with the same parameter.</para>
-
-      <para><emphasis>Ensure collection can have an element added or
-      removed</emphasis></para>
-
-      <programlisting format="linespecific">public String validateAddTo&lt;PropertyName&gt;(&lt;property type&gt; param)
-public String validateRemoveFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-      <para>Complements a get method for a collection property.</para>
-
-      <para>This <literal>validate</literal> method is used to check that the
-      specified object can be added to or removed from a collection. Using
-      such a mechanism the programmer can guarantee that the collection never
-      becomes invalid. If a <literal>String</literal> object is returned then
-      adding/removing the specified object is not valid and the collection
-      will not be changed. The string itself will then be made visible to the
-      user to inform them why changing the collection with the object would be
-      invalid. If the method returns <literal moreinfo="none">null</literal>
-      then the object will be added to/removed from the collection, that is,
-      from the collection object directly if there is no
-      <literal>addTo</literal>/<literal>removeFrom</literal> method, or via a
-      call to the <literal>addTo</literal>/<literal>removeFrom</literal>
-      method, with the same parameter, if they do exist.</para>
-
-      <para><emphasis>Ensure it is valid to invoke an action</emphasis></para>
-
-      <programlisting format="linespecific">public String validate&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-      <para>Complements an action method.</para>
-
-      <para>This <literal>validate</literal> method is used to check that the
-      actions parameters are all valid and that the action method can be
-      safely invoked, that is, if it is invoked that it will not fail. If a
-      <literal>String</literal> object is returned then the action should not
-      be invoked. The string itself will then be made visible to the user to
-      inform them why the method cannot be invoked. If the method returns
-      <literal moreinfo="none">null</literal> then the action method will be
-      invoked with the same set of parameters.</para>
-
-      <para><emphasis>Ensure object is in a valid state to be
-      saved</emphasis></para>
-
-      <para>A validate() method may be added to provided validation at object
-      level - prior to making an object persistent.</para>
-
-      <programlisting format="linespecific">public String validate()</programlisting>
-
-      <para>This is particularly useful for validating fields in relation to
-      each other, as in the following example:</para>
-
-      <programlisting format="linespecific">public class Booking {
-    private Date fromDate;
-    public Date getFromDate() {...}
-    public void setFromDate(Date d) {...}
-    
-    private Date toDate;
-    public Date getToDate() {...}
-    public void setToDate(Date d) {...}
-
-    public String validate() {
-        if (fromDate &gt; toDate) {
-            return "From Date cannot be after To Date";
-        }
-        return null;
-    }
-    ...
-}</programlisting>
-
-      <para>This will prevent the user from saving a transient
-      <literal>Booking</literal> where the From Date falls after the To Date.
-      Note that in this example, the two date properties could also have their
-      own individual validate methods - for example in order to test that each
-      date was after today.</para>
-
-      <note>
-        <para>At the time of writing, the <literal>validate</literal> method
-        is called only when the object is first saved, not when it is
-        subsequently updated. For validation of subsequent updates, it is
-        necessary to build the validation logic into the individual property
-        validation methods, though these could delegate to a common
-        <literal>validate</literal> method.</para>
-      </note>
-    </section>
-  </chapter>
-
-  <chapter id="chp.RecognisedTypes">
-    <title>Recognised Types</title>
-
-    <abstract>
-      <para>Lists the different categories of types that are recognized by
-      Apache Isis.</para>
-    </abstract>
-
-    <para>Apache Isis creates an adapter for every domain object. There are
-    three categories of objects that are recognised: value, reference and
-    collection. Value and collection objects are dealt with on a class by
-    class basis, while all reference objects are dealt with in the same way
-    where the properties are seen as fields, and public methods as actions.
-    Listed below are all the recognised types.</para>
-
-    <section>
-      <title>Value objects</title>
-
-      <para>The following are built-in types. In addition to these any type
-      either annotated using <literal>@Value</literal>, or registered as a
-      value type using <filename moreinfo="none">isis.properties</filename>,
-      will also be treated as a value type.</para>
-
-      <section>
-        <title>Primitive types</title>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal moreinfo="none">boolean</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal moreinfo="none">byte</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal moreinfo="none">char</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal moreinfo="none">double</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal moreinfo="none">float</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal moreinfo="none">int</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal moreinfo="none">long</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal moreinfo="none">short</literal></para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section>
-        <title>Number classes</title>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>java.lang.Boolean</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.math.BigInteger</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.math.BigDecimal</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.lang.Byte</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.lang.Character</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.lang.Double</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.lang.Float</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.lang.Integer</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.lang.Long</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.lang.Short</literal></para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section>
-        <title>Java Classes</title>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>java.lang.String</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.util.Date</literal> (date and time)</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.sql.Date</literal> (date only)</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.sql.Time</literal> (time only)</para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.sql.Timestamp</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>java.awt.Image</literal></para>
-          </listitem>
-        </itemizedlist>
-      </section>
-
-      <section>
-        <title>Application Library</title>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.Color</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.Date</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.DateTime</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.Image</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.Money</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.Password</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.Percentage</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.Time</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>org.apache.isis.applib.value.TimeStamp</literal></para>
-          </listitem>
-        </itemizedlist>
-      </section>
-    </section>
-
-    <section>
-      <title>Collection objects</title>
-
-      <itemizedlist>
-        <listitem>
-          <para><literal>java.util.Collection</literal> (usually
-          <literal>java.util.ArrayList</literal>,
-          <literal>java.util.LinkedList</literal>,
-          <literal>java.util.LinkedHashSet</literal> or
-          <literal>java.util.TreeSet</literal>)</para>
-        </listitem>
-
-        <listitem>
-          <para>arrays</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>Note that <literal>java.util.Map</literal> is not supported as a
-      collection type.</para>
-    </section>
-
-    <section>
-      <title>Reference objects</title>
-
-      <itemizedlist>
-        <listitem>
-          <para>all other domain classes (not annotated with <literal
-          moreinfo="none">@Value</literal> / registered as a value using
-          <filename moreinfo="none">isis.properties</filename>).</para>
-        </listitem>
-      </itemizedlist>
-    </section>
-  </chapter>
-
-  <chapter id="chp.Services">
-    <title>Services</title>
-
-    <abstract>
-      <para>Describes Apache Isis' support for domain services</para>
-    </abstract>
-
-    <para>Services, which are automatically injected into any domain object
-    that needs them, are just ordinary domain objects but with an
-    <literal>getId()</literal> identity method. The method recognised
-    is:</para>
-
-    <programlisting format="linespecific">public String getId()</programlisting>
-
-    <para>This identity method is currently used only by perspectives, when
-    registering services. (Strictly speaking the <literal>getId()</literal>
-    method is optional; if not present then the fully qualified class name is
-    used as the Id).</para>
-
-    <para>All the other methods are processed as for domain objects, as
-    described in a previous section.</para>
-
-    <para>To simplify the process of writing service objects the following
-    abstract classes are available from within the application library:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para><literal>AbstractFactoryAndRepository</literal></para>
-      </listitem>
-
-      <listitem>
-        <para><literal>AbstractService</literal></para>
-      </listitem>
-    </itemizedlist>
-
-    <para>In addition there are classes within the framework that assist
-    building services that need to integrate with the framework.</para>
-
-    <itemizedlist>
-      <listitem>
-        <para><literal>RepositoryHelper</literal></para>
-      </listitem>
-
-      <listitem>
-        <para><literal>ServiceException</literal></para>
-      </listitem>
-    </itemizedlist>
-
-    <section>
-      <title>Registering services</title>
-
-      <para>Services are registered with the Framework at startup via the
-      properties file, using the services properties. The
-      <literal>services</literal> property itself dictates which service
-      classes are to be instantiated at startup, for example:</para>
-
-      <programlisting format="linespecific">isis.services = bom.BookingFactory, bom.CustomerFactoryAndRepository, \
-  bom.LocationFactoryAndRepository
-</programlisting>
-
-      <para>The <literal>prefix</literal> property allows you to specify the
-      common package once and, hence omit them from the classes in the list.
-      The following set of properties is therefore equivalent to the previous
-      example.</para>
-
-      <programlisting format="linespecific">isis.services.prefix = bom
-isis.services = BookingFactory, CustomerFactoryAndRepository, \
-  LocationFactoryAndRepository
-</programlisting>
-
-      <section>
-        <title>System repositories</title>
-
-        <para>As well as services defined programmatically, it is possible to
-        use a repository provided by the framework that will, for a configured
-        object type, provide methods to:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Create a new transient instance</para>
-          </listitem>
-
-          <listitem>
-            <para>Create a new persisted instance</para>
-          </listitem>
-
-          <listitem>
-            <para>Find all persisted instances</para>
-          </listitem>
-
-          <listitem>
-            <para>Find instances with a specified title</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>To register such a service prefix the class name with
-        'repository#', for example:</para>
-
-        <programlisting format="linespecific">isis.services = repository#bom.Booking</programlisting>
-      </section>
-    </section>
-
-    <section>
-      <title>Factories/Repositories</title>
-
-      <para></para>
-
-      <para><remark>TODO: discuss the service that combines factory and
-      repository</remark></para>
-
-      <para></para>
-    </section>
-
-    <section>
-      <title>Other services</title>
-
-      <para></para>
-
-      <para><remark>TODO: discuss the use of business vs technology
-      services</remark></para>
-
-      <para></para>
-    </section>
   </chapter>
 
   <appendix>

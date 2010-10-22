@@ -20,6 +20,7 @@
         <siteBaseDir>..</siteBaseDir>
 
 		<docbkxGuideTitle>Apache Isis Application Library</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Developing domain driven applications using Apache Isis</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-applib</docbkxGuideName>
 	</properties>
 	

@@ -1,19 +1,25 @@
+~~  Licensed to the Apache Software Foundation (ASF) under one
+~~  or more contributor license agreements.  See the NOTICE file
+~~  distributed with this work for additional information
+~~  regarding copyright ownership.  The ASF licenses this file
+~~  to you under the Apache License, Version 2.0 (the
+~~  "License"); you may not use this file except in compliance
+~~  with the License.  You may obtain a copy of the License at
+~~
+~~        http://www.apache.org/licenses/LICENSE-2.0
+~~
+~~  Unless required by applicable law or agreed to in writing,
+~~  software distributed under the License is distributed on an
+~~  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+~~  KIND, either express or implied.  See the License for the
+~~  specific language governing permissions and limitations
+~~  under the License.
+
 Overview
 
-  <Groovy Objects> is a {{{http://starobjects.org}sister project}} for the {{{http://nakedobjects.org}Naked Objects}} framework, providing support for domain objects to be written in {{{http://groovy.codehaus.org}Groovy}}.
-  The diagram below shows how Groovy Objects relates to the Naked Objects framework, in terms of the {{{http://alistair.cockburn.us/Hexagonal+architecture}hexagonal architecture}}.
-
-[images/HexagonalArchitectureOverview.png] Naked Objects & Groovy Objects.
-
-  There are a number of other sister projects; for details see the {{{http://starobjects.sourceforge.net}Star Objects}} umbrella project.
+  This module configures Apache Isis to allow you to write your domain objects in {{{http://groovy.codehaus.org}Groovy}}.
 
 Getting Started
 
-  Full instructions on how to configure a regular Naked Objects application to support Groovy are provided in the users' guide.
-
-  <Groovy Objects> is distributed using {{{http://maven.apache.org}Maven}}, downloadable from the Maven repo hosted at the <Star Objects> umbrella project.
-
-Contributing to this project
-
-  If you are interested in contributing to or improving this project, please contact Dan Haywood.
+  Full instructions on how to configure Isis to support Groovy are provided in the users' guide.
 

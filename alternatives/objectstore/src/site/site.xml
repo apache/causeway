@@ -6,9 +6,16 @@
 			<item name="Object Stores"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+        
 		<menu name="Alternative ObjectStores">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
+
+        <menu ref="module"/>
+
+        <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

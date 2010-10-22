@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>groovy-testapp-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>groovy-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>groovy-testapp-claims-service</artifactId>
+	<artifactId>groovy-claims-service</artifactId>
 	<name>Groovy Support TestApp: Claims Services</name>
 
 	<build>
@@ -24,14 +24,14 @@
 
 	<dependencies>
 		<dependency>
-		<groupId>org.apache.isis.extensions</groupId>
+		<groupId>org.apache.isis.alternatives.progmodel</groupId>
 			<artifactId>groovy-applib</artifactId>
 		</dependency>
 
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>groovy-testapp-claims-dom</artifactId>
+			<artifactId>groovy-claims-dom</artifactId>
 		</dependency>
 	</dependencies>
 

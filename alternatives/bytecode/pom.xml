@@ -19,6 +19,7 @@
         <siteBaseDir>../..</siteBaseDir>
 
         <docbkxGuideTitle>Apache Isis Alternative Bytecode Implementations</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-alternatives-bytecode</docbkxGuideName>
 	</properties>
 

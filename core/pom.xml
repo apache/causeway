@@ -31,6 +31,7 @@
         <siteBaseDir>..</siteBaseDir>
 		
 		<docbkxGuideTitle>Apache Isis Core</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Design, APIs and Customization</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-core</docbkxGuideName>	
     </properties>
 

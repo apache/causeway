@@ -17,35 +17,16 @@
 
 	<packaging>pom</packaging>
 
-    <!-- 
-    commenting out, pretty sure I don't use
-    -->
-    <!-- 
-	<repositories>
-		<repository>
-			<id>guiceyfruit.release</id>
-			<name>GuiceyFruit Release Repository</name>
-			<url>http://guiceyfruit.googlecode.com/svn/repo/releases/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-		</repository>
-	</repositories>
-    -->
-
-	<properties>
+    <properties>
 		<wicket.version>1.4.12</wicket.version>
 		<wicketstuff.version>1.4.12</wicketstuff.version>
-        <!-- 
-        commenting out, pretty sure I don't use
-        -->
-        <!-- 
-    		<guiceyfruit-version>2.0</guiceyfruit-version>
-        -->
-	</properties>
+        
+        <siteBaseDir>../..</siteBaseDir>
+
+        <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-wicket-viewer</docbkxGuideName>
+    </properties>
 
 	<modules>
 		<module>applib</module>
@@ -216,24 +197,6 @@
 				<artifactId>google-collections</artifactId>
 				<version>1.0</version>
 			</dependency>
-
-            <!-- 
-            commenting out, pretty sure I don't use
-            -->
-            <!-- 
-			<dependency>
-				<groupId>org.guiceyfruit</groupId>
-				<artifactId>guiceyfruit-core</artifactId>
-				<version>${guiceyfruit-version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.guiceyfruit</groupId>
-				<artifactId>guiceyfruit-junit4</artifactId>
-				<version>${guiceyfruit-version}</version>
-				<scope>test</scope>
-			</dependency>
-            -->
 
 			<dependency>
 				<groupId>org.slf4j</groupId>

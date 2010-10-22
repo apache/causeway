@@ -18,6 +18,14 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>runtime</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
 	    <dependency>
 		    <groupId>com.google.collections</groupId>
 		    <artifactId>google-collections</artifactId>

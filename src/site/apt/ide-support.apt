@@ -17,36 +17,40 @@
 
 
 
- We've developed a few simple utilities to help speed up your coding efforts.
+  We've developed a few simple utilities to help speed up your coding efforts. 
+  
+  <If you are also a contributor to Isis itself, see also 
+  {{{./contributors-devenv.html}this page}} for setting up your development
+  environment.> 
  
 Eclipse
 
-* Templates
+* Java Editor Templates
 
  Download the following links to a temporary directory:
 
- * {{{https://apache.isis.svn/svnroot/trunk/distribution/tarball/src/main/ide/eclipse/templates/isis-templates.xml}isis-templates.xml}}
+ * {{{./ide/eclipse/templates/isis-templates.xml}isis-templates.xml}}
 
- * {{{https://apache.isis.svn/svnroot/trunk/distribution/tarball/src/main/ide/eclipse/templates/junit4-templates.xml}junit4-templates.xml}}
+ * {{{./ide/eclipse/templates/junit4-templates.xml}junit4-templates.xml}}
 
- * {{{https://apache.isis.svn/svnroot/trunk/distribution/tarball/src/main/ide/eclipse/templates/jmock2-templates.xml}jmock2-templates.xml}}
+ * {{{./ide/eclipse/templates/jmock2-templates.xml}jmock2-templates.xml}}
 
  []
   
  Now, import using <<Windows > Preferences > Java > Editor > Templates>> and then choose <<Import>>
  
- The [[NAME]] templates are prefixed <<<no>>>, the JUnit templates are prefixed <<<ju4>>>, and the JMock templates prefixed <<<jm2>>>.
+ The Isis templates are prefixed <<<is>>>, the JUnit templates are prefixed <<<ju4>>>, and the JMock templates prefixed <<<jm2>>>.
  
- 
+
 * Code Folding
 
-  The code templates that we ship are designed to be used with the Coffee Bytes code folder, with <<<\{\{>>> and 
+  The Isis code templates that we ship are designed to be used with the Coffee Bytes code folder, with <<<\{\{>>> and 
   <<<\}\}>>> being used to define custom regions.
   
   Unfortunately, though the original code-folding plugin stopped working somewhere around Eclipse 3.3.  
   All is not lost though; Kevin Meyer has helpfully recompiled it against Eclipse 3.5.  To use it:
   
-  * download this {{{http://isis.apache.org/com.cb.eclipse.folding.KAM-3.5.zip}zip}}
+  * download this {{{./com.cb.eclipse.folding.KAM-3.5.zip}zip}}
   
   * unzip into Eclipse's plugins folder
   

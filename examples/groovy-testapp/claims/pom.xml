@@ -9,8 +9,8 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.extensions</groupId>
-	<artifactId>groovy-testapp-claims</artifactId>
+	<groupId>org.apache.isis.examples.apps</groupId>
+	<artifactId>groovy-claims</artifactId>
 	<version>0.1-SNAPSHOT</version>
 	
 	<name>Groovy Support TestApp: Claims</name>
@@ -110,44 +110,44 @@
 			<!-- this project's own modules -->
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>groovy-testapp-claims-dom</artifactId>
+				<artifactId>groovy-claims-dom</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>groovy-testapp-claims-fixture</artifactId>
+				<artifactId>groovy-claims-fixture</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>groovy-testapp-claims-service</artifactId>
+				<artifactId>groovy-claims-service</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>groovy-testapp-claims-commandline</artifactId>
+				<artifactId>groovy-claims-commandline</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>groovy-testapp-claims-webapp</artifactId>
+				<artifactId>groovy-claims-webapp</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 
 
 			<!-- Groovy Support -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.alternatives.progmodel</groupId>
 				<artifactId>groovy-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.alternatives.progmodel</groupId>
 				<artifactId>groovy-metamodel</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>

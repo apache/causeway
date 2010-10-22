@@ -6,19 +6,16 @@
 			<item name="DnD"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="DnD Viewer">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
         <menu name="Documentation">
             <item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
             <item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />
-			<!-- 
-			<menu name="For Contributors">
-				<item name="Design Notes" href="design-notes.html" />
-				<item name="DnD viewer" href="dnd-viewer.html" />
-			</menu>
-			-->
 		</menu>
 
 		<menu name="Maven Reports" ref="reports" />

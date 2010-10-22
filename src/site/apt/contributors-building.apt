@@ -17,37 +17,33 @@
 
 
 
-Building [[NAME]]
+Building Isis
 
- [[NAME]] is built using Maven; generally we develop with Eclipse with the m2eclipse plugin.
+ Isis is built using Maven; generally we develop with Eclipse with the m2eclipse plugin.
  
 Prerequisites
 
- Install {{{http://maven.apache.org}Maven}} 2.x (2.0.9 or later should be fine; we haven't yet tried building with Maven 3).
+ Install {{{http://maven.apache.org}Maven}} 3.0.
  
-Build the "Corporate" POM
-
- Like many Maven-based apps, the Maven modules have a "corporate" super-POM.  This should be built first:
  
-+----------------------------------------------------+
-cd pom
-mvn clean install
-cd ..
-+----------------------------------------------------+
+Build the Code Base
 
- 
-Build the Trunk
-
- Next, you can build trunk.  This will recursively build all the core, and its plugins.  If it's the first time you're running this, then it'll take some time downloading prerequisites... 
+ Next, you can build trunk.  This will recursively the entire tree.  If it's the first time you're running this, then it'll take some time downloading prerequisites... 
  a good time to go grab a coffee.
  
 +----------------------------------------------------+
-mvn clean install
+mvn clean install -P all
 +----------------------------------------------------+
 
+  You can also build the site and documentation using:
+  
++----------------------------------------------------+
+mvn site-deploy -P deploy-local
++----------------------------------------------------+
 
-What Next?
+  This will deploy the site to <<</tmp/m2-sites/isis>>>, where you can check it out.
+  
+  There are a few other variations and profiles; there's a summary in the <<<isis-parent/pom.xml>>> itself.
 
- We recommend you load up one of the example apps (in <<<distribution>>> directory) and get them running against your new snapshot.
- We tend to use Eclipse with the {{{http://m2eclipse.sonatype.org}m2eclipse}} plugin.
+
  

@@ -23,9 +23,7 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
-
-    <subtitle>Developers Guide</subtitle>
-
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>

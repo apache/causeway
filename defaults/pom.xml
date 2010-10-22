@@ -21,7 +21,8 @@
     <properties>
         <siteBaseDir>..</siteBaseDir>
 
-        <docbkxGuideTitle>Apache Isis Default Implementations</docbkxGuideTitle>
+        <docbkxGuideTitle>Apache Isis Defaults</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Default Implementations of Core APIs</docbkxGuideSubTitle>
         <docbkxGuideName>isis-defaults</docbkxGuideName>
     </properties>
 

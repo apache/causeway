@@ -6,8 +6,11 @@
 			<item name="WebApp Support"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="WebApp Support">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
 		<menu name="Maven Reports" ref="reports" />

@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.extensions.bdd.common.AliasRegistry;
 import org.apache.isis.extensions.bdd.common.CellBinding;
 import org.apache.isis.extensions.bdd.common.StoryBoundValueException;
@@ -33,7 +34,6 @@ import org.apache.isis.extensions.bdd.common.fixtures.perform.SaveObject;
 import org.apache.isis.extensions.bdd.common.fixtures.perform.SetProperty;
 import org.apache.isis.extensions.bdd.common.util.Strings;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.runtimecontext.spec.feature.ObjectActionSet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

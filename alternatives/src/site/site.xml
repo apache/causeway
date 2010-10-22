@@ -6,9 +6,16 @@
 			<item name="Alternatives"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="Alternatives">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
+
+        <menu ref="modules"/>
+
+        <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

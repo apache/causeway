@@ -19,6 +19,7 @@
     	<headless-viewer.version>0.1-SNAPSHOT</headless-viewer.version>
 
         <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
         <docbkxGuideName>isis-junit-support</docbkxGuideName>
 	</properties>
 

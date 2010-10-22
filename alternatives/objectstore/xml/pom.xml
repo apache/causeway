@@ -17,6 +17,7 @@
         <siteBaseDir>../../..</siteBaseDir>
 
         <docbkxGuideTitle>Apache Isis XML ObjectStore</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-xml-objectstore</docbkxGuideName>
     </properties>
 

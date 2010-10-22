@@ -1,13 +1,17 @@
 <project name="${project.name}">
-	<version position="right"/>
-    <body>
+
+	<body>
+		<breadcrumbs>
+			<item name="AppLib"/>
+		</breadcrumbs>
+
         <menu ref="parent"/>
 
-        <menu name="Documentation">
-            <item name="User Guide (PDF)" href="../documentation/docbkx/pdf/user-guide.pdf"/>
-            <item name="User Guide (HTML)" href="../documentation/docbkx/html/user-guide/user-guide.html"/>
-        </menu>
+		<menu name="Wicket AppLib">
+			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
+		</menu>
         
-        <menu ref="reports"/>
-    </body>
+		<menu name="Maven Reports" ref="reports" />
+	</body>
 </project>

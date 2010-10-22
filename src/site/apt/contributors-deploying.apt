@@ -17,9 +17,9 @@
 
 
 
-Deploying [[NAME]]
+Deploying Apache Isis
 
-  These notes are for [[NAME]] contributors with responsibility for deploying [[NAME]] (either the code artifact via <<<mvn deploy>>> or the site via <<<mvn site-deploy>>>).
+  These notes are for Apache Isis contributors with responsibility for deploying [[NAME]] (either the code artifact via <<<mvn deploy>>> or the site via <<<mvn site-deploy>>>).
 
 Software
 
@@ -57,165 +57,7 @@ chere -i
   Switch back to Windows Explorer and you'll find that you should be able to 
   start a bash shell in a new terminal window from any folder. 
    
-Prerequisites
+Process
 
-  You will require shell access to the {{{http://sourceforge.net/projects/isis}Isis project on SourceForge}}.  
- Rob Matthews can grant access to this.
-
- Before you can perform any deploy, you need to log into the SF shell:
+  For now, we'll just refer to the {{{http://incubator.apache.org/bval/cwiki/release-process.html}write-up put together by Donald Woods}}.
   
-+-------------------------------------------------------+
-ssh -t xxxxx,isis@shell.sourceforge.net create
-+-------------------------------------------------------+
-  
-  where 'xxxxx' is your SF username.
-  
-  When you login, SF will put you to your home directory, <<</home/users/x/xx/xxxxx>>>.  Before doing anything else, 
-  switch to the root of the <<<isis>>> project:
-  
-+-------------------------------------------------------+
-cd ../../../../groups/n/na/isis
-+-------------------------------------------------------+
-
-Directory Structure
-
- The directory structure underneath <<<isis>>> is:
- 
-+-----------------------------------------------------------------+
-./htdocs           - live website, hosted at http://isis.apache.org
-./m2/repo/snapshot - snapshot repository
-./m2/repo/release  - release repository
-./m2/site          - staged website
-./static           - static content, not under version control
-                     (book, robots.txt, catalogs for Maven repo)
-./buildhtdocs.sh   - shell script for recreating the live website 
-+-----------------------------------------------------------------+
-
- We have symlinks to <<<./m2/repo>>> and <<<./m2/site>>> in <<<htdocs>>> so that they can be accessed via HTTP:
-
-  * {{{http://isis.apache.org/m2-repo/release}http://isis.apache.org/m2-repo/release}} is the <<<./m2/repo/release>>> repo 
-
-  * {{{http://isis.apache.org/m2-repo/snapshot}http://isis.apache.org/m2-repo/snapshot}} is the <<<./m2/repo/snapshot>>> repo 
-
-  * {{{http://isis.apache.org/m2-site}http://isis.apache.org/m2-site}} is the <<<./m2/site>>> staged website 
-  
-Maven Deploy
-
- Typically we deploy artifacts locally first for a trial run, then deploy remotely.
- 
- To deploy locally to your <<</tmp>>> directory:
- 
-+----------------------------------------------------+
-mvn clean install deploy
-+----------------------------------------------------+
- 
- To deploy remotely to Sourceforge:
- 
-+----------------------------------------------------+
-mvn clean install deploy -P deploy-remote
-+----------------------------------------------------+
- 
- Deploying to the <<<release>>> repo requires running mvn release; discussion of that is outside the scope of this technote.
- 
-Maven Site Deploy
-
- Typically we deploy the site locally for a trial run, then deploy remotely to the staging site.  Finally, we promote to being the live site.
-
-* Local Site Deploy
-
- To deploy locally to your <<</tmp>>> directory:
- 
-+----------------------------------------------------+
-mvn site-deploy -P site-all
-+----------------------------------------------------+
-
- Then, browse to <<<file:///tmp/m2-sites/isis/trunk/index.html>>> and check
-
- To deploy locally, this time generating all reports:
- 
-+----------------------------------------------------+
-mvn site-deploy -P site-all
-+----------------------------------------------------+
-
- Then, browse to <<<file:///tmp/m2-sites/isis/trunk/index.html>>> and check.
-
-* Remote Site Staging
-
- To stage the site remotely to Sourceforge; <<in theory>> all that is required is:
- 
-+----------------------------------------------------+
-mvn site-deploy -P site-all,deploy-remote
-+----------------------------------------------------+
-
- However, you are likely to find that Sourceforge throws up the occasional intermittent authentication failure.  When this happens
- on the second-to-last module, this is not much fun.
- 
- We therefore recommend that you use 'rsync' to copy up your local deployment to your SF userweb:
- 
-+---------------------------------------------------------------------+
-cd /tmp/m2-sites/isis
-find trunk -print | grep -v jar$ | zip trunk -@
-rsync -avP -e ssh trunk.zip xxxxxx@frs.sourceforge.net:userweb/htdocs
-+---------------------------------------------------------------------+
-
- again, where 'xxxxx' is your SF username.
-
- Back in the SF shell, you can then copy the files over to the staging site:
-
-+------------------------------------------------------------------+
-cd ../../../../groups/n/na/isis
-unzip ~/userweb/htdocs/trunk.zip -d m2/site/.
-+------------------------------------------------------------------+
-
- Check the files have been copied over, then remove the files from your <<<userweb/htdocs>>> directory:
-
-+------------------------------------------------------------------+
-rm -rf ~/userweb/htdocs/trunk.zip
-+------------------------------------------------------------------+
- 
-* Remote Site Promoting
-
- Browse to {{{http://isis.apache.org/m2-site/trunk/index.html}http://isis.apache.org/m2-site/trunk/index.html}} and check the site is okay.
- 
- When you are happy to promote, run the <<<buildhtdocs.sh>>> script:
- 
-+----------------------------------------------------+
-sh buildhtdocs.sh
-+----------------------------------------------------+
- 
- This will zap the contents of <<<htdocs>>>, and then copy over the staged website 
- and recreate symlinks to static content.
-
- And for future reference, here's the <<<buildhtdocs.sh>>> script:
-
-+----------------------------------------------------+
-#!/bin/bash
-if [ ! -d htdocs ]; then
-    echo "can't find htdocs - quitting" >&2
-    exit 1
-fi
-
-echo ""
-echo ""
-echo "zapping htdocs..."
-rm -rf htdocs/* 2>/dev/null 1>&2
-
-echo ""
-echo ""
-echo "copying over new site..."
-cp -R m2/site/trunk/* htdocs/.
-
-echo ""
-echo ""
-echo "recreating symlinks to static content..."
-for a in static/*
-do
-ln -s ../$a htdocs/`basename $a`
-done
-
-echo ""
-echo ""
-echo "recreating symlinks to m2 dirs..."
-ln -s ../m2/repo htdocs/m2-repo
-ln -s ../m2/site htdocs/m2-site
-+----------------------------------------------------+

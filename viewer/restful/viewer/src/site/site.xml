@@ -1,7 +1,17 @@
 <project name="${project.name}">
     <version position="right"/>
-    <body>
+	<body>
+		<breadcrumbs>
+			<item name="Viewer"/>
+		</breadcrumbs>
+
         <menu ref="parent"/>
-    	<menu ref="reports"/>
-    </body>
+
+		<menu name="Restful Viewer">
+			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
+		</menu>
+        
+		<menu name="Maven Reports" ref="reports" />
+	</body>
 </project>

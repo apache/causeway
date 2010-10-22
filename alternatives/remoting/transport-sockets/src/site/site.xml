@@ -10,6 +10,12 @@
 			<item name="About" href="index.html" />
 		</menu>
 
-		<menu name="Maven Reports" ref="reports"/>
+        <menu ref="parent"/>
+
+        <menu name="Maven Reports" ref="reports" />
+
+        <menu name="For Contributors">
+            <item name="Jottings" href="jottings.html" />
+        </menu>
 	</body>
 </project>

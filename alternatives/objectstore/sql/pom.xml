@@ -24,6 +24,7 @@
         <siteBaseDir>../../..</siteBaseDir>
 
         <docbkxGuideTitle>Apache Isis SQL ObjectStore</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-sql-objectstore</docbkxGuideName>
     </properties>
 

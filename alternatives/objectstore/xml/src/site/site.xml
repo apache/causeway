@@ -6,8 +6,11 @@
 			<item name="XML" />
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="XML ObjectStore">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
 		<menu name="Documentation">
@@ -15,6 +18,6 @@
 			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />
 		</menu>
 
-		<menu name="Maven Reports" ref="reports" />
+        <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

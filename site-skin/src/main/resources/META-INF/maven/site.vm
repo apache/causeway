@@ -468,8 +468,7 @@
   <body class="composite">
     <div id="wrapper">
       <div id="banner">
-        <a href="http://incubator.apache.org/isis" id="bannerLeft">&nbsp;</a>
-        <a href="http://incubator.apache.org" id="bannerRight">&nbsp;</a>
+        <a href="http://incubator.apache.org/isis" id="bannerFull">&nbsp;</a>
         <div class="clear">
           <hr/>
         </div>

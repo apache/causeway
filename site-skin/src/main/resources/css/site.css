@@ -1,10 +1,11 @@
 body {
-  background: AntiqueWhite;
+  background: #4A6074;
   text-align: center;
 }
 #wrapper {
-  width: 1024px;
-  margin: 0 auto;
+  width: 980px;
+  border:3px solid white;
+  margin:8px auto;
   text-align: left;
   background: white;
 }
@@ -17,19 +18,28 @@ body {
 	text-align: right;
 }
 
+#bannerFull {
+  background: url(../images/logos/banner.png) left top no-repeat;
+  height: 100px;
+  width: 980px;
+  float: left;
+}
+
+/*
 #bannerLeft {
   background: url(../images/logos/banner-left.png) left top no-repeat;
-  height: 85px;
+  height: 100px;
   width: 627px;
   float: left;
 }
 
 #bannerRight {
-  background: url(../images/logos/apache-incubator-logo.png) right top no-repeat;
-  height: 85px;
+  background: url(../images/logos/apache-incubator-logo.png) right center no-repeat;
+  height: 100px;
   width: 240px;
   float: right;
 }
+*/
 
 img.wrap-left {
     float: left;

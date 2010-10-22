@@ -15,28 +15,16 @@
 ~~  specific language governing permissions and limitations
 ~~  under the License.
 
-
- -----
- Welcome to Apache Isis
- -----
+Welcome to Apache Isis
 
  <Apache Isis> is a full-stack open source application development framework, 
  designed to let you rapidly develop domain-driven business enterprise 
- applications following the naked objects pattern.
-
----------------------------------------------------------------------------------------------
-  Apache Isis is an effort undergoing incubation at The Apache Software Foundation (ASF), 
-  sponsored by the Incubator project. Incubation is required of all newly accepted projects
-  until a further review indicates that the infrastructure, communications, and decision 
-  making process have stabilized in a manner consistent with other successful ASF projects. 
-  While incubation status is not necessarily a reflection of the completeness or stability 
-  of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
----------------------------------------------------------------------------------------------
+ applications.
 
  The framework is designed around two patterns:
  
  * the first is the 
-   {{{http://en.wikipedia.org/wiki/naked_objects}Naked Objects pattern}}, 
+   {{{http://en.wikipedia.org/wiki/naked_objects}naked objects pattern}}, 
    whereby the framework automatically generates an object-oriented user 
    interface (OOUI) for your domain objects.  If required, this OOUI can then 
    be customized.  
@@ -76,4 +64,14 @@ Where to Start?
   <Apache Isis>.  To keep things manageable, we've tried to scope information 
   closest to where it's relevant.  To help guide you through the
   framework, we've also prepared a {{{./where-to-start.html}where to start}}.
+
+Disclaimer
+  
+  <Apache Isis is an effort undergoing incubation at The Apache Software Foundation (ASF), 
+  sponsored by the Incubator project. Incubation is required of all newly accepted projects
+  until a further review indicates that the infrastructure, communications, and decision 
+  making process have stabilized in a manner consistent with other successful ASF projects. 
+  While incubation status is not necessarily a reflection of the completeness or stability 
+  of the code, it does indicate that the project has yet to be fully endorsed by the ASF.>
+
   

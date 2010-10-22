@@ -6,10 +6,15 @@
 			<item name="Core" />
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+        
 		<menu name="Core Framework">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
+        <menu ref="modules"/>
+        
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
 			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />

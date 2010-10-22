@@ -8,6 +8,6 @@
 </listAttribute>
 <stringAttribute key="org.eclipse.jdt.launching.CLASSPATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.classpathProvider"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.apache.isis.webserver.WebServer"/>
-<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.apache.isis.extensions.wicket-testapp-claims-commandline"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="org.apache.isis.examples.apps.wicket-claims-commandline"/>
 <stringAttribute key="org.eclipse.jdt.launching.SOURCE_PATH_PROVIDER" value="org.maven.ide.eclipse.launchconfig.sourcepathProvider"/>
 </launchConfiguration>

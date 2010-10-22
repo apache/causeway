@@ -40,13 +40,11 @@
         <!-- used for javassist, identity -->
         <isis.alternatives-bytecode.version>0.1-SNAPSHOT</isis.alternatives-bytecode.version>
 
+        <isis.alternatives-progmodel-groovy.version>0.1-SNAPSHOT</isis.alternatives-progmodel-groovy.version>
         <isis.alternatives-progmodel-headless.version>0.1-SNAPSHOT</isis.alternatives-progmodel-headless.version>
 
         <!-- used for common, transport-sockets, marshalling-encoding, marshalling-serialize -->
         <isis.alternatives-remoting.version>0.1-SNAPSHOT</isis.alternatives-remoting.version>
-
-        <isis.alternatives-remoting-transport-http.version>0.1-SNAPSHOT</isis.alternatives-remoting-transport-http.version>
-        <isis.alternatives-remoting-marshalling-xstream.version>0.1-SNAPSHOT</isis.alternatives-remoting-marshalling-xstream.version>
 
         <isis.alternatives-security-ldap.version>0.1-SNAPSHOT</isis.alternatives-security-ldap.version>
         <isis.alternatives-security-file.version>0.1-SNAPSHOT</isis.alternatives-security-file.version>
@@ -116,7 +114,6 @@
                 <artifactId>security</artifactId>
                 <version>${isis.version}</version>
             </dependency>
-
 
             <!-- viewer: dnd -->
             <dependency>
@@ -205,7 +202,6 @@
                 <version>${isis.viewer-restful.version}</version>
             </dependency>
 
-
             <!-- alternatives: bytecode -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.bytecode</groupId>
@@ -218,37 +214,69 @@
                 <version>${isis.alternatives-bytecode.version}</version>
             </dependency>
 
-
-            <!-- alternatives: security -->
+            <!-- alternatives: security: ldap -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.security</groupId>
                 <artifactId>ldap</artifactId>
                 <version>${isis.alternatives-security-ldap.version}</version>
             </dependency>
+
+            <!-- alternatives: security: ldap -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.security</groupId>
                 <artifactId>file</artifactId>
                 <version>${isis.alternatives-security-file.version}</version>
             </dependency>
 
-
-            <!-- alternatives: objectstores -->
+            <!-- alternatives: objectstore: xml -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.objectstore</groupId>
                 <artifactId>xml</artifactId>
                 <version>${isis.alternatives-objectstore-xml.version}</version>
             </dependency>
+
+            <!-- alternatives: objectstore: nosql -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.objectstore</groupId>
                 <artifactId>nosql</artifactId>
                 <version>${isis.alternatives-objectstore-nosql.version}</version>
             </dependency>
+
+            <!-- alternatives: objectstore: sql -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.objectstore</groupId>
                 <artifactId>sql</artifactId>
                 <version>${isis.alternatives-objectstore-sql.version}</version>
             </dependency>
 
+            <!-- alternatives: progmodel: headless -->
+            <dependency>
+                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <artifactId>headless</artifactId>
+                <version>${isis.alternatives-progmodel-headless.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <artifactId>headless-applib</artifactId>
+                <version>${isis.alternatives-progmodel-headless.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <artifactId>headless-embedded</artifactId>
+                <version>${isis.alternatives-progmodel-headless.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <artifactId>headless-viewer</artifactId>
+                <version>${isis.alternatives-progmodel-headless.version}</version>
+            </dependency>
+
+            <!-- alternatives: progmodel: groovy -->
+            <dependency>
+                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <artifactId>groovy</artifactId>
+                <version>${isis.alternatives-progmodel-groovy.version}</version>
+            </dependency>
 
             <!-- alternatives: remoting -->
             <dependency>
@@ -292,29 +320,6 @@
                 <groupId>org.apache.isis.alternatives.remoting</groupId>
                 <artifactId>marshalling-xstream</artifactId>
                 <version>${isis.alternatives-remoting-marshalling-xstream.version}</version>
-            </dependency>
-
-
-            <!-- alternatives: progmodel -->
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless</artifactId>
-                <version>${isis.alternatives-progmodel-headless.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless-applib</artifactId>
-                <version>${isis.alternatives-progmodel-headless.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless-embedded</artifactId>
-                <version>${isis.alternatives-progmodel-headless.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless-viewer</artifactId>
-                <version>${isis.alternatives-progmodel-headless.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

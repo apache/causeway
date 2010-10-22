@@ -22,6 +22,7 @@
         <siteBaseDir>../../..</siteBaseDir>
 
         <docbkxGuideTitle>Apache Isis NOSQL ObjectStore</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-nosql-objectstore</docbkxGuideName>
     </properties>
 

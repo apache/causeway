@@ -16,6 +16,14 @@
 	<name>Restful Viewer</name>
 
 	<packaging>pom</packaging>
+
+    <properties>
+        <siteBaseDir>../..</siteBaseDir>
+
+        <docbkxGuideTitle>Apache Isis Restful Viewer</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-restful-viewer</docbkxGuideName>
+    </properties>
 	
 	<repositories>
 		<!-- required for RestEasy -->

@@ -18,6 +18,7 @@
         <siteBaseDir>../..</siteBaseDir>
 
 		<docbkxGuideTitle>Apache Isis DnD Viewer</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-dnd-viewer</docbkxGuideName>
     </properties>
 

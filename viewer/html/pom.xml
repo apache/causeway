@@ -18,6 +18,7 @@
         <siteBaseDir>../..</siteBaseDir>
 
 		<docbkxGuideTitle>Apache Isis HTML Viewer</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-html-viewer</docbkxGuideName>
     </properties>
 

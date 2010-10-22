@@ -12,84 +12,29 @@
 		site.
 
 		Only the toc items need to be maintained manually; the rest is boilerplate.  
-		
-		In addition to the site-docs PDF defined by this page, there may also
-		be formal DocBook documentation.
 	-->
 	<toc name="Table of Contents" depth="1">
 		<item name="Introducing Apache Isis" ref="index.apt"/>
 		<item name="Where to start?" ref="where-to-start.apt" />
-		<item name="IDE Support" ref="ide-support.apt"/>
 		<item name="Who we are" ref="who-we-are.apt"/>
+		<item name="IDE Support" ref="ide-support.apt"/>
 		<item name="Roadmap" ref="roadmap.apt"/>
-		<item name="Appendix: Background Material" ref="background-material.apt"/>
-		<item name="Appendix: Jottings" ref="jottings.apt"/>
+
+        <item name="Contributors: Dev Env" ref="contributors-devenv.html" />
+        <item name="Contributors: Building" ref="contributors-building.html" />
+        <item name="Contributors: Writing Docs" ref="contributors-writing-docs.html" />
+        <item name="Contributors: Deploying" ref="contributors-deploying.html" />
+        <item name="Contributors: Jottings" ref="jottings.html" />
 	</toc>
 
 
-	<!--
-	TODO: to go through
-	
-  <toc name="Table of Contents" depth="3">
-    <item name="Introduction" ref="getting-startedx.xml">
-        <item name="What is [[NAME]]" ref="introduction.xml" />
-        <item name="An Online Demo" ref="demo.xml" />
-        <item name="User Stories/Examples" ref="dsfa-intro.xml" />
-        <item name="FAQ" ref="faq.fml" />
-    </item>
-    
-	<item name="Getting Started" ref="getting-started.xml">
-        <item name="A quick tutorial" ref="quick-tutorial.html" />
-
-        <item name="Getting Started" ref="developer-tutorial.xml" />
-        <item name="Tutorial" ref="tutorial.xml" />
-
-        <item name="Examples" ref="examples.html" />
-        <item name="How it works" ref="how-it-works.html" />
-    </item>
-	
-    <item name="Developing [[NAME]] Applications" ref="getting-startedx.xml">
-        <item name="Installation" ref="installation.xml" />
-		<item name="Developing Domain Objects" ref="developing-domain-objects.html" />
-		<item name="Building Apps with Ant" ref="building-with-ant.html" />
-        <item name="Building Apps with Maven" ref="building-with-maven.html" />
-        <item name="Running as a Prototype" ref="running-prototype.html" />
-    </item>
-    
-    <item name="Developer's Reference" ref="getting-startedx.xml">
-		<item name="Filename conventions" ref="file-nameconvention.xml" />
-        <item name="Archetype" ref="archetype.xml" />
-        <item name="Recognised Types" ref="recognised-types.xml" />
-        <item name="Recognised Methods" ref="recognised-methods.xml" />
-        <item name="Recognised Annotations" ref="recognised-annotations.xml" />
-        <item name="Services" ref="services.xml" />
-        <item name="Fixtures" ref="fixtures.xml" />
-        <item name="Command Line Parameters" ref="command-line-parameters.xml" />
-        <item name="Images" ref="images.xml" />
-        <item name="Configuration" ref="configuration.xml" />
-    
-     <item name="Test links" ref="building.apt" />
-		
-    </item>
-    
-    <item name="Extending and Developing the Framework" ref="getting-startedx.xml">
-    
-        <item name="Framework" ref="framework.xml" />
-        <item name="New material" ref="new material to add.xml" />
-        <item name="Reflection" ref="reflection.xml" />
-        <item name="System" ref="system.xml" />
-        <item name="Notes" ref="notes-on-nof.xml" />
-    </item>
-  </toc>
-  -->
-  
 	<cover>
 		<coverType>${pdf.title}</coverType>
 		<coverTitle>${project.name}</coverTitle>
 		<coverSubTitle>v. ${project.version}</coverSubTitle>
 		<coverdate>${date}</coverdate>
 		<projectName>${project.name}</projectName>
-	    <projectLogo>${trunk.baseDir}/src/site/resources/images/logo.png</projectLogo>
+	    <projectLogo>${trunkBaseDir}/src/site/resources/images/logo.png</projectLogo>
 		<companyName>${project.organization.name}</companyName>
 	</cover>
 

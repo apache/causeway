@@ -2,36 +2,24 @@
 <project>
 
 	<body>
-
 		<breadcrumbs>
 			<item name="Scimpi"/>
 		</breadcrumbs>
 
+        <menu ref="parent"/>
+
 		<menu name="Scimpi">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
-
-		<menu name="Modules" ref="modules" />
+        
+        <menu ref="modules"/>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />
 			<item name="${docbkxGuideTitle} (HTML)" href="docbkx/html/guide/${docbkxGuideName}.html" />
-			<!--
-			<item name="Getting Started" href="getting-started.html" />
-			<item name="Creating a Scimpi Webapp" href="creating-webapp.html" />
-			<item name="Scimpi Web Applications" href="scimpi-webapps.html" />
-			<item name="Framework Development" href="framework-development.html" />
-			<item name="Tag References" href="tag-reference.html" />
-			<item name="Defining New Tags" href="defining-tags.html" />
-			
-			<menu name="For Contributors">
-				<item name="Scimpi Development" href="scimpi-development.html" />
-			</menu>
-			
-			<menu name="Old Documentation">
-				<item name="Original manual" href="manual.html" />
-			</menu>
-			-->
 		</menu>
+
+        <menu name="Maven Reports" ref="reports" />
 	</body>
 </project>

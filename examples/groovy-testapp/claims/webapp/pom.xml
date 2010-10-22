@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.extensions</groupId>
-		<artifactId>groovy-testapp-claims</artifactId>
+		<groupId>org.apache.isis.examples.apps</groupId>
+		<artifactId>groovy-claims</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>groovy-testapp-claims-webapp</artifactId>
+	<artifactId>groovy-claims-webapp</artifactId>
 	<name>Groovy Support TestApp: Claims WebApp</name>
 
 	<packaging>war</packaging>
@@ -28,38 +28,26 @@
 		<!-- other modules in this project -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>groovy-testapp-claims-fixture</artifactId>
+			<artifactId>groovy-claims-fixture</artifactId>
 		</dependency>
 
 		<!-- apache isis -->
 
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-cglib</artifactId>
+			<groupId>org.apache.isis.defaults</groupId>
+			<artifactId>bytecode</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>bytecode-javassist</artifactId>
+			<groupId>org.apache.isis.alternatives.bytecode</groupId>
+			<artifactId>javassist</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>remoting</artifactId>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>headless-embedded</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
 		</dependency>
 		<!-- comment in to run simple web server (uses Jetty) <dependency> <groupId>org.nakedobjects.core</groupId> 
 			<artifactId>webserver</artifactId> </dependency> -->

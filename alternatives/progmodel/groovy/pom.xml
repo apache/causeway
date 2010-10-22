@@ -5,11 +5,11 @@
 
 	<parent>
 		<groupId>org.apache.isis</groupId>
-		<artifactId>plugins</artifactId>
+		<artifactId>alternatives</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.apache.isis.extensions</groupId>
+	<groupId>org.apache.isis.alternatives.progmodel</groupId>
 	<artifactId>groovy</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
@@ -19,12 +19,16 @@
 
 	<properties>
 		<groovy.version>1.7.2</groovy.version>
+
+        <docbkxGuideTitle>Apache Isis Groovy Support</docbkxGuideTitle>
+        <docbkxGuideSubTitle>Developing domain objects using Groovy</docbkxGuideSubTitle>
+        <docbkxGuideName>isis-groovy-support</docbkxGuideName>
 	</properties>
+
 
 	<modules>
 		<module>gapplib</module>
 		<module>gmetamodel</module>
-		<module>gdocumentation</module>
 	</modules>
 
 	<build>
@@ -42,12 +46,12 @@
 
 			<!-- Groovy Support -->
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.alternatives.progmodel</groupId>
 				<artifactId>groovy-applib</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
-				<groupId>org.apache.isis.extensions</groupId>
+				<groupId>org.apache.isis.alternatives.progmodel</groupId>
 				<artifactId>groovy-metamodel</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
