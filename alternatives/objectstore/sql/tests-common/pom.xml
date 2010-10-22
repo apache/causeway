@@ -72,6 +72,10 @@
     </dependencyManagement>
     
     <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>runtime</artifactId>
+        </dependency>
         <!--  Required for TestProxy -->
 		<!-- Isis defaults -->
         <dependency>
@@ -87,7 +91,6 @@
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
             <artifactId>progmodel</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
         	<groupId>org.apache.isis.defaults</groupId>
@@ -111,6 +114,19 @@
         <dependency>
             <groupId>org.apache.isis.alternatives.objectstore</groupId>
             <artifactId>xml</artifactId>
+        </dependency>
+		<!-- others -->
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-legacy</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-junit4</artifactId>
+        </dependency>
+        <dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
         </dependency>
     </dependencies>
 </project>
