@@ -29,7 +29,7 @@
 		<!-- required for RestEasy -->
 		<repository>
 			<id>jboss</id>
-			<url>http://repository.jboss.org/maven2</url>
+			<url>http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
 		</repository>
 		<repository>
 			<id>maven2-repository.dev.java.net</id>
