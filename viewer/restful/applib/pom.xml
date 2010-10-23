@@ -28,4 +28,15 @@
 			<artifactId>log4j</artifactId>
 		</dependency>
 	</dependencies>
+
+
+    <repositories>
+        <!-- The artifact in the maven repository has been moved and causes a build failure. Using this setting gets the artifact allowing the build to work.  This fix should hopefully be temporary -->
+        <repository>
+          <id>java.net</id>
+          <url>http://download.java.net/maven/1</url>
+          <layout>legacy</layout>
+        </repository>
+    </repositories>
+
 </project>
