@@ -35,7 +35,7 @@ Customization
   
     These views will typically be to render a specific entity, a particular property/parameter type, 
     or a collection of entities.  You can either write these views from scratch, or use existing <<<Component>>>
-    implementations (for example the open source code available at Wicket's companion site, {{{http://wicketstuff.org}WicketStuff.org}). 
+    implementations (for example the open source code available at Wicket's companion site, {{{http://wicketstuff.org}WicketStuff.org}}). 
     
   * third, you can register your own pages for a particular object type
   
