@@ -1,5 +1,6 @@
 package org.apache.isis.extensions.bdd.common.util;
 
+import org.apache.isis.viewer.bdd.common.util.Strings;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;

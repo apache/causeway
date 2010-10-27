@@ -49,33 +49,21 @@
   <preface id="preface">
     <title>Preface</title>
 
-    <para><ulink url="http://wicketobjects.sourceforge.net">Wicket
-    Objects</ulink> is a sister project to <ulink
-    url="http://nakedobjects.org">Naked Objects</ulink>, providing a
-    customizable web-based viewer for <emphasis>Naked Objects</emphasis>
+    <para>The <emphasis>Apache Isis Wicket Viewer</emphasis> provides a
+    customizable web-based viewer for <emphasis>Apache Isis</emphasis>
     implemented using the <ulink url="http://wicket.apache.org">Apache
-    Wicket</ulink> framework. <emphasis>Wicket Objects</emphasis> is hosted on
-    <ulink url="http://wicketobjects.sourceforge.net">SourceForge</ulink>, and
-    is licensed under <ulink
-    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
-    License v2</ulink>. <emphasis>Naked Objects</emphasis> is also hosted on
-    <ulink url="http://sourceforge.net/projects">SourceForge</ulink>, and is
-    also licensed under <ulink
-    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
-    License v2</ulink>.</para>
-
-    <para>This user guide is written for developers looking to write
-    <emphasis>Naked Objects</emphasis> applications and deploy them using the
-    <emphasis>Wicket Objects</emphasis> viewer. It assumes familiarity with
-    writing <emphasis>Naked Objects</emphasis> applications, but that is all
-    that is needed to get an application up-and-running with the generic
+    Wicket</ulink> framework. This user guide is written for developers
+    looking to write <emphasis>Apache Isis</emphasis> applications and deploy
+    them using the <emphasis>Wicket Viewer</emphasis>. It assumes familiarity
+    with writing <emphasis>Isis</emphasis> applications, but that is all that
+    is needed to get an application up-and-running with the generic
     <acronym>OOUI</acronym>.</para>
 
-    <para>Familiarity with <emphasis>Apache Wicket</emphasis> is also useful
-    to understand how it all fits together, but not essential unless you want
-    to start customizing the <acronym>UI</acronym>. If you're interested in
-    learning more about <emphasis>Wicket</emphasis> itself, then <ulink
-    url="TODO">Wicket In Action</ulink> (Martijn Dashort &amp; Eelco
+    <para>Familiarity with <emphasis>Apache Wicket</emphasis> is useful to
+    understand how the wicket viewer fits together, but is essential unless
+    you want to start customizing the <acronym>UI</acronym>. If you're
+    interested in learning more about <emphasis>Wicket</emphasis> itself, then
+    <ulink url="TODO">Wicket In Action</ulink> (Martijn Dashort &amp; Eelco
     Hillenius) is definitely worth reading.</para>
   </preface>
 
@@ -85,23 +73,23 @@
     <title>Introduction</title>
 
     <abstract>
-      <para>This introductory chapter describes the objective of
-      <emphasis>Wicket Objects</emphasis>, and the target audience for this
+      <para>This introductory chapter describes the objective of the
+      <emphasis>Wicket Viewer</emphasis>, and the target audience for this
       guide.</para>
     </abstract>
 
     <sect1>
-      <title>Introducing Wicket Objects</title>
+      <title>Introducing the Apache Isis Wicket Viewer</title>
 
-      <para><emphasis>Wicket Objects</emphasis> provides a generic
-      <acronym>OOUI</acronym> web-based viewer for <ulink
-      url="http://nakedobjects.org">Naked Objects</ulink> domain models, using
-      <ulink url="http://wicket.apache.org">Apache Wicket</ulink> as the
-      underlying web framework.</para>
+      <para>The <emphasis>Wicket Viewer</emphasis> provides a generic
+      <acronym>OOUI</acronym> web-based viewer for <emphasis>Apache
+      Isis</emphasis> domain models, using <ulink
+      url="http://wicket.apache.org">Apache Wicket</ulink> as the underlying
+      web framework.</para>
 
       <para>What this means for you, the developer, is that you can build a
-      web application solely by developing the domain model as pojos.
-      <emphasis>Wicket Objects</emphasis> will then render your domain objects
+      web application solely by developing the domain model as pojos. The
+      <emphasis>Wicket Viewer</emphasis> will then render your domain objects
       in a web <acronym>UI</acronym> using ready provided
       <emphasis>Wicket</emphasis> <classname>Component</classname>s.</para>
 
@@ -125,11 +113,11 @@
         </listitem>
 
         <listitem>
-          <para>Finally, <emphasis>Wicket Objects</emphasis> also renders
-          actions (commands/behaviors) for your domain objects, and lets these
-          actions to be invoked. This is what makes <emphasis>Naked
-          Objects</emphasis>-based applications that much more than simple
-          <acronym>CRUD</acronym> applications.</para>
+          <para>Finally, the vuewer also renders actions (commands/behaviors)
+          for your domain objects, and lets these actions to be invoked. This
+          is what makes <emphasis>Apache Isis</emphasis>-based applications
+          that much more than simple <acronym>CRUD</acronym>
+          applications.</para>
         </listitem>
       </itemizedlist>
 
@@ -148,17 +136,18 @@
       see some examples of these customizations in <xref
       linkend="chp.Screenshots" />.</para>
 
-      <para><emphasis>Wicket Objects</emphasis> web apps are bootstrapped the
-      same as vanilla <emphasis>Wicket</emphasis> applications, with
-      <emphasis>Wicket Objects</emphasis> providing an implementation of
+      <para><emphasis>Apache Isis</emphasis> webapps that use the
+      <emphasis>Wicket Viewer</emphasis> are bootstrapped in the same as
+      vanilla <emphasis>Wicket</emphasis> applications, with the
+      <emphasis>Wicket Viewer</emphasis> providing an implementation of
       <emphasis>Wicket</emphasis>'s <code>WebApplication</code> class that
-      additionally bootstraps the <emphasis>Naked Objects</emphasis> runtime.
-      Authentication is performed using <emphasis>Naked Objects</emphasis> own
-      authentication mechanism (which itself is pluggable).</para>
+      additionally bootstraps the <emphasis>Apache Isis</emphasis> runtime.
+      Authentication is performed using <emphasis>Apache Isis</emphasis>' own
+      security mechanism (which itself is pluggable).</para>
     </sect1>
 
     <sect1>
-      <title>Wicket Objects Compared to other Wicket RAD Frameworks</title>
+      <title>The Wicket Viewer compared to other Wicket RAD Frameworks</title>
 
       <sect2>
         <title>Differences in Capability</title>
@@ -177,10 +166,11 @@
         that do some of the wiring for back-end technologies like <ulink
         url="http://springframework.org">Spring</ulink> and <ulink
         url="hibernate.org">Hibernate</ulink>. So, how does <emphasis>Wicket
-        Objects</emphasis> compare to them?</para>
+        Viewer</emphasis> for <emphasis>Apache Isis</emphasis> compare to
+        them?</para>
 
         <para>Well, compared to <emphasis>Wicketopia</emphasis> for example,
-        <emphasis>Wicket Objects</emphasis> shares the following ideas:</para>
+        <emphasis>Wicket Viewer</emphasis> shares the following ideas:</para>
 
         <itemizedlist>
           <listitem>
@@ -199,15 +189,15 @@
             <para>both frameworks support (or aspire to support) the metamodel
             being built from various sources, including for example
             <emphasis>Hibernate</emphasis> or <acronym>JSR-303</acronym>
-            annotations etc. In the case of <emphasis>Wicket
-            Objects</emphasis> this is done by leveraging the underlying
-            <emphasis>Naked Objects</emphasis> framework.</para>
+            annotations etc. In the case of the <emphasis>Wicket
+            Viewer</emphasis> this is done by using <emphasis>Apache
+            Isis</emphasis>' own metamodel.</para>
           </listitem>
         </itemizedlist>
 
         <para>But there are some differences too; through <emphasis>Wicket
-        Objects</emphasis> use of the <emphasis>Naked Objects</emphasis>
-        underneath, it:</para>
+        Viewer</emphasis>'s use of the <emphasis>Apache Isis</emphasis>
+        it:</para>
 
         <itemizedlist>
           <listitem>
@@ -217,8 +207,8 @@
           </listitem>
 
           <listitem>
-            <para>supports user-defined value types (using <emphasis>Naked
-            Objects</emphasis>' <classname>@Value</classname> annotation);
+            <para>supports user-defined value types (using <emphasis>Apache
+            Isis</emphasis>' <classname>@Value</classname> annotation);
             important for domain-driven applications</para>
           </listitem>
 
@@ -232,8 +222,8 @@
 
           <listitem>
             <para>supports properties which are references to other entities,
-            not just simple value types. In particular, <emphasis>Wicket
-            Objects</emphasis>' property editor for references allows
+            not just simple value types. In particular, the <emphasis>Wicket
+            Viewer</emphasis>'s property editor for references allows
             instances to be found by invoking repositories in-situ</para>
           </listitem>
 
@@ -250,27 +240,29 @@
           </listitem>
         </itemizedlist>
 
-        <para>The flip side of <emphasis>Wicket Objects</emphasis>' more
-        extensive metamodel support is that it uses <emphasis>Naked
-        Objects</emphasis>' own metamodel <acronym>API</acronym>. In contrast,
+        <para>The flip side of the <emphasis>Wicket Viewer</emphasis>'s more
+        extensive metamodel support is that it uses <emphasis>Apache
+        Isis</emphasis>' own metamodel <acronym>API</acronym>. In contrast,
         <emphasis>Wicketopia</emphasis> (only supporting properties and not
         collections or actions) can get by using
         <classname>java.bean.PropertyDescriptor</classname> from the
         <acronym>JDK</acronym>.</para>
 
         <para>Compared to frameworks and archetypes that use
-        <emphasis>Hibernate</emphasis> for the backend, <emphasis>Wicket
-        Objects</emphasis> (again by leveraging <emphasis>Naked
-        Objects</emphasis>) is more general here too. So, it has a
-        <classname>Session</classname> concept that is analogous to a
-        <emphasis>Hibernate</emphasis> session (and if using
-        <emphasis>Hibernate</emphasis> as a backend, the <emphasis>Naked
-        Objects</emphasis>' <classname>Session</classname> just wraps
-        <emphasis>Hibernate</emphasis>'s). But it also supports other back-end
-        persistence stores too. Indeed, for rapid development we usually use
-        an in-memory object store.</para>
+        <emphasis>Hibernate</emphasis> for the backend, the <emphasis>Wicket
+        Viewer</emphasis> (again by leveraging the rest of the
+        <emphasis>Apache Isis</emphasis> framework) is more general here too.
+        So, it has a <classname>Session</classname> concept that is analogous
+        to a <emphasis>Hibernate</emphasis> session (and if using the
+        <emphasis>JPA ObjectStore</emphasis> as a backend, the
+        <emphasis>Apache Isis</emphasis>' <classname>Session</classname> just
+        wraps the <acronym>JPA</acronym> provider's
+        <classname>PersistenceContext</classname> <emphasis>e</emphasis>'s).
+        But it also supports other back-end persistence stores too. Indeed,
+        <emphasis>Apache Isis</emphasis>' default to support rapid development
+        we usually use an in-memory object store.</para>
 
-        <para><emphasis>Wicket Objects</emphasis> can also handle
+        <para>The <emphasis>Wicket Viewer</emphasis> can also handle
         non-persisted objects as well as persisted objects; with every managed
         object is stored in an identity map. This support for non-persisted
         objects is important because it is central to supporting specialized
@@ -281,40 +273,41 @@
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>Wicket Objects</emphasis> will automatically
+            <para>The <emphasis>Wicket Viewer</emphasis> will automatically
             serialize both persisted and non-persisted objects, irrespective
             of whether the pojo itself is serializable. This is important if
             deploying on a cluster.</para>
           </listitem>
 
           <listitem>
-            <para>Through <emphasis>Naked Objects</emphasis>, every managed
-            object also automatically has any domain service dependencies
-            automatically injected into it),</para>
+            <para>Through the <emphasis>Apache Isis</emphasis> core framework,
+            every managed object also automatically has any domain service
+            dependencies automatically injected into it),</para>
           </listitem>
 
           <listitem>
-            <para>Again, courtesy of <emphasis>Naked Objects</emphasis>, every
-            persisted object has a unique, immutable and serializable object
-            Id (<acronym>OID</acronym>). This can be a very useful resource
-            when integrating with external services such as
+            <para>Again, courtesy of <emphasis>Apache Isis</emphasis> core,
+            every persisted object has a unique, immutable and serializable
+            object Id (<acronym>OID</acronym>). This can be a very useful
+            resource when integrating with external services such as
             <acronym>REST</acronym> and <acronym>ESB</acronym>s.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>Naked Objects</emphasis> also provides automatic
-            dirty tracking, and optimistic locking.</para>
+            <para><emphasis>Apache Isis</emphasis> core also provides
+            automatic dirty tracking, and optimistic locking.</para>
           </listitem>
         </itemizedlist>
 
-        <para>Downsides? Currently <emphasis>Naked Objects</emphasis> does not
+        <para>Downsides? Currently <emphasis>Apache Isis</emphasis> does not
         support some of the Enterprise Java <acronym>API</acronym>s such as
         <acronym>JTA</acronym>, so interactions with domain services that
         ultimately delegate to transaction stores (such as
         <acronym>JMS</acronym>) cannot be enlisted in the same transaction as
         the persistence store. And, obviously, it introduces a dependency on
-        the <emphasis>Naked Objects</emphasis> framework over and above
-        technologies such as <emphasis>Hibernate</emphasis>.</para>
+        the <emphasis>Apache Isis</emphasis> framework over and above
+        technologies such as the <acronym>JPA</acronym> provider
+        implementation.</para>
       </sect2>
 
       <sect2>
@@ -329,31 +322,31 @@
         application service layer, and in wiring the various pages
         together.</para>
 
-        <para>In <emphasis>Wicket Objects</emphasis>, though, it is the
+        <para>With the <emphasis>Wicket Viewer</emphasis>, though, it is the
         framework that is in control of this layer too, because the links
         between pages are ultimately rendered by the property editor
-        <classname>Component</classname>s provided by <emphasis>Wicket
-        Objects</emphasis>. and - in rendering the links representing
-        references - controls . What that also means is that every page
-        rendered by <emphasis>Wicket Objects</emphasis> is always of either an
-        object (typical case), or an action parameter dialog, or of a
-        collection (the result of invoking an action.</para>
+        <classname>Component</classname>s provided by the viewer, and - in
+        rendering the links representing references - controls . What that
+        also means is that every page rendered by the <emphasis>Wicket
+        Viewer</emphasis> is always of either an object (typical case), or an
+        action parameter dialog, or of a collection (the result of invoking an
+        action).</para>
 
         <para>Within this constraint, there is a lot of flexibility, though,
-        because every element of the page can be customized. Internally
-        <emphasis>Wicket Objects</emphasis> uses the chain of responsibility
-        pattern to determine how which Component type to use to render a page
-        element. This works at a fine-grained level (eg a date editor) and
-        also at a larger-scale, (eg rendering a collection of
-        <classname>Locatable</classname> entities on a google maps). See <xref
-        linkend="chp.Screenshots" /> for more on this.</para>
+        because every element of the page can be customized. Internally the
+        <emphasis>Wicket Viewer</emphasis> uses the chain of responsibility
+        pattern to determine how which <classname>Component</classname> type
+        to use to render a page element. This works at a fine-grained level
+        (eg a date editor) and also at a larger-scale, (eg rendering a
+        collection of <classname>Locatable</classname> entities on a google
+        maps). See <xref linkend="chp.Screenshots" /> for more on this.</para>
       </sect2>
 
       <sect2>
-        <title>Part of the Naked Objects Family</title>
+        <title>Part of the <emphasis>Apache Isis</emphasis> framework</title>
 
-        <para><emphasis>Wicket Objects</emphasis> is only one of a number of
-        viewers available for <emphasis>Naked Objects</emphasis>. What that
+        <para>The <emphasis>Wicket Viewer</emphasis> is only one of a number
+        of viewers available for <emphasis>Apache Isis</emphasis>. What that
         means is that you can take your same domain objects model and deploy
         them in other architectures. For example, the <acronym>DnD</acronym>
         viewer is a rich, desktop <acronym>GUI</acronym> that employs a
@@ -363,76 +356,78 @@
         objects makes for a very good development tool: something akin to a
         <acronym>UML</acronym> design tool, only animated.</para>
 
-        <para><emphasis>Naked Objects</emphasis> also supports a number of
+        <para><emphasis>Apache Isis</emphasis> also supports a number of
         different ways to test your application. Domain objects written to the
-        <emphasis>Naked Objects</emphasis> programming model are just pojos,
-        and so can easily be unit tested using frameworks such as <ulink
+        <emphasis>Apache Isis</emphasis> programming model are just pojos, and
+        so can easily be unit tested using frameworks such as <ulink
         url="http://junit.org">JUnit</ulink> and <ulink
-        url="http://jmock.org">JMock</ulink>. As a step up from that, Naked
-        Objects provides a "headless" viewer that wraps your domain objects in
-        proxies. This allows unit testing as if through the lens of a GUI;
-        trying to invoke an action that is disabled will throw an
+        url="http://jmock.org">JMock</ulink>. As a step up from that,
+        <emphasis>Apache Isis</emphasis> provides its own integrations with
+        JUnit, providing a "headless" programming model that wraps your domain
+        objects in proxies. This allows unit testing as if through the lens of
+        a GUI; trying to invoke an action that is disabled will throw an
         exception.</para>
 
-        <para>Moving up to agile acceptance testing, <emphasis>Naked
-        Objects</emphasis> has integrations with both <ulink
-        url="http://fitnesse.org">FitNesse</ulink> and <ulink
-        url="http://concordion.org">Concordion</ulink>. The business analyst
-        can specify the behavior of the system in a wiki
-        (<emphasis>FitNesse</emphasis>) or <acronym>HTML</acronym>
-        (<emphasis>Concordion</emphasis>), and then the developer wire up this
+        <para>Moving up to story testing/BDD, <emphasis>Apache Isis</emphasis>
+        integrates with <ulink url="http://concordion.org">Concordion</ulink>.
+        The business analyst specifies the behavior of the system in
+        <acronym>HTML</acronym>, and then the developer wire up this
         specification to the domain model using a set of fixtures that
         interact with the domain objects following the same rules as the
         viewers. This allows application-level testing without the hassle of
-        using a GUI testing framework such as
+        using a <acronym>GUI</acronym> testing framework such as
         <emphasis>Selenium</emphasis>.</para>
 
-        <para>One final point: <emphasis>Naked Objects</emphasis> has a strong
+        <para>One final point: <emphasis>Apache Isis</emphasis> has a strong
         separation between its programming model and the framework that
         understands that programming model. So, your domain objects depend
-        only on the <emphasis>Naked Objects</emphasis> applib (which defines
+        only on the <emphasis>Apache Isis</emphasis> applib (which defines
         annotations such as <classname>@RegEx</classname>), not the framework
         itself. This allows you to take your domain objects and deploy them on
-        other frameworks later, if need be. You'll notice that
-        <emphasis>Wicket Objects</emphasis> continues this strong separation,
-        defining its own applib for annotations and features unique to the
-        <emphasis>Wicket Objects</emphasis> viewer.</para>
+        other frameworks later, if need be. The <emphasis>Wicket
+        Viewer</emphasis> maintains this strong separation, defining its own
+        applib for annotations and features unique to the <emphasis>Wicket
+        Viewer</emphasis>.</para>
       </sect2>
     </sect1>
 
     <sect1>
-      <title>Wicket Objects compared to other Naked Objects Viewers</title>
+      <title>The <emphasis>Wicket Viewer</emphasis> compared to other
+      <emphasis>Apache Isis</emphasis> viewers</title>
 
-      <para>Because <emphasis>Wicket Objects</emphasis> renders your domain
+      <para>Because the <emphasis>Wicket Viewer</emphasis> renders your domain
       model within a webapp, it is to some extent similar to the
       <acronym>HTML</acronym> viewer that is provided out-of-the-box by
-      <emphasis>Naked Objects</emphasis> itself. However, unlike the
-      <acronym>HTML</acronym> viewer, <emphasis>Wicket Objects</emphasis> is
-      highly customizable. <emphasis>Wicket Objects</emphasis> itself
-      essentially consists of a set of Wicket components that are used to
-      render domain objects, individual member elements of domain objects, and
-      indeed collections of domain objects. The components provided are
-      sufficient to render any <emphasis>Naked Objects</emphasis> domain
-      model. However, any developer with experience of
-      <emphasis>Wicket</emphasis> can easily write their own components and
-      register them with <emphasis>Wicket Objects</emphasis>. In this way,
-      custom renderings of domain objects can be achieved.</para>
+      <emphasis>Apache Isis</emphasis> itself. However, unlike the
+      <acronym>HTML</acronym> viewer, the <emphasis>Wicket Viewer</emphasis>
+      is highly customizable. The <emphasis>Wicket Viewer</emphasis> itself
+      essentially consists of a set of <ulink
+      url="http://wicket.apache.org">Wicket</ulink>
+      <classname>Component</classname>s that are used to render domain
+      objects, individual member elements of domain objects, and indeed
+      collections of domain objects. The components provided are sufficient to
+      render any <emphasis>Apache Isis</emphasis> domain model. However, any
+      developer with experience of <emphasis>Wicket</emphasis> can easily
+      write their own components and register them with the <emphasis>Wicket
+      Viewer</emphasis>. In this way, custom renderings of domain objects can
+      be achieved.</para>
     </sect1>
 
     <sect1>
       <title>Typical Flow for Developing a Wicket Objects Application</title>
 
       <para>There are, of course, lots of ways to skin any given cat, but
-      here's how you might go about developing a <emphasis>Wicket
-      Objects</emphasis> app:</para>
+      here's how you might go about developing an <emphasis>Apache
+      Isis</emphasis> application to be deployed using the <emphasis>Wicket
+      Viewer</emphasis>:</para>
 
       <itemizedlist>
         <listitem>
-          <para>use the Naked Objects application archetype to create an
-          outline domain model, running against the in-memory object store.
-          The structure of a <emphasis>Naked Objects</emphasis> application is
-          reviewed in <xref
-          linkend="sec.StructureOfANakedObjectsApp" />.</para>
+          <para>use the <emphasis>Apache Isis</emphasis> application archetype
+          to create an outline domain model, running against the in-memory
+          object store. The structure of a <emphasis>Apache Isis</emphasis>
+          application is reviewed in <xref
+          linkend="sec.StructureOfAnApacheIsisApp" />.</para>
         </listitem>
 
         <listitem>
@@ -442,40 +437,37 @@
         </listitem>
 
         <listitem>
-          <para>modify the app to run under <emphasis>Wicket</emphasis>,
-          either using a built-in Jetty web server (see <xref
+          <para>run your application under <emphasis>Wicket</emphasis>, either
+          using a built-in Jetty web server (see <xref
           linkend="sec.RunningFromTheCommandLineProject" />) or as a regular
           webapp (see <xref
           linkend="sec.RunningFromTheWebAppProject" />).</para>
         </listitem>
 
         <listitem>
-          <para>with your app now running as a webapp, customize the
-          look-n-feel to use your preferred fonts and logos by updating the
-          <acronym>CSS</acronym> (see <xref linkend="sec.GenericCss" />). You
-          can also use <acronym>CSS</acronym> to fine-tune the layout for
-          selected objects or object members (see <xref
-          linkend="sec.SpecificCss" />).</para>
+          <para>customize the look-n-feel to use your preferred fonts and
+          logos by updating the <acronym>CSS</acronym> (see <xref
+          linkend="sec.GenericCss" />). You can also use
+          <acronym>CSS</acronym> to fine-tune the layout for selected objects
+          or object members (see <xref linkend="sec.SpecificCss" />).</para>
         </listitem>
 
         <listitem>
           <para>continue to develop your domain application, identifying
           properties, collections and defining behavior through actions. Also,
           define fixtures to represent pre-canned scenarios to explore with
-          your domain expert. For more on developing Naked Objects
-          applications, you might want to (he says modestly) check out <ulink
-          url="http://pragprog.com/titles/dhnako">Domain Driven Design using
-          Naked Objects</ulink> (published by the <ulink
-          url="http://pragprog.com">Pragmatic Bookshelf</ulink>).</para>
+          your domain expert. Check out the core <emphasis>Apache
+          Isis</emphasis> documentation for more on developing domain
+          objects.</para>
         </listitem>
 
         <listitem>
           <para>fine tune the set of <classname>Component</classname>s used to
-          render your entities. <emphasis>Wicket Objects</emphasis> provides
-          built-in <classname>Component</classname>s to render every element
-          of your domain objects, and in some cases provides more than one
-          <classname>Component</classname>. When <emphasis>Wicket
-          Objects</emphasis> provides a number of alternate views like this,
+          render your entities. The <emphasis>Wicket Viewer</emphasis>
+          provides built-in <classname>Component</classname>s to render every
+          element of your domain objects, and in some cases provides more than
+          one <classname>Component</classname>. When the <emphasis>Wicket
+          Viewer</emphasis> provides a number of alternate views like this,
           you might prefer only one. Or, you might use an existing
           <classname>Component</classname> and adapt it into your own
           <classname>Component</classname>. In either case, you'll need to
@@ -509,9 +501,9 @@
           integrate with external services. For example, you might want to
           send out an email, or invoke a web service exposed by some other
           system in your enterprise. Define an interface for these domain
-          services, and register their implementation in the <emphasis>Naked
-          Objects</emphasis> configuration file. See the main <emphasis>Naked
-          Objects</emphasis> documentation for more details on this.</para>
+          services, and register their implementation in the <emphasis>Apache
+          Isis</emphasis> configuration file. See the main <emphasis>Apache
+          Isis</emphasis> documentation for more details on this.</para>
         </listitem>
 
         <listitem>
@@ -523,7 +515,7 @@
 
       <para>Enough verbiage. The next chapter is a run through of a simple
       application, screenshot by screenshot, so you can quickly assess whether
-      <emphasis>Wicket Objects</emphasis> fits your needs.</para>
+      the <emphasis>Wicket Viewer</emphasis> fits your needs.</para>
     </sect1>
   </chapter>
 
@@ -531,9 +523,9 @@
     <title>Application Walkthrough</title>
 
     <abstract>
-       This chapter is a collection of screenshots to give you an idea of what 
+       This chapter is a collection of screenshots to give you an idea of what the 
 
-      <emphasis>Wicket Objects</emphasis>
+      <emphasis>Wicket Viewer</emphasis>
 
        can do. 
     </abstract>
@@ -541,15 +533,15 @@
     <para>Most of the screenshots in this chapter require no specific
     <acronym>GUI</acronym> code; in fact the first six sections require no
     specialized code other than the domain objects. The <acronym>GUI</acronym>
-    that you see is generated by <emphasis>Wicket Objects</emphasis> at
+    that you see is generated by the <emphasis>Wicket Viewer</emphasis> at
     runtime, directly from the domain model. You can find all the code for the
     domain objects in <xref linkend="apx.ExampleApp" />.</para>
 
     <sect1>
       <title>Logging on, and the Application Services Menu</title>
 
-      <para><emphasis>Wicket Objects</emphasis> integrates with
-      <emphasis>Naked Objects</emphasis> authentication mechanism (which is
+      <para>The <emphasis>Wicket Viewer</emphasis> integrates with
+      <emphasis>Apache Isis</emphasis> authentication mechanism (which is
       itself pluggable); so we start off with a login screen:</para>
 
       <mediaobject>
@@ -591,10 +583,9 @@
 
       <para>Because the <literal>All Employees</literal> action takes no
       arguments, invoking it just returns its results. In this case the action
-      returns a collection (of <classname>Employee</classname>s), and so
-      <emphasis>Wicket Objects</emphasis> renders the collection as a table.
-      If the action had returned a single object, then that would have been
-      rendered instead.</para>
+      returns a collection (of <classname>Employee</classname>s), and so the
+      viewer renders the collection as a table. If the action had returned a
+      single object, then that would have been rendered instead.</para>
 
       <mediaobject>
         <imageobject>
@@ -654,11 +645,11 @@
     <sect1>
       <title>Editing Objects</title>
 
-      <para>In <emphasis>Naked Objects</emphasis> applications, we modify
+      <para>In <emphasis>Apache Isis</emphasis> applications, we modify
       objects either by invoking actions on them or by editing them directly.
       Which properties are editable is determined by the entity itself, with
-      <emphasis>Wicket Objects</emphasis> providing an appropriate editor for
-      each property type. In the following screenshot we see the
+      the <emphasis>Wicket Viewer</emphasis> providing an appropriate editor
+      for each property type. In the following screenshot we see the
       <classname>Claim</classname> entity being edited.</para>
 
       <mediaobject>
@@ -670,14 +661,13 @@
 
       <para>As well as supporting the editing of properties with value types
       (<classname>boolean</classname>, <classname>String</classname>,
-      <classname>Date</classname> etc), <emphasis>Wicket Objects</emphasis>
-      also allows properties representing references to other entities to be
-      edited. For example, each <classname>Claim</classname> has an
-      <varname>approver</varname> (of type <classname>Approver</classname>,
-      and implemented by <classname>Employee</classname>). Thus,
-      <emphasis>Wicket Objects</emphasis> gives us the ability to find an
-      <classname>Employee</classname> from the <literal>Employees</literal>
-      repository:</para>
+      <classname>Date</classname> etc), the viewer also allows properties
+      representing references to other entities to be edited. For example,
+      each <classname>Claim</classname> has an <varname>approver</varname> (of
+      type <classname>Approver</classname>, and implemented by
+      <classname>Employee</classname>). Thus, the viewer gives us the ability
+      to find an <classname>Employee</classname> from the
+      <literal>Employees</literal> repository:</para>
 
       <mediaobject>
         <imageobject>
@@ -702,9 +692,9 @@
 
       <para>Being able to edit entities makes it easy to build
       <acronym>CRUD</acronym>-style (create/read/update/delete) applications.
-      <emphasis>Wicket Objects</emphasis> also allows arbitrary actions to be
-      performed on entities. In the screenshot below, we see the <literal>Add
-      Item</literal> action (corresponding to
+      The <emphasis>Wicket Viewer</emphasis> also allows arbitrary actions to
+      be performed on entities. In the screenshot below, we see the
+      <literal>Add Item</literal> action (corresponding to
       <methodname>addItem()</methodname> method on the
       <classname>Claim</classname> class) being called:</para>
 
@@ -714,11 +704,11 @@
         </imageobject>
       </mediaobject>
 
-      <para>Because this action takes parameters, <emphasis>Wicket
-      Objects</emphasis> renders a dialog form for the user to complete. Just
-      as with the entity editor, we can specify parameters of any type,
-      including references to other entities if we wish). In this particular
-      case the parameter types are just numbers and strings:</para>
+      <para>Because this action takes parameters, the viewer renders a dialog
+      form for the user to complete. Just as with the entity editor, we can
+      specify parameters of any type, including references to other entities
+      if we wish). In this particular case the parameter types are just
+      numbers and strings:</para>
 
       <mediaobject>
         <imageobject>
@@ -762,7 +752,7 @@
 
       <para>When the action is performed, the object's state is updated, along
       with any other processing. For example, a message could have been sent
-      via an <acronym>ESB</acronym> to the processing department. Note the
+      via an enterprise service bus to the processing department. Note the
       title of the <classname>Claim</classname> entity has also been
       updated:</para>
 
@@ -778,8 +768,8 @@
 
       <para>In addition to actions, we can also capture business rules by
       means of validation. For example, a <classname>Claim</classname>, once
-      submitted, cannot be submitted again. In <emphasis>Wicket
-      Objects</emphasis>, this is shown by a tooltip:</para>
+      submitted, cannot be submitted again. With the <emphasis>Wicket
+      Viewer</emphasis>, this is shown by a tooltip:</para>
 
       <mediaobject>
         <imageobject>
@@ -787,20 +777,21 @@
         </imageobject>
       </mediaobject>
 
-      <para><emphasis>Naked Objects</emphasis> supports three different types
-      of validation: whether the class member (property, collection or action)
-      is visible; whether it is usable, and, whether the proposed value or
+      <para><emphasis>Apache Isis</emphasis> supports three different types of
+      validation: whether the class member (property, collection or action) is
+      visible; whether it is usable, and, whether the proposed value or
       arguments are valid. Or, more pithily, "can you see it, can you use it,
-      can you do it". <emphasis>Wicket Objects</emphasis> surfaces all of
-      these different validation rules in the <acronym>GUI</acronym>.</para>
+      can you do it". The viewer surfaces all of these different validation
+      rules in the <acronym>GUI</acronym>.</para>
     </sect1>
 
     <sect1>
       <title>View Components</title>
 
-      <para><emphasis>Wicket Objects</emphasis> pages are built from multiple
-      Wicket <classname>Component</classname>s. For example, the application
-      service menu bar has its own <classname>Component</classname>:</para>
+      <para>The pages rendered by the <emphasis>Wicket Viewer</emphasis> are
+      built from multiple <emphasis>Apache Wicket</emphasis>
+      <classname>Component</classname>s. For example, the application service
+      menu bar has its own <classname>Component</classname>:</para>
 
       <mediaobject>
         <imageobject>
@@ -809,7 +800,8 @@
         </imageobject>
       </mediaobject>
 
-      <para>Likewise, there's a Component to render an entire entity:</para>
+      <para>Likewise, there's a <classname>Component</classname> to render an
+      entire entity:</para>
 
       <mediaobject>
         <imageobject>
@@ -840,17 +832,17 @@
 
       <para>There are <classname>Component</classname>s such as these for
       every class member, including collections, actions and, indeed, action
-      parameters. In fact, you can think of <emphasis>Wicket
-      Objects</emphasis> as basically a collection of pre-canned
+      parameters. In fact, you can think of the <emphasis>Wicket
+      Viewer</emphasis> as basically a collection of pre-canned
       <classname>Component</classname>s that know how to render the
-      <emphasis>Naked Objects</emphasis> metamodel.</para>
+      <emphasis>Apache Isis</emphasis> metamodel.</para>
 
       <para>Note, by the way, the <acronym>CSS</acronym> classes. Each
       <acronym>HTML</acronym> element can be targetted either by its type (a
       string scalar), or by its class member (the
       <classname>Claim</classname>'s <varname>description</varname> property),
-      or both. <emphasis>Wicket Objects</emphasis> makes it easy to contribute
-      custom <classname>CSS</classname> that applies to every page.</para>
+      or both. The viewer therefore makes it easy to contribute custom
+      <acronym>CSS</acronym> that applies to every page.</para>
     </sect1>
 
     <sect1>
@@ -869,8 +861,8 @@
       </mediaobject>
 
       <para>When there is more than one <classname>Component</classname>
-      capable of rendering the object, <emphasis>Wicket Objects</emphasis>
-      allows the view to be selected:</para>
+      capable of rendering the object, the viewer allows the view to be
+      selected:</para>
 
       <mediaobject>
         <imageobject>
@@ -900,11 +892,12 @@
       </mediaobject>
 
       <para>So far all the screenshots we've seen have been generated from a
-      basic domain application, with no custom GUI coding (see <xref
-      linkend="apx.ExampleApp" />). But <emphasis>Wicket Objects</emphasis> is
-      also extensible. So, we can write custom views/components, provide a
-      corresponding <classname>ComponentFactory</classname> and then plug them
-      into <emphasis>Wicket Objects</emphasis>' registry of
+      basic domain application, with no custom <acronym>GUI</acronym> coding
+      (see <xref linkend="apx.ExampleApp" />). But the <emphasis>Wicket
+      Viewer</emphasis> is also extensible. So, we can write custom
+      views/components, provide a corresponding
+      <classname>ComponentFactory</classname> and then plug them into the
+      <emphasis>Wicket Viewer</emphasis>'s registry of
       <classname>ComponentFactory</classname>s. For example, if we make
       <classname>Employee</classname> implement a view-specific
       <classname>Locatable</classname> interface, then we can render them on a
@@ -940,7 +933,7 @@
       forwardly, the use case might be particularly complex or subtle, and we
       want to provide the user with additional guidance.</para>
 
-      <para><emphasis>Wicket Objects</emphasis> therefore lets us work with
+      <para>The <emphasis>Wicket Viewer</emphasis> therefore lets us work with
       objects designed to guide the user through the use case. Because they
       represent a particular solution to help the user achieve their
       objective, you can think of them as being part of the solution space
@@ -1036,27 +1029,27 @@
     <title>Running the Application</title>
 
     <abstract>
-      <para>This chapter describes how to take a <emphasis>Naked
-      Objects</emphasis> application and get it running using <emphasis>Wicket
-      Objects</emphasis>, with the non-customized, generic
+      <para>This chapter describes how to take an <emphasis>Apache
+      Isis</emphasis> application and get it running using the
+      <emphasis>Wicket Viewer</emphasis>, with the non-customized, generic
       <acronym>OOUI</acronym>.</para>
     </abstract>
 
-    <para><emphasis>Wicket Objects</emphasis> applications, ultimately, are
-    just <emphasis>Wicket</emphasis> applications that happen to boot up
-    <emphasis>Naked Objects</emphasis>. As such, they are bootstrapped with a
-    <filename>web.xml</filename> that is structured the same as any other
-    Wicket application.</para>
+    <para>Applications deployed to run with the <emphasis>Wicket
+    Viewer</emphasis> are, ultimately just <emphasis>Wicket</emphasis> webapps
+    that happen to boot up <emphasis>Apache Isis</emphasis>. As such, they are
+    bootstrapped with a <filename>web.xml</filename> that is structured the
+    same as any other <emphasis>Wicket</emphasis> application.</para>
 
     <para>This chapter describes how to run up such a webapp starting with a
-    regular <emphasis>Naked Objects</emphasis> application.</para>
+    regular <emphasis>Apache Isis</emphasis> application.</para>
 
-    <sect1 id="sec.StructureOfANakedObjectsApp">
-      <title>Structure of a Naked Objects Application</title>
+    <sect1 id="sec.StructureOfAnApacheIsisApp">
+      <title>Structure of an Apache Isis Application</title>
 
-      <para>The typical structure for a <emphasis>Naked Objects</emphasis>
-      application (and the one you'll end up with if you use <emphasis>Naked
-      Objects</emphasis>' Maven application archetype) is:</para>
+      <para>We recommend that you use <emphasis>Apache Isis</emphasis>' Maven
+      application archetype to set up your application. Doing so will result
+      in a multi-module project that contains the following modules:</para>
 
       <itemizedlist>
         <listitem>
@@ -1074,9 +1067,17 @@
         </listitem>
 
         <listitem>
-          <para><filename>app/service</filename></para>
+          <para>app/domsvc</para>
 
-          <para>Implementation of services, repositories and factories</para>
+          <para>Implementation of domain services (not
+          repositories/factories)</para>
+        </listitem>
+
+        <listitem>
+          <para><filename>app/objectstore-default</filename></para>
+
+          <para>Implementation of repositories/factories for the default
+          object store</para>
         </listitem>
 
         <listitem>
@@ -1095,282 +1096,31 @@
         </listitem>
 
         <listitem>
-          <para><filename>app/webapp</filename></para>
+          <para><filename>app/viewer-wicket</filename></para>
 
-          <para>Packaging and running as a web application</para>
+          <para>The application set up to be run using wicket, and packaged up
+          as a webapp.</para>
         </listitem>
       </itemizedlist>
 
-      <note>
-        <para>The example app (as described in <xref
-        linkend="apx.ExampleApp" />) also has an <filename>app/ui</filename>
-        submodule which contains custom views for its
-        <classname>ClaimWizard</classname> class.</para>
-      </note>
-
-      <sidebar>
-        <para>The <acronym>DnD</acronym> viewer and <acronym>HTML</acronym>
-        viewers provided by <emphasis>Naked Objects</emphasis> can also be run
-        a third way, using the
-        <code>org.nakedobjects.runtime.NakedObjects</code> main class. The
-        bootstrapping mechanism for each is proprietary to <emphasis>Naked
-        Objects</emphasis> though; the viewer is specified using the
-        <code>--viewer</code> flag, which ultimately corresponds to an
-        implementation of <code>NakedObjectsViewerInstaller</code> that does
-        the main bootstrapping. <emphasis>Wicket Objects</emphasis> does not,
-        however, support this method, primarily because <emphasis>Apache
-        Wicket</emphasis> developers will be more familiar with bootstrapping
-        using <filename>web.xml</filename>.</para>
-      </sidebar>
-
-      <para>Before you go any further, you'll need to update your POMs to add
-      the required dependencies on Wicket Objects.</para>
+      <para>You will see that the archetypes creates a number of other
+      <filename>app/viewer-xxx</filename> and
+      <filename>app/objectstore-xxx</filename> modules. You can delete those
+      modules that aren't relevant to your final deployment (probably the
+      <filename>app/viewer-xxx</filename> modules and most of the
+      <filename>app/objectstore-xxx</filename> modules, or you can just ignore
+      them. If you do delete any modules, remember to remove their reference
+      from the parent <filename>app/pom.xml</filename> file'a
+      <sgmltag>&lt;modules&gt;</sgmltag> section).</para>
 
       <sect2>
-        <title>Adding Dependency Management for Wicket Objects</title>
+        <title>The viewer-wicket module's web.xml</title>
 
-        <para>In the parent project's <filename>pom.xml</filename>, specify
-        the modules of <emphasis>Wicket Objects</emphasis> that are used in
-        the submodules, along with the version.</para>
-
-        <para>First, define a property for the version:</para>
-
-        <para><programlisting>&lt;properties&gt;
-    &lt;wicketobjects.version&gt;0.1-SNAPSHOT&lt;/wicketobjects.version&gt;
-&lt;/properties&gt;</programlisting>Then, add
-        <code>&lt;dependencyManagement&gt;</code> entries for <emphasis>Wicket
-        Objects</emphasis> itself:</para>
-
-        <programlisting>&lt;dependencyManagement&gt;
-  &lt;dependencies&gt;
-    ...
-
-    &lt;!-- WicketObjects --&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;applib&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;viewer&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    ...
-  &lt;dependencies&gt;
-&lt;dependencyManagement&gt;</programlisting>
-
-        <para>If you intend to use any of the custom components (see <xref
-        linkend="chp.CustomComponents" />), then also add in:</para>
-
-        <programlisting>&lt;dependencyManagement&gt;
-  &lt;dependencies&gt;
-    ...
-
-    &lt;!-- WicketObjects view extensions --&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;view-gmap2-applib&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;view-gmap2-view&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;view-googlecharts-applib&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;view-googlecharts-view&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;view-calendarviews-applib&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;view-calendarviews-view&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-      &lt;artifactId&gt;view-cooldatasoftmenu-view&lt;/artifactId&gt;
-      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-
-    ...
-  &lt;dependencies&gt;
-&lt;/dependencyManagement&gt;</programlisting>
-      </sect2>
-
-      <sect2>
-        <title>Adding AppLib Dependency</title>
-
-        <para>In the DOM project, add in a <code>&lt;dependency&gt;</code> to
-        the Wicket Objects applib:</para>
-
-        <programlisting>&lt;dependencies&gt;
-  ...
-
-  &lt;!-- WicketObjects --&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;applib&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  ...
-&lt;/dependencies&gt;</programlisting>
-
-        <para>Again, if you intend to use any of the custom components (see
-        <xref linkend="chp.CustomComponents" />), then also add in
-        dependencies to their respective applibs (if they have one):</para>
-
-        <programlisting>&lt;dependencies&gt;
-  ...
-
-  &lt;!-- WicketObjects view extensions --&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-calendarviews-applib&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-gmap2-applib&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-googlecharts-applib&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  ...
-&lt;/dependencies&gt;</programlisting>
-
-        <para>It's possible to run the app from either the
-        <emphasis>commandline</emphasis> or the <emphasis>webapp</emphasis>
-        project, in both cases picking up a standard
-        <filename>web.xml</filename> file to define a webapp. Which you use is
-        largely a matter of preference, and both approaches are outlined
-        here.</para>
-      </sect2>
-    </sect1>
-
-    <sect1 id="sec.RunningFromTheCommandLineProject">
-      <title>Running from the commandline project</title>
-
-      <para>If you already have a <emphasis>Naked Objects</emphasis>
-      application running then you are probably running it from the
-      commandline. This has the classpath set up, and the application
-      archetype provides Eclipse <filename>.launch</filename> configurations
-      for running the <acronym>DnD</acronym> viewer. So the easiest way to get
-      <emphasis>Wicket Objects</emphasis> viewer up and running is probably
-      from the commandline.</para>
-
-      <sect2 id="sec.commandLine-adding-dependency-to-wicketobjects">
-        <title>Adding Dependency to Wicket Objects Viewer</title>
-
-        <para>First, add a <code>&lt;dependency&gt;</code> to the
-        <emphasis>Wicket Objects</emphasis> runtime:</para>
-
-        <programlisting>&lt;dependencies&gt;
-  ...
-
-  &lt;!-- WicketObjects --&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;viewer&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  ...
-&lt;/dependencies&gt;</programlisting>
-
-        <para>As you did for the DOM project, also add in dependencies to the
-        custom components (see <xref linkend="chp.CustomComponents" />) if you
-        are going to be using them:</para>
-
-        <programlisting>&lt;dependencies&gt;
-  ...
-
-  &lt;!-- WicketObjects view extensions --&gt;
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-gmap2-applib&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-gmap2-view&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-googlecharts-applib&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-googlecharts-view&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-calendarviews-applib&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-calendarviews-view&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  &lt;dependency&gt;
-    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
-    &lt;artifactId&gt;view-cooldatasoftmenu-view&lt;/artifactId&gt;
-  &lt;/dependency&gt;
-
-  ...
-&lt;/dependencies&gt;</programlisting>
-      </sect2>
-
-      <sect2>
-        <title>Adding Dependency to Bootstrap</title>
-
-        <para>Unlike the <acronym>DnD</acronym> viewer which is bootstrapped
-        using <classname>NakedObjects</classname> main class, we're going to
-        use <code>org.nakedobjects.webserver.WebServer</code>. This also
-        provides a <methodname>main()</methodname>, and in it boots up an
-        embedded Jetty webserver and picks up the
-        <filename>web.xml</filename>. Therefore, edit the
-        <filename>pom.xml</filename>, and add/comment in:</para>
-
-        <programlisting>&lt;dependency&gt;
- &lt;groupId&gt;org.nakedobjects.core&lt;/groupId&gt;
- &lt;artifactId&gt;webserver&lt;/artifactId&gt;
-&lt;/dependency&gt;</programlisting>
-      </sect2>
-
-      <sect2>
-        <title>web.xml</title>
-
-        <para>Next, we need a <filename>web.xml</filename> file to define the
-        web app, in the <filename>src/main/webapp</filename> directory. The
-        contents of this is largely boilerplate, and will be very familiar if
-        you already know the <emphasis>Apache Wicket</emphasis>
-        framework:</para>
+        <para>The <filename>viewer-wicket</filename> module aready contains a
+        <filename>web.xml</filename> file to define the web app, in the
+        <filename>src/main/webapp</filename> directory. The contents of this
+        is largely boilerplate, and will be very familiar if you already know
+        the <emphasis>Apache Wicket</emphasis> framework:</para>
 
         <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
 &lt;web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -1383,7 +1133,7 @@
     &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
     &lt;init-param&gt;
       &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
-      &lt;param-value&gt;org.starobjects.wicket.viewer.WicketObjectsApplication&lt;/param-value&gt;
+      &lt;param-value&gt;org.apache.isis.viewer.wicket.viewer.IsisWicketApplication&lt;/param-value&gt;
     &lt;/init-param&gt;
   &lt;/filter&gt;
 
@@ -1394,10 +1144,10 @@
 
 &lt;/web-app&gt;</programlisting>
 
-        <para>The <classname>WicketObjectsApplication</classname> is a
-        subclass of <emphasis>Wicket</emphasis>'s own
-        <classname>WebApplication</classname> that bootstraps <emphasis>Naked
-        Objects</emphasis>, handles authentication and sets up sessions and
+        <para>The <classname>IsisWicketApplication</classname> is a subclass
+        of <emphasis>Wicket</emphasis>'s own
+        <classname>WebApplication</classname> that bootstraps <emphasis>Apache
+        Isis</emphasis>, handles authentication and sets up sessions and
         transactions.</para>
       </sect2>
 
@@ -1405,9 +1155,10 @@
         <title>Deployment Mode</title>
 
         <para><emphasis>Apache Wicket</emphasis> webapps can be run in one of
-        two configurations, either in <literal>development</literal> mode, or
-        <literal>deployment</literal> mode. In Wicket, the configuration type
-        can be specified as either:</para>
+        two "configuration type"s, either in the
+        <literal>development</literal> configuration type or in the
+        <literal>deployment</literal> configuration type. In Wicket, the
+        configuration type can be specified as either:</para>
 
         <orderedlist>
           <listitem>
@@ -1430,32 +1181,33 @@
         <methodname>Application#configure()</methodname> method is the place
         to look for all the differences.</para>
 
-        <para>For its part, <emphasis>Naked Objects</emphasis> defines various
-        deployment modes. For example, <literal>exploration</literal> and
+        <para>For its part, <emphasis>Apache Isis</emphasis> defines various
+        "deployment mode"s. For example, <literal>exploration</literal> and
         <literal>prototype</literal> mode are both intended for single-user
         development, with the former requiring no login and also including any
         actions annotated as <code>@Exploration</code>. For multi-user
-        (production) use, <emphasis>Naked Objects</emphasis> provides the
-        <literal>server</literal> deployment mode, associating s separate
-        <emphasis>Naked Objects</emphasis> runtime
-        (<classname>NakedObjectsContext</classname>) to each thread (ie bound
-        to a <code>ThreadLocal</code>).</para>
+        (production) use, <emphasis>Apache Isis</emphasis> provides the
+        <literal>server</literal> deployment mode, associating a separate
+        <emphasis>Apache Isis</emphasis> runtime
+        (<classname>IsisContext</classname>) to each thread (ie bound to a
+        <code>ThreadLocal</code>).</para>
 
-        <para><emphasis>Wicket Objects</emphasis> maps the
-        <emphasis>Wicket</emphasis> configuration type to <emphasis>Naked
-        Objects</emphasis>' <literal>prototype</literal> deployment mode.
-        However, the <literal>server</literal> deployment mode provided by
-        <emphasis>Naked Objects</emphasis> is not quite appropriate for a
+        <para>The <emphasis>Wicket Viewer</emphasis> maps
+        <emphasis>Wicket</emphasis>'s <literal>development</literal>
+        configuration type to <emphasis>Apache Isis</emphasis>'
+        <literal>prototype</literal> deployment mode. However, the
+        <literal>server</literal> deployment mode provided by <emphasis>Apache
+        Isis</emphasis> is not quite appropriate for a
         <emphasis>Wicket</emphasis> webapp, because there could be multiple
         concurrent requests for a given user (originating from the same
-        browser/user agent). <emphasis>Wicket Objects</emphasis> therefore
-        defines a custom deployment mode which binds the <emphasis>Naked
-        Objects</emphasis> runtime to the <emphasis>Wicket</emphasis> session
-        (see the <classname>NakedObjectsContextForWicket</classname> class if
-        you're interested in such things).</para>
+        browser/user agent). The <emphasis>Wicket Viewer</emphasis> therefore
+        defines a custom deployment mode which binds the <emphasis>Apache
+        Isis</emphasis> runtime to the <emphasis>Wicket</emphasis> session
+        (see the <classname>IsisContextForWicket</classname> class if you're
+        interested in such things).</para>
 
-        <para>What all this means is that selecting between <emphasis>Naked
-        Objects</emphasis> deployment modes is done just by specifying the
+        <para>What all this means is that selecting between <emphasis>Apache
+        Isis</emphasis> deployment modes is done just by specifying the
         <emphasis>Apache Wicket</emphasis> configuration type. If you're
         already familiar with Wicket there's therefore nothing new to learn:
         just configure the webapp to run in either
@@ -1464,67 +1216,119 @@
       </sect2>
 
       <sect2>
-        <title>Configuring Security</title>
+        <title>Security</title>
 
         <para>Since both of the deployment modes supported by <emphasis>Wicket
         Objects</emphasis> require a login, it means we need to set up
-        security. The <classname>NakedObjectsApplication</classname> class
-        provided by <emphasis>Wicket Objects</emphasis> subclasses from
+        security. The <classname>IsisWicketApplication</classname> class
+        provided by the <emphasis>Wicket Viewer</emphasis> subclasses from
         <emphasis>Wicket</emphasis>'s own
         <classname>AuthenticatedWebApplication</classname>, and serves up a
         sign-in page. To ensure that this sign-in page appears, every web page
-        served up by <emphasis>Wicket Objects</emphasis> is annotated with
-        <code>@AuthorizeInstantiation("org.starobjects.wicket.roles.USER")</code>,
+        served up by the <emphasis>Wicket Viewer</emphasis> is annotated with
+        <code>@AuthorizeInstantiation("org.apache.isis.viewer.wicket.roles.USER")</code>,
         which requires that every login has a role called
-        <literal>org.starobjects.wicket.roles.USER</literal>.</para>
+        <literal>org.apache.isis.viewer.wicket.roles.USER</literal>.</para>
 
         <sidebar>
-          <para>Naked Objects deployment modes provide a couple of ways of
-          avoiding login during development. For example, in
+          <para><emphasis>Apache Isis</emphasis> deployment modes provide a
+          couple of ways of avoiding login during development. For example, in
           <literal>exploration</literal> mode the viewers automatically login,
           while in <literal>exploration</literal> mode and
           <literal>prototype</literal> mode specifying a
           <code>LogonFixture</code> will means an automatic logon using the
-          details provided within that fixture. <emphasis>Wicket
-          Objects</emphasis> does not support <literal>exploration</literal>
+          details provided within that fixture. The <emphasis>Wicket
+          Viewer</emphasis> does not support <literal>exploration</literal>
           mode, however, and does not currently support
-          <classname>LogonFixture</classname>. What that means is that under
-          <emphasis>Wicket Objects</emphasis> it's always necessary to
-          login.</para>
+          <classname>LogonFixture</classname>. What that means is that it's
+          always necessary to login.</para>
         </sidebar>
 
-        <para><emphasis>Wicket Objects</emphasis> delegates to <emphasis>Naked
-        Objects</emphasis> to authentication. Assuming that you are still
-        using <emphasis>Naked Objects</emphasis>' default file-based
-        authentication mechanism, this means each user/password should be
-        defined in the <filename>config/passwords</filename> file:</para>
+        <para>The <emphasis>Wicket Viewer</emphasis> delegates to
+        <emphasis>Apache Isis</emphasis> to authentication. <emphasis>Apache
+        Isis</emphasis>' default authentication mechanism is a no-op and
+        requires no configuration. If you decide to a different authentication
+        mechanism (eg file-based security,
+        <classname>org.apache.isis.alternatives.security:file</classname>, or
+        <acronym>LDAP</acronym>-based security,
+        <classname>org.apache.isis.alternatives.security:ldap</classname>)
+        then refer to the appropriate documentation for that module.</para>
 
-        <programlisting>sven:pass
-dick:s3cr3t
-bob:obv1ous</programlisting>
-
-        <para>Normally, the <filename>passwords</filename> file is also used
-        to specify the login roles. However, <emphasis>Wicket
-        Objects</emphasis> simply always places each login into the
-        <literal>org.starobjects.wicket.roles.USER</literal> role, to ensure
-        that once the sign-in page is navigated past, that the user can access
-        each web page.</para>
+        <para>The <emphasis>Wicket Viewer</emphasis> simply always places each
+        login into the
+        <literal>org.apache.isis.viewer.wicket.roles.USER</literal> role, to
+        ensure that once the sign-in page is navigated past, that the user can
+        access each web page.</para>
 
         <sidebar>
           <para>One consequence of this design is that the roles cannot
-          currently be used by the <emphasis>Naked Objects</emphasis> domain
+          currently be used by the <emphasis>Apache Isis</emphasis> domain
           objects nor the authorization mechanism; every user is simply in the
           USER role. This will be addressed in the future.</para>
         </sidebar>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.RunningFromTheWebAppProject">
+      <title>Running as a WAR</title>
+
+      <para>The most straightforward approach for running a <emphasis>Wicket
+      Viewer </emphasis>application is to build a <acronym>WAR</acronym>
+      archive from the <filename>viewer-wicket</filename> module. Most
+      <acronym>IDE</acronym>s will then allow this WAR to be deployed on an
+      external servlet container, for debugging. For example, in Eclipse this
+      is done by Run As &gt; Server:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/RunAsServer.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para>and then select the external servlet container to deploy
+      against:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/RunAsServer-dialog.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para>If deploying this way, then the web browser URL may be slightly
+      different. For example with Eclipse the URL to specify is <ulink
+      url="http://localhost:8080/webappname">http://localhost:8080/webappname</ulink>.</para>
+    </sect1>
+
+    <sect1 id="sec.RunningFromTheCommandLineProject">
+      <title>Running using <emphasis>Isis</emphasis>'
+      <classname>WebServer</classname> class</title>
+
+      <para>As an alternative to deploying as a webapp, you can use Isis'
+      <classname>WebServer</classname> class. This class has its own
+      <methodname>main()</methodname> to bootstraps Jetty and configures a
+      webapp from the <filename>web.xml</filename> file. If using Eclipse, for
+      example, then yo can create a <filename>.launch</filename> configuration
+      to run your application using <classname>WebServer</classname>.</para>
+
+      <sect2>
+        <title>Adding Dependency to Bootstrap</title>
+
+        <para>The only thing you need to do is to edit the
+        <filename>viewer-wicket</filename> module's
+        <filename>pom.xml</filename>; add/comment in:</para>
+
+        <programlisting>&lt;dependency&gt;
+ &lt;groupId&gt;org.apache.isis.core&lt;/groupId&gt;
+ &lt;artifactId&gt;webserver&lt;/artifactId&gt;
+&lt;/dependency&gt;</programlisting>
       </sect2>
 
       <sect2>
         <title>Running the Application</title>
 
         <para>Running the application is just a matter of running the
-        <classname>org.nakedobjects.webserver.WebServer</classname>. For
-        example, in Eclipse the following launch configuration should
-        suffice:</para>
+        <classname>org.apache.isis.WebServer</classname>. For example, in
+        Eclipse the following launch configuration should suffice:</para>
 
         <mediaobject>
           <imageobject>
@@ -1552,116 +1356,43 @@ bob:obv1ous</programlisting>
       </sect2>
     </sect1>
 
-    <sect1 id="sec.RunningFromTheWebAppProject">
-      <title>Running from the webapp project</title>
+    <sect1 id="sec.CustomizingTheStartup">
+      <title>Customizing the Startup</title>
 
-      <para>The second approach for running a <emphasis>Wicket
-      Objects</emphasis> application is to build a <acronym>WAR</acronym>
-      archive of the webapp. Most <acronym>IDE</acronym>s will then allow this
-      WAR to be deployed on an external servlet container, for
-      debugging.</para>
+      <para>Most of the remaining chapters address various means by which the
+      <acronym>UI</acronym> generated by the <emphasis>Wicket
+      Viewer</emphasis> can be customized. Before we go any further, though,
+      we should mention that the viewer uses dependency injection provided by
+      <ulink url="http://google-guice.googlecode.com">Guice</ulink>. It comes
+      with default bindings, so customizing the <emphasis>Wicket
+      Viewer</emphasis> requires overriding these default bindings.</para>
 
-      <para>Starting with a <emphasis>Naked Objects</emphasis> application,
-      the <acronym>WAR</acronym> archive is most easily built using the
-      <filename>webapp</filename> project. In it you'll need to make the
-      following changes:</para>
+      <sidebar>
+        <para>Note: this usage of Guice is likely to be replaced by JSR-299
+        based dependency mechanism.</para>
+      </sidebar>
 
-      <itemizedlist>
-        <listitem>
-          <para>add the same <code>&lt;dependency&gt;</code>s as were listed
-          for the commandline project (see <xref
-          linkend="sec.commandLine-adding-dependency-to-wicketobjects" />).
-          Note that there's no need to add the <code>&lt;dependency&gt;</code>
-          to <emphasis>Naked Objects</emphasis>'
-          <filename>webserver</filename> module, though.</para>
-        </listitem>
+      <para>Specifically, in <classname>IsisWicketApplication</classname>,
+      there's a method <methodname>newIsisWicketModule()</methodname>:</para>
 
-        <listitem>
-          <para>in <filename>src/main/webapp</filename> there already be a
-          <filename>web.xml</filename> with entries for bootstrapping the
-          <acronym>HTML</acronym> viewer. Replace the contents of
-          <filename>web.xml</filename> with that used for bootstrap
-          <emphasis>Wicket Objects</emphasis> (as shown in <xref
-          linkend="sec.RunningFromTheCommandLineProject" />)</para>
-        </listitem>
-
-        <listitem>
-          <para>the two mandatory configuration files,
-          <filename>nakedobjects.properties</filename> and
-          <filename>passwords</filename> need to be in a location so that they
-          can be read by the webapp. The easiest approach is to copy them from
-          the <filename>config</filename> directory to the root classpath (eg
-          <filename>src/main/resources</filename> in the
-          <filename>webapp</filename> project)</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>You should then be able to build the webapp and deploy. For
-      example, in Eclipse this is done by Run As &gt; Server:</para>
-
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/RunAsServer.png" scale="40" />
-        </imageobject>
-      </mediaobject>
-
-      <para>and then select the external servlet container to deploy
-      against:</para>
-
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/RunAsServer-dialog.png" scale="40" />
-        </imageobject>
-      </mediaobject>
-
-      <para>If deploying this way, then the web browser URL may be slightly
-      different. For example with Eclipse the URL to specify is <ulink
-      url="http://localhost:8080/webappname">http://localhost:8080/webappname</ulink>.</para>
-    </sect1>
-  </chapter>
-
-  <chapter>
-    <title>Customization</title>
-
-    <abstract>
-      <para>This chapter describes the main mechanisms by which the
-      <acronym>UI</acronym> provided by <emphasis>Wicket Objects</emphasis>
-      can be customized.</para>
-    </abstract>
-
-    <para><emphasis>Wicket Objects</emphasis> offers several ways in which the
-    <acronym>UI</acronym> rendered can be customized, from simply tweaking the
-    CSS (though this in itself can be pretty powerful) through to supporting
-    mashups and wizards. This chapter explains each of these
-    approaches.</para>
-
-    <para>Before we go any further, though, we should mention that
-    <emphasis>Wicket Objects</emphasis> uses dependency injection provided by
-    <ulink url="http://google-guice.googlecode.com">Guice</ulink>. It comes
-    with default bindings, so customizing Wicket Objects requires overriding
-    these default bindings.</para>
-
-    <para>Specifically, in <classname>WicketObjectsApplication</classname>,
-    there's a method <methodname>newWicketObjectsModule()</methodname>:</para>
-
-    <programlisting>public class WicketObjectsApplication extends AuthenticatedWebApplication {
+      <programlisting>public class IsisWicketApplication extends AuthenticatedWebApplication {
   ...
-  protected Module newWicketObjectsModule() {
-    return new WicketObjectsModule();
+  protected Module newIsisWicketModule() {
+    return new IsisWicketModule();
   }
 }</programlisting>
 
-    <para>This method can be overridden in your own subclass of
-    <classname>WicketObjectsApplication</classname>, providing a new
-    implementation of <emphasis>Guice</emphasis>'s
-    <classname>Module</classname> interface. Typically you'll just want to
-    override one or two of the bindings, so you should use the
-    <classname>Modules</classname> helper class:</para>
+      <para>This method can be overridden in your own subclass of
+      <classname>IsisWicketApplication</classname>, providing a new
+      implementation of <emphasis>Guice</emphasis>'s
+      <classname>Module</classname> interface. Typically you'll just want to
+      override one or two of the bindings, so you should use the
+      <classname>Modules</classname> helper class:</para>
 
-    <programlisting>public class MyApplication extends WicketObjectsApplication {
+      <programlisting>public class MyApplication extends IsisWicketApplication {
   ...
-  protected Module newWicketObjectsModule() {
-    return Modules.override(super.newWicketObjectsModule()).with(
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
       new AbstractModule() {
         @Override
         protected void configure() {
@@ -1672,32 +1403,37 @@ bob:obv1ous</programlisting>
   }
 }</programlisting>
 
-    <para>To pick up your subclass of
-    <classname>WicketObjectsApplication</classname>, just update the
-    <filename>web.xml</filename> file.</para>
+      <para>To pick up your subclass of
+      <classname>IsisWicketApplication</classname>, just update the
+      <filename>web.xml</filename> file.</para>
+    </sect1>
+  </chapter>
 
-    <para>There are more details provided in each of the sections that
-    follow.</para>
+  <chapter id="chp.CustomizingCss">
+    <title>Customizing CSS</title>
 
-    <sect1 id="sec.CustomizingUsingCss">
-      <title>CSS</title>
+    <abstract>
+      <para>This chapter describes how to customize the <acronym>UI</acronym>
+      generated by the <emphasis>Wicket Viewer</emphasis> by providing
+      application-specific <acronym>CSS</acronym>.</para>
+    </abstract>
 
-      <para><acronym>CSS</acronym> is used heavily in <emphasis>Wicket
-      Objects</emphasis>, with the <acronym>HTML</acronym> of each
-      <classname>Component</classname> using <acronym>CSS</acronym> classes
-      for the styling. But you can override the default styling by supplying
-      an application-level <acronym>CSS</acronym> file which by default should
-      be called <filename>css/application.css</filename> in the classpath (eg
-      under <filename>src/main/resources</filename>).</para>
+    <para><acronym>CSS</acronym> is used heavily by the <emphasis>Wicket
+    Viewer</emphasis>, with the <acronym>HTML</acronym> of each
+    <classname>Component</classname> using <acronym>CSS</acronym> classes for
+    the styling. But you can override the default styling by supplying an
+    application-level <acronym>CSS</acronym> file, in the classpath (eg under
+    <filename>src/main/resources</filename>).</para>
 
-      <para>If you want to call the file something else, the subclass
-      <classname>WicketObjectsApplication</classname> and override the
-      <methodname>newWicketObjectsModule()</methodname> method:</para>
+    <para>For example, if you want to bind to
+    <filename>src/main/resources/myapp.css</filename>, then subclass
+    <classname>IsisWicketApplication</classname> and override the
+    <methodname>newIsisWicketModule()</methodname> method:</para>
 
-      <programlisting>public class MyApplication extends WicketObjectsApplication {
+    <programlisting>public class MyApplication extends IsisWicketApplication {
   ...
-  protected Module newWicketObjectsModule() {
-    return Modules.override(super.newWicketObjectsModule()).with(
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
       new AbstractModule() {
         @Override
         protected void configure() {
@@ -1708,83 +1444,87 @@ bob:obv1ous</programlisting>
   }
 }</programlisting>
 
-      <para>There are two levels at which we can override the default styling,
-      either generically or specific to a particular domain.</para>
+    <para>Your custom application should then be registered in web.xml, as
+    described in <xref linkend="sec.CustomizingTheStartup" />.</para>
 
-      <sect2 id="sec.GenericCss">
-        <title>Generic CSS</title>
+    <para>There are two levels at which we can override the default styling,
+    either generically or specific to a particular domain. Let's look at
+    both.</para>
 
-        <para>The name of each class indicates the nature of what is being
-        rendered, and each <classname>Component</classname> provides some
-        default styling so that the out-of-the-box <acronym>UI</acronym> is
-        usable. For example, an entity icon, title and actions are rendered
-        as:</para>
+    <sect1 id="sec.GenericCss">
+      <title>Generic CSS</title>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/EntitySummary.png" scale="60" />
-          </imageobject>
-        </mediaobject>
+      <para>The name of each class indicates the nature of what is being
+      rendered, and each <classname>Component</classname> provides some
+      default styling so that the out-of-the-box <acronym>UI</acronym> is
+      usable. For example, an entity icon, title and actions are rendered
+      as:</para>
 
-        <para>The icon and title for this are rendered as:</para>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/EntitySummary.png" scale="60" />
+        </imageobject>
+      </mediaobject>
 
-        <programlisting>&lt;div class="entitySummary"&gt;
-  &lt;img src="?wicket:interface=:4:entity:entity:entitySummary:entityImage:1:IResourceListener::" 
+      <para>The icon and title for this are rendered as:</para>
+
+      <programlisting>&lt;div class="entitySummary"&gt;
+  &lt;img src="?wicket:interface=:4:entity:entity:entitySummary:entityImage:1:IResourceListener::"
        class="entityImage" wicket:id="entityImage"&gt;
   &lt;label class="entityTitle" wicket:id="entityTitle"&gt;Fred Smith&lt;/label&gt;
   ...
 &lt;/div&gt;</programlisting>
 
-        <para>So, to change the font, you could use:</para>
+      <para>So, to change the font, you could use:</para>
 
-        <programlisting>div.entitySummary &gt; label.entityTitle {
+      <programlisting>div.entitySummary &gt; label.entityTitle {
   color: maroon;
   font-size: xx-large;
   font-weight: bolder;
 }</programlisting>
 
-        <para>This would render the entity icon and title as:</para>
+      <para>This would render the entity icon and title as:</para>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/EntitySummary-Css.png" scale="60" />
-          </imageobject>
-        </mediaobject>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/EntitySummary-Css.png" scale="60" />
+        </imageobject>
+      </mediaobject>
 
-        <para>In this way you can develop a look-n-feel for the application
-        (or perhaps your organization).</para>
-      </sect2>
+      <para>In this way you can develop a look-n-feel for the application (or
+      perhaps your organization).</para>
+    </sect1>
 
-      <sect2 id="sec.SpecificCss">
-        <title>Specific CSS</title>
+    <sect1 id="sec.SpecificCss">
+      <title>Specific CSS</title>
 
-        <para>As well as targetting <acronym>HTML</acronym> elements
-        generically, individual class members can also be targetted for a
-        particular domain model.</para>
+      <para>As well as targetting <acronym>HTML</acronym> elements
+      generically, individual class members can also be targetted for a
+      particular domain model.</para>
 
-        <para>For example, the properties of a <classname>Claim</classname>
-        object might be rendered as:</para>
+      <para>For example, the properties of a <classname>Claim</classname>
+      object might be rendered as:</para>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/Claim-properties.png" scale="60" />
-          </imageobject>
-        </mediaobject>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/Claim-properties.png" scale="60" />
+        </imageobject>
+      </mediaobject>
 
-        <para></para>
+      <para></para>
 
-        <para>The <acronym>HTML</acronym> for the
-        <methodname>description</methodname> property is:</para>
+      <para>The <acronym>HTML</acronym> for the
+      <methodname>description</methodname> property is:</para>
 
-        <programlisting>&lt;div class="Claim-description" wicket:id="scalar"&gt;
+      <programlisting>&lt;div class="Claim-description" wicket:id="scalar"&gt;
   &lt;wicket:panel&gt;
     &lt;div class="string scalarPanel"&gt;
       &lt;label wicket:id="scalarIfRegular" for="scalarValue3d"&gt;
         &lt;span class="scalarName" wicket:id="scalarName"&gt;description&lt;/span&gt;
         &lt;span class="scalarValue"&gt;
-          &lt;input type="text" title="" size="25" disabled="disabled" 
-             value="Meeting at clients" wicket:id="scalarValue" 
-             id="scalarValue3d" 
+          &lt;input type="text" title="" size="25" disabled="disabled"
+             value="Meeting at clients" wicket:id="scalarValue"
+             id="scalarValue3d"
              name="properties:1:scalar:scalarIfRegular:scalarValue"&gt;
         &lt;/span&gt;
       &lt;/label&gt;
@@ -1796,26 +1536,166 @@ bob:obv1ous</programlisting>
   &lt;/wicket:panel&gt;
 &lt;/div&gt;</programlisting>
 
-        <para>To change the label of this specific element, we could
-        use:</para>
+      <para>To change the label of this specific element, we could use:</para>
 
-        <programlisting>.Claim-description .scalarName {
+      <programlisting>.Claim-description .scalarName {
   color: maroon;
   font-weight: bolder;
 }</programlisting>
 
-        <para>which would give us:</para>
+      <para>which would give us:</para>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/Claim-properties-CSS.png" scale="60" />
-          </imageobject>
-        </mediaobject>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/Claim-properties-CSS.png" scale="60" />
+        </imageobject>
+      </mediaobject>
 
-        <para>This is a slightly trite example, but demonstrates the
-        point.</para>
+      <para>This is a slightly trite example, but demonstrates the
+      point.</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Using the Wicket Viewer AppLib</title>
+
+    <abstract>
+      <para>This chapter explains how to use certain viewer-specific features
+      in your domain application.</para>
+    </abstract>
+
+    <para>Many <emphasis>Isis</emphasis> components have their own application
+    library, the <emphasis>Wicket Viewer</emphasis> included. This allows you
+    to specify additional viewer-specific semantics within your domain model;
+    the viewer can then render them appropriately.</para>
+
+    <sect1>
+      <title>Configuring the Project Modules</title>
+
+      <para>In order to use the viewer-specific features, the
+      <filename>dom</filename> module must reference the applib, and the
+      <filename>viewer-wicket</filename> module must be configured
+      appropriately.</para>
+
+      <sect2>
+        <title>Referencing the AppLib</title>
+
+        <para>In the dom project, add in a <code>&lt;dependency&gt;</code> to
+        the <emphasis>Wicket Viewer</emphasis> applib:</para>
+
+        <programlisting>&lt;dependencies&gt;
+  ...
+
+  &lt;!-- Wicket Viewer --&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  ...
+&lt;/dependencies&gt;</programlisting>
+
+        <para>This will allow you to use the <emphasis>Wicket
+        Viewer</emphasis>'s annotations etc. in your domain objects.</para>
+      </sect2>
+
+      <sect2>
+        <title>Configuring the <emphasis>Wicket Viewer</emphasis>
+        Facets</title>
+
+        <para>In addition, you must also configure your application so that
+        the <emphasis>Isis</emphasis> metamodel contains the information to be
+        picked up by the <emphasis>Wicket Viewer</emphasis>.</para>
+
+        <para>In the <filename>viewer-wicket</filename> module, add the
+        following to <filename>isis.properties</filename>:</para>
+
+        <programlisting>isis.reflector.facets.include=\
+    org.apache.isis.viewer.wicket.metamodel.wizardpagedesc.WizardPageDescriptionAnnotationFacetFactory\
+   ,org.apache.isis.viewer.wicket.metamodel.cssclass.CssClassAnnotationFacetFactory</programlisting>
+
+        <para>This basically instructs <emphasis>Apache Isis</emphasis> to
+        capture additional information (facets) in its metamodel. Now let's
+        look at what these facets are used for.</para>
       </sect2>
     </sect1>
+
+    <sect1>
+      <title>@CssClass</title>
+
+      <para>The <classname>@CssClass</classname> annotation allows you to
+      specify an additional <classname>CSS</classname> class (or classes)
+      applied on any object type, property, collection or action. This
+      <acronym>CSS</acronym> will be added verbatim to any
+      <acronym>CSS</acronym> classes that are normally applied by the
+      <emphasis>Wicket Viewer</emphasis> itself.</para>
+
+      <para>*** TODO: complete.</para>
+
+      <para></para>
+
+      <para>There is further discussion on </para>
+    </sect1>
+
+    <sect1>
+      <title>@WizardPageDescription</title>
+
+      <para>It's common for wizards to have a description explaining what the
+      user is expected to do. This can be modeled as a
+      <classname>String</classname> property annotated with
+      <classname>@WizardPageDescription</classname>, for example:</para>
+
+      <programlisting>@NotPersistable
+public class ClaimWizard extends AbstractDomainObject {
+
+    ...
+
+    @WizardPageDescription
+    @MemberOrder(sequence = "1")
+    public String getPageDescription() { ... }
+
+    ...
+}</programlisting>
+
+      <para>Adding this annotation causes the <emphasis>Wicket
+      Viewer</emphasis> to select a different <classname>Component</classname>
+      to be used to render this property; specifically, one that renders the
+      value as a large label. You can see the result of this annotation in
+      below (the label above the claimant).</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/320-wizard-claimant-page.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>Note that this annotation only affects the description; the three
+      buttons shown in the above screenshot are as a result of the wizard
+      being implemented as a custom component. For more on that topic, see
+      <xref linkend="chp.WritingCustomComponents" />.</para>
+    </sect1>
+  </chapter>
+
+  <chapter>
+    <title>Customizing the Component Set</title>
+
+    <abstract>
+      <para>This chapter describes the how to customize the
+      <acronym>UI</acronym> by modifying the set of components used to render
+      objects, properties, collections or actions.</para>
+    </abstract>
+
+    <para>The <emphasis>Wicket Viewer</emphasis> offers several ways in which
+    the <acronym>UI</acronym> rendered can be customized, from simply tweaking
+    the <acronym>CSS</acronym> (see <xref linkend="chp.CustomizingCss" />)
+    through to the use of custom components for mashups and wizards. This
+    chapter explains how to use pre-existing custom components; <xref
+    linkend="chp.WritingCustomComponents" /> explains how to write your own
+    components, and lists some components that have already been
+    developed.</para>
+
+    <para>There are more details provided in each of the sections that
+    follow.</para>
 
     <sect1 id="sec.ComponentFactories">
       <title>Component Factories</title>
@@ -1823,8 +1703,8 @@ bob:obv1ous</programlisting>
       <sect2>
         <title><classname>ComponentFactory</classname> interface</title>
 
-        <para>At its heart <emphasis>Wicket Objects</emphasis> consists of a
-        set of <emphasis>Wicket</emphasis> <code>Component</code>s and
+        <para>At its heart the <emphasis>Wicket Viewer</emphasis> consists of
+        a set of <emphasis>Wicket</emphasis> <code>Component</code>s and
         corresponding <classname>IModel&lt;?&gt;</classname>s that are used to
         render entities, collections of elements and indeed individual members
         of elements. Each <classname>Component</classname>s is created by a
@@ -1832,8 +1712,8 @@ bob:obv1ous</programlisting>
         factory to use discovered using a chain-of-responsibility
         pattern.</para>
 
-        <para>The <classname>Component</classname>s created by
-        <emphasis>Wicket Objects</emphasis> vary in size from rendering an
+        <para>The <classname>Component</classname>s created by the
+        <emphasis>Wicket Viewer</emphasis> vary in size from rendering an
         entire collection of entities all the way down to a single property of
         an entity. You can find the full set of built-in
         <classname>Component</classname>s by searching for implementations of
@@ -1885,10 +1765,11 @@ bob:obv1ous</programlisting>
         power-type for the subclass of <classname>IModel&lt;?&gt;</classname>
         that is supplied.</para>
 
-        <para>The superclass, <classname>ComponentFactoryAbstract</classname>,
-        then, takes responsibility for checking that the
-        <classname>ComponentType</classname> of the model, using the value
-        provided in the constructor:</para>
+        <para>The superclass <classname>ComponentFactoryAbstract</classname>
+        takes responsibility for checking that the
+        <classname>ComponentType</classname> matches the
+        <literal>wicket:id</literal>, while delegating the checking of the
+        IModel to its subtype:</para>
 
         <programlisting>public abstract class ComponentFactoryAbstract implements ComponentFactory ... {
   ...
@@ -1914,61 +1795,18 @@ bob:obv1ous</programlisting>
         linkend="chp.Views" />.</para>
       </sect2>
 
-      <sect2>
-        <title>Registering <classname>ComponentFactory</classname>s using
-        <classname>ComponentFactoryList</classname></title>
-
-        <para>The set of <classname>ComponentFactory</classname>s that are
-        provided with <emphasis>Wicket Objects</emphasis> are specified by the
-        <classname>ComponentFactoryList</classname> interface. </para>
-
-        <para>To add new factories, or indeed remove support for any of the
-        default factories, you'll need to do to things. The first is to
-        provide a new implementation of
-        <classname>ComponentFactoryList</classname>. If you look at
-        <classname>ComponentFactoryListDefault</classname> you'll see that it
-        is written so that it can be easily subclassed and overridden on an
-        as-needed basis.</para>
-
-        <para>Second, you need to override the binding in
-        <methodname>newWicketObjectsModule()</methodname>, eg:</para>
-
-        <programlisting>public class MyApplication extends WicketObjectsApplication {
-  ...
-  protected Module newWicketObjectsModule() {
-    return Modules.override(super.newWicketObjectsModule()).with(
-      new AbstractModule() {
-        @Override
-        protected void configure() {
-          bind(ComponentFactoryList.class).to(MyComponentFactoryList.class);
-        }
-      }
-    );
-  }
-}</programlisting>
-
-        <para>You should also ensure that your
-        <classname>MyComponentFactoryList</classname> is annotated with
-        <classname>@Singleton</classname>.</para>
-
-        <para>And, do remember to update <filename>web.xml</filename> to
-        reference your subclass of
-        <classname>WicketObjectsApplication</classname>.</para>
-      </sect2>
-
-      <sect2>
+      <sect2 id="sec.RegisteringUsingMetaInfServices">
         <title>Registering <classname>ComponentFactory</classname>s using
         META-INF Services</title>
 
-        <para>As an alternative to using
-        <classname>ComponentFactoryList</classname>, you can also register new
-        <classname>ComponentFactory</classname>s using the JDK's own
+        <para>The easiest way to register new
+        <classname>ComponentFactory</classname>s is using the JDK's own
         <classname>ServiceLoader</classname> capability.</para>
 
         <para>All that is needed is for your
         <classname>ComponentFactory</classname> to be registered in a file on
         the classpath call
-        <filename>META-INF/services/org.starobjects.wicket.ui.ComponentFactory</filename>.
+        <filename>META-INF/services/org.apache.isis.viewer.wicket.ui.ComponentFactory</filename>.
         The contents of this file should be the fully qualified class name of
         your <classname>ComponentFactory</classname> implementation. And
         that's it! Registering the <classname>ComponentFactory</classname> is
@@ -1985,13 +1823,62 @@ bob:obv1ous</programlisting>
         <note>
           <para>This capability is provided by the
           <classname>ComponentFactoryRegistry</classname> component, which is
-          also bound in the <classname>WicketObjectsModule</classname>. If you
+          also bound in the <classname>IsisWicketModule</classname>. If you
           wanted to, you could replace this higher-level registry component
           with your own implementation. There's probably very little need to
           do this though, given that you can just as easily customize using
           <classname>ComponentFactoryList</classname> or
           <filename>META-INF</filename> services.</para>
         </note>
+      </sect2>
+
+      <sect2>
+        <title>Registering <classname>ComponentFactory</classname>s using a
+        custom <classname>ComponentFactoryList</classname></title>
+
+        <para>The set of <classname>ComponentFactory</classname>s that are
+        provided with the <emphasis>Wicket Viewer</emphasis> are specified by
+        the <classname>ComponentFactoryList</classname> interface.</para>
+
+        <para>If you only want to add new factories, we recommend using the
+        technique described in <xref
+        linkend="sec.RegisteringUsingMetaInfServices" />. But if you want to
+        remove support for any of the default factories, or perhaps change the
+        order in which factories are registered, you'll need to do use write
+        and the bind in your own implementation of
+        <classname>ComponentFactoryList</classname>.</para>
+
+        <para>To write your implementation of
+        <classname>ComponentFactoryList</classname>, start with the default
+        implementation, <classname>ComponentFactoryListDefault</classname>.
+        You'll see that it is written so that it can be easily subclassed and
+        overridden on an as-needed basis. Worst case scenario, you can
+        copy-and-paste code as necessary.</para>
+
+        <para>Then, you need to override the binding in
+        <methodname>newIsisWicketModule()</methodname>, eg:</para>
+
+        <programlisting>public class MyApplication extends IsisWicketApplication {
+  ...
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
+      new AbstractModule() {
+        @Override
+        protected void configure() {
+          bind(ComponentFactoryList.class).to(MyComponentFactoryList.class);
+        }
+      }
+    );
+  }
+}</programlisting>
+
+        <para>You should also ensure that your
+        <classname>MyComponentFactoryList</classname> is annotated with
+        <classname>@Singleton</classname>.</para>
+
+        <para>And, do remember to update <filename>web.xml</filename> to
+        reference your subclass of
+        <classname>IsisWicketApplication</classname>.</para>
       </sect2>
     </sect1>
 
@@ -2004,8 +1891,8 @@ bob:obv1ous</programlisting>
       <sect2>
         <title>Page Registry</title>
 
-        <para>While the content of any given web page rendered by
-        <emphasis>Wicket Objects</emphasis> is made up of multiple
+        <para>While the content of any given web page rendered by the
+        <emphasis>Wicket Viewer</emphasis> is made up of multiple
         <classname>Component</classname>s, there are in fact only a small
         number of <classname>WebPage</classname>s:</para>
 
@@ -2038,7 +1925,7 @@ bob:obv1ous</programlisting>
         different implementation of <classname>PageRegistry</classname>. As
         for <classname>ComponentFactory</classname>s, this is done by
         providing a new implementation, and then overriding a binding in
-        <methodname>newWicketObjectsModule()</methodname>.</para>
+        <methodname>newIsisWicketModule()</methodname>.</para>
 
         <para>The default pages are specified by
         <classname>PageClassListDefault</classname>:</para>
@@ -2057,16 +1944,15 @@ bob:obv1ous</programlisting>
 
         <para>You can easily copy-n-paste this to create your own
         implementation. Note though that there must be a registered page for
-        every <classname>PageType</classname> instance, otherwise
-        <emphasis>Wicket Objects</emphasis> will fail fast on boot
-        time.</para>
+        every <classname>PageType</classname> instance, otherwise the
+        <emphasis>Wicket Viewer</emphasis> will fail fast on boot time.</para>
 
         <para>Overriding the binding is done in the usual way:</para>
 
-        <programlisting>public class MyApplication extends WicketObjectsApplication {
+        <programlisting>public class MyApplication extends IsisWicketApplication {
   ...
-  protected Module newWicketObjectsModule() {
-    return Modules.override(super.newWicketObjectsModule()).with(
+  protected Module newIsisWicketModule() {
+    return Modules.override(super.newIsisWicketModule()).with(
       new AbstractModule() {
         @Override
         protected void configure() {
@@ -2078,7 +1964,7 @@ bob:obv1ous</programlisting>
 }</programlisting>
 
         <para>Don't forget to update the web.xml to specify your subclass of
-        <classname>WicketObjectsApplication</classname>.</para>
+        <classname>IsisWicketApplication</classname>.</para>
 
         <note>
           <para>If all you want is to provide a custom rendering of a
@@ -2094,21 +1980,20 @@ bob:obv1ous</programlisting>
 
       <sect2 id="sec.SubclassingWicketObjectsApplication">
         <title>Subclassing
-        <classname>WicketObjectsApplication</classname></title>
+        <classname>IsisWicketApplication</classname></title>
 
         <para>As we've seen, you can also customize <emphasis>Wicket
         Objects</emphasis> in various ways by subclassing the
-        <classname>WicketObjectsApplication</classname> bootstrap. The most
+        <classname>IsisWicketApplication</classname> bootstrap. The most
         common reason for doing so is to override the default implementation
         of <classname>ComponentFactoryList</classname>.</para>
 
         <para>This design follows the general style of
         <emphasis>Wicket</emphasis>; in fact, you'll see that
-        <classname>WicketObjectsApplication</classname> itself overrides a
-        number of other methods (such as
-        <methodname>newRequestCycle()</methodname> and
-        <methodname>newConverterLocator()</methodname>), in order to hook
-        <emphasis>Naked Objects</emphasis> into the rest of Wicket.</para>
+        <classname>IsisWicketApplication</classname> itself overrides a number
+        of other methods (such as <methodname>newRequestCycle()</methodname>
+        and <methodname>newConverterLocator()</methodname>), in order to hook
+        <emphasis>Apache Isis</emphasis> into the rest of Wicket.</para>
 
         <para>In general it's unlikely that you'll need to alter the behavior
         of these hook methods; but it's useful to know that <emphasis>Wicket
@@ -2119,206 +2004,8 @@ bob:obv1ous</programlisting>
     </sect1>
   </chapter>
 
-  <chapter id="chp.CustomComponents">
-    <title>Custom Components</title>
-
-    <abstract>
-      <para>This chapter describes a number of custom components for
-      <emphasis>Wicket Objects</emphasis>. Some of these integrate third party
-      components and/or experimental.</para>
-    </abstract>
-
-    <para>As was described in <xref linkend="sec.ComponentFactories" />, the
-    <emphasis>Wicket Objects</emphasis> viewer is designed to be extensible,
-    allowing you to plug in more sophisticated renderings of the domain
-    objects that make up your application. This chapter describes a number of
-    custom components that demonstrate this capability, most of which are
-    basically wrappers around functionality within the
-    <emphasis>Wicket</emphasis>'s companion <ulink
-    url="http://wicketstuff.org">WicketStuff</ulink> project.</para>
-
-    <para>The components here are probably best considered as examples rather
-    than formally part of <emphasis>Wicket Objects</emphasis>, if only because
-    we want <emphasis>Wicket Objects</emphasis> to depend just on core
-    <emphasis>Wicket</emphasis>, not <emphasis>WicketStuff</emphasis>. But
-    what you will find is that all the components here follow a similar
-    layout, so you can easily adapt copy them into your own projects and adapt
-    them as you feel fit.</para>
-
-    <sect1>
-      <title>About the Components</title>
-
-      <para>The source for these components is available at <ulink
-      url="https://wicketobjects.svn.sourceforge.net/svnroot/wicketobjects/trunk/views">https://wicketobjects.svn.sourceforge.net/svnroot/wicketobjects/trunk/views</ulink>.</para>
-
-      <sect2>
-        <title>Common Layout</title>
-
-        <para>Most of the components define their own interfaces or
-        annotations; these are then implemented or annotated on the domain
-        classes so that the component knows whether it applies or not (see
-        discussion on <classname>ComponentFactory</classname>, in <xref
-        linkend="sec.ComponentFactory" />).</para>
-
-        <para>To minimize the coupling between the domain objects and the
-        component implementation, we separate out the interfaces/annotations
-        into an applib.</para>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata fileref="images/views-common-layout.png" scale="50" />
-          </imageobject>
-        </mediaobject>
-
-        <para>The naming convention for these modules is:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><filename>org.starobjects.wicket:view-xxx</filename> for the
-            parent module for view 'xxx'</para>
-          </listitem>
-
-          <listitem>
-            <para><filename>org.starobjects.wicket:view-xxx-applib</filename>
-            for the applib submodule</para>
-          </listitem>
-
-          <listitem>
-            <para><filename>org.starobjects.wicket:view-xxx-view</filename>
-            for the view submodule (that contains the actual
-            <classname>ComponentFactory</classname> and
-            <classname>Component</classname> implementations)</para>
-          </listitem>
-        </itemizedlist>
-      </sect2>
-
-      <sect2>
-        <title>Update Classpath</title>
-
-        <para>The classpath for both the <filename>dom</filename> submodule
-        and the <filename>commandline</filename> / <filename>webapp</filename>
-        submodule each need to be updated (see <xref
-        linkend="sec.StructureOfANakedObjectsApp" /> for an overview of the
-        typical structure of a Naked Objects application):</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>the <filename>dom</filename> submodule should be updated to
-            reference the <classname>view-xxx-applib</classname> submodule for
-            each custom component</para>
-          </listitem>
-
-          <listitem>
-            <para>the <filename>commandline</filename> /
-            <filename>webapp</filename> module should be updated to reference
-            the <filename>view-xxx-view</filename> submodule for each custom
-            component</para>
-          </listitem>
-        </itemizedlist>
-      </sect2>
-    </sect1>
-
-    <sect1 id="sec.gmap2">
-      <title>Gmap2</title>
-
-      <para>The gmap2 component renders a collection of objects in a Google
-      map:</para>
-
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/280-customize-ui-maps-mashup.png"
-                     scale="30" />
-        </imageobject>
-      </mediaobject>
-
-      <para>All that is required is for the object to implement
-      <classname>Locatable</classname> interface, which in turn returns a
-      <classname>Location</classname> value object:</para>
-
-      <programlisting>package org.starobjects.wicket.view.gmap2.applib;
-
-public interface Locatable {
-    Location getLocation();
-}</programlisting>
-
-      <para>If deploying on localhost, no <acronym>API</acronym> key is
-      required. However, internet deployments do require an key, which should
-      be specified as an init-parameter for the <emphasis>Wicket</emphasis>
-      filter in <filename>web.xml</filename>:</para>
-
-      <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
-&lt;web-app ... &gt;
-
-  ...
-
-  &lt;filter&gt;
-    &lt;filter-name&gt;wicket.app&lt;/filter-name&gt;
-    &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
-      &lt;param-value&gt;org.starobjects.wicket.viewer.app.WicketObjectsApplication&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-      &lt;param-name&gt;GOOGLE_MAPS_API_KEY&lt;/param-name&gt;
-      &lt;param-value&gt;(key here)&lt;/param-value&gt;
-    &lt;/init-param&gt;
-  &lt;/filter&gt;
-
-&lt;/web-app&gt;</programlisting>
-    </sect1>
-
-    <sect1 id="sec.googlecharts">
-      <title>Google Charts</title>
-
-      <para>The googlechart component provides basic charting capabilities. It
-      currently supports a single chart type; to render a collection as a pie
-      chart:</para>
-
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/410-analyze-summary-piechart.png"
-                     scale="30" />
-        </imageobject>
-      </mediaobject>
-
-      <para>All that is required is for the object to implement the (horribly
-      named) <classname>PieChartable</classname>:</para>
-
-      <programlisting>package org.starobjects.wicket.view.googlecharts.applib;
-
-public interface PieChartable {
-
-  double getPieChartValue();
-  String getPieChartLabel();
-}</programlisting>
-
-      <para>The label is used to point to each sector on the pie chart, the
-      value determines the size of each sector relative to the other
-      sectors.</para>
-    </sect1>
-
-    <sect1>
-      <title>CoolDataSoft Application Services Menu</title>
-
-      <para>The CoolDataSoft application services menu provides a different
-      look-n-feel for the application services menu, using Ajax instead of
-      <acronym>CSS</acronym>:</para>
-
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/cooldatasoft-appmenu.png" scale="30" />
-        </imageobject>
-      </mediaobject>
-
-      <para>The implementation is based upon code lifted from the <ulink
-      url="http://code.google.com/p/wicket-menu/">wicket-menu</ulink> project,
-      hosted on code.google.com. Please note that this code is GPLv3 and so
-      cannot be used freely in commercial applications.</para>
-    </sect1>
-  </chapter>
-
-  <chapter id="chp.SpecializedUseCases">
-    <title>Supporting Specialized Use Cases</title>
+  <chapter id="chp.WritingCustomComponents">
+    <title>Writing Custom Components</title>
 
     <abstract>
       <para>This chapter provides some further guidance on objects designed to
@@ -2326,8 +2013,8 @@ public interface PieChartable {
     </abstract>
 
     <para>Back in the application walkthrough (see <xref
-    linkend="sec.SpecializedUseCasesWalkthrough" />) we saw that
-    <emphasis>Wicket Objects</emphasis> has support for non-persisted objects
+    linkend="sec.SpecializedUseCasesWalkthrough" />) we saw that the
+    <emphasis>Wicket Viewer</emphasis> has support for non-persisted objects
     that are designed to support specialized use cases. Whereas regular
     persisted domain objects can be thought of as part of the problem space,
     such non-persisted objects can be thought of as being part of the solution
@@ -2369,7 +2056,7 @@ public interface PieChartable {
         </imageobject>
       </mediaobject>
 
-      <para>You can use any of the <emphasis>Wicket Objects</emphasis>'
+      <para>You can use any of the <emphasis>Wicket Viewer</emphasis>'s
       built-in <classname>Component</classname>s that are used to build the
       generic views for your own custom views; search down the
       <classname>ComponentFactory</classname> inheritance hierarchy and
@@ -2379,47 +2066,9 @@ public interface PieChartable {
       does precisely this; you can inspect the code in <xref
       linkend="sec.ExampleAppCustomViews" />).</para>
 
-      <para><emphasis>Wicket Objects</emphasis> also has a small number of
+      <para>The <emphasis>Wicket Viewer</emphasis> also has a small number of
       <classname>Component</classname>s intended for writing custom
       views.</para>
-
-      <sect2>
-        <title><classname>@WizardPageDescription</classname></title>
-
-        <para>It's common for wizards to have a description explaining what
-        the user is expected to do. This can be modeled as a
-        <classname>String</classname> property annotated with
-        <classname>@WizardPageDescription</classname>, for example:</para>
-
-        <programlisting>@NotPersistable
-public class ClaimWizard extends AbstractDomainObject {
-
-    ...
-
-    @WizardPageDescription
-    @MemberOrder(sequence = "1")
-    public String getPageDescription() { ... }
-
-    ...
-}</programlisting>
-
-        <para>You can see the result of this annoation in the screenshots of
-        the wizard (see <xref
-        linkend="sec.SpecializedUseCasesWalkthrough" />).</para>
-
-        <para>In order for this to work, the following line must be added to
-        <emphasis>Naked Objects</emphasis>' configuration file,
-        <filename>nakedobjects.properties</filename>:</para>
-
-        <programlisting>nakedobjects.reflector.facets.include=org.starobjects.wicket.metamodel.facets.WizardPageDescriptionAnnotationFacetFactory</programlisting>
-
-        <para>This basically instructs <emphasis>Naked Objects</emphasis> to
-        capture additional information in its metamodel (specifically, that a
-        <classname>WizardPageDescriptionFacet</classname> is associated to the
-        property). This then causes a different
-        <classname>Component</classname> to be used to render this property;
-        specifically, one that renders the value as a large label.</para>
-      </sect2>
 
       <sect2>
         <title><classname>ProcessObjectPanelAbstract</classname></title>
@@ -2467,11 +2116,11 @@ public class ClaimWizard extends AbstractDomainObject {
       <sect2>
         <title>Help Wanted!</title>
 
-        <para>As you can see, the level of support provided by
-        <emphasis>Wicket Objects</emphasis> for custom views is, admittedly,
+        <para>As you can see, the level of support provided by the
+        <emphasis>Wicket Viewer</emphasis> for custom views is, admittedly,
         quite limited. There's nothing to prevent you from writing your own,
-        of course, but to do so you'll need to use with the <emphasis>Naked
-        Objects</emphasis> metamodel <acronym>API</acronym>s.</para>
+        of course, but to do so you'll need to use with the <emphasis>Apache
+        Isis</emphasis> metamodel <acronym>API</acronym>s.</para>
 
         <para>We hope to extend the components available as <emphasis>Wicket
         Objects</emphasis> continues to be developed. But in the meantime, if
@@ -2494,11 +2143,11 @@ public class ClaimWizard extends AbstractDomainObject {
 public class ClaimWizard extends AbstractDomainObject {
 
     public enum Page {
-        INTRO("This wizard will take you through the process of creating a claim"), 
-        CLAIMANT("Enter the claimant that is making this claim"), 
+        INTRO("This wizard will take you through the process of creating a claim"),
+        CLAIMANT("Enter the claimant that is making this claim"),
         APPROVER("By default, the claimant's own approver will approve this claim.  " +
-          "Update here if another approver will approve this claim."), 
-        DESCRIPTION("Update the description if required."), 
+          "Update here if another approver will approve this claim."),
+        DESCRIPTION("Update the description if required."),
         SUMMARY("Confirm all details, or go back and amend if needed");
 
         private String description;
@@ -2597,6 +2246,297 @@ public class ClaimWizard extends AbstractDomainObject {
     </sect1>
   </chapter>
 
+  <chapter id="chp.CustomComponents">
+    <title>Custom Components in isis-contrib</title>
+
+    <abstract>
+      <para>This chapter describes a number of custom components for the
+      <emphasis>Wicket Viewer</emphasis>. Some of these integrate third party
+      components and/or experimental.</para>
+    </abstract>
+
+    <para>As was described in <xref linkend="sec.ComponentFactories" />, the
+    <emphasis>Wicket Viewer</emphasis> is designed to be extensible, allowing
+    you to plug in more sophisticated renderings of the domain objects that
+    make up your application. This chapter describes a number of custom
+    components that demonstrate this capability, most of which are basically
+    wrappers around functionality within the <emphasis>Wicket</emphasis>'s
+    companion <ulink url="http://wicketstuff.org">WicketStuff</ulink>
+    project.</para>
+
+    <para>The components here are probably best considered as examples rather
+    than formally part of the <emphasis>Wicket Viewer</emphasis>, if only
+    because we want the <emphasis>Wicket Viewer</emphasis> to depend just on
+    core <emphasis>Wicket</emphasis>, not <emphasis>WicketStuff</emphasis>.
+    But what you will find is that all the components here follow a similar
+    layout, so you can easily adapt copy them into your own projects and adapt
+    them as you feel fit.</para>
+
+    <sect1>
+      <title>About the Components</title>
+
+      <para>The source for these components is available at ***.</para>
+
+      <sect2>
+        <title>Common Layout</title>
+
+        <para>Most of the components define their own interfaces or
+        annotations; these are then implemented or annotated on the domain
+        classes so that the component knows whether it applies or not (see
+        discussion on <classname>ComponentFactory</classname>, in <xref
+        linkend="sec.ComponentFactory" />).</para>
+
+        <para>To minimize the coupling between the domain objects and the
+        component implementation, we separate out the interfaces/annotations
+        into an applib.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/views-common-layout.png" scale="50" />
+          </imageobject>
+        </mediaobject>
+
+        <para>The naming convention for these modules is:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><filename>org.starobjects.wicket:view-xxx</filename> for the
+            parent module for view 'xxx'</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>org.starobjects.wicket:view-xxx-applib</filename>
+            for the applib submodule</para>
+          </listitem>
+
+          <listitem>
+            <para><filename>org.starobjects.wicket:view-xxx-view</filename>
+            for the view submodule (that contains the actual
+            <classname>ComponentFactory</classname> and
+            <classname>Component</classname> implementations)</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+
+      <sect2>
+        <title>Adding Dependency Management for Custom Views</title>
+
+        <para>In the parent project's <filename>pom.xml</filename>, specify
+        the modules of the custom views that you want to use, along with the
+        version:</para>
+
+        <programlisting>&lt;dependencyManagement&gt;
+  &lt;dependencies&gt;
+    ...
+
+    &lt;!-- Wicket Viewer view extensions --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-gmap2-applib&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-gmap2-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-googlecharts-applib&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-googlecharts-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-calendarviews-applib&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-calendarviews-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.isis.viewer.wicket&lt;/groupId&gt;
+      &lt;artifactId&gt;view-cooldatasoftmenu-view&lt;/artifactId&gt;
+      &lt;version&gt;${wicketobjects.version}&lt;/version&gt;
+    &lt;/dependency&gt;
+
+    ...
+  &lt;dependencies&gt;
+&lt;/dependencyManagement&gt;</programlisting>
+      </sect2>
+
+      <sect2>
+        <title>Adding the Custom View's AppLibs as Dependencies</title>
+
+        <para>*** Again, if you intend to use any of the custom components
+        (see <xref linkend="chp.CustomComponents" />), then also add in
+        dependencies to their respective applibs (if they have one):</para>
+
+        <programlisting>&lt;dependencies&gt;
+  ...
+
+  &lt;!-- Wicket Viewer view extensions --&gt;
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;view-calendarviews-applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;view-gmap2-applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  &lt;dependency&gt;
+    &lt;groupId&gt;org.starobjects.wicket&lt;/groupId&gt;
+    &lt;artifactId&gt;view-googlecharts-applib&lt;/artifactId&gt;
+  &lt;/dependency&gt;
+
+  ...
+&lt;/dependencies&gt;</programlisting>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Update Classpath</title>
+
+        <para>The classpath for both the <filename>dom</filename> submodule
+        and the <filename>commandline</filename> / <filename>webapp</filename>
+        submodule each need to be updated (see <xref
+        linkend="sec.StructureOfAnApacheIsisApp" /> for an overview of the
+        typical structure of an <emphasis>Apache Isis</emphasis>
+        application):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the <filename>dom</filename> submodule should be updated to
+            reference the <classname>view-xxx-applib</classname> submodule for
+            each custom component</para>
+          </listitem>
+
+          <listitem>
+            <para>the <filename>commandline</filename> /
+            <filename>webapp</filename> module should be updated to reference
+            the <filename>view-xxx-view</filename> submodule for each custom
+            component</para>
+          </listitem>
+        </itemizedlist>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.gmap2">
+      <title>Gmap2</title>
+
+      <para>The gmap2 component renders a collection of objects in a Google
+      map:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/280-customize-ui-maps-mashup.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>All that is required is for the object to implement
+      <classname>Locatable</classname> interface, which in turn returns a
+      <classname>Location</classname> value object:</para>
+
+      <programlisting>package org.apache.isis.viewer.wicket.view.gmap2.applib;
+
+public interface Locatable {
+    Location getLocation();
+}</programlisting>
+
+      <para>If deploying on localhost, no <acronym>API</acronym> key is
+      required. However, internet deployments do require an key, which should
+      be specified as an init-parameter for the <emphasis>Wicket</emphasis>
+      filter in <filename>web.xml</filename>:</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+&lt;web-app ... &gt;
+
+  ...
+
+  &lt;filter&gt;
+    &lt;filter-name&gt;wicket.app&lt;/filter-name&gt;
+    &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
+      &lt;param-value&gt;org.apache.isis.viewer.wicket.viewer.app.IsisWicketApplication&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+      &lt;param-name&gt;GOOGLE_MAPS_API_KEY&lt;/param-name&gt;
+      &lt;param-value&gt;(key here)&lt;/param-value&gt;
+    &lt;/init-param&gt;
+  &lt;/filter&gt;
+
+&lt;/web-app&gt;</programlisting>
+    </sect1>
+
+    <sect1 id="sec.googlecharts">
+      <title>Google Charts</title>
+
+      <para>The googlechart component provides basic charting capabilities. It
+      currently supports a single chart type; to render a collection as a pie
+      chart:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/410-analyze-summary-piechart.png"
+                     scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>All that is required is for the object to implement the (horribly
+      named) <classname>PieChartable</classname>:</para>
+
+      <programlisting>package org.apache.isis.viewer.wicket.view.googlecharts.applib;
+
+public interface PieChartable {
+
+  double getPieChartValue();
+  String getPieChartLabel();
+}</programlisting>
+
+      <para>The label is used to point to each sector on the pie chart, the
+      value determines the size of each sector relative to the other
+      sectors.</para>
+    </sect1>
+
+    <sect1>
+      <title>CoolDataSoft Application Services Menu</title>
+
+      <para>The CoolDataSoft application services menu provides a different
+      look-n-feel for the application services menu, using Ajax instead of
+      <acronym>CSS</acronym>:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/cooldatasoft-appmenu.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The implementation is based upon code lifted from the <ulink
+      url="http://code.google.com/p/wicket-menu/">wicket-menu</ulink> project,
+      hosted on code.google.com. Please note that this code is GPLv3 and so
+      cannot be used freely in commercial applications.</para>
+    </sect1>
+  </chapter>
+
   <chapter>
     <title>Deployment Topics</title>
 
@@ -2609,24 +2549,25 @@ public class ClaimWizard extends AbstractDomainObject {
     number of things to be addressed. Most significantly of these is
     persistence, but security is another important topic.</para>
 
-    <para>Because <emphasis>Wicket Objects</emphasis> runs on top of
-    <emphasis>Naked Objects</emphasis>, many of the deployment tasks are based
-    on the way in which <emphasis>Naked Objects</emphasis> tackles
-    them.</para>
+    <para>Because the <emphasis>Wicket Viewer</emphasis> runs on top of
+    <emphasis>Apache Isis</emphasis>, many of the deployment tasks are based
+    on the way in which <emphasis>Apache Isis</emphasis> tackles them.</para>
 
     <para>This chapter briefly outlines the main tasks from a <emphasis>Wicket
     Objects</emphasis> perspective. You might, though, want to dig out my
     book, <ulink url="http://pragprog.com/titles/dhnako">Domain Driven Design
-    using Naked Objects</ulink> (DDDuNO), for more in-depth coverage of the
-    <emphasis>Naked Objects</emphasis> side-of-things.</para>
+    using Naked Objects</ulink>, for more in-depth coverage of the
+    <emphasis>Apache Isis</emphasis> side-of-things (it covers
+    <emphasis>Apache Isis</emphasis>' predecessor, <emphasis>Naked
+    Objects</emphasis>, but is still broadly applicable).</para>
 
     <sect1>
       <title>Running in a WebApp</title>
 
-      <para>When developing <emphasis>Wicket Objects</emphasis> applications
-      you can run from either the <filename>commandline</filename> project or
-      from the <filename>webapp</filename> project (see <xref
-      linkend="sec.StructureOfANakedObjectsApp" />). If you've been using the
+      <para>When developing <emphasis>Apache Isis</emphasis> applications you
+      can run from either the <filename>commandline</filename> project or from
+      the <filename>webapp</filename> project (see <xref
+      linkend="sec.StructureOfAnApacheIsisApp" />). If you've been using the
       former, then you'll need to switch to running from the latter so that
       your application can be built as a <acronym>WAR</acronym> for
       deployment. Take care to ensure that:</para>
@@ -2638,8 +2579,8 @@ public class ClaimWizard extends AbstractDomainObject {
         </listitem>
 
         <listitem>
-          <para>that the <filename>nakedobjects.properties</filename> config
-          file is the same</para>
+          <para>that the <filename>isis.properties</filename> config file is
+          the same</para>
         </listitem>
       </itemizedlist>
     </sect1>
@@ -2658,29 +2599,29 @@ public class ClaimWizard extends AbstractDomainObject {
         <listitem>
           <para>the simplest persistence mechanism (albeit still only really
           for prototyping) is to use the XML object store. You can specify
-          this in <filename>nakedobjects.properties</filename>:</para>
+          this in <filename>isis.properties</filename>:</para>
 
-          <programlisting>nakedobjects.persistor=xml
-nakedobjects.xmlos.dir=/tmp/xml</programlisting>
+          <programlisting>isis.persistor=xml
+isis.xmlos.dir=/tmp/xml</programlisting>
         </listitem>
 
         <listitem>
           <para>more likely though you'll want to use a relational database.
           One option is <ulink url="http://jpaobjects.sourceforge.net">JPA
-          Objects</ulink>, another sister project to <emphasis>Naked
-          Objects</emphasis> (like <emphasis>Wicket Objects</emphasis> itself,
-          in fact). There's reasonable coverage in the <ulink
+          Objects</ulink>, another sister project to <emphasis>Apache
+          Isis</emphasis> (like <emphasis>Wicket Objects</emphasis> itself, in
+          fact). There's reasonable coverage in the <ulink
           url="http://pragprog.com/titles/dhnako">DDDuNO</ulink> book.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Naked Objects</emphasis> also has (will have) a
+          <para><emphasis>Apache Isis</emphasis> also has (will have) a
           JDBC-based object store, SQL Object Store</para>
         </listitem>
 
         <listitem>
-          <para>If relational databases aren't your thing, <emphasis>Naked
-          Objects</emphasis> also has (will have) a BerkeleyDB Object
+          <para>If relational databases aren't your thing, <emphasis>Apache
+          Isis</emphasis> also has (will have) a BerkeleyDB Object
           Store</para>
         </listitem>
       </itemizedlist>
@@ -2690,14 +2631,14 @@ nakedobjects.xmlos.dir=/tmp/xml</programlisting>
       <title>Security</title>
 
       <para>By default, <email>Wicket Objects</email> is configured to use
-      <emphasis>Naked Objects</emphasis>' default authentication and
+      <emphasis>Apache Isis</emphasis>' default authentication and
       authorization. This are both file-based, with a simple passwords file to
-      define users, and a similar file to define authorization. Naked Objects
-      does though provide an implementation for both that use
-      <acronym>LDAP</acronym>. This is discussed in the <emphasis>Naked
-      Objects</emphasis> documentation and in the DDDuNO book. Alternatively,
-      you could always write your own implementations to hook into your own
-      security infrastructure.</para>
+      define users, and a similar file to define authorization.
+      <emphasis>Apache Isis</emphasis> does though provide an implementation
+      for both that use <acronym>LDAP</acronym>. This is discussed in the
+      other <emphasis>Apache Isis</emphasis> documentation and in Dan
+      Haywood's book. Alternatively, you could always write your own
+      implementations to hook into your own security infrastructure.</para>
     </sect1>
 
     <sect1>
@@ -2717,7 +2658,7 @@ nakedobjects.xmlos.dir=/tmp/xml</programlisting>
     &lt;filter-class&gt;org.apache.wicket.protocol.http.WicketFilter&lt;/filter-class&gt;
     &lt;init-param&gt;
       &lt;param-name&gt;applicationClassName&lt;/param-name&gt;
-      &lt;param-value&gt;org.starobjects.wicket.viewer.app.WicketObjectsApplication&lt;/param-value&gt;
+      &lt;param-value&gt;org.apache.isis.viewer.wicket.viewer.app.IsisWicketApplication&lt;/param-value&gt;
     &lt;/init-param&gt;
     &lt;init-param&gt;
       &lt;param-name&gt;configuration&lt;/param-name&gt;
@@ -2727,9 +2668,9 @@ nakedobjects.xmlos.dir=/tmp/xml</programlisting>
 
 &lt;/web-app&gt;</programlisting>
 
-      <para>Doing this also disables Naked Objects "exploration" actions (any
-      action annotated with <classname>@Exploration</classname> will no longer
-      be visible).</para>
+      <para>Doing this also disables <emphasis>Apache Isis</emphasis>
+      "exploration" actions (any action annotated with
+      <classname>@Exploration</classname> will no longer be visible).</para>
     </sect1>
   </chapter>
 
@@ -2774,22 +2715,22 @@ nakedobjects.xmlos.dir=/tmp/xml</programlisting>
           getters and setters and some of the validation methods have been
           omitted.</para>
 
-          <programlisting>package org.nakedobjects.examples.claims.dom.claim;
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.nakedobjects.applib.AbstractDomainObject;
-import org.nakedobjects.applib.annotation.Disabled;
-import org.nakedobjects.applib.annotation.Ignore;
-import org.nakedobjects.applib.annotation.MaxLength;
-import org.nakedobjects.applib.annotation.MemberOrder;
-import org.nakedobjects.applib.annotation.Named;
-import org.nakedobjects.applib.annotation.Optional;
-import org.nakedobjects.applib.value.Date;
-import org.nakedobjects.applib.value.Money;
-import org.starobjects.wicket.applib.CalendarEvent;
-import org.starobjects.wicket.applib.Calendarable;
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.annotation.MaxLength;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.value.Money;
+import org.apache.isis.viewer.wicket.applib.CalendarEvent;
+import org.apache.isis.viewer.wicket.applib.Calendarable;
 
 public class Claim extends AbstractDomainObject implements Calendarable {
 
@@ -2853,7 +2794,7 @@ public class Claim extends AbstractDomainObject implements Calendarable {
     public Approver getApprover() { ... }
     public void setApprover(Approver approver) { ... }
     public String disableApprover() { ... }
-    public String validateApprover(final Approver approver) { 
+    public String validateApprover(final Approver approver) {
         if (approver == null)
             return null;
         return approver == getClaimant() ? "Can't approve own claims" : null;
@@ -2873,7 +2814,7 @@ public class Claim extends AbstractDomainObject implements Calendarable {
         return getStatus().equals("New") ? null
                 : "Claim has already been submitted";
     }
-    public Object default0Submit() { 
+    public Object default0Submit() {
         return getClaimant().getApprover();
     }
     // }}
@@ -2905,7 +2846,7 @@ public class Claim extends AbstractDomainObject implements Calendarable {
           <itemizedlist>
             <listitem>
               <para>Although <classname>Claim</classname> is inheriting from
-              <emphasis>Naked Objects</emphasis>'
+              <emphasis>Apache Isis</emphasis>'
               <classname>AbstractDomainObject</classname> class, this isn't
               mandatory.</para>
             </listitem>
@@ -2915,13 +2856,13 @@ public class Claim extends AbstractDomainObject implements Calendarable {
               type <classname>Claimant</classname> and
               <classname>Approver</classname>. As we'll see below these are
               interfaces. References to both interface and classes is
-              supported in <emphasis>Naked Objects</emphasis>.</para>
+              supported in <emphasis>Apache Isis</emphasis>.</para>
             </listitem>
 
             <listitem>
               <para>The <classname>Claim</classname> uses a
               <classname>Money</classname> class, a value type provided by
-              <emphasis>Naked Objects</emphasis>. It's also possible to write
+              <emphasis>Apache Isis</emphasis>. It's also possible to write
               ones own value types (or indeed use third-party value types such
               as JodaTime).</para>
             </listitem>
@@ -2937,12 +2878,12 @@ public class Claim extends AbstractDomainObject implements Calendarable {
           <classname>Claim</classname>, and doesn't have any particular
           behavior itself:</para>
 
-          <programlisting>package org.nakedobjects.examples.claims.dom.claim;
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
 
-import org.nakedobjects.applib.AbstractDomainObject;
-import org.nakedobjects.applib.annotation.MemberOrder;
-import org.nakedobjects.applib.value.Date;
-import org.nakedobjects.applib.value.Money;
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.value.Date;
+import org.apache.isis.applib.value.Money;
 
 public class ClaimItem extends AbstractDomainObject {
 
@@ -2983,7 +2924,7 @@ public class ClaimItem extends AbstractDomainObject {
           classes outside the claims package. The
           <classname>Approver</classname> interface is, in fact, empty:</para>
 
-          <programlisting>package org.nakedobjects.examples.claims.dom.claim;
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
 
 public interface Approver {
 
@@ -2992,7 +2933,7 @@ public interface Approver {
           <para>There's not a lot more to
           <classname>Claimant</classname>:</para>
 
-          <programlisting>package org.nakedobjects.examples.claims.dom.claim;
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
 
 public interface Claimant {
 
@@ -3009,12 +2950,12 @@ public interface Claimant {
           the two domain services (as appearing in the menu bar), and is
           defined as:</para>
 
-          <programlisting>package org.nakedobjects.examples.claims.dom.claim;
+          <programlisting>package org.apache.isis.examples.claims.dom.claim;
 
 import java.util.List;
 
-import org.nakedobjects.applib.annotation.Named;
-import org.nakedobjects.applib.value.Date;
+import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.value.Date;
 
 @Named("Claims")
 public interface ClaimRepository {
@@ -3051,15 +2992,15 @@ public interface ClaimRepository {
           <para>The <classname>Employee</classname> class is the other main
           class in this app:</para>
 
-          <programlisting>package org.nakedobjects.examples.claims.dom.employee;
+          <programlisting>package org.apache.isis.examples.claims.dom.employee;
 
-import org.nakedobjects.applib.AbstractDomainObject;
-import org.nakedobjects.applib.annotation.Disabled;
-import org.nakedobjects.applib.annotation.MemberOrder;
-import org.nakedobjects.examples.claims.dom.claim.Approver;
-import org.nakedobjects.examples.claims.dom.claim.Claimant;
-import org.starobjects.wicket.applib.Locatable;
-import org.starobjects.wicket.applib.Location;
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.examples.claims.dom.claim.Approver;
+import org.apache.isis.examples.claims.dom.claim.Claimant;
+import org.apache.isis.viewer.wicket.applib.Locatable;
+import org.apache.isis.viewer.wicket.applib.Location;
 
 public class Employee extends AbstractDomainObject implements Claimant,
         Approver, Locatable {
@@ -3126,11 +3067,11 @@ public class Employee extends AbstractDomainObject implements Claimant,
           <para>The <classname>EmployeeRepository</classname> interface
           defines the other domain service (on the services menu):</para>
 
-          <programlisting>package org.nakedobjects.examples.claims.dom.employee;
+          <programlisting>package org.apache.isis.examples.claims.dom.employee;
 
 import java.util.List;
 
-import org.nakedobjects.applib.annotation.Named;
+import org.apache.isis.applib.annotation.Named;
 
 @Named("Employees")
 public interface EmployeeRepository {
@@ -3159,31 +3100,31 @@ public interface EmployeeRepository {
         <literal>previous()</literal>, <literal>next()</literal> and
         <literal>finish()</literal> actions are available.</para>
 
-        <programlisting>package org.nakedobjects.examples.claims.dom.claim;
+        <programlisting>package org.apache.isis.examples.claims.dom.claim;
 
 import java.util.Calendar;
 import java.util.List;
 
-import org.nakedobjects.applib.AbstractDomainObject;
-import org.nakedobjects.applib.annotation.Disabled;
-import org.nakedobjects.applib.annotation.Hidden;
-import org.nakedobjects.applib.annotation.Ignore;
-import org.nakedobjects.applib.annotation.MemberOrder;
-import org.nakedobjects.applib.annotation.NotPersistable;
-import org.nakedobjects.applib.annotation.TypicalLength;
-import org.nakedobjects.applib.clock.Clock;
-import org.nakedobjects.examples.claims.dom.employee.EmployeeRepository;
-import org.starobjects.wicket.applib.WizardPageDescription;
+import org.apache.isis.applib.AbstractDomainObject;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NotPersistable;
+import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.applib.clock.Clock;
+import org.apache.isis.examples.claims.dom.employee.EmployeeRepository;
+import org.apache.isis.viewer.wicket.applib.WizardPageDescription;
 
 @NotPersistable
 public class ClaimWizard extends AbstractDomainObject {
 
     public enum Page {
-        INTRO("This wizard will take you through the process of creating a claim"), 
-        CLAIMANT("Enter the claimant that is making this claim"), 
+        INTRO("This wizard will take you through the process of creating a claim"),
+        CLAIMANT("Enter the claimant that is making this claim"),
         APPROVER("By default, the claimant's own approver will approve this claim.  " +
-                 "Update here if another approver will approve this claim."), 
-        DESCRIPTION("Update the description if required."), 
+                 "Update here if another approver will approve this claim."),
+        DESCRIPTION("Update the description if required."),
         SUMMARY("Confirm all details, or go back and amend if needed");
 
         private String description;
@@ -3393,14 +3334,14 @@ public class ClaimWizard extends AbstractDomainObject {
         <para>The <classname>ClaimExpenseSummary</classname> is used as a
         report object:</para>
 
-        <programlisting>package org.nakedobjects.examples.claims.dom.claim;
+        <programlisting>package org.apache.isis.examples.claims.dom.claim;
 
-import org.nakedobjects.applib.annotation.Disabled;
-import org.nakedobjects.applib.annotation.Ignore;
-import org.nakedobjects.applib.annotation.MemberOrder;
-import org.nakedobjects.applib.annotation.NotPersistable;
-import org.nakedobjects.applib.value.Money;
-import org.starobjects.wicket.applib.PieChartable;
+import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.NotPersistable;
+import org.apache.isis.applib.value.Money;
+import org.apache.isis.viewer.wicket.applib.PieChartable;
 
 @NotPersistable
 public class ClaimantExpenseSummary implements PieChartable,
@@ -3493,15 +3434,15 @@ public class ClaimantExpenseSummary implements PieChartable,
 
         <para></para>
 
-        <programlisting>package org.nakedobjects.examples.claims.ui.claimwizard;
+        <programlisting>package org.apache.isis.examples.claims.ui.claimwizard;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;
-import org.nakedobjects.examples.claims.dom.claim.ClaimWizard;
-import org.nakedobjects.metamodel.spec.NakedObjectSpecification;
-import org.starobjects.wicket.viewer.components.ComponentType;
-import org.starobjects.wicket.viewer.components.entity.EntityComponentFactoryAbstract;
-import org.starobjects.wicket.viewer.components.entity.EntityModel;
+import org.apache.isis.examples.claims.dom.claim.ClaimWizard;
+import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.viewer.wicket.viewer.components.ComponentType;
+import org.apache.isis.viewer.wicket.viewer.components.entity.EntityComponentFactoryAbstract;
+import org.apache.isis.viewer.wicket.viewer.components.entity.EntityModel;
 
 public class ClaimWizardComponentFactory extends EntityComponentFactoryAbstract {
 
@@ -3518,8 +3459,8 @@ public class ClaimWizardComponentFactory extends EntityComponentFactoryAbstract 
     }
 
     private boolean isModelForWizard(EntityModel model) {
-        final NakedObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-        final NakedObjectSpecification claimWizardSpec = getSpecificationLoader().loadSpecification(ClaimWizard.class);
+        final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
+        final ObjectSpecification claimWizardSpec = getSpecificationLoader().loadSpecification(ClaimWizard.class);
         return typeOfSpec.isOfType(claimWizardSpec);
     }
 
@@ -3542,7 +3483,7 @@ public class ClaimWizardComponentFactory extends EntityComponentFactoryAbstract 
 
         <para></para>
 
-        <programlisting>package org.nakedobjects.examples.claims.ui.claimwizard;
+        <programlisting>package org.apache.isis.examples.claims.ui.claimwizard;
 
 import java.util.List;
 
@@ -3557,19 +3498,19 @@ import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
-import org.nakedobjects.metamodel.adapter.NakedObject;
-import org.nakedobjects.metamodel.commons.filters.Filter;
-import org.nakedobjects.metamodel.facets.object.validate.ValidateObjectFacet;
-import org.nakedobjects.metamodel.spec.NakedObjectSpecification;
-import org.nakedobjects.metamodel.spec.feature.NakedObjectAssociation;
-import org.nakedobjects.metamodel.spec.feature.NakedObjectAssociationFilters;
-import org.nakedobjects.metamodel.spec.feature.OneToOneAssociation;
-import org.starobjects.wicket.viewer.common.ProcessObjectPanelAbstract;
-import org.starobjects.wicket.viewer.common.scalars.ScalarModel;
-import org.starobjects.wicket.viewer.components.ComponentType;
-import org.starobjects.wicket.viewer.components.entity.EntityModel;
-import org.starobjects.wicket.viewer.mementos.PropertyMemento;
-import org.starobjects.wicket.viewer.util.Mementos;
+import org.apache.isis.metamodel.adapter.NakedObject;
+import org.apache.isis.metamodel.commons.filters.Filter;
+import org.apache.isis.metamodel.facets.object.validate.ValidateObjectFacet;
+import org.apache.isis.metamodel.spec.NakedObjectSpecification;
+import org.apache.isis.metamodel.spec.feature.NakedObjectAssociation;
+import org.apache.isis.metamodel.spec.feature.NakedObjectAssociationFilters;
+import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.viewer.wicket.viewer.common.ProcessObjectPanelAbstract;
+import org.apache.isis.viewer.wicket.viewer.common.scalars.ScalarModel;
+import org.apache.isis.viewer.wicket.viewer.components.ComponentType;
+import org.apache.isis.viewer.wicket.viewer.components.entity.EntityModel;
+import org.apache.isis.viewer.wicket.viewer.mementos.PropertyMemento;
+import org.apache.isis.viewer.wicket.viewer.util.Mementos;
 
 import com.google.common.collect.Lists;
 
@@ -3596,7 +3537,7 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
         addOrReplace(claimWizardForm);
     }
 
-    class ClaimWizardForm extends Form&lt;NakedObject&gt; {
+    class ClaimWizardForm extends Form&lt;ObjectAdapter&gt; {
 
         private static final long serialVersionUID = 1L;
 
@@ -3627,8 +3568,8 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
 
         private void addProperties() {
             EntityModel entityModel = (EntityModel) getModel();
-            NakedObject adapter = entityModel.getObject();
-            NakedObjectSpecification noSpec = adapter.getSpecification();
+            ObjectAdapter adapter = entityModel.getObject();
+            ObjectSpecification noSpec = adapter.getSpecification();
 
             List&lt;OneToOneAssociation&gt; properties = visibleProperties(adapter,
                     noSpec);
@@ -3649,14 +3590,14 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
 
         @SuppressWarnings("unchecked")
         private List&lt;OneToOneAssociation&gt; visibleProperties(
-                NakedObject adapter, NakedObjectSpecification noSpec) {
+                ObjectAdapter adapter, ObjectSpecification noSpec) {
             return (List&lt;OneToOneAssociation&gt;) noSpec
                     .getAssociationList(visiblePropertyFilter(adapter));
         }
 
-        private Filter&lt;NakedObjectAssociation&gt; visiblePropertyFilter(
-                NakedObject adapter) {
-            return NakedObjectAssociationFilters.PROPERTIES
+        private Filter&lt;ObjectAssociation&gt; visiblePropertyFilter(
+                ObjectAdapter adapter) {
+            return ObjectAssociationFilters.PROPERTIES
                     .and(NakedObjectAssociationFilters.dynamicallyVisible(
                             getAuthenticationSession(), adapter));
         }
@@ -3696,10 +3637,10 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
         private void addFeedbackGui() {
             final FeedbackPanel feedback = addOrReplaceFeedback();
 
-            NakedObject adapter = getModel().getObject();
+            ObjectAdapter adapter = getModel().getObject();
             if (adapter == null) {
                 feedback.error("cannot locate object:"
-                        + getEntityModel().getNakedObjectMemento().toString());
+                        + getEntityModel().getObjectMemento().toString());
             }
         }
 
@@ -3723,7 +3664,7 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
                 @Override
                 public void validate(Form&lt;?&gt; form) {
                     EntityModel entityModel = (EntityModel) getModel();
-                    NakedObject adapter = entityModel.getObject();
+                    ObjectAdapter adapter = entityModel.getObject();
                     ValidateObjectFacet facet = adapter.getSpecification()
                             .getFacet(ValidateObjectFacet.class);
                     if (facet == null) {
@@ -3787,10 +3728,10 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
       <title>AppLib</title>
 
       <para>This small submodule defines the <emphasis>Wicket
-      Objects</emphasis> application library, and (along with <emphasis>Naked
-      Objects</emphasis>' own applib) represents the sole point of coupling
-      between <emphasis>Wicket Objects</emphasis> and the domain objects
-      themselves.</para>
+      Viewer</emphasis>'s application library, and (along with
+      <emphasis>Apache Isis</emphasis>' own applib) represents the sole point
+      of coupling between <emphasis>Apache Isis/Wicket Viewer</emphasis> and
+      the domain objects themselves.</para>
 
       <para>There is no real behaviour in this module; instead it defines
       annotations to decorate your domain objects. An example is
@@ -3804,15 +3745,15 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
       <title>Facets</title>
 
       <para>The <filename>facets</filename> submodule provides extensions to
-      <emphasis>Naked Objects</emphasis> metamodel, picking up annotations
+      <emphasis>Apache Isis</emphasis> metamodel, picking up annotations
       defined in the applib. Basically, it provides implementations of
-      <emphasis>Naked Objects</emphasis>' <classname>FacetFactory</classname>
-      interface, which are registered with Naked Objects using the
-      <filename>nakedobjects.properties</filename> configuration file. For
+      <emphasis>Apache Isis</emphasis>' <classname>FacetFactory</classname>
+      interface, which are registered with <emphasis>Apache Isis</emphasis>
+      using the <filename>isis.properties</filename> configuration file. For
       example, to pick up the <classname>@WizardPageDescription</classname>
       annotation, add:</para>
 
-      <programlisting>nakedobjects.reflector.facets.include=org.starobjects.wicket.metamodel.facets.WizardPageDescriptionAnnotationFacetFactory</programlisting>
+      <programlisting>isis.reflector.facets.include=org.apache.isis.viewer.wicket.metamodel.facets.WizardPageDescriptionAnnotationFacetFactory</programlisting>
     </sect1>
 
     <sect1 id="sec.modules-model">
@@ -3820,9 +3761,9 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
 
       <para>The <filename>model</filename> submodule provides implementations
       of <emphasis>Wicket</emphasis> <classname>IModel</classname>s, with
-      these <classname>IModel</classname>s wrapping <emphasis>Naked
-      Objects</emphasis> domain objects. These <classname>IModel</classname>s
-      are shared among different views defined in the <filename>ui</filename>
+      these <classname>IModel</classname>s wrapping <emphasis>Apache
+      Isis</emphasis> domain objects. These <classname>IModel</classname>s are
+      shared among different views defined in the <filename>ui</filename>
       module.</para>
 
       <para>The most important models are:</para>
@@ -3928,7 +3869,7 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
       <para>The <filename>viewer</filename> submodule is used to bootstrap the
       webapp, providing an implementation of <emphasis>Wicket</emphasis>'s
       <classname>WebApplication</classname> class that also bootstraps the
-      <emphasis>Naked Objects</emphasis> runtime.</para>
+      <emphasis>Apache Isis</emphasis> runtime.</para>
 
       <para>It also provides login/logout pages, and registers default sets of
       <classname>ComponentFactory</classname>s which ultimately determine the

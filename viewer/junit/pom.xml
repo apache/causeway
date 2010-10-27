@@ -9,14 +9,14 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>junit</artifactId>
-	
+
 	<name>JUnit Viewer</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
-        
+
         <core.version>0.1-SNAPSHOT</core.version>
-    	<headless-viewer.version>0.1-SNAPSHOT</headless-viewer.version>
+    	<wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
 
         <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
@@ -57,8 +57,8 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.alternatives.progmodel</groupId>
-			<artifactId>headless-viewer</artifactId>
-			<version>${headless-viewer.version}</version>
+			<artifactId>wrapper-metamodel</artifactId>
+			<version>${wrapper-progmodel.version}</version>
         </dependency>
 
         <dependency>

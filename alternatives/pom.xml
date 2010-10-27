@@ -12,7 +12,7 @@
 	<artifactId>alternatives</artifactId>
 
 	<name>Isis Alternatives</name>
-	
+
 	<description>
 		Alternative implementations for the core APIs.
 	</description>
@@ -32,8 +32,9 @@
 		<module>objectstore</module>
 		<module>progmodel</module>
 		<module>remoting</module>
+		<module>embedded</module>
 	</modules>
-	
+
 	<reporting>
 		<plugins>
 			<plugin>
@@ -80,5 +81,5 @@
 	</dependencyManagement>
 
 
-</project>	
+</project>
 

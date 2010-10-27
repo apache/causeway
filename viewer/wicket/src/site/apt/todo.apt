@@ -28,11 +28,13 @@ Status
 User Stories To Do
 
   paging
-  
-  * not working, only showing first 8 items
-  
+    
   * provide an annotation?
   
+  css class
+
+  * go through widgets and look for CssClassFacet and apply to objects, properties, collections, actions
+
   choices support
   
   * required for values as well as references

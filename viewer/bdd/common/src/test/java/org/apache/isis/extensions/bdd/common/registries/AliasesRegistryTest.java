@@ -1,7 +1,7 @@
 package org.apache.isis.extensions.bdd.common.registries;
 
-import org.apache.isis.extensions.bdd.common.story.registries.AliasRegistryDefault;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
 import org.hamcrest.CoreMatchers;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

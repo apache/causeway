@@ -26,7 +26,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
-			<artifactId>wicket-facets</artifactId>
+			<artifactId>wicket-metamodel</artifactId>
 		</dependency>
 
 		<dependency>

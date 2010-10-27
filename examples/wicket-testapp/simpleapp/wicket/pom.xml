@@ -7,13 +7,13 @@
 	  	<artifactId>simpleapp</artifactId>
 	  	<version>0.0.1-SNAPSHOT</version>
   </parent>
-  
+
   <name>Wicket</name>
   <artifactId>simpleapp-wicket</artifactId>
   <packaging>war</packaging>
-  
+
 	<properties>
-		<wicketobjects.version>0.1-SNAPSHOT</wicketobjects.version>
+		<isis.wicketviewer.version>0.1-SNAPSHOT</isis.wicketviewer.version>
 		<jetty.version>6.1.4</jetty.version>
 	</properties>
 
@@ -25,92 +25,44 @@
             </plugin>
 		</plugins>
 	</build>
-	
-	<repositories>
-        <!-- bootstrap parent corporate POM -->
-		<repository>
-			<id>starobjects-release</id>
-			<url>http://starobjects.sourceforge.net/m2-repo/release</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-        </repository>
-		<!-- latest-n-greatest -->
-		<repository>
-			<id>starobjects-snapshot</id>
-			<url>http://starobjects.sourceforge.net/m2-repo/snapshot</url> 
-			<!-- <url>file://L:/Dev/java/.m2/repository</url> -->
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-        </repository>
-	</repositories>
 
-  <dependencies>
+
+    <dependencies>
 		<!-- other modules in this project -->
 
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>simpleapp-service</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>simpleapp-fixture</artifactId>
 		</dependency>
-		
-		<!-- naked objects -->
 
+
+		<dependency>
+			<groupId>org.apache.isis.core</groupId>
+			<artifactId>webserver</artifactId>
+		</dependency>
 	    <dependency>
-	        <groupId>org.nakedobjects.core</groupId>
-	        <artifactId>bytecode-cglib</artifactId>
+	        <groupId>org.apache.isis.defaults</groupId>
+	        <artifactId>bytecode</artifactId>
 	    </dependency>
 	    <dependency>
-	        <groupId>org.nakedobjects.core</groupId>
+	        <groupId>org.apache.isis.core</groupId>
 	        <artifactId>bytecode-javassist</artifactId>
 	    </dependency>
 		<dependency>
-			<groupId>org.nakedobjects.core</groupId>
-			<artifactId>remoting</artifactId>
+			<groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.nakedobjects.plugins</groupId>
-			<artifactId>html-viewer</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.nakedobjects.plugins</groupId>
-			<artifactId>http-remoting-server</artifactId>
-		</dependency>
-	    <dependency>
-	        <groupId>org.nakedobjects.plugins</groupId>
-	        <artifactId>headless-embedded</artifactId>
-	    </dependency>
-		<dependency>
-			<groupId>org.nakedobjects.plugins</groupId>
-			<artifactId>xml-persistor</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.nakedobjects.core</groupId>
-			<artifactId>webserver</artifactId>
-		</dependency>
-		
+
 			<!-- WicketObjects -->
 			<dependency>
-				<groupId>org.starobjects.wicket</groupId>
-				<artifactId>applib</artifactId>
-				<version>${wicketobjects.version}</version>
-			</dependency>
-
-			<dependency>
-				<groupId>org.starobjects.wicket</groupId>
-				<artifactId>viewer</artifactId>
-				<version>${wicketobjects.version}</version>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-viewer</artifactId>
+				<version>${isis.wicketviewer.version}</version>
 			</dependency>
 
 		<!--  JETTY DEPENDENCIES FOR TESTING  -->
@@ -138,6 +90,6 @@
 			<version>0.1-SNAPSHOT</version>
 			<type>pom</type>
 		</dependency>
-		
+
   </dependencies>
 </project>

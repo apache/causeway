@@ -17,19 +17,17 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
-        
+
     	<pdf.title>Alternative Programming Models</pdf.title>
     	<pdf.outputName>alternative-progmodels</pdf.outputName>
 	</properties>
 
 
 	<modules>
-		<!-- 
 		<module>groovy</module>
-		-->
-		<module>headless</module>
+		<module>wrapper</module>
 	</modules>
-	
+
     <reporting>
         <plugins>
             <plugin>
@@ -50,5 +48,5 @@
         </plugins>
     </reporting>
 
-</project>	
+</project>
 

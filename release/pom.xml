@@ -17,7 +17,7 @@
         It is designed to be imported into an application module, using a scope=import (Maven 2.0.9 onwards) in the
         dependencyManagement section, and importing this module's dependencyManagement section in turn.
         Alternatively, it can be in inherited from, but note that any elements that this module inherits
-        from its parent (an ultimately, the org.apache:apache corporate POM), will need to be overridden. 
+        from its parent (an ultimately, the org.apache:apache corporate POM), will need to be overridden.
     </description>
 
     <packaging>pom</packaging>
@@ -41,13 +41,15 @@
         <isis.alternatives-bytecode.version>0.1-SNAPSHOT</isis.alternatives-bytecode.version>
 
         <isis.alternatives-progmodel-groovy.version>0.1-SNAPSHOT</isis.alternatives-progmodel-groovy.version>
-        <isis.alternatives-progmodel-headless.version>0.1-SNAPSHOT</isis.alternatives-progmodel-headless.version>
+        <isis.alternatives-progmodel-wrapper.version>0.1-SNAPSHOT</isis.alternatives-progmodel-wrapper.version>
 
         <!-- used for common, transport-sockets, marshalling-encoding, marshalling-serialize -->
         <isis.alternatives-remoting.version>0.1-SNAPSHOT</isis.alternatives-remoting.version>
 
         <isis.alternatives-security-ldap.version>0.1-SNAPSHOT</isis.alternatives-security-ldap.version>
         <isis.alternatives-security-file.version>0.1-SNAPSHOT</isis.alternatives-security-file.version>
+
+        <isis.alternatives-embedded.version>0.1-SNAPSHOT</isis.alternatives-embedded.version>
     </properties>
 
     <dependencyManagement>
@@ -249,25 +251,20 @@
                 <version>${isis.alternatives-objectstore-sql.version}</version>
             </dependency>
 
-            <!-- alternatives: progmodel: headless -->
+            <!-- alternatives: progmodel: wrapper -->
             <dependency>
                 <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless</artifactId>
+                <artifactId>wrapper</artifactId>
+                <version>${isis.alternatives-progmodel-wrapper.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <artifactId>wrapper-applib</artifactId>
                 <version>${isis.alternatives-progmodel-headless.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless-applib</artifactId>
-                <version>${isis.alternatives-progmodel-headless.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless-embedded</artifactId>
-                <version>${isis.alternatives-progmodel-headless.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.isis.alternatives.progmodel</groupId>
-                <artifactId>headless-viewer</artifactId>
+                <artifactId>wrapper-embedded</artifactId>
                 <version>${isis.alternatives-progmodel-headless.version}</version>
             </dependency>
 
@@ -321,6 +318,14 @@
                 <artifactId>marshalling-xstream</artifactId>
                 <version>${isis.alternatives-remoting-marshalling-xstream.version}</version>
             </dependency>
+
+            <!-- alternatives: embedded -->
+            <dependency>
+                <groupId>org.apache.isis.alternatives</groupId>
+                <artifactId>embedded</artifactId>
+                <version>${isis.alternatives-embedded.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 

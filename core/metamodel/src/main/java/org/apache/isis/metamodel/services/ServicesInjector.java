@@ -29,40 +29,40 @@ import org.apache.isis.commons.components.SessionScopedComponent;
 
 /**
  * The repository of services, also able to inject into any object.
- * 
+ *
  * <p>
  * The {@link #getContainer() domain object container} is always injected but
  * is not a {@link #getRegisteredServices() registered service}.
  */
 public interface ServicesInjector extends SessionScopedComponent, Injectable {
 
-    
+
     // ///////////////////////////////////////////////////////////////////////////
     // Container
     // ///////////////////////////////////////////////////////////////////////////
 
     DomainObjectContainer getContainer();
-    
+
     /**
      * Container to inject.
-     * 
+     *
      * <p>
      * This itself is injected.
      */
     public void setContainer(final DomainObjectContainer container);
 
-    
+
     // ///////////////////////////////////////////////////////////////////////////
     // Services
     // ///////////////////////////////////////////////////////////////////////////
 
     /**
      * Services to be injected.
-     * 
+     *
      * <p>
      * Should automatically inject all services into each other (though calling
      * {@link #open()} will also do this).
-     * 
+     *
      * @param services
      */
     void setServices(List<Object> services);
@@ -70,7 +70,7 @@ public interface ServicesInjector extends SessionScopedComponent, Injectable {
 
     /**
      * All registered services, as an immutable {@link List}.
-     * 
+     *
      * <p>
      * Does not include the {@link #getContainer() container}.
      */

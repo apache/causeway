@@ -20,7 +20,7 @@
     <properties>
 		<wicket.version>1.4.12</wicket.version>
 		<wicketstuff.version>1.4.12</wicketstuff.version>
-        
+
         <siteBaseDir>../..</siteBaseDir>
 
         <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
@@ -31,7 +31,7 @@
 	<modules>
 		<module>applib</module>
 		<module>model</module>
-		<module>facets</module>
+		<module>metamodel</module>
 		<module>ui</module>
 		<module>viewer</module>
 	</modules>
@@ -64,12 +64,12 @@
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-facets</artifactId>
+				<artifactId>wicket-metamodel</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.viewer</groupId>
-				<artifactId>wicket-facets</artifactId>
+				<artifactId>wicket-metamodel</artifactId>
 				<version>0.1-SNAPSHOT</version>
 				<scope>test</scope>
 				<type>test-jar</type>

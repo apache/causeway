@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.Map;
 
-import org.apache.isis.extensions.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.junit.Test;
 
 
