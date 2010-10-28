@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.bdd.common.util;
+package org.apache.isis.viewer.bdd.common.util;
 
 import org.apache.isis.viewer.bdd.common.util.Strings;
 import org.hamcrest.CoreMatchers;

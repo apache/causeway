@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.extensions.wicket.model.models;
+package org.apache.isis.viewer.wicket.model.models;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;

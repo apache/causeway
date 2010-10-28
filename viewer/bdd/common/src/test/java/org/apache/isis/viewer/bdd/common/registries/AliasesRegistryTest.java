@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.bdd.common.registries;
+package org.apache.isis.viewer.bdd.common.registries;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
