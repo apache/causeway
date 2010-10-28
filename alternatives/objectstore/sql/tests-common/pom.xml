@@ -39,6 +39,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
@@ -70,7 +73,7 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
         <dependency>
             <groupId>org.apache.isis.core</groupId>
@@ -98,13 +101,13 @@
         	<version>0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
-        
+
 		<!-- Isis Object store -->
         <dependency>
             <groupId>org.apache.isis.alternatives.objectstore</groupId>
             <artifactId>sql-impl</artifactId>
         </dependency>
-		
+
         <!-- HSQLDB -->
         <dependency>
             <groupId>org.hsqldb</groupId>

@@ -13,7 +13,7 @@
 	    <artifactId>release</artifactId>
 	    <version>4.0.1-SNAPSHOT</version>
 	</parent>
-		
+
 	<build>
 		<plugins>
 			<plugin>
@@ -84,53 +84,6 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<reporting>
-		<plugins>
-			<!--  General project overview -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<reportSets>
-					<reportSet>
-						<inherited>false</inherited>
-						<reports>
-							<report>license</report>
-							<report>project-team</report>
-							<report>issue-tracking</report>
-							<report>scm</report>
-							<report>cim</report>
-						</reports>
-					</reportSet>
-					<reportSet>
-						<reports>
-							<report>dependencies</report>
-							<report>dependency-convergence</report>
-							<report>index</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-
-			<!-- Unit tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-			</plugin>
-
-			<!-- API docs -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<aggregate>true</aggregate>
-					<doctitle>Naked Objects Application</doctitle>
-					<splitindex>false</splitindex>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
-
 
 	<dependencyManagement>
 		<dependencies>

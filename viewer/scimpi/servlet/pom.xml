@@ -9,7 +9,7 @@
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>scimpi-servlet</artifactId>
-	
+
 	<name>Scimpi Viewer Servlet</name>
 
 	<properties>
@@ -22,12 +22,15 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
                         <reports>
-                            <report>dependency-convergence</report>
                             <report>dependencies</report>
+                            <report>dependency-convergence</report>
                             <report>plugins</report>
                             <report>summary</report>
                         </reports>
@@ -41,13 +44,13 @@
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>scimpi-dispatcher</artifactId>
-        </dependency>		
-		
+        </dependency>
+
         <dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>servlet-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-		
+
 	</dependencies>
 </project>

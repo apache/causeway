@@ -6,13 +6,13 @@
 		<artifactId>core</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
-    
+
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>testsupport</artifactId>
 	<name>Core Test Support</name>
 
 	<description>
-		Support for writing unit tests; should be added as a dependency 
+		Support for writing unit tests; should be added as a dependency
 		with scope=test only
 	</description>
 
@@ -26,6 +26,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
@@ -46,7 +49,7 @@
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
             </dependency>
-            
+
             <dependency>
                 <groupId>org.jmock</groupId>
                 <artifactId>jmock</artifactId>
@@ -61,7 +64,7 @@
                 <groupId>org.jmock</groupId>
                 <artifactId>jmock-legacy</artifactId>
             </dependency>
-            
+
 	</dependencies>
 
 </project>

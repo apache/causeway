@@ -5,10 +5,10 @@
 	<groupId>org.apache.isis.examples.apps</groupId>
 	<artifactId>claims</artifactId>
     <version>0.1-SNAPSHOT</version>
-    
+
 	<name>Example Claims</name>
 	<description>Example of an claims submitting application</description>
-    
+
 	<packaging>pom</packaging>
 
 	<build>
@@ -62,14 +62,14 @@
 					</execution>
 				</executions>
 			</plugin>
-			
+
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>2.0-beta-5</version>
             </plugin>
 		</plugins>
 	</build>
-	
+
 	<modules>
 		<module>dom</module>
 		<module>fixture</module>
@@ -77,53 +77,6 @@
 		<module>commandline</module>
 		<module>webapp</module>
 	</modules>
-
-	<reporting>
-		<plugins>
-
-			<!--  General project overview -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<reportSets>
-					<reportSet>
-						<inherited>false</inherited>
-						<reports>
-							<report>license</report>
-							<report>project-team</report>
-							<report>issue-tracking</report>
-							<report>scm</report>
-							<report>cim</report>
-						</reports>
-					</reportSet>
-					<reportSet>
-						<reports>
-							<report>dependencies</report>
-							<report>dependency-convergence</report>
-							<report>index</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-
-			<!-- Unit tests -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-			</plugin>
-
-			<!-- API docs -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<aggregate>true</aggregate>
-					<doctitle>Apache Isis Example Claims Application</doctitle>
-					<splitindex>false</splitindex>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
 
 
 	<dependencyManagement>

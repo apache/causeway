@@ -9,13 +9,13 @@
 	</parent>
 
 	<artifactId>applib</artifactId>
-	
+
 	<name>Isis AppLib</name>
 	<description>
 		Isis application library, defining annotations and utilities for the
 		default (Java) programming model.
 	</description>
-	
+
 	<properties>
         <siteBaseDir>..</siteBaseDir>
 
@@ -23,7 +23,7 @@
         <docbkxGuideSubTitle>Developing domain driven applications using Apache Isis</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-applib</docbkxGuideName>
 	</properties>
-	
+
 	<build>
 		<plugins>
             <plugin>
@@ -40,6 +40,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-project-info-reports-plugin</artifactId>
 				<inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
 				<reportSets>
 					<reportSet>
 						<inherited>true</inherited>
@@ -54,5 +57,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	
+
 </project>

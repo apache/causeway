@@ -10,12 +10,12 @@
 	<groupId>org.apache.isis.alternatives.security</groupId>
 	<artifactId>file</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	
+
 	<name>File Security Implementation</name>
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
-        
+
         <docbkx.title>Apache Isis File Security</docbkx.title>
         <docbkx.outputName>isis-file-security</docbkx.outputName>
 	</properties>
@@ -26,6 +26,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>

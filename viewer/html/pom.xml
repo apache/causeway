@@ -11,7 +11,7 @@
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>html</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	
+
 	<name>Html Viewer</name>
 
 	<properties>
@@ -38,6 +38,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>

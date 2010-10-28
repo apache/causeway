@@ -40,6 +40,9 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
@@ -64,7 +67,7 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
                 <artifactId>sql-tests-common</artifactId>
 				<version>${project.version}</version>
             </dependency>
-			
+
             <!-- Required to support the XML cross-test -->
 			<!--
             <dependency>
@@ -73,7 +76,7 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
                 <version>${xml-objectstore.version}</version>
             </dependency>
 			-->
-            
+
             <!-- JDBC drivers -->
             <dependency>
                 <groupId>postgresql</groupId>
@@ -87,7 +90,7 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
     <dependencies>
         <!--  Required for TestProxy -->
 		<!-- Isis defaults -->
@@ -112,20 +115,20 @@ Just add your server implementation to org.apache.isis.extensions.sql.objectstor
         	<version>0.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
-        
+
 		<!-- Isis Object store -->
         <dependency>
             <groupId>org.apache.isis.alternatives.objectstore</groupId>
             <artifactId>sql-impl</artifactId>
         </dependency>
-		
+
 		<!-- Test common -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>sql-tests-common</artifactId>
         	<scope>test</scope>
 		</dependency>
-		
+
         <!-- Required to support the implemented servers -->
         <dependency>
             <groupId>postgresql</groupId>

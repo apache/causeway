@@ -10,19 +10,22 @@
     <groupId>org.apache.isis.alternatives.remoting</groupId>
 	<artifactId>marshalling-xstream</artifactId>
 	<version>0.1-SNAPSHOT</version>
-	
+
 	<name>XStream Marshalling</name>
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
     </properties>
-    
+
     <reporting>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
@@ -49,17 +52,17 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.alternatives.remoting</groupId>
 			<artifactId>common</artifactId>
 		</dependency>
-	
+
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>
 		</dependency>
 	</dependencies>
-	
+
 </project>

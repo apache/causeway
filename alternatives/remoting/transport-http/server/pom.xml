@@ -8,7 +8,7 @@
 	</parent>
 
 	<artifactId>transport-http-server</artifactId>
-	
+
 	<name>HTTP Transport (Server-side)</name>
 
 	<properties>
@@ -21,6 +21,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
@@ -53,7 +56,7 @@
 			<groupId>org.apache.isis.core</groupId>
 			<artifactId>webapp</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.apache.isis.alternatives.remoting</groupId>
 			<artifactId>common</artifactId>
@@ -65,5 +68,5 @@
 	        <scope>provided</scope>
         </dependency>
 	</dependencies>
-	
+
 </project>

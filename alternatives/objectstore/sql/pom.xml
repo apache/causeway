@@ -59,7 +59,7 @@
         </plugins>
     </reporting>
 
-    
+
 	<profiles>
 		<profile>
 			<id>normal</id>
@@ -80,7 +80,7 @@
 			</modules>
 		</profile>
 	</profiles>
-	
+
     <dependencyManagement>
         <dependencies>
             <dependency>

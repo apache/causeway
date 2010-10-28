@@ -10,7 +10,7 @@
 	<groupId>org.apache.isis.alternatives.remoting</groupId>
 	<artifactId>common</artifactId>
     <name>Remoting Common and APIs</name>
-    
+
     <!-- shouldn't be needed, but was being built as a pom for some reason -->
     <packaging>jar</packaging>
 
@@ -24,6 +24,9 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
                 <inherited>false</inherited>
+                <configuration>
+                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                </configuration>
                 <reportSets>
                     <reportSet>
                         <inherited>false</inherited>
@@ -57,7 +60,7 @@
 			<type>test-jar</type>
 			<scope>test</scope>
 		</dependency>
-		
+
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
