@@ -27,7 +27,9 @@
 
     <modules>
         <module>archetypes</module>
+	<!--
     <module>myapp</module>
+        -->
   </modules>
 
     <reporting>
