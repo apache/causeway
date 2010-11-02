@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+    	<groupId>org.apache.isis.support</groupId>
+    	<artifactId>prototype</artifactId>
+		<version>0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>prototype-dom</artifactId>
+	<name>Prototype DOM</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.isis</groupId>
+			<artifactId>applib</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.isis.viewer</groupId>
+			<artifactId>wicket-applib</artifactId>
+		</dependency>
+		
+        <!-- 
+		<dependency>
+			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+			<artifactId>view-calendarviews-applib</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+			<artifactId>view-gmap2-applib</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+			<artifactId>view-googlecharts-applib</artifactId>
+		</dependency>
+        -->        
+		
+	</dependencies>
+</project>

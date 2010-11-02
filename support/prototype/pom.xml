@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.apache.isis.support</groupId>
+	<artifactId>prototype</artifactId>
+	<version>0.1-SNAPSHOT</version>
+	
+	<name>Prototype App</name>
+	
+	<packaging>pom</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+				<executions>
+					<execution>
+						<id>source</id>
+						<phase>compile</phase>
+					</execution>
+					<execution>
+						<id>test</id>
+						<phase>test-compile</phase>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.4.2</version>
+				<configuration>
+					<excludes>
+						<exclude>**/Test*.java</exclude>
+					</excludes>
+					<useFile>true</useFile>
+					<printSummary>false</printSummary>
+					<outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>**/Test*.java</exclude>
+					</excludes>
+					<showSuccess>false</showSuccess>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>test</phase>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<modules>
+		<module>dom</module>
+		<module>fixture</module>
+		<module>objstore-default</module>
+		<module>quickrun</module>
+		<module>viewer-html</module>
+		<module>viewer-wicket</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+
+			<!-- Apache Isis -->
+			<dependency>
+				<groupId>org.apache.isis</groupId>
+				<artifactId>release</artifactId>
+				<version>0.1-SNAPSHOT</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Isis Wicket Viewer -->
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.isis.viewer</groupId>
+				<artifactId>wicket-viewer</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<!-- this project's own modules -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>prototype-dom</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>prototype-domsvc</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>prototype-fixture</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>prototype-quickrun</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>prototype-objstore-dflt</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>viewer-dnd</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>viewer-html</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>viewer-scimpi</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>viewer-wicket</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>viewer-restful</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tests-bdd</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>tests-unit</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+
+			<!-- Isis Wicket Viewer: view API extensions -->
+            <!-- 
+			<dependency>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-gmap2-applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-gmap2-view</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-googlecharts-applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-googlecharts-view</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+
+			<dependency>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-calendarviews-applib</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-calendarviews-view</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+		
+			<dependency>
+				<groupId>net.sf.isiscontrib.viewer.wicket</groupId>
+				<artifactId>view-cooldatasoftmenu-view</artifactId>
+				<version>0.1-SNAPSHOT</version>
+			</dependency>
+            -->            
+
+			<!-- 3rd party -->
+			<dependency>
+				<groupId>com.google.collections</groupId>
+				<artifactId>google-collections</artifactId>
+				<version>1.0</version>
+			</dependency>
+
+		</dependencies>
+	</dependencyManagement>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+		</dependency>
+	</dependencies>
+
+
+</project>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.apache.isis.support</groupId>
+        <artifactId>prototype</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
+	<artifactId>prototype-viewer-html</artifactId>
+	<name>Prototype HTML Viewer</name>
+	
+	<packaging>war</packaging>
+
+	<build>
+		<plugins>
+            <plugin>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>maven-jetty-plugin</artifactId>
+            </plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+	
+		<!-- other modules in this project -->
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>prototype-fixture</artifactId>
+		</dependency>
+
+
+
+		<!-- Isis -->
+		<dependency>
+	        <groupId>org.apache.isis.viewer</groupId>
+			<artifactId>html</artifactId>
+		</dependency>
+		<dependency>
+	        <groupId>org.apache.isis.alternatives.objectstore</groupId>
+			<artifactId>xml</artifactId>
+		</dependency>
+		<!--
+		comment in to run simple web server (uses Jetty)
+		<dependency>
+	        <groupId>org.apache.isis.core</groupId>
+			<artifactId>webserver</artifactId>
+		</dependency>
+		-->
+
+	    <dependency>
+	        <groupId>org.apache.isis.defaults</groupId>
+	        <artifactId>bytecode</artifactId>
+	    </dependency>
+	    <dependency>
+	        <groupId>org.apache.isis.alternatives.bytecode</groupId>
+	        <artifactId>javassist</artifactId>
+	    </dependency>
+
+
+	</dependencies>
+
+</project>
