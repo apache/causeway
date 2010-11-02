@@ -37,7 +37,7 @@
     <!-- 2. building site/docs -->
 
     <!-- 2.1 prereqs -->
-    <!-- mvn install:install-file -D groupId=com.java -D artifactId=jimi
+    <!-- mvn install:install-file -D groupId=com.java -D artifactId=jimi 
         -D version=1.0 -D packaging=jar -D file=/path/to/file -->
     <!-- mvn clean install -P site-skin -->
 
@@ -55,8 +55,7 @@
         <url>http://svn.apache.org/repos/asf/incubator/isis/trunk</url>
     </scm>
 
-    <!-- used in Site generation for relative references.
-    -->
+    <!-- used in Site generation for relative references. -->
     <url>http://incubator.apache.org/isis/</url>
 
     <properties>
@@ -143,11 +142,11 @@
     </issueManagement>
 
     <!-- TODO: is there a CI server for ASF? I've asked on isis-dev. -->
-    <!-- <ciManagement> <system>Hudson</system> <url>http://isis.apache.org/hudson/</url>
-        <notifiers> <notifier> <type>mail</type> <address>rmatthews@nakedobjects.org</address>
-        <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration
-        /> </notifier> <notifier> <type>mail</type> <address>dan@haywood-associates.co.uk</address>
-        <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration
+    <!-- <ciManagement> <system>Hudson</system> <url>http://isis.apache.org/hudson/</url> 
+        <notifiers> <notifier> <type>mail</type> <address>rmatthews@nakedobjects.org</address> 
+        <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration 
+        /> </notifier> <notifier> <type>mail</type> <address>dan@haywood-associates.co.uk</address> 
+        <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration 
         /> </notifier> </notifiers> </ciManagement> -->
 
     <pluginRepositories>
@@ -179,18 +178,51 @@
         </extensions>
 
         <pluginManagement>
-            <!-- defines versions of plugins and the configuration for their
-                non-reporting goals. Configuration of any reporting goals (aka reports) will
+            <!-- defines versions of plugins and the configuration for their 
+                non-reporting goals. Configuration of any reporting goals (aka reports) will 
                 be found in the reporting section. -->
             <plugins>
-                <!-- IDE support for Eclipse. (NetBeans 6.7+ and IDEA 7.0
-                    have built-in support for Maven) Alternatively, use m2eclipse and import
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>1.0-beta-1</version>
+                    <configuration>
+                        <rules>
+                            <requireMavenVersion>
+                                <version>[2.2.1,)</version>
+                            </requireMavenVersion>
+                            <requireJavaVersion>
+                                <version>[1.6.0-21,)</version>
+                            </requireJavaVersion>
+                            <requirePluginVersions>
+                                <message>All plugin versions must be defined!</message>
+                                <banLatest>true</banLatest>
+                                <banRelease>true</banRelease>
+                            </requirePluginVersions>
+                        </rules>
+                    </configuration>
+                    <!-- goal:enforce supposedly binds to phase:validate, but explicit binding seems to be required -->
+                    <executions>
+                        <execution>
+                            <id>validate-enforce</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+
+                <!-- IDE support for Eclipse. (NetBeans 6.7+ and IDEA 7.0 
+                    have built-in support for Maven) Alternatively, use m2eclipse and import 
                     POMs directly. -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-eclipse-plugin</artifactId>
-                    <version>2.5.1</version> <!-- version 2.7 & 2.8 presently have a bug that prevents multiple-resources; while 2.6 fails to use projectNameTemplate properly
-                        from being filtered -->
+                    <version>2.5.1</version> <!-- version 2.7 & 2.8 presently have a bug that prevents multiple-resources; 
+                        while 2.6 fails to use projectNameTemplate properly from being filtered -->
                     <configuration>
                         <downloadSources>true</downloadSources>
                         <downloadJavadocs>true</downloadJavadocs>
@@ -242,7 +274,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-report-plugin</artifactId>
                     <version>2.5</version>
-                    <!-- goal:report is a report so is configured in the
+                    <!-- goal:report is a report so is configured in the 
                         reporting section; invokes phase:test before running itself -->
                 </plugin>
 
@@ -253,9 +285,9 @@
                     <artifactId>cobertura-maven-plugin</artifactId>
                     <version>2.4</version>
                     <inherited>true</inherited>
-                    <!-- goal:check binds to phase:verify (not currently
+                    <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if code coverage < threshold) -->
-                    <!-- goal:cobertura is a report so is configured in the
+                    <!-- goal:cobertura is a report so is configured in the 
                         reporting section; invokes phase:test before running itself -->
                 </plugin>
 
@@ -265,9 +297,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
                     <version>2.6</version>
-                    <!-- goal:check binds to phase:verify (not currently
+                    <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if any violations) -->
-                    <!-- goal:checkstyle is a report so is configured in
+                    <!-- goal:checkstyle is a report so is configured in 
                         the reporting section -->
                 </plugin>
 
@@ -276,13 +308,13 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
                     <version>2.5</version>
-                    <!-- goal:check binds to phase:verify (not currently
+                    <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if any violations) -->
-                    <!-- goal:check-cpd binds to phase:verify (not currently
+                    <!-- goal:check-cpd binds to phase:verify (not currently 
                         configured, can be used to break build if any CPD violations) -->
-                    <!-- goal:pmd is a report so is configured in the reporting
+                    <!-- goal:pmd is a report so is configured in the reporting 
                         section -->
-                    <!-- goal:cpd is a report so is configured in the reporting
+                    <!-- goal:cpd is a report so is configured in the reporting 
                         section -->
                 </plugin>
 
@@ -292,9 +324,9 @@
                     <artifactId>findbugs-maven-plugin</artifactId>
                     <version>2.3.1</version>
                     <inherited>true</inherited>
-                    <!-- goal:check binds to phase:verify (not currently
+                    <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if any violations) -->
-                    <!-- goal:findbugs is a report so is configured in the
+                    <!-- goal:findbugs is a report so is configured in the 
                         reporting section -->
                 </plugin>
 
@@ -303,9 +335,9 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>javancss-maven-plugin</artifactId>
                     <version>2.0</version>
-                    <!-- goal:check binds to phase:verify (not currently
+                    <!-- goal:check binds to phase:verify (not currently 
                         configured, can be used to break build if any violations) -->
-                    <!-- goal:report is a report so is configured in the
+                    <!-- goal:report is a report so is configured in the 
                         reporting section -->
                 </plugin>
 
@@ -314,7 +346,7 @@
                     <groupId>org.codehaus.mojo</groupId>
                     <artifactId>jdepend-maven-plugin</artifactId>
                     <version>2.0-beta-2</version>
-                    <!-- goal:generate is a report so is configured in the
+                    <!-- goal:generate is a report so is configured in the 
                         reporting section -->
                 </plugin>
 
@@ -324,12 +356,12 @@
                     <artifactId>taglist-maven-plugin</artifactId>
                     <version>2.4</version>
                     <inherited>true</inherited>
-                    <!-- goal:taglist is a report so is configured in the
+                    <!-- goal:taglist is a report so is configured in the 
                         reporting section -->
                 </plugin>
 
-                <!-- Artifacts derived from code: javadoc; supports both
-                    build and report goals; not included as a build plugin except through profiles
+                <!-- Artifacts derived from code: javadoc; supports both 
+                    build and report goals; not included as a build plugin except through profiles 
                     (to speed up the build) -->
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -355,16 +387,16 @@
                             <link>http://java.sun.com/j2ee/1.4/docs/api</link>
                         </links>
                         <linksource>true</linksource>
-                        <!-- http://jira.codehaus.org/browse/MJAVADOC-268
+                        <!-- http://jira.codehaus.org/browse/MJAVADOC-268 
                             and http://jira.codehaus.org/browse/MJAVADOC-284 -->
                         <detectOfflineLinks>false</detectOfflineLinks>
                     </configuration>
-                    <!-- goal:aggregate (for aggregator modules) has no binding;
+                    <!-- goal:aggregate (for aggregator modules) has no binding; 
                         explicitly bound in profiles -->
                     <!-- goal:jar (for non-aggregator modules) binds to phase:package -->
-                    <!-- goal:test-jar (for non-aggregator modules) binds
+                    <!-- goal:test-jar (for non-aggregator modules) binds 
                         to phase:package -->
-                    <!-- goal:javadoc is a report so is configured in the
+                    <!-- goal:javadoc is a report so is configured in the 
                         reporting section -->
                 </plugin>
 
@@ -374,7 +406,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jxr-plugin</artifactId>
                     <version>2.2</version>
-                    <!-- goal:jxr is a report so is configured in the reporting
+                    <!-- goal:jxr is a report so is configured in the reporting 
                         section -->
                 </plugin>
 
@@ -387,9 +419,9 @@
                     <configuration>
                         <includePom>true</includePom>
                     </configuration>
-                    <!-- goal:aggregate (for aggregator modules) binds to
+                    <!-- goal:aggregate (for aggregator modules) binds to 
                         phase:package -->
-                    <!-- goal:jar and goal:test-jar are meant to bind to
+                    <!-- goal:jar and goal:test-jar are meant to bind to 
                         phase:package, but doesn't seem to so bound explicitly -->
                     <executions>
                         <execution>
@@ -410,7 +442,7 @@
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.3.1</version>
                     <!-- goal:jar binds to phase:package -->
-                    <!-- goal:test-jar supposedly binds to phase:package,
+                    <!-- goal:test-jar supposedly binds to phase:package, 
                         but seems to need this explicit binding. -->
                     <executions>
                         <execution>
@@ -430,7 +462,7 @@
                     <artifactId>maven-war-plugin</artifactId>
                     <version>2.0.2</version>
                     <configuration>
-                        <!-- This is broken in maven-war-plugin 2.0, but
+                        <!-- This is broken in maven-war-plugin 2.0, but 
                             works in 2.0.1+ -->
                         <warSourceExcludes>
                             WEB-INF/lib/*.jar
@@ -466,12 +498,12 @@
                                 <goal>pdf</goal>
                             </goals>
                             <configuration>
-                                <!-- arrange for output to be with other
+                                <!-- arrange for output to be with other 
                                     reports generated in site phase -->
                                 <outputDirectory>${project.reporting.outputDirectory}</outputDirectory>
                                 <includeReports>false</includeReports>
-                                <!-- REVIEW: want to set to 'false', but
-                                    causes trunk, trunk/core to fail fatally (as opposed to failing silently
+                                <!-- REVIEW: want to set to 'false', but 
+                                    causes trunk, trunk/core to fail fatally (as opposed to failing silently 
                                     otherwise...) -->
                                 <aggregate>true</aggregate>
                             </configuration>
@@ -479,13 +511,13 @@
                     </executions>
                 </plugin>
 
-                <!-- PDF from DocBook (configured to build user guide and
+                <!-- PDF from DocBook (configured to build user guide and 
                     developers guide): docbkx hosted at http://docbkx-tools.sourceforge.net/docbkx-maven-plugin -->
                 <plugin>
                     <groupId>com.agilejava.docbkx</groupId>
                     <artifactId>docbkx-maven-plugin</artifactId>
                     <version>2.0.8</version>
-                    <!-- doesn't seem to render the title page correctly?
+                    <!-- doesn't seem to render the title page correctly? 
                         <version>2.0.10</version> -->
                     <configuration>
                         <includes>**/guide/*.xml</includes>
@@ -493,7 +525,7 @@
                         <highlightSource>1</highlightSource>
                     </configuration>
 
-                    <!-- goal:generate-html has not binding; explicitly bind
+                    <!-- goal:generate-html has not binding; explicitly bind 
                         to phase:site -->
                     <executions>
                         <execution>
@@ -532,7 +564,7 @@
                             </configuration>
                         </execution>
 
-                        <!-- goal:generate-pdf has not binding; explicitly
+                        <!-- goal:generate-pdf has not binding; explicitly 
                             bind to phase:site -->
                         <execution>
                             <id>pdf-docs</id>
@@ -614,7 +646,7 @@
                         <generateReports>true</generateReports>
                         <generateSitemap>true</generateSitemap>
                     </configuration>
-                    <!-- goal:jar binds to phase:package; override to bind
+                    <!-- goal:jar binds to phase:package; override to bind 
                         to (site lifecycle) phase:site -->
                     <executions>
                         <execution>
@@ -635,7 +667,7 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>2.2</version>
-                    <!-- main configuration in reporting section (in inheriting
+                    <!-- main configuration in reporting section (in inheriting 
                         modules) -->
                 </plugin>
 
@@ -650,11 +682,11 @@
                         <preparationGoals>clean install</preparationGoals>
                         <autoVersionSubmodules>true</autoVersionSubmodules>
                     </configuration>
-                    <!-- goal:clean (for aggregator modules) has no bindings;
+                    <!-- goal:clean (for aggregator modules) has no bindings; 
                         cleans up release.properties and any backup POM files -->
-                    <!-- goal:prepare (for aggregator modules) has no bindings;
+                    <!-- goal:prepare (for aggregator modules) has no bindings; 
                         prepares for release in SCM (modifying x.x-SNAPSHOT to x.x) -->
-                    <!-- goal:update-versions (for aggregator modules) has
+                    <!-- goal:update-versions (for aggregator modules) has 
                         no bindings; updates versions eg to SNAPSHOT -->
                     <!-- etc; none of the goals has a binding. -->
                 </plugin>
@@ -683,6 +715,7 @@
                 <plugin>
                     <groupId>org.mortbay.jetty</groupId>
                     <artifactId>maven-jetty-plugin</artifactId>
+                    <version>6.1.25</version>
                     <configuration>
                         <webAppConfig>
                             <contextPath>webapp</contextPath>
@@ -693,12 +726,18 @@
             </plugins>
         </pluginManagement>
 
-        <!-- build plugins; apply to all inheriting modules. Note that some
-            plugins also come from the "super-POM" for the default bindings. For example,
-            in the 'default' lifecycle, the resources, compiler, surefire, jar, install
-            and deploy plugins are automatically included because they provide the default
+        <!-- build plugins; apply to all inheriting modules. Note that some 
+            plugins also come from the "super-POM" for the default bindings. For example, 
+            in the 'default' lifecycle, the resources, compiler, surefire, jar, install 
+            and deploy plugins are automatically included because they provide the default 
             bindings. For the 'site' lifecycle, the site plugin is automatically included. -->
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -743,23 +782,23 @@
     <reporting>
         <excludeDefaults>true</excludeDefaults>
         <plugins>
-            <!-- top-level pom (this pom) should have a reportSet with inherited=false,
-                and: license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management,
+            <!-- top-level pom (this pom) should have a reportSet with inherited=false, 
+                and: license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management, 
                 plugin-management, plugins, modules, summary -->
-            <!-- parent pom of submodules should have a reportSet with inherited=false,
+            <!-- parent pom of submodules should have a reportSet with inherited=false, 
                 and: dependency-management (*), plugins, modules, summary. -->
-            <!-- packaging=jar should have a reportSet with inherited=false,
-                and: dependency-management (*), dependencies, dependency-convergence, plugins,
+            <!-- packaging=jar should have a reportSet with inherited=false, 
+                and: dependency-management (*), dependencies, dependency-convergence, plugins, 
                 summary -->
-            <!-- (*) dependency-management should only be added if there
+            <!-- (*) dependency-management should only be added if there 
                 is a dependencyManagement section present -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-                <!-- it seems to be necessary to set inherited=false, otherwise
-                    the default reportSet seems to be inherited even if explicitly overridden
-                    in the inheriting POM by a different reportSet. In practice this is no great
-                    hardship, because each level will have a different reportSet anyway (see
+                <!-- it seems to be necessary to set inherited=false, otherwise 
+                    the default reportSet seems to be inherited even if explicitly overridden 
+                    in the inheriting POM by a different reportSet. In practice this is no great 
+                    hardship, because each level will have a different reportSet anyway (see 
                     comment above) -->
                 <inherited>false</inherited>
                 <reportSets>
@@ -1020,7 +1059,7 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <executions>
-                            <!-- goal:aggregate (for aggregator modules)
+                            <!-- goal:aggregate (for aggregator modules) 
                                 has no binding; binding explicitly -->
                             <execution>
                                 <id>aggregate-submodules</id>
@@ -1029,7 +1068,7 @@
                                     <goal>aggregate</goal>
                                 </goals>
                             </execution>
-                            <!-- goal:jar (for non-aggregator modules) is
+                            <!-- goal:jar (for non-aggregator modules) is 
                                 meant to bind to phase:package, but does not seem to; binding explicitly -->
                             <execution>
                                 <id>attach-jar</id>
@@ -1038,7 +1077,7 @@
                                     <goal>jar</goal>
                                 </goals>
                             </execution>
-                            <!-- goal:test-jar (for non-aggregator modules)
+                            <!-- goal:test-jar (for non-aggregator modules) 
                                 binds to phase:package; have chosen not to bind -->
                         </executions>
                     </plugin>
@@ -1089,7 +1128,7 @@
                             </excludeRoots>
                         </configuration>
                     </plugin>
-		    
+
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -1172,11 +1211,11 @@
                                 <link>http://java.sun.com/j2ee/1.4/docs/api</link>
                             </links>
                             <linksource>true</linksource>
-                            <!-- http://jira.codehaus.org/browse/MJAVADOC-268
+                            <!-- http://jira.codehaus.org/browse/MJAVADOC-268 
                                 and http://jira.codehaus.org/browse/MJAVADOC-284 -->
                             <detectOfflineLinks>false</detectOfflineLinks>
                             <!-- default value is as given; referenced by 
-                                 other plugins so specified explicitly -->
+                                other plugins so specified explicitly -->
                             <outputDirectory>${project.build.directory}/apidocs</outputDirectory>
                         </configuration>
                         <reportSets>
@@ -1189,17 +1228,17 @@
                         </reportSets>
                     </plugin>
 
-                    <!-- TO LOOK INTO <plugin> <groupId>org.codehaus.sonar</groupId>
+                    <!-- TO LOOK INTO <plugin> <groupId>org.codehaus.sonar</groupId> 
                         <artifactId>sonar-maven-plugin</artifactId> <version>1.10.1</version> </plugin> -->
 
-                    <!-- TO LOOK INTO <plugin> <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-changelog-plugin</artifactId> <reportSets> <reportSet>
-                        <id>dual-report</id> <configuration> <type>range</type> <range>10</range>
-                        </configuration> <reports> <report>changelog</report> <report>file-activity</report>
+                    <!-- TO LOOK INTO <plugin> <groupId>org.apache.maven.plugins</groupId> 
+                        <artifactId>maven-changelog-plugin</artifactId> <reportSets> <reportSet> 
+                        <id>dual-report</id> <configuration> <type>range</type> <range>10</range> 
+                        </configuration> <reports> <report>changelog</report> <report>file-activity</report> 
                         </reports> </reportSet> </reportSets> </plugin> -->
 
-                    <!-- TO LOOK INTO <plugin> <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-changes-plugin</artifactId> <configuration> <query>status=accepted&amp;status=assigned&amp;status=new&amp;status=reopened&amp;order=priority</query>
+                    <!-- TO LOOK INTO <plugin> <groupId>org.apache.maven.plugins</groupId> 
+                        <artifactId>maven-changes-plugin</artifactId> <configuration> <query>status=accepted&amp;status=assigned&amp;status=new&amp;status=reopened&amp;order=priority</query> 
                         </configuration> </plugin> -->
                 </plugins>
             </reporting>
