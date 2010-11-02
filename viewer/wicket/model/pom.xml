@@ -12,6 +12,10 @@
 	<artifactId>wicket-model</artifactId>
 	<name>Wicket Viewer Model</name>
 
+	<properties>
+		<siteBaseDir>../../..</siteBaseDir>
+	</properties>
+
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

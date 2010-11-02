@@ -16,7 +16,7 @@
     <properties>
         <xml-objectstore.version>0.1-SNAPSHOT</xml-objectstore.version>
         <hsqldb.version>1.8.0.10</hsqldb.version>
-        <siteBaseDir>../../..</siteBaseDir>
+	<siteBaseDir>../../../..</siteBaseDir>
     </properties>
 
     <description>Common code to test the sql persistor. Uses the HSQLDB for maximum compatibility.</description>

@@ -12,6 +12,10 @@
 	<name>Wicket Viewer Implementation</name>
 	<artifactId>wicket-viewer</artifactId>
 
+	<properties>
+		<siteBaseDir>../../..</siteBaseDir>
+	</properties>
+
 	<build>
 		<resources>
 			<resource>

@@ -11,7 +11,10 @@
 	<artifactId>bdd-fitnesse</artifactId>
 	<name>BDD Viewers: FitNesse</name>
 
-	<packaging>jar</packaging>
+        <properties>
+		<siteBaseDir>../../..</siteBaseDir>
+	</properties>
+
 
 	<build>
 		<plugins>

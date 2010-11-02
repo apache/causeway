@@ -13,6 +13,10 @@
 	<artifactId>groovy-metamodel</artifactId>
 	<name>Groovy MetaModel</name>
 
+	<properties>
+		<siteBaseDir>../../../..</siteBaseDir>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.alternatives.progmodel</groupId>

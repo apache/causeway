@@ -17,12 +17,12 @@
 
     <name>Apache Isis</name>
     <description>
-		Root POM for core framework, the viewers,
+        Root POM for core framework, the viewers,
         the default implementations and alternatives implementations.
-		Defines standard build process, as well as
-		standard set of 3rd party dependencies
-		(eg for testing and logging frameworks).
-	</description>
+        Defines standard build process, as well as
+        standard set of 3rd party dependencies
+        (eg for testing and logging frameworks).
+        </description>
 
     <!-- 1. building code: -->
 
@@ -229,12 +229,10 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.5</version>
                     <configuration>
-                        <junitArtifactName>junit:junit</junitArtifactName>
                         <excludes>
                             <exclude>**/Test*.java</exclude>
                         </excludes>
                         <printSummary>false</printSummary>
-                        <outputDirectory>${project.build.directory}/surefire-reports</outputDirectory>
                     </configuration>
                     <!-- goal:test binds to phase:test -->
                 </plugin>
@@ -266,7 +264,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>2.5</version>
+                    <version>2.6</version>
                     <!-- goal:check binds to phase:verify (not currently
                         configured, can be used to break build if any violations) -->
                     <!-- goal:checkstyle is a report so is configured in
@@ -344,10 +342,10 @@
                         <windowtitle>${project.name} ${project.version}</windowtitle>
                         <testDoctitle>${project.name} ${project.version}
                             (TEST API)
-						</testDoctitle>
+                        </testDoctitle>
                         <testWindowtitle>${project.name}
                             ${project.version} (TEST API)
-						</testWindowtitle>
+                        </testWindowtitle>
                         <splitindex>true</splitindex>
                         <encoding>${project.build.sourceEncoding}</encoding>
                         <links>
@@ -436,7 +434,7 @@
                             works in 2.0.1+ -->
                         <warSourceExcludes>
                             WEB-INF/lib/*.jar
-						</warSourceExcludes>
+                        </warSourceExcludes>
                         <archive>
                             <manifest>
                                 <addClasspath>true</addClasspath>
@@ -606,11 +604,13 @@
                     </dependencies>
                     <configuration>
                         <locales>en</locales>
-                        <jarOutputDirectory>${project.build.directory}/site
-						</jarOutputDirectory>
+                        <jarOutputDirectory>
+                            ${project.build.directory}/site
+                        </jarOutputDirectory>
                         <finalName>isis-${project.version}</finalName>
-                        <jarOutputDirectory>${project.reporting.outputDirectory}
-						</jarOutputDirectory>
+                        <jarOutputDirectory>
+                            ${project.reporting.outputDirectory}
+                        </jarOutputDirectory>
                         <generateReports>true</generateReports>
                         <generateSitemap>true</generateSitemap>
                     </configuration>
@@ -1080,13 +1080,16 @@
                                 <ruleset>${pmd.ruleset}</ruleset>
                             </rulesets>
                             <excludeRoots>
-                                <excludeRoot>${project.build.directory}/generated-sources/modello
-								</excludeRoot>
-                                <excludeRoot>${project.build.directory}/generated-sources/plugin
-								</excludeRoot>
+                                <excludeRoot>
+                                    ${project.build.directory}/generated-sources/modello
+                                </excludeRoot>
+                                <excludeRoot>
+                                    ${project.build.directory}/generated-sources/plugin
+                                </excludeRoot>
                             </excludeRoots>
                         </configuration>
                     </plugin>
+		    
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
@@ -1101,6 +1104,16 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>jdepend-maven-plugin</artifactId>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jxr-plugin</artifactId>
+                        <configuration>
+                            <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
+                            <linkJavadoc>true</linkJavadoc>
+                            <javadocDir>${project.build.directory}/apidocs</javadocDir>
+                        </configuration>
                     </plugin>
 
                     <plugin>
@@ -1138,16 +1151,6 @@
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jxr-plugin</artifactId>
-                        <configuration>
-                            <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
-                            <linkJavadoc>true</linkJavadoc>
-                            <javadocDir>${project.build.directory}/apidocs</javadocDir>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <configuration>
                             <quiet>true</quiet>
@@ -1156,10 +1159,10 @@
                                 ${project.version}</windowtitle>
                             <testDoctitle>${project.name}
                                 ${project.version} (TEST API)
-							</testDoctitle>
+                            </testDoctitle>
                             <testWindowtitle>${project.name}
                                 ${project.version} (TEST API)
-							</testWindowtitle>
+                            </testWindowtitle>
                             <splitindex>true</splitindex>
                             <encoding>${project.build.sourceEncoding}</encoding>
                             <links>
@@ -1172,6 +1175,9 @@
                             <!-- http://jira.codehaus.org/browse/MJAVADOC-268
                                 and http://jira.codehaus.org/browse/MJAVADOC-284 -->
                             <detectOfflineLinks>false</detectOfflineLinks>
+                            <!-- default value is as given; referenced by 
+                                 other plugins so specified explicitly -->
+                            <outputDirectory>${project.build.directory}/apidocs</outputDirectory>
                         </configuration>
                         <reportSets>
                             <reportSet>

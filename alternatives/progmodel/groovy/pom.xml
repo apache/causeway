@@ -20,6 +20,8 @@
 	<properties>
 		<groovy.version>1.7.2</groovy.version>
 
+		<siteBaseDir>../../..</siteBaseDir>
+
         <docbkxGuideTitle>Apache Isis Groovy Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Developing domain objects using Groovy</docbkxGuideSubTitle>
         <docbkxGuideName>isis-groovy-support</docbkxGuideName>

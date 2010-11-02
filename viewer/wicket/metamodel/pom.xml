@@ -11,6 +11,10 @@
 	<artifactId>wicket-metamodel</artifactId>
 	<name>Wicket Viewer MetaModel Support</name>
 
+        <properties>
+		<siteBaseDir>../../..</siteBaseDir>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>

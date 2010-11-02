@@ -12,6 +12,10 @@
 	<artifactId>restful-applib</artifactId>
 	<name>Restful Viewer AppLib</name>
 
+	<properties>
+		<siteBaseDir>../../..</siteBaseDir>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>

@@ -12,6 +12,9 @@
 	<name>Wicket Viewer UI Components</name>
 	<artifactId>wicket-ui</artifactId>
 
+        <properties>
+		<siteBaseDir>../../..</siteBaseDir>
+	</properties>
 
 	<build>
 		<resources>

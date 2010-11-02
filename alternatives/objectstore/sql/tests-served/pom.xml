@@ -16,7 +16,7 @@
     <properties>
         <postgresql.version>8.4-701.jdbc4</postgresql.version>
         <mysql.version>5.0.5</mysql.version>
-        <siteBaseDir>../../..</siteBaseDir>
+	<siteBaseDir>../../../..</siteBaseDir>
     </properties>
 
     <description>Runs the common tests against a few server implementations.

@@ -12,6 +12,11 @@
     <artifactId>groovy-applib</artifactId>
     <name>Groovy AppLib</name>
 
+	<properties>
+		<siteBaseDir>../../../..</siteBaseDir>
+	</properties>
+
+
     <dependencies>
         <dependency>
             <groupId>org.apache.isis</groupId>

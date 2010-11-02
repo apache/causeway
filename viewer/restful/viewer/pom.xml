@@ -12,6 +12,10 @@
 	<artifactId>restful-viewer</artifactId>
 	<name>Restful Viewer Implementation</name>
 
+	<properties>
+		<siteBaseDir>../../..</siteBaseDir>
+	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
