@@ -22,11 +22,31 @@
 			<artifactId>prototype-fixture</artifactId>
 		</dependency>
 
-		<!-- apache isis -->
+		<!-- isis core -->
         <dependency>
 			<groupId>org.apache.isis.core</groupId>
             <artifactId>webserver</artifactId>
         </dependency>
+
+        <!-- isis defaults -->
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+        
+        <!-- isis viewers -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>dnd</artifactId>
@@ -36,15 +56,7 @@
 			<artifactId>html</artifactId>
 		</dependency>
 
-	    <dependency>
-			<groupId>org.apache.isis.defaults</groupId>
-	        <artifactId>bytecode</artifactId>
-	    </dependency>
-	    <dependency>
-			<groupId>org.apache.isis.alternatives.bytecode</groupId>
-	        <artifactId>javassist</artifactId>
-	    </dependency>
-
+        <!-- isis alternatives -->
 		<dependency>
 			<groupId>org.apache.isis.alternatives.objectstore</groupId>
 			<artifactId>xml</artifactId>
