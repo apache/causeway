@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.value;
 
 import org.apache.isis.metamodel.facets.MarkerFacet;
 import org.apache.isis.metamodel.facets.MultiTypedFacet;
 
-
 /**
  * Indicates that this class has value semantics.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to the <tt>@Value</tt> annotation. However,
- * note that value semantics is just a convenient term for a number of mostly optional semantics all of which
- * are defined elsewhere.
+ * In the standard Apache Isis Programming Model, corresponds to the <tt>@Value</tt> annotation. However, note that
+ * value semantics is just a convenient term for a number of mostly optional semantics all of which are defined
+ * elsewhere.
  */
 public interface ValueFacet extends MarkerFacet, MultiTypedFacet {
 

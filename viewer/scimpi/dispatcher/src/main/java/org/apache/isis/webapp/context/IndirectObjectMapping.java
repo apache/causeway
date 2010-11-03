@@ -135,12 +135,6 @@ public class IndirectObjectMapping implements ObjectMapping {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.isis.webapp.context.ObjectMapping#mapObject(org.apache.isis.noa.adapter.[[NAME]],
-     *      org.apache.isis.webapp.context.RequestContext.Scope)
-     */
     public String mapObject(ObjectAdapter obj, Scope scope) {
         ObjectAdapter object;
         object = (ObjectAdapter) obj;

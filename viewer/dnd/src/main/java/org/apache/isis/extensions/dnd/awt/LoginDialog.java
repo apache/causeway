@@ -63,7 +63,7 @@ public class LoginDialog extends Frame implements ActionListener, KeyListener {
     private Label instructionLabel;
 
     public LoginDialog(AuthenticationManager authenticationManager) {
-        super("[[NAME]] Login");
+        super("Apache Isis Login");
         this.authenticationManager = authenticationManager;
 
         setBackground(new Color(0xe0e0e0));

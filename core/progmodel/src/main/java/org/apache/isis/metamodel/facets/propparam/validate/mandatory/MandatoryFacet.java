@@ -35,7 +35,7 @@ import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
  * mandatory parameter, the action cannot be invoked without the value being provided.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, specify mandatory by <i>omitting</i> the
+ * In the standard Apache Isis Programming Model, specify mandatory by <i>omitting</i> the
  * <tt>@Optional</tt> annotation.
  */
 public interface MandatoryFacet extends MarkerFacet, ValidatingInteractionAdvisor {

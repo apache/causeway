@@ -17,20 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.disable;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.SingleWhenValueFacet;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 
-
 /**
  * Disable a property, collection or action.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the member with
- * <tt>@Disabled</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the member with <tt>@Disabled</tt>.
  */
 public interface DisabledFacet extends SingleWhenValueFacet, DisablingInteractionAdvisor {
 

@@ -36,8 +36,8 @@ import org.apache.isis.extensions.dnd.view.ViewSpecification;
 
 /**
  * Displays an error message in place of a normal field when a problem occurs, usually due to a programming
- * error, and the normal field cannot be created. A example of this is where value field is declared in a
- * [[NAME]], but the programmer forgot to instantiate the value object, causing null to be returned
+ * error, and the normal field cannot be created. A example of this is where value field is declared in an
+ * ObjectAdapter, but the programmer forgot to instantiate the value object, causing null to be returned
  * instead, which is an illegal value.
  */
 public class FieldErrorView extends AbstractView {

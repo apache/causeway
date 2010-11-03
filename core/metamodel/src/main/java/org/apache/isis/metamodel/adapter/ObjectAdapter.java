@@ -17,16 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.adapter;
 
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.version.Version;
 
-
 /**
- * [[NAME]] are adapters to domain objects, where the application is written in terms of domain objects
- * and those objects are represented within the NOF through these adapter, and not directly.
+ * Adapters to domain objects, where the application is written in terms of domain objects and those objects are
+ * represented within the NOF through these adapter, and not directly.
  * 
  * @see ObjectMetaModel
  */
@@ -56,8 +54,7 @@ public interface ObjectAdapter extends ObjectMetaModel {
     void checkLock(Version version);
 
     /**
-     * The objects unique id. This id allows the object to added to, stored by, and retrieved from the object
-     * store.
+     * The objects unique id. This id allows the object to added to, stored by, and retrieved from the object store.
      */
     Oid getOid();
 
@@ -80,11 +77,8 @@ public interface ObjectAdapter extends ObjectMetaModel {
 
     void fireChangedEvent();
 
-    
-
     /**
-     * Whether this instance belongs to another object (meaning its {@link #getOid()} will
-     * be <tt>AggregatedOid</tt>.
+     * Whether this instance belongs to another object (meaning its {@link #getOid()} will be <tt>AggregatedOid</tt>.
      */
     boolean isAggregated();
 

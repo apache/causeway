@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.system.internal;
 
 import java.awt.Color;
@@ -29,17 +28,16 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Window;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.runtime.about.AboutIsis;
 import org.apache.isis.runtime.imageloader.TemplateImage;
 import org.apache.isis.runtime.imageloader.TemplateImageLoader;
-
+import org.apache.log4j.Logger;
 
 public class SplashWindow extends Window implements Runnable {
     private static final long serialVersionUID = 1L;
     final static Logger LOG = Logger.getLogger(SplashWindow.class);
-    private static final String LOGO_TEXT = "[[NAME]]";
+    private static final String LOGO_TEXT = "Apache Isis";
 
     private int delay;
     private final Font textFont;
@@ -98,7 +96,7 @@ public class SplashWindow extends Window implements Runnable {
         setupCenterLocation();
 
         setVisible(true);
-      //  toFront();
+        // toFront();
     }
 
     private void setupCenterLocation() {
@@ -210,10 +208,12 @@ public class SplashWindow extends Window implements Runnable {
         parent.dispose();
     }
 
+    @Override
     public void run() {
         try {
             Thread.sleep(delay);
-        } catch (final InterruptedException e) {}
+        } catch (final InterruptedException e) {
+        }
 
         removeImmediately();
     }

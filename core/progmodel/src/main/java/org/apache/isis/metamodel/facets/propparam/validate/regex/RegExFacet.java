@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propparam.validate.regex;
 
 import org.apache.isis.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.mask.MaskFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * Whether the (string) property or a parameter must correspond to a specific regular expression.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to the <tt>@RegEx</tt> annotation.
+ * In the standard Apache Isis Programming Model, corresponds to the <tt>@RegEx</tt> annotation.
  * 
  * @see MaskFacet
  */

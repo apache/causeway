@@ -32,7 +32,7 @@ public class Welcome implements Action {
     public static final String COMMAND = "start";
 
     public void execute(final Request request, final Context context, final Page page) {
-        page.setTitle("NOF Application");
+        page.setTitle("Isis Application");
 
         context.init();
 

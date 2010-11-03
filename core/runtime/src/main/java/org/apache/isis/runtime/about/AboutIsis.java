@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.about;
 
 import java.io.IOException;
@@ -28,7 +27,6 @@ import java.util.Properties;
 import java.util.ResourceBundle;
 
 import org.apache.isis.commons.exceptions.IsisException;
-
 
 public class AboutIsis {
     private static String applicationCopyrightNotice;
@@ -43,7 +41,7 @@ public class AboutIsis {
 
     static {
         try {
-            final ResourceBundle bundle = ResourceBundle.getBundle("nof-version");
+            final ResourceBundle bundle = ResourceBundle.getBundle("isis-version");
             logo = bundle.getString("framework.logo");
             frameworkVersion = bundle.getString("framework.version");
             frameworkName = bundle.getString("framework.name");
@@ -52,7 +50,7 @@ public class AboutIsis {
         } catch (final MissingResourceException ex) {
             logo = "splash-logo";
             frameworkVersion = "${project.version}-r${buildNumber}";
-            frameworkCopyright = "Copyright (c) 2002~2009 [[NAME]] Group";
+            frameworkCopyright = "Copyright (c) 2010 Apache Software Foundation";
             frameworkName = "${project.parent.name}";
         }
 
@@ -63,8 +61,8 @@ public class AboutIsis {
         try {
             String moduleId = "org.apache.isis.plugins:dndviewer";
             String module = moduleId.replace(":", "/");
-            InputStream resourceAsStream = AboutIsis.class.getClassLoader().getResourceAsStream(
-                    "META-INF/maven/" + module + "/pom.properties");
+            InputStream resourceAsStream =
+                AboutIsis.class.getClassLoader().getResourceAsStream("META-INF/maven/" + module + "/pom.properties");
             if (resourceAsStream == null) {
                 return "no version";
             }
@@ -91,7 +89,7 @@ public class AboutIsis {
     }
 
     public static String getFrameworkCopyrightNotice() {
-        return select(frameworkCopyright, "Copyright [[NAME]] Group");
+        return select(frameworkCopyright, "Copyright Apache Software Foundation");
     }
 
     public static String getFrameworkCompileDate() {
@@ -99,7 +97,7 @@ public class AboutIsis {
     }
 
     public static String getFrameworkName() {
-        return select(frameworkName, "[[NAME]] Framework");
+        return select(frameworkName, "Apache Isis (incubating)");
     }
 
     public static String getImageName() {
@@ -108,11 +106,10 @@ public class AboutIsis {
 
     public static String getFrameworkVersion() {
         String version = "Version " + select(frameworkVersion, "unreleased");
-        /* NOT in use yet:
-        for (ComponentDetails details : componentDetails) {
-            version += "\n" + details.getName() + " " + details.getModule() + " " + details.getVersion();
-        }
-        */
+        /*
+         * NOT in use yet: for (ComponentDetails details : componentDetails) { version += "\n" + details.getName() + " "
+         * + details.getModule() + " " + details.getVersion(); }
+         */
         return version;
     }
 

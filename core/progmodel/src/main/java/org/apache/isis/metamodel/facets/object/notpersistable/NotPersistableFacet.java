@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.notpersistable;
 
 import org.apache.isis.metamodel.facets.SingleValueFacet;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 
-
 /**
- * Indicates that the instances of this class are not persistable either by the user (through the viewer) or
- * at all (either by the user or programmatically).
+ * Indicates that the instances of this class are not persistable either by the user (through the viewer) or at all
+ * (either by the user or programmatically).
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to applying the
- * <tt>@NotPersistable</tt> annotation at the class level.
+ * In the standard Apache Isis Programming Model, typically corresponds to applying the <tt>@NotPersistable</tt>
+ * annotation at the class level.
  */
 public interface NotPersistableFacet extends SingleValueFacet, DisablingInteractionAdvisor {
 

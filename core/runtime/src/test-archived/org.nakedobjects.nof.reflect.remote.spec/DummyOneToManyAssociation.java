@@ -20,9 +20,8 @@
 
 package org.apache.isis.nof.reflect.remote.spec;
 
-import org.apache.isis.noa.adapter.[[NAME]];
 import org.apache.isis.noa.adapter.ObjectAdapter;
-import org.apache.isis.noa.adapter.[[NAME]]Reference;
+import org.apache.isis.noa.adapter.ObjectAdapterReference;
 import org.apache.isis.noa.facets.Facet;
 import org.apache.isis.noa.reflect.Consent;
 import org.apache.isis.noa.reflect.ObjectField;
@@ -79,7 +78,7 @@ public class DummyOneToManyAssociation implements ObjectField {
         return false;
     }
     
-    public [[NAME]] get(final ObjectAdapter fromObject) {
+    public ObjectAdapter get(final ObjectAdapter fromObject) {
         return null;
     }
 
@@ -122,7 +121,7 @@ public class DummyOneToManyAssociation implements ObjectField {
         return null;
     }
 
-    public [[NAME]][] getOptions(final ObjectAdapter target) {
+    public ObjectAdapter[] getOptions(final ObjectAdapter target) {
         return null;
     }
     
@@ -142,7 +141,7 @@ public class DummyOneToManyAssociation implements ObjectField {
         return Allow.DEFAULT;
     }
 
-    public Consent isUsable(final [[NAME]]Reference target) {
+    public Consent isUsable(final ObjectAdapterReference target) {
         return null;
     }
 
@@ -158,7 +157,7 @@ public class DummyOneToManyAssociation implements ObjectField {
         return false;
     }
 
-    public boolean isVisible(final [[NAME]]Reference target) {
+    public boolean isVisible(final ObjectAdapterReference target) {
         return true;
     }
 

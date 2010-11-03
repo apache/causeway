@@ -17,48 +17,40 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.context;
 
 import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.commons.lang.Maybe;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
-import com.google.inject.Injector;
-
-
 /**
- * A specialised IsisContext implementation that provides two sets of components: one for the server;
- * and one for the client. This simply determines the current thread and if that thread is the server thread
- * then it provides server data. For any other thread the client data is used.
+ * A specialised IsisContext implementation that provides two sets of components: one for the server; and one for the
+ * client. This simply determines the current thread and if that thread is the server thread then it provides server
+ * data. For any other thread the client data is used.
  */
 public class IsisContextPipe extends IsisContextMultiUser {
-    
+
     public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
         return new IsisContextPipe(sessionFactory);
     }
 
-    
     private IsisSession clientSession;
     private IsisSession serverSession;
-    
+
     private Thread server;
 
-    
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // Constructor
-    /////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////
+
     private IsisContextPipe(final IsisSessionFactory sessionFactory) {
         super(sessionFactory);
     }
 
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // Server (not API)
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     public void setServer(final Thread server) {
         this.server = server;
@@ -68,10 +60,9 @@ public class IsisContextPipe extends IsisContextMultiUser {
         return Thread.currentThread() == server;
     }
 
-
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // getCurrent() Hook
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
 
     @Override
     protected IsisSession getSessionInstance(final String sessionId) {
@@ -86,7 +77,8 @@ public class IsisContextPipe extends IsisContextMultiUser {
             return clientSession;
         }
     }
-    
+
+    @Override
     public IsisSession openSessionInstance(final AuthenticationSession authenticationSession) {
         applySessionClosePolicy();
         IsisSession newSession = getSessionFactoryInstance().openSession(authenticationSession);
@@ -98,31 +90,30 @@ public class IsisContextPipe extends IsisContextMultiUser {
         return newSession;
     }
 
-
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // shutdown
-    /////////////////////////////////////////////////////
-
+    // ///////////////////////////////////////////////////
 
     @Override
-    public void closeAllSessionsInstance() {}
+    public void closeAllSessionsInstance() {
+    }
 
-    
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // Execution Context Ids
-    /////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////
+
     @Override
     public String[] allSessionIds() {
         return new String[] { clientSession.getId(), serverSession.getId() };
     }
-    
-    /////////////////////////////////////////////////////
-    // Debugging
-    /////////////////////////////////////////////////////
 
+    // ///////////////////////////////////////////////////
+    // Debugging
+    // ///////////////////////////////////////////////////
+
+    @Override
     public String debugTitle() {
-        return "[[NAME]] (pipe) " + Thread.currentThread().getName();
+        return "Isis (pipe) " + Thread.currentThread().getName();
     }
 
     @Override
@@ -130,7 +121,5 @@ public class IsisContextPipe extends IsisContextMultiUser {
         super.debugData(debug);
         debug.appendln("Server thread", server);
     }
-
-
 
 }

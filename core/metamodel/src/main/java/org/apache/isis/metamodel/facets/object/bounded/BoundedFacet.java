@@ -17,24 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.bounded;
 
 import org.apache.isis.metamodel.facets.MarkerFacet;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * Whether the number of instances of this class is bounded.
  * 
  * <p>
- * Typically viewers will interpret this information by displaying all instances of the class in a drop-down
- * list box or similar widget.
+ * Typically viewers will interpret this information by displaying all instances of the class in a drop-down list box or
+ * similar widget.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the member with
- * <tt>@Bounded</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the member with <tt>@Bounded</tt>.
  */
 public interface BoundedFacet extends MarkerFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {
 

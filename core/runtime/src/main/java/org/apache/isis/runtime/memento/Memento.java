@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.memento;
 
 import java.io.IOException;
@@ -25,7 +24,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.debug.DebugString;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.exceptions.UnknownTypeException;
@@ -48,17 +46,16 @@ import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
-
 /**
  * Holds the state for the specified object in serializable form.
- *
+ * 
  * <p>
- * This object is {@link Serializable} and can be passed over the network easily. Also for a persistent
- * objects only the reference's {@link Oid}s are held, avoiding the need for serializing the whole object
- * graph.
+ * This object is {@link Serializable} and can be passed over the network easily. Also for a persistent objects only the
+ * reference's {@link Oid}s are held, avoiding the need for serializing the whole object graph.
  */
 public class Memento implements Serializable {
 
@@ -67,12 +64,12 @@ public class Memento implements Serializable {
     private static final Logger LOG = Logger.getLogger(Memento.class);
 
     private Data state;
-    private List<Oid> transientObjects = new ArrayList<Oid>();
+    private final List<Oid> transientObjects = new ArrayList<Oid>();
 
     public Memento(final ObjectAdapter object) {
         state = object == null ? null : createData(object);
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("created memento for " + this);
+            LOG.debug("created memento for " + this);
         }
     }
 
@@ -89,13 +86,13 @@ public class Memento implements Serializable {
         final Data[] collData = new Data[facet.size(object)];
         int i = 0;
         for (ObjectAdapter ref : facet.iterable(object)) {
-			String resolveStateName = ref.getResolveState().name();
-			String specName = ref.getSpecification().getFullName();
-			Oid oid = ref.getOid();
-			collData[i++] = new Data(oid, resolveStateName, specName);
+            String resolveStateName = ref.getResolveState().name();
+            String specName = ref.getSpecification().getFullName();
+            Oid oid = ref.getOid();
+            collData[i++] = new Data(oid, resolveStateName, specName);
         }
         String elementTypeSpecName = object.getSpecification().getFullName();
-        return new CollectionData(object.getOid(), object.getResolveState(), elementTypeSpecName , collData);
+        return new CollectionData(object.getOid(), object.getResolveState(), elementTypeSpecName, collData);
     }
 
     private ObjectData createObjectData(final ObjectAdapter adapter) {
@@ -103,12 +100,13 @@ public class Memento implements Serializable {
         final ObjectAssociation[] fields = cls.getAssociations();
         final ObjectData data = new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullName());
         for (int i = 0; i < fields.length; i++) {
-            if (fields[i].isNotPersisted()){
-                if( fields[i].isOneToManyAssociation()) {
+            if (fields[i].isNotPersisted()) {
+                if (fields[i].isOneToManyAssociation()) {
                     continue;
                 }
-                if (fields[i].containsFacet(PropertyAccessorFacet.class) && !fields[i].containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field " + fields[i].getName());       
+                if (fields[i].containsFacet(PropertyAccessorFacet.class)
+                    && !fields[i].containsFacet(PropertySetterFacet.class)) {
+                    LOG.debug("ignoring not-settable field " + fields[i].getName());
                     continue;
                 }
             }
@@ -142,7 +140,7 @@ public class Memento implements Serializable {
 
         Oid refOid = ref.getOid();
         if (refOid == null) {
-        	return createStandaloneData(ref);
+            return createStandaloneData(ref);
         }
 
         if (refOid.isTransient() && !transientObjects.contains(refOid)) {
@@ -157,14 +155,14 @@ public class Memento implements Serializable {
     }
 
     private Data createStandaloneData(ObjectAdapter adapter) {
-    	return new StandaloneData(adapter);
-	}
+        return new StandaloneData(adapter);
+    }
 
     protected Data getData() {
         return state;
     }
 
-	public Oid getOid() {
+    public Oid getOid() {
         return state.getOid();
     }
 
@@ -173,50 +171,50 @@ public class Memento implements Serializable {
             return null;
         }
         final ObjectSpecification spec = getSpecificationLoader().loadSpecification(state.getClassName());
-		ObjectAdapter object;
-		ResolveState targetState;
-		if (getOid().isTransient()) {
-		    object = getHydrator().recreateAdapter(getOid(), spec);
-		    targetState = ResolveState.SERIALIZING_TRANSIENT;
-		} else {
-		    object = getHydrator().recreateAdapter(getOid(), spec);
-		    targetState = ResolveState.UPDATING;
-		}
-		if (object.getSpecification().isCollection()) {
-		    populateCollection(object, (CollectionData) state, targetState);
-		} else {
-		    updateObject(object, state, targetState);
-		}
-		if (LOG.isDebugEnabled()) {
-		    LOG.debug("recreated object " + object.getOid());
-		}
-		return object;
+        ObjectAdapter object;
+        ResolveState targetState;
+        if (getOid().isTransient()) {
+            object = getHydrator().recreateAdapter(getOid(), spec);
+            targetState = ResolveState.SERIALIZING_TRANSIENT;
+        } else {
+            object = getHydrator().recreateAdapter(getOid(), spec);
+            targetState = ResolveState.UPDATING;
+        }
+        if (object.getSpecification().isCollection()) {
+            populateCollection(object, (CollectionData) state, targetState);
+        } else {
+            updateObject(object, state, targetState);
+        }
+        if (LOG.isDebugEnabled()) {
+            LOG.debug("recreated object " + object.getOid());
+        }
+        return object;
     }
 
     private void populateCollection(ObjectAdapter collection, CollectionData state, ResolveState targetState) {
         ObjectAdapter[] initData = new ObjectAdapter[state.elements.length];
         int i = 0;
         for (Data elementData : state.elements) {
-           initData[i++] = recreateReference(elementData);
+            initData[i++] = recreateReference(elementData);
         }
         CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         facet.init(collection, initData);
     }
 
     private ObjectAdapter recreateReference(final Data data) {
-    	final ObjectSpecification spec = getSpecificationLoader().loadSpecification(data.getClassName());
+        final ObjectSpecification spec = getSpecificationLoader().loadSpecification(data.getClassName());
 
-    	if (data instanceof StandaloneData) {
-			StandaloneData standaloneData = (StandaloneData) data;
-			return standaloneData.getAdapter();
-    	}
+        if (data instanceof StandaloneData) {
+            StandaloneData standaloneData = (StandaloneData) data;
+            return standaloneData.getAdapter();
+        }
 
         final Oid oid = data.getOid();
         if (oid == null) {
             return null;
         }
 
-    	ObjectAdapter ref;
+        ObjectAdapter ref;
         if (oid.isTransient()) {
             ref = getHydrator().recreateAdapter(oid, spec);
         } else {
@@ -234,12 +232,11 @@ public class Memento implements Serializable {
     }
 
     /**
-     * Updates the specified object (assuming it is the correct object for this memento) with the state held
-     * by this memento.
-     *
+     * Updates the specified object (assuming it is the correct object for this memento) with the state held by this
+     * memento.
+     * 
      * @throws IllegalArgumentException
-     *             if the memento was created from different logical object to the one specified (i.e. its oid
-     *             differs).
+     *             if the memento was created from different logical object to the one specified (i.e. its oid differs).
      */
     public void updateObject(final ObjectAdapter object) {
         updateObject(object, state, ResolveState.RESOLVING);
@@ -248,8 +245,9 @@ public class Memento implements Serializable {
     private void updateObject(final ObjectAdapter object, final Data state, final ResolveState resolveState) {
         final Object oid = object.getOid();
         if (oid != null && !oid.equals(state.getOid())) {
-            throw new IllegalArgumentException("This memento can only be used to update the [[NAME]] with the Oid "
-                    + state.getOid() + " but is " + oid);
+            throw new IllegalArgumentException(
+                "This memento can only be used to update the ObjectAdapter with the Oid " + state.getOid() + " but is "
+                    + oid);
 
         } else {
             if (!(state instanceof ObjectData)) {
@@ -258,7 +256,7 @@ public class Memento implements Serializable {
                 updateObject(object, resolveState, state);
             }
             if (LOG.isDebugEnabled()) {
-            	LOG.debug("object updated " + object.getOid());
+                LOG.debug("object updated " + object.getOid());
             }
         }
 
@@ -275,7 +273,7 @@ public class Memento implements Serializable {
             final ObjectData od = (ObjectData) state;
             if (od.containsField()) {
                 throw new IsisException("Resolve state (for " + object
-                        + ") inconsistent with fact that data exists for fields");
+                    + ") inconsistent with fact that data exists for fields");
             }
         }
     }
@@ -284,12 +282,12 @@ public class Memento implements Serializable {
         final ObjectData od = (ObjectData) state;
         final ObjectAssociation[] fields = object.getSpecification().getAssociations();
         for (ObjectAssociation field : fields) {
-			if (field.isNotPersisted()) {
-                if( field.isOneToManyAssociation()) {
+            if (field.isNotPersisted()) {
+                if (field.isOneToManyAssociation()) {
                     continue;
                 }
                 if (field.containsFacet(PropertyAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field " + field.getName());       
+                    LOG.debug("ignoring not-settable field " + field.getName());
                     continue;
                 }
             }
@@ -313,24 +311,22 @@ public class Memento implements Serializable {
         }
     }
 
-    private void updateOneToManyAssociation(
-            final ObjectAdapter object,
-            final OneToManyAssociation field,
-            final CollectionData collectionData) {
+    private void updateOneToManyAssociation(final ObjectAdapter object, final OneToManyAssociation field,
+        final CollectionData collectionData) {
         final ObjectAdapter collection = field.get(object);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final List<ObjectAdapter> original = Lists.newArrayList();
         for (ObjectAdapter adapter : facet.iterable(collection)) {
-        	original.add(adapter);
-		}
+            original.add(adapter);
+        }
 
         Data[] elements = collectionData.elements;
         for (Data data : elements) {
             final ObjectAdapter element = recreateReference(data);
             if (!facet.contains(collection, element)) {
-            	if (LOG.isDebugEnabled()) {
-            		LOG.debug("  association " + field + " changed, added " + element.getOid());
-            	}
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("  association " + field + " changed, added " + element.getOid());
+                }
                 field.addElement(object, element);
             } else {
                 field.removeElement(object, element);
@@ -338,46 +334,44 @@ public class Memento implements Serializable {
         }
 
         for (ObjectAdapter element : original) {
-        	if (LOG.isDebugEnabled()) {
-        		LOG.debug("  association " + field + " changed, removed " + element.getOid());
-        	}
-        	field.removeElement(object, element);
-		}
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("  association " + field + " changed, removed " + element.getOid());
+            }
+            field.removeElement(object, element);
+        }
     }
 
-    private void updateOneToOneAssociation(final ObjectAdapter object, final OneToOneAssociation field, final Data fieldData) {
+    private void updateOneToOneAssociation(final ObjectAdapter object, final OneToOneAssociation field,
+        final Data fieldData) {
         if (fieldData == null) {
             field.initAssociation(object, null);
         } else {
             final ObjectAdapter ref = recreateReference(fieldData);
             if (field.get(object) != ref) {
-            	if (LOG.isDebugEnabled()) {
-            		LOG.debug("  association " + field + " changed to " + ref.getOid());
-            	}
+                if (LOG.isDebugEnabled()) {
+                    LOG.debug("  association " + field + " changed to " + ref.getOid());
+                }
                 field.initAssociation(object, ref);
             }
         }
     }
 
     public void encodedData(final DataOutputStreamExtended outputImpl) throws IOException {
-    	outputImpl.writeEncodable(state);
+        outputImpl.writeEncodable(state);
     }
 
     public void restore(final DataInputStreamExtended inputImpl) throws IOException {
         state = inputImpl.readEncodable(Data.class);
     }
 
-
-
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // toString, debug
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {
         return "[" + (state == null ? null : state.getClassName() + "/" + state.getOid() + state) + "]";
     }
-
 
     public void debug(final DebugString debug) {
         if (state != null) {
@@ -385,10 +379,9 @@ public class Memento implements Serializable {
         }
     }
 
-
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
     private static SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();
@@ -401,6 +394,5 @@ public class Memento implements Serializable {
     private static PersistenceSessionHydrator getHydrator() {
         return getPersistenceSession();
     }
-
 
 }

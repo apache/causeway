@@ -34,7 +34,7 @@ public abstract class AbstractHtmlPage implements Component, Page {
     private final String siteFooter;
     private final String siteHeader;
     private final String styleSheet;
-    private String title = "[[NAME]]";
+    private String title = "Apache Isis";
 
     public AbstractHtmlPage(final String styleSheet, final String header, final String footer) {
         this.styleSheet = styleSheet == null ? "default.css" : styleSheet;
@@ -73,7 +73,7 @@ public abstract class AbstractHtmlPage implements Component, Page {
         writer.print("  <title>");
         writer.print(title);
         writer.println("</title>");
-        writer.println("  <meta name=\"description\" content=\"[[NAME]] Application Web Page\" />");
+        writer.println("  <meta name=\"description\" content=\"Apache Isis Application Web Page\" />");
 
         final StringTokenizer st = new StringTokenizer(styleSheet, ",");
         int i = 0;

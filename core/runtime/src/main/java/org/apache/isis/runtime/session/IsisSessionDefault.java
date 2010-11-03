@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.session;
 
+import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.components.SessionScopedComponent;
 import org.apache.isis.commons.debug.DebugInfo;
 import org.apache.isis.commons.debug.DebugString;
@@ -42,15 +40,14 @@ import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.transaction.IsisTransaction;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.userprofile.UserProfile;
-
+import org.apache.log4j.Logger;
 
 /**
- * Analogous to a Hibernate <tt>Session</tt>, holds the current set of components for a 
- * specific execution context (such as on a thread).
+ * Analogous to a Hibernate <tt>Session</tt>, holds the current set of components for a specific execution context (such
+ * as on a thread).
  * 
  * <p>
- * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for locating
- * the current execution context.
+ * The <tt>IsisContext</tt> class (in <tt>nof-core</tt>) is responsible for locating the current execution context.
  * 
  * @see IsisSessionFactory
  */
@@ -66,67 +63,63 @@ public class IsisSessionDefault implements IsisSession {
     private final AuthenticationSession authenticationSession;
     private PersistenceSession persistenceSession; // only non-final so can be replaced in tests.
     private final UserProfile userProfile;
-    
+
     private final int id;
     private long accessTime;
     private String debugSnapshot;
 
+    public IsisSessionDefault(final IsisSessionFactory sessionFactory,
+        final AuthenticationSession authenticationSession, final PersistenceSession persistenceSession,
+        final UserProfile userProfile) {
 
-    public IsisSessionDefault(
-            final IsisSessionFactory sessionFactory, 
-            final AuthenticationSession authenticationSession,
-            final PersistenceSession persistenceSession,
-            final UserProfile userProfile) {
-        
         // global context
         ensureThatArg(sessionFactory, is(not(nullValue())), "execution context factory is required");
 
         // session
         ensureThatArg(authenticationSession, is(not(nullValue())), "authentication session is required");
         ensureThatArg(persistenceSession, is(not(nullValue())), "persistence session is required");
-       ensureThatArg(userProfile, is(not(nullValue())), "user profile is required");
+        ensureThatArg(userProfile, is(not(nullValue())), "user profile is required");
 
         this.executionContextFactory = sessionFactory;
 
         this.authenticationSession = authenticationSession;
         this.persistenceSession = persistenceSession;
         this.userProfile = userProfile;
-        
+
         setSessionOpenTime(System.currentTimeMillis());
 
         this.id = nextId++;
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // open, close
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public void open() {
         persistenceSession.open();
     }
-    
+
     /**
      * Closes session.
      */
+    @Override
     public void close() {
         takeSnapshot();
         getPersistenceSession().close();
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // shutdown
-    ////////////////////////////////////////////////////////
-
-    
+    // //////////////////////////////////////////////////////
 
     /**
      * Shuts down all components.
      */
+    @Override
     public void closeAll() {
         close();
-        
+
         shutdownIfRequired(persistenceSession);
     }
 
@@ -137,10 +130,11 @@ public class IsisSessionDefault implements IsisSession {
         }
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // ExecutionContextFactory
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
+    @Override
     public IsisSessionFactory getSessionFactory() {
         return executionContextFactory;
     }
@@ -173,98 +167,91 @@ public class IsisSessionDefault implements IsisSession {
         return executionContextFactory.getTemplateImageLoader();
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // AuthenticationSession
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * Returns the security session representing this user for this execution context.
      */
+    @Override
     public AuthenticationSession getAuthenticationSession() {
         return authenticationSession;
     }
-
 
     private String getSessionUserName() {
         return getAuthenticationSession().getUserName();
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Id
-    ////////////////////////////////////////////////////////
-
+    // //////////////////////////////////////////////////////
 
     /**
      * Returns an descriptive identifier for this {@link IsisSessionDefault}.
      */
+    @Override
     public String getId() {
         return "#" + id + getSessionUserName();
     }
 
-
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Persistence Session
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Perspective
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public UserProfile getUserProfile() {
         return userProfile;
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Session Open Time
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     protected long getSessionOpenTime() {
         return accessTime;
     }
-    
+
     private void setSessionOpenTime(long accessTime) {
         this.accessTime = accessTime;
     }
 
-
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Transaction
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * Convenience method that returns the {@link IsisTransaction} of the session, if any.
      */
+    @Override
     public IsisTransaction getCurrentTransaction() {
         return getTransactionManager().getTransaction();
     }
 
-
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // testSetObjectPersistor
-    ////////////////////////////////////////////////////////
-
+    // //////////////////////////////////////////////////////
 
     /**
-     * Should only be called in tests. 
+     * Should only be called in tests.
      */
     public void testSetObjectPersistor(PersistenceSession objectPersistor) {
         this.persistenceSession = objectPersistor;
     }
-    
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // toString
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
     @Override
     public String toString() {
         final ToString asString = new ToString(this);
@@ -273,18 +260,18 @@ public class IsisSessionDefault implements IsisSession {
         return asString.toString();
     }
 
-
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Debugging
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public void debugAll(final DebugString debug) {
-        debug.startSection("[[NAME]] Context Snapshot");
+        debug.startSection("Isis Context Snapshot");
         debug.appendln(debugSnapshot);
         debug.endSection();
     }
 
+    @Override
     public void debug(final DebugString debug) {
         debug.appendAsHexln("hash", hashCode());
         debug.appendln("context id", id);
@@ -311,7 +298,6 @@ public class IsisSessionDefault implements IsisSession {
         LOG.debug(debugSnapshot);
     }
 
-
     private void debug(final DebugString debug, final Object object) {
         if (object instanceof DebugInfo) {
             final DebugInfo d = (DebugInfo) object;
@@ -323,7 +309,6 @@ public class IsisSessionDefault implements IsisSession {
         }
     }
 
-    
     public void appendState(final ToString asString) {
         asString.append("authenticationSession", getAuthenticationSession());
         asString.append("persistenceSession", getPersistenceSession());
@@ -334,6 +319,7 @@ public class IsisSessionDefault implements IsisSession {
         }
     }
 
+    @Override
     public void debugState(final DebugString debug) {
         debug.appendln("authenticationSession", getAuthenticationSession());
         debug.appendln("persistenceSession", getPersistenceSession());
@@ -344,10 +330,9 @@ public class IsisSessionDefault implements IsisSession {
         }
     }
 
-
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ///////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////
 
     private IsisTransactionManager getTransactionManager() {
         return getPersistenceSession().getTransactionManager();

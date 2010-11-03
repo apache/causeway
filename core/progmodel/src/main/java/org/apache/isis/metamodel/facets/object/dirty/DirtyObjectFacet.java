@@ -17,18 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.dirty;
 
 import org.apache.isis.metamodel.facets.Facet;
 
-
 /**
  * Mechanisms for explicitly managing the dirty state of the object.
- * 
- * <p>
- * TODO: this was introduced for [[NAME]] 2.0, but not sure if they are still required for [[NAME]]
- * 3.0.
  */
 public interface DirtyObjectFacet extends Facet {
 

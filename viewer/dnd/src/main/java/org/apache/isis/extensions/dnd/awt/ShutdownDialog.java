@@ -48,13 +48,13 @@ class ShutdownDialog extends Dialog implements ActionListener, KeyListener {
     private static String QUIT_LABEL = "Ok";
 
     public ShutdownDialog(final ViewerFrame owner) {
-        super(owner, "[[NAME]]", true);
+        super(owner, "Apache Isis", true);
 
         // AWTUtilities.addWindowIcon(this, "shutdown-logo.gif");
 
         setLayout(new GridLayout(2, 3, 10, 10));
 
-        add(new Label("Exit [[NAME]]?", Label.LEFT));
+        add(new Label("Exit Apache Isis?", Label.LEFT));
 
         add(new Panel());
         add(new Panel());

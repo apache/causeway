@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.properties.choices;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
-
 
 /**
  * Provides a set of choices for a property.
@@ -31,8 +29,8 @@ import org.apache.isis.metamodel.facets.Facet;
  * Viewers would typically represent this as a drop-down list box for the property.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to the <tt>choicesXxx</tt> supporting method
- * for the property with accessor <tt>getXxx</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to the <tt>choicesXxx</tt> supporting method for the
+ * property with accessor <tt>getXxx</tt>.
  * 
  * <p>
  * Note: an alternative mechanism may be to use the <tt>@Bounded</tt> annotation against the referenced class.

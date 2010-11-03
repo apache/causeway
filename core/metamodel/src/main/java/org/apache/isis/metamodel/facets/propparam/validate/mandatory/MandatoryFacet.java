@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propparam.validate.mandatory;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -26,17 +25,16 @@ import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.MarkerFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * Whether a property or a parameter is mandatory (not optional).
  * 
  * <p>
- * For a mandatory property, the object cannot be saved/updated without the value being provided. For a
- * mandatory parameter, the action cannot be invoked without the value being provided.
+ * For a mandatory property, the object cannot be saved/updated without the value being provided. For a mandatory
+ * parameter, the action cannot be invoked without the value being provided.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, specify mandatory by <i>omitting</i> the
- * <tt>@Optional</tt> annotation.
+ * In the standard Apache Isis Programming Model, specify mandatory by <i>omitting</i> the <tt>@Optional</tt>
+ * annotation.
  */
 public interface MandatoryFacet extends MarkerFacet, ValidatingInteractionAdvisor {
 
@@ -44,14 +42,14 @@ public interface MandatoryFacet extends MarkerFacet, ValidatingInteractionAdviso
      * Whether this value is required but has not been provided (and is therefore invalid).
      * 
      * <p>
-     * If the value has been provided, <i>or</i> if the property or parameter is not required, then will
-     * return <tt>false</tt>.
+     * If the value has been provided, <i>or</i> if the property or parameter is not required, then will return
+     * <tt>false</tt>.
      */
     boolean isRequiredButNull(ObjectAdapter adapter);
 
     /**
-     * Indicates that the implementation is overridding the usual semantics, in other words that the
-     * {@link FacetHolder} to which this {@link Facet} is attached is <i>not</i> mandatory.
+     * Indicates that the implementation is overridding the usual semantics, in other words that the {@link FacetHolder}
+     * to which this {@link Facet} is attached is <i>not</i> mandatory.
      */
     public boolean isInvertedSemantics();
 }

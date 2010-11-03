@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.collections.validate;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * Validate that an object can be removed to a collection.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>validateRemoveFromXxx</tt>
- * support method for a collection.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>validateRemoveFromXxx</tt> support
+ * method for a collection.
  */
 public interface CollectionValidateRemoveFromFacet extends Facet, ValidatingInteractionAdvisor {
 
@@ -39,4 +37,3 @@ public interface CollectionValidateRemoveFromFacet extends Facet, ValidatingInte
      */
     public String invalidReason(ObjectAdapter inObject, ObjectAdapter value);
 }
-

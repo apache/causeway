@@ -30,7 +30,7 @@ import org.apache.isis.application.value.ValueParseException;
  * <h3>Implementation Notes</h3>
  * 
  * This is a little risky, but just using <code>data.getBytes(&quot;UTF-8&quot;)</code>. This perhaps
- * should be replaced with UUDecoding, or (more fundamentally) the [[NAME]]Value interface should change.
+ * should be replaced with UUDecoding, or (more fundamentally) the Value interface should change.
  * <p>
  * But the above *might* do (haven't tested this out yet), because RTF uses either 7-bit or (for MS Word)
  * 8-bit character sets and no more. To quote the RTF 1.5 spec:

@@ -33,7 +33,7 @@ import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
  * list box or similar widget.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the member with
+ * In the standard Apache Isis Programming Model, corresponds to annotating the member with
  * <tt>@Bounded</tt>.
  */
 public interface BoundedFacet extends MarkerFacet, DisablingInteractionAdvisor, ValidatingInteractionAdvisor {

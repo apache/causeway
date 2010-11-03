@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.properties.defaults;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 
-
 /**
  * Provides a default value for a property of a newly created object.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to the <tt>defaultXxx</tt> supporting method
- * for the property with accessor <tt>getXxx</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to the <tt>defaultXxx</tt> supporting method for the
+ * property with accessor <tt>getXxx</tt>.
  * 
  * <p>
  * Note: an alternative mechanism may be to specify the value in the created callback.

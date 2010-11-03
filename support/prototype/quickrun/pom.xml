@@ -55,6 +55,10 @@
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>html</artifactId>
 		</dependency>
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>restful-viewer</artifactId>
+        </dependency>
 
         <!-- isis alternatives -->
 		<dependency>

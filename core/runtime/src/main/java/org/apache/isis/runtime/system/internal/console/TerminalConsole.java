@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.system.internal.console;
 
 import java.io.BufferedReader;
@@ -27,7 +26,6 @@ import java.io.InputStreamReader;
 import org.apache.log4j.Logger;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 
 /**
  * Marked as final because starts a thread in the {@link #TerminalConsole() constructor}.
@@ -41,41 +39,48 @@ public final class TerminalConsole implements ServerConsole, Runnable {
         new Thread(this).start();
     }
 
-    public void clear() {}
+    public void clear() {
+    }
 
+    @Override
     public void close() {
         running = false;
     }
 
-    public void collections() {}
+    public void collections() {
+    }
 
+    @Override
     public void init(final Server server) {
         this.server = server;
         log("Control of " + server);
     }
 
     public void listClasses() {
-    /*
-     * try { Enumeration e = server.getObjectStore().classes();
-     *
-     * log("Loaded classes:-"); while (e.hasMoreElements()) { [[NAME]]Class object = ([[NAME]]Class)
-     * e.nextElement();
-     *
-     * log(" " + object); } } catch (ObjectStoreException e) { LOG.error("Error listing classes " +
-     * e.getMessage()); }
-     */
+        /*
+         * try { Enumeration e = server.getObjectStore().classes();
+         * 
+         * log("Loaded classes:-"); while (e.hasMoreElements()) { ObjectSpecification object = (ObjectSpecification)
+         * e.nextElement();
+         * 
+         * log(" " + object); } } catch (ObjectStoreException e) { LOG.error("Error listing classes " + e.getMessage());
+         * }
+         */
     }
 
+    @Override
     public void log() {
         log("");
     }
 
+    @Override
     public void log(final String message) {
         LOG.info(message);
         System.out.println("> " + message);
     }
 
-    public void objects() {}
+    public void objects() {
+    }
 
     public void quit() {
         server.shutdown();
@@ -83,6 +88,7 @@ public final class TerminalConsole implements ServerConsole, Runnable {
         running = false;
     }
 
+    @Override
     public void run() {
         final BufferedReader dis = new BufferedReader(new InputStreamReader(System.in));
 
@@ -111,8 +117,7 @@ public final class TerminalConsole implements ServerConsole, Runnable {
         exitSystem();
     }
 
-
-    @SuppressWarnings(value="DM_EXIT")
+    @SuppressWarnings(value = "DM_EXIT")
     private void exitSystem() {
         System.exit(0);
     }
@@ -121,5 +126,3 @@ public final class TerminalConsole implements ServerConsole, Runnable {
         new Thread(this).start();
     }
 }
-
-

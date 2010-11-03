@@ -17,17 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.ignore;
 
 import org.apache.isis.metamodel.facets.Facet;
-
 
 /**
  * Whether the action is programmatic, and therefore should be ignored.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the action method using
+ * In the standard Apache Isis Programming Model, corresponds to annotating the action method using
  * <tt>@Programmatic</tt>.
  */
 public interface IgnoreFacet extends Facet {

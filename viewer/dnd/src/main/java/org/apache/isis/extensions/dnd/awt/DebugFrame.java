@@ -217,7 +217,7 @@ public abstract class DebugFrame extends Frame {
      */
     public void show(final int x, final int y) {
         /*
-         * WARNING - When refresh button is pressed it is in the AWT thread; if the [[NAME]] repository
+         * WARNING - When refresh button is pressed it is in the AWT thread; if the repository
          * is thread based then the wrong set of components will be used giving strange results, particularly
          * in the object persistor.
          */

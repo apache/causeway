@@ -22,7 +22,7 @@ package org.apache.isis.progmodel.java5.reflect;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.noa.adapter.[[NAME]];
+import org.apache.isis.noa.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.When;
 import org.apache.isis.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.metamodel.facets.actions.executed.ExecutedFacet;
@@ -76,7 +76,7 @@ public class JavaActionTest extends ProxyTestCase {
     }
 
     public void testAction() throws Exception {
-        javaAction.execute(target, new [[NAME]][0]);
+        javaAction.execute(target, new ObjectAdapter[0]);
         assertTrue(javaObject.actionCalled());
     }
 
@@ -149,7 +149,7 @@ public class JavaActionTest extends ProxyTestCase {
     }
 
     public void testParameterSetValid() throws Exception {
-        Consent consent = javaAction.isParameterSetValidImperatively(target, new [[NAME]][0]);
+        Consent consent = javaAction.isParameterSetValidImperatively(target, new ObjectAdapter[0]);
         assertEquals(false, consent.isAllowed());
         assertEquals("invalid", consent.getReason());
     }

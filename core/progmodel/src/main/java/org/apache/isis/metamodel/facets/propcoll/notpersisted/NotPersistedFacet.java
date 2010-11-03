@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propcoll.notpersisted;
 
 import org.apache.isis.metamodel.facets.MarkerFacet;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 
-
 /**
  * Indicates that a property or a collection shouldn't be persisted.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the property or collection with
- * the <tt>@NotPersisted</tt> annotation.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the property or collection with the
+ * <tt>@NotPersisted</tt> annotation.
  */
 public interface NotPersistedFacet extends MarkerFacet, DisablingInteractionAdvisor {
 

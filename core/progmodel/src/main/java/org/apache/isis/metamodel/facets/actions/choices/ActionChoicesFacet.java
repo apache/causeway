@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.actions.choices;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 
-
 /**
  * Obtain choices for each of the parameters of the action.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>choicesXxx</tt> support
- * method for an action.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>choicesXxx</tt> support method for an
+ * action.
  */
 public interface ActionChoicesFacet extends Facet {
 

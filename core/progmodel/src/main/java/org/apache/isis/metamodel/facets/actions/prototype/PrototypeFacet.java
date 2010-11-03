@@ -27,7 +27,7 @@ import org.apache.isis.metamodel.facets.Facet;
  * Indicates that the action should only be available in a special <i>prototype</i> mode.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the action method using
+ * In the standard Apache Isis Programming Model, corresponds to annotating the action method using
  * <tt>@Prototype</tt>.
  */
 public interface PrototypeFacet extends Facet {

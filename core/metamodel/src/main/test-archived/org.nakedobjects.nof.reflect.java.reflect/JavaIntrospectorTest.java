@@ -25,7 +25,6 @@ import java.util.HashMap;
 
 import junit.framework.TestSuite;
 
-import org.apache.isis.noa.adapter.[[NAME]];
 import org.apache.isis.noa.adapter.ObjectAdapter;
 import org.apache.isis.noa.adapter.ResolveState;
 import org.apache.isis.noa.facets.Facet;
@@ -304,19 +303,19 @@ public class JavaIntrospectorTest extends ProxyTestCase {
 
     public void testClassActionValidatesWhenNoValidateMethodExists() {
         JavaAction action = findClassAction("bottom");
-        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(null, new [[NAME]][0]));
+        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(null, new ObjectAdapter[0]));
     }
     
     public void testClassActionValidate() {
         JavaAction action = findClassAction("top");
-        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(null, new [[NAME]][0]));
+        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(null, new ObjectAdapter[0]));
     }
 
     public void testClassActionValidateFails() {
         JavaAction action = findClassAction("top");
         JavaObjectWithBasicProgramConventions.classActionValid = "not now";
-        assertEquals(true, action.isParameterSetValidImperatively(null, new [[NAME]][0]).isVetoed());
-        assertEquals("not now", action.isParameterSetValidImperatively(null, new [[NAME]][0]).getReason());
+        assertEquals(true, action.isParameterSetValidImperatively(null, new ObjectAdapter[0]).isVetoed());
+        assertEquals("not now", action.isParameterSetValidImperatively(null, new ObjectAdapter[0]).getReason());
     }
 
     public void testCollectionReturnCollectionFieldProxy() throws Exception {
@@ -538,14 +537,14 @@ public class JavaIntrospectorTest extends ProxyTestCase {
         Enumeration elements = actions.elements();
 
         JavaAction action = ((JavaAction) elements.nextElement());
-        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(adapter, new [[NAME]][1]));
+        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(adapter, new ObjectAdapter[1]));
         target.objectActionValid = "not valid";
-        assertEquals(true, action.isParameterSetValidImperatively(adapter, new [[NAME]][1]).isVetoed());
-        assertEquals("not valid", action.isParameterSetValidImperatively(adapter, new [[NAME]][1]).getReason());
+        assertEquals(true, action.isParameterSetValidImperatively(adapter, new ObjectAdapter[1]).isVetoed());
+        assertEquals("not valid", action.isParameterSetValidImperatively(adapter, new ObjectAdapter[1]).getReason());
 
         action = ((JavaAction) elements.nextElement());
-        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(adapter, new [[NAME]][1]));
-        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(adapter, new [[NAME]][1]));
+        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(adapter, new ObjectAdapter[1]));
+        assertEquals(Allow.DEFAULT, action.isParameterSetValidImperatively(adapter, new ObjectAdapter[1]));
 
     }
 

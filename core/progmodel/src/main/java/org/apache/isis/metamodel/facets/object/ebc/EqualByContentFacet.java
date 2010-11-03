@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.ebc;
 
 import org.apache.isis.metamodel.facets.MarkerFacet;
 import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 
-
 /**
  * Indicates that the instances of this class are equal-by-content.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to applying the
- * <tt>@EqualByContent</tt> annotation at the class level.
+ * In the standard Apache Isis Programming Model, typically corresponds to applying the <tt>@EqualByContent</tt>
+ * annotation at the class level.
  * 
  * @see ImmutableFacet
  * @see ValueFacet

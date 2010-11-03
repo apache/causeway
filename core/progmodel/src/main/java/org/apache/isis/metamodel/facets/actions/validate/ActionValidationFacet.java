@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.actions.validate;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -25,14 +24,12 @@ import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
- * The mechanism by which the set of parameters of the action can be validated before the action itself is
- * invoked.
+ * The mechanism by which the set of parameters of the action can be validated before the action itself is invoked.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>validateXxx</tt> support
- * method for an action.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>validateXxx</tt> support method for an
+ * action.
  * 
  * <p>
  * Note that the parameters may be validated independently first (eg a range check on a numeric parameter).

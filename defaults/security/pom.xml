@@ -9,7 +9,7 @@
 
 	<groupId>org.apache.isis.defaults</groupId>
 	<artifactId>security</artifactId>
-	<name>Default Security (File)</name>
+	<name>Default Security (No-op)</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>

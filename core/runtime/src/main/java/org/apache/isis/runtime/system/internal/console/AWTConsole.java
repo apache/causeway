@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.system.internal.console;
 
 import java.awt.BorderLayout;
@@ -32,11 +31,10 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.runtime.context.IsisContext;
+import org.apache.log4j.Logger;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 
 public class AWTConsole extends Frame implements ServerConsole {
     private static final long serialVersionUID = 1L;
@@ -68,6 +66,7 @@ public class AWTConsole extends Frame implements ServerConsole {
 
         p.add(b = new Button("Blank"));
         b.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 clearLog();
             }
@@ -76,6 +75,7 @@ public class AWTConsole extends Frame implements ServerConsole {
         // debug
         p.add(b = new Button("Classes"));
         b.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 listClasses();
             }
@@ -83,6 +83,7 @@ public class AWTConsole extends Frame implements ServerConsole {
 
         p.add(b = new Button("Cache"));
         b.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 listCachedObjects();
             }
@@ -90,6 +91,7 @@ public class AWTConsole extends Frame implements ServerConsole {
 
         p.add(b = new Button("C/Cache"));
         b.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 clearCache();
             }
@@ -98,6 +100,7 @@ public class AWTConsole extends Frame implements ServerConsole {
         // quit
         p.add(quit = new Button("Quit"));
         quit.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(final ActionEvent e) {
                 quit();
             }
@@ -123,10 +126,11 @@ public class AWTConsole extends Frame implements ServerConsole {
         setBounds(bounds);
     }
 
-    private void clearCache() {}
+    private void clearCache() {
+    }
 
     /**
-     *
+     * 
      * @param message
      *            java.lang.String
      */
@@ -137,43 +141,47 @@ public class AWTConsole extends Frame implements ServerConsole {
     /**
      *
      */
+    @Override
     public void close() {
         dispose();
     }
 
+    @Override
     public void init(final Server server) {
         this.server = server;
         log("Console in control of " + server);
     }
 
     private void listCachedObjects() {
-    /*
-     * Enumeration e = server.getObjectStore().cache();
-     *
-     * log("Cached objects:-"); while (e.hasMoreElements()) { ObjectAdapter object = (ObjectAdapter)
-     * e.nextElement();
-     *
-     * log(" " + object.getClassName() + "[" + (object.isResolved() ? "" : "~") + object.getOid() + "] " +
-     * object.title()); } log();
-     */
+        /*
+         * Enumeration e = server.getObjectStore().cache();
+         * 
+         * log("Cached objects:-"); while (e.hasMoreElements()) { ObjectAdapter object = (ObjectAdapter)
+         * e.nextElement();
+         * 
+         * log(" " + object.getClassName() + "[" + (object.isResolved() ? "" : "~") + object.getOid() + "] " +
+         * object.title()); } log();
+         */
     }
 
     private void listClasses() {
-    /*
-     * try { Enumeration e = server.getObjectStore().classes();
-     *
-     * log("Loaded classes:-"); while (e.hasMoreElements()) { [[NAME]]Class object = ([[NAME]]Class)
-     * e.nextElement();
-     *
-     * log(" " + object); } log(); } catch (ObjectStoreException e) { LOG.error("Error listing classes " +
-     * e.getMessage()); }
-     */
+        /*
+         * try { Enumeration e = server.getObjectStore().classes();
+         * 
+         * log("Loaded classes:-"); while (e.hasMoreElements()) { ObjectSpecification object = (ObjectSpecification)
+         * e.nextElement();
+         * 
+         * log(" " + object); } log(); } catch (ObjectStoreException e) { LOG.error("Error listing classes " +
+         * e.getMessage()); }
+         */
     }
 
+    @Override
     public void log() {
         log.append("\n");
     }
 
+    @Override
     public void log(final String message) {
         log.append(message + '\n');
         LOG.info(message);
@@ -188,9 +196,8 @@ public class AWTConsole extends Frame implements ServerConsole {
         exitSystem();
     }
 
-    @SuppressWarnings(value="DM_EXIT")
+    @SuppressWarnings(value = "DM_EXIT")
     private void exitSystem() {
         System.exit(0);
     }
 }
-

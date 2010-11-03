@@ -17,23 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propparam.validate.mandatory;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.FacetHolder;
 
-
 /**
  * Whether a property or a parameter is mandatory (not optional).
  * 
  * <p>
- * For a mandatory property, the object cannot be saved/updated without the value being provided. For a
- * mandatory parameter, the action cannot be invoked without the value being provided.
+ * For a mandatory property, the object cannot be saved/updated without the value being provided. For a mandatory
+ * parameter, the action cannot be invoked without the value being provided.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, specify mandatory by <i>omitting</i> the
- * <tt>@Optional</tt> annotation.
+ * In the standard Apache Isis Programming Model, specify mandatory by <i>omitting</i> the <tt>@Optional</tt>
+ * annotation.
  */
 public class MandatoryFacetDefault extends MandatoryFacetAbstract {
 
@@ -44,6 +42,7 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
     /**
      * If not specified or, if a string, then zero length.
      */
+    @Override
     public boolean isRequiredButNull(final ObjectAdapter adapter) {
         final Object object = unwrapObject(adapter);
         if (object == null) {
@@ -54,6 +53,7 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
         return str != null && str.length() == 0;
     }
 
+    @Override
     public boolean isInvertedSemantics() {
         return false;
     }

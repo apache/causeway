@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propparam.validate.mask;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -25,12 +24,11 @@ import org.apache.isis.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.regex.RegExFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * Whether the (string) property or a parameter must correspond to a specific mask.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to the <tt>@Mask</tt> annotation.
+ * In the standard Apache Isis Programming Model, corresponds to the <tt>@Mask</tt> annotation.
  * 
  * <p>
  * TODO: not yet implemented by the framework or any viewer.

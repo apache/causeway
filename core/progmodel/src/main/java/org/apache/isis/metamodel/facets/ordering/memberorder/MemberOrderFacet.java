@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.ordering.memberorder;
 
 import org.apache.isis.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.metamodel.facets.ordering.actionorder.ActionOrderFacet;
 import org.apache.isis.metamodel.facets.ordering.fieldorder.FieldOrderFacet;
 
-
 /**
  * The preferred mechanism for determining the order in which the members of the object should be rendered.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating each of the member methods with
- * the <tt>@MemberOrder</tt>. An alternative appraoch is to use the {@link ActionOrderFacet actionOrder} or
+ * In the standard Apache Isis Programming Model, corresponds to annotating each of the member methods with the
+ * <tt>@MemberOrder</tt>. An alternative appraoch is to use the {@link ActionOrderFacet actionOrder} or
  * {@link FieldOrderFacet field order}.
  * 
  * @see MemberOrderFacet

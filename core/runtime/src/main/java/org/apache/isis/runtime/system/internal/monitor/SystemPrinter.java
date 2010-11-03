@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.system.internal.monitor;
 
 import java.io.File;
@@ -34,10 +33,9 @@ import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.io.IoUtils;
 import org.apache.isis.runtime.about.AboutIsis;
 
-
 public class SystemPrinter {
 
-    private PrintStream output;
+    private final PrintStream output;
 
     public SystemPrinter() {
         this(System.out);
@@ -63,7 +61,7 @@ public class SystemPrinter {
     }
 
     public void printDiagnostics() {
-        print("------- [[NAME]] diagnostics report -------");
+        print("------- Apache Isis diagnostics report -------");
         printVersion();
 
         printBlock("System properties");
@@ -86,6 +84,7 @@ public class SystemPrinter {
         File file = new File("../lib");
         if (file.isDirectory()) {
             final String[] files = file.list(new FilenameFilter() {
+                @Override
                 public boolean accept(File dir, String name) {
                     return name.endsWith(".jar");
                 }
@@ -103,6 +102,7 @@ public class SystemPrinter {
         file = new File("config");
         if (file.isDirectory()) {
             final String[] files = file.list(new FilenameFilter() {
+                @Override
                 public boolean accept(File dir, String name) {
                     return new File(dir, name).isFile();
                 }

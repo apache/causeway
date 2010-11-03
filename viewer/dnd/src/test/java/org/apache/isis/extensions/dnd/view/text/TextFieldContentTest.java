@@ -178,13 +178,13 @@ public class TextFieldContentTest {
     public void testAlignField() {
         // the following text wraps so it takes up 9 line
         content
-                .setText("[[NAME]] - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2000 - 2005 [[NAME]] Group");
+                .setText("Apache Isis - a framework that exposes behaviourally complete business objects directly to the user. Copyright (C) 2010 Apache Software Foundation");
 
         assertEquals(9, content.getNoLinesOfContent());
 
         String[] lines = content.getDisplayLines();
         assertEquals(4, lines.length);
-        assertEquals("[[NAME]] - a ", lines[0]);
+        assertEquals("Apache Isis - a ", lines[0]);
         assertEquals("framework that ", lines[1]);
         assertEquals("exposes ", lines[2]);
         assertEquals("behaviourally complete ", lines[3]);
@@ -195,9 +195,9 @@ public class TextFieldContentTest {
         assertEquals(4, lines.length);
         // assertEquals("business objects ", lines[0]);
         assertEquals("directly to the user. ", lines[0]);
-        assertEquals("Copyright (C) 2000 ", lines[1]);
-        assertEquals("- 2005 [[NAME]] ", lines[2]);
-        assertEquals("Objects Group", lines[3]);
+        assertEquals("Copyright (C) 2010 ", lines[1]);
+        assertEquals("Apache ", lines[2]);
+        assertEquals("Software Foundation", lines[3]);
     }
 
     @Test

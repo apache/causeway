@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.hide;
 
 import org.apache.isis.applib.events.VisibilityEvent;
@@ -26,13 +25,12 @@ import org.apache.isis.metamodel.facets.FacetAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 
-
 /**
  * Hide a property, collection or action based on the current session.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>hideXxx(UserMemento)</tt>
- * support method for the member.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>hideXxx(UserMemento)</tt> support
+ * method for the member.
  */
 public abstract class HideForSessionFacetAbstract extends FacetAbstract implements HideForSessionFacet {
 
@@ -44,8 +42,8 @@ public abstract class HideForSessionFacetAbstract extends FacetAbstract implemen
         super(type(), holder, false);
     }
 
+    @Override
     public String hides(final VisibilityContext<? extends VisibilityEvent> ic) {
         return hiddenReason(ic.getSession());
     }
 }
-

@@ -28,7 +28,7 @@ import org.apache.isis.metamodel.facets.Facet;
  * Obtain choices for each of the parameters of the action.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>choicesNXxx</tt> support
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>choicesNXxx</tt> support
  * method for an action (where N is the 0-based parameter number).
  */
 public interface ActionParameterChoicesFacet extends Facet {

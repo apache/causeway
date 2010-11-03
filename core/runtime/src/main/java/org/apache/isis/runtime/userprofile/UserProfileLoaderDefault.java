@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.userprofile;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.debug.DebugInfo;
 import org.apache.isis.commons.debug.DebugString;
 import org.apache.isis.commons.exceptions.IsisException;
@@ -31,42 +29,39 @@ import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.session.IsisSession;
+import org.apache.log4j.Logger;
 
 /**
  * Acts like a bridge, loading the profile from the underlying store.
  */
 public class UserProfileLoaderDefault implements UserProfileLoader, DebugInfo {
-	
-    private static final String DEFAULT_PERSPECTIVE_NAME = "[[NAME]]";
-    private static final String EXPLORATION =  " Exploration";
 
-	private Logger LOG = Logger.getLogger(UserProfile.class);
+    private static final String DEFAULT_PERSPECTIVE_NAME = "Apache Isis";
+    private static final String EXPLORATION = " Exploration";
+
+    private final Logger LOG = Logger.getLogger(UserProfile.class);
 
     public static enum Mode {
-    	/**
-    	 * Must provide some services.
-    	 */
-    	STRICT,
-    	/**
-    	 * For testing only, no services is okay.
-    	 */
-    	RELAXED
+        /**
+         * Must provide some services.
+         */
+        STRICT,
+        /**
+         * For testing only, no services is okay.
+         */
+        RELAXED
     }
-    
 
     private final UserProfileStore store;
     private final Mode mode;
-    
+
     private UserProfile userProfile;
 
-	private List<Object> serviceList;
+    private List<Object> serviceList;
 
-
-
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Constructor
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     public UserProfileLoaderDefault(final UserProfileStore store) {
         this(store, Mode.STRICT);
@@ -80,51 +75,55 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebugInfo {
         this.mode = mode;
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // init, shutdown
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
-	/**
-	 * Does nothing.
-	 */
-	public void init() {
-	}
+    /**
+     * Does nothing.
+     */
+    @Override
+    public void init() {
+    }
 
+    /**
+     * Does nothing.
+     */
+    @Override
+    public void shutdown() {
+    }
 
-	/**
-	 * Does nothing.
-	 */
-	public void shutdown() {
-	}
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Fixtures
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     /**
      * @see PersistenceSession#isFixturesInstalled()
      */
+    @Override
     public boolean isFixturesInstalled() {
-        return store.isFixturesInstalled(); 
+        return store.isFixturesInstalled();
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // saveAs...
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
+    @Override
     public void saveAsDefault(UserProfile userProfile) {
         store.save("_default", userProfile);
     }
 
+    @Override
     public void saveForUser(String userName, UserProfile userProfile) {
         store.save(userName, userProfile);
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // saveSession
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public void saveSession(List<ObjectAdapter> objects) {
         loadOrCreateProfile();
         userProfile.saveObjects(objects);
@@ -135,51 +134,50 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebugInfo {
         saveForUser(userName(), userProfile);
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // getProfile
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public UserProfile getProfile(AuthenticationSession session) {
         String userName = session.getUserName();
         UserProfile profile = store.getUserProfile(userName);
-        userProfile =  profile != null ? profile : createUserProfile(userName);
+        userProfile = profile != null ? profile : createUserProfile(userName);
         return userProfile;
     }
 
+    @Override
     @Deprecated
     public UserProfile getProfile() {
         loadOrCreateProfile();
         return userProfile;
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Helpers: (for getProfile)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     private void loadOrCreateProfile() {
         if (userProfile == null) {
             String userName = userName();
             UserProfile profile = store.getUserProfile(userName);
-            userProfile =  profile != null ? profile : createUserProfile(userName);
+            userProfile = profile != null ? profile : createUserProfile(userName);
         }
     }
 
-
     private UserProfile createUserProfile(String userName) {
         UserProfile template = store.getUserProfile("_default");
-		if (template == null) {
-			return createDefaultProfile(userName);
-		} else {
-			return createProfileFromTemplate(userName, template);
-		}
+        if (template == null) {
+            return createDefaultProfile(userName);
+        } else {
+            return createProfileFromTemplate(userName, template);
+        }
     }
-    
 
     private UserProfile createDefaultProfile(String userName) {
         UserProfile profile = new UserProfile();
-        profile.newPerspective(DEFAULT_PERSPECTIVE_NAME + (IsisContext.getDeploymentType().isExploring() ? EXPLORATION : ""));
+        profile.newPerspective(DEFAULT_PERSPECTIVE_NAME
+            + (IsisContext.getDeploymentType().isExploring() ? EXPLORATION : ""));
 
         List<Object> services = getServices();
         if (services.size() == 0 && mode == Mode.STRICT) {
@@ -192,7 +190,6 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebugInfo {
         return profile;
     }
 
-
     private UserProfile createProfileFromTemplate(String userName, UserProfile template) {
         UserProfile userProfile = new UserProfile();
         userProfile.copy(template);
@@ -200,54 +197,52 @@ public class UserProfileLoaderDefault implements UserProfileLoader, DebugInfo {
         return userProfile;
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Debugging
-    ////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////
+
+    @Override
     public void debugData(DebugString debug) {
         debug.appendln("Store", store.toString());
         debug.appendln("Mode", mode);
-        
+
         debug.append(store);
         debug.append(userProfile);
     }
 
+    @Override
     public String debugTitle() {
         return "User Profile Service";
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Dependencies (injected via setters)
-    ////////////////////////////////////////////////////////
-	
-	public List<Object> getServices() {
-		return serviceList;
-	}
+    // //////////////////////////////////////////////////////
 
-	public void setServices(List<Object> serviceList) {
-		this.serviceList = serviceList;
-	}
+    @Override
+    public List<Object> getServices() {
+        return serviceList;
+    }
 
-    ////////////////////////////////////////////////////////
+    @Override
+    public void setServices(List<Object> serviceList) {
+        this.serviceList = serviceList;
+    }
+
+    // //////////////////////////////////////////////////////
     // Dependencies (from context)
-    ////////////////////////////////////////////////////////
-	
-	private static AuthenticationSession getAuthenticationSession() {
-		return getSession().getAuthenticationSession();
-	}
+    // //////////////////////////////////////////////////////
+
+    private static AuthenticationSession getAuthenticationSession() {
+        return getSession().getAuthenticationSession();
+    }
 
     private static String userName() {
         return getAuthenticationSession().getUserName();
     }
 
-	private static IsisSession getSession() {
-		return IsisContext.getSession();
-	}
-
-	
+    private static IsisSession getSession() {
+        return IsisContext.getSession();
+    }
 
 }
-
-

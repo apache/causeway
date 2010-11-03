@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.properties.validate;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -26,14 +25,13 @@ import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacetAbstract;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * The mechanism by which the proposed value of a property can be validated, called immediately before
  * {@link PropertySetterFacetAbstract setting the value}.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>validateXxx</tt> method
- * for a property with an accessor of <tt>getXxx</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>validateXxx</tt> method for a property
+ * with an accessor of <tt>getXxx</tt>.
  * 
  * @see PropertySetterFacet
  */

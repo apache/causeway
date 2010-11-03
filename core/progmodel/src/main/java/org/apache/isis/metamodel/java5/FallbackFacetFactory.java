@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.java5;
 
 import java.lang.reflect.Method;
@@ -47,16 +46,14 @@ import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectActionPeer;
 import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectMemberPeer;
 import org.apache.isis.metamodel.specloader.internal.peer.JavaOneToOneAssociationPeer;
 
-
 /**
- * Central point for providing some kind of default for any {@link Facet}s required by the [[NAME]]
- * Framework itself.
- *
+ * Central point for providing some kind of default for any {@link Facet}s required by the Apache Isis framework itself.
+ * 
  */
 public class FallbackFacetFactory extends FacetFactoryAbstract {
 
     @SuppressWarnings("unused")
-	private final static Map<Class<?>, Integer> TYPICAL_LENGTHS_BY_CLASS = new HashMap<Class<?>, Integer>() {
+    private final static Map<Class<?>, Integer> TYPICAL_LENGTHS_BY_CLASS = new HashMap<Class<?>, Integer>() {
         private static final long serialVersionUID = 1L;
         {
             putTypicalLength(byte.class, Byte.class, 3);
@@ -86,13 +83,14 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
         return FacetUtil.addFacets(new Facet[] { new DescribedAsFacetNone(holder),
-        // commenting these out, think this whole isNoop business is a little bogus
-                // new ImmutableFacetNever(holder),
-                new NotPersistableFacetNull(holder), new TitleFacetNone(holder), });
+            // commenting these out, think this whole isNoop business is a little bogus
+            // new ImmutableFacetNever(holder),
+            new NotPersistableFacetNull(holder), new TitleFacetNone(holder), });
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
+    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover,
+        final FacetHolder holder) {
         final List<Facet> facets = new ArrayList<Facet>();
 
         if (holder instanceof JavaObjectMemberPeer) {
@@ -133,4 +131,3 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     }
 
 }
-

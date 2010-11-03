@@ -17,21 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.dirty;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-
 
 /**
  * Explicitly indicate that this object is dirty and needs to be persisted.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to method named <tt>markDirty</tt>.
- * 
- * <p>
- * TODO: this was introduced for [[NAME]] 2.0, but not sure if they are still required for [[NAME]]
- * 3.0.
+ * In the standard Apache Isis Programming Model, typically corresponds to method named <tt>markDirty</tt>.
  * 
  * @see ClearDirtyObjectFacet
  * @see IsDirtyObjectFacet

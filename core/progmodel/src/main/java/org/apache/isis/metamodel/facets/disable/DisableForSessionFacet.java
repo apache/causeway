@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.disable;
 
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 
-
 /**
  * Disable a property, collection or action based on the current session.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the
- * <tt>disableXxx(UserMemento)</tt> support method for the member.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>disableXxx(UserMemento)</tt> support
+ * method for the member.
  */
 public interface DisableForSessionFacet extends Facet, DisablingInteractionAdvisor {
 
@@ -40,4 +38,3 @@ public interface DisableForSessionFacet extends Facet, DisablingInteractionAdvis
     public String disabledReason(AuthenticationSession session);
 
 }
-

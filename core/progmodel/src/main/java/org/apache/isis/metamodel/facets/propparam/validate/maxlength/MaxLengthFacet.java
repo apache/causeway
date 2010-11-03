@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propparam.validate.maxlength;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * Whether the (string) property or a parameter's length must not exceed a certain length.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to the <tt>@MaxLength</tt> annotation.
+ * In the standard Apache Isis Programming Model, corresponds to the <tt>@MaxLength</tt> annotation.
  */
 public interface MaxLengthFacet extends SingleIntValueFacet, ValidatingInteractionAdvisor {
 

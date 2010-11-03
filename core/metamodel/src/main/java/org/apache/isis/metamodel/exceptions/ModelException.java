@@ -17,13 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.exceptions;
 
 import org.apache.isis.commons.exceptions.IsisException;
 
 /**
- * Thrown when a problem is found with the domain model, and [[NAME]] cannot proceed.
+ * Thrown when a problem is found with the domain model, and Isis cannot proceed.
  */
 public class ModelException extends IsisException {
     private static final long serialVersionUID = 1L;

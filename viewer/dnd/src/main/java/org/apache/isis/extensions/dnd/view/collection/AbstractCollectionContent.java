@@ -115,8 +115,8 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
          * 
          * for (int i = 0; i < actions.length; i++) { final Action action = actions[i]; AbstractUserAction
          * option; option = new AbstractUserAction(actions[i].getId()) { public void execute(final Workspace
-         * workspace, final View view, final Location at) { [[NAME]] result = collection.execute(action, new
-         * [[NAME]][0]); at.add(20, 20); workspace.addOpenViewFor(result, at); } };
+         * workspace, final View view, final Location at) { ObjectAdapter result = collection.execute(action, new
+         * ObjectAdapter[0]); at.add(20, 20); workspace.addOpenViewFor(result, at); } };
          * 
          * if (option != null) { options.add(option); } }
          */

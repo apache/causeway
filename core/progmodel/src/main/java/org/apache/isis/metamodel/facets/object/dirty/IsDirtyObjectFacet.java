@@ -17,21 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.dirty;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
-
 
 /**
  * Determine whether this object has been explicitly {@link MarkDirtyObjectFacet marked as dirty}.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to method named <tt>isDirty</tt>.
- * 
- * <p>
- * TODO: this was introduced for [[NAME]] 2.0, but not sure if they are still required for [[NAME]]
- * 3.0.
+ * In the standard Apache Isis Programming Model, typically corresponds to method named <tt>isDirty</tt>.
  * 
  * @see ClearDirtyObjectFacet
  * @see MarkDirtyObjectFacet

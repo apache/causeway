@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.callbacks;
 
 /**
- * Represents the mechanism to inform the object that it has been persisted to the object store for the first
- * time.
+ * Represents the mechanism to inform the object that it has been persisted to the object store for the first time.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, this is represented by a <tt>saved</tt> method.
+ * In the standard Apache Isis Programming Model, this is represented by a <tt>saved</tt> method.
  * 
  * <p>
  * 
@@ -34,4 +32,3 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 public interface PersistedCallbackFacet extends CallbackFacet {
 
 }
-

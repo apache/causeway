@@ -17,22 +17,20 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.ordering.fieldorder;
 
 import org.apache.isis.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.metamodel.facets.ordering.actionorder.ActionOrderFacet;
 import org.apache.isis.metamodel.facets.ordering.memberorder.MemberOrderFacet;
 
-
 /**
- * (One of the) mechanism(s) for determining the order in which the properties and collections of the object
- * should be rendered.
+ * (One of the) mechanism(s) for determining the order in which the properties and collections of the object should be
+ * rendered.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to the <tt>fieldOrder</tt> method
- * which returns a comma-separated list of action names. An alternative (and preferred, because it is
- * refactoring-safe) mechanism is to annotate each of the methods using <tt>@MemberOrder</tt>.
+ * In the standard Apache Isis Programming Model, typically corresponds to the <tt>fieldOrder</tt> method which returns
+ * a comma-separated list of action names. An alternative (and preferred, because it is refactoring-safe) mechanism is
+ * to annotate each of the methods using <tt>@MemberOrder</tt>.
  * 
  * @see MemberOrderFacet
  * @see ActionOrderFacet

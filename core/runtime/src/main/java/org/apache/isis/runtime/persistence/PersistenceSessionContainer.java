@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.persistence;
 
 import org.apache.isis.applib.DomainObjectContainer;
@@ -35,24 +34,23 @@ import org.apache.isis.runtime.persistence.query.PersistenceQuery;
  */
 public interface PersistenceSessionContainer {
 
-    
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Creation
-    ///////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////
+
     /**
      * Creates a new instance of the specified type and returns it in an adapter whose resolved state set to
-     * {@link ResolveState#TRANSIENT} (except if the type is marked as {@link ObjectSpecification#isValueOrIsAggregated() aggregated}
-     * in which case it will be set to {@link ResolveState#VALUE}).
+     * {@link ResolveState#TRANSIENT} (except if the type is marked as
+     * {@link ObjectSpecification#isValueOrIsAggregated() aggregated} in which case it will be set to
+     * {@link ResolveState#VALUE}).
      * 
      * <p>
-     * <b><i>
-     * REVIEW: not sure about {@link ResolveState#VALUE} - see comments in 
+     * <b><i> REVIEW: not sure about {@link ResolveState#VALUE} - see comments in
      * {@link #adapterFor(Object, Oid, Version)}.</i></b>
      * 
      * <p>
-     * While creating the object the it will be initialised with default values and its created
-     * lifecycle method (its logical constructor) will be invoked.  Contrast this with
+     * While creating the object the it will be initialised with default values and its created lifecycle method (its
+     * logical constructor) will be invoked. Contrast this with
      * {@link #recreateTransientInstance(Oid, ObjectSpecification)}.
      * 
      * <p>
@@ -60,22 +58,17 @@ public interface PersistenceSessionContainer {
      */
     ObjectAdapter createInstance(ObjectSpecification specification);
 
-
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Finding
-    ///////////////////////////////////////////////////////////
-
+    // /////////////////////////////////////////////////////////
 
     /**
-     * Loads the object identified by the specified {@link Oid} from the persisted 
-     * set of objects.
+     * Loads the object identified by the specified {@link Oid} from the persisted set of objects.
      * 
      * <p>
      * As used primarily by <tt>ServerDistribution</tt>.
      */
     ObjectAdapter loadObject(Oid oid, ObjectSpecification spec);
-
 
     /**
      * Finds and returns instances that match the specified query.
@@ -92,15 +85,15 @@ public interface PersistenceSessionContainer {
      * Finds and returns instances that match the specified {@link PersistenceQuery}.
      * 
      * <p>
-     * Compared to {@link #findInstances(Query, QueryCardinality)}, not that there is no
-     * {@link QueryCardinality} parameter.  That's because {@link PersistenceQuery} intrinsically
-     * carry the knowledge as to how many rows they return.
+     * Compared to {@link #findInstances(Query, QueryCardinality)}, not that there is no {@link QueryCardinality}
+     * parameter. That's because {@link PersistenceQuery} intrinsically carry the knowledge as to how many rows they
+     * return.
      * 
      * @throws UnsupportedFindException
      *             if the criteria is not support by this persistor
      */
     ObjectAdapter findInstances(PersistenceQuery criteria);
-    
+
     /**
      * Whether there are any instances of the specified {@link ObjectSpecification type}.
      * 
@@ -109,63 +102,54 @@ public interface PersistenceSessionContainer {
      */
     boolean hasInstances(ObjectSpecification specification);
 
-
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Resolving
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     /**
-     * Re-initialises the fields of an object. If the object is unresolved then the object's missing data
-     * should be retrieved from the persistence mechanism and be used to set up the value objects and
-     * associations.
+     * Re-initialises the fields of an object. If the object is unresolved then the object's missing data should be
+     * retrieved from the persistence mechanism and be used to set up the value objects and associations.
      */
     void resolveImmediately(ObjectAdapter object);
-    
+
     /**
-     * Hint that specified field within the specified object is likely to be needed soon. This allows the
-     * object's data to be loaded, ready for use.
+     * Hint that specified field within the specified object is likely to be needed soon. This allows the object's data
+     * to be loaded, ready for use.
      * 
      * <p>
-     * This method need not do anything, but offers the object store the opportunity to load in objects before
-     * their use. Contrast this with resolveImmediately, which requires an object to be loaded before
-     * continuing.
+     * This method need not do anything, but offers the object store the opportunity to load in objects before their
+     * use. Contrast this with resolveImmediately, which requires an object to be loaded before continuing.
      * 
      * @see #resolveImmediately(ObjectAdapter)
      */
     void resolveField(ObjectAdapter object, ObjectAssociation association);
 
-    
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Persisting
-    ///////////////////////////////////////////////////////////
-    
+    // /////////////////////////////////////////////////////////
+
     /**
-     * Makes a [[NAME]] persistent. The specified object should be stored away via this object store's
-     * persistence mechanism, and have an new and unique OID assigned to it (by calling the object's
-     * <code>setOid</code> method). The object, should also be added to the cache as the object is implicitly
-     * 'in use'.
+     * Makes an {@link ObjectAdapter} persistent. The specified object should be stored away via this object store's
+     * persistence mechanism, and have an new and unique OID assigned to it (by calling the object's <code>setOid</code>
+     * method). The object, should also be added to the cache as the object is implicitly 'in use'.
      * 
      * <p>
-     * If the object has any associations then each of these, where they aren't already persistent, should
-     * also be made persistent by recursively calling this method.
+     * If the object has any associations then each of these, where they aren't already persistent, should also be made
+     * persistent by recursively calling this method.
      * </p>
      * 
      * <p>
-     * If the object to be persisted is a collection, then each element of that collection, that is not
-     * already persistent, should be made persistent by recursively calling this method.
+     * If the object to be persisted is a collection, then each element of that collection, that is not already
+     * persistent, should be made persistent by recursively calling this method.
      * </p>
      */
     void makePersistent(ObjectAdapter object);
 
     /**
-     * Mark the {@link ObjectAdapter} as changed, and therefore requiring flushing
-     * to the persistence mechanism.
+     * Mark the {@link ObjectAdapter} as changed, and therefore requiring flushing to the persistence mechanism.
      */
     void objectChanged(ObjectAdapter object);
 
     void destroyObject(ObjectAdapter object);
 
 }
-
-

@@ -95,7 +95,7 @@ public class CollectionElementBuilder extends AbstractViewBuilder {
                     elementContent = new CollectionElement(element);
                 } else {
                     final ObjectAdapter obj = ((OneToManyField) view.getContent()).getParent();
-                    // [[NAME]] obj = view.getParent().getContent().getAdapter();
+                    // ObjectAdapter obj = view.getParent().getContent().getAdapter();
                     final ObjectAdapter parent = obj;
                     elementContent = new OneToManyFieldElementImpl(parent, element, field);
                 }

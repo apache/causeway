@@ -44,7 +44,7 @@ import org.apache.isis.runtime.userprofile.PerspectiveEntry;
  * 
  * <p>
  * During lay-out any icons that have an UNPLACED location (-1, -1) are given a location. Objects of type
- * [[NAME]]Class are added to the left-hand side, while all other icons are placed on the right-hand side of the
+ * ObjectSpecification are added to the left-hand side, while all other icons are placed on the right-hand side of the
  * workspace view. Open windows are displayed in the centre.
  */
 public class ApplicationWorkspaceBuilder extends AbstractViewBuilder {

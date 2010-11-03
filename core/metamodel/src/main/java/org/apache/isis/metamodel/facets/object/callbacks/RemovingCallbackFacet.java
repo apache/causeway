@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.callbacks;
 
 /**
  * Represents the mechanism to inform the object that it about to be deleted.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, this is represented by a <tt>deleting</tt> method.
+ * In the standard Apache Isis Programming Model, this is represented by a <tt>deleting</tt> method.
  * 
  * @see RemovedCallbackFacet
  */
@@ -32,4 +31,3 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 public interface RemovingCallbackFacet extends CallbackFacet {
 
 }
-

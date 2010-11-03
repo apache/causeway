@@ -28,7 +28,7 @@ import org.apache.isis.metamodel.facets.Facet;
  * Add object to a collection.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>addToXxx</tt> support
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>addToXxx</tt> support
  * method for a collection.
  */
 public interface CollectionAddToFacet extends Facet {

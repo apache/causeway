@@ -32,7 +32,7 @@ import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
  * objects or other aggregated objects.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to applying the <tt>@Aggregated</tt>
+ * In the standard Apache Isis Programming Model, typically corresponds to applying the <tt>@Aggregated</tt>
  * annotation at the class level.
  * 
  * <p>

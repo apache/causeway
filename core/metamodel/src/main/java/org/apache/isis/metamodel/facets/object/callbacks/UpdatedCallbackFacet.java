@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.callbacks;
 
 /**
  * Represents the mechanism to inform the object that it has been updated in the object store.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, this is represented by a <tt>updated</tt> method.
+ * In the standard Apache Isis Programming Model, this is represented by a <tt>updated</tt> method.
  * 
  * <p>
  * 
@@ -34,4 +33,3 @@ package org.apache.isis.metamodel.facets.object.callbacks;
 public interface UpdatedCallbackFacet extends CallbackFacet {
 
 }
-

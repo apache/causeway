@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 /**
- * ([[NAME]]) Adapter Factory API.
+ * (Apache Isis) Adapter Factory API.
  * 
  * <p>
- * Concrete implementations are in the <tt>objectadapter-xxx</tt> modules.
  * In most scenarios the default implementation is expected to suffice.  However,
  * the API was introduced to allow custom viewers to install more sophisticated
  * adapters, specifically to support observer (MVC) patterns in the UI.

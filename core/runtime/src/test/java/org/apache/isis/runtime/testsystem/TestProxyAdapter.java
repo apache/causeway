@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.testsystem;
 
 import java.util.Hashtable;
@@ -37,7 +36,6 @@ import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 
-
 public class TestProxyAdapter implements ObjectAdapter {
     private final Hashtable fieldContents = new Hashtable();
     private Object object;
@@ -50,6 +48,7 @@ public class TestProxyAdapter implements ObjectAdapter {
     private final int id = next++;
     private String iconName;
 
+    @Override
     public void checkLock(final Version version) {
         if (this.version.different(version)) {
             throw new ConcurrencyException("", getOid());
@@ -60,39 +59,47 @@ public class TestProxyAdapter implements ObjectAdapter {
         return (ObjectAdapter) fieldContents.get(field.getId());
     }
 
+    @Override
     public String getIconName() {
         return iconName;
     }
 
+    @Override
     public Object getObject() {
         return object;
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public ResolveState getResolveState() {
         return state;
     }
 
+    @Override
+    public boolean isPersistent() {
+        return getResolveState().isPersistent();
+    }
 
-	public boolean isPersistent() {
-		return getResolveState().isPersistent();
-	}
+    @Override
+    public boolean isTransient() {
+        return getResolveState().isTransient();
+    }
 
-	public boolean isTransient() {
-		return getResolveState().isTransient();
-	}
-
+    @Override
     public ObjectSpecification getSpecification() {
         return spec;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }
 
+    @Override
     public void setOptimisticLock(final Version version) {
         this.version = version;
     }
@@ -107,7 +114,7 @@ public class TestProxyAdapter implements ObjectAdapter {
 
     public void setupObject(final Object object) {
         if (object instanceof ObjectAdapter) {
-            throw new IsisException("can't create a [[NAME]] for a [[NAME]]: " + object.toString());
+            throw new IsisException("can't create an ObjectAdapter for an ObjectAdapter: " + object.toString());
         }
         this.object = object;
     }
@@ -132,8 +139,10 @@ public class TestProxyAdapter implements ObjectAdapter {
         this.version = version;
     }
 
-    public void setValue(final OneToOneAssociation field, final Object object) {}
+    public void setValue(final OneToOneAssociation field, final Object object) {
+    }
 
+    @Override
     public String titleString() {
         return titleString;
     }
@@ -147,31 +156,41 @@ public class TestProxyAdapter implements ObjectAdapter {
         return str.toString();
     }
 
+    @Override
     public void changeState(final ResolveState state) {
         this.state.isValidToChangeTo(state);
         this.state = state;
     }
 
+    @Override
     public void replacePojo(final Object pojo) {
         throw new NotYetImplementedException();
     }
 
-    public void fireChangedEvent() {}
+    @Override
+    public void fireChangedEvent() {
+    }
 
+    @Override
     public TypeOfFacet getTypeOfFacet() {
         return null;
     }
 
-    public void setTypeOfFacet(final TypeOfFacet typeOfFacet) {}
+    @Override
+    public void setTypeOfFacet(final TypeOfFacet typeOfFacet) {
+    }
 
+    @Override
     public ObjectAdapter getOwner() {
         return null;
     }
 
+    @Override
     public Instance getInstance(Specification specification) {
         return null;
     }
 
+    @Override
     public boolean isAggregated() {
         return false;
     }

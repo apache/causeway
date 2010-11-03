@@ -17,20 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.hide;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.SingleWhenValueFacet;
 import org.apache.isis.metamodel.interactions.HidingInteractionAdvisor;
 
-
 /**
  * Hide a property, collection or action.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the member with
- * <tt>@Hidden</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the member with <tt>@Hidden</tt>.
  */
 public interface HiddenFacet extends SingleWhenValueFacet, HidingInteractionAdvisor {
 

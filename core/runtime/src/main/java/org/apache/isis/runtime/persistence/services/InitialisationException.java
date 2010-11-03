@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.persistence.services;
 
 import org.apache.isis.commons.exceptions.IsisException;
 
-
 /**
- * Indicates a problem initialising the [[NAME]] system.
+ * Indicates a problem initialising the Apache Isis framework.
  */
 public class InitialisationException extends IsisException {
     private static final long serialVersionUID = 1L;

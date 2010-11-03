@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * This interface is used by the {@link org.apache.isis.runtime.persistence.PersistenceSession} and
  * is generally not intended to be implemented directly.  
@@ -25,7 +24,7 @@
  * <p>
  * Used by object store implementations to specify how to manufacture
  * {@link org.apache.isis.metamodel.adapter.oid.Oid}s (permanent unique identifiers
- * for each domain object managed by [[NAME]]).  For example, an
+ * for each domain object managed by Apache Isis).  For example, an
  * in-memory object store will just use a unique Id, whereas a generator
  * for Hibernate will hook into Hibernate's own identity generators.
  * 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.remoting.server;
 
 import java.io.IOException;
@@ -29,17 +28,19 @@ import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ServerMarshaller;
 
 /**
- * Acts as the mediator between the {@link ServerMarshaller} (which pulls stuff off the
- * transport and pushes stuff on) and the {@link ServerFacade}, ie the rest of the [[NAME]] System.
+ * Acts as the mediator between the {@link ServerMarshaller} (which pulls stuff off the transport and pushes stuff on)
+ * and the {@link ServerFacade}, ie the rest of the Apache Isis System.
  * 
  * @see ClientConnection
  */
 public interface ServerConnection {
 
     ServerFacade getServerFacade();
-    
+
     Request readRequest() throws IOException;
+
     void sendResponse(Object response) throws IOException;
+
     void sendError(IsisException exception) throws IOException;
-    
+
 }

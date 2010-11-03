@@ -24,7 +24,7 @@ package org.apache.isis.metamodel.facets.object.callbacks;
  * Represents the mechanism to inform the object that it is about to be updated in the object store.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, this is represented by a <tt>updating</tt> method.
+ * In the standard Apache Isis Programming Model, this is represented by a <tt>updating</tt> method.
  * 
  * <p>
  * 

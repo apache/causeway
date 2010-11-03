@@ -210,7 +210,7 @@ public class ActionFieldBuilderTest {
      * 
      * class MockActionHelper extends ActionHelper {
      * 
-     * protected MockActionHelper( ObjectAdapter target, Action action, String[] labels, [[NAME]][] parameters,
+     * protected MockActionHelper( ObjectAdapter target, Action action, String[] labels, ObjectAdapter[] parameters,
      * ObjectSpecification[] parameterTypes, boolean[] required) { super(target, action, labels,
      * parameters, parameterTypes, required); }
      */

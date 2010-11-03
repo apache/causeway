@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.actions.prototype;
 
 import org.apache.isis.metamodel.facets.Facet;
-
 
 /**
  * Indicates that the action should only be available in a special <i>prototype</i> mode.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the action method using
- * <tt>@Prototype</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the action method using <tt>@Prototype</tt>.
  */
 public interface PrototypeFacet extends Facet {
 

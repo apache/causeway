@@ -17,17 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.persistence.adaptermanager;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.debug.DebugInfo;
 import org.apache.isis.commons.debug.DebugString;
@@ -57,11 +55,10 @@ import org.apache.isis.runtime.persistence.adaptermanager.internal.PojoAdapterHa
 import org.apache.isis.runtime.persistence.adaptermanager.internal.PojoAdapterMap;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGeneratorAware;
+import org.apache.log4j.Logger;
 
-
-public class AdapterManagerDefault 
-		extends AdapterManagerAbstract 
-		implements AdapterFactoryAware, SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebugInfo {
+public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware,
+    SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebugInfo {
 
     private static final Logger LOG = Logger.getLogger(AdapterManagerDefault.class);
 
@@ -92,20 +89,21 @@ public class AdapterManagerDefault
     /**
      * Injected using dependency injection.
      */
-	private ServicesInjector servicesInjector;
+    private ServicesInjector servicesInjector;
 
     // //////////////////////////////////////////////////////////////////
     // constructor
     // //////////////////////////////////////////////////////////////////
 
     public AdapterManagerDefault() {
-    // does nothing
+        // does nothing
     }
 
     // //////////////////////////////////////////////////////////////////
     // open, close
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public void open() {
         ensureThatState(adapterFactory, is(notNullValue()));
         ensureThatState(specificationLoader, is(notNullValue()));
@@ -123,6 +121,7 @@ public class AdapterManagerDefault
         pojoAdapterMap.open();
     }
 
+    @Override
     public void close() {
         oidAdapterMap.close();
         pojoAdapterMap.close();
@@ -132,6 +131,7 @@ public class AdapterManagerDefault
     // reset
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public void reset() {
         oidAdapterMap.reset();
         pojoAdapterMap.reset();
@@ -141,6 +141,7 @@ public class AdapterManagerDefault
     // Iterable
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Iterator<ObjectAdapter> iterator() {
         return getPojoAdapterMap().iterator();
     }
@@ -149,6 +150,7 @@ public class AdapterManagerDefault
     // Backdoor
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter addExistingAdapter(final ObjectAdapter adapter) {
         mapAndInjectServices(adapter);
         return adapter;
@@ -158,12 +160,14 @@ public class AdapterManagerDefault
     // Adapter lookup
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getAdapterFor(final Object pojo) {
         ensureThatArg(pojo, is(notNullValue()));
 
         return getPojoAdapterMap().getAdapter(pojo);
     }
 
+    @Override
     public ObjectAdapter getAdapterFor(final Oid oid) {
         ensureThatArg(oid, is(notNullValue()));
         ensureMapsConsistent(oid);
@@ -181,8 +185,9 @@ public class AdapterManagerDefault
      * <p>
      * Looks up {@link #getAdapterFor(Object)} or returns a new transient
      */
+    @Override
     public ObjectAdapter adapterFor(final Object pojo) {
-    	
+
         // attempt to locate adapter for the pojo
         final ObjectAdapter adapter = getAdapterFor(pojo);
         if (adapter != null) {
@@ -201,6 +206,7 @@ public class AdapterManagerDefault
         return map(createOrRecreateRootAdapter(pojo));
     }
 
+    @Override
     public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, Identified identified) {
 
         // attempt to locate adapter for the pojo
@@ -208,7 +214,7 @@ public class AdapterManagerDefault
         if (adapter != null) {
             return adapter;
         }
-        
+
         // need to create (and possibly map) the adapter.
         final ObjectSpecification noSpec = getSpecificationLoader().loadSpecification(pojo.getClass());
 
@@ -224,7 +230,7 @@ public class AdapterManagerDefault
         if (ownerAdapter != null && identified != null) {
             if (specIsAggregated(noSpec) || referenceIsAggregated(identified)) {
                 ObjectAdapter newAdapter = createAggregatedAdapter(pojo, ownerAdapter, identified);
-				return mapAndInjectServices(newAdapter);
+                return mapAndInjectServices(newAdapter);
             }
         }
 
@@ -240,6 +246,7 @@ public class AdapterManagerDefault
         return identified.containsFacet(AggregatedFacet.class);
     }
 
+    @Override
     public ObjectAdapter recreateRootAdapter(final Oid oid, final Object pojo) {
 
         // attempt to locate adapter for the pojo
@@ -261,6 +268,7 @@ public class AdapterManagerDefault
     // adapter maintenance
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public void remapUpdated(final Oid oid) {
         ensureThatArg(oid.hasPrevious(), is(true));
 
@@ -297,17 +305,17 @@ public class AdapterManagerDefault
      * Removes the specified object from both the identity-adapter map, and the pojo-adapter map.
      * 
      * <p>
-     * This indicates that the object is no longer in use, and therefore that no objects exists within the
-     * system.
+     * This indicates that the object is no longer in use, and therefore that no objects exists within the system.
      * 
      * <p>
-     * If an {@link ObjectAdapter adapter} is removed while its pojo still is referenced then a subsequent
-     * interaction of that pojo will create a different {@link ObjectAdapter adapter}, in a
-     * {@link ResolveState#TRANSIENT transient} state.
+     * If an {@link ObjectAdapter adapter} is removed while its pojo still is referenced then a subsequent interaction
+     * of that pojo will create a different {@link ObjectAdapter adapter}, in a {@link ResolveState#TRANSIENT transient}
+     * state.
      * 
      * <p>
      * TODO: should do a cascade remove of any aggregated objects.
      */
+    @Override
     public void removeAdapter(final ObjectAdapter adapter) {
         ensureMapsConsistent(adapter);
 
@@ -326,38 +334,38 @@ public class AdapterManagerDefault
      * {@inheritDoc}
      * 
      * <p>
-     * Note that there is no management of {@link Version}s here. That is because the
-     * {@link PersistenceSession} is expected to manage this. (In practice this is done by the
-     * <tt>ObjectAdapterStore</tt> implementation delegated by the <tt>PersistenceSessionObjectStore</tt>, and
-     * propogated back to client-side as required).
+     * Note that there is no management of {@link Version}s here. That is because the {@link PersistenceSession} is
+     * expected to manage this. (In practice this is done by the <tt>ObjectAdapterStore</tt> implementation delegated by
+     * the <tt>PersistenceSessionObjectStore</tt>, and propogated back to client-side as required).
      */
+    @Override
     public void remapAsPersistent(final ObjectAdapter adapter) {
         // don't do this because the Oid has been updated already
-    	// ensureMapsConsistent(adapter);
+        // ensureMapsConsistent(adapter);
 
         AggregateAdapters aggregateAdapters = aggregateAdaptersFor(adapter);
         remapAsPersistent(aggregateAdapters);
     }
 
-	private AggregateAdapters aggregateAdaptersFor(final ObjectAdapter rootAdapter) {
+    private AggregateAdapters aggregateAdaptersFor(final ObjectAdapter rootAdapter) {
         AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
         Oid rootOid = rootAdapter.getOid();
-        
-		for(OneToManyAssociation otma: rootAdapter.getSpecification().getCollectionList()) {
-			AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getIdentifier());
-			ObjectAdapter collectionAdapter = getAdapterFor(aggregatedOid);
-			if (collectionAdapter != null) {
-				// collection adapters are lazily created and so there may not be one.
-				aggregateAdapters.addCollectionAdapter(otma, collectionAdapter);
-			}
-		}
-		return aggregateAdapters;
+
+        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollectionList()) {
+            AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getIdentifier());
+            ObjectAdapter collectionAdapter = getAdapterFor(aggregatedOid);
+            if (collectionAdapter != null) {
+                // collection adapters are lazily created and so there may not be one.
+                aggregateAdapters.addCollectionAdapter(otma, collectionAdapter);
+            }
+        }
+        return aggregateAdapters;
     }
 
-	private void remapAsPersistent(final AggregateAdapters aggregateAdapters) {
-		
-		ObjectAdapter rootAdapter = aggregateAdapters.getRootAdapter();
-		// although the Oid reference doesn't change, the Oid internal values will change
+    private void remapAsPersistent(final AggregateAdapters aggregateAdapters) {
+
+        ObjectAdapter rootAdapter = aggregateAdapters.getRootAdapter();
+        // although the Oid reference doesn't change, the Oid internal values will change
         final Oid oid = rootAdapter.getOid();
         if (LOG.isDebugEnabled()) {
             LOG.debug("remapAsPersistent: " + oid);
@@ -375,61 +383,59 @@ public class AdapterManagerDefault
         if (LOG.isDebugEnabled()) {
             LOG.debug("removing collection adapter(s) from oid map");
         }
-        for(ObjectAdapter collectionAdapter: aggregateAdapters) {
-        	Oid collectionOid = collectionAdapter.getOid();
+        for (ObjectAdapter collectionAdapter : aggregateAdapters) {
+            Oid collectionOid = collectionAdapter.getOid();
             removed = getOidAdapterMap().remove(collectionOid);
             if (!removed) {
                 LOG.warn("could not remove collectionOid: " + collectionOid);
                 // should we fail here with a more serious error?
             }
         }
-        
+
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("updating the Oid");
+            LOG.debug("updating the Oid");
         }
         getOidGenerator().convertTransientToPersistentOid(oid);
 
-        
         // re-map the root adapter
         if (LOG.isDebugEnabled()) {
             LOG.debug("re-adding into maps; oid is now: " + oid);
         }
         getOidAdapterMap().add(oid, rootAdapter);
 
-
         // re-map the collection adapters
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("re-adding collection adapter(s) to oid map");
+            LOG.debug("re-adding collection adapter(s) to oid map");
         }
-        for(ObjectAdapter collectionAdapter: aggregateAdapters) {
-        	AggregatedOid previousCollectionOid = (AggregatedOid) collectionAdapter.getOid();
+        for (ObjectAdapter collectionAdapter : aggregateAdapters) {
+            AggregatedOid previousCollectionOid = (AggregatedOid) collectionAdapter.getOid();
             getOidAdapterMap().add(previousCollectionOid, collectionAdapter);
         }
 
         // replace any pojos if required, remapping in the pojo map
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("replacing any collection pojos, remapping in pojo map");
+            LOG.debug("replacing any collection pojos, remapping in pojo map");
         }
-        for(OneToManyAssociation otma: aggregateAdapters.getCollections()) {
-        	ObjectAdapter collectionAdapter = aggregateAdapters.getCollectionAdapter(otma);
-        	
-        	Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
-        	Object collectionPojoOnRootPojo = getCollectionPojo(otma, rootAdapter);
-        	
-        	if (collectionPojoOnRootPojo != collectionPojoWrappedByAdapter) {
-        		getPojoAdapterMap().remove(collectionAdapter);
-        		collectionAdapter.replacePojo(collectionPojoOnRootPojo);
-        		getPojoAdapterMap().add(collectionPojoOnRootPojo, collectionAdapter);
-        	}
+        for (OneToManyAssociation otma : aggregateAdapters.getCollections()) {
+            ObjectAdapter collectionAdapter = aggregateAdapters.getCollectionAdapter(otma);
+
+            Object collectionPojoWrappedByAdapter = collectionAdapter.getObject();
+            Object collectionPojoOnRootPojo = getCollectionPojo(otma, rootAdapter);
+
+            if (collectionPojoOnRootPojo != collectionPojoWrappedByAdapter) {
+                getPojoAdapterMap().remove(collectionAdapter);
+                collectionAdapter.replacePojo(collectionPojoOnRootPojo);
+                getPojoAdapterMap().add(collectionPojoOnRootPojo, collectionAdapter);
+            }
         }
-        
+
         // update the adapter's state
         rootAdapter.changeState(ResolveState.RESOLVED);
 
         if (LOG.isDebugEnabled()) {
             LOG.debug("made persistent " + rootAdapter + "; was " + oid.getPrevious());
         }
-	}
+    }
 
     public Object getCollectionPojo(final OneToManyAssociation association, final ObjectAdapter ownerAdapter) {
         final PropertyAccessorFacet accessor = association.getFacet(PropertyAccessorFacet.class);
@@ -443,10 +449,11 @@ public class AdapterManagerDefault
     /**
      * For testing purposes only.
      */
+    @Override
     public ObjectAdapter testCreateTransient(final Object pojo, final Oid oid) {
         if (!oid.isTransient()) {
             throw new IllegalArgumentException(
-                    "Oid should be transient; use standard API to recreate adapters for persistent Oids");
+                "Oid should be transient; use standard API to recreate adapters for persistent Oids");
         }
         return map(createOrRecreateRootAdapter(pojo, oid));
     }
@@ -467,39 +474,39 @@ public class AdapterManagerDefault
 
     /**
      * The default implementation will always create a new transient {@link ObjectAdapter adapter}, using the
-     * {@link OidGenerator}. However, the method has <tt>protected</tt> visibility so can be overridden if
-     * required.  For example, some object stores (eg Hibernate) may be able to infer from the pojo itself what the
-     * {@link Oid} and persistence state of the object is.
+     * {@link OidGenerator}. However, the method has <tt>protected</tt> visibility so can be overridden if required. For
+     * example, some object stores (eg Hibernate) may be able to infer from the pojo itself what the {@link Oid} and
+     * persistence state of the object is.
      */
-	protected Oid createOid(final Object pojo) {
-		return getOidGenerator().createTransientOid(pojo);
-	}
+    protected Oid createOid(final Object pojo) {
+        return getOidGenerator().createTransientOid(pojo);
+    }
 
     /**
-     * Creates an {@link ObjectAdapter adapter} with an {@link AggregatedOid} (so that its version and its
-     * persistence are the same as its owning parent).
+     * Creates an {@link ObjectAdapter adapter} with an {@link AggregatedOid} (so that its version and its persistence
+     * are the same as its owning parent).
      * 
      * <p>
      * Should only be called if the pojo is known not to be {@link #getAdapterFor(Object) mapped}.
      * 
      * <p>
-     * Helper method, but <tt>protected</tt> so can be overridden if required.  For example, some object stores
-     * (specifically, the XML object store at time of writing) do not support aggregated Oids for anything other
-     * than collections.
+     * Helper method, but <tt>protected</tt> so can be overridden if required. For example, some object stores
+     * (specifically, the XML object store at time of writing) do not support aggregated Oids for anything other than
+     * collections.
      */
     protected ObjectAdapter createAggregatedAdapter(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
-    	
-    	Identifier identifier = identified.getIdentifier();
-    	ensureMapsConsistent(ownerAdapter);
+
+        Identifier identifier = identified.getIdentifier();
+        ensureMapsConsistent(ownerAdapter);
         Assert.assertNotNull(pojo);
 
         // persistence of aggregated follows the parent
         final Oid aggregatedOid = new AggregatedOid(ownerAdapter.getOid(), identifier);
         ObjectAdapter aggregatedAdapter = createOrRecreateAdapter(pojo, aggregatedOid);
-        
-		// we copy over the type onto the adapter itself
-		// [not sure why this is really needed, surely we have enough info in the adapter
-		//  to look this up on the fly?]
+
+        // we copy over the type onto the adapter itself
+        // [not sure why this is really needed, surely we have enough info in the adapter
+        // to look this up on the fly?]
         aggregatedAdapter.setTypeOfFacet(identified.getFacet(TypeOfFacet.class));
 
         // same locking as parent
@@ -512,59 +519,56 @@ public class AdapterManagerDefault
      * Creates a {@link ObjectAdapter adapter} with no {@link Oid}.
      * 
      * <p>
-     * Should only be called if the pojo is known not to be {@link #getAdapterFor(Object) mapped}, and for
-     * immutable value types referenced.
+     * Should only be called if the pojo is known not to be {@link #getAdapterFor(Object) mapped}, and for immutable
+     * value types referenced.
      */
     private ObjectAdapter createStandaloneAdapter(Object pojo) {
         return createOrRecreateAdapter(pojo, null);
     }
 
     /**
-     * Helper method that creates but does not {@link #mapAndInjectServices(ObjectAdapter) add}) the root 
-     * {@link ObjectAdapter adapter} along with adapters for all collections,  an
-     * {@link ObjectAdapter adapter}, and sets its {@link ResolveState} based on the {@link Oid}.
+     * Helper method that creates but does not {@link #mapAndInjectServices(ObjectAdapter) add}) the root
+     * {@link ObjectAdapter adapter} along with adapters for all collections, an {@link ObjectAdapter adapter}, and sets
+     * its {@link ResolveState} based on the {@link Oid}.
      * 
      * <p>
      * The {@link ResolveState} state will be:
      * <ul>
      * <li> {@link ResolveState#TRANSIENT} if the {@link Oid} is {@link Oid#isTransient() transient}.
-     * <li> {@link ResolveState#GHOST} if the {@link Oid} is persistent (not {@link Oid#isTransient()
-     * transient}).
+     * <li> {@link ResolveState#GHOST} if the {@link Oid} is persistent (not {@link Oid#isTransient() transient}).
      * <li> {@link ResolveState#VALUE} if no {@link Oid} was supplied.
      * </ul>
      */
     private AggregateAdapters createOrRecreateRootAdapter(final Object pojo, final Oid oid) {
         ObjectAdapter rootAdapter = createOrRecreateAdapter(pojo, oid);
-        
+
         AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
 
-        // failed experiment to try to ensure that all adapters are loaded for the root; 
+        // failed experiment to try to ensure that all adapters are loaded for the root;
         // left in in case we want to re-instate
-		// eagerlyCreateCollectionAdapters(rootAdapter, aggregateAdapters);
-		return aggregateAdapters;
+        // eagerlyCreateCollectionAdapters(rootAdapter, aggregateAdapters);
+        return aggregateAdapters;
     }
 
-	@SuppressWarnings("unused")
-	private void eagerlyCreateCollectionAdapters(ObjectAdapter rootAdapter,
-			AggregateAdapters aggregateAdapters) {
-		for(OneToManyAssociation otma: rootAdapter.getSpecification().getCollectionList()) {
-			Object referencedCollection = getCollectionPojo(otma, rootAdapter);
-			ObjectAdapter collectionAdapter = 
-				createAggregatedAdapter(referencedCollection, rootAdapter, otma);
-			
-			aggregateAdapters.addCollectionAdapter(otma, collectionAdapter);
-		}
-	}
+    @SuppressWarnings("unused")
+    private void eagerlyCreateCollectionAdapters(ObjectAdapter rootAdapter, AggregateAdapters aggregateAdapters) {
+        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollectionList()) {
+            Object referencedCollection = getCollectionPojo(otma, rootAdapter);
+            ObjectAdapter collectionAdapter = createAggregatedAdapter(referencedCollection, rootAdapter, otma);
 
-	private ObjectAdapter createOrRecreateAdapter(final Object pojo, final Oid oid) {
-		ObjectAdapter adapter = getAdapterFactory().createAdapter(pojo, oid);
+            aggregateAdapters.addCollectionAdapter(otma, collectionAdapter);
+        }
+    }
+
+    private ObjectAdapter createOrRecreateAdapter(final Object pojo, final Oid oid) {
+        ObjectAdapter adapter = getAdapterFactory().createAdapter(pojo, oid);
         if (oid == null) {
             adapter.changeState(ResolveState.VALUE);
         } else {
             adapter.changeState(oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST);
         }
         return adapter;
-	}
+    }
 
     // //////////////////////////////////////////////////////////////////////////
     // Helpers: map & unmap
@@ -572,14 +576,14 @@ public class AdapterManagerDefault
 
     private ObjectAdapter map(final AggregateAdapters aggregateAdapters) {
         Assert.assertNotNull(aggregateAdapters);
-    	ObjectAdapter adapter = aggregateAdapters.getRootAdapter();
-    	mapAndInjectServices(adapter);
-    	for(ObjectAdapter collectionAdapter: aggregateAdapters) {
-    		mapAndInjectServices(collectionAdapter);
-    	}
-    	return adapter;
+        ObjectAdapter adapter = aggregateAdapters.getRootAdapter();
+        mapAndInjectServices(adapter);
+        for (ObjectAdapter collectionAdapter : aggregateAdapters) {
+            mapAndInjectServices(collectionAdapter);
+        }
+        return adapter;
     }
-    
+
     private ObjectAdapter mapAndInjectServices(final ObjectAdapter adapter) {
         Assert.assertNotNull(adapter);
         final Object pojo = adapter.getObject();
@@ -593,31 +597,29 @@ public class AdapterManagerDefault
             LOG.debug("adding identity for adapter with oid=" + adapter.getOid());
         }
 
-        // new design... always map [[NAME]] provided not standalone.
+        // new design... always map ObjectAdapter provided not standalone.
         if (adapter.getResolveState().isValue()) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("not mapping value adapter");
             }
-    		servicesInjector.injectDependencies(pojo);
+            servicesInjector.injectDependencies(pojo);
             return adapter;
         }
 
         // add all aggregated collections
         ObjectSpecification noSpec = adapter.getSpecification();
-        if (!adapter.isAggregated() || 
-        	 adapter.isAggregated() && !noSpec.isImmutable()) {
+        if (!adapter.isAggregated() || adapter.isAggregated() && !noSpec.isImmutable()) {
             getPojoAdapterMap().add(pojo, adapter);
         }
 
         // order is important - add to pojo map first, then identity map
         getOidAdapterMap().add(adapter.getOid(), adapter);
 
-		// must inject after mapping, otherwise infinite loop 
-		servicesInjector.injectDependencies(pojo);
+        // must inject after mapping, otherwise infinite loop
+        servicesInjector.injectDependencies(pojo);
 
         return adapter;
     }
-    
 
     private void unmap(final ObjectAdapter adapter) {
         ensureMapsConsistent(adapter);
@@ -672,15 +674,16 @@ public class AdapterManagerDefault
         Object adapterPojo = adapter.getObject();
         ObjectAdapter adapterAccordingToPojoAdapterMap = getPojoAdapterMap().getAdapter(adapterPojo);
         ensureThatArg(adapter, is(adapterAccordingToPojoAdapterMap), "mismatch in PojoAdapterMap: adapter's Pojo: "
-                + adapterPojo + ", \n" + "provided adapter: " + adapter + "; \n" + " but map's adapter was : "
-                + adapterAccordingToPojoAdapterMap);
+            + adapterPojo + ", \n" + "provided adapter: " + adapter + "; \n" + " but map's adapter was : "
+            + adapterAccordingToPojoAdapterMap);
     }
 
     private void ensureOidAdapterMapConsistent(final ObjectAdapter adapter) {
         Oid adapterOid = adapter.getOid();
         ObjectAdapter adapterAccordingToOidAdapterMap = getOidAdapterMap().getAdapter(adapterOid);
         ensureThatArg(adapter, is(adapterAccordingToOidAdapterMap), "mismatch in OidAdapter map: " + "adapter's Oid: "
-                + adapterOid + ", " + "provided adapter: " + adapter + "; " + "map's adapter: " + adapterAccordingToOidAdapterMap);
+            + adapterOid + ", " + "provided adapter: " + adapter + "; " + "map's adapter: "
+            + adapterAccordingToOidAdapterMap);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -701,7 +704,7 @@ public class AdapterManagerDefault
     // if (oid != null) {
     // return adapterFor(domainObject, oid);
     // }
-    //        
+    //
     // if (domainObject == null) {
     // return null;
     // }
@@ -738,7 +741,7 @@ public class AdapterManagerDefault
     // LOG.debug("creating adapter (transient) for adapter with oid=" + adapter.getOid());
     // }
     // identityMap.addAdapter(adapter);
-    //        
+    //
     // final ObjectSpecification specification = adapter.getSpecification();
     // if (specification.isAggregated()) {
     // adapter.changeState(ResolveState.STANDALONE);
@@ -754,10 +757,10 @@ public class AdapterManagerDefault
     // private ObjectAdapter adapterFor(final Object domainObject, final Oid oid) {
     // ObjectAdapter adapter = getAdapterFor(oid);
     // if (adapter != null) {
-    //            
+    //
     // // TODO: REVIEW: was tripping the exception setting a Boolean on a @NotPersistable.
     // // is it safe for immutable values to use equals(.) instead?
-    //            
+    //
     // ObjectSpecification noSpec = adapter.getSpecification();
     // ValueFacet valueFacet = noSpec.getFacet(ValueFacet.class);
     // ImmutableFacet immutableFacet = valueFacet != null? valueFacet.getFacet(ImmutableFacet.class): null;
@@ -775,7 +778,7 @@ public class AdapterManagerDefault
     // }
     // return adapter;
     // }
-    //        
+    //
     // adapter = getAdapterFor(domainObject);
     // if (adapter != null) {
     // if (!adapter.getOid().equals(oid)) {
@@ -798,10 +801,12 @@ public class AdapterManagerDefault
     // debug
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public String debugTitle() {
         return "Identity map (adapter manager)";
     }
 
+    @Override
     public void debugData(final DebugString debug) {
         debug.appendTitle(pojoAdapterMap.debugTitle());
         pojoAdapterMap.debugData(debug);
@@ -811,7 +816,6 @@ public class AdapterManagerDefault
         oidAdapterMap.debugData(debug);
 
     }
-
 
     // //////////////////////////////////////////////////////////////////////////
     // Optionally Injected: OidAdapterMap
@@ -863,6 +867,7 @@ public class AdapterManagerDefault
     /**
      * Injected.
      */
+    @Override
     public void setAdapterFactory(AdapterFactory adapterFactory) {
         this.adapterFactory = adapterFactory;
     }
@@ -877,6 +882,7 @@ public class AdapterManagerDefault
     /**
      * Injected.
      */
+    @Override
     public void setSpecificationLoader(SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
@@ -891,6 +897,7 @@ public class AdapterManagerDefault
     /**
      * Injected.
      */
+    @Override
     public void setOidGenerator(OidGenerator oidGenerator) {
         this.oidGenerator = oidGenerator;
     }
@@ -898,9 +905,9 @@ public class AdapterManagerDefault
     /**
      * Injected.
      */
-	public void setServicesInjector(ServicesInjector servicesInjector) {
-		this.servicesInjector = servicesInjector;
-	}
+    @Override
+    public void setServicesInjector(ServicesInjector servicesInjector) {
+        this.servicesInjector = servicesInjector;
+    }
 
 }
-

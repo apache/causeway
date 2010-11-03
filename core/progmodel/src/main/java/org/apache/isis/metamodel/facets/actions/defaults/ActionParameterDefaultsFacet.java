@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.actions.defaults;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 
-
 /**
  * Obtain defaults for each of the parameters of the action.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>defaultsNXxx(...)</tt>
- * support method for an action (where N is the 0-based parameter number).
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>defaultsNXxx(...)</tt> support method
+ * for an action (where N is the 0-based parameter number).
  */
 public interface ActionParameterDefaultsFacet extends Facet {
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.ident.title;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -25,13 +24,12 @@ import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.object.ident.icon.IconFacet;
 import org.apache.isis.metamodel.facets.object.ident.plural.PluralFacet;
 
-
 /**
- * Mechanism for obtaining the title of an instance of a class, used to label the instance in the viewer
- * (usually alongside an icon representation).
+ * Mechanism for obtaining the title of an instance of a class, used to label the instance in the viewer (usually
+ * alongside an icon representation).
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to a method named <tt>title</tt>.
+ * In the standard Apache Isis Programming Model, typically corresponds to a method named <tt>title</tt>.
  * 
  * @see IconFacet
  * @see PluralFacet

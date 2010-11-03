@@ -17,21 +17,19 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.object.immutable;
 
 import org.apache.isis.metamodel.facets.SingleWhenValueFacet;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 
-
 /**
- * Indicates that the instances of this class are immutable and so may not be modified either through the
- * viewer or indeed programmatically.
+ * Indicates that the instances of this class are immutable and so may not be modified either through the viewer or
+ * indeed programmatically.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, typically corresponds to applying the <tt>@Immutable</tt>
- * annotation at the class level.
+ * In the standard Apache Isis Programming Model, typically corresponds to applying the <tt>@Immutable</tt> annotation
+ * at the class level.
  * 
  * @see EqualByContentFacet
  * @see ValueFacet

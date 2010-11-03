@@ -17,21 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.actions.executed;
 
 import org.apache.isis.metamodel.facets.EnumerationAbstract;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.spec.Target;
 
-
 /**
- * Whether the action should be invoked locally, remotely, or on the default location depending on its
- * persistence state.
+ * Whether the action should be invoked locally, remotely, or on the default location depending on its persistence
+ * state.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to annotating the action method using
- * <tt>@Executed</tt>.
+ * In the standard Apache Isis Programming Model, corresponds to annotating the action method using <tt>@Executed</tt>.
  */
 public interface ExecutedFacet extends Facet {
 

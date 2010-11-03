@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.properties.modify;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.propcoll.access.PropertyAccessorFacet;
 
-
 /**
  * The mechanism by which the value of the property can be set.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the mutator method for a property.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the mutator method for a property.
  * 
  * @see PropertyAccessorFacet
  * @see PropertyClearFacet

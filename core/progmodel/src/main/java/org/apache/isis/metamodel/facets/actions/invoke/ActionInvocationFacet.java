@@ -29,7 +29,7 @@ import org.apache.isis.metamodel.spec.ObjectSpecification;
  * Represents the mechanism by which the action should be invoked.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the actual action method itself (a
+ * In the standard Apache Isis Programming Model, corresponds to invoking the actual action method itself (a
  * <tt>public</tt> method that does not represent a property, a collection or any of the supporting methods).
  */
 public interface ActionInvocationFacet extends Facet {

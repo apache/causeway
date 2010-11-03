@@ -17,19 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.context;
 
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.components.TransactionScopedComponent;
 import org.apache.isis.commons.debug.DebugInfo;
 import org.apache.isis.commons.debug.DebugList;
 import org.apache.isis.commons.debug.DebugString;
 import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.commons.lang.Maybe;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.config.ConfigurationException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
@@ -47,15 +43,12 @@ import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtime.userprofile.UserProfile;
 import org.apache.isis.runtime.userprofile.UserProfileLoader;
-
-import com.google.inject.Injector;
-
+import org.apache.log4j.Logger;
 
 /**
- * Provides singleton <i>access to</i> the current (session scoped) {@link IsisSession}, along with
- * convenience methods to obtain application-scoped components and also any transaction-scoped components
- * {@link TransactionScopedComponent}s if a {@link IsisTransaction}
- * {@link IsisSession#getCurrentTransaction() is in progress}.
+ * Provides singleton <i>access to</i> the current (session scoped) {@link IsisSession}, along with convenience methods
+ * to obtain application-scoped components and also any transaction-scoped components {@link TransactionScopedComponent}
+ * s if a {@link IsisTransaction} {@link IsisSession#getCurrentTransaction() is in progress}.
  * 
  * <p>
  * Somewhat analogous to (the static methods in) <tt>HibernateUtil</tt>.
@@ -124,12 +117,10 @@ public abstract class IsisContext implements DebugInfo {
      * Will throw an exception if an instance has already been created and is not
      * {@link ContextReplacePolicy#REPLACEABLE}.
      */
-    protected IsisContext(
-            final ContextReplacePolicy replacePolicy,
-            final SessionClosePolicy sessionClosePolicy,
-            final IsisSessionFactory sessionFactory) {
+    protected IsisContext(final ContextReplacePolicy replacePolicy, final SessionClosePolicy sessionClosePolicy,
+        final IsisSessionFactory sessionFactory) {
         if (singleton != null && !singleton.isContextReplaceable()) {
-            throw new IsisException("[[NAME]] Context already set up and cannot be replaced");
+            throw new IsisException("Isis Context already set up and cannot be replaced");
         }
         singleton = this;
         this.sessionFactory = sessionFactory;
@@ -199,11 +190,10 @@ public abstract class IsisContext implements DebugInfo {
      * Ignored if already closed.
      * 
      * <p>
-     * This method is <i>not</i> marked <tt>final</tt> so it can be overridden if necessarily.
-     * Generally speaking this shouldn't be necessary; one case where it might though is
-     * if an implementation has multiple concurrent uses of a session, in which case "closing"
-     * the session really means just deregistering the usage of it by a particular thread; only
-     * when all threads have finished with a session can it really be closed.
+     * This method is <i>not</i> marked <tt>final</tt> so it can be overridden if necessarily. Generally speaking this
+     * shouldn't be necessary; one case where it might though is if an implementation has multiple concurrent uses of a
+     * session, in which case "closing" the session really means just deregistering the usage of it by a particular
+     * thread; only when all threads have finished with a session can it really be closed.
      */
     public void closeSessionInstance() {
         if (getSessionInstance() != null) {
@@ -213,21 +203,20 @@ public abstract class IsisContext implements DebugInfo {
     }
 
     /**
-     * Overridable hook method called from {@link #closeSessionInstance()}, allowing subclasses to clean up
-     * (for example datastructures).
+     * Overridable hook method called from {@link #closeSessionInstance()}, allowing subclasses to clean up (for example
+     * datastructures).
      * 
      * <p>
-     * The {@link #getSessionInstance() current} {@link IsisSession} will already have been
-     * {@link IsisSession#close() closed}.
+     * The {@link #getSessionInstance() current} {@link IsisSession} will already have been {@link IsisSession#close()
+     * closed}.
      */
-    protected void doClose() {}
+    protected void doClose() {
+    }
 
     /**
      * Shutdown the application.
      */
     protected abstract void closeAllSessionsInstance();
-
-    
 
     // ///////////////////////////////////////////////////////////
     // getSession()
@@ -237,8 +226,8 @@ public abstract class IsisContext implements DebugInfo {
      * Locates the current {@link IsisSession}.
      * 
      * <p>
-     * This might just be a singleton (eg {@link IsisContextStatic}), or could be retrieved from the
-     * thread (eg {@link IsisContextThreadLocal}).
+     * This might just be a singleton (eg {@link IsisContextStatic}), or could be retrieved from the thread (eg
+     * {@link IsisContextThreadLocal}).
      */
     public abstract IsisSession getSessionInstance();
 
@@ -278,8 +267,7 @@ public abstract class IsisContext implements DebugInfo {
     }
 
     /**
-     * Convenience method to return {@link IsisSession} for specified
-     * {@link IsisSession#getId()}.
+     * Convenience method to return {@link IsisSession} for specified {@link IsisSession#getId()}.
      * 
      * <p>
      * Provided primarily for debugging.
@@ -297,7 +285,7 @@ public abstract class IsisContext implements DebugInfo {
         LOG.info("closing all instances");
         IsisContext instance = getInstance();
         if (instance != null) {
-        	instance.closeAllSessionsInstance();
+            instance.closeAllSessionsInstance();
         }
     }
 
@@ -306,8 +294,7 @@ public abstract class IsisContext implements DebugInfo {
     // ///////////////////////////////////////////////////////////
 
     /**
-     * Convenience method returning the {@link IsisSessionFactory} of the current {@link #getSession()
-     * session}.
+     * Convenience method returning the {@link IsisSessionFactory} of the current {@link #getSession() session}.
      */
     public static IsisSessionFactory getSessionFactory() {
         return getInstance().getSessionFactoryInstance();
@@ -324,9 +311,9 @@ public abstract class IsisContext implements DebugInfo {
         }
         // REVIEW
         return configuration;
-        //return getSessionFactory().getConfiguration();
+        // return getSessionFactory().getConfiguration();
     }
-    
+
     public static void setConfiguration(IsisConfiguration configuration) {
         IsisContext.configuration = configuration;
     }
@@ -363,10 +350,9 @@ public abstract class IsisContext implements DebugInfo {
      * 
      * @see IsisSessionFactory#getAuthorizationManager()
      */
-	public static AuthorizationManager getAuthorizationManager() {
-		return getSessionFactory().getAuthorizationManager();
-	}
-
+    public static AuthorizationManager getAuthorizationManager() {
+        return getSessionFactory().getAuthorizationManager();
+    }
 
     /**
      * Convenience method.
@@ -376,7 +362,7 @@ public abstract class IsisContext implements DebugInfo {
     public static TemplateImageLoader getTemplateImageLoader() {
         return getSessionFactory().getTemplateImageLoader();
     }
-    
+
     public static UserProfileLoader getUserProfileLoader() {
         return getSessionFactory().getUserProfileLoader();
     }
@@ -384,14 +370,13 @@ public abstract class IsisContext implements DebugInfo {
     public static List<Object> getServices() {
         return getSessionFactory().getServices();
     }
-    
 
     // ///////////////////////////////////////////////////////////
     // Static Convenience methods (session scoped)
     // ///////////////////////////////////////////////////////////
 
     public static boolean inSession() {
-    	IsisSession session = getInstance().getSessionInstance();
+        IsisSession session = getInstance().getSessionInstance();
         return session != null;
     }
 
@@ -407,8 +392,8 @@ public abstract class IsisContext implements DebugInfo {
     }
 
     /**
-     * Convenience method to return the {@link #getSession() current} {@link IsisSession}'s
-     * {@link IsisSession#getId() id}.
+     * Convenience method to return the {@link #getSession() current} {@link IsisSession}'s {@link IsisSession#getId()
+     * id}.
      * 
      * @see IsisSession#getId()
      */
@@ -456,17 +441,15 @@ public abstract class IsisContext implements DebugInfo {
     // ///////////////////////////////////////////////////////////
 
     public static boolean inTransaction() {
-        return inSession() && 
-               getCurrentTransaction() != null && 
-               !getCurrentTransaction().getState().isComplete();
+        return inSession() && getCurrentTransaction() != null && !getCurrentTransaction().getState().isComplete();
     }
 
     /**
      * Convenience method, returning the current {@link IsisTransaction transaction} (if any).
      * 
      * <p>
-     * Transactions are managed using the {@link IsisTransactionManager} obtainable from the
-     * {@link IsisSession's} {@link PersistenceSession}.
+     * Transactions are managed using the {@link IsisTransactionManager} obtainable from the {@link IsisSession's}
+     * {@link PersistenceSession}.
      * 
      * @see IsisSession#getCurrentTransaction()
      * @see PersistenceSession#getTransactionManager()
@@ -496,9 +479,9 @@ public abstract class IsisContext implements DebugInfo {
     // ///////////////////////////////////////////////////////////
 
     public static DebugInfo[] debugSystem() {
-        DebugList debugList = new DebugList("[[NAME]] System");
+        DebugList debugList = new DebugList("Apache Isis System");
         debugList.add("Context", getInstance());
-        debugList.add("[[NAME]] session factory", getSessionFactory());
+        debugList.add("Apache Isis session factory", getSessionFactory());
         debugList.add("  Authentication manager", getSessionFactory().getAuthenticationManager());
         debugList.add("  Persistence session factory", getSessionFactory().getPersistenceSessionFactory());
         debugList.add("User profile loader", getUserProfileLoader());
@@ -512,25 +495,26 @@ public abstract class IsisContext implements DebugInfo {
         debugList.add("Services", getServices());
         return debugList.debug();
     }
- 
+
     public static DebugInfo[] debugSession() {
-        DebugList debugList = new DebugList("[[NAME]] Session");
-        debugList.add("[[NAME]] session", getSession());
+        DebugList debugList = new DebugList("Apache Isis Session");
+        debugList.add("Apache Isis session", getSession());
         debugList.add("Authentication session", getAuthenticationSession());
         debugList.add("User profile", getUserProfile());
-        
+
         debugList.add("Persistence Session", getPersistenceSession());
         debugList.add("Transaction Manager", getTransactionManager());
-        
+
         debugList.add("Service injector", getPersistenceSession().getServicesInjector());
         debugList.add("Adapter factory", getPersistenceSession().getAdapterFactory());
         debugList.add("Object factory", getPersistenceSession().getObjectFactory());
         debugList.add("OID generator", getPersistenceSession().getOidGenerator());
         debugList.add("Adapter manager", getPersistenceSession().getAdapterManager());
         debugList.add("Services", getPersistenceSession().getServices());
-        return debugList.debug();        
+        return debugList.debug();
     }
 
+    @Override
     public void debugData(final DebugString debug) {
         debug.appendln("context ", this);
     }

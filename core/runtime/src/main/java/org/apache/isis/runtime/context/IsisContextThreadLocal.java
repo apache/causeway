@@ -17,24 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.context;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.debug.DebugString;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
-
+import org.apache.log4j.Logger;
 
 /**
  * Basic multi-user implementation of Isis that stores a set of components for each thread in use.
  */
 public class IsisContextThreadLocal extends IsisContextMultiUser {
-    
+
     private static final Logger LOG = Logger.getLogger(IsisContextThreadLocal.class);
 
     public static IsisContext createInstance(final IsisSessionFactory sessionFactory) {
@@ -47,23 +45,19 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         super(sessionFactory);
     }
 
-    
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Session
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
-
-    
     @Override
     public void closeAllSessionsInstance() {
         shutdownAllThreads();
     }
 
-
     protected void shutdownAllThreads() {
         synchronized (sessionsByThread) {
             int i = 0;
-            for (Thread thread: sessionsByThread.keySet()) {
+            for (Thread thread : sessionsByThread.keySet()) {
                 LOG.info("Shutting down thread: " + i++);
                 IsisSession data = sessionsByThread.get(thread);
                 data.closeAll();
@@ -71,35 +65,33 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         }
     }
 
-    
     @Override
     protected void doClose() {
         sessionsByThread.remove(Thread.currentThread());
     }
 
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Execution Context Ids
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     @Override
     public String[] allSessionIds() {
         final String[] ids = new String[sessionsByThread.size()];
         int i = 0;
-        for(Thread thread: sessionsByThread.keySet()) {
+        for (Thread thread : sessionsByThread.keySet()) {
             final IsisSession data = sessionsByThread.get(thread);
             ids[i++] = data.getId();
         }
         return ids;
     }
 
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // Debugging
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
+    @Override
     public String debugTitle() {
-        return "[[NAME]] (by thread) " + Thread.currentThread().getName();
+        return "Isis (by thread) " + Thread.currentThread().getName();
     }
 
     @Override
@@ -107,7 +99,7 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         super.debugData(debug);
         debug.appendln();
         debug.appendTitle("Threads based Contexts");
-        for(Thread thread: sessionsByThread.keySet()) {
+        for (Thread thread : sessionsByThread.keySet()) {
             final IsisSession data = sessionsByThread.get(thread);
             debug.appendln(thread.toString(), data);
         }
@@ -115,8 +107,8 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
 
     @Override
     protected IsisSession getSessionInstance(final String executionContextId) {
-        for(Thread thread: sessionsByThread.keySet()) {
-            final IsisSession data = (IsisSession) sessionsByThread.get(thread);
+        for (Thread thread : sessionsByThread.keySet()) {
+            final IsisSession data = sessionsByThread.get(thread);
             if (data.getId().equals(executionContextId)) {
                 return data;
             }
@@ -124,12 +116,9 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         return null;
     }
 
-
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
     // open, close
-    ///////////////////////////////////////////////////////////
-
-    
+    // /////////////////////////////////////////////////////////
 
     /**
      * Is only intended to be called through {@link IsisContext#openSession(AuthenticationSession)}.
@@ -142,18 +131,20 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         Thread thread = Thread.currentThread();
         synchronized (sessionsByThread) {
             applySessionClosePolicy();
-			IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
-			LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for " + authenticationSession.getUserName());
-			saveSession(thread, session);
-			session.open();
-			return session;
+            IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
+            LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
+                + authenticationSession.getUserName());
+            saveSession(thread, session);
+            session.open();
+            return session;
         }
     }
 
-	protected IsisSession createAndOpenSession(final Thread thread, AuthenticationSession authenticationSession) {
+    protected IsisSession createAndOpenSession(final Thread thread, AuthenticationSession authenticationSession) {
         IsisSession session = getSessionFactoryInstance().openSession(authenticationSession);
         session.open();
-        LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for " + authenticationSession.getUserName());
+        LOG.info("  opening session " + session + " (count " + sessionsByThread.size() + ") for "
+            + authenticationSession.getUserName());
         return session;
     }
 
@@ -165,11 +156,9 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
         return session;
     }
 
-
-    
-    ///////////////////////////////////////////////////////////
-    // getCurrent()  (Hook)
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
+    // getCurrent() (Hook)
+    // /////////////////////////////////////////////////////////
 
     /**
      * Get {@link IsisSession execution context} used by the current thread.
@@ -179,14 +168,12 @@ public class IsisContextThreadLocal extends IsisContextMultiUser {
     @Override
     public IsisSession getSessionInstance() {
         final Thread thread = Thread.currentThread();
-        IsisSession session = (IsisSession) sessionsByThread.get(thread);
-        /* REVIEW this has been moved to IsisContext.getSession()
-        if (session == null) {
-            throw new IllegalStateException("No Session opened for this thread");
-        }*/
+        IsisSession session = sessionsByThread.get(thread);
+        /*
+         * REVIEW this has been moved to IsisContext.getSession() if (session == null) { throw new
+         * IllegalStateException("No Session opened for this thread"); }
+         */
         return session;
     }
-
-
 
 }

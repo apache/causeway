@@ -72,7 +72,7 @@ public abstract class BusinessValueHolder implements TitledObject {
      * Returns a string representation of this object.
      * <p>
      * The specification of this string representation is not fixed, but, at the time of writing, consists of
-     * <i>title [short[[NAME]]ClassName] </i>
+     * <i>title [short ObjectAdapterClassName] </i>
      * </p>
      * 
      * @return string representation of object.

@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.actions.invoke;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
-
 /**
  * Represents the mechanism by which the action should be invoked.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the actual action method itself (a
+ * In the standard Apache Isis Programming Model, corresponds to invoking the actual action method itself (a
  * <tt>public</tt> method that does not represent a property, a collection or any of the supporting methods).
  */
 public interface ActionInvocationFacet extends Facet {
@@ -41,4 +39,3 @@ public interface ActionInvocationFacet extends Facet {
     public ObjectSpecification getOnType();
 
 }
-

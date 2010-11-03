@@ -20,8 +20,8 @@
 
 package org.apache.isis.nof.reflect.remote.spec;
 
-import org.apache.isis.noa.adapter.[[NAME]];
-import org.apache.isis.noa.adapter.[[NAME]]Reference;
+import org.apache.isis.noa.adapter.ObjectAdapter;
+import org.apache.isis.noa.adapter.ObjectAdapterReference;
 import org.apache.isis.noa.facets.Facet;
 import org.apache.isis.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.metamodel.facets.actions.executed.ExecutedFacet;
@@ -57,7 +57,7 @@ public class DummyAction implements ObjectAction {
 		return "";
 	}
 
-	public [[NAME]] execute(final [[NAME]]Reference object, final [[NAME]][] parameters) {
+	public ObjectAdapter execute(final ObjectAdapterReference object, final ObjectAdapter[] parameters) {
 		return peer.execute(object, parameters);
 	}
 
@@ -65,7 +65,7 @@ public class DummyAction implements ObjectAction {
 		return new ObjectAction[0];
 	}
 
-	public [[NAME]][] getDefaultParameterValues([[NAME]]Reference target) {
+	public ObjectAdapter[] getDefaultParameterValues(ObjectAdapterReference target) {
 		throw new NotImplementedException();
 	}
 
@@ -111,7 +111,7 @@ public class DummyAction implements ObjectAction {
         return peer.getOnType();
     }
 
-	public [[NAME]][][] getOptions([[NAME]]Reference target) {
+	public ObjectAdapter[][] getOptions(ObjectAdapterReference target) {
 		return null;
 	}
 
@@ -242,12 +242,12 @@ public class DummyAction implements ObjectAction {
 	}
 
     /**
-     * Delegates to {@link #isParameterSetValidDeclaratively([[NAME]]Reference, [[NAME]][])} and
-     * then {@link #isParameterSetValidImperatively([[NAME]]Reference, [[NAME]][])}, as per the
+     * Delegates to {@link #isParameterSetValidDeclaratively(ObjectAdapterReference, ObjectAdapter[])} and
+     * then {@link #isParameterSetValidImperatively(ObjectAdapterReference, ObjectAdapter[])}, as per the
      * contract in the {@link ObjectAction implemented interface}.
      */
-	public Consent isParameterSetValid(final [[NAME]]Reference object,
-			final [[NAME]][] parameters) {
+	public Consent isParameterSetValid(final ObjectAdapterReference object,
+			final ObjectAdapter[] parameters) {
 	    Consent consentDeclaratively = isParameterSetValidDeclaratively(object, parameters);
         if (consentDeclaratively.isVetoed()) {
             return consentDeclaratively;
@@ -259,18 +259,18 @@ public class DummyAction implements ObjectAction {
      * Always returns an {@link Allow}.
      */
     public Consent isParameterSetValidDeclaratively(
-            [[NAME]]Reference object,
-            [[NAME]][] parameters) {
+        ObjectAdapterReference object,
+        ObjectAdapter[] parameters) {
         return Allow.DEFAULT;
     }
 
     public Consent isParameterSetValidImperatively(
-            [[NAME]]Reference object,
-            [[NAME]][] parameters) {
+        ObjectAdapterReference object,
+        ObjectAdapter[] parameters) {
         return peer.isParameterSetValidImperatively(object, parameters);
     }
 
-    public Consent isUsable(final [[NAME]]Reference target) {
+    public Consent isUsable(final ObjectAdapterReference target) {
 		return peer.isUsable(target);
 	}
 
@@ -306,15 +306,15 @@ public class DummyAction implements ObjectAction {
         return peer.isVisibleForSession(new TestSession());
     }
 
-    public boolean isVisible(final [[NAME]]Reference target) {
+    public boolean isVisible(final ObjectAdapterReference target) {
 		return peer.isVisible(target);
 	}
 
-    public [[NAME]][] parameterStubs() {
+    public ObjectAdapter[] parameterStubs() {
 		throw new NotImplementedException();
 	}
     
-    public [[NAME]]Reference realTarget([[NAME]]Reference target) {
+    public ObjectAdapterReference realTarget(ObjectAdapterReference target) {
         return target;
     }
 

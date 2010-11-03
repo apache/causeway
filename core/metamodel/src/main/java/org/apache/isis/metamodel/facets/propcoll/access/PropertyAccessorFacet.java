@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propcoll.access;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 
-
 /**
  * The mechanism by which the value of the property can be accessed.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the accessor method for a
- * property.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the accessor method for a property.
  */
 public interface PropertyAccessorFacet extends Facet {
 

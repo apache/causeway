@@ -17,24 +17,21 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.hide;
 
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.interactions.HidingInteractionAdvisor;
 
-
 /**
  * Hide a property, collection or action based on the current session.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>hideXxx(UserMemento)</tt>
- * support method for the member.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>hideXxx(UserMemento)</tt> support
+ * method for the member.
  */
 public interface HideForSessionFacet extends Facet, HidingInteractionAdvisor {
 
     public String hiddenReason(AuthenticationSession session);
 
 }
-

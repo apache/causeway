@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.propparam.typicallength;
 
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
-
 
 /**
  * The typical length of a property or a parameter.
@@ -30,10 +28,11 @@ import org.apache.isis.metamodel.facets.SingleIntValueFacet;
  * Intended to be used by the viewer as a rendering hint to size the UI field to an appropriate size.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to the <tt>@TypicalLength</tt> annotation.
+ * In the standard Apache Isis Programming Model, corresponds to the <tt>@TypicalLength</tt> annotation.
  */
 public interface TypicalLengthFacet extends SingleIntValueFacet {
 
+    @Override
     public int value();
 
 }

@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.collections.modify;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 
-
 /**
  * Remove object to a collection.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>removeFromXxx</tt> support
- * method for an action.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>removeFromXxx</tt> support method for
+ * an action.
  */
 public interface CollectionRemoveFromFacet extends Facet {
 

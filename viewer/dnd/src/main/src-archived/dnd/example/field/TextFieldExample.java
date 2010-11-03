@@ -286,11 +286,8 @@ class DummyTextParseableField implements TextParseableContent {
 }
 
 public class TextFieldExample extends TestViews {
-    private static final String LONG_TEXT = "[[NAME]] - a framework that exposes behaviourally complete business\n"
-            + "objects directly to the user. Copyright (C) 2000 - 2005 [[NAME]] Group  Ltd\n" + "\n"
-            + "This program is free software; you can redistribute it and/or modify it under\n"
-            + "the terms of the GNU General Public License as published by the Free Software\n"
-            + "Foundation; either version 2 of the License, or (at your option) any later " + "version.";
+    private static final String LONG_TEXT = "Apache Isis - a framework that exposes behaviourally complete business\n"
+            + "objects directly to the user. Copyright (C) 2010 Apache Software Foundation\n";
 
     private static final String SHORT_TEXT = "Short length of text for small field";
 

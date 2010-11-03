@@ -17,19 +17,17 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.collections.modify;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 
-
 /**
  * Add object to a collection.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>addToXxx</tt> support
- * method for a collection.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>addToXxx</tt> support method for a
+ * collection.
  */
 public interface CollectionAddToFacet extends Facet {
 

@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.collections.validate;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
-
 /**
  * Validate that an object can be added to a collection.
  * 
  * <p>
- * In the standard [[NAME]] Programming Model, corresponds to invoking the <tt>validateAddToXxx</tt>
- * support method for a collection.
+ * In the standard Apache Isis Programming Model, corresponds to invoking the <tt>validateAddToXxx</tt> support method
+ * for a collection.
  * 
  */
 public interface CollectionValidateAddToFacet extends Facet, ValidatingInteractionAdvisor {
@@ -40,4 +38,3 @@ public interface CollectionValidateAddToFacet extends Facet, ValidatingInteracti
      */
     public String invalidReason(ObjectAdapter target, ObjectAdapter proposedArgument);
 }
-

@@ -37,7 +37,7 @@ import org.apache.isis.extensions.dnd.view.Toolkit;
 
 
 public class ViewerFrame extends Frame implements RenderingArea {
-    private static final String DEFAULT_TITLE = "[[NAME]]";
+    private static final String DEFAULT_TITLE = "Apache Isis";
     private static final long serialVersionUID = 1L;
     private XViewer viewer;
 
