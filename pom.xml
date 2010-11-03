@@ -24,28 +24,25 @@
         (eg for testing and logging frameworks).
         </description>
 
-    <!-- 1. building code: -->
+    <!-- 1. building code: (-o flag recommended once dependencies/plugins downloaded) -->
 
-    <!-- mvn clean install -->
-    <!-- mvn clean install -P standard,build-all -->
-
-    <!-- mvn deploy -P standard,build-all,deploy-remote -->
-    <!-- mvn deploy -P standard,build-all,apache-release -->
-
+    <!-- mvn clean install                              -o -->
+    <!-- mvn clean install                -D build=full -o -->
+    <!-- mvn clean install -D modules=all               -o -->
+    <!-- mvn clean install -D modules=all -D build=full -o -->
 
 
-    <!-- 2. building site/docs -->
+
+    <!-- 2. building site/docs: (-o flag recommended once dependencies/plugins downloaded) -->
 
     <!-- 2.1 prereqs -->
     <!-- mvn install:install-file -D groupId=com.java -D artifactId=jimi 
         -D version=1.0 -D packaging=jar -D file=/path/to/file -->
-    <!-- mvn clean install -P site-skin -->
+    <!-- mvn clean install -D modules=skin -o -->
 
     <!-- 2.2 site/docs -->
-    <!-- mvn site-deploy -P standard,deploy-local -->
-
-    <!-- mvn site-deploy -P standard,site-all,deploy-local -->
-    <!-- mvn site-deploy -P standard,site-all,apache-release -->
+    <!-- mvn site-deploy -D modules=standard -D deploy=local              -o -->
+    <!-- mvn site-deploy -D modules=standard -D deploy=local -D site=full -o -->
 
     <inceptionYear>2010</inceptionYear>
 
@@ -1046,13 +1043,19 @@
         <site>
             <id>isis-site</id>
             <name>Apache Isis Site</name>
-            <url>${distMgmtSnapshotsSiteUrl}</url>
+            <url>${distMgmtSiteUrl}</url>
         </site>
     </distributionManagement>
 
     <profiles>
         <profile>
-            <id>build-all</id>
+            <id>build-full</id>
+            <activation>
+                <property>
+                    <name>build</name>
+                    <value>full</value>
+                </property>
+            </activation>
             <build>
                 <plugins>
                     <plugin>
@@ -1086,7 +1089,13 @@
         </profile>
 
         <profile>
-            <id>site-all</id>
+            <id>site-full</id>
+            <activation>
+                <property>
+                    <name>site</name>
+                    <value>full</value>
+                </property>
+            </activation>
             <reporting>
                 <plugins>
                     <plugin>
@@ -1246,18 +1255,26 @@
 
         <profile>
             <id>deploy-local</id>
-            <!-- to deploy locally to Apache Isis' SF repo -->
+            <activation>
+                <property>
+                    <name>deploy</name>
+                    <value>local</value>
+                </property>
+            </activation>
+            <!-- to deploy locally -->
             <properties>
-                <distMgmtSnapshotsName>file:///tmp/m2-repo/release</distMgmtSnapshotsName>
-                <distMgmtSnapshotsUrl>file:///tmp/m2-repo/snapshot</distMgmtSnapshotsUrl>
-                <distMgmtSnapshotsSiteUrl>file:///tmp/m2-sites/isis</distMgmtSnapshotsSiteUrl>
+                <distMgmtSiteUrl>file:///tmp/m2-sites/isis</distMgmtSiteUrl>
             </properties>
         </profile>
 
         <profile>
-            <id>standard</id>
+            <id>modules-standard</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
+                <property>
+                    <name>modules</name>
+                    <value>standard</value>
+                </property>
             </activation>
             <modules>
                 <module>applib</module>
@@ -1269,60 +1286,122 @@
             </modules>
         </profile>
         <profile>
-            <id>site-skin</id>
+            <id>modules-skin</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>skin</value>
+                </property>
+            </activation>
             <modules>
                 <module>site-skin</module>
             </modules>
         </profile>
         <profile>
-            <id>applib</id>
+            <id>modules-applib</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>applib</value>
+                </property>
+            </activation>
             <modules>
                 <module>applib</module>
             </modules>
         </profile>
         <profile>
-            <id>defaults</id>
+            <id>modules-core</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>core</value>
+                </property>
+            </activation>
             <modules>
-                <module>applib</module>
                 <module>core</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>modules-defaults</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>defaults</value>
+                </property>
+            </activation>
+            <modules>
                 <module>defaults</module>
-                <module>release</module>
             </modules>
         </profile>
         <profile>
-            <id>viewers</id>
+            <id>modules-viewer</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>viewer</value>
+                </property>
+            </activation>
             <modules>
                 <module>viewer</module>
             </modules>
         </profile>
         <profile>
-            <id>viewer</id>
+            <id>modules-viewers</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>viewers</value>
+                </property>
+            </activation>
             <modules>
                 <module>viewer</module>
             </modules>
         </profile>
         <profile>
-            <id>alternatives</id>
+            <id>modules-alternatives</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>alternatives</value>
+                </property>
+            </activation>
             <modules>
-                <module>alternatives</module>
+                <module>modules-alternatives</module>
             </modules>
         </profile>
         <profile>
-            <id>examples</id>
+            <id>modules-examples</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>examples</value>
+                </property>
+            </activation>
             <modules>
                 <module>examples</module>
             </modules>
         </profile>
         <profile>
-            <id>support</id>
+            <id>modules-support</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>support</value>
+                </property>
+            </activation>
             <modules>
-                <module>release</module>
-                <module>examples</module>
                 <module>support</module>
+                <module>release</module>
             </modules>
         </profile>
         <profile>
             <id>all</id>
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>all</value>
+                </property>
+            </activation>
             <modules>
                 <module>applib</module>
                 <module>core</module>
@@ -1332,13 +1411,6 @@
                 <module>release</module>
                 <module>examples</module>
                 <module>support</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>scratch</id>
-            <modules>
-                <module>applib</module>
-                <module>defaults</module>
             </modules>
         </profile>
     </profiles>
