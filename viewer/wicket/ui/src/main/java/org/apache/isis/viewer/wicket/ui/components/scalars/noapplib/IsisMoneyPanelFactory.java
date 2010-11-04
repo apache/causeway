@@ -28,11 +28,11 @@ import org.apache.wicket.Component;
 /**
  * {@link ComponentFactory} for {@link IsisMoneyPanel}.
  */
-public class NoMoneyPanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisMoneyPanelFactory extends ComponentFactoryScalarAbstract {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoMoneyPanelFactory() {
+	public IsisMoneyPanelFactory() {
 		super(org.apache.isis.applib.value.Money.class);
 	}
 

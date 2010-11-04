@@ -28,11 +28,11 @@ import org.apache.wicket.Component;
 /**
  * {@link ComponentFactory} for {@link IsisPercentagePanel}.
  */
-public class NoPercentagePanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisPercentagePanelFactory extends ComponentFactoryScalarAbstract {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoPercentagePanelFactory() {
+	public IsisPercentagePanelFactory() {
 		super(org.apache.isis.applib.value.Percentage.class);
 	}
 

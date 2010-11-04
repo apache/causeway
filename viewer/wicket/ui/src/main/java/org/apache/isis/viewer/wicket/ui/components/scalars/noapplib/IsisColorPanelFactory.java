@@ -26,18 +26,18 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScala
 import org.apache.wicket.Component;
 
 /**
- * {@link ComponentFactory} for {@link IsisPasswordPanel}.
+ * {@link ComponentFactory} for {@link IsisColorPanel}.
  */
-public class NoPasswordPanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisColorPanelFactory extends ComponentFactoryScalarAbstract {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoPasswordPanelFactory() {
-		super(org.apache.isis.applib.value.Password.class);
+	public IsisColorPanelFactory() {
+		super(org.apache.isis.applib.value.Color.class);
 	}
 
 	public Component createComponent(String id, ScalarModel scalarModel) {
-		return new IsisPasswordPanel(id, scalarModel);
+		return new IsisColorPanel(id, scalarModel);
 	}
 
 }

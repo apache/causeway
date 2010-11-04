@@ -26,18 +26,18 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.ComponentFactoryScala
 import org.apache.wicket.Component;
 
 /**
- * {@link ComponentFactory} for {@link IsisDateTimePanel}.
+ * {@link ComponentFactory} for {@link IsisPasswordPanel}.
  */
-public class NoDateTimePanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisPasswordPanelFactory extends ComponentFactoryScalarAbstract {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoDateTimePanelFactory() {
-		super(org.apache.isis.applib.value.DateTime.class);
+	public IsisPasswordPanelFactory() {
+		super(org.apache.isis.applib.value.Password.class);
 	}
 
 	public Component createComponent(String id, ScalarModel scalarModel) {
-		return new IsisDateTimePanel(id, scalarModel);
+		return new IsisPasswordPanel(id, scalarModel);
 	}
 
 }

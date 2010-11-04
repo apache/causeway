@@ -48,14 +48,14 @@ import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaSqlTimeP
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkdates.JavaUtilDatePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigDecimalPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.jdkmath.JavaMathBigIntegerPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoColorPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoDatePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoDateTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoMoneyPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoPasswordPanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoPercentagePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoTimePanelFactory;
-import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.NoTimeStampPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisColorPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisDatePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisDateTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisMoneyPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisPasswordPanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisPercentagePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisTimePanelFactory;
+import org.apache.isis.viewer.wicket.ui.components.scalars.noapplib.IsisTimeStampPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BooleanPanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.BytePanelFactory;
 import org.apache.isis.viewer.wicket.ui.components.scalars.primitive.CharacterPanelFactory;
@@ -194,14 +194,14 @@ public class ComponentFactoryListDefault implements ComponentFactoryList {
 		componentFactories.add(new JavaSqlDatePanelFactory());
 		componentFactories.add(new JavaSqlTimePanelFactory());
 		
-		componentFactories.add(new NoMoneyPanelFactory());
-		componentFactories.add(new NoDatePanelFactory());
-		componentFactories.add(new NoDateTimePanelFactory());
-		componentFactories.add(new NoTimePanelFactory());
-		componentFactories.add(new NoTimeStampPanelFactory());
-		componentFactories.add(new NoColorPanelFactory());
-		componentFactories.add(new NoPercentagePanelFactory());
-		componentFactories.add(new NoPasswordPanelFactory());
+		componentFactories.add(new IsisMoneyPanelFactory());
+		componentFactories.add(new IsisDatePanelFactory());
+		componentFactories.add(new IsisDateTimePanelFactory());
+		componentFactories.add(new IsisTimePanelFactory());
+		componentFactories.add(new IsisTimeStampPanelFactory());
+		componentFactories.add(new IsisColorPanelFactory());
+		componentFactories.add(new IsisPercentagePanelFactory());
+		componentFactories.add(new IsisPasswordPanelFactory());
 		
 		componentFactories.add(new JavaMathBigIntegerPanelFactory());
 		componentFactories.add(new JavaMathBigDecimalPanelFactory());

@@ -28,11 +28,11 @@ import org.apache.wicket.Component;
 /**
  * {@link ComponentFactory} for {@link IsisTimePanel}.
  */
-public class NoTimePanelFactory extends ComponentFactoryScalarAbstract {
+public class IsisTimePanelFactory extends ComponentFactoryScalarAbstract {
 
 	private static final long serialVersionUID = 1L;
 
-	public NoTimePanelFactory() {
+	public IsisTimePanelFactory() {
 		super(org.apache.isis.applib.value.Time.class);
 	}
 
