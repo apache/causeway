@@ -24,13 +24,18 @@
 
 	<dependencies>
 	
-		<!-- other modules in this project -->
-
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>prototype-fixture</artifactId>
-		</dependency>
-
+        <!-- other modules in this project -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>prototype-dom</artifactId>
+        </dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>prototype-fixture</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
 
 
 		<!-- Isis -->
@@ -38,27 +43,42 @@
 	        <groupId>org.apache.isis.viewer</groupId>
 			<artifactId>html</artifactId>
 		</dependency>
-		<dependency>
-	        <groupId>org.apache.isis.alternatives.objectstore</groupId>
-			<artifactId>xml</artifactId>
-		</dependency>
-		<!--
-		comment in to run simple web server (uses Jetty)
-		<dependency>
-	        <groupId>org.apache.isis.core</groupId>
-			<artifactId>webserver</artifactId>
-		</dependency>
-		-->
 
-	    <dependency>
-	        <groupId>org.apache.isis.defaults</groupId>
-	        <artifactId>bytecode</artifactId>
-	    </dependency>
-	    <dependency>
-	        <groupId>org.apache.isis.alternatives.bytecode</groupId>
-	        <artifactId>javassist</artifactId>
-	    </dependency>
+        <!-- Isis defaults -->
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
 
+        <!-- Isis alternatives -->        
+        <dependency>
+            <groupId>org.apache.isis.alternatives.security</groupId>
+            <artifactId>file</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.alternatives.objectstore</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
+        
+        <!-- to run using WebServer -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>webserver</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
 
 	</dependencies>
 
