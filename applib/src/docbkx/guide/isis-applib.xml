@@ -664,8 +664,8 @@
       to confirm their exact status.</para>
 
       <para>You'll also find coverage of the object store
-      <acronym>API</acronym> itself in this document, see <xref
-      linkend="chp.ObjectStoreApi" />. Most users of the framework are
+      <acronym>API</acronym> itself in the <filename>core</filename> documentation. 
+      Most users of the framework are
       unlikely to write their own object store, of course, though we hope that
       over time new implementations will be written by the community.</para>
     </sect1>
@@ -793,17 +793,8 @@
         </listitem>
       </itemizedlist>
 
-      <para>You'll find further coverage of the remoting APIs in <xref
-      linkend="chp.RemotingApi" />. Detailed documentation of the
-      <acronym>http</acronym> transport implementation in the HTTP Remoting
-      module (in <filename>alternates/http-remoting</filename>) module, and
-      documentation for the xstream implementation is in the XStream
-      Marshalling module (in
-      <filename>alternates/xstream-marshalling</filename>).</para>
-
-      <para>There's also further coverage of deploying applications in
-      client/server mode in <xref
-      linkend="chp.DeployingIsisApplications" />.</para>
+      <para>You'll find further coverage of the remoting APIs and how to deploy applications in
+      client/server mode in the <filename>alternatives/remoting</filename> documentation.</para>
     </sect1>
 
     <sect1>
@@ -901,10 +892,6 @@
       authorization; the exact configuration to use here will depend both on
       the implementation chosen (file-based, LDAP or some other) and whether
       running in client/server mode or not.</para>
-
-      <para>The main coverage of the topic of deployment options (which
-      repeats some of the above) can be found in this document, in <xref
-      linkend="chp.DeployingIsisApplications" />.</para>
     </sect1>
 
     <sect1>

@@ -24,13 +24,12 @@
         (eg for testing and logging frameworks).
         </description>
 
+    <!-- See https://cwiki.apache.org/confluence/display/ISIS/MavenBuildProfiles for full info on different options -->
+    
     <!-- 1. building code: (-o flag recommended once dependencies/plugins downloaded) -->
 
-    <!-- mvn clean install                              -o -->
-    <!-- mvn clean install                -D build=full -o -->
-    <!-- mvn clean install -D modules=all               -o -->
-    <!-- mvn clean install -D modules=all -D build=full -o -->
-
+    <!-- mvn clean install                -o -->
+    <!-- mvn clean install -D modules=all -o -->
 
 
     <!-- 2. building site/docs: (-o flag recommended once dependencies/plugins downloaded) -->
@@ -1269,6 +1268,8 @@
 
         <profile>
             <id>modules-standard</id>
+            <!-- The standard set for a smoke test; if this builds we're probably ok, since supports both build (clean install) and site (site-deploy)
+            If fact, these are also the modules that make up the site.  Note that 'examples' and 'release' are omitted -->
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
@@ -1282,11 +1283,33 @@
                 <module>defaults</module>
                 <module>alternatives</module>
                 <module>viewer</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>modules-all</id>
+            <!-- This is every module that can be built (clean, install).  
+            Do not use with site-deploy, because includes 'release' and 'examples' that are not part of the site  -->
+            <activation>
+                <property>
+                    <name>modules</name>
+                    <value>all</value>
+                </property>
+            </activation>
+            <modules>
+                <module>site-skin</module>
+                <module>applib</module>
+                <module>core</module>
+                <module>defaults</module>
+                <module>alternatives</module>
+                <module>viewer</module>
+                <module>support</module>
+                <module>examples</module>
                 <module>release</module>
             </modules>
         </profile>
         <profile>
             <id>modules-skin</id>
+            <!-- prereq for running site-deploy -->
             <activation>
                 <property>
                     <name>modules</name>
@@ -1297,8 +1320,10 @@
                 <module>site-skin</module>
             </modules>
         </profile>
+        
         <profile>
             <id>modules-applib</id>
+            <!-- To quickly build -->
             <activation>
                 <property>
                     <name>modules</name>
@@ -1391,26 +1416,18 @@
             </activation>
             <modules>
                 <module>support</module>
-                <module>release</module>
             </modules>
         </profile>
         <profile>
-            <id>all</id>
+            <id>modules-release</id>
             <activation>
                 <property>
                     <name>modules</name>
-                    <value>all</value>
+                    <value>release</value>
                 </property>
             </activation>
             <modules>
-                <module>applib</module>
-                <module>core</module>
-                <module>defaults</module>
-                <module>alternatives</module>
-                <module>viewer</module>
                 <module>release</module>
-                <module>examples</module>
-                <module>support</module>
             </modules>
         </profile>
     </profiles>

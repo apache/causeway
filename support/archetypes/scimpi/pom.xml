@@ -16,6 +16,10 @@
     
     <packaging>maven-archetype</packaging>
 
+    <properties>
+        <siteBaseDir>../../..</siteBaseDir>
+    </properties>
+
     <build>
         <extensions>
           <extension>

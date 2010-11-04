@@ -29,7 +29,7 @@ Building an exploration application from archetype
 	
 	At the command prompt...
 	
-	[In all cases, you can use "mvn -o ..." to force maven to run offline.
+	In all cases, you can use "mvn -o ..." to force maven to run offline.
 	
 	
 	In the trunk/support directory: Run "mvn install" to install the archetypes.

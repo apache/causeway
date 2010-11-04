@@ -22,6 +22,10 @@
         <module>scimpi</module>
     </modules>
 
+    <properties>
+        <siteBaseDir>../..</siteBaseDir>
+    </properties>
+
     <build>
         <pluginManagement>
             <plugins>

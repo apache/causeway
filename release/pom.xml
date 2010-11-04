@@ -3,10 +3,12 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- inherit directly from the apache parent because there's no need 
+        to bring in any of the build or reporting plugins -->
     <parent>
-        <groupId>org.apache.isis</groupId>
-        <artifactId>isis-parent</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <groupId>org.apache</groupId>
+        <artifactId>apache</artifactId>
+        <version>7</version>
     </parent>
 
     <artifactId>release</artifactId>
@@ -52,6 +54,19 @@
         <isis.alternatives-embedded.version>0.1-SNAPSHOT</isis.alternatives-embedded.version>
     </properties>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- defined only to be consistent with the isis-parent build; 
+                    not otherwise used -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>2.1.1</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
     <dependencyManagement>
         <dependencies>
 

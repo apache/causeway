@@ -16,8 +16,6 @@
     <properties>
         <!-- REVIEW -->
         <current40xVersion>4.0</current40xVersion>
-        <!-- REVIEW -->
-        <dependency.locations.enabled>false</dependency.locations.enabled>
 
         <siteBaseDir>..</siteBaseDir>
         
