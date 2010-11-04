@@ -1202,14 +1202,9 @@
                         <configuration>
                             <quiet>true</quiet>
                             <doctitle>${project.name} ${project.version}</doctitle>
-                            <windowtitle>${project.name}
-                                ${project.version}</windowtitle>
-                            <testDoctitle>${project.name}
-                                ${project.version} (TEST API)
-                            </testDoctitle>
-                            <testWindowtitle>${project.name}
-                                ${project.version} (TEST API)
-                            </testWindowtitle>
+                            <windowtitle>${project.name}${project.version}</windowtitle>
+                            <testDoctitle>${project.name}${project.version} (TEST API)</testDoctitle>
+                            <testWindowtitle>${project.name}${project.version} (TEST API)</testWindowtitle>
                             <splitindex>true</splitindex>
                             <encoding>${project.build.sourceEncoding}</encoding>
                             <links>
