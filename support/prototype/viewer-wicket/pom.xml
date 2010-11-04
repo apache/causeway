@@ -41,12 +41,75 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>prototype-dom</artifactId>
 		</dependency>
+        
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>prototype-fixture</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
 
 		<!-- Wicket Viewer -->
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>wicket-viewer</artifactId>
 		</dependency>
+        
+        <!-- Isis defaults -->
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+        </dependency>
+
+        <!-- Isis alternatives -->        
+        <dependency>
+            <groupId>org.apache.isis.alternatives.security</groupId>
+            <artifactId>file</artifactId>
+        </dependency>
+        
+        <!-- to run using WebServer -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>webserver</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- Isis Wicket views -->
+        <!-- 
+        <dependency>
+            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+            <artifactId>view-gmap2-view</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+            <artifactId>view-googlecharts-view</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+            <artifactId>calendarviews-view</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>net.sourceforge.isiscontrib.viewer.wicket</groupId>
+            <artifactId>view-cooldatasoftmenu</artifactId>
+        </dependency>
+        -->
+        
 	</dependencies>
 
 </project>
