@@ -16,7 +16,7 @@
 	<packaging>pom</packaging>
 
 	<properties>
-        <siteBaseDir>../../..</siteBaseDir>
+        <siteBaseDir>../..</siteBaseDir>
 
         <pdf.title>Apache Isis Alternative ObjectStores</pdf.title>
         <pdf.outputName>apache-isis-alternatives-objectstores</pdf.outputName>
