@@ -51,8 +51,6 @@
         <module>expenses</module>
         <module>shopping-cart</module>
         <module>bdd-testapp</module>
-        <module>restful-testapp</module>
-        <module>wicket-testapp/claims</module>
         <module>metamodel-examples/namefile</module>
     </modules>
 

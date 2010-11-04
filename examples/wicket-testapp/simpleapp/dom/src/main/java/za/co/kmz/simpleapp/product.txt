@@ -1,3 +1,0 @@
-Product Vision
-To manage recipes and pantry inventory.
-
