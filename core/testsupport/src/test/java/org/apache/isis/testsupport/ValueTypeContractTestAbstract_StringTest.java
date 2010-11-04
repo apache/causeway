@@ -3,7 +3,7 @@ package org.apache.isis.testsupport;
 import java.util.Arrays;
 import java.util.List;
 
-public class ValueTypeContractTestAbstract_StringIntegerTest extends ValueTypeContractTestAbstract<String> {
+public class ValueTypeContractTestAbstract_StringTest extends ValueTypeContractTestAbstract<String> {
 
 	@Override
 	protected List<String> getObjectsWithSameValue() {
