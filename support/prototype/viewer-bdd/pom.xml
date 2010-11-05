@@ -2,22 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.apache.isis.support</groupId>
+    <parent>
+        <groupId>org.apache.isis.support</groupId>
+        <artifactId>prototype</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
+
 	<artifactId>prototype-viewer-bdd</artifactId>
-	<version>0.1-SNAPSHOT</version>
 
 	<name>Prototype: BDD (Concordion) Tests</name>
 
     <build>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
@@ -27,22 +23,16 @@
                             <value>target/concordion</value>
                         </property>
                     </systemProperties>
+                    <includes>
+                         <include>**/*.java</include>
+                    </includes>
+                    <excludes>
+                         <exclude>**/CustomCssPackage.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 		</plugins>
     </build>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.apache.isis</groupId>
-				<artifactId>release</artifactId>
-				<version>0.1-SNAPSHOT</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 	
 	<dependencies>
 
