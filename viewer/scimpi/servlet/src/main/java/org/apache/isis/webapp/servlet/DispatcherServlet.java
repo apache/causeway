@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.webapp.servlet;
 
 import java.io.IOException;
@@ -29,31 +28,33 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.Dispatcher;
 import org.apache.isis.webapp.UserManager;
-
+import org.apache.log4j.Logger;
 
 public class DispatcherServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private static final Logger LOG = Logger.getLogger(DispatcherServlet.class);
     private Dispatcher dispatcher;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
+        IOException {
         LOG.info("POST " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LOG.info("GET  " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
     private void process(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	// TODO: NOF's AuthenticationSession now has its own #getAttribute() and #setAttribute() methods,
-    	// so an alternative is to bind this info onto the AuthSession.
-    	// The core/webapp will (hopefully) evolve to define a standard approach here...
+        // TODO: NOF's AuthenticationSession now has its own #getAttribute() and #setAttribute() methods,
+        // so an alternative is to bind this info onto the AuthSession.
+        // The core/webapp will (hopefully) evolve to define a standard approach here...
         try {
             HttpSession httpSession = request.getSession(true);
             ServletRequestContext context = (ServletRequestContext) httpSession.getAttribute("scimpi-context");
@@ -61,15 +62,16 @@ public class DispatcherServlet extends HttpServlet {
                 context = new ServletRequestContext();
                 httpSession.setAttribute("scimpi-context", context);
             }
-                context.startRequest(request, response, getServletContext());
-                dispatcher.process(context, request.getServletPath());
+            context.startRequest(request, response, getServletContext());
+            dispatcher.process(context, request.getServletPath());
         } catch (RuntimeException e) {
             LOG.error("servlet exception", e);
             throw e;
         }
-            
+
     }
 
+    @Override
     public void init() throws ServletException {
         super.init();
 
@@ -85,8 +87,7 @@ public class DispatcherServlet extends HttpServlet {
         }
         String dir = getServletContext().getRealPath("/WEB-INF");
         dispatcher.init(dir);
-        
+
         new UserManager(IsisContext.getAuthenticationManager());
     }
 }
-
