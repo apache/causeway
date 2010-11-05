@@ -27,7 +27,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 import net.sf.cglib.proxy.MethodInterceptor;
 
-import org.apache.isis.progmodel.wrapper.applib.WrappedObject;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 
 
 
@@ -52,7 +52,7 @@ public class CgLibClassProxyFactory<T> implements IProxyFactory<T> {
         // Create the proxy
         final Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(toProxyClass);
-        enhancer.setInterfaces(new Class[] { WrappedObject.class });
+        enhancer.setInterfaces(new Class[] { WrapperObject.class });
         enhancer.setCallbackType(interceptor.getClass());
 
         final Class enhancedClass = enhancer.createClass();

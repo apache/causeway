@@ -28,7 +28,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
 import org.apache.isis.bytecode.cglib.persistence.objectfactory.internal.CglibEnhanced;
-import org.apache.isis.progmodel.wrapper.applib.WrappedObject;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 
 
 
@@ -57,7 +57,7 @@ public class CgLibProxy<T> {
     		List<Class> interfaces = new ArrayList<Class>();
 			interfaces.addAll(Arrays.asList(enhancedClass.getInterfaces()));
 			interfaces.remove(Factory.class); // if there.
-			interfaces.add(WrappedObject.class);
+			interfaces.add(WrapperObject.class);
     		
 			return (T) Enhancer.create(
 					origSuperclass,

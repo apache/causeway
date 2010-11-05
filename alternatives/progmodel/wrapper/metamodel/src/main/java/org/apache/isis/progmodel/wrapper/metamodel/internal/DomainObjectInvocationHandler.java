@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
 import java.lang.reflect.InvocationTargetException;
@@ -51,12 +50,11 @@ import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InteractionException;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
-import org.apache.isis.progmodel.wrapper.applib.WrappedObject;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.util.Constants;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.util.MethodPrefixFinder;
-
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
@@ -66,36 +64,33 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     protected Method titleMethod;
 
     /**
-     * The <tt>save()</tt> method from {@link WrappedObject#save()}.
+     * The <tt>save()</tt> method from {@link WrapperObject#save()}.
      */
     protected Method saveMethod;
 
     /**
-     * The <tt>underlying()</tt> method from {@link WrappedObject#underlying()}.
+     * The <tt>underlying()</tt> method from {@link WrapperObject#wrapped()}.
      */
-    protected Method underlyingMethod;
+    protected Method wrappedMethod;
 
     private final Map<Method, Collection<?>> collectionViewObjectsByMethod = new HashMap<Method, Collection<?>>();
     private final Map<Method, Map<?, ?>> mapViewObjectsByMethod = new HashMap<Method, Map<?, ?>>();
 
-    public DomainObjectInvocationHandler(
-            final T delegate,
-            final WrapperFactory embeddedViewer,
-            final ExecutionMode mode,
-            final RuntimeContext runtimeContext) {
+    public DomainObjectInvocationHandler(final T delegate, final WrapperFactory embeddedViewer,
+        final ExecutionMode mode, final RuntimeContext runtimeContext) {
         super(delegate, embeddedViewer, mode, runtimeContext);
         try {
             titleMethod = delegate.getClass().getMethod("title", new Class[] {});
-            saveMethod = WrappedObject.class.getMethod("save", new Class[] {});
-            underlyingMethod = WrappedObject.class.getMethod("underlying", new Class[] {});
-        } catch (final NoSuchMethodException e) {}
+            saveMethod = WrapperObject.class.getMethod("save", new Class[] {});
+            wrappedMethod = WrapperObject.class.getMethod("wrapped", new Class[] {});
+        } catch (final NoSuchMethodException e) {
+        }
     }
 
-    
     @Override
     public Object invoke(final Object proxyObject, final Method method, final Object[] args) throws Throwable {
 
-        if (isObjectMethod(method) ) {
+        if (isObjectMethod(method)) {
             return delegate(method, args);
         }
 
@@ -162,24 +157,25 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         // filter out
         if (isGetterMethod) {
             throw new UnsupportedOperationException(String.format(
-                    "Can only invoke 'get' on properties or collections; '%s' represents %s", methodName, decode(objectMember)));
+                "Can only invoke 'get' on properties or collections; '%s' represents %s", methodName,
+                decode(objectMember)));
         }
         if (isSetterMethod) {
-            throw new UnsupportedOperationException(String.format("Can only invoke 'set' on properties; '%s' represents %s",
-                    methodName, decode(objectMember)));
+            throw new UnsupportedOperationException(String.format(
+                "Can only invoke 'set' on properties; '%s' represents %s", methodName, decode(objectMember)));
         }
         if (isAddToMethod) {
-            throw new UnsupportedOperationException(String.format("Can only invoke 'addTo' on collections; '%s' represents %s",
-                    methodName, decode(objectMember)));
+            throw new UnsupportedOperationException(String.format(
+                "Can only invoke 'addTo' on collections; '%s' represents %s", methodName, decode(objectMember)));
         }
         if (isRemoveFromMethod) {
             throw new UnsupportedOperationException(String.format(
-                    "Can only invoke 'removeFrom' on collections; '%s' represents %s", methodName, decode(objectMember)));
+                "Can only invoke 'removeFrom' on collections; '%s' represents %s", methodName, decode(objectMember)));
         }
 
         if (objectMember instanceof ObjectAction) {
             checkUsability(getAuthenticationSession(), targetAdapter, objectMember);
-            
+
             final ObjectAction noa = (ObjectAction) objectMember;
             return handleActionMethod(args, getAuthenticationSession(), targetAdapter, noa, memberName);
         }
@@ -192,13 +188,14 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private Object handleTitleMethod(final Method method, final Object[] args, final ObjectAdapter targetAdapter)
-            throws IllegalAccessException, InvocationTargetException {
+        throws IllegalAccessException, InvocationTargetException {
 
         resolveIfRequired(targetAdapter);
 
         final ObjectSpecification targetNoSpec = targetAdapter.getSpecification();
-        final ObjectTitleContext titleContext = targetNoSpec.createTitleInteractionContext(getAuthenticationSession(),
-                InteractionInvocationMethod.BY_USER, targetAdapter);
+        final ObjectTitleContext titleContext =
+            targetNoSpec.createTitleInteractionContext(getAuthenticationSession(), InteractionInvocationMethod.BY_USER,
+                targetAdapter);
         final ObjectTitleEvent titleEvent = titleContext.createInteractionEvent();
         notifyListeners(titleEvent);
         return titleEvent.getTitle();
@@ -208,7 +205,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // save
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleSaveMethod(final AuthenticationSession session, final ObjectAdapter targetAdapter, final ObjectSpecification targetNoSpec) {
+    private Object handleSaveMethod(final AuthenticationSession session, final ObjectAdapter targetAdapter,
+        final ObjectSpecification targetNoSpec) {
 
         final InteractionResult interactionResult = targetNoSpec.isValidResult(targetAdapter);
         notifyListenersAndVetoIfRequired(interactionResult);
@@ -225,36 +223,29 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // property - access
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleGetterMethodOnProperty(
-            final Object[] args,
-            final ObjectAdapter targetAdapter,
-            final OneToOneAssociation otoa,
-            final String methodName) {
+    private Object handleGetterMethodOnProperty(final Object[] args, final ObjectAdapter targetAdapter,
+        final OneToOneAssociation otoa, final String methodName) {
         if (args.length != 0) {
             throw new IllegalArgumentException("Invoking a 'get' should have no arguments");
         }
 
         resolveIfRequired(targetAdapter);
-        
+
         final ObjectAdapter currentReferencedAdapter = otoa.get(targetAdapter);
         final Object currentReferencedObj = IsisUtils.unwrap(currentReferencedAdapter);
 
-        final PropertyAccessEvent ev = new PropertyAccessEvent(getDelegate(), otoa.getIdentifier(), currentReferencedObj);
+        final PropertyAccessEvent ev =
+            new PropertyAccessEvent(getDelegate(), otoa.getIdentifier(), currentReferencedObj);
         notifyListeners(ev);
         return currentReferencedObj;
     }
-
 
     // /////////////////////////////////////////////////////////////////
     // property - modify
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleSetterMethodOnProperty(
-            final Object[] args,
-            final AuthenticationSession session,
-            final ObjectAdapter targetAdapter,
-            final OneToOneAssociation otoa,
-            final String methodName) {
+    private Object handleSetterMethodOnProperty(final Object[] args, final AuthenticationSession session,
+        final ObjectAdapter targetAdapter, final OneToOneAssociation otoa, final String methodName) {
         if (args.length != 1) {
             throw new IllegalArgumentException("Invoking a setter should only have a single argument");
         }
@@ -262,9 +253,10 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final Object argumentObj = underlying(args[0]);
-        final ObjectAdapter argumentNO = argumentObj != null? getRuntimeContext().adapterFor(argumentObj): null;
+        final ObjectAdapter argumentNO = argumentObj != null ? getRuntimeContext().adapterFor(argumentObj) : null;
 
-        final InteractionResult interactionResult = otoa.isAssociationValid(targetAdapter, argumentNO).getInteractionResult();
+        final InteractionResult interactionResult =
+            otoa.isAssociationValid(targetAdapter, argumentNO).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
 
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
@@ -274,58 +266,52 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
                 otoa.clearAssociation(targetAdapter);
             }
         }
-        
+
         objectChangedIfRequired(targetAdapter);
 
         return null;
     }
 
-
     // /////////////////////////////////////////////////////////////////
     // collection - access
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleGetterMethodOnCollection(
-            final Method method,
-            final Object[] args,
-            final ObjectAdapter targetAdapter,
-            final OneToManyAssociation otma,
-            final String memberName) {
+    private Object handleGetterMethodOnCollection(final Method method, final Object[] args,
+        final ObjectAdapter targetAdapter, final OneToManyAssociation otma, final String memberName) {
         if (args.length != 0) {
             throw new IllegalArgumentException("Invoking a 'get' should have no arguments");
         }
 
         resolveIfRequired(targetAdapter);
-        
+
         final ObjectAdapter currentReferencedAdapter = otma.get(targetAdapter);
         final Object currentReferencedObj = IsisUtils.unwrap(currentReferencedAdapter);
 
         final CollectionAccessEvent ev = new CollectionAccessEvent(getDelegate(), otma.getIdentifier());
 
         if (currentReferencedObj instanceof Collection) {
-            final Collection<?> collectionViewObject = lookupViewObject(method, memberName, (Collection<?>) currentReferencedObj, otma);
+            final Collection<?> collectionViewObject =
+                lookupViewObject(method, memberName, (Collection<?>) currentReferencedObj, otma);
             notifyListeners(ev);
             return collectionViewObject;
         } else if (currentReferencedObj instanceof Map) {
-            final Map<?, ?> mapViewObject = lookupViewObject(method, memberName, (Map<?, ?>) currentReferencedObj, otma);
+            final Map<?, ?> mapViewObject =
+                lookupViewObject(method, memberName, (Map<?, ?>) currentReferencedObj, otma);
             notifyListeners(ev);
             return mapViewObject;
         }
-        throw new IllegalArgumentException(
-        		String.format("Collection type '%s' not supported by framework", currentReferencedObj.getClass().getName()));
+        throw new IllegalArgumentException(String.format("Collection type '%s' not supported by framework",
+            currentReferencedObj.getClass().getName()));
     }
 
     /**
      * Looks up (or creates) a proxy for this object.
      */
-    private Collection<?> lookupViewObject(
-            final Method method,
-            final String memberName,
-            final Collection<?> collectionToLookup,
-            final OneToManyAssociation otma) {
+    private Collection<?> lookupViewObject(final Method method, final String memberName,
+        final Collection<?> collectionToLookup, final OneToManyAssociation otma) {
         Collection<?> collectionViewObject = collectionViewObjectsByMethod.get(method);
         if (collectionViewObject == null) {
-            if (collectionToLookup instanceof WrappedObject) {
+            if (collectionToLookup instanceof WrapperObject) {
                 collectionViewObject = collectionToLookup;
             } else {
                 collectionViewObject = Proxy.proxy(collectionToLookup, memberName, this, getRuntimeContext(), otma);
@@ -335,14 +321,11 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         return collectionViewObject;
     }
 
-    private Map<?, ?> lookupViewObject(
-            final Method method,
-            final String memberName,
-            final Map<?, ?> mapToLookup,
-            final OneToManyAssociation otma) {
+    private Map<?, ?> lookupViewObject(final Method method, final String memberName, final Map<?, ?> mapToLookup,
+        final OneToManyAssociation otma) {
         Map<?, ?> mapViewObject = mapViewObjectsByMethod.get(method);
         if (mapViewObject == null) {
-            if (mapToLookup instanceof WrappedObject) {
+            if (mapToLookup instanceof WrapperObject) {
                 mapViewObject = mapToLookup;
             } else {
                 mapViewObject = Proxy.proxy(mapToLookup, memberName, this, getRuntimeContext(), otma);
@@ -356,16 +339,13 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // collection - add to
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleCollectionAddToMethod(
-            final Object[] args,
-            final ObjectAdapter targetAdapter,
-            final OneToManyAssociation otma,
-            final String methodName) {
-    	
+    private Object handleCollectionAddToMethod(final Object[] args, final ObjectAdapter targetAdapter,
+        final OneToManyAssociation otma, final String methodName) {
+
         if (args.length != 1) {
             throw new IllegalArgumentException("Invoking a addTo should only have a single argument");
         }
-        
+
         resolveIfRequired(targetAdapter);
 
         final Object argumentObj = underlying(args[0]);
@@ -380,7 +360,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
             otma.addElement(targetAdapter, argumentNO);
         }
-        
+
         objectChangedIfRequired(targetAdapter);
 
         return null;
@@ -390,15 +370,12 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // collection - remove from
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleCollectionRemoveFromMethod(
-            final Object[] args,
-            final ObjectAdapter targetAdapter,
-            final OneToManyAssociation otma,
-            final String methodName) {
+    private Object handleCollectionRemoveFromMethod(final Object[] args, final ObjectAdapter targetAdapter,
+        final OneToManyAssociation otma, final String methodName) {
         if (args.length != 1) {
             throw new IllegalArgumentException("Invoking a removeFrom should only have a single argument");
         }
-        
+
         resolveIfRequired(targetAdapter);
 
         final Object argumentObj = underlying(args[0]);
@@ -407,15 +384,16 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         }
         final ObjectAdapter argumentAdapter = getRuntimeContext().adapterFor(argumentObj);
 
-        final InteractionResult interactionResult = otma.isValidToRemove(targetAdapter, argumentAdapter).getInteractionResult();
+        final InteractionResult interactionResult =
+            otma.isValidToRemove(targetAdapter, argumentAdapter).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
 
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
             otma.removeElement(targetAdapter, argumentAdapter);
         }
-        
+
         objectChangedIfRequired(targetAdapter);
-        
+
         return null;
     }
 
@@ -423,42 +401,39 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // action
     // /////////////////////////////////////////////////////////////////
 
-    private Object handleActionMethod(
-            final Object[] args,
-            final AuthenticationSession session,
-            final ObjectAdapter targetAdapter,
-            final ObjectAction noa,
-            final String memberName) {
+    private Object handleActionMethod(final Object[] args, final AuthenticationSession session,
+        final ObjectAdapter targetAdapter, final ObjectAction noa, final String memberName) {
 
         final Object[] underlyingArgs = new Object[args.length];
         int i = 0;
         for (final Object arg : args) {
             underlyingArgs[i++] = underlying(arg);
         }
-        
+
         final ObjectAdapter[] argAdapters = new ObjectAdapter[underlyingArgs.length];
         int j = 0;
         for (final Object underlyingArg : underlyingArgs) {
-            argAdapters[j++] = underlyingArg!=null?getRuntimeContext().adapterFor(underlyingArg):null;
+            argAdapters[j++] = underlyingArg != null ? getRuntimeContext().adapterFor(underlyingArg) : null;
         }
 
-        final InteractionResult interactionResult = noa.isProposedArgumentSetValid(targetAdapter, argAdapters).getInteractionResult();
+        final InteractionResult interactionResult =
+            noa.isProposedArgumentSetValid(targetAdapter, argAdapters).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
 
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
             final ObjectAdapter actionReturnNO = noa.execute(targetAdapter, argAdapters);
             return IsisUtils.unwrap(actionReturnNO);
         }
-        
+
         objectChangedIfRequired(targetAdapter);
-        
+
         return null;
     }
 
     private Object underlying(final Object arg) {
-        if (arg instanceof WrappedObject<?>) {
-            final WrappedObject<?> argViewObject = (WrappedObject<?>) arg;
-            return argViewObject.underlying();
+        if (arg instanceof WrapperObject<?>) {
+            final WrapperObject<?> argViewObject = (WrapperObject<?>) arg;
+            return argViewObject.wrapped();
         } else {
             return arg;
         }
@@ -468,13 +443,17 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // visibility and usability checks (common to all members)
     // /////////////////////////////////////////////////////////////////
 
-    private void checkVisibility(final AuthenticationSession session, final ObjectAdapter targetObjectAdapter, final ObjectMember objectMember) {
-        final InteractionResult interactionResult = objectMember.isVisible(getAuthenticationSession(), targetObjectAdapter).getInteractionResult();
+    private void checkVisibility(final AuthenticationSession session, final ObjectAdapter targetObjectAdapter,
+        final ObjectMember objectMember) {
+        final InteractionResult interactionResult =
+            objectMember.isVisible(getAuthenticationSession(), targetObjectAdapter).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
-    private void checkUsability(final AuthenticationSession session, final ObjectAdapter targetObjectAdapter, final ObjectMember objectMember) {
-        final InteractionResult interactionResult = objectMember.isUsable(getAuthenticationSession(), targetObjectAdapter).getInteractionResult();
+    private void checkUsability(final AuthenticationSession session, final ObjectAdapter targetObjectAdapter,
+        final ObjectMember objectMember) {
+        final InteractionResult interactionResult =
+            objectMember.isUsable(getAuthenticationSession(), targetObjectAdapter).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
     }
 
@@ -524,7 +503,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return new DisabledException(usabilityEvent);
         }
         throw new IllegalArgumentException(
-                "Provided interactionEvent must be a VisibilityEvent, UsabilityEvent or a ValidityEvent");
+            "Provided interactionEvent must be a VisibilityEvent, UsabilityEvent or a ValidityEvent");
     }
 
     // /////////////////////////////////////////////////////////////////
@@ -537,7 +516,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (member == null) {
             final String methodName = method.getName();
             throw new UnsupportedOperationException("Method '" + methodName
-                    + "' being invoked does not correspond to any of the object's fields or actions.");
+                + "' being invoked does not correspond to any of the object's fields or actions.");
         }
         return member;
     }
@@ -546,7 +525,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final String prefix = new MethodPrefixFinder().findPrefix(methodName);
         if (StringUtils.in(prefix, Constants.INVALID_PREFIXES)) {
             throw new UnsupportedOperationException(String.format(
-                    "Cannot invoke methods with prefix '%s'; use only get/set/addTo/removeFrom/action", prefix));
+                "Cannot invoke methods with prefix '%s'; use only get/set/addTo/removeFrom/action", prefix));
         }
         return prefix;
     }
@@ -560,7 +539,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     protected boolean isUnderlyingMethod(final Method method) {
-        return method.equals(underlyingMethod);
+        return method.equals(wrappedMethod);
     }
 
     private boolean isGetterMethod(final String prefix) {
@@ -599,7 +578,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final ObjectSpecification nos = getSpecification(clazz);
         if (!(nos instanceof JavaSpecification)) {
             throw new UnsupportedOperationException("Only Java is supported (specification is '"
-                    + nos.getClass().getCanonicalName() + "')");
+                + nos.getClass().getCanonicalName() + "')");
         }
         return (JavaSpecification) nos;
     }
@@ -608,8 +587,5 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final ObjectSpecification nos = getSpecificationLoader().loadSpecification(type);
         return nos;
     }
-
-
-
 
 }

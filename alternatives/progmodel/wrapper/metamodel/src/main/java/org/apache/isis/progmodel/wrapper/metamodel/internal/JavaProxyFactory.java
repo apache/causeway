@@ -23,7 +23,7 @@ package org.apache.isis.progmodel.wrapper.metamodel.internal;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-import org.apache.isis.progmodel.wrapper.applib.WrappedObject;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 
 
 
@@ -36,6 +36,6 @@ public class JavaProxyFactory<T> implements IProxyFactory<T> {
 
     @SuppressWarnings("unchecked")
     public T createProxy(final Class<T> toProxy, final InvocationHandler handler) {
-        return (T) Proxy.newProxyInstance(toProxy.getClassLoader(), new Class[] { toProxy, WrappedObject.class }, handler);
+        return (T) Proxy.newProxyInstance(toProxy.getClassLoader(), new Class[] { toProxy, WrapperObject.class }, handler);
     }
 }
