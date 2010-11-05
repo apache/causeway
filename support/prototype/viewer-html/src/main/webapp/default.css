@@ -1,9 +1,28 @@
 /* Start Global styles */
+
+body {
+  background: #101254;
+  text-align: center;
+}
+#wrapper {
+  width: 980px;
+  min-height: 800px;
+  border:3px solid #7F81C0;
+  margin:8px auto;
+  text-align: left;
+  background: white;
+}
+
+.header-icon > img {
+	max-width: 40px;
+	height: 40px;
+}
+	
 BODY {
 	font-family: Arial, Sans-Serif;
 	margin: 0 0 10px 0;
 	color: black;
-	background-color: white;
+
 /*
 	background: url(default-images/poweredby-logo.png);
 	background-repeat: no-repeat;
@@ -27,7 +46,6 @@ A:hover {
 
 div#site-header:after {
 	bottom: 0px;
-	content: "version 7, modified by IH";
 	display: block;
 	text-align: right;
 	float:right;
@@ -41,7 +59,7 @@ div#site-header {
 	background-repeat: repeat-x white-space :   nowrap;
 	list-style: none;
 	margin: 0px;
-	height: 124px;
+	height: 100px;
 }
 
 div#site-logo {
@@ -49,8 +67,8 @@ div#site-logo {
 	background-repeat: no-repeat;
 	background-position: left;
 	position: absolute;
-	width: 769px;
-	height: 124px;
+	width: 980px;
+	height: 100px;
 	margin: 0 auto;
 }
 
@@ -124,7 +142,7 @@ DIV.options DIV.item a:visited {
 
 /* Start services */
 DIV.services {
-	background-color: #29357D;
+	background-color: #7F81C0;
 	margin: 0;
 	padding: 4px 20px 4px 5px;
 	min-height: 20px;
