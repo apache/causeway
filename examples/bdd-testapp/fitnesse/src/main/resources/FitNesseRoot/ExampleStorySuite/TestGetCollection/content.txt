@@ -1,6 +1,0 @@
-!include CommonCreateClaimForTomAndSam
-
-
-!|using naked objects viewer|
-|on object|alias as|perform|using member|
-|Employee:Tom Brown|tomsClaims|get collection|Most Recent Claims|

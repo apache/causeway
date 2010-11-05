@@ -1,7 +1,0 @@
-Modify Tom's claim details and save:
-
-!|using naked objects viewer|
-|on object|alias result as|perform|on member|value|
-|tomsClaim1||set property|Date|4-Jan-2007|
-|tomsClaim1||set property|Description|lunch with client|
-|tomsClaim1||save|

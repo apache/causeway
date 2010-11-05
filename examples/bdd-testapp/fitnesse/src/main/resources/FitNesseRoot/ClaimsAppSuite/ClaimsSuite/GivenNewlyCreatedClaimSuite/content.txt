@@ -1,7 +1,0 @@
-!contents -R2 -g -p -f -h
-----
-To view this given in a Naked Objects viewer, change the properties of this page to 'Test' and then run as a test.
-
-!include -c GivenNewlyCreatedClaimSuite.TheGiven
-
-!|Run Viewer|

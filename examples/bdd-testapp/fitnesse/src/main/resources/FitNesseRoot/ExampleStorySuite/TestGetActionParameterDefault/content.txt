@@ -1,5 +1,0 @@
-!|using naked objects viewer|
-|on object|alias as|perform|using member|with arguments|
-|Employee:Tom Brown|someActionParameterDefault|get action parameter default|Some Action With Parameter Defaults|0|
-
-there doesn't seem to be any easy way in the Java version of FitNesse to verify a simple strings or primitives (ie non-JavaBeans)...

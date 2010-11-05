@@ -1,5 +1,0 @@
-!|set up objects|org.starobjects.tested.fitnesse.testapp.dom.employee.Employee|
-|Name|Approver|alias as|
-|Fred Smith||Employee:Fred Smith|
-|Tom Brown|Employee:Fred Smith|Employee:Tom Brown|
-|Sam Jones|Employee:Fred Smith|Employee:Sam Jones|

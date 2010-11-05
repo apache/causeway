@@ -1,2 +1,0 @@
-!include -c <ClaimsSuite.GivenEmployeeWithApproverSuite.TheGiven
-!include -c <ClaimsSuite.GivenEmployeeWithApproverSuite.WhenCreateNewClaimSuite.TheWhen

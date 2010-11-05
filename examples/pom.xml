@@ -50,7 +50,6 @@
         <module>claims</module>
         <module>expenses</module>
         <module>shopping-cart</module>
-        <module>bdd-testapp</module>
         <module>metamodel-examples/namefile</module>
     </modules>
 

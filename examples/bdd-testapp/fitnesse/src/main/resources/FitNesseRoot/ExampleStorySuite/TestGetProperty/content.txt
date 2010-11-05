@@ -1,7 +1,0 @@
-!|using naked objects viewer|
-|on object|alias as|perform|using member|
-|Employee:Tom Brown|tomsApproverViaGetProperty|get property|Approver|
-
-!|using naked objects viewer|
-|on object|perform|using member|that it|value|
-|tomsApproverViaGetProperty|check property|Name|is|Fred Smith|
