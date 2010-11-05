@@ -1,0 +1,113 @@
+/*
+ *  Licensed to the Apache Software Foundation (ASF) under one
+ *  or more contributor license agreements.  See the NOTICE file
+ *  distributed with this work for additional information
+ *  regarding copyright ownership.  The ASF licenses this file
+ *  to you under the Apache License, Version 2.0 (the
+ *  "License"); you may not use this file except in compliance
+ *  with the License.  You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing,
+ *  software distributed under the License is distributed on an
+ *  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ *  KIND, either express or implied.  See the License for the
+ *  specific language governing permissions and limitations
+ *  under the License.
+ */
+
+package org.apache.isis.support.prototype.junit;
+
+import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
+import org.apache.isis.support.prototype.dom.claim.ClaimRepository;
+import org.apache.isis.support.prototype.dom.employee.Employee;
+import org.apache.isis.support.prototype.dom.employee.EmployeeRepository;
+import org.apache.isis.support.prototype.objstore.dflt.claim.ClaimRepositoryInMemory;
+import org.apache.isis.support.prototype.objstore.dflt.employee.EmployeeRepositoryInMemory;
+import org.apache.isis.viewer.junit.IsisTestRunner;
+import org.apache.isis.viewer.junit.Service;
+import org.apache.isis.viewer.junit.Services;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.runner.RunWith;
+
+@RunWith(IsisTestRunner.class)
+@Services({ @Service(ClaimRepositoryInMemory.class), @Service(EmployeeRepositoryInMemory.class) })
+public abstract class AbstractTest {
+
+    private DomainObjectContainer domainObjectContainer;
+    private WrapperFactory wrapperFactory;
+
+    /**
+     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the {@link #setClaimRepository(ClaimRepository)
+     * injected} {@link ClaimRepository}.
+     */
+    protected ClaimRepository claimRepository;
+    /**
+     * The {@link WrapperFactory#wrap(Object) wrapped} equivalent of the
+     * {@link #setEmployeeRepository(EmployeeRepository) injected} {@link EmployeeRepository}.
+     */
+    protected EmployeeRepository employeeRepository;
+
+    protected Employee tomEmployee;
+
+    @Before
+    public void wrapInjectedServices() throws Exception {
+        claimRepository = wrapped(claimRepository);
+        employeeRepository = wrapped(employeeRepository);
+    }
+
+    @Before
+    public void setUp() {
+        tomEmployee = wrapped(employeeRepository.findEmployees("Tom").get(0));
+    }
+
+    protected <T> T wrapped(T obj) {
+        return wrapperFactory.wrap(obj);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> T unwrapped(T obj) {
+        if (obj instanceof WrapperObject) {
+            WrapperObject<?> wrapperObject = (WrapperObject<?>) obj;
+            return (T) wrapperObject.wrapped();
+        }
+        return obj;
+    }
+
+    @After
+    public void tearDown() {
+    }
+
+    // //////////////////////////////////////////////////////
+    // Injected.
+    // //////////////////////////////////////////////////////
+
+    protected WrapperFactory getWrapperFactory() {
+        return wrapperFactory;
+    }
+
+    public void setWrapperFactory(WrapperFactory wrapperFactory) {
+        this.wrapperFactory = wrapperFactory;
+    }
+
+    protected DomainObjectContainer getDomainObjectContainer() {
+        return domainObjectContainer;
+    }
+
+    public void setDomainObjectContainer(final DomainObjectContainer domainObjectContainer) {
+        this.domainObjectContainer = domainObjectContainer;
+    }
+
+    public void setClaimRepository(final ClaimRepository claimRepository) {
+        this.claimRepository = claimRepository;
+    }
+
+    public void setEmployeeRepository(final EmployeeRepository employeeRepository) {
+        this.employeeRepository = employeeRepository;
+    }
+
+}

@@ -65,6 +65,14 @@
 			<groupId>org.apache.isis.alternatives.objectstore</groupId>
 			<artifactId>xml</artifactId>
 		</dependency>
+
+        <!-- JUnit Viewer dependencies -->
+        <dependency>
+            <groupId>org.apache.isis.viewer</groupId>
+            <artifactId>junit</artifactId>
+            <version>0.1-SNAPSHOT</version>
+            <scope>test</scope>
+        </dependency>
         
 		<!--  JETTY DEPENDENCIES FOR TESTING  -->
 		<dependency>
