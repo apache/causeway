@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.support.prototype.dom.employee;
 
 import java.util.List;
@@ -30,4 +29,6 @@ public interface EmployeeRepository {
     public List<Employee> allEmployees();
 
     public List<Employee> findEmployees(@Named("Name") String name);
+
+    public EmployeeTakeOn newEmployee();
 }

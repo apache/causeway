@@ -90,6 +90,9 @@
         <module>viewer-html</module>
         <module>viewer-wicket</module>
         <module>viewer-restful</module>
+        <module>viewer-scimpi</module>
+        <module>viewer-junit</module>
+        <module>viewer-bdd</module>
     </modules>
 
     <dependencyManagement>

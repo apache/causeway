@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.support.prototype.objstore.dflt.employee;
 
 import java.util.List;
@@ -25,30 +24,39 @@ import java.util.List;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.support.prototype.dom.employee.Employee;
 import org.apache.isis.support.prototype.dom.employee.EmployeeRepository;
-
+import org.apache.isis.support.prototype.dom.employee.EmployeeTakeOn;
 
 public class EmployeeRepositoryInMemory extends AbstractFactoryAndRepository implements EmployeeRepository {
 
-	// {{ Id, iconName
+    // {{ Id, iconName
+    @Override
     public String getId() {
         return "claimants";
     }
+
     public String iconName() {
         return "EmployeeRepository";
     }
+
     // }}
 
-    
     // {{ action: allEmployees
+    @Override
     public List<Employee> allEmployees() {
         return allInstances(Employee.class);
     }
+
     // }}
 
-    
     // {{ action: findEmployees
+    @Override
     public List<Employee> findEmployees(String name) {
         return allMatches(Employee.class, name);
     }
+
     // }}
+    @Override
+    public EmployeeTakeOn newEmployee() {
+        return newTransientInstance(EmployeeTakeOn.class);
+    }
 }

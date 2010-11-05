@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.support.prototype.dom.claim;
 
 import java.util.List;
@@ -43,5 +42,9 @@ public interface ClaimRepository {
 
     @NotContributed
     public List<ClaimantExpenseSummary> analyseClaimantExpenses();
+
+    int countClaimsFor(Claimant claimant);
+
+    Claim mostRecentClaim(Claimant claimant);
 
 }
