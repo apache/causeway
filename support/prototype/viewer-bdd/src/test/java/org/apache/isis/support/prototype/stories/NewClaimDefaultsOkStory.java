@@ -1,6 +1,6 @@
-package org.apache.isis.extensions.bdd.testapp.claims.stories;
+package org.apache.isis.support.prototype.stories;
 
-import org.apache.isis.extensions.bdd.testapp.claims.CustomCssPackage;
+import org.apache.isis.support.prototype.CustomCssPackage;
 import org.apache.isis.viewer.bdd.concordion.AbstractIsisConcordionTest;
 
 
