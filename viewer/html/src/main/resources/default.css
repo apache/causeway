@@ -1,9 +1,28 @@
 /* Start Global styles */
+
+body {
+  background: #101254;
+  text-align: center;
+}
+#wrapper {
+  width: 980px;
+  min-height: 800px;
+  border:3px solid #7F81C0;
+  margin:8px auto;
+  text-align: left;
+  background: white;
+}
+
+.header-icon > img {
+	max-width: 40px;
+	height: 40px;
+}
+	
 BODY {
 	font-family: Arial, Sans-Serif;
 	margin: 0 0 10px 0;
 	color: black;
-	background-color: white;
+
 /*
 	background: url(default-images/poweredby-logo.png);
 	background-repeat: no-repeat;
@@ -27,7 +46,6 @@ A:hover {
 
 div#site-header:after {
 	bottom: 0px;
-	content: "version 7, modified by IH";
 	display: block;
 	text-align: right;
 	float:right;
@@ -41,7 +59,7 @@ div#site-header {
 	background-repeat: repeat-x white-space :   nowrap;
 	list-style: none;
 	margin: 0px;
-	height: 124px;
+	height: 100px;
 }
 
 div#site-logo {
@@ -49,8 +67,8 @@ div#site-logo {
 	background-repeat: no-repeat;
 	background-position: left;
 	position: absolute;
-	width: 739px;
-	height: 124px;
+	width: 980px;
+	height: 100px;
 	margin: 0 auto;
 }
 
@@ -124,7 +142,7 @@ DIV.options DIV.item a:visited {
 
 /* Start services */
 DIV.services {
-	background-color: #29357D;
+	background-color: #7F81C0;
 	margin: 0;
 	padding: 4px 20px 4px 5px;
 	min-height: 20px;
@@ -432,16 +450,17 @@ DIV.header {
 	background-color: #F0F0F0;
 	min-height: 48px;
 	margin: 0 50px 0 280px;
-	padding-top: 1em;
+
 }
 
 SPAN.header-icon IMG {
-    padding-left:0.4em;;
-	height: 32px;
-	vertical-align:middle;
+	float: left;
 }
 
 SPAN.header-text {
+	float: left;
+	position: relative;
+	top: 10px;
 	margin-left: 7px;
 	FONT-WEIGHT: bold;
 	FONT-SIZE: 16px;
@@ -449,7 +468,6 @@ SPAN.header-text {
 	COLOR: #003366;
 	FONT-STYLE: normal;
 	FONT-FAMILY: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	vertical-align:middle;
 }
 
 /* End of Object Header */ /* Start of Object Contents */
@@ -489,7 +507,7 @@ DIV.field DIV.icon IMG {
 	height: 16px;
 }
 
-.label,.value,.separator {
+.label,.value {
 	font-size: 80%;
 	color: #333399;
 }
@@ -502,17 +520,25 @@ DIV.field DIV.icon {
 }
 
 DIV.field span.label,DIV.field DIV.label {
-	min-width: 14em;
-	float: left;
-	margin-top: 0.3em;
+	width: 170px;
+	display: block;
+	/*content: ":";*/
+	margin: 0 0 -18px 7px;
 }
 
-DIV.field span.label {
-    padding-left:0.4em;
+DIV.field span.separator {
+	display: inline;
+	position: relative;
+	margin: 0 0 -15px 180px;
+	vertical-align: top;
 }
 
-DIV.field span.value, DIV.field DIV.value, DIV.field INPUT.value, DIV.field SELECT.value {
-	display:  inline;
+DIV.field span.value, DIV.field DIV.value, DIV.field INPUT.value, DIV.field SELECT.value
+	{
+	top: -2px;
+	position: relative;
+	margin: 0px 10px -5px 0px;
+	display: inline;
 }
 
 DIV.field span.value PRE {
@@ -817,7 +843,7 @@ H4 {
 DIV.text {
 	font-size: 100%;
 	color: #336699;
-	letter-spacing: 1pt;margin: 0 0 -18px 7px;
+	letter-spacing: 1pt;
 	text-indent:-1pt;
 	margin: 10px 10px 0px 10px;
 }
