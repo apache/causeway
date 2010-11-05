@@ -66,7 +66,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     public static IsisSystem getSystemBoundTo(
             ServletContext servletContext) {
         Object system = servletContext
-                .getAttribute(WebAppConstants.NAKED_OBJECTS_SYSTEM_KEY);
+                .getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
         return (IsisSystem) system;
     }
 
@@ -106,7 +106,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
         IsisSystem system = injector.getInstance(IsisSystem.class);
 
-        servletContext.setAttribute(WebAppConstants.NAKED_OBJECTS_SYSTEM_KEY,
+        servletContext.setAttribute(WebAppConstants.ISIS_SYSTEM_KEY,
                 system);
         } catch (RuntimeException e) {
             LOG.error("startup failed", e);
@@ -194,14 +194,14 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
 
         try {
             final IsisSystem system = (IsisSystem) servletContext
-                    .getAttribute(WebAppConstants.NAKED_OBJECTS_SYSTEM_KEY);
+                    .getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
             if (system != null) {
                 LOG.info("calling system shutdown");
                 system.shutdown();
             }
         } finally {
             servletContext
-                    .removeAttribute(WebAppConstants.NAKED_OBJECTS_SYSTEM_KEY);
+                    .removeAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
             LOG.info("server shut down");
         }
     }

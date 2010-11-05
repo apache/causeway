@@ -53,7 +53,7 @@ public final class WebAppConstants {
 	 * Key under which the {@link IsisSystem} is bound as a
 	 * servlet context attribute (<tt>ServletContext#getAttribute(String)</tt>).
 	 */
-	public final static String NAKED_OBJECTS_SYSTEM_KEY = WebAppConstants.class
+	public final static String ISIS_SYSTEM_KEY = WebAppConstants.class
 			.getPackage().getName()
 			+ ".isisSystem";
 

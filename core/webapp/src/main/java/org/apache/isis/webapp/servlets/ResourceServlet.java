@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.webapp.servlets;
 
 import java.io.FileInputStream;
@@ -30,16 +29,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.io.IoUtils;
 import org.apache.isis.commons.lang.Resources;
 import org.apache.isis.commons.lang.StringUtils;
-
+import org.apache.log4j.Logger;
 
 /**
  * 
  * @author Dan Haywood
- *
+ * 
  */
 public class ResourceServlet extends HttpServlet {
 
@@ -47,50 +45,52 @@ public class ResourceServlet extends HttpServlet {
     private final Logger LOG = Logger.getLogger(ResourceServlet.class);
 
     @Override
-    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-            IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException, IOException {
         processRequest(request, response);
     }
 
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-            IOException {
+        IOException {
         processRequest(request, response);
     }
 
-    private void processRequest(final HttpServletRequest request, final HttpServletResponse response) throws ServletException,
-            IOException {
+    private void processRequest(final HttpServletRequest request, final HttpServletResponse response)
+        throws ServletException, IOException {
         final String servletPath = StringUtils.stripLeadingSlash(request.getServletPath());
         LOG.info("request: " + servletPath);
-        
-        // try to load from classpath
+
+        // try to load from filesystem
+        InputStream is2 = getRealPath(request);
+        if (is2 != null) {
+            LOG.debug("request: " + servletPath + " loaded from filesystem");
+            IoUtils.copy(is2, response.getOutputStream());
+            is2.close();
+            return;
+        }
+
+        // otherwise, try to load from classpath
         InputStream is = Resources.getResourceAsStream(servletPath);
         if (is != null) {
+            LOG.debug("request: " + servletPath + " loaded from classpath");
             IoUtils.copy(is, response.getOutputStream());
             is.close();
             return;
         }
-        
-        // otherwise, try to load from filesystem
-        is = getRealPath(request);
-        if (is != null) {
-            IoUtils.copy(is, response.getOutputStream());
-            is.close();
-            return;
-        }
-        
+
         LOG.warn("failed to load resource from classpath or file system: " + servletPath);
     }
 
-	private FileInputStream getRealPath(final HttpServletRequest request) {
-		String realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
-		if (realPath == null) {
-		    return null;
-		}
+    private FileInputStream getRealPath(final HttpServletRequest request) {
+        String realPath = request.getSession().getServletContext().getRealPath(request.getServletPath());
+        if (realPath == null) {
+            return null;
+        }
         try {
-			return new FileInputStream(realPath);
-		} catch (FileNotFoundException e) {
-			return null;
-		}
-	}
+            return new FileInputStream(realPath);
+        } catch (FileNotFoundException e) {
+            return null;
+        }
+    }
 }

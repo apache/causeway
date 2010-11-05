@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.webapp.auth;
 
 import javax.servlet.ServletContext;
@@ -35,77 +34,71 @@ import org.apache.isis.runtime.system.IsisSystem;
 import org.apache.isis.webapp.WebAppConstants;
 
 /**
- * Looks up from the {@link HttpSession}, failing
- * that attempts to logon using a {@link LogonFixture} (if available and not
- * already used) or in exploration mode.
+ * Looks up from the {@link HttpSession}, failing that attempts to logon using a {@link LogonFixture} (if available and
+ * not already used) or in exploration mode.
  * 
  * <p>
- * The {@link AuthenticationSession} is looked up from the {@link HttpSession} using
- * the value {@value WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}.
- * Because we only want to use the {@link LogonFixture} once, the {@link HttpSession}
- * also stores the value {@value WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY}
- * once a logon has occurred implicitly.
+ * The {@link AuthenticationSession} is looked up from the {@link HttpSession} using the value
+ * {@value WebAppConstants#HTTP_SESSION_AUTHENTICATION_SESSION_KEY}. Because we only want to use the
+ * {@link LogonFixture} once, the {@link HttpSession} also stores the value
+ * {@value WebAppConstants#HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY} once a logon has occurred
+ * implicitly.
  */
-public class AuthenticationSessionLookupStrategyDefault extends
-		AuthenticationSessionLookupStrategyAbstract {
+public class AuthenticationSessionLookupStrategyDefault extends AuthenticationSessionLookupStrategyAbstract {
 
-	public AuthenticationSession lookup(ServletRequest servletRequest,
-			ServletResponse servletResponse) {
+    @Override
+    public AuthenticationSession lookup(ServletRequest servletRequest, ServletResponse servletResponse) {
 
-		// use previously authenticated session if available.
-		HttpSession httpSession = getHttpSession(servletRequest);
-		AuthenticationSession authSession = (AuthenticationSession) httpSession
-			.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
-		if (authSession != null) {
-			boolean sessionValid = getAuthenticationManager().isSessionValid(authSession);
-			if (sessionValid) {
-				return authSession;
-			}
-		}
-		
-		// otherwise, look for LogonFixture and try to authenticate
-		ServletContext servletContext = getServletContext(servletRequest);
-		IsisSystem system = (IsisSystem) servletContext
-		.getAttribute(WebAppConstants.NAKED_OBJECTS_SYSTEM_KEY);
-		if (system == null) {
-			// not expected to happen...
-			return null;
-		}
-		LogonFixture logonFixture = system.getLogonFixture();
-		
-		// see if exploration is supported
-		if (system.getDeploymentType().isExploring()) {
-			authSession = getAuthenticationManager().authenticate(
-					new AuthenticationRequestExploration(logonFixture));
-			if (authSession != null) {
-				return authSession;
-			}
-		}
-		
-		boolean loggedInUsingLogonFixture = httpSession.getAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY) != null;
-		if (logonFixture != null && !loggedInUsingLogonFixture) {
-			httpSession.setAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY, true);
-			return getAuthenticationManager().authenticate(
-					new AuthenticationRequestLogonFixture(logonFixture));
-		}
+        // use previously authenticated session if available.
+        HttpSession httpSession = getHttpSession(servletRequest);
+        AuthenticationSession authSession =
+            (AuthenticationSession) httpSession.getAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY);
+        if (authSession != null) {
+            boolean sessionValid = getAuthenticationManager().isSessionValid(authSession);
+            if (sessionValid) {
+                return authSession;
+            }
+        }
 
-		return null;
-	}
+        // otherwise, look for LogonFixture and try to authenticate
+        ServletContext servletContext = getServletContext(servletRequest);
+        IsisSystem system = (IsisSystem) servletContext.getAttribute(WebAppConstants.ISIS_SYSTEM_KEY);
+        if (system == null) {
+            // not expected to happen...
+            return null;
+        }
+        LogonFixture logonFixture = system.getLogonFixture();
 
-	public void bind(ServletRequest servletRequest,
-			ServletResponse servletResponse, AuthenticationSession authSession) {
-		HttpSession httpSession = getHttpSession(servletRequest);
-		httpSession.setAttribute(
-				WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY,
-				authSession);
-	}
+        // see if exploration is supported
+        if (system.getDeploymentType().isExploring()) {
+            authSession = getAuthenticationManager().authenticate(new AuthenticationRequestExploration(logonFixture));
+            if (authSession != null) {
+                return authSession;
+            }
+        }
 
-	// //////////////////////////////////////////////////////////
-	// Dependencies (from context)
-	// //////////////////////////////////////////////////////////
+        boolean loggedInUsingLogonFixture =
+            httpSession.getAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY) != null;
+        if (logonFixture != null && !loggedInUsingLogonFixture) {
+            httpSession.setAttribute(WebAppConstants.HTTP_SESSION_LOGGED_ON_PREVIOUSLY_USING_LOGON_FIXTURE_KEY, true);
+            return getAuthenticationManager().authenticate(new AuthenticationRequestLogonFixture(logonFixture));
+        }
 
-	private static AuthenticationManager getAuthenticationManager() {
-		return IsisContext.getAuthenticationManager();
-	}
+        return null;
+    }
+
+    @Override
+    public void bind(ServletRequest servletRequest, ServletResponse servletResponse, AuthenticationSession authSession) {
+        HttpSession httpSession = getHttpSession(servletRequest);
+        httpSession.setAttribute(WebAppConstants.HTTP_SESSION_AUTHENTICATION_SESSION_KEY, authSession);
+    }
+
+    // //////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    // //////////////////////////////////////////////////////////
+
+    private static AuthenticationManager getAuthenticationManager() {
+        return IsisContext.getAuthenticationManager();
+    }
 
 }
