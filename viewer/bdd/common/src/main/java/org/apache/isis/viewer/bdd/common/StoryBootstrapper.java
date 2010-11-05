@@ -20,7 +20,7 @@ public interface StoryBootstrapper  {
 	void setInstallerLookup(InstallerLookup installerLookup);
 
 	IsisSystem getSystem();
-	void setNakedObjectsSystem(IsisSystem system);
+	void setIsisSystem(IsisSystem system);
 
 
     /**

@@ -17,12 +17,12 @@ import org.apache.isis.viewer.bdd.concordion.internal.fixtures.perform.StoryCell
 
 import com.google.common.collect.Lists;
 
-public class UsingNakedObjectsViewerForConcordion extends
+public class UsingIsisViewerForConcordion extends
 		AbstractFixture<UsingNakedObjectsViewerPeer> {
 
 	private final List<String> argumentCells = new ArrayList<String>();
 
-	public UsingNakedObjectsViewerForConcordion(
+	public UsingIsisViewerForConcordion(
 			final AliasRegistry aliasesRegistry,
 			final Perform.Mode mode) {
 		this(aliasesRegistry, mode, 
@@ -46,7 +46,7 @@ public class UsingNakedObjectsViewerForConcordion extends
 						.optional().build());
 	}
 
-	private UsingNakedObjectsViewerForConcordion(
+	private UsingIsisViewerForConcordion(
 			final AliasRegistry aliasesRegistry,
 			final Perform.Mode mode,
 			final CellBinding onObjectBinding,

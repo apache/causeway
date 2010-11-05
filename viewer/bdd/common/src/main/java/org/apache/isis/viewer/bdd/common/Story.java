@@ -15,7 +15,7 @@ import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.IsisSystem;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.bdd.common.story.bootstrapping.InitNakedObjects;
+import org.apache.isis.viewer.bdd.common.story.bootstrapping.IsisInitializer;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownNakedObjects;
@@ -75,9 +75,9 @@ public class Story implements StoryBootstrapper, AliasRegistrySpi {
     }
 
     /**
-     * Called by {@link InitNakedObjects}.
+     * Called by {@link IsisInitializer}.
      */
-    public void setNakedObjectsSystem(
+    public void setIsisSystem(
             final IsisSystem nakedObjectsSystem) {
         this.nakedObjectsSystem = nakedObjectsSystem;
     }

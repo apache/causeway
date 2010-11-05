@@ -18,12 +18,12 @@ import org.apache.isis.viewer.bdd.common.components.StoryInMemoryPersistenceMech
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
-public class InitNakedObjects extends AbstractHelper {
+public class IsisInitializer extends AbstractHelper {
 
 	private final ConfigurationBuilder configurationBuilder;
 	private final DeploymentType deploymentType;
 
-    public InitNakedObjects(final Story story, ConfigurationBuilder configurationBuilder, DeploymentType deploymentType) {
+    public IsisInitializer(final Story story, ConfigurationBuilder configurationBuilder, DeploymentType deploymentType) {
         super(story);
         this.configurationBuilder = configurationBuilder;
         this.deploymentType = deploymentType;
@@ -58,7 +58,7 @@ public class InitNakedObjects extends AbstractHelper {
             system = injector.getInstance(IsisSystem.class);
             
             getStory().setInstallerLookup(installerLookup);
-            getStory().setNakedObjectsSystem(system);
+            getStory().setIsisSystem(system);
 
             // provide a session in order to install fixtures
             IsisContext.openSession(new InitialisationSession());
