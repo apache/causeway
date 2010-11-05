@@ -1,0 +1,15 @@
+<swf:page-title><swf:title icon="no" /></swf:page-title>
+<swf:template  file="../style/template.shtml" />
+
+<h2><swf:title /></h2>
+<swf:short-form>
+	<swf:exclude name="approver"/>
+</swf:short-form>
+
+<swf:methods>
+	<swf:exclude name="submit"/>
+</swf:methods>
+
+
+
+
