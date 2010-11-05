@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.config;
 
 import java.io.IOException;
@@ -26,18 +25,19 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.commons.resource.ResourceStreamSource;
 import org.apache.isis.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.metamodel.config.internal.PropertiesReader;
+import org.apache.log4j.Logger;
 
+import com.google.common.base.Objects;
 
 /**
- * Adapter for {@link ConfigurationBuilder}, loading the specified configuration resource (file) from the
- * given {@link ResourceStreamSource}(s).
+ * Adapter for {@link ConfigurationBuilder}, loading the specified configuration resource (file) from the given
+ * {@link ResourceStreamSource}(s).
  * 
  * <p>
  * If a property is in multiple configuration resources then the latter resources will overwrite the former.
@@ -47,8 +47,8 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
     private static final Logger LOG = Logger.getLogger(ConfigurationBuilderResourceStreams.class);
 
     static class ConfigurationResourceAndPolicy {
-        private String configurationResource;
-        private NotFoundPolicy notFoundPolicy;
+        private final String configurationResource;
+        private final NotFoundPolicy notFoundPolicy;
 
         public ConfigurationResourceAndPolicy(String configurationResource, NotFoundPolicy notFoundPolicy) {
             this.configurationResource = configurationResource;
@@ -62,11 +62,17 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
         public NotFoundPolicy getNotFoundPolicy() {
             return notFoundPolicy;
         }
+
+        @Override
+        public String toString() {
+            return String.format("%s{%s}", configurationResource, notFoundPolicy);
+        }
     }
 
     private final ResourceStreamSource resourceStreamSource;
 
-    private final List<ConfigurationResourceAndPolicy> configurationResources = new ArrayList<ConfigurationResourceAndPolicy>();
+    private final List<ConfigurationResourceAndPolicy> configurationResources =
+        new ArrayList<ConfigurationResourceAndPolicy>();
     private final Properties additionalProperties = new Properties();
     private boolean includeSystemProperties = false;
 
@@ -112,6 +118,7 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
     // ResourceStreamSource
     // ////////////////////////////////////////////////////////////
 
+    @Override
     public ResourceStreamSource getResourceStreamSource() {
         return resourceStreamSource;
     }
@@ -125,14 +132,15 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
      * {@link ResourceStreamSource} available.
      * 
      * <p>
-     * If the configuration resource cannot be found then the provided {@link NotFoundPolicy} determines
-     * whether an exception is thrown or not.
+     * If the configuration resource cannot be found then the provided {@link NotFoundPolicy} determines whether an
+     * exception is thrown or not.
      * 
      * <p>
-     * Must be called before {@link #getConfiguration()}; the resource is actually read on
-     * {@link #getConfiguration()}.
+     * Must be called before {@link #getConfiguration()}; the resource is actually read on {@link #getConfiguration()}.
      */
-    public synchronized void addConfigurationResource(final String configurationResource, final NotFoundPolicy notFoundPolicy) {
+    @Override
+    public synchronized void addConfigurationResource(final String configurationResource,
+        final NotFoundPolicy notFoundPolicy) {
         configurationResources.add(new ConfigurationResourceAndPolicy(configurationResource, notFoundPolicy));
         invalidateCache();
     }
@@ -145,6 +153,7 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
     /**
      * Adds additional property.
      */
+    @Override
     public synchronized void add(final String key, final String value) {
         if (key == null || value == null) {
             return;
@@ -159,6 +168,7 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
     /**
      * Adds additional properties.
      */
+    @Override
     public synchronized void add(final Properties properties) {
         final Enumeration<?> keys = properties.propertyNames();
         while (keys.hasMoreElements()) {
@@ -175,6 +185,7 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
     /**
      * Returns the current {@link IsisConfiguration configuration}.
      */
+    @Override
     public synchronized IsisConfiguration getConfiguration() {
         if (cachedConfiguration != null) {
             return cachedConfiguration;
@@ -196,13 +207,13 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
         }
     }
 
-    private void loadConfigurationResource(
-            PropertiesConfiguration configuration,
-            ConfigurationResourceAndPolicy configResourceAndPolicy) {
+    private void loadConfigurationResource(PropertiesConfiguration configuration,
+        ConfigurationResourceAndPolicy configResourceAndPolicy) {
         String configurationResource = configResourceAndPolicy.getConfigurationResource();
         NotFoundPolicy notFoundPolicy = configResourceAndPolicy.getNotFoundPolicy();
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("loading configuration resource: " + configurationResource + ", notFoundPolicy: " + notFoundPolicy);
+            LOG.debug("loading configuration resource: " + configurationResource + ", notFoundPolicy: "
+                + notFoundPolicy);
         }
         loadConfigurationResource(configuration, configurationResource, notFoundPolicy);
     }
@@ -212,13 +223,11 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
      * {@link ResourceStreamSource} available.
      * 
      * <p>
-     * If the configuration resource cannot be found then the provided {@link NotFoundPolicy} determines
-     * whether an exception is thrown or not.
+     * If the configuration resource cannot be found then the provided {@link NotFoundPolicy} determines whether an
+     * exception is thrown or not.
      */
-    protected void loadConfigurationResource(
-            final PropertiesConfiguration configuration,
-            final String configurationResource,
-            final NotFoundPolicy notFoundPolicy) {
+    protected void loadConfigurationResource(final PropertiesConfiguration configuration,
+        final String configurationResource, final NotFoundPolicy notFoundPolicy) {
         try {
             PropertiesReader propertiesReader = loadConfigurationResource(resourceStreamSource, configurationResource);
             addProperties(configuration, propertiesReader.getProperties());
@@ -231,7 +240,7 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
         }
         if (notFoundPolicy == NotFoundPolicy.FAIL_FAST) {
             throw new IsisException("failed to load '" + configurationResource + "'; tried using: "
-                    + resourceStreamSource.getName());
+                + resourceStreamSource.getName());
         } else {
             if (LOG.isInfoEnabled()) {
                 LOG.info("'" + configurationResource + "' not found, but not needed");
@@ -239,9 +248,8 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
         }
     }
 
-    private PropertiesReader loadConfigurationResource(
-            ResourceStreamSource resourceStreamSource,
-            final String configurationResource) throws IOException {
+    private PropertiesReader loadConfigurationResource(ResourceStreamSource resourceStreamSource,
+        final String configurationResource) throws IOException {
         return new PropertiesReader(resourceStreamSource, configurationResource);
     }
 
@@ -273,11 +281,18 @@ public class ConfigurationBuilderResourceStreams implements ConfigurationBuilder
     // Injectable
     // ////////////////////////////////////////////////////////////
 
+    @Override
     public void injectInto(Object candidate) {
         if (ConfigurationBuilderAware.class.isAssignableFrom(candidate.getClass())) {
             ConfigurationBuilderAware cast = ConfigurationBuilderAware.class.cast(candidate);
             cast.setConfigurationBuilder(this);
         }
+    }
+
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this).add("resourceStream", resourceStreamSource)
+            .add("configResources", configurationResources).toString();
     }
 
 }

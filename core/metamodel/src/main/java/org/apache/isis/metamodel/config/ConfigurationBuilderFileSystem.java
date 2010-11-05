@@ -17,43 +17,38 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.config;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.resource.ResourceStreamSource;
 import org.apache.isis.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.log4j.Logger;
 
 /**
- * Convenience implementation of {@link ConfigurationBuilder} that
- * loads configuration resource from a specified directory (or directories) on the
- * filesystem.
+ * Convenience implementation of {@link ConfigurationBuilder} that loads configuration resource from a specified
+ * directory (or directories) on the filesystem.
  * 
  * @see ResourceStreamSourceFileSystem
  */
 public class ConfigurationBuilderFileSystem extends ConfigurationBuilderResourceStreams {
 
-	@SuppressWarnings("unused")
-	private static final Logger LOG = Logger
-			.getLogger(ConfigurationBuilderFileSystem.class);
-	
-	private static ResourceStreamSource createResourceStreamSource(
-			String... directories) {
-		ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
-		for(String directory: directories) {
-			composite.addResourceStreamSource(
-				new ResourceStreamSourceFileSystem(directory));
-		}
-		return composite;
-	}
+    @SuppressWarnings("unused")
+    private static final Logger LOG = Logger.getLogger(ConfigurationBuilderFileSystem.class);
 
-	public ConfigurationBuilderFileSystem(String... directories) {
-		super(createResourceStreamSource(directories));
-	}
+    private static ResourceStreamSource createResourceStreamSource(String... directories) {
+        ResourceStreamSourceComposite composite = new ResourceStreamSourceComposite();
+        for (String directory : directories) {
+            composite.addResourceStreamSource(new ResourceStreamSourceFileSystem(directory));
+        }
+        return composite;
+    }
 
-	public ConfigurationBuilderFileSystem() {
-		super(new ResourceStreamSourceFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
-	}
+    public ConfigurationBuilderFileSystem(String... directories) {
+        super(createResourceStreamSource(directories));
+    }
+
+    public ConfigurationBuilderFileSystem() {
+        super(new ResourceStreamSourceFileSystem(ConfigurationConstants.DEFAULT_CONFIG_DIRECTORY));
+    }
 
 }
