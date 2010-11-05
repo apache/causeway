@@ -89,6 +89,7 @@
         <module>quickrun</module>
         <module>viewer-html</module>
         <module>viewer-wicket</module>
+        <module>viewer-restful</module>
     </modules>
 
     <dependencyManagement>
