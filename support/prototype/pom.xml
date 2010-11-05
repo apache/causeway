@@ -36,7 +36,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.4.2</version>
+                    <version>2.4.3</version>
                     <configuration>
                         <excludes>
                             <exclude>**/Test*.java</exclude>
@@ -91,7 +91,6 @@
         <module>viewer-wicket</module>
         <module>viewer-restful</module>
         <module>viewer-scimpi</module>
-        <module>viewer-junit</module>
         <module>viewer-bdd</module>
     </modules>
 
@@ -210,22 +209,10 @@
                 <artifactId>view-cooldatasoftmenu-view</artifactId> <version>0.1-SNAPSHOT</version> 
                 </dependency> -->
 
-            <!-- 3rd party -->
-            <dependency>
-                <groupId>com.google.collections</groupId>
-                <artifactId>google-collections</artifactId>
-                <version>1.0</version>
-            </dependency>
 
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.google.collections</groupId>
-            <artifactId>google-collections</artifactId>
-        </dependency>
-    </dependencies>
 
 
 </project>
