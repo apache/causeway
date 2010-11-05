@@ -72,6 +72,8 @@ public class ClaimRepositoryInMemory extends AbstractFactoryAndRepository implem
     @Override
     public List<Claim> claimsFor(Claimant claimant) {
         Claim pattern = newTransientInstance(Claim.class);
+        pattern.setDescription(null);
+        pattern.setApprover(null);
         pattern.setStatus(null);
         pattern.setDate(null);
         pattern.setClaimant(claimant);
