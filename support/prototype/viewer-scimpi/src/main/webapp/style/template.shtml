@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>${title}</title>
+<link rel="stylesheet" title="Style 1" href="${_context}/style/screen.css" type="text/css" media="all" />
+</head>
+
+<body id="demo">
+
+<div id="banner">
+	<div class="logo"><img src="images/logo.png"/></div>
+	<div class="title">Claims App</div>
+</div>
+
+<div id="content">
+	<div id="side">
+		<ul>
+      	    <li><swf:action-link 
+      	    		object="service:claimants"
+      	    		method="allEmployees">All claimants</swf:action-link></li>
+            <li><swf:action-link 
+            		object="service:claims" 
+            		method="allClaims">All claims</swf:action-link></li>
+      	    <li><swf:action-link 
+      	    		object="service:claimants"
+      	    		method="newEmployee">New employee</swf:action-link></li>
+		</ul>
+	</div>
+	<div id="main">
+        <swf:feedback />
+		<swf:content />
+		
+		<swf:diagnostics/>
+	</div>
+</div>
+
+</body>
+</html>
