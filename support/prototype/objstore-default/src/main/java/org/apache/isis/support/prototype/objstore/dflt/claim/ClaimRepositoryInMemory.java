@@ -82,10 +82,33 @@ public class ClaimRepositoryInMemory extends AbstractFactoryAndRepository implem
 
     // {{ action: newClaim
     @Override
-    public ClaimWizard newClaim(Claimant claimant) {
+    public ClaimWizard newClaimUsingWizard(Claimant claimant) {
         final ClaimWizard claimWizard = newTransientInstance(ClaimWizard.class);
         claimWizard.modifyClaimant(claimant);
         return claimWizard;
+    }
+
+    // }}
+
+    // {{ action: newClaim
+    @Override
+    public Claim newClaim(Claimant claimant) {
+        Claim claim = newTransientInstance(Claim.class);
+        if (claimant != null) {
+            claim.setClaimant(claimant);
+            claim.setApprover(claimant.getApprover());
+        }
+        return claim;
+    }
+
+    // }}
+
+    // {{ action: newClaimWithDescription
+    @Override
+    public Claim newClaimWithDescription(Claimant claimant, String description) {
+        Claim claim = newClaim(claimant);
+        claim.setDescription(description);
+        return claim;
     }
 
     // }}

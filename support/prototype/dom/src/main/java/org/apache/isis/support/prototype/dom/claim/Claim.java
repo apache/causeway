@@ -17,10 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.support.prototype.dom.claim;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +34,7 @@ import org.apache.isis.applib.util.Reasons;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
 
-public class Claim extends AbstractDomainObject /* implements Calendarable */ {
+public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     // {{ Title
     public String title() {
@@ -77,6 +77,10 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
         this.description = description;
     }
 
+    public String defaultDescription() {
+        return "enter a description here";
+    }
+
     public String validateDescription(final String description) {
         if (description == null)
             return null;
@@ -99,6 +103,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
     public void setDate(Date date) {
         this.date = date;
     }
+
     // }}
 
     // {{ Status
@@ -113,6 +118,18 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    // }}
+
+    // {{ changeStatus
+    @MemberOrder(sequence = "1")
+    public void changeStatus(final String status) {
+        setStatus(status);
+    }
+
+    public List<String> choices0ChangeStatus() {
+        return Arrays.asList("New", "Incomplete", "Done");
     }
 
     private String ifAlreadySubmitted() {
@@ -163,7 +180,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
     // }}
 
     // {{ Items
-    private List<ClaimItem> items = new ArrayList<ClaimItem>();
+    private final List<ClaimItem> items = new ArrayList<ClaimItem>();
 
     @MemberOrder(sequence = "6")
     public List<ClaimItem> getItems() {
@@ -173,12 +190,12 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
     public void addToItems(ClaimItem item) {
         items.add(item);
     }
+
     public void removeFromItems(ClaimItem item) {
         items.remove(item);
     }
+
     // }}
-
-
 
     // }}
 
@@ -189,8 +206,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
     }
 
     public String disableSubmit() {
-        return getStatus().equals("New") ? null
-                : "Claim has already been submitted";
+        return getStatus().equals("New") ? null : "Claim has already been submitted";
     }
 
     public Approver default0Submit() {
@@ -201,9 +217,8 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
 
     // {{ action: addItem
     @MemberOrder(sequence = "1")
-    public void addItem(@Named("Days since") int days,
-            @Named("Amount") double amount,
-            @Named("Description") String description) {
+    public void addItem(@Named("Days since") int days, @Named("Amount") double amount,
+        @Named("Description") String description) {
         ClaimItem claimItem = newTransientInstance(ClaimItem.class);
         Date date = new Date();
         date = date.add(0, 0, days);
@@ -220,39 +235,44 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */ {
 
     // }}
 
-    
     // {{ removeItem
     @MemberOrder(sequence = "2")
     public void removeItem(final ClaimItem claimItem) {
         removeFromItems(claimItem);
     }
+
     public String disableRemoveItem() {
         return Reasons.coalesce(ifAlreadySubmitted());
     }
+
     public ClaimItem default0RemoveItem() {
-        if(getItems().size()>0) {
-            return getItems().get(getItems().size()-1);
+        if (getItems().size() > 0) {
+            return getItems().get(getItems().size() - 1);
         } else {
             return null;
         }
     }
+
     public List<ClaimItem> choices0RemoveItem() {
         return Collections.unmodifiableList(getItems());
     }
+
     // }}
 
-
     public String validate() {
+        if (getStatus().equals("Incomplete")) {
+            return "incomplete";
+        }
         if (getDescription().contains("foobaz")) {
             return "no foobaz allowed in description!";
         }
         return null;
     }
 
-//    @Ignore
-//    @Override
-//    public CalendarEvent getCalendarEvent() {
-//        return CalendarEvent.newAllDayEvent(getDate().dateValue());
-//    }
-     
+    // @Ignore
+    // @Override
+    // public CalendarEvent getCalendarEvent() {
+    // return CalendarEvent.newAllDayEvent(getDate().dateValue());
+    // }
+
 }

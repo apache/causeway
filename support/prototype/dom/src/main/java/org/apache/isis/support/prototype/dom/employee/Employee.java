@@ -17,20 +17,22 @@
  *  under the License.
  */
 
-
 package org.apache.isis.support.prototype.dom.employee;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.isis.applib.AbstractDomainObject;
-import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.support.prototype.dom.claim.Approver;
 import org.apache.isis.support.prototype.dom.claim.Claimant;
 
-public class Employee extends AbstractDomainObject implements Claimant,
-        Approver /* , Locatable */{
+public class Employee extends AbstractDomainObject implements Claimant, Approver /* , Locatable */{
 
     // {{ Title
+    @Override
     public String title() {
         return getName();
     }
@@ -61,6 +63,7 @@ public class Employee extends AbstractDomainObject implements Claimant,
     // {{ Approver
     private Approver approver;
 
+    @Override
     @MemberOrder(sequence = "2")
     public Approver getApprover() {
         return approver;
@@ -70,24 +73,88 @@ public class Employee extends AbstractDomainObject implements Claimant,
         this.approver = approver;
     }
 
+    public String validateApprover(final Approver approver) {
+        if (approver == null)
+            return null;
+        if (approver == this) {
+            return "Cannot act as own approver";
+        }
+        return null;
+    }
+
     // }}
 
-//    // {{ Location
-//    private Location location;
-//
-//    @Disabled
-//    @MemberOrder(sequence = "1")
-//    public Location getLocation() {
-//        return location;
-//    }
-//
-//    public void setLocation(final Location location) {
-//        this.location = location;
-//    }
-//    // }}
-    
+    // // {{ Location
+    // private Location location;
+    //
+    // @Disabled
+    // @MemberOrder(sequence = "1")
+    // public Location getLocation() {
+    // return location;
+    // }
+    //
+    // public void setLocation(final Location location) {
+    // this.location = location;
+    // }
+    // // }}
 
-    
+    // {{ SomeHiddenProperty
+    private String someHiddenProperty;
+
+    @Hidden
+    @MemberOrder(sequence = "1")
+    public String getSomeHiddenProperty() {
+        return someHiddenProperty;
+    }
+
+    public void setSomeHiddenProperty(final String someHiddenProperty) {
+        this.someHiddenProperty = someHiddenProperty;
+    }
+
+    // }}
+
+    // {{ SomePropertyWithDefault
+    private String somePropertyWithDefault;
+
+    @MemberOrder(sequence = "1")
+    public String getSomePropertyWithDefault() {
+        return somePropertyWithDefault;
+    }
+
+    public void setSomePropertyWithDefault(final String somePropertyWithDefault) {
+        this.somePropertyWithDefault = somePropertyWithDefault;
+    }
+
+    public String defaultSomePropertyWithDefault() {
+        return "Foo";
+    }
+
+    // }}
+
+    // {{ SomeActionWithParameterDefaults
+    @MemberOrder(sequence = "1")
+    public int someActionWithParameterDefaults(final int param0, final int param1) {
+        return param0 + param1;
+    }
+
+    public int default0SomeActionWithParameterDefaults() {
+        return 5;
+    }
+
+    // }}
+
+    // {{ someActionWithParameterChoices
+    @MemberOrder(sequence = "1")
+    public int someActionWithParameterChoices(final int param0, final int param1) {
+        return param0 - param1;
+    }
+
+    public List<Integer> choices0SomeActionWithParameterChoices() {
+        return Arrays.asList(1, 2, 3);
+    }
+
+    // }}
+
     // {{ Limit
     private int limit;
 
@@ -102,7 +169,4 @@ public class Employee extends AbstractDomainObject implements Claimant,
     }
     // }}
 
-
-    
 }
-

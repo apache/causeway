@@ -38,7 +38,12 @@ public interface ClaimRepository {
     @NotInRepositoryMenu
     public List<Claim> claimsSince(Claimant claimant, Date since);
 
-    public ClaimWizard newClaim(Claimant claimant);
+    public Claim newClaim(Claimant claimant);
+
+    @Named("New Claim")
+    public Claim newClaimWithDescription(Claimant claimant, String description);
+
+    public ClaimWizard newClaimUsingWizard(Claimant claimant);
 
     @NotContributed
     public List<ClaimantExpenseSummary> analyseClaimantExpenses();
