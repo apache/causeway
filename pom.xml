@@ -1283,7 +1283,7 @@
         <profile>
             <id>modules-all</id>
             <!-- This is every module that can be built (clean, install).  
-            Do not use with site-deploy, because includes 'release' and 'examples' that are not part of the site  -->
+            Do not use with site-deploy, because includes 'release' and 'examples' that are not part of the site -->
             <activation>
                 <property>
                     <name>modules</name>
@@ -1297,9 +1297,9 @@
                 <module>defaults</module>
                 <module>alternatives</module>
                 <module>viewer</module>
+                <module>release</module>
                 <module>support</module>
                 <module>examples</module>
-                <module>release</module>
             </modules>
         </profile>
         <profile>
