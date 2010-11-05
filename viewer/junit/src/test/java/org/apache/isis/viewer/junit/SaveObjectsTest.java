@@ -28,15 +28,15 @@ import static org.junit.Assert.fail;
 
 import org.apache.isis.metamodel.facets.object.validate.ValidateObjectFacetViaValidateMethod;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
-import org.apache.isis.progmodel.wrapper.applib.WrappedObject;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.junit.Test;
 
 public class SaveObjectsTest extends AbstractTest {
 
 	@SuppressWarnings("unchecked")
-	private WrappedObject<Customer> asViewObject(final Customer proxiedNewCustomer) {
-		return (WrappedObject<Customer>) proxiedNewCustomer;
+	private WrapperObject<Customer> asViewObject(final Customer proxiedNewCustomer) {
+		return (WrapperObject<Customer>) proxiedNewCustomer;
 	}
 
 	@Test
@@ -51,7 +51,7 @@ public class SaveObjectsTest extends AbstractTest {
 		newCustomerViewObject.setMaxLengthField("abc");
 		newCustomerViewObject.setRegExCaseInsensitiveField("ABCd");
 		newCustomerViewObject.setRegExCaseSensitiveField("abcd");
-		final WrappedObject<Customer> proxyNewCustomer = asViewObject(newCustomerViewObject);
+		final WrapperObject<Customer> proxyNewCustomer = asViewObject(newCustomerViewObject);
 		proxyNewCustomer.save();
 		assertThat(getDomainObjectContainer().isPersistent(newCustomer),
 				is(true));
@@ -70,7 +70,7 @@ public class SaveObjectsTest extends AbstractTest {
 
 		assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
 
-		final WrappedObject<Customer> proxyNewCustomer = asViewObject(custJsVO);
+		final WrapperObject<Customer> proxyNewCustomer = asViewObject(custJsVO);
 		proxyNewCustomer.save();
 
 		assertThat(getDomainObjectContainer().isPersistent(custJsDO), is(true));
@@ -92,7 +92,7 @@ public class SaveObjectsTest extends AbstractTest {
 		final Customer newCustomerViewObject = getWrapperFactory().wrap(newCustomer);
 		newCustomer.validate = "No shakes";
 
-		final WrappedObject<Customer> proxyNewCustomer = asViewObject(newCustomerViewObject);
+		final WrapperObject<Customer> proxyNewCustomer = asViewObject(newCustomerViewObject);
 		try {
 			assertThat(getDomainObjectContainer().isPersistent(newCustomer),
 					is(false));

@@ -27,7 +27,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.apache.isis.progmodel.wrapper.applib.WrappedObject;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.junit.Test;
@@ -36,14 +36,14 @@ import org.junit.Test;
 public class ViewObjectTest extends AbstractTest {
 
     @SuppressWarnings("unchecked")
-    private WrappedObject<Customer> asViewObject() {
-        return (WrappedObject<Customer>) custJsVO;
+    private WrapperObject<Customer> asViewObject() {
+        return (WrapperObject<Customer>) custJsVO;
     }
 
 	@Test
     public void canCastViewsToViewObject() {
         @SuppressWarnings("unused")
-        final WrappedObject<Customer> custRpVOAsViewObject = asViewObject();
+        final WrapperObject<Customer> custRpVOAsViewObject = asViewObject();
     }
 
     @Test
@@ -79,7 +79,7 @@ public class ViewObjectTest extends AbstractTest {
         custJsDO.addToVisitedCountries(countryGbrDO);
         custJsDO.addToVisitedCountries(countryUsaDO);
         final List<Country> visitedCountries = custJsVO.getVisitedCountries();
-        assertThat(visitedCountries instanceof WrappedObject, is(true));
+        assertThat(visitedCountries instanceof WrapperObject, is(true));
     }
 
     @Test

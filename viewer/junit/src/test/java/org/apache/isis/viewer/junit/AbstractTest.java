@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.junit;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
-import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.isis.viewer.junit.sample.domain.Customer;
 import org.apache.isis.viewer.junit.sample.domain.Product;
@@ -38,20 +36,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 
-
 @RunWith(IsisTestRunner.class)
-@Fixtures({
-	@Fixture(CountriesFixture.class),
-	@Fixture(ProductsFixture.class),
-	@Fixture(CustomersFixture.class),
-	@Fixture(CustomerOrdersFixture.class)
-})
-@Services({
-	@Service(CountryRepository.class),
-	@Service(ProductRepository.class),
-	@Service(CustomerRepository.class),
-	@Service(OrderRepository.class)
-})
+@Fixtures({ @Fixture(CountriesFixture.class), @Fixture(ProductsFixture.class), @Fixture(CustomersFixture.class),
+    @Fixture(CustomerOrdersFixture.class) })
+@Services({ @Service(CountryRepository.class), @Service(ProductRepository.class), @Service(CustomerRepository.class),
+    @Service(OrderRepository.class) })
 public abstract class AbstractTest {
 
     protected Customer custJsDO;
@@ -75,8 +64,6 @@ public abstract class AbstractTest {
     private DomainObjectContainer domainObjectContainer;
     private WrapperFactory wrapperFactory;
 
-    private InteractionListener interactionListener;
-
     @Before
     public void setUp() {
 
@@ -98,20 +85,16 @@ public abstract class AbstractTest {
     public void tearDown() {
     }
 
-    protected InteractionListener getInteractionListener() {
-        return interactionListener;
-    }
-
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // Injected.
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     protected WrapperFactory getWrapperFactory() {
         return wrapperFactory;
     }
+
     public void setWrapperFactory(WrapperFactory headlessViewer) {
-    	this.wrapperFactory = headlessViewer;
+        this.wrapperFactory = headlessViewer;
     }
 
     protected DomainObjectContainer getDomainObjectContainer() {
@@ -121,7 +104,6 @@ public abstract class AbstractTest {
     public void setDomainObjectContainer(final DomainObjectContainer domainObjectContainer) {
         this.domainObjectContainer = domainObjectContainer;
     }
-
 
     protected ProductRepository getProductRepository() {
         return productRepository;
@@ -146,9 +128,5 @@ public abstract class AbstractTest {
     public void setCountryRepository(final CountryRepository countryRepository) {
         this.countryRepository = countryRepository;
     }
-
-
-
-
 
 }
