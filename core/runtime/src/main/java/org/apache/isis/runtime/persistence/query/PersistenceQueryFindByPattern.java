@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.persistence.query;
 
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -35,16 +34,16 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
         return pattern;
     }
 
-    public PersistenceQueryFindByPattern(
-            final ObjectSpecification specification,
-            final ObjectAdapter pattern) {
+    public PersistenceQueryFindByPattern(final ObjectSpecification specification, final ObjectAdapter pattern) {
         super(specification);
         this.pattern = pattern;
     }
 
+    @Override
     public boolean matches(final ObjectAdapter object) {
-        final ObjectSpecification requiredType = pattern.getSpecification();
-        return requiredType.equals(object.getSpecification()) && matchesPattern(pattern, object);
+        final ObjectSpecification requiredSpec = pattern.getSpecification();
+        ObjectSpecification objectSpec = object.getSpecification();
+        return objectSpec.equals(requiredSpec) && matchesPattern(pattern, object);
     }
 
     private boolean matchesPattern(final ObjectAdapter pattern, final ObjectAdapter instance) {
@@ -70,7 +69,7 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
                     // find the objects
                     final ObjectAdapter reqd = fld.get(pattern);
                     final ObjectAdapter search = fld.get(object);
-                    
+
                     // compare the titles
                     final String r = reqd.titleString().toLowerCase();
                     final String s = search.titleString().toLowerCase();

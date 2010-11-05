@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.util;
 
 import java.lang.reflect.InvocationTargetException;
@@ -32,31 +31,31 @@ import org.apache.isis.commons.lang.WrapperUtils;
 import org.apache.isis.metamodel.exceptions.ReflectionException;
 import org.apache.isis.metamodel.specloader.internal.introspector.MethodFinderUtils;
 
-
 /**
  * TODO: remove duplication with {@link WrapperUtils} and {@link MethodFinderUtils}.
  */
 public class InvokeUtils {
 
-	
     // //////////////////////////////////////////////////////////////
     // invoke
     // //////////////////////////////////////////////////////////////
 
     public static void invoke(final List<Method> methods, final Object object) {
-    	for(Method method: methods) {
-    		invoke(method, object);
-    	}
+        for (Method method : methods) {
+            invoke(method, object);
+        }
     }
 
     public static Object invoke(final Method method, final Object object) {
-    	final Object[] parameters = nullOrDefaultArgsFor(method);
+        final Object[] parameters = nullOrDefaultArgsFor(method);
         return invoke(method, object, parameters);
     }
-    
+
     public static Object invoke(final Method method, final Object object, final Object[] parameters) {
         try {
             return method.invoke(object, parameters);
+        } catch (final IllegalArgumentException e) {
+            throw e;
         } catch (final InvocationTargetException e) {
             invocationException("Exception executing " + method, e);
             return null;
@@ -74,10 +73,9 @@ public class InvokeUtils {
     }
 
     public static Object invokeStatic(final Method method) {
-    	return invoke(method, null, nullOrDefaultArgsFor(method));
+        return invoke(method, null, nullOrDefaultArgsFor(method));
     }
 
-    
     // //////////////////////////////////////////////////////////////
     // invocationException
     // //////////////////////////////////////////////////////////////
@@ -96,12 +94,11 @@ public class InvokeUtils {
         }
     }
 
-
     // //////////////////////////////////////////////////////////////
     // Helpers
     // //////////////////////////////////////////////////////////////
 
-    private static Map<Class<?>,Object> defaultByPrimitiveType = new HashMap<Class<?>, Object>();
+    private static Map<Class<?>, Object> defaultByPrimitiveType = new HashMap<Class<?>, Object>();
     static {
         defaultByPrimitiveType.put(byte.class, (byte) 0);
         defaultByPrimitiveType.put(short.class, (short) 0);
@@ -113,7 +110,6 @@ public class InvokeUtils {
         defaultByPrimitiveType.put(boolean.class, false);
     }
 
-
     private static Object[] nullOrDefaultArgsFor(final Method method) {
         final Class<?>[] paramTypes = method.getParameterTypes();
         final Object[] parameters = new Object[paramTypes.length];
@@ -124,12 +120,11 @@ public class InvokeUtils {
     }
 
     /**
-     * Returns the corresponding 'null' value for the primitives, or just <tt>null</tt> if the class
-     * represents a non-primitive type.
+     * Returns the corresponding 'null' value for the primitives, or just <tt>null</tt> if the class represents a
+     * non-primitive type.
      */
     private static Object nullOrDefaultFor(final Class<?> type) {
         return defaultByPrimitiveType.get(type);
     }
-
 
 }

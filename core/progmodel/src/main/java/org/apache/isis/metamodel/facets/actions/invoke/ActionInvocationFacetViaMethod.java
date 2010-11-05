@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.metamodel.facets.actions.invoke;
 
 import java.lang.reflect.InvocationTargetException;
@@ -25,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -34,7 +32,7 @@ import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.metamodel.util.InvokeUtils;
-
+import org.apache.log4j.Logger;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {
 
@@ -45,14 +43,10 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
-	private final RuntimeContext runtimeContext;
+    private final RuntimeContext runtimeContext;
 
-    public ActionInvocationFacetViaMethod(
-            final Method method,
-            final ObjectSpecification onType,
-            final ObjectSpecification returnType,
-            final FacetHolder holder, 
-            final RuntimeContext runtimeContext) {
+    public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType,
+        final ObjectSpecification returnType, final FacetHolder holder, final RuntimeContext runtimeContext) {
         super(holder);
         this.method = method;
         this.paramCount = method.getParameterTypes().length;
@@ -62,20 +56,24 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
+    @Override
     public ObjectSpecification getReturnType() {
         return returnType;
     }
 
+    @Override
     public ObjectSpecification getOnType() {
         return onType;
     }
 
+    @Override
     public ObjectAdapter invoke(final ObjectAdapter inObject, final ObjectAdapter[] parameters) {
         if (parameters.length != paramCount) {
             LOG.error(method + " requires " + paramCount + " parameters, not " + parameters.length);
@@ -99,10 +97,12 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
             adapter.setTypeOfFacet(typeOfFacet);
             return adapter;
 
+        } catch (final IllegalArgumentException e) {
+            throw e;
         } catch (final InvocationTargetException e) {
             if (e.getTargetException() instanceof IllegalStateException) {
                 throw new ReflectiveActionException("IllegalStateException thrown while executing " + method + " "
-                        + e.getTargetException().getMessage(), e.getTargetException());
+                    + e.getTargetException().getMessage(), e.getTargetException());
             } else {
                 InvokeUtils.invocationException("Exception executing " + method, e);
                 return null;
@@ -112,34 +112,31 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
         }
     }
 
+    private static Object unwrap(final ObjectAdapter adapter) {
+        return adapter == null ? null : adapter.getObject();
+    }
 
-	private static Object unwrap(final ObjectAdapter adapter) {
-	    return adapter == null ? null : adapter.getObject();
-	}
+    @Override
+    public boolean impliesResolve() {
+        return true;
+    }
 
-	
-	public boolean impliesResolve() {
-		return true;
-	}
+    @Override
+    public boolean impliesObjectChanged() {
+        return false;
+    }
 
-	public boolean impliesObjectChanged() {
-		return false;
-	}
-	
-
-	@Override
+    @Override
     protected String toStringValues() {
         return "method=" + method;
     }
-    
-    
-    ///////////////////////////////////////////////////////////
+
+    // /////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    ///////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////
 
     private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+        return runtimeContext;
+    }
 
 }
-
