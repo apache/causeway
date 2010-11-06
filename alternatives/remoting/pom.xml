@@ -102,6 +102,14 @@
 				<artifactId>transport-http</artifactId>
 				<version>0.1-SNAPSHOT</version>
 			</dependency>
+            
+            <dependency>
+                <groupId>org.apache.isis.alternatives.bytecode</groupId>
+                <artifactId>identity</artifactId>
+                <version>0.1-SNAPSHOT</version>
+                <scope>test</scope>
+            </dependency>
+            
 		</dependencies>
 	</dependencyManagement>
 

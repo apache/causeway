@@ -17,6 +17,7 @@
 
         <core.version>0.1-SNAPSHOT</core.version>
     	<wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
+        <identity-bytecode.version>0.1-SNAPSHOT</identity-bytecode.version>
 
         <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
@@ -57,6 +58,25 @@
         </plugins>
     </reporting>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.apache.isis.defaults</groupId>
+                <artifactId>security</artifactId>
+                <version>${core.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.progmodel</groupId>
+                <artifactId>wrapper-metamodel</artifactId>
+                <version>${wrapper-progmodel.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.bytecode</groupId>
+                <artifactId>identity</artifactId>
+                    <version>${identity-bytecode.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.alternatives.progmodel</groupId>
@@ -92,6 +112,11 @@
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
             <artifactId>progmodel</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.alternatives.bytecode</groupId>
+            <artifactId>identity</artifactId>
         </dependency>
 
 		<dependency>

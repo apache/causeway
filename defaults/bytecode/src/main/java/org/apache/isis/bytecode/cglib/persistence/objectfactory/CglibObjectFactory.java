@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.bytecode.cglib.persistence.objectfactory;
 
 import org.apache.isis.bytecode.cglib.persistence.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
@@ -34,10 +33,9 @@ public class CglibObjectFactory extends ObjectFactoryAbstract {
     private DomainObjectContainerResolve resolver;
     private DomainObjectContainerObjectChanged changer;
 
-
     public CglibObjectFactory() {
     }
-    
+
     @Override
     public void open() {
         super.open();
@@ -45,6 +43,7 @@ public class CglibObjectFactory extends ObjectFactoryAbstract {
         resolver = new DomainObjectContainerResolve();
 
         ObjectResolver objectResolver = new ObjectResolver() {
+            @Override
             public void resolve(Object domainObject, String propertyName) {
                 // TODO: could do better than this by maintaining a map of resolved
                 // properties on the ObjectAdapter adapter.
@@ -52,17 +51,19 @@ public class CglibObjectFactory extends ObjectFactoryAbstract {
             }
         };
         ObjectChanger objectChanger = new ObjectChanger() {
+            @Override
             public void objectChanged(Object domainObject) {
                 changer.objectChanged(domainObject);
             }
         };
-        
-        classEnhancer = new ObjectResolveAndObjectChangedEnhancer(
-        		objectResolver, objectChanger, getSpecificationLoader());
+
+        classEnhancer =
+            new ObjectResolveAndObjectChangedEnhancer(objectResolver, objectChanger, getSpecificationLoader());
     }
 
+    @Override
     public <T> T doInstantiate(Class<T> cls) throws ObjectInstantiationException {
         return classEnhancer.newInstance(cls);
     }
-    
+
 }

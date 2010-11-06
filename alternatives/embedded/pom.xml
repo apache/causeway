@@ -17,6 +17,7 @@
         <siteBaseDir>../..</siteBaseDir>
 
         <wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
+        <identity-bytecode.version>0.1-SNAPSHOT</identity-bytecode.version>
 
         <docbkxGuideTitle>Apache Isis Embedded Deployment</docbkxGuideTitle>
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
@@ -54,6 +55,11 @@
 				<artifactId>wrapper-metamodel</artifactId>
 				<version>${wrapper-progmodel.version}</version>
 	        </dependency>
+            <dependency>
+                <groupId>org.apache.isis.alternatives.bytecode</groupId>
+                <artifactId>identity</artifactId>
+                <version>${identity-bytecode.version}</version>
+            </dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -72,6 +78,12 @@
 			<groupId>org.apache.isis.alternatives.progmodel</groupId>
 			<artifactId>wrapper-metamodel</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.alternatives.bytecode</groupId>
+            <artifactId>identity</artifactId>
+        </dependency>
+
 	</dependencies>
 
 </project>

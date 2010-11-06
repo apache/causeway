@@ -17,13 +17,24 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.persistence.objectstore;
 
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
 
+import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
+import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerExtended;
+import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
+import org.apache.isis.runtime.persistence.objectstore.algorithm.dummy.DummyPersistAlgorithm;
+import org.apache.isis.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
+import org.apache.isis.runtime.testsystem.TestObjectFactory;
+import org.apache.isis.runtime.testsystem.TestProxyOidGenerator;
+import org.apache.isis.runtime.testsystem.TestProxySystem;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Mockery;
@@ -33,23 +44,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.metamodel.services.container.DomainObjectContainerDefault;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerExtended;
-import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryBasic;
-import org.apache.isis.runtime.persistence.objectstore.algorithm.dummy.DummyPersistAlgorithm;
-import org.apache.isis.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
-import org.apache.isis.runtime.testsystem.TestProxyOidGenerator;
-import org.apache.isis.runtime.testsystem.TestProxySystem;
 
 @RunWith(JMock.class)
 public class PersistenceSessionObjectStoreTest {
 
-    private Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private PersistenceSessionFactory mockPersistenceSessionFactory;
     private PersistenceSessionObjectStore persistenceSession;
@@ -64,44 +63,38 @@ public class PersistenceSessionObjectStoreTest {
 
     private AdapterFactory adapterFactory;
 
-
     @Before
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);
-        
+
         system = new TestProxySystem();
 
         objectStore = new ObjectStoreSpy();
 
         RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
         DomainObjectContainerDefault container = new DomainObjectContainerDefault();
-        
+
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
-        
+
         servicesInjector = new ServicesInjectorDefault();
         servicesInjector.setContainer(container);
-        
+
         // implicitly created by the system, so reuse
-        adapterManager = (AdapterManagerExtended)system.getAdapterManager();
+        adapterManager = (AdapterManagerExtended) system.getAdapterManager();
         adapterFactory = system.getAdapterFactory();
-        
-        persistenceSession = new PersistenceSessionObjectStore(
-                mockPersistenceSessionFactory, 
-                adapterFactory,  
-                new ObjectFactoryBasic(), 
-                servicesInjector, 
-                new TestProxyOidGenerator(),
-                adapterManager,
-                new DummyPersistAlgorithm(), objectStore);
+
+        persistenceSession =
+            new PersistenceSessionObjectStore(mockPersistenceSessionFactory, adapterFactory, new TestObjectFactory(),
+                servicesInjector, new TestProxyOidGenerator(), adapterManager, new DummyPersistAlgorithm(), objectStore);
         transactionManager = new ObjectStoreTransactionManager(persistenceSession, objectStore);
         transactionManager.injectInto(persistenceSession);
-        
+
         servicesInjector.setServices(Collections.emptyList());
         persistenceSession.setSpecificationLoader(system.getReflector());
-        
+
         system.setPersistenceSession(persistenceSession);
         system.init();
 
@@ -145,14 +138,14 @@ public class PersistenceSessionObjectStoreTest {
 
         objectStore.assertAction(0, "startTransaction");
         objectStore.assertAction(1, action);
-        
+
         // Nov2008 refactoring has inverted the order.
-//        objectStore.assertAction(2, "endTransaction");
-//        objectStore.assertAction(3, command);
-        
+        // objectStore.assertAction(2, "endTransaction");
+        // objectStore.assertAction(3, command);
+
         objectStore.assertAction(2, "execute DestroyObjectCommand " + testObjectAdapter);
         objectStore.assertAction(3, "endTransaction");
-        
+
         assertEquals(4, objectStore.getActions().size());
     }
 

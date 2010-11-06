@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.nosql;
 
 import java.util.HashMap;
@@ -33,7 +32,6 @@ import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntim
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.identifier.Identified;
 import org.apache.isis.metamodel.specloader.JavaReflector;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverserDefault;
@@ -41,26 +39,31 @@ import org.apache.isis.metamodel.specloader.validator.MetaModelValidatorNoop;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactoryAbstract;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.runtime.testsystem.TestClassSubstitutor;
 import org.apache.isis.runtime.testsystem.TestProxyAdapter;
 
 public class TrialObjects {
 
     private AdapterFactory factory;
     private JavaReflector reflector;
-    
-    private Map<Object, ObjectAdapter> adapters = new HashMap<Object, ObjectAdapter>();
+
+    private final Map<Object, ObjectAdapter> adapters = new HashMap<Object, ObjectAdapter>();
 
     public TrialObjects() {
 
         PropertiesConfiguration configuration = new PropertiesConfiguration();
 
-        reflector = new JavaReflector(configuration , new ClassSubstitutorIdentity(), new CollectionTypeRegistryDefault(), new SpecificationTraverserDefault(), 
-                new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(), new MetaModelValidatorNoop());
+        reflector =
+            new JavaReflector(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
+                new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
+                new MetaModelValidatorNoop());
         reflector.setRuntimeContext(new RuntimeContextNoRuntime() {
+            @Override
             public ObjectAdapter adapterFor(Object pattern) {
                 return adapters.get(pattern);
             }
-            
+
+            @Override
             public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
                 if (adapters.get(pojo) != null) {
                     return adapters.get(pojo);
@@ -71,11 +74,13 @@ public class TrialObjects {
 
         });
         reflector.init();
-        
+
         factory = new AdapterFactoryAbstract() {
+            @Override
             public TestProxyAdapter createAdapter(Object pojo, Oid oid) {
                 ObjectSpecification specification = reflector.loadSpecification(pojo.getClass());
-                ResolveState state = oid == null ? ResolveState.VALUE : oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST;
+                ResolveState state =
+                    oid == null ? ResolveState.VALUE : oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST;
 
                 final TestProxyAdapter testProxyObjectAdapter = new TestProxyAdapter();
                 testProxyObjectAdapter.setupResolveState(state);
@@ -98,5 +103,3 @@ public class TrialObjects {
         return factory.createAdapter(pojo, oid);
     }
 }
-
-

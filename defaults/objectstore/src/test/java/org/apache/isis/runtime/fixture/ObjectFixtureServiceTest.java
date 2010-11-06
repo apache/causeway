@@ -17,8 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.fixture;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 import java.io.File;
 import java.util.Date;
@@ -27,18 +29,17 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.junit.Before;
-import org.junit.Test;
 import org.apache.isis.metamodel.config.ConfigurationConstants;
 import org.apache.isis.runtime.testdomain.Movie;
 import org.apache.isis.runtime.testdomain.Person;
 import org.apache.isis.runtime.testdomain.Role;
 import org.apache.isis.runtime.testsystem.TestProxySystemII;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
-
 
 /**
  * TODO: remove dependency on {@link TestProxySystemII} and move back to runtime.
@@ -84,7 +85,7 @@ public class ObjectFixtureServiceTest {
         Set<Object> objects = service.allSavedObjects();
         Assert.assertEquals(1, objects.size());
         Object object = objects.toArray()[0];
-        Assert.assertEquals(Person.class, object.getClass());
+        assertThat(object instanceof Person, is(true));
         Assert.assertEquals("Fred Smith", ((Person) object).getName());
         Assert.assertEquals(new Date(110, 2, 8, 13, 32), ((Person) object).getDate());
     }
@@ -104,6 +105,4 @@ public class ObjectFixtureServiceTest {
         Assert.assertEquals(4, savedObjects.size());
     }
 
-
 }
-

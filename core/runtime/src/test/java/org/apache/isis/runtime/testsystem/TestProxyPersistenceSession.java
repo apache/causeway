@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.testsystem;
 
+import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
 
 import java.util.Hashtable;
 import java.util.Vector;
@@ -42,7 +41,6 @@ import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactoryAbstract;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryBasic;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryAbstract.Mode;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtime.transaction.IsisTransactionDefault;
@@ -51,10 +49,9 @@ import org.apache.isis.runtime.transaction.IsisTransactionManagerAbstract;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 
-
 /**
- * Static mock implementation of {@link PersistenceSession} that provides some partial implementation but also
- * has methods to spy on interactions.
+ * Static mock implementation of {@link PersistenceSession} that provides some partial implementation but also has
+ * methods to spy on interactions.
  * 
  * <p>
  * Is an alternative is to using the JMock mocking library.
@@ -65,107 +62,101 @@ import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
 
     protected static class AdapterFactoryTestProxyAdapter extends AdapterFactoryAbstract {
+        @Override
         public TestProxyAdapter createAdapter(Object pojo, Oid oid) {
             final TestProxyAdapter testProxyObjectAdapter = new TestProxyAdapter();
             testProxyObjectAdapter.setupObject(pojo);
             testProxyObjectAdapter.setupOid(oid);
-            testProxyObjectAdapter.setupResolveState(
-                    oid == null ? ResolveState.VALUE : 
-                        oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST);
+            testProxyObjectAdapter.setupResolveState(oid == null ? ResolveState.VALUE : oid.isTransient()
+                ? ResolveState.TRANSIENT : ResolveState.GHOST);
 
-            testProxyObjectAdapter.setupSpecification(
-                    IsisContext.getSpecificationLoader().loadSpecification(pojo.getClass()));
+            testProxyObjectAdapter.setupSpecification(IsisContext.getSpecificationLoader().loadSpecification(
+                pojo.getClass()));
 
             return testProxyObjectAdapter;
         }
     }
 
-    private final IsisTransactionManager transactionManager = new IsisTransactionManagerAbstract<IsisTransactionDefault>() {
+    private final IsisTransactionManager transactionManager =
+        new IsisTransactionManagerAbstract<IsisTransactionDefault>() {
 
-        public void startTransaction() {
-            actions.addElement("start transaction");
-            createTransaction();
-        }
+            @Override
+            public void startTransaction() {
+                actions.addElement("start transaction");
+                createTransaction();
+            }
 
-        @Override
-        protected IsisTransactionDefault createTransaction(
-                final MessageBroker messageBroker, 
+            @Override
+            protected IsisTransactionDefault createTransaction(final MessageBroker messageBroker,
                 final UpdateNotifier updateNotifier) {
-            return new IsisTransactionDefault(this, messageBroker, updateNotifier);
-        }
-        
-        public boolean flushTransaction() {
-            actions.addElement("flush transaction");
-            return false;
-        }
+                return new IsisTransactionDefault(this, messageBroker, updateNotifier);
+            }
 
-        public void abortTransaction() {
-            getTransaction().abort();
-        }
+            @Override
+            public boolean flushTransaction() {
+                actions.addElement("flush transaction");
+                return false;
+            }
 
-        public void endTransaction() {
-            actions.addElement("end transaction");
-            getTransaction().commit();
-        }
+            @Override
+            public void abortTransaction() {
+                getTransaction().abort();
+            }
 
+            @Override
+            public void endTransaction() {
+                actions.addElement("end transaction");
+                getTransaction().commit();
+            }
 
-    };
+        };
 
     private final Vector<String> actions = new Vector<String>();
-    
-    
+
     /**
      * Playing the role of the object store.
      */
     private final Hashtable<Oid, ObjectAdapter> persistedObjects = new Hashtable<Oid, ObjectAdapter>();
 
-    
-    public TestProxyPersistenceSession(
-    		final PersistenceSessionFactory persistenceSessionFactory) {
-        super(persistenceSessionFactory, 
-                new AdapterFactoryTestProxyAdapter(),
-                new ObjectFactoryBasic(Mode.RELAXED) {}, 
-                new ServicesInjectorDefault(), 
-                new TestProxyOidGenerator(), 
-                new AdapterManagerDefault());
+    public TestProxyPersistenceSession(final PersistenceSessionFactory persistenceSessionFactory) {
+        super(persistenceSessionFactory, new AdapterFactoryTestProxyAdapter(), new TestObjectFactory(Mode.RELAXED) {
+        }, new ServicesInjectorDefault(), new TestProxyOidGenerator(), new AdapterManagerDefault());
 
         RuntimeContextFromSession runtimeContext = new RuntimeContextFromSession();
         DomainObjectContainerDefault container = new DomainObjectContainerDefault();
         runtimeContext.injectInto(container);
         runtimeContext.setContainer(container);
-        
-		getServicesInjector().setContainer(container);
-		
+
+        getServicesInjector().setContainer(container);
+
         setTransactionManager(transactionManager);
     }
 
-    
+    @Override
     public void doOpen() {
         getAdapterFactory().injectInto(getAdapterManager());
         getSpecificationLoader().injectInto(getAdapterManager());
         getOidGenerator().injectInto(getAdapterManager());
-        
-        
-    }
-    
 
-    
-    ////////////////////////////////////////////////////////////////
+    }
+
+    // //////////////////////////////////////////////////////////////
     // TestProxy equivalent implementations
-    ////////////////////////////////////////////////////////////////
-    
+    // //////////////////////////////////////////////////////////////
+
+    @Override
     public ObjectAdapter loadObject(Oid oid, ObjectSpecification spec) {
         ensureThatArg(oid, is(notNullValue()));
         ensureThatArg(spec, is(notNullValue()));
 
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
-        
+
         if (adapter == null) {
             // the objectstore or client proxy implementations will load from object store.
             // This test implementation similarly looks in its persisted objects map.
             adapter = persistedObjects.get(oid);
         }
-        
+
         if (adapter == null) {
             // the objectstore or client proxy implementations will returns null if none found.
             // This test implementation *however* throws an exception.
@@ -175,47 +166,48 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
         return adapter;
     }
 
+    @Override
     public void makePersistent(ObjectAdapter object) {
 
         // the object store implementation calls to the PersistAlgorithm that interacts with
         // the ObjectStore and then ultimately for each object invokes madePersistent.
         getAdapterManager().remapAsPersistent(object);
-        
 
         // this is done here explicitly; in the object store impl it is a responsibility of
         // the object store.
         object.setOptimisticLock(new TestProxyVersion(1));
     }
 
-
+    @Override
     public void objectChanged(ObjectAdapter object) {
         actions.addElement("object changed " + object.getOid());
         object.setOptimisticLock(((TestProxyVersion) object.getVersion()).next());
     }
 
+    @Override
     public void destroyObject(ObjectAdapter object) {
         actions.addElement("object deleted " + object.getOid());
     }
 
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // TestSupport
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
 
-    
+    @Override
     public void testReset() {
         getAdapterManager().reset();
     }
 
-
-    ////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////
     // Not yet implemented
-    ////////////////////////////////////////////////////////////////
-    
-    
+    // //////////////////////////////////////////////////////////////
+
+    @Override
     public void resolveImmediately(ObjectAdapter object) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void resolveField(ObjectAdapter object, ObjectAssociation association) {
         actions.addElement("object deleted " + object.getOid());
     }
@@ -240,21 +232,19 @@ public class TestProxyPersistenceSession extends PersistenceSessionAbstract {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public boolean isFixturesInstalled() {
         throw new NotYetImplementedException();
     }
 
-
+    @Override
     public boolean hasInstances(ObjectSpecification specification) {
         throw new NotYetImplementedException();
     }
 
-
-
+    @Override
     public String debugTitle() {
         return null;
     }
-
-
 
 }

@@ -62,6 +62,12 @@
 		</dependency>
 
         <dependency>
+            <groupId>org.apache.isis.alternatives.bytecode</groupId>
+            <artifactId>identity</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
             <scope>test</scope>
