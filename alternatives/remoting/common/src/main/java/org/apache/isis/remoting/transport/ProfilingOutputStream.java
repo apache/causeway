@@ -17,18 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.remoting.transport;
 
 import java.io.IOException;
 import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.remoting.protocol.encoding.EncodingMarshaller;
-
 
 public class ProfilingOutputStream extends OutputStream {
-	
+
     private static final Logger LOG = Logger.getLogger(ProfilingOutputStream.class);
 
     private final OutputStream wrapped;
@@ -86,7 +83,7 @@ public class ProfilingOutputStream extends OutputStream {
         wrapped.write(b);
         end();
     }
-    
+
     @Override
     public void close() throws IOException {
         if (LOG.isDebugEnabled()) {
@@ -97,4 +94,3 @@ public class ProfilingOutputStream extends OutputStream {
     }
 
 }
-

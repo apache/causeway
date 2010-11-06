@@ -20,7 +20,6 @@
 
 package org.apache.isis.remoting.client.facets;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
@@ -43,7 +42,7 @@ import org.apache.isis.remoting.exchange.ExecuteServerActionRequest;
 import org.apache.isis.remoting.exchange.ExecuteServerActionResponse;
 import org.apache.isis.remoting.exchange.KnownObjectsRequest;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtime.persistence.PersistenceSession;
@@ -52,6 +51,7 @@ import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.messagebroker.MessageList;
 import org.apache.isis.runtime.transaction.messagebroker.WarningList;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.log4j.Logger;
 
 
 /**

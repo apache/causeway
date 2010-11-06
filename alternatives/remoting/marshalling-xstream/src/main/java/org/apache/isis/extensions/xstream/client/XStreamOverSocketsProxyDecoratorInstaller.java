@@ -22,11 +22,11 @@ package org.apache.isis.extensions.xstream.client;
 
 import java.util.List;
 
+import org.apache.isis.alternatives.remoting.transport.sockets.shared.SocketTransport;
 import org.apache.isis.extensions.xstream.shared.XStreamMarshaller;
 import org.apache.isis.remoting.client.ProxyInstallerAbstract;
-import org.apache.isis.remoting.protocol.ClientMarshaller;
+import org.apache.isis.remoting.marshalling.ClientMarshaller;
 import org.apache.isis.remoting.transport.Transport;
-import org.apache.isis.remoting.transport.socket.SocketTransport;
 
 
 public class XStreamOverSocketsProxyDecoratorInstaller extends ProxyInstallerAbstract {

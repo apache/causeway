@@ -25,15 +25,10 @@ import org.apache.isis.metamodel.config.ConfigurationConstants;
 
 public final class ProtocolConstants {
 
-	private static final String ROOT = 
+	public static final String ROOT = 
 		ConfigurationConstants.ROOT + ProtocolInstaller.TYPE + ".";
-	
-	public static final String KEEPALIVE_KEY = ROOT + "keepalive";
-	public static final boolean KEEPALIVE_DEFAULT = false;
-	
-	public static final String DEBUGGING_KEY = ROOT + "debugging";
-	public static final boolean DEBUGGING_DEFAULT = false;
-
+    public static final String ENCODER_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "persistence-query.encoders";
+    public static final String ENCODER_CLASS_NAME_LIST_DEPRECATED = ConfigurationConstants.ROOT + "criteria.encoders";
 	
 	private ProtocolConstants() {}
 

@@ -23,9 +23,6 @@ package org.apache.isis.remoting.protocol.encoding;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.facets.Facet;
@@ -36,7 +33,7 @@ import org.apache.isis.remoting.data.DummyEncodeableObjectData;
 import org.apache.isis.remoting.data.DummyNullValue;
 import org.apache.isis.remoting.data.DummyObjectData;
 import org.apache.isis.remoting.data.common.NullData;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoderDefault;
+import org.apache.isis.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.runtime.testdomain.Movie;
 import org.apache.isis.runtime.testdomain.Person;
 import org.apache.isis.runtime.testspec.MovieSpecification;
@@ -44,6 +41,9 @@ import org.apache.isis.runtime.testspec.PersonSpecification;
 import org.apache.isis.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtime.testsystem.TestProxyVersion;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 
 

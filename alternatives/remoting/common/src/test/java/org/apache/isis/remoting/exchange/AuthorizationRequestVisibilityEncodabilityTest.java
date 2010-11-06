@@ -20,18 +20,17 @@
 
 package org.apache.isis.remoting.exchange;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.apache.isis.commons.matchers.NofMatchers.*;
 
 import java.io.IOException;
 
-import org.junit.Ignore;
-import org.junit.Test;
 import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
 import org.apache.isis.metamodel.encoding.Encodable;
 import org.apache.isis.remoting.data.common.IdentityData;
-import org.apache.isis.remoting.exchange.AuthorizationRequestVisibility;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class AuthorizationRequestVisibilityEncodabilityTest extends EncodabilityContractTest {
 

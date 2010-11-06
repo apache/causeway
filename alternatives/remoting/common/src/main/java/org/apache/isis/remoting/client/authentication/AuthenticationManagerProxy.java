@@ -24,7 +24,7 @@ import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.exchange.CloseSessionRequest;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.authentication.standard.AuthenticationManagerStandard;
 
 

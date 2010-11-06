@@ -59,6 +59,13 @@
 			<artifactId>common</artifactId>
 		</dependency>
 
+        <dependency>
+            <!-- required for sockets transport support -->
+            <groupId>org.apache.isis.alternatives.remoting</groupId>
+            <artifactId>transport-sockets</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 		<dependency>
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>xstream</artifactId>

@@ -55,7 +55,7 @@ import org.apache.isis.remoting.exchange.HasInstancesRequest;
 import org.apache.isis.remoting.exchange.KnownObjectsRequest;
 import org.apache.isis.remoting.exchange.ResolveObjectRequest;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;

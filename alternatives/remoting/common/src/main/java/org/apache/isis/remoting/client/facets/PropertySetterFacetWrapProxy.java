@@ -34,7 +34,7 @@ import org.apache.isis.remoting.exchange.SetAssociationResponse;
 import org.apache.isis.remoting.exchange.SetValueRequest;
 import org.apache.isis.remoting.exchange.SetValueResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 

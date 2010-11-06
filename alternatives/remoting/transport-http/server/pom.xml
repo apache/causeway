@@ -42,18 +42,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.isis.core</groupId>
-			<artifactId>metamodel</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-        </dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>runtime</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
 			<artifactId>webapp</artifactId>
 		</dependency>
 
@@ -61,6 +49,18 @@
 			<groupId>org.apache.isis.alternatives.remoting</groupId>
 			<artifactId>common</artifactId>
 		</dependency>
+        <dependency>
+            <!-- required for encoding marshalling -->
+            <groupId>org.apache.isis.alternatives.remoting</groupId>
+            <artifactId>marshalling-encode</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <!-- required for serialize marshalling -->
+            <groupId>org.apache.isis.alternatives.remoting</groupId>
+            <artifactId>marshalling-serialize</artifactId>
+            <optional>true</optional>
+        </dependency>
 
         <dependency>
 	        <groupId>javax.servlet</groupId>

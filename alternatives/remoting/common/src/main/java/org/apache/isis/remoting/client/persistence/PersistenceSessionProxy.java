@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.components.ApplicationScopedComponent;
 import org.apache.isis.commons.components.SessionScopedComponent;
 import org.apache.isis.commons.debug.DebugString;
@@ -55,7 +54,7 @@ import org.apache.isis.remoting.exchange.ResolveFieldResponse;
 import org.apache.isis.remoting.exchange.ResolveObjectRequest;
 import org.apache.isis.remoting.exchange.ResolveObjectResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.PersistenceSessionAbstract;
@@ -70,6 +69,7 @@ import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.runtime.transaction.TransactionalClosureAbstract;
 import org.apache.isis.runtime.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.log4j.Logger;
 
 
 public class PersistenceSessionProxy extends PersistenceSessionAbstract {

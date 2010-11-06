@@ -41,28 +41,24 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>metamodel</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
-        </dependency>
-
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-		    <artifactId>runtime</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.isis.core</groupId>
-			<artifactId>runtime</artifactId>
-			<type>test-jar</type>
-			<scope>test</scope>
+			<groupId>org.apache.isis.alternatives.remoting</groupId>
+		    <artifactId>common</artifactId>
 		</dependency>
 
         <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <scope>test</scope>
+            <!-- required if using Serializing Marshaller -->
+            <groupId>org.apache.isis.alternatives.remoting</groupId>
+            <artifactId>marshalling-serialize</artifactId>
+            <optional>true</optional>
         </dependency>
+
+        <dependency>
+            <!-- required if using Serializing Marshaller -->
+            <groupId>org.apache.isis.alternatives.remoting</groupId>
+            <artifactId>marshalling-encode</artifactId>
+            <optional>true</optional>
+        </dependency>
+
 	</dependencies>
 
 </project>

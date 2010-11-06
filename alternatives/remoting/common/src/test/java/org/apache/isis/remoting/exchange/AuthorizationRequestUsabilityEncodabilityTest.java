@@ -26,14 +26,13 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
+import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
+import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.remoting.data.common.IdentityData;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.metamodel.encoding.Encodable;
-import org.apache.isis.remoting.data.common.IdentityData;
-import org.apache.isis.remoting.exchange.AuthorizationRequestUsability;
 
 @RunWith(JMock.class)
 public class AuthorizationRequestUsabilityEncodabilityTest extends EncodabilityContractTest {

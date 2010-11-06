@@ -20,7 +20,6 @@
 
 package org.apache.isis.remoting.client.facetdecorator;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetdecorator.FacetDecoratorAbstract;
 import org.apache.isis.metamodel.facets.Facet;
@@ -38,7 +37,7 @@ import org.apache.isis.remoting.client.facets.CollectionRemoveFromFacetWrapProxy
 import org.apache.isis.remoting.client.facets.PropertyClearFacetWrapProxy;
 import org.apache.isis.remoting.client.facets.PropertySetterFacetWrapProxy;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 
 public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
 

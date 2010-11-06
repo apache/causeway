@@ -25,7 +25,7 @@ import java.io.IOException;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.ServerMarshaller;
+import org.apache.isis.remoting.marshalling.ServerMarshaller;
 
 public class ServerConnectionDefault implements ServerConnection {
 

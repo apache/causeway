@@ -20,15 +20,13 @@
 
 package org.apache.isis.remoting.client.facets;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.remoting.data.common.ObjectData;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.log4j.Logger;
 
 
 public class ProxyUtil {

@@ -23,13 +23,6 @@ package org.apache.isis.remoting.server;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -43,13 +36,20 @@ import org.apache.isis.remoting.exchange.ClearAssociationResponse;
 import org.apache.isis.remoting.exchange.SetAssociationRequest;
 import org.apache.isis.remoting.exchange.SetAssociationResponse;
 import org.apache.isis.remoting.facade.impl.ServerFacadeImpl;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.runtime.testsystem.TestProxyAssociation;
 import org.apache.isis.runtime.testsystem.TestProxyVersion;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 
 
 @RunWith(JMock.class)

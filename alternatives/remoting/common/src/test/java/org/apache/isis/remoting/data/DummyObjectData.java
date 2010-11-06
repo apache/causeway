@@ -25,7 +25,6 @@ import java.util.Arrays;
 import org.apache.isis.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.ObjectData;
 
 

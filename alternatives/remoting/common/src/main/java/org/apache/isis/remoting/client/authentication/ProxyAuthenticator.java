@@ -24,7 +24,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import org.apache.isis.commons.ensure.Assert;
 import org.apache.isis.commons.ensure.Ensure;
 import org.apache.isis.commons.lang.StringUtils;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
@@ -32,7 +31,7 @@ import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.exchange.OpenSessionRequest;
 import org.apache.isis.remoting.exchange.OpenSessionResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtime.authentication.standard.AuthenticatorAbstract;

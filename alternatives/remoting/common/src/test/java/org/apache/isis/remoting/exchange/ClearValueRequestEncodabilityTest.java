@@ -26,13 +26,12 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
 import org.apache.isis.metamodel.encoding.Encodable;
 import org.apache.isis.remoting.data.common.IdentityData;
-import org.apache.isis.remoting.exchange.ClearValueRequest;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 public class ClearValueRequestEncodabilityTest extends EncodabilityContractTest {
 

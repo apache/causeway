@@ -26,7 +26,6 @@ import static org.junit.Assert.assertThat;
 
 import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
 import org.apache.isis.metamodel.encoding.Encodable;
-import org.apache.isis.remoting.exchange.OpenSessionRequest;
 
 public class AuthenticationRequestEncodabilityTest extends EncodabilityContractTest {
 

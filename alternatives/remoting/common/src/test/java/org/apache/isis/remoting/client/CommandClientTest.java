@@ -20,10 +20,8 @@
 
 package org.apache.isis.remoting.client;
 
-import org.easymock.MockControl;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.remoting.IsisRemoteException;
-import org.apache.isis.remoting.client.ClientConnection;
 import org.apache.isis.remoting.data.DummyIdentityData;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.data.common.ObjectData;
@@ -41,6 +39,7 @@ import org.apache.isis.remoting.facade.proxy.ServerFacadeProxy;
 import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtime.testsystem.TestProxyOid;
 import org.apache.isis.runtime.testsystem.TestProxySession;
+import org.easymock.MockControl;
 
 
 public class CommandClientTest extends ProxyJunit3TestCase {

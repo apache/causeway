@@ -20,7 +20,6 @@
 
 package org.apache.isis.remoting.client.persistence;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -34,7 +33,7 @@ import org.apache.isis.remoting.exchange.ExecuteClientActionRequest;
 import org.apache.isis.remoting.exchange.ExecuteClientActionResponse;
 import org.apache.isis.remoting.exchange.KnownObjectsRequest;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtime.persistence.PersistenceSessionTransactionManagement;
@@ -43,6 +42,7 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCo
 import org.apache.isis.runtime.transaction.IsisTransactionManagerAbstract;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.log4j.Logger;
 
 public class ClientSideTransactionManager extends IsisTransactionManagerAbstract<ClientSideTransaction> {
 

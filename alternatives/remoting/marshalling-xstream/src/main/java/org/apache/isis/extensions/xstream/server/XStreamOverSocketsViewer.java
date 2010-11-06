@@ -24,12 +24,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.isis.alternatives.remoting.transport.sockets.server.SocketsViewerAbstract;
 import org.apache.isis.extensions.xstream.shared.XStreamMarshaller;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.remoting.server.ServerConnection;
 import org.apache.isis.remoting.server.ServerConnectionDefault;
-import org.apache.isis.remoting.server.SocketsViewerAbstract;
 import org.apache.isis.remoting.transport.ConnectionException;
 import org.apache.isis.remoting.transport.simple.SimpleTransport;
 

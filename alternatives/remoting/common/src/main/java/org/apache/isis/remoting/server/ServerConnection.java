@@ -25,7 +25,7 @@ import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.remoting.client.ClientConnection;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.ServerMarshaller;
+import org.apache.isis.remoting.marshalling.ServerMarshaller;
 
 /**
  * Acts as the mediator between the {@link ServerMarshaller} (which pulls stuff off the transport and pushes stuff on)

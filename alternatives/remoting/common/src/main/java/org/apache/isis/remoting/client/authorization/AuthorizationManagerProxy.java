@@ -32,7 +32,7 @@ import org.apache.isis.remoting.exchange.AuthorizationRequestUsability;
 import org.apache.isis.remoting.exchange.AuthorizationRequestVisibility;
 import org.apache.isis.remoting.exchange.AuthorizationResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.authorization.AuthorizationManagerAbstract;
 
 

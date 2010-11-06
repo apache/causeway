@@ -21,21 +21,19 @@
 package org.apache.isis.extensions.xstream.shared;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.StreamCorruptedException;
 import java.net.SocketException;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.exchange.Request;
+import org.apache.isis.remoting.marshalling.MarshallerAbstract;
 import org.apache.isis.remoting.protocol.IllegalRequestException;
-import org.apache.isis.remoting.protocol.MarshallerAbstract;
 import org.apache.isis.remoting.transport.ConnectionException;
 import org.apache.isis.remoting.transport.Transport;
+import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 

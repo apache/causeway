@@ -23,7 +23,6 @@ package org.apache.isis.remoting.client.facets;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.facets.DecoratingFacet;
-import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertyClearFacetAbstract;
 import org.apache.isis.remoting.data.common.IdentityData;
@@ -31,7 +30,7 @@ import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.exchange.ClearAssociationRequest;
 import org.apache.isis.remoting.exchange.ClearAssociationResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.encoding.internal.ObjectEncoderDecoder;
+import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 
