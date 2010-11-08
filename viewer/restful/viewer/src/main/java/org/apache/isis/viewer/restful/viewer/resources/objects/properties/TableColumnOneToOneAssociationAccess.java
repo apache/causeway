@@ -4,12 +4,12 @@ import java.text.MessageFormat;
 
 import nu.xom.Element;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.resources.objects.TableColumnNakedObjectAssociation;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;

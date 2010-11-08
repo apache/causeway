@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.metamodel.specloader.ObjectReflector;
 import org.apache.isis.metamodel.specloader.ObjectReflectorInstaller;

@@ -23,11 +23,11 @@ package org.apache.isis.metamodel.facets.propparam.validate.mask;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Mask;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.testspec.TestProxySpecification;
 
 
 public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

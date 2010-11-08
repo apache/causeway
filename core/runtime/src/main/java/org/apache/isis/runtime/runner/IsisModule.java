@@ -23,9 +23,9 @@ package org.apache.isis.runtime.runner;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.metamodel.config.ConfigurationBuilderDefault;
-import org.apache.isis.metamodel.config.ConfigurationPrimer;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilderDefault;
+import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.runtime.system.DeploymentType;

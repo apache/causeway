@@ -22,10 +22,10 @@ package org.apache.isis.metamodel.facets.ordering.memberorder;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.Allow;
-import org.apache.isis.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.Allow;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.metamodel.facets.NamedAndDescribedFacetHolderImpl;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
 

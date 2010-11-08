@@ -24,12 +24,12 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class RegExAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {

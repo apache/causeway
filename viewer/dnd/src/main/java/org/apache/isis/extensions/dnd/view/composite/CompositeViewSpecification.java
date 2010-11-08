@@ -23,7 +23,7 @@ package org.apache.isis.extensions.dnd.view.composite;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.extensions.dnd.util.Properties;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;

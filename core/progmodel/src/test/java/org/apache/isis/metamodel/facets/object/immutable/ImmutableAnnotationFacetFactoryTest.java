@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.facets.object.immutable;
 
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.When;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

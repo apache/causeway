@@ -26,7 +26,7 @@ import static org.junit.Assert.assertNotSame;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtime.testsystem.ProxyJunit4TestCase;
 
 

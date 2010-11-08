@@ -22,10 +22,10 @@ package org.apache.isis.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.runtimecontext.spec.IntrospectableSpecificationAbstract;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {

@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.authentication;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 
 public interface AuthenticationManager extends ApplicationScopedComponent {
 

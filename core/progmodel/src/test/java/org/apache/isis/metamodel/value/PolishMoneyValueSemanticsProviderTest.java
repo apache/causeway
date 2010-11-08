@@ -31,7 +31,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.applib.value.Money;
-import org.apache.isis.metamodel.adapter.TextEntryParseException;
+import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetHolderImpl;
 

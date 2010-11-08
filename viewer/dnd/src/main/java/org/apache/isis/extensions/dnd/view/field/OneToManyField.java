@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.field;
 
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.extensions.dnd.view.collection.CollectionContent;
 import org.apache.isis.extensions.dnd.view.content.FieldContent;
 

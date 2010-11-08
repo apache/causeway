@@ -21,14 +21,14 @@
 package org.apache.isis.metamodel.runtimecontext.spec.feature;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.identifier.Identified;
 
 
 // TODO need to pull up the common methods. like getName(), from subclasses

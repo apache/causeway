@@ -22,7 +22,7 @@ package org.apache.isis.runtime.runner.options;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.metamodel.config.ConfigurationPrimer;
+import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
 import org.apache.isis.runtime.runner.BootPrinter;
 
 public interface OptionHandler extends ConfigurationPrimer {

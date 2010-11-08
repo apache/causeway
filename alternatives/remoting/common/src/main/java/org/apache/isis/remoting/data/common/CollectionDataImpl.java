@@ -27,12 +27,12 @@ import java.util.Arrays;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataInputStreamExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 
 public class CollectionDataImpl implements CollectionData, Encodable, Serializable {
 

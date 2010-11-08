@@ -23,7 +23,7 @@ package org.apache.isis.extensions.dnd.view.collection;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
 public class SimpleCollectionSorter implements CollectionSorter {

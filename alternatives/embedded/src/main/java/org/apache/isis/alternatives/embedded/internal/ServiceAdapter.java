@@ -20,7 +20,7 @@
 
 package org.apache.isis.alternatives.embedded.internal;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class ServiceAdapter extends StandaloneAdapter {
 

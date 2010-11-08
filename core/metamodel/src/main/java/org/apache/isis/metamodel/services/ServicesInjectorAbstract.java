@@ -36,7 +36,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.exceptions.ReflectionException;
 
 
 public abstract class ServicesInjectorAbstract implements ServicesInjector {

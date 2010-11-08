@@ -24,8 +24,8 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 
 public class SerialOidEncodabilityWhenPersistentTest extends SerialOidEncodabilityAbstractTest {
 

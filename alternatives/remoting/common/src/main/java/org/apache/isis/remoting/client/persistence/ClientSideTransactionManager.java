@@ -20,11 +20,11 @@
 
 package org.apache.isis.remoting.client.persistence;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ResolveState;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.remoting.client.transaction.ClientSideTransaction;
 import org.apache.isis.remoting.client.transaction.ClientTransactionEvent;
 import org.apache.isis.remoting.data.common.ObjectData;

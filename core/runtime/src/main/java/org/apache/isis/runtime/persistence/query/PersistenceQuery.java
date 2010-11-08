@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.persistence.query;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 /**

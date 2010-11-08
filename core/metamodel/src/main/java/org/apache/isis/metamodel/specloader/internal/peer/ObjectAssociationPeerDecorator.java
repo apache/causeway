@@ -23,8 +23,8 @@ package org.apache.isis.metamodel.specloader.internal.peer;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 
 public abstract class ObjectAssociationPeerDecorator implements ObjectAssociationPeer {

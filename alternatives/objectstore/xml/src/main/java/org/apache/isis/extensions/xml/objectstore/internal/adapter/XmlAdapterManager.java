@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.xml.objectstore.internal.adapter;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerDefault;
 
 public class XmlAdapterManager extends AdapterManagerDefault {

@@ -26,8 +26,8 @@ import java.awt.Graphics;
 import java.awt.PrintJob;
 import java.awt.Toolkit;
 
-import org.apache.isis.metamodel.consent.Allow;
-import org.apache.isis.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.Allow;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.Workspace;

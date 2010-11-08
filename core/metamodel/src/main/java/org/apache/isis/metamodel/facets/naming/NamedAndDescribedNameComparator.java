@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.facets.naming;
 import java.io.Serializable;
 import java.util.Comparator;
 
-import org.apache.isis.metamodel.spec.NamedAndDescribed;
+import org.apache.isis.core.metamodel.spec.NamedAndDescribed;
 
 
 /**

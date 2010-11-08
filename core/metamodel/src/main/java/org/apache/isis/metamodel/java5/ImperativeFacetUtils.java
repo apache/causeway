@@ -25,9 +25,9 @@ import java.util.List;
 
 import org.apache.isis.core.commons.filters.AbstractFilter;
 import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.facets.DecoratingFacet;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
 
 
 public final class ImperativeFacetUtils {

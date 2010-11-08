@@ -21,18 +21,18 @@
 package org.apache.isis.extensions.dnd.view.field;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.adapter.InvalidEntryException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.consent.Allow;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Allow;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.ObjectContent;
 import org.apache.isis.extensions.dnd.view.content.AbstractTextParsableContent;

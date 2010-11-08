@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.xml.objectstore;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
 
 public class ObjectStorePersistenceHelper implements PersistenceQueryBuiltIn {

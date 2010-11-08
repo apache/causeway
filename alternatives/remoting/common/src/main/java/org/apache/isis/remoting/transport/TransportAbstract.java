@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.transport;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 
 public abstract class TransportAbstract implements Transport {
 

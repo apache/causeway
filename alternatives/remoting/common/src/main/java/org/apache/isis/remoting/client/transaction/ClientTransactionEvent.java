@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.client.transaction;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
 public class ClientTransactionEvent {

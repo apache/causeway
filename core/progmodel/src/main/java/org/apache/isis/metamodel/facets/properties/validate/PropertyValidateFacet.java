@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.properties.validate;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacetAbstract;

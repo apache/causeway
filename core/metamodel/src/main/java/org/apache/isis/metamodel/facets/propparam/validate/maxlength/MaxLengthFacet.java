@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.propparam.validate.maxlength;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.SingleIntValueFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 

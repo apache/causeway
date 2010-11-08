@@ -24,8 +24,8 @@ import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Hashtable;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

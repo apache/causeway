@@ -1,8 +1,8 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 public class GetCollection extends PerformAbstractTypeParams {
 

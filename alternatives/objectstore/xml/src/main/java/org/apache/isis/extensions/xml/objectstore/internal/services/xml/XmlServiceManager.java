@@ -26,7 +26,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.extensions.xml.objectstore.internal.data.xml.ContentWriter;
 import org.apache.isis.extensions.xml.objectstore.internal.data.xml.XmlFile;
 import org.apache.isis.extensions.xml.objectstore.internal.services.ServiceManager;

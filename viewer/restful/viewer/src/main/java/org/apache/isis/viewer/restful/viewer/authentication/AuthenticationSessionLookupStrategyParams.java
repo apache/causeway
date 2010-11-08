@@ -4,7 +4,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.auth.AuthenticationSessionLookupStrategyDefault;

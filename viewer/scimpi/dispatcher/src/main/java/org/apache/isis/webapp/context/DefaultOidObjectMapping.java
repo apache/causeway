@@ -31,12 +31,12 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.encoding.DataOutputStreamExtended;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.webapp.ScimpiException;

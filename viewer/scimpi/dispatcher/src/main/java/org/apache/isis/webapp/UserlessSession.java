@@ -22,8 +22,8 @@ package org.apache.isis.webapp;
 
 import java.io.IOException;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSessionAbstract;
-import org.apache.isis.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
 
 public class UserlessSession extends AuthenticationSessionAbstract {
 

@@ -30,7 +30,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.SystemConstants;

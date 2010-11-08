@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.facets.object.ident.title;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.FacetAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;

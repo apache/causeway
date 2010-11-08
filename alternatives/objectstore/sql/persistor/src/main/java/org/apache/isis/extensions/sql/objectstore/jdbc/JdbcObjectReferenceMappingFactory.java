@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.sql.objectstore.jdbc;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMappingFactory;
 

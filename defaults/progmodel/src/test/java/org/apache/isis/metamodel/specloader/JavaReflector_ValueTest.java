@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.specloader;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.JavaReflector;
 
 

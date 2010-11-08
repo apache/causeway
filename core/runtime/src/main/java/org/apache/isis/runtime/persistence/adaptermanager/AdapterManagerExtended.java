@@ -23,7 +23,7 @@ package org.apache.isis.runtime.persistence.adaptermanager;
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugInfo;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 

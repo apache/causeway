@@ -22,8 +22,8 @@ package org.apache.isis.runtime.authorization;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 
 
 /**

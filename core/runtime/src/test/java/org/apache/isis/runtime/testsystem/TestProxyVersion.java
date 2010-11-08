@@ -22,7 +22,7 @@ package org.apache.isis.runtime.testsystem;
 
 import java.util.Date;
 
-import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 
 
 public class TestProxyVersion implements Version {

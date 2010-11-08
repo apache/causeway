@@ -27,12 +27,12 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataInputStreamExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 
 
 public final class SerialOid implements Oid, Encodable, Serializable, DirectlyStringableOid {

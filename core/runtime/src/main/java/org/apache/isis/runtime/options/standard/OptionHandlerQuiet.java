@@ -24,7 +24,7 @@ import static org.apache.isis.runtime.runner.Constants.QUIET_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.runtime.runner.BootPrinter;
 import org.apache.isis.runtime.runner.options.OptionHandlerAbstract;
 

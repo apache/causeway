@@ -24,8 +24,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 

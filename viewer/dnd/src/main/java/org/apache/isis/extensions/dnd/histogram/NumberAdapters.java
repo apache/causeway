@@ -20,13 +20,13 @@
 
 package org.apache.isis.extensions.dnd.histogram;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.facets.value.DoubleFloatingPointValueFacet;
 import org.apache.isis.metamodel.facets.value.FloatingPointValueFacet;
 import org.apache.isis.metamodel.facets.value.IntegerValueFacet;
 import org.apache.isis.metamodel.facets.value.MoneyValueFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 
 
 public class NumberAdapters {

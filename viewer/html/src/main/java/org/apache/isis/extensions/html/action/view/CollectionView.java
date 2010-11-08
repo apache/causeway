@@ -20,10 +20,10 @@
 
 package org.apache.isis.extensions.html.action.view;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.extensions.html.action.Action;
 import org.apache.isis.extensions.html.action.ActionException;
 import org.apache.isis.extensions.html.action.view.util.TableUtil;

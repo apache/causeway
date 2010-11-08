@@ -23,8 +23,8 @@ package org.apache.isis.extensions.sql.objectstore;
 import java.sql.Timestamp;
 import java.util.Date;
 
-import org.apache.isis.metamodel.adapter.version.SerialNumberVersion;
-import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 
 
 public class VersionMapping {

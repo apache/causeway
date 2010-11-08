@@ -24,7 +24,8 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.util.ClassUtil;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetHolderImpl;
@@ -36,7 +37,6 @@ import org.apache.isis.metamodel.facets.object.parseable.ParseableFacetUsingPars
 import org.apache.isis.metamodel.facets.propparam.typicallength.TypicalLengthFacetUsingParser;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.util.ClassUtil;
 
 
 public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract implements ValueFacet {

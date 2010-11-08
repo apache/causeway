@@ -23,10 +23,10 @@ package org.apache.isis.remoting.client.facets;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 import org.apache.isis.runtime.testsystem.TestProxySystem;

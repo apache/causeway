@@ -20,11 +20,11 @@
 
 package org.apache.isis.extensions.html.task;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.runtime.context.IsisContext;

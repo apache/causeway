@@ -23,7 +23,7 @@ package org.apache.isis.extensions.xml.objectstore.internal.data.xml;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.DefaultClock;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.DefaultClockTest;
 import org.apache.isis.extensions.xml.objectstore.internal.data.ObjectData;

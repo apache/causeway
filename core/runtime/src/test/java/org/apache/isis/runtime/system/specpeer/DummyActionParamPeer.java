@@ -20,8 +20,8 @@
 
 package org.apache.isis.runtime.system.specpeer;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 
 

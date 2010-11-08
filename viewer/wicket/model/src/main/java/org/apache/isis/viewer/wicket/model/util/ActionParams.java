@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 
 
 

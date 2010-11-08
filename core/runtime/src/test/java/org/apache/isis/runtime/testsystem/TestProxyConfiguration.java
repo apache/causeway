@@ -30,7 +30,7 @@ import junit.framework.AssertionFailedError;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 
 
 public class TestProxyConfiguration implements IsisConfiguration {

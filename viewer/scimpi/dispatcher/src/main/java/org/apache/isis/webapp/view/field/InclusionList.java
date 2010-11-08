@@ -23,8 +23,8 @@ package org.apache.isis.webapp.view.field;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.webapp.BlockContent;
 import org.apache.isis.webapp.view.form.InputField;
 

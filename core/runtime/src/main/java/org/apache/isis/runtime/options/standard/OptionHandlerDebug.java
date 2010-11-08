@@ -22,7 +22,7 @@ package org.apache.isis.runtime.options.standard;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.runtime.runner.BootPrinter;
 import org.apache.isis.runtime.runner.options.OptionHandlerAbstract;
 

@@ -23,9 +23,9 @@ package org.apache.isis.remoting.exchange;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.apache.isis.remoting.data.common.ObjectData;
 
 public class ClearValueResponse implements Encodable, Serializable {

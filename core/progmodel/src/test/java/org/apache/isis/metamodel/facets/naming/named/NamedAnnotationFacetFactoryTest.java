@@ -24,9 +24,9 @@ import java.lang.reflect.Method;
 import java.util.Collection;
 
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class NamedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

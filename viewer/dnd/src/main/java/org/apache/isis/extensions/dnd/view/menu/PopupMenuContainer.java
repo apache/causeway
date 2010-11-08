@@ -25,7 +25,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;

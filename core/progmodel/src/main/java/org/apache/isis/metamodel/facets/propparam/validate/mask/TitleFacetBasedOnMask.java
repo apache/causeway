@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.propparam.validate.mask;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.metamodel.facets.object.ident.title.TitleFacetAbstract;
 import org.apache.isis.metamodel.facets.object.ident.title.TitleFacetUsingParser;

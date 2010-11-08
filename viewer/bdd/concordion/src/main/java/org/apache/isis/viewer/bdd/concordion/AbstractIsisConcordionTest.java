@@ -11,9 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.isis.core.commons.io.IoUtils;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.metamodel.config.ConfigurationBuilderFileSystem;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;

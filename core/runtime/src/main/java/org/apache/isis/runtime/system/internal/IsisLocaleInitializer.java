@@ -23,7 +23,7 @@ package org.apache.isis.runtime.system.internal;
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.system.SystemConstants;
 
 public class IsisLocaleInitializer {

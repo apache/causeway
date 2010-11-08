@@ -25,9 +25,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.data.common.ReferenceData;

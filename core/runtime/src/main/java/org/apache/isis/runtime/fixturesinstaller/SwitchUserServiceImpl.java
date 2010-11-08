@@ -23,7 +23,7 @@ package org.apache.isis.runtime.fixturesinstaller;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.switchuser.SwitchUserService;
 import org.apache.isis.applib.switchuser.SwitchUserServiceAware;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.runtime.context.IsisContext;

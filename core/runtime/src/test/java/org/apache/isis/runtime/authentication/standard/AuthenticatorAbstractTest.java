@@ -30,7 +30,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtime.authentication.AuthenticationRequestAbstract;
 import org.apache.isis.runtime.authentication.standard.exploration.AuthenticationRequestExploration;

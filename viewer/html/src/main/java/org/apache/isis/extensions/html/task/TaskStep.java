@@ -21,8 +21,8 @@
 package org.apache.isis.extensions.html.task;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.html.action.Action;
 import org.apache.isis.extensions.html.action.ActionException;
 import org.apache.isis.extensions.html.component.Component;

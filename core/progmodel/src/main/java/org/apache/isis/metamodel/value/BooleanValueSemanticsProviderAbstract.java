@@ -21,15 +21,15 @@
 package org.apache.isis.metamodel.value;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.TextEntryParseException;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.util.IsisUtils;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.value.BooleanValueFacet;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.util.IsisUtils;
 
 
 public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements BooleanValueFacet {

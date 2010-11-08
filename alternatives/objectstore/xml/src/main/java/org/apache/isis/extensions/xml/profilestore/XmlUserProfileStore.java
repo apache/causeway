@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.xml.profilestore;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.extensions.xml.objectstore.internal.data.xml.XmlFile;
 import org.apache.isis.runtime.userprofile.UserProfile;
 import org.apache.isis.runtime.userprofile.UserProfileStore;

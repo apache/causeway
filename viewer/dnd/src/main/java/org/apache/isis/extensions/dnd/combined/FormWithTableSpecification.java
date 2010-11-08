@@ -20,11 +20,11 @@
 
 package org.apache.isis.extensions.dnd.combined;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.extensions.dnd.form.FormSpecification;
 import org.apache.isis.extensions.dnd.table.InternalTableSpecification;
 import org.apache.isis.extensions.dnd.view.Axes;

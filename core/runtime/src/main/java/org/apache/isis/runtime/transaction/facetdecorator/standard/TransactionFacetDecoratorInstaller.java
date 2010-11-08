@@ -22,7 +22,7 @@ package org.apache.isis.runtime.transaction.facetdecorator.standard;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.runtime.transaction.facetdecorator.TransactionFacetDecoratorInstallerAbstract;
 
 import com.google.common.collect.Lists;

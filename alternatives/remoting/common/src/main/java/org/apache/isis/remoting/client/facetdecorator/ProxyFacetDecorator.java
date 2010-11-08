@@ -20,8 +20,10 @@
 
 package org.apache.isis.remoting.client.facetdecorator;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.facetdecorator.FacetDecoratorAbstract;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
@@ -29,8 +31,6 @@ import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacet;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.identifier.Identified;
 import org.apache.isis.remoting.client.facets.ActionInvocationFacetWrapProxy;
 import org.apache.isis.remoting.client.facets.CollectionAddToFacetWrapProxy;
 import org.apache.isis.remoting.client.facets.CollectionRemoveFromFacetWrapProxy;

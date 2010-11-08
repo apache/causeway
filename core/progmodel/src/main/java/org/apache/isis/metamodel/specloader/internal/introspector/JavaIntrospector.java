@@ -33,7 +33,10 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.facets.MethodScope;
@@ -45,8 +48,6 @@ import org.apache.isis.metamodel.facets.ordering.actionorder.ActionOrderFacet;
 import org.apache.isis.metamodel.facets.ordering.fieldorder.FieldOrderFacet;
 import org.apache.isis.metamodel.facets.ordering.memberorder.DeweyOrderSet;
 import org.apache.isis.metamodel.spec.JavaSpecification;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.specloader.ObjectReflectorAbstract;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -59,7 +60,6 @@ import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionPeer;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectAssociationPeer;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.metamodel.util.NameUtils;
 
 
 public class JavaIntrospector {

@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.specloader.internal.cache;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public class StaticSpecificationCache implements SpecificationCache {

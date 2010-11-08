@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.transport;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 
 
 public final class TransportConstants {

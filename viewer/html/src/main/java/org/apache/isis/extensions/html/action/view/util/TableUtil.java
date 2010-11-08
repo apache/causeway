@@ -20,22 +20,22 @@
 
 package org.apache.isis.extensions.html.action.view.util;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.extensions.html.component.ComponentFactory;
 import org.apache.isis.extensions.html.component.Table;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
-import static org.apache.isis.metamodel.spec.feature.ObjectAssociationFilters.PROPERTIES;
-import static org.apache.isis.metamodel.spec.feature.ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS;
+import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.PROPERTIES;
+import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS;
 
 
 

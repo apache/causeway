@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.noapplib;
 
 import org.apache.isis.applib.value.Date;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.components.scalars.ScalarPanelTextFieldAbstract;
 import org.apache.wicket.datetime.markup.html.form.DateTextField;

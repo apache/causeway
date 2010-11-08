@@ -22,9 +22,9 @@ package org.apache.isis.extensions.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.html.component.ComponentAbstract;
 import org.apache.isis.extensions.html.image.ImageLookup;
 import org.apache.isis.extensions.html.request.Request;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.imageloader.awt;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 
 
 public class ImageConstants {

@@ -24,10 +24,10 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Iterator;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 
 /**

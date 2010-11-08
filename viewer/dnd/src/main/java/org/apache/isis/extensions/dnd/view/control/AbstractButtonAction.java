@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.dnd.view.control;
 
-import org.apache.isis.metamodel.consent.Allow;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.consent.Allow;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.extensions.dnd.view.ButtonAction;
 import org.apache.isis.extensions.dnd.view.View;
 

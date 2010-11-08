@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.facets.ordering;
 
 import java.util.StringTokenizer;
 
+import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
-import org.apache.isis.metamodel.util.NameUtils;
 
 
 public class SimpleOrderSet extends OrderSet {

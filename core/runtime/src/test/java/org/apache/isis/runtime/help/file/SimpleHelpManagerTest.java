@@ -27,8 +27,8 @@ import java.io.StringReader;
 import junit.framework.TestCase;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 
 
 public class SimpleHelpManagerTest extends TestCase {

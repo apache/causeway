@@ -27,7 +27,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.metamodel.specloader.internal.TypeExtractorMethodReturn;

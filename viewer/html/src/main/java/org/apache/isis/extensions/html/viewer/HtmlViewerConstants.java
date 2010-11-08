@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.html.viewer;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 
 public final class HtmlViewerConstants {
 

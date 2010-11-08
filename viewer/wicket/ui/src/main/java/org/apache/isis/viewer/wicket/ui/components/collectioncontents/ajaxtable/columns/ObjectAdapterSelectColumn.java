@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.ajaxtable.columns;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.ui.components.widgets.buttons.ContainedButton;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;

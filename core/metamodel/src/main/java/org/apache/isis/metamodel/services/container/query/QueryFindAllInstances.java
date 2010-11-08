@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.services.container.query;
 import java.io.Serializable;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Although implements {@link Query} and thus is intended to be (and indeed is) {@link Serializable},

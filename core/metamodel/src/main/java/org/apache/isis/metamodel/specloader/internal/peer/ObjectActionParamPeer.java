@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.specloader.internal.peer;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 
 public interface ObjectActionParamPeer extends FacetHolder {

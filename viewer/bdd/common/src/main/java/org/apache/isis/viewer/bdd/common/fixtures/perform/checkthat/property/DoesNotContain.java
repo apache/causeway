@@ -1,7 +1,7 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.property;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;

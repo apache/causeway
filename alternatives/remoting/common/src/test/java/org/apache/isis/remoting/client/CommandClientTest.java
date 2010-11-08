@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.client;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.remoting.IsisRemoteException;
 import org.apache.isis.remoting.data.DummyIdentityData;
 import org.apache.isis.remoting.data.common.IdentityData;

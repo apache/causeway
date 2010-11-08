@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;

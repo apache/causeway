@@ -22,8 +22,8 @@ package org.apache.isis.remoting.data;
 
 import java.util.Arrays;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.remoting.data.common.CollectionData;
 import org.apache.isis.remoting.data.common.ReferenceData;
 

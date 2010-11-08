@@ -23,9 +23,9 @@
  */
 package org.apache.isis.extensions.sql.objectstore.auto;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.specloader.internal.OneToManyAssociationImpl;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectAssociationPeer;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.sql.objectstore.FieldMappingLookup;
 import org.apache.isis.extensions.sql.objectstore.ObjectMappingLookup;
 

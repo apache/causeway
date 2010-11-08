@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.models;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * Backing model for actions of application services menu bar (typically, as displayed

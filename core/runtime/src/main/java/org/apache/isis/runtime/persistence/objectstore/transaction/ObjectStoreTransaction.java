@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
 import org.apache.isis.runtime.transaction.IsisTransactionAbstract;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;

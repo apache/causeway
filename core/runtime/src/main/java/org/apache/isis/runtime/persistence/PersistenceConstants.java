@@ -20,8 +20,8 @@
 package org.apache.isis.runtime.persistence;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.metamodel.config.ConfigurationConstants;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.services.ServicesInjector;
 import org.apache.isis.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.metamodel.services.container.DomainObjectContainerDefault;

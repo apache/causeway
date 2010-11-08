@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.authorization.standard.file;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.runtime.authorization.standard.AuthorizationConstants;
 

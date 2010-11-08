@@ -24,11 +24,11 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.remoting.data.DummyReferenceData;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.exchange.ClearAssociationRequest;

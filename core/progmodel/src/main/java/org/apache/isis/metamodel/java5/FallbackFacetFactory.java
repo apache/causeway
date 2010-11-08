@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
@@ -40,7 +41,6 @@ import org.apache.isis.metamodel.facets.object.ident.title.TitleFacetNone;
 import org.apache.isis.metamodel.facets.object.notpersistable.NotPersistableFacetNull;
 import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacetNone;
 import org.apache.isis.metamodel.facets.propparam.validate.maxlength.MaxLengthFacetUnlimited;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
 import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectActionPeer;
 import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectMemberPeer;

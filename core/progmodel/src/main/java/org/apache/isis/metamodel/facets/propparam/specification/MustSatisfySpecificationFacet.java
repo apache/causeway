@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.util.ReasonBuffer;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;

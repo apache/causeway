@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import java.awt.Graphics2D;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.value.ImageValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.metamodel.consent.InteractionAdvisorFacet;
+import org.apache.isis.core.metamodel.consent.InteractionAdvisorFacet;
 import org.apache.isis.metamodel.facets.Facet;
 
 

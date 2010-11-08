@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 
 import nu.xom.Element;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.restful.applib.resources.ServicesResource;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.html.XhtmlTemplate;

@@ -26,9 +26,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

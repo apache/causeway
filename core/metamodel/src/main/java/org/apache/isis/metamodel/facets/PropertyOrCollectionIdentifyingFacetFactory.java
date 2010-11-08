@@ -24,8 +24,8 @@ package org.apache.isis.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 
 /**

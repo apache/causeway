@@ -20,10 +20,10 @@
 
 package org.apache.isis.metamodel.specloader.internal;
 
-import org.apache.isis.metamodel.adapter.Instance;
-import org.apache.isis.metamodel.adapter.MutableProposedHolder;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.isis.core.metamodel.adapter.Instance;
+import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 
 

@@ -22,9 +22,9 @@ package org.apache.isis.extensions.dnd.view.debug;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.ConsentAbstract;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.ConsentAbstract;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.MenuOptions;
 import org.apache.isis.extensions.dnd.view.UserActionSet;

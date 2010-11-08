@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.facets.object.notpersistable;
 
 import org.apache.isis.applib.marker.NonPersistable;
 import org.apache.isis.applib.marker.ProgramPersistable;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {

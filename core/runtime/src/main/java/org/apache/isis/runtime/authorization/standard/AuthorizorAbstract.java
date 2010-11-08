@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.authorization.standard;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 
 
 public abstract class AuthorizorAbstract implements Authorizor {

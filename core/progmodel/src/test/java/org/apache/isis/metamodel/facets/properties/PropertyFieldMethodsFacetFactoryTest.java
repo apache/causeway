@@ -23,6 +23,7 @@ package org.apache.isis.metamodel.facets.properties;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.actions.DescribedAsFacetViaMethod;
@@ -59,7 +60,6 @@ import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacetVia
 import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.metamodel.facets.properties.validate.PropertyValidateFacet;
 import org.apache.isis.metamodel.facets.properties.validate.PropertyValidateFacetViaMethod;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {

@@ -34,7 +34,7 @@ import java.sql.Statement;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.runtime.testsystem.SqlDataClassFactory;
 import org.apache.isis.runtime.testsystem.TestProxySystemIII;
 import org.apache.isis.runtime.testsystem.dataclasses.SimpleClass;

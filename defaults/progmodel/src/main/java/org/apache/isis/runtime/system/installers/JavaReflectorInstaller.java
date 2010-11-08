@@ -27,9 +27,9 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.metamodel.config.ConfigurationConstants;
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.metamodel.specloader.JavaReflector;

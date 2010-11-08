@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.facets.object.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;

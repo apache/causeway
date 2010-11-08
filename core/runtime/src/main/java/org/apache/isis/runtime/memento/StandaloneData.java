@@ -25,11 +25,11 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.IsisContext;
 
 public class StandaloneData extends Data {

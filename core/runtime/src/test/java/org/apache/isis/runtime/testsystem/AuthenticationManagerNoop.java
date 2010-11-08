@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.testsystem;
 
 import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 

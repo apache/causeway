@@ -26,9 +26,9 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.metamodel.encoding.Encodable;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
+import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.ReferenceData;
 import org.junit.Before;

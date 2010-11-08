@@ -20,11 +20,11 @@
 
 package org.apache.isis.extensions.dnd.view.option;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.consent.Allow;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.Veto;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Allow;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.ObjectContent;
 import org.apache.isis.extensions.dnd.view.View;

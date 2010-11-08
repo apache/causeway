@@ -25,12 +25,16 @@ import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.Allow;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.metamodel.exceptions.ModelException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.Allow;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.exceptions.ModelException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationFacets;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.MultiTypedFacet;
 import org.apache.isis.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
@@ -41,10 +45,6 @@ import org.apache.isis.metamodel.facets.propparam.validate.mandatory.MandatoryFa
 import org.apache.isis.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.services.container.query.QueryFindAllInstances;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.SpecificationFacets;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 
 

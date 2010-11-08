@@ -3,7 +3,7 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.Constants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;

@@ -24,7 +24,7 @@ import java.awt.Cursor;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.extensions.dnd.view.BackgroundTask;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.Feedback;

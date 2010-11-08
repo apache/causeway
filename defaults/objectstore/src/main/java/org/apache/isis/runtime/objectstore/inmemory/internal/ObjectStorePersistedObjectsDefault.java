@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SimpleOidGenerator.Memento;
 
 /**

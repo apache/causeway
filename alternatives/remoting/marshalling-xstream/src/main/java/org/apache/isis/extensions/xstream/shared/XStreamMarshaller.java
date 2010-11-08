@@ -27,7 +27,7 @@ import java.io.StreamCorruptedException;
 import java.net.SocketException;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.marshalling.MarshallerAbstract;
 import org.apache.isis.remoting.protocol.IllegalRequestException;

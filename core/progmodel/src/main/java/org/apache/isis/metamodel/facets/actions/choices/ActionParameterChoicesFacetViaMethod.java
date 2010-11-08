@@ -25,14 +25,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
+import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.java5.ImperativeFacet;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.util.ObjectAdapterUtils;
-import org.apache.isis.metamodel.util.ObjectInvokeUtils;
 
 
 

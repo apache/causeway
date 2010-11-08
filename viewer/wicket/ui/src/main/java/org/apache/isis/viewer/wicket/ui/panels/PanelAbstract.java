@@ -22,9 +22,9 @@ package org.apache.isis.viewer.wicket.ui.panels;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;

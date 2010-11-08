@@ -21,8 +21,8 @@
 package org.apache.isis.runtime.testsystem;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authorization.AuthorizationManager;
 
 public class AuthorizationManagerNoop implements AuthorizationManager {

@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.common;
 
 import java.io.Serializable;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.wicket.Component;
 
 /**

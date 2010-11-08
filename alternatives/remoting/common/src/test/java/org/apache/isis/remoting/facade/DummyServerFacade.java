@@ -21,7 +21,7 @@
 package org.apache.isis.remoting.facade;
 
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.exchange.AuthorizationRequestUsability;
 import org.apache.isis.remoting.exchange.AuthorizationRequestVisibility;

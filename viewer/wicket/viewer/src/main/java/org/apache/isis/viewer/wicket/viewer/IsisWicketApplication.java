@@ -22,8 +22,8 @@ package org.apache.isis.viewer.wicket.viewer;
 
 import java.util.ServiceLoader;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.runner.IsisModule;
 import org.apache.isis.runtime.system.DeploymentType;

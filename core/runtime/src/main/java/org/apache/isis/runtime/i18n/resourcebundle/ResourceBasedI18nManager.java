@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 
 
 public class ResourceBasedI18nManager implements I18nManager {

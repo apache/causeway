@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 
 public interface Perform {

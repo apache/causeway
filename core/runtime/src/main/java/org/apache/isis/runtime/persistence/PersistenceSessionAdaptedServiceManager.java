@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public interface PersistenceSessionAdaptedServiceManager {
 	

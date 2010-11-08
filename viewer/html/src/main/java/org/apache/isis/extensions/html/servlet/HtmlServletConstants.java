@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.html.servlet;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 
 public final class HtmlServletConstants {
 	

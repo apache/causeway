@@ -23,7 +23,7 @@ package org.apache.isis.runtime.help.file;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.runtime.help.StandardHelpFacetDecorator;
 import org.apache.isis.runtime.installers.InstallerAbstract;

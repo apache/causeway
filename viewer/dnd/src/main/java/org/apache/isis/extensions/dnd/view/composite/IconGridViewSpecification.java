@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.composite;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Text;
 import org.apache.isis.extensions.dnd.icon.Icon;

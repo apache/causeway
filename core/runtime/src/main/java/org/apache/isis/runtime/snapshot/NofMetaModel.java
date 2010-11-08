@@ -21,9 +21,9 @@
 package org.apache.isis.runtime.snapshot;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.util.CollectionFacetUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

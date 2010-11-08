@@ -29,11 +29,13 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.metamodel.adapter.Instance;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.adapter.Instance;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
 import org.apache.isis.metamodel.facets.When;
 import org.apache.isis.metamodel.facets.disable.DisableForSessionFacetAbstract;
 import org.apache.isis.metamodel.facets.hide.HiddenFacetAbstract;
@@ -51,8 +53,6 @@ import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.identifier.IdentifiedImpl;
 import org.apache.isis.runtime.testsystem.TestProxySystem;
 
 

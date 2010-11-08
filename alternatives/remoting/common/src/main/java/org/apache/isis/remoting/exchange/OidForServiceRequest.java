@@ -23,10 +23,10 @@ package org.apache.isis.remoting.exchange;
 import java.io.IOException;
 
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataInputStreamExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.facade.ServerFacade;
 

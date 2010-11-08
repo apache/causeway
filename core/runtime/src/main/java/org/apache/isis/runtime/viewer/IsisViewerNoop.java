@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.viewer;
 
 import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.web.WebAppSpecification;
 

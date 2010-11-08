@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.sql.objectstore;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.extensions.sql.objectstore.auto.AutoMapperFactory;
 import org.apache.isis.extensions.sql.objectstore.jdbc.JdbcConnectorFactory;
 import org.apache.isis.extensions.sql.objectstore.jdbc.JdbcFieldMappingFactoryInstaller;

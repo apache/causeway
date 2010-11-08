@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.authentication.standard;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
 

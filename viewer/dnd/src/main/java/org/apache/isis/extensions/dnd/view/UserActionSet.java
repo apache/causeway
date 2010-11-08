@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.dnd.view;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.extensions.dnd.drawing.Color;
 
 public interface UserActionSet extends UserAction {

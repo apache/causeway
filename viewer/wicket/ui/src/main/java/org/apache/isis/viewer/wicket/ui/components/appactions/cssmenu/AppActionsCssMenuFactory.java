@@ -23,13 +23,13 @@ package org.apache.isis.viewer.wicket.ui.components.appactions.cssmenu;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.metamodel.facets.actions.notinrepositorymenu.NotInRepositoryMenuFacet;
 import org.apache.isis.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;

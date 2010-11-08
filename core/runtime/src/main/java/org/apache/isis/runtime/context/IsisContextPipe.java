@@ -20,7 +20,7 @@
 package org.apache.isis.runtime.context;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 

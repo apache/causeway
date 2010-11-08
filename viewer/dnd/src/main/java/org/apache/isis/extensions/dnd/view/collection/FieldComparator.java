@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.dnd.view.collection;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 
 public class FieldComparator implements Comparator {

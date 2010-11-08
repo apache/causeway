@@ -31,16 +31,16 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.util.IsisUtils;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.metamodel.services.container.query.QueryFindAllInstances;
 import org.apache.isis.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.metamodel.services.container.query.QueryFindByTitle;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.util.IsisUtils;
 
 
 public class DomainObjectContainerDefault implements DomainObjectContainer, RuntimeContextAware {

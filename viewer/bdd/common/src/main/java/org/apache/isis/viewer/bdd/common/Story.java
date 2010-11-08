@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.persistence.PersistenceSession;

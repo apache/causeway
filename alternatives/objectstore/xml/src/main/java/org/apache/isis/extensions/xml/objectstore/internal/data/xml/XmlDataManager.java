@@ -26,7 +26,7 @@ import java.util.Vector;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.xml.objectstore.internal.data.CollectionData;
 import org.apache.isis.extensions.xml.objectstore.internal.data.Data;
 import org.apache.isis.extensions.xml.objectstore.internal.data.DataManager;

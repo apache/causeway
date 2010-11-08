@@ -44,7 +44,7 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
-import org.apache.isis.metamodel.config.ConfigurationBuilderFileSystem;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
 import org.apache.isis.extensions.sql.objectstore.singleton.SqlIntegrationTestSingleton;
 import org.apache.isis.runtime.testsystem.SqlDataClassFactory;
 import org.apache.isis.runtime.testsystem.dataclasses.SimpleClass;

@@ -23,7 +23,7 @@ package org.apache.isis.remoting.transport.simple;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.transport.TransportAbstract;
 
 /**

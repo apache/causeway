@@ -26,8 +26,8 @@ import static org.junit.Assert.assertThat;
 
 import org.jmock.integration.junit4.JMock;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 
 @RunWith(JMock.class)
 public class SimpleSessionEncodabilityNoRolesTest extends SimpleSessionEncodabilityTestAbstract {

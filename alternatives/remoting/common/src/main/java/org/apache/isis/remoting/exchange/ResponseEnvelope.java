@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 
 public class ResponseEnvelope implements Encodable, Serializable {
 	

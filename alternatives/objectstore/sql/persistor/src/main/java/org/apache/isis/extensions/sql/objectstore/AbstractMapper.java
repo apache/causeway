@@ -23,9 +23,9 @@ package org.apache.isis.extensions.sql.objectstore;
 import java.util.Date;
 import java.util.Hashtable;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.version.SerialNumberVersion;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.sql.objectstore.SqlOid.State;
 
 

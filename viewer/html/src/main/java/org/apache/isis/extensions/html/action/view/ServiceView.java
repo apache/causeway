@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.html.action.view;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.extensions.html.component.ViewPane;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.extensions.html.request.Request;

@@ -38,7 +38,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.Resources;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.imageloader.TemplateImage;
 import org.apache.isis.runtime.imageloader.TemplateImageImpl;
 import org.apache.isis.runtime.imageloader.TemplateImageLoader;

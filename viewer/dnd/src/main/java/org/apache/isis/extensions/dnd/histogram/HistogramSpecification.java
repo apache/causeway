@@ -23,7 +23,7 @@ package org.apache.isis.extensions.dnd.histogram;
 import java.util.List;
 
 import org.apache.isis.core.commons.filters.AbstractFilter;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.View;

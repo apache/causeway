@@ -27,8 +27,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionPeer;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.DummyNullValue;

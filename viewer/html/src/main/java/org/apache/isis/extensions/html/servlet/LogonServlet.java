@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.extensions.html.component.html.HtmlComponentFactory;
 import org.apache.isis.extensions.html.component.html.LogonFormPage;
 import org.apache.isis.extensions.html.context.Context;

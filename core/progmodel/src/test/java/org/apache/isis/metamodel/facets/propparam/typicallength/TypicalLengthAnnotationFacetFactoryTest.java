@@ -23,9 +23,9 @@ package org.apache.isis.metamodel.facets.propparam.typicallength;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.TypicalLength;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

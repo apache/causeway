@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public interface SingleClassValueFacet extends Facet {

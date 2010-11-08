@@ -22,7 +22,7 @@ package org.apache.isis.remoting.exchange;
 
 import java.util.Map;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.remoting.data.common.ObjectData;
 
 import com.google.inject.internal.Maps;

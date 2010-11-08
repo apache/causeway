@@ -20,11 +20,11 @@
 
 package org.apache.isis.metamodel.facets.object.validprops;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class ObjectValidPropertiesFacetFactory extends FacetFactoryAbstract {

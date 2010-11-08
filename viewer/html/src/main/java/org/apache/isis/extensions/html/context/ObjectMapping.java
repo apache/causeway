@@ -21,9 +21,9 @@
 package org.apache.isis.extensions.html.context;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 
 
 public interface ObjectMapping {

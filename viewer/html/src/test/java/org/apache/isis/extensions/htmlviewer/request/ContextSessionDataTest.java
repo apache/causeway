@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.htmlviewer.request;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ResolveState;
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtime.testsystem.TestPojo;

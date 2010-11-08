@@ -1,7 +1,7 @@
 package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.runtime.context.IsisContext;

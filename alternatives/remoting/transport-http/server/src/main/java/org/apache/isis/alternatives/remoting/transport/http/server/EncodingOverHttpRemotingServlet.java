@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.alternatives.remoting.marshalling.encode.EncodingMarshaller;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.facade.impl.ServerFacadeImpl;
 import org.apache.isis.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.remoting.server.ServerConnection;

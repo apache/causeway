@@ -20,8 +20,8 @@
 
 package org.apache.isis.webapp.view.display;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.webapp.context.RequestContext;
 import org.apache.isis.webapp.context.RequestContext.Scope;
 import org.apache.isis.webapp.processor.PageWriter;

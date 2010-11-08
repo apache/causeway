@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.html.component;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public interface Form extends Component {

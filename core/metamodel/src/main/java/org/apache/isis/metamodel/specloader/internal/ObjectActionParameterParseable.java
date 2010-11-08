@@ -20,21 +20,21 @@
 
 package org.apache.isis.metamodel.specloader.internal;
 
-import org.apache.isis.metamodel.adapter.Instance;
-import org.apache.isis.metamodel.adapter.MutableProposedHolder;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.adapter.Instance;
+import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
 import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.ValidityContext;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.isis.metamodel.spec.feature.ParseableEntryActionParameter;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 
 

@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.disable;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.FacetHolder;
 
 

@@ -22,16 +22,16 @@ package org.apache.isis.webapp.edit;
 
 import java.io.IOException;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.TextEntryParseException;
-import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.Action;
 import org.apache.isis.webapp.Dispatcher;

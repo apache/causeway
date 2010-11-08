@@ -22,7 +22,7 @@ package org.apache.isis.runtime.authentication.standard;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.runtime.installers.InstallerAbstract;

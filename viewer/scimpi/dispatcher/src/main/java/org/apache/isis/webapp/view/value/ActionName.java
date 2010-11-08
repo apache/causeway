@@ -20,8 +20,8 @@
 
 package org.apache.isis.webapp.view.value;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.processor.Request;
 import org.apache.isis.webapp.util.MethodsUtils;

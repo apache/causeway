@@ -22,7 +22,7 @@ package org.apache.isis.extensions.dnd.combined;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.dnd.view.ViewAxis;
 
 

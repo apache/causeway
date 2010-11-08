@@ -22,8 +22,8 @@ package org.apache.isis.runtime.persistence;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 
 
 public class PersistorUtil {

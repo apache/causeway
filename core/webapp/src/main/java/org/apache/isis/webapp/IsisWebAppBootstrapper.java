@@ -28,10 +28,10 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.metamodel.config.ConfigurationBuilderResourceStreams;
-import org.apache.isis.metamodel.config.ConfigurationPrimer;
-import org.apache.isis.metamodel.config.NotFoundPolicy;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilderResourceStreams;
+import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
+import org.apache.isis.core.metamodel.config.NotFoundPolicy;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.runtime.logging.IsisLoggingConfigurer;

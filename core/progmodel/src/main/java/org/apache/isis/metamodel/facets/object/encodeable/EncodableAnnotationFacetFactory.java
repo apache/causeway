@@ -22,15 +22,15 @@ package org.apache.isis.metamodel.facets.object.encodeable;
 
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, RuntimeContextAware {

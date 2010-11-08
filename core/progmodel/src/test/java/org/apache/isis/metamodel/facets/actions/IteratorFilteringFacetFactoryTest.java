@@ -23,8 +23,8 @@ package org.apache.isis.metamodel.facets.actions;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {

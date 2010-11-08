@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.ui.app.imagecache;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.wicket.markup.html.PackageResource;
 
 public interface ImageCache {

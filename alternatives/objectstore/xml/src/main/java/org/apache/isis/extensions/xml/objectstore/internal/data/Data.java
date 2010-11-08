@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.xml.objectstore.internal.data;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 

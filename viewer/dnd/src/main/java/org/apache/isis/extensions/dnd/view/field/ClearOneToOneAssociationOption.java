@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.field;
 
-import org.apache.isis.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.Workspace;

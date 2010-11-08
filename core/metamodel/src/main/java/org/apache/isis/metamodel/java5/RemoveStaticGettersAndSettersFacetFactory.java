@@ -20,11 +20,11 @@
 
 package org.apache.isis.metamodel.java5;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.facets.MethodScope;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 /**

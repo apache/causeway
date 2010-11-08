@@ -25,8 +25,8 @@ import java.io.Serializable;
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 /**
  * Although (through this class) the subclasses implements {@link Query} and

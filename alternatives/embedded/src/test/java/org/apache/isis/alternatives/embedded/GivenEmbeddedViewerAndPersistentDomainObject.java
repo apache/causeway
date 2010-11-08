@@ -32,7 +32,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
@@ -43,6 +42,7 @@ import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.alternatives.embedded.dom.employee.Employee;
 import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.apache.isis.alternatives.embedded.internal.PersistenceState;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 
 
 @RunWith(JMock.class)

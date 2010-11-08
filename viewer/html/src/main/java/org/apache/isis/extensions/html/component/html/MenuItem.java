@@ -22,7 +22,7 @@ package org.apache.isis.extensions.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.extensions.html.component.Component;
 
 

@@ -26,6 +26,8 @@ import java.util.List;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
@@ -38,8 +40,6 @@ import org.apache.isis.metamodel.facets.disable.DisabledFacetAlways;
 import org.apache.isis.metamodel.facets.hide.HiddenFacetAlways;
 import org.apache.isis.metamodel.facets.hide.HideForContextFacetViaMethod;
 import org.apache.isis.metamodel.facets.hide.HideForSessionFacetViaMethod;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.util.InvokeUtils;
 
 
 public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactoryAbstract implements MethodPrefixBasedFacetFactory {

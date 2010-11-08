@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.facets.object.ident.icon;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.util.ObjectInvokeUtils;
 
 
 public class IconFacetViaMethod extends IconFacetAbstract {

@@ -1,8 +1,8 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.AssertsValidity;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ProposedArgumentValidityAbstract;

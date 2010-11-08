@@ -19,7 +19,7 @@
 
 package org.apache.isis.progmodel.wrapper.applib;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 /**
  * Implemented by all objects that have been viewed as per {@link WrapperFactory#wrap(Object)}.

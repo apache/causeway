@@ -22,9 +22,9 @@ package org.apache.isis.webapp.edit;
 
 import java.io.IOException;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.Action;
 import org.apache.isis.webapp.ForbiddenException;

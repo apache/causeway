@@ -20,15 +20,15 @@
 
 package org.apache.isis.metamodel.value;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.object.value.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public abstract class ValueUsingValueSemanticsProviderFacetFactory extends FacetFactoryAbstract implements RuntimeContextAware,

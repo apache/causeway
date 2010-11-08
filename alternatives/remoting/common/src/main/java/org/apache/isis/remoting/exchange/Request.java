@@ -22,8 +22,8 @@ package org.apache.isis.remoting.exchange;
 
 import java.util.UUID;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.apache.isis.remoting.facade.ServerFacade;
 
 public interface Request extends Encodable {

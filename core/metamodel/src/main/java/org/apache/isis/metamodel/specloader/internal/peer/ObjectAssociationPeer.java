@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.specloader.internal.peer;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 /**

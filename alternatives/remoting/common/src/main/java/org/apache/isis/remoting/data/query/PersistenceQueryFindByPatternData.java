@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.data.query;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByPattern;
 

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence.adapterfactory.pojo;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactoryAbstract;
 
 public class PojoAdapterFactory extends AdapterFactoryAbstract {

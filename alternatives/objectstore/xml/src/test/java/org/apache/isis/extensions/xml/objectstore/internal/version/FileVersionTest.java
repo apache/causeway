@@ -28,9 +28,9 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.encoding.DataInputExtended;
-import org.apache.isis.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.runtime.testsystem.ProxyJunit4TestCase;
 
 public class FileVersionTest extends ProxyJunit4TestCase {

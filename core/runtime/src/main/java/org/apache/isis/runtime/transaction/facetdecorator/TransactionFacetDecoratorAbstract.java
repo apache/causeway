@@ -20,8 +20,8 @@
 
 package org.apache.isis.runtime.transaction.facetdecorator;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.facetdecorator.FacetDecoratorAbstract;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;

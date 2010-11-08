@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.facets;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ObjectNoop;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectNoop;
 
 
 public class FacetAbstractTest extends TestCase {

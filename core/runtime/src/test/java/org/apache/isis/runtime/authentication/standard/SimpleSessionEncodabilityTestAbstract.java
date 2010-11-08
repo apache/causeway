@@ -24,7 +24,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.metamodel.encoding.EncodabilityContractTest;
+import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
 
 public abstract class SimpleSessionEncodabilityTestAbstract extends EncodabilityContractTest {
 

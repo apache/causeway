@@ -32,7 +32,7 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtime.persistence.objectstore.ObjectStoreSpy;
 import org.apache.isis.runtime.testsystem.TestProxySystem;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.When;
@@ -60,7 +61,6 @@ import org.apache.isis.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.metamodel.facets.propcoll.access.PropertyAccessorFacet;
 import org.apache.isis.metamodel.facets.propcoll.access.PropertyAccessorFacetViaAccessor;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {

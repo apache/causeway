@@ -23,12 +23,12 @@ package org.apache.isis.runtime.persistence.oidgenerator;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugInfo;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
-import org.apache.isis.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
-import org.apache.isis.metamodel.encoding.Encodable;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
+import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 

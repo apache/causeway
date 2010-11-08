@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.ident.icon;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.metamodel.facets.object.ident.plural.PluralFacet;

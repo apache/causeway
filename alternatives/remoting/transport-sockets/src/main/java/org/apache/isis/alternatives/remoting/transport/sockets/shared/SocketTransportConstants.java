@@ -20,7 +20,7 @@
 
 package org.apache.isis.alternatives.remoting.transport.sockets.shared;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.remoting.transport.TransportInstaller;
 
 

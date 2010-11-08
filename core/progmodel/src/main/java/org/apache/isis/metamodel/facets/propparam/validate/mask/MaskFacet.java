@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.propparam.validate.mask;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.regex.RegExFacet;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;

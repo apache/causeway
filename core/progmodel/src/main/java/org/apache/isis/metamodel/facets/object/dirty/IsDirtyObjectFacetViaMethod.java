@@ -24,10 +24,10 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.java5.ImperativeFacet;
-import org.apache.isis.metamodel.util.InvokeUtils;
 
 
 public class IsDirtyObjectFacetViaMethod extends IsDirtyObjectFacetAbstract implements ImperativeFacet {

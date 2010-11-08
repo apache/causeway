@@ -20,7 +20,7 @@
 
 package org.apache.isis.webapp.edit;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public class FieldEditState {
     private final String entry;

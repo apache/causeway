@@ -22,7 +22,7 @@ package org.apache.isis.webapp.view.edit;
 
 import java.util.Iterator;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.context.RequestContext;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.data.query;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public abstract class PersistenceQueryDataAbstract implements PersistenceQueryData {
     private static final long serialVersionUID = 1L;

@@ -23,12 +23,14 @@ package org.apache.isis.metamodel.specloader.internal;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.metamodel.adapter.Instance;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.adapter.Instance;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
@@ -44,9 +46,7 @@ import org.apache.isis.metamodel.interactions.ValidityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectAssociationPeer;
-import org.apache.isis.metamodel.util.CollectionFacetUtils;
 
 
 public class OneToManyAssociationImpl extends ObjectAssociationAbstract implements OneToManyAssociation {

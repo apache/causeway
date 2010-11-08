@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.facets.object.immutable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.SingleWhenValueFacetAbstract;

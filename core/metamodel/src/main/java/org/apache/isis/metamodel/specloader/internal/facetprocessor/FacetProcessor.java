@@ -33,7 +33,8 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.MethodFilteringFacetFactory;
@@ -43,7 +44,6 @@ import org.apache.isis.metamodel.facets.PropertyOrCollectionIdentifyingFacetFact
 import org.apache.isis.metamodel.java5.MethodPrefixBasedFacetFactory;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;

@@ -23,7 +23,7 @@ package org.apache.isis.remoting.marshalling;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.transport.Transport;
 
 

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.transaction.facetdecorator;
 
-import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 
 
 public interface TransactionFacetDecorator extends FacetDecorator {

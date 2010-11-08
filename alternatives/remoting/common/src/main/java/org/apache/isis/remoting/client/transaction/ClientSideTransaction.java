@@ -23,7 +23,7 @@ package org.apache.isis.remoting.client.transaction;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.runtime.transaction.IsisTransactionAbstract;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;

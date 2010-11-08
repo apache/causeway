@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
 public abstract class AbstractFacetFactoryTest extends TestCase {

@@ -20,6 +20,7 @@
 
 package org.apache.isis.metamodel.facets.collections.aggregated;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
@@ -27,7 +28,6 @@ import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.facets.collections.CollectionFacetFactory;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.object.aggregated.AggregatedFacet;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 

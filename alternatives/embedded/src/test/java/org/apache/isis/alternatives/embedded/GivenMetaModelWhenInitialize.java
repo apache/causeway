@@ -28,8 +28,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
@@ -37,6 +35,8 @@ import org.apache.isis.alternatives.embedded.EmbeddedContext;
 import org.apache.isis.alternatives.embedded.IsisMetaModel;
 import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 
 @RunWith(JMock.class)
 public class GivenMetaModelWhenInitialize {

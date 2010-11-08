@@ -22,7 +22,7 @@ package org.apache.isis.webapp.logon;
 
 import java.io.IOException;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.webapp.Action;
 import org.apache.isis.webapp.Dispatcher;

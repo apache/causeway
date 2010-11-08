@@ -23,8 +23,8 @@ package org.apache.isis.runtime.userprofile;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 /**

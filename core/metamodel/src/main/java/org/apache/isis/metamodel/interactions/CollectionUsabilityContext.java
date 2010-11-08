@@ -22,10 +22,10 @@ package org.apache.isis.metamodel.interactions;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.CollectionUsabilityEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.InteractionContextType;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.InteractionContextType;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 
 /**

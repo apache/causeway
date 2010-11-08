@@ -23,15 +23,15 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
-import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
-import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.metamodel.facets.object.ident.plural.PluralFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverserDefault;

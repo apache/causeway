@@ -24,8 +24,8 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 

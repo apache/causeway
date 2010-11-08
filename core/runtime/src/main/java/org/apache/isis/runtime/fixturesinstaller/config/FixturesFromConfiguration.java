@@ -23,7 +23,7 @@ package org.apache.isis.runtime.fixturesinstaller.config;
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.runtime.fixture.ObjectLoaderFixture;
 import org.apache.isis.runtime.fixturesinstaller.FixturesInstallerAbstract;
 import org.apache.isis.runtime.fixturesinstaller.FixturesInstallerDelegate;

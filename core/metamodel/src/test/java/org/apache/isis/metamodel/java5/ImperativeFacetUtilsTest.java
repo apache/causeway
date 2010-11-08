@@ -35,9 +35,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.java5.ImperativeFacetUtils.ImperativeFacetFlags;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
 
 @RunWith(JMock.class)
 public class ImperativeFacetUtilsTest {

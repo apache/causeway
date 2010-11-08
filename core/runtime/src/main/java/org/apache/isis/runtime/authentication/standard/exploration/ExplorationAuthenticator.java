@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.runtime.authentication.standard.SimpleSession;

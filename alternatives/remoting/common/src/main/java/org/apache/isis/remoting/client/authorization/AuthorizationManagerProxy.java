@@ -24,9 +24,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.exchange.AuthorizationRequestUsability;
 import org.apache.isis.remoting.exchange.AuthorizationRequestVisibility;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.transaction.IsisTransaction;

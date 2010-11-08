@@ -27,7 +27,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.util.InvokeUtils;
+import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
@@ -43,12 +47,8 @@ import org.apache.isis.metamodel.facets.naming.named.NamedFacetInferred;
 import org.apache.isis.metamodel.java5.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectActionPeer;
 import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionParamPeer;
-import org.apache.isis.metamodel.util.InvokeUtils;
-import org.apache.isis.metamodel.util.NameUtils;
 
 
 /**

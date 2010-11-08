@@ -25,9 +25,9 @@ import java.util.Collection;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.When;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

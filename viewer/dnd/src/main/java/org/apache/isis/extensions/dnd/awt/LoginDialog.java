@@ -41,7 +41,7 @@ import java.awt.event.WindowEvent;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
 

@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.wicket.model.util;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 
 import com.google.common.base.Function;
 

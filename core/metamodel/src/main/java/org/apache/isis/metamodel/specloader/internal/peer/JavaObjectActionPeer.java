@@ -21,15 +21,15 @@
 package org.apache.isis.metamodel.specloader.internal.peer;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.Target;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.Target;
-import org.apache.isis.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.metamodel.specloader.ReflectiveActionException;
 
 

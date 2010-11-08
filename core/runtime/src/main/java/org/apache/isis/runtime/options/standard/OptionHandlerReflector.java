@@ -27,7 +27,7 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.runtime.installers.InstallerRepository;
 import org.apache.isis.runtime.runner.BootPrinter;

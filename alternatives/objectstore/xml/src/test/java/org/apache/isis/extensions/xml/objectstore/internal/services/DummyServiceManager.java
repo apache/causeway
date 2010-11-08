@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.xml.objectstore.internal.services;
 
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 
 public class DummyServiceManager implements ServiceManager {

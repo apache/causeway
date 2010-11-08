@@ -26,7 +26,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.webapp.context.RequestContext.Scope;
 import org.apache.isis.webapp.debug.DebugView;
 import org.apache.isis.webapp.processor.Request;

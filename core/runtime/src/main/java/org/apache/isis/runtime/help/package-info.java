@@ -19,7 +19,7 @@
 
 
 /**
- * Help API, utilizing the {@link org.apache.isis.metamodel.facetdecorator.FacetDecorator} mechanism..
+ * Help API, utilizing the {@link org.apache.isis.core.metamodel.facetdecorator.FacetDecorator} mechanism..
  * 
  * <p>
  * Concrete implementations are in the <tt>help-xxx</tt> modules.  Note at the time of writing - unlike

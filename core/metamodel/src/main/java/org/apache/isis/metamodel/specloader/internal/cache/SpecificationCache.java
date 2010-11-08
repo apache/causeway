@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.specloader.internal.cache;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.specloader.ObjectReflectorAbstract;
 
 

@@ -23,9 +23,9 @@ package org.apache.isis.metamodel.java5;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAbstract implements AnnotationBasedFacetFactory {

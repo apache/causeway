@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.objectstore.inmemory;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
 public class InMemoryObjectStore_reset extends AbstractInMemoryObjectStoreTest {

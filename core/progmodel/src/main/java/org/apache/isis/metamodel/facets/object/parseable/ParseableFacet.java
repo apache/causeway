@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.facets.object.parseable;
 
-import org.apache.isis.metamodel.adapter.InvalidEntryException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.TextEntryParseException;
+import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.metamodel.facets.object.ident.title.TitleFacet;
 

@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import org.apache.isis.metamodel.consent.InteractionResult;
-import org.apache.isis.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetFilters;
 import org.apache.isis.metamodel.facets.FacetHolder;

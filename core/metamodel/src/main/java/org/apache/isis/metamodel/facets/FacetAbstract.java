@@ -27,11 +27,11 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.NofMatchers;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.metamodel.spec.identifier.Identified;
 
 
 public abstract class FacetAbstract implements Facet {

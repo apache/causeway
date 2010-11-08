@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 
 

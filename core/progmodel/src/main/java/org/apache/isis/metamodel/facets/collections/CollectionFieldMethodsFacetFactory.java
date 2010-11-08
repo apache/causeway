@@ -27,6 +27,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
@@ -46,9 +48,7 @@ import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacetV
 import org.apache.isis.metamodel.java5.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.specloader.internal.peer.JavaOneToManyAssociationPeer;
-import org.apache.isis.metamodel.util.NameUtils;
 
 
 public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements

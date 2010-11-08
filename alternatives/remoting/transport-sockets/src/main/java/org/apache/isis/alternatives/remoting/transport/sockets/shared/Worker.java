@@ -29,7 +29,7 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.remoting.exchange.OpenSessionRequest;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.exchange.ResponseEnvelope;

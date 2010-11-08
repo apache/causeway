@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.context.IsisContext;
 
 public abstract class PerformAbstract implements Perform {

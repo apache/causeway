@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.authentication.standard.exploration;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 
 public final class ExplorationAuthenticatorConstants {
 	

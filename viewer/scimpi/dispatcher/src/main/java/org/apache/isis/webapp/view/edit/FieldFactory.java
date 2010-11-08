@@ -20,13 +20,13 @@
 
 package org.apache.isis.webapp.view.edit;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.context.RequestContext;
 import org.apache.isis.webapp.context.RequestContext.Scope;

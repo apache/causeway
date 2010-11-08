@@ -1,9 +1,9 @@
 package org.apache.isis.viewer.restful.viewer.resources.objects;
 
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 import org.apache.isis.viewer.restful.viewer.xom.TableColumnAbstract;
 

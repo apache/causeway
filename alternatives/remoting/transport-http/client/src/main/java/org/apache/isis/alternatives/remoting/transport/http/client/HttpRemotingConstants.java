@@ -20,7 +20,7 @@
 
 package org.apache.isis.alternatives.remoting.transport.http.client;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 
 public class HttpRemotingConstants {
 	

@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.sql.objectstore.mapping;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 
 public interface FieldMappingFactory {

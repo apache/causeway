@@ -22,7 +22,7 @@ package org.apache.isis.extensions.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.html.component.ComponentComposite;
 import org.apache.isis.extensions.html.component.Form;
 import org.apache.isis.runtime.context.IsisContext;

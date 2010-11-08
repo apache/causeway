@@ -26,12 +26,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.util.IsisUtils;
+import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.java5.ImperativeFacet;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.util.ObjectInvokeUtils;
-import org.apache.isis.metamodel.util.IsisUtils;
 
 
 public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstract implements ImperativeFacet {

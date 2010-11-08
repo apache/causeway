@@ -28,7 +28,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.metamodel.specloader.ObjectReflectorAbstract;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.sql.objectstore.SqlPersistorInstaller;

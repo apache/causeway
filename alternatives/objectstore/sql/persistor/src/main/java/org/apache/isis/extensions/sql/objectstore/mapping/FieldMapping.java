@@ -21,7 +21,7 @@
 package org.apache.isis.extensions.sql.objectstore.mapping;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.extensions.sql.objectstore.Results;
 
 

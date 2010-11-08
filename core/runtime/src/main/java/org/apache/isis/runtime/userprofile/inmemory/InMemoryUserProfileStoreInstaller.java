@@ -22,7 +22,7 @@ package org.apache.isis.runtime.userprofile.inmemory;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.installers.InstallerAbstract;
 import org.apache.isis.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtime.userprofile.UserProfileStoreInstaller;

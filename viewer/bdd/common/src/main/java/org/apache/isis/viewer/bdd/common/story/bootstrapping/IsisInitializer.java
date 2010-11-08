@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.fixturesinstaller.FixturesInstallerNoop;
 import org.apache.isis.runtime.installers.InstallerLookup;

@@ -20,8 +20,8 @@
 
 package org.apache.isis.runtime.persistence.oidgenerator;
 
-import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
+import org.apache.isis.core.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
 
 
 

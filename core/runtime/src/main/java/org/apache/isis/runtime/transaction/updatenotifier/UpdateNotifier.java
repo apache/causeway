@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * UpdateNotifier provides updates to client making available lists of the

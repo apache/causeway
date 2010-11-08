@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.dirty;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * Determine whether this object has been explicitly {@link MarkDirtyObjectFacet marked as dirty}.

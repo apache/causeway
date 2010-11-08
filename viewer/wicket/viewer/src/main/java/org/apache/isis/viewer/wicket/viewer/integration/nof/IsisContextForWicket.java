@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;

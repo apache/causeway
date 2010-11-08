@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.dirty;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 /**
  * Explicitly indicate that this object is dirty and needs to be persisted.

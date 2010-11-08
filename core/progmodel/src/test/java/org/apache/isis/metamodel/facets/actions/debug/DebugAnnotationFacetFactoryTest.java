@@ -23,9 +23,9 @@ package org.apache.isis.metamodel.facets.actions.debug;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Debug;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

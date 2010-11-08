@@ -23,7 +23,7 @@ package org.apache.isis.webapp.view.field;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 
 public class LinkedFieldsBlock extends InclusionList {

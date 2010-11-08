@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.mongo;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.extensions.nosql.KeyCreator;
 import org.apache.isis.extensions.nosql.NoSqlDataDatabase;
 import org.apache.isis.extensions.nosql.NoSqlPersistorMechanismInstaller;

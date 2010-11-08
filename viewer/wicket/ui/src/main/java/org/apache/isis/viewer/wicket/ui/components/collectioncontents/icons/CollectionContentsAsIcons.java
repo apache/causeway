@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.components.entity.blocks.summary.EntitySummaryPanel;

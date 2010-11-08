@@ -26,8 +26,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.remoting.exchange.OpenSessionRequest;
 import org.apache.isis.remoting.exchange.OpenSessionResponse;
 import org.apache.isis.remoting.facade.ServerFacade;

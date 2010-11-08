@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
-import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {

@@ -22,11 +22,14 @@ package org.apache.isis.metamodel.runtimecontext.spec.feature;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.Consent;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.MultiTypedFacet;
 import org.apache.isis.metamodel.facets.help.HelpFacet;
@@ -39,9 +42,6 @@ import org.apache.isis.metamodel.interactions.InteractionUtils;
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.metamodel.spec.identifier.Identified;
-import org.apache.isis.metamodel.util.NameUtils;
 
 
 public abstract class ObjectMemberAbstract implements ObjectMember {

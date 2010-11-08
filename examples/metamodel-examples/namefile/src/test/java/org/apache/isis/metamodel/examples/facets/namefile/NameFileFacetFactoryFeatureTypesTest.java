@@ -27,8 +27,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.examples.facets.namefile.NameFileFacetFactory;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 

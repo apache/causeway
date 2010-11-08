@@ -25,7 +25,8 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.metamodel.facets.object.ebc.EqualByContentFacet;
@@ -36,7 +37,6 @@ import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {

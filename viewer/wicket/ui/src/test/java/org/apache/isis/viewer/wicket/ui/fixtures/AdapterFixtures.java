@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.ui.fixtures;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 

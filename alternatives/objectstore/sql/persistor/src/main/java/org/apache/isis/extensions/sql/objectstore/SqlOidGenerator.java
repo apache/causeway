@@ -23,7 +23,7 @@ package org.apache.isis.extensions.sql.objectstore;
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.extensions.sql.objectstore.auto.AutoMapper;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGeneratorAbstract;
 import org.apache.isis.runtime.transaction.ObjectPersistenceException;

@@ -22,8 +22,8 @@ package org.apache.isis.extensions.dnd.table;
 
 import java.util.Hashtable;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 
 public class TypeBasedColumnWidthStrategy implements ColumnWidthStrategy {

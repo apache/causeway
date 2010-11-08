@@ -21,10 +21,10 @@
 package org.apache.isis.extensions.xml.objectstore.internal.commands;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.xml.objectstore.internal.data.DataManager;
 import org.apache.isis.extensions.xml.objectstore.internal.data.ObjectData;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;

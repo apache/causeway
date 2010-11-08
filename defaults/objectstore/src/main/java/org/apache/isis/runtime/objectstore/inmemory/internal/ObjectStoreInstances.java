@@ -31,12 +31,12 @@ import java.util.Vector;
 
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.adapter.version.SerialNumberVersion;
-import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.objectstore.inmemory.InMemoryObjectStore;
 import org.apache.isis.runtime.persistence.PersistenceSession;

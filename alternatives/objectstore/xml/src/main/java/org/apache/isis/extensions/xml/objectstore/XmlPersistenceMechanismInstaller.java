@@ -21,7 +21,7 @@
 package org.apache.isis.extensions.xml.objectstore;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.extensions.xml.objectstore.internal.adapter.XmlAdapterManager;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.DefaultClock;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;

@@ -24,11 +24,11 @@ import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.oid.Oid;
-import org.apache.isis.metamodel.config.ConfigurationException;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.config.ConfigurationException;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtime.logging.Logger;
 import org.apache.isis.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtime.persistence.UnsupportedFindException;

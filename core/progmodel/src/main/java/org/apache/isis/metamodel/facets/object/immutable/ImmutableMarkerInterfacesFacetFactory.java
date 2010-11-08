@@ -24,12 +24,12 @@ import org.apache.isis.applib.marker.AlwaysImmutable;
 import org.apache.isis.applib.marker.ImmutableOncePersisted;
 import org.apache.isis.applib.marker.ImmutableUntilPersisted;
 import org.apache.isis.applib.marker.NeverImmutable;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.facets.When;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class ImmutableMarkerInterfacesFacetFactory extends FacetFactoryAbstract {

@@ -20,8 +20,8 @@
 
 package org.apache.isis.runtime.persistence.adapterfactory.pojo;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtime.testsystem.TestPojo;

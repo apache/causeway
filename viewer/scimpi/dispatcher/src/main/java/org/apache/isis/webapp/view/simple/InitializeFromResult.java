@@ -20,7 +20,7 @@
 
 package org.apache.isis.webapp.view.simple;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.ScimpiException;
 import org.apache.isis.webapp.context.RequestContext;

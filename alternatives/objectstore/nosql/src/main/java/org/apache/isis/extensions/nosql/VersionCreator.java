@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.nosql;
 
-import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 
 public interface VersionCreator {
 

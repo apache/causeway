@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.facets.object.callback;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.object.callbacks.UpdateCallbackFacetFactory;
@@ -29,7 +30,6 @@ import org.apache.isis.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.UpdatedCallbackFacetViaMethod;
 import org.apache.isis.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.UpdatingCallbackFacetViaMethod;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {

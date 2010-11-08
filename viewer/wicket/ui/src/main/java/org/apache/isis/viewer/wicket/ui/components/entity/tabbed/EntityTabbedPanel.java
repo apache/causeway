@@ -23,7 +23,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.tabbed;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;

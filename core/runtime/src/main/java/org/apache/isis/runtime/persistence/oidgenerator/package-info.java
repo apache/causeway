@@ -23,7 +23,7 @@
  * 
  * <p>
  * Used by object store implementations to specify how to manufacture
- * {@link org.apache.isis.metamodel.adapter.oid.Oid}s (permanent unique identifiers
+ * {@link org.apache.isis.core.metamodel.adapter.oid.Oid}s (permanent unique identifiers
  * for each domain object managed by Apache Isis).  For example, an
  * in-memory object store will just use a unique Id, whereas a generator
  * for Hibernate will hook into Hibernate's own identity generators.

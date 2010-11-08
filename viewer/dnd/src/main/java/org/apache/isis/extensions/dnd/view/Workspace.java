@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
 public interface Workspace extends View {

@@ -31,10 +31,10 @@ import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.version.Version;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.Dispatcher;
 import org.apache.isis.webapp.ScimpiException;

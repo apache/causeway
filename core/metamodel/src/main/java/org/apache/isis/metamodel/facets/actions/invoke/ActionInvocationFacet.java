@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.actions.invoke;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 /**
  * Represents the mechanism by which the action should be invoked.

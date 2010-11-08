@@ -29,7 +29,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.apache.isis.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.runtime.testdomain.Movie;
 import org.apache.isis.runtime.testdomain.Person;
 import org.apache.isis.runtime.testdomain.Role;

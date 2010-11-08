@@ -24,11 +24,11 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.NonPersistable;
 import org.apache.isis.applib.marker.ProgramPersistable;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class NotPersistableMarkerInterfacesFacetFactory extends FacetFactoryAbstract {

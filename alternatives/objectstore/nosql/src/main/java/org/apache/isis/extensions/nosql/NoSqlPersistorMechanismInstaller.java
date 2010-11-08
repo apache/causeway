@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.nosql;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactoryDelegating;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;

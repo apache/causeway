@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.configurable;
 
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.runtime.userprofile.Options;
 import org.apache.isis.runtime.userprofile.OptionsAware;
 

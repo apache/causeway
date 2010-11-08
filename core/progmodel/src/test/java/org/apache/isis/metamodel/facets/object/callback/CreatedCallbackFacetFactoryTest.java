@@ -22,12 +22,12 @@ package org.apache.isis.metamodel.facets.object.callback;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacetFactory;
 import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacetViaMethod;
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {

@@ -22,9 +22,9 @@ package org.apache.isis.runtime.viewer;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.metamodel.config.ConfigurationBuilderAware;
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilderAware;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;

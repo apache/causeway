@@ -23,10 +23,12 @@ package org.apache.isis.metamodel.runtimecontext.spec.feature;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.metamodel.adapter.Instance;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.adapter.Instance;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
@@ -35,8 +37,6 @@ import org.apache.isis.metamodel.facets.propparam.validate.mandatory.MandatoryFa
 import org.apache.isis.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.interactions.VisibilityContext;
 import org.apache.isis.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract.MemberType;
-import org.apache.isis.metamodel.spec.identifier.IdentifiedImpl;
-import org.apache.isis.metamodel.testspec.TestProxySpecification;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

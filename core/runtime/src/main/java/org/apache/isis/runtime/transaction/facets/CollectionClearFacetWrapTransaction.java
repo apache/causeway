@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.transaction.facets;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.DecoratingFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacetAbstract;

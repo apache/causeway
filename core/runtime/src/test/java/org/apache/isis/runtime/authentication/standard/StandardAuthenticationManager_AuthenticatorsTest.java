@@ -26,7 +26,7 @@ import static org.junit.Assert.assertThat;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtime.authentication.NoAuthenticatorException;
 import org.jmock.Mockery;

@@ -23,8 +23,8 @@ package org.apache.isis.remoting.protocol.internal;
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.apache.isis.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 /**
  * Caches a sorted version of the fields for a specified ObjectSpecification. This is used to counteract

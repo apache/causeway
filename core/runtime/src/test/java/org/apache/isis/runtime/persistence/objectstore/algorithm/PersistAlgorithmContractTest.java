@@ -23,8 +23,8 @@ package org.apache.isis.runtime.persistence.objectstore.algorithm;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.runtime.persistence.adapterfactory.pojo.PojoAdapter;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;

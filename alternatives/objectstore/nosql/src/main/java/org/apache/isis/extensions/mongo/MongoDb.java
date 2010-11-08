@@ -25,8 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.extensions.nosql.KeyCreator;
 import org.apache.isis.extensions.nosql.NoSqlCommandContext;
 import org.apache.isis.extensions.nosql.NoSqlDataDatabase;

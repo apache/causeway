@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.facets;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
 public interface FacetFactory {

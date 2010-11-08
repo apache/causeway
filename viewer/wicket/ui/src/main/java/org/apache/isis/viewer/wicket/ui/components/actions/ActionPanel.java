@@ -23,9 +23,9 @@ package org.apache.isis.viewer.wicket.ui.components.actions;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.models.ActionExecutor;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;

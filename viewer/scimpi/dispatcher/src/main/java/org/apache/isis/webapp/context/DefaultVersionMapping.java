@@ -20,8 +20,8 @@
 
 package org.apache.isis.webapp.context;
 
-import org.apache.isis.metamodel.adapter.version.SerialNumberVersion;
-import org.apache.isis.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
+import org.apache.isis.core.metamodel.adapter.version.Version;
 
 public class DefaultVersionMapping implements VersionMapping {
 

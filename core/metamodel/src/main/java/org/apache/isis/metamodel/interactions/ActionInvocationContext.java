@@ -20,14 +20,14 @@
 
 package org.apache.isis.metamodel.interactions;
 
-import static org.apache.isis.metamodel.util.IsisUtils.unwrap;
+import static org.apache.isis.core.metamodel.util.IsisUtils.unwrap;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.ActionInvocationEvent;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.consent.InteractionContextType;
-import org.apache.isis.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.consent.InteractionContextType;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 
 
 /**

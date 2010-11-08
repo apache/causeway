@@ -22,7 +22,7 @@ package org.apache.isis.extensions.dnd.view.debug;
 
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.DebugCanvas;
 import org.apache.isis.extensions.dnd.view.Content;

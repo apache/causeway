@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.actions.executed;
 
+import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.metamodel.facets.EnumerationAbstract;
 import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.spec.Target;
 
 /**
  * Whether the action should be invoked locally, remotely, or on the default location depending on its persistence
