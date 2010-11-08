@@ -1,13 +1,13 @@
 package org.apache.isis.viewer.restful.viewer.embedded;
 
 import org.apache.isis.core.commons.lang.MapUtils;
+import org.apache.isis.core.webapp.IsisSessionFilter;
+import org.apache.isis.core.webapp.StaticContentFilter;
+import org.apache.isis.core.webapp.servlets.ResourceServlet;
 import org.apache.isis.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtime.web.WebAppSpecification;
 import org.apache.isis.viewer.restful.viewer.RestfulApplication;
 import org.apache.isis.viewer.restful.viewer.authentication.AuthenticationSessionLookupStrategyParams;
-import org.apache.isis.webapp.IsisSessionFilter;
-import org.apache.isis.webapp.StaticContentFilter;
-import org.apache.isis.webapp.servlets.ResourceServlet;
 import org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher;
 import org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap;
 

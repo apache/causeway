@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.facets.value.FloatingPointValueFacet;
+import org.apache.isis.core.progmodel.facets.value.FloatingPointValueFacet;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 

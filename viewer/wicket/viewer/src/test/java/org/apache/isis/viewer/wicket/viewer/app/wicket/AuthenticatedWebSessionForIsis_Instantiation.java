@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
-import org.apache.isis.common.jmock.FixtureMockery;
+import org.apache.isis.core.testsupport.jmock.FixtureMockery;
 import org.apache.isis.viewer.wicket.viewer.Fixture_Request_Stub;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.wicket.Request;

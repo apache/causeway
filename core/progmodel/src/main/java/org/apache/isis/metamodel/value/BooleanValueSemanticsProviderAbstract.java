@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.IsisUtils;
-import org.apache.isis.metamodel.facets.value.BooleanValueFacet;
+import org.apache.isis.core.progmodel.facets.value.BooleanValueFacet;
 
 
 public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements BooleanValueFacet {

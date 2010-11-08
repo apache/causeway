@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.apache.isis.metamodel.facets.object.immutable.DisabledFacetDerivedFromImmutable;
+import org.apache.isis.core.progmodel.facets.object.immutable.DisabledFacetDerivedFromImmutable;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.junit.Test;
 

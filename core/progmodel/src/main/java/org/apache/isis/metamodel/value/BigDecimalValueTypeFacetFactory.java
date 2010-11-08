@@ -24,7 +24,7 @@ import java.math.BigDecimal;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.facets.value.BigDecimalValueFacet;
+import org.apache.isis.core.progmodel.facets.value.BigDecimalValueFacet;
 
 
 public class BigDecimalValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {

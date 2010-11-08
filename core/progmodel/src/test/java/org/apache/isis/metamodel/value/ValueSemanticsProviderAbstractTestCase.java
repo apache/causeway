@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.value;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
-import static org.apache.isis.common.jmock.ReturnArgumentJMockAction.returnArgument;
+import static org.apache.isis.core.testsupport.jmock.ReturnArgumentJMockAction.returnArgument;
 
 import java.util.Locale;
 
@@ -42,8 +42,8 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacetUsingEncoderDecoder;
-import org.apache.isis.metamodel.facets.object.parseable.ParseableFacetUsingParser;
+import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsingEncoderDecoder;
+import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
 
 
 @RunWith(JMock.class)

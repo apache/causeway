@@ -35,7 +35,7 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.facets.value.ImageValueFacet;
+import org.apache.isis.core.progmodel.facets.value.ImageValueFacet;
 
 
 public abstract class ImageValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements ImageValueFacet {

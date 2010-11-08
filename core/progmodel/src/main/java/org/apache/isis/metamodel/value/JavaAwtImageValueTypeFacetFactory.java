@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.value;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.facets.value.ImageValueFacet;
+import org.apache.isis.core.progmodel.facets.value.ImageValueFacet;
 
 
 public class JavaAwtImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {

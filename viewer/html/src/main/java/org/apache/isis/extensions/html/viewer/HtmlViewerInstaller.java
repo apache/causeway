@@ -21,6 +21,9 @@
 package org.apache.isis.extensions.html.viewer;
 
 import org.apache.isis.core.commons.lang.MapUtils;
+import org.apache.isis.core.webapp.IsisSessionFilter;
+import org.apache.isis.core.webapp.StaticContentFilter;
+import org.apache.isis.core.webapp.servlets.ResourceServlet;
 import org.apache.isis.extensions.html.servlet.ControllerServlet;
 import org.apache.isis.extensions.html.servlet.HtmlServletConstants;
 import org.apache.isis.extensions.html.servlet.LogonServlet;
@@ -29,9 +32,6 @@ import org.apache.isis.runtime.viewer.IsisViewer;
 import org.apache.isis.runtime.viewer.IsisViewerInstallerAbstract;
 import org.apache.isis.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtime.web.WebAppSpecification;
-import org.apache.isis.webapp.IsisSessionFilter;
-import org.apache.isis.webapp.StaticContentFilter;
-import org.apache.isis.webapp.servlets.ResourceServlet;
 
 
 /**

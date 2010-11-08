@@ -29,7 +29,7 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacetAbstract;
+import org.apache.isis.core.progmodel.facets.collections.modify.CollectionFacetAbstract;
 import org.apache.isis.remoting.data.DummyCollectionData;
 import org.apache.isis.remoting.data.DummyObjectData;
 import org.apache.isis.remoting.data.common.CollectionData;

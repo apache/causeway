@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.i18n.resourcebundle.facets;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.help.HelpFacetAbstract;
+import org.apache.isis.core.progmodel.facets.help.HelpFacetAbstract;
 
 
 public class HelpFacetWrapI18n extends HelpFacetAbstract {

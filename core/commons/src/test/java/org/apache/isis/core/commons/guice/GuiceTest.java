@@ -29,8 +29,8 @@ import static org.junit.Assert.assertThat;
 import org.jmock.Expectations;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.common.jmock.AbstractJMockForInterfacesTest;
 import org.apache.isis.core.commons.guice.ScopeBindingModule;
+import org.apache.isis.core.testsupport.jmock.AbstractJMockForInterfacesTest;
 
 import com.google.inject.CreationException;
 import com.google.inject.Guice;

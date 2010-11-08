@@ -27,7 +27,7 @@ import java.util.Date;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.facets.value.DateValueFacet;
+import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.ForbiddenException;

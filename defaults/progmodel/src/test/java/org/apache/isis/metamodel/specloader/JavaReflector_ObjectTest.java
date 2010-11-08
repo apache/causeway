@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.facets.object.ident.plural.PluralFacet;
-import org.apache.isis.metamodel.facets.object.ident.title.TitleFacet;
-import org.apache.isis.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.metamodel.facets.object.validprops.ObjectValidPropertiesFacet;
+import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
+import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
+import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacet;
 import org.apache.isis.metamodel.specloader.JavaReflector;
 import org.apache.isis.runtime.system.TestDomainObject;
 

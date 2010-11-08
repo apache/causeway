@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.i18n.resourcebundle.facets;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
 
 
 public class NamedFacetWrapI18n extends NamedFacetAbstract {

@@ -25,7 +25,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.common.jmock.FixtureMockery;
+import org.apache.isis.core.testsupport.jmock.FixtureMockery;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.viewer.wicket.viewer.Fixture_AuthenticationManager_AuthenticateOk;

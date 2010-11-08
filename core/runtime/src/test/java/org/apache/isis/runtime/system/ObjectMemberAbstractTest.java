@@ -44,15 +44,15 @@ import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoR
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
-import org.apache.isis.metamodel.facets.disable.DisableForSessionFacetAbstract;
-import org.apache.isis.metamodel.facets.hide.HiddenFacetAbstract;
-import org.apache.isis.metamodel.facets.hide.HiddenFacetAlways;
-import org.apache.isis.metamodel.facets.hide.HiddenFacetImpl;
-import org.apache.isis.metamodel.facets.hide.HiddenFacetNever;
-import org.apache.isis.metamodel.facets.hide.HideForContextFacetNone;
-import org.apache.isis.metamodel.facets.hide.HideForSessionFacetAbstract;
-import org.apache.isis.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
-import org.apache.isis.metamodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.progmodel.facets.disable.DisableForSessionFacetAbstract;
+import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAbstract;
+import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAlways;
+import org.apache.isis.core.progmodel.facets.hide.HiddenFacetImpl;
+import org.apache.isis.core.progmodel.facets.hide.HiddenFacetNever;
+import org.apache.isis.core.progmodel.facets.hide.HideForContextFacetNone;
+import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetAbstract;
+import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
 import org.apache.isis.runtime.testsystem.TestProxySystem;
 
 

@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.object.value.ValueFacetUsingSemanticsProvider;
+import org.apache.isis.core.progmodel.facets.object.value.ValueFacetUsingSemanticsProvider;
 
 
 public abstract class ValueUsingValueSemanticsProviderFacetFactory extends FacetFactoryAbstract implements RuntimeContextAware,

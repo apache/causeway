@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.field;
 
-import org.apache.isis.metamodel.facets.value.PasswordValueFacet;
+import org.apache.isis.core.progmodel.facets.value.PasswordValueFacet;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.View;

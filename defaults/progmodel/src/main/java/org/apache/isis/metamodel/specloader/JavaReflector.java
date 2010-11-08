@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.spec.JavaSpecification;
-import org.apache.isis.metamodel.specloader.internal.instances.InstanceCollectionSpecification;
+import org.apache.isis.core.progmodel.spec.JavaSpecification;
+import org.apache.isis.core.progmodel.specloader.internal.instances.InstanceCollectionSpecification;
 
 
 public class JavaReflector extends ObjectReflectorAbstract {

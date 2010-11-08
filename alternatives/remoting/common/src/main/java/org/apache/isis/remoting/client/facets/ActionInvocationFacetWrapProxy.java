@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
+import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.NullData;
 import org.apache.isis.remoting.data.common.ObjectData;

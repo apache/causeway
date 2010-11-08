@@ -7,12 +7,12 @@
 	</welcome-file-list>
 	
     <listener>
-        <listener-class>org.apache.isis.webapp.servlet.SystemInitializer</listener-class>
+        <listener-class>org.apache.isis.core.webapp.servlet.SystemInitializer</listener-class>
     </listener>
     
 	<servlet >
 		<servlet-name>dispatcher</servlet-name>
-		<servlet-class>org.apache.isis.webapp.servlet.DispatcherServlet</servlet-class>
+		<servlet-class>org.apache.isis.core.webapp.servlet.DispatcherServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>

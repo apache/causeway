@@ -3,8 +3,8 @@ package org.apache.isis.runtime.testsystem.tests;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.core.testsupport.value.ValueTypeContractTestAbstract;
 import org.apache.isis.runtime.testsystem.TestProxyOid;
-import org.apache.isis.testsupport.ValueTypeContractTestAbstract;
 
 public class TestProxyOid_ValueType extends ValueTypeContractTestAbstract<TestProxyOid> {
 

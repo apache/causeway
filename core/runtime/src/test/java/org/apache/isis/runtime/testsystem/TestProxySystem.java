@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
+import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authorization.AuthorizationManager;
 import org.apache.isis.runtime.context.IsisContext;

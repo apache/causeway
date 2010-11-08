@@ -24,7 +24,7 @@ import java.math.BigInteger;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.facets.value.BigIntegerValueFacet;
+import org.apache.isis.core.progmodel.facets.value.BigIntegerValueFacet;
 
 
 public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {

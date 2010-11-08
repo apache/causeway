@@ -37,7 +37,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.facets.value.MoneyValueFacet;
+import org.apache.isis.core.progmodel.facets.value.MoneyValueFacet;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 

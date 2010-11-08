@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.wicket.ui.components.scalars.image;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.facets.value.ImageValueFacet;
+import org.apache.isis.core.progmodel.facets.value.ImageValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;
 import org.apache.isis.viewer.wicket.ui.ComponentType;

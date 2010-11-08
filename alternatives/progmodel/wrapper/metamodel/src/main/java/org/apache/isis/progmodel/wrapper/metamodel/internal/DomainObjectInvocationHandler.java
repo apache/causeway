@@ -45,7 +45,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.IsisUtils;
-import org.apache.isis.metamodel.spec.JavaSpecification;
+import org.apache.isis.core.progmodel.spec.JavaSpecification;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InteractionException;

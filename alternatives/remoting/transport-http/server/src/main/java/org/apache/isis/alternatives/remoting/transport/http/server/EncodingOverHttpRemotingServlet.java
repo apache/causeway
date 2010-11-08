@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.alternatives.remoting.marshalling.encode.EncodingMarshaller;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.webapp.IsisWebAppBootstrapper;
 import org.apache.isis.remoting.facade.impl.ServerFacadeImpl;
 import org.apache.isis.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.remoting.server.ServerConnection;
@@ -37,7 +38,6 @@ import org.apache.isis.remoting.server.ServerConnectionDefault;
 import org.apache.isis.remoting.transport.ServerConnectionHandler;
 import org.apache.isis.remoting.transport.simple.SimpleTransport;
 import org.apache.isis.runtime.system.IsisSystem;
-import org.apache.isis.webapp.IsisWebAppBootstrapper;
 
 /**
  * Analogous to {@link SocketsViewerAbstract}; both ultimately delegate to {@link ServerConnectionHandler}.

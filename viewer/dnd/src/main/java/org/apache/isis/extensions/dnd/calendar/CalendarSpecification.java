@@ -22,8 +22,8 @@ package org.apache.isis.extensions.dnd.calendar;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.facets.value.DateValueFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.CompositeViewSpecification;
 import org.apache.isis.extensions.dnd.view.Content;

@@ -27,8 +27,8 @@ import static org.junit.Assert.fail;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.facets.disable.DisableForContextFacetViaMethod;
-import org.apache.isis.metamodel.facets.disable.DisabledFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.disable.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.disable.DisabledFacetAnnotation;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.viewer.junit.sample.domain.Order;
 import org.junit.Test;

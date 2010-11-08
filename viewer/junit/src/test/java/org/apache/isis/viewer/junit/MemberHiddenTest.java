@@ -25,9 +25,9 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.apache.isis.metamodel.facets.hide.HiddenFacetAnnotation;
-import org.apache.isis.metamodel.facets.hide.HideForContextFacetViaMethod;
-import org.apache.isis.metamodel.facets.hide.HideForSessionFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.hide.HideForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetViaMethod;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.junit.Test;

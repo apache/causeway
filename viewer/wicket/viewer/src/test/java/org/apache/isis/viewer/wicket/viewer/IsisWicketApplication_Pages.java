@@ -23,7 +23,7 @@ package org.apache.isis.viewer.wicket.viewer;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.common.jmock.FixtureMockery;
+import org.apache.isis.core.testsupport.jmock.FixtureMockery;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;
 import org.apache.isis.viewer.wicket.ui.pages.PageType;
 import org.apache.isis.viewer.wicket.ui.pages.home.HomePage;

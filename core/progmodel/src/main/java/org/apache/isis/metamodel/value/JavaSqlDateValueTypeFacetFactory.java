@@ -24,7 +24,7 @@ import java.sql.Date;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.facets.value.DateValueFacet;
+import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
 
 
 public class JavaSqlDateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {

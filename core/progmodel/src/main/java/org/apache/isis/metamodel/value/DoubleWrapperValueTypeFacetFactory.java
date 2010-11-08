@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.value;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.facets.value.DoubleFloatingPointValueFacet;
+import org.apache.isis.core.progmodel.facets.value.DoubleFloatingPointValueFacet;
 
 
 public class DoubleWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {

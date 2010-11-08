@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.viewer.app.wicket;
 
 import static org.junit.Assert.fail;
 
-import org.apache.isis.common.jmock.AbstractJMockForClassesTest;
+import org.apache.isis.core.testsupport.jmock.AbstractJMockForClassesTest;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.WebRequestCycleForIsis;
 import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;

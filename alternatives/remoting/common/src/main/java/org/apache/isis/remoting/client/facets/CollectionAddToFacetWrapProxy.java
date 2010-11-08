@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facets.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
+import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetAbstract;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.exchange.SetAssociationRequest;

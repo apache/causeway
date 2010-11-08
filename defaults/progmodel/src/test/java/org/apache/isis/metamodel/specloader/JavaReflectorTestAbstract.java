@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
-import org.apache.isis.metamodel.facets.object.ident.plural.PluralFacet;
+import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authorization.AuthorizationManager;

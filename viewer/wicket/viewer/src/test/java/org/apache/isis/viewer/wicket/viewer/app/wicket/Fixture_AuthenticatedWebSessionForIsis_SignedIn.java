@@ -23,9 +23,9 @@ package org.apache.isis.viewer.wicket.viewer.app.wicket;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.common.jmock.FixtureMockery;
-import org.apache.isis.common.jmock.MockFixture;
-import org.apache.isis.common.jmock.MockFixtureAdapter;
+import org.apache.isis.core.testsupport.jmock.FixtureMockery;
+import org.apache.isis.core.testsupport.jmock.MockFixture;
+import org.apache.isis.core.testsupport.jmock.MockFixtureAdapter;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.viewer.wicket.viewer.Fixture_AuthenticationManager_AuthenticateOk;
 import org.apache.isis.viewer.wicket.viewer.Fixture_Request_Stub;

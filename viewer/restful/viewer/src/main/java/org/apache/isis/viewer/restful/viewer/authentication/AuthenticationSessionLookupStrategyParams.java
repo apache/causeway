@@ -5,9 +5,9 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.runtime.context.IsisContext;
-import org.apache.isis.webapp.auth.AuthenticationSessionLookupStrategyDefault;
 
 public class AuthenticationSessionLookupStrategyParams extends AuthenticationSessionLookupStrategyDefault {
 
