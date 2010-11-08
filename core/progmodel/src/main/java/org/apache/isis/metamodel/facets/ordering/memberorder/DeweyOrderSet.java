@@ -27,8 +27,8 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.metamodel.facets.ordering.OrderSet;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 /**

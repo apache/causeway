@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.runner;
 
-import org.apache.isis.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
 import org.apache.isis.runtime.remoting.ClientConnectionInstaller;
 import org.apache.isis.runtime.system.DeploymentType;

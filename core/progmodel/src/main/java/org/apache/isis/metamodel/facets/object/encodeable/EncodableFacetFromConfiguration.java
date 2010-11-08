@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.facets.object.encodeable;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 
 public class EncodableFacetFromConfiguration extends EncodableFacetAbstract {

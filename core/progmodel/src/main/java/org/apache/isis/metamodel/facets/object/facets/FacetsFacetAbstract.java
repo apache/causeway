@@ -25,10 +25,10 @@ import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public abstract class FacetsFacetAbstract extends FacetAbstract implements FacetsFacet {

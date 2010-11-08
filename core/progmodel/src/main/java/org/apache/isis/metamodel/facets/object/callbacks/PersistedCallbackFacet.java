@@ -19,6 +19,9 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
+
 /**
  * Represents the mechanism to inform the object that it has been persisted to the object store for the first time.
  * 

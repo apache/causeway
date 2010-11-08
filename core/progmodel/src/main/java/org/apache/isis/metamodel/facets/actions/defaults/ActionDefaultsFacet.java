@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.actions.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.Facet;
 
 /**
  * Obtain defaults for each of the parameters of the action.

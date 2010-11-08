@@ -22,13 +22,13 @@ package org.apache.isis.metamodel.facets.properties.validate;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.specloader.internal.facetprocessor.FacetProcessor;
+import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetProcessor;
 
 
 /**

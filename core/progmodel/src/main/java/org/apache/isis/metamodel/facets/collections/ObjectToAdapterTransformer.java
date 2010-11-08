@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.collections;
 
 import org.apache.commons.collections.Transformer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 /**
  * Uses the Commons Collection API to transform {@link Object}s into

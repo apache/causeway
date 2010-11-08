@@ -22,8 +22,8 @@ package org.apache.isis.remoting.client.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.facets.DecoratingFacet;
-import org.apache.isis.metamodel.facets.properties.modify.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.DecoratingFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertyClearFacetAbstract;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.data.common.ObjectData;

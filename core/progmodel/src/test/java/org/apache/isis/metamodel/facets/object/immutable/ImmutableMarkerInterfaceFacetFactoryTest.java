@@ -24,9 +24,10 @@ import org.apache.isis.applib.marker.AlwaysImmutable;
 import org.apache.isis.applib.marker.ImmutableOncePersisted;
 import org.apache.isis.applib.marker.ImmutableUntilPersisted;
 import org.apache.isis.applib.marker.NeverImmutable;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -65,7 +66,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.ALWAYS, immutableFacetMarkerInterface.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, immutableFacetMarkerInterface.value());
 
         assertNoMethodsRemoved();
     }
@@ -79,7 +80,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.ONCE_PERSISTED, immutableFacetMarkerInterface.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, immutableFacetMarkerInterface.value());
 
         assertNoMethodsRemoved();
     }
@@ -93,7 +94,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.UNTIL_PERSISTED, immutableFacetMarkerInterface.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, immutableFacetMarkerInterface.value());
 
         assertNoMethodsRemoved();
     }
@@ -107,7 +108,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.NEVER, immutableFacetMarkerInterface.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, immutableFacetMarkerInterface.value());
 
         assertNoMethodsRemoved();
     }

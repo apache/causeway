@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.facets.ordering.memberorder;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 
 
 public abstract class MemberOrderFacetAbstract extends MultipleValueFacetAbstract implements MemberOrderFacet {

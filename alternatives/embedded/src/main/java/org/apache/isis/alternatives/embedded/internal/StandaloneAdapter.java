@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectMetaModel;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 
 /**
  * Only provides a concrete implementation of the methods corresponding to 

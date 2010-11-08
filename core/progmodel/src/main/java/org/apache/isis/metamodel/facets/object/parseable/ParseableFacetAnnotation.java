@@ -23,8 +23,8 @@ package org.apache.isis.metamodel.facets.object.parseable;
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 
 public class ParseableFacetAnnotation extends ParseableFacetAbstract {

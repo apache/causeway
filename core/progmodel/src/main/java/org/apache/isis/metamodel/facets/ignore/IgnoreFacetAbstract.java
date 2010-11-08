@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.facets.ignore;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
 
 public abstract class IgnoreFacetAbstract extends MarkerFacetAbstract implements IgnoreFacet {

@@ -21,9 +21,9 @@
 package org.apache.isis.core.metamodel.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 
 
 public final class ObjectAdapterUtils {

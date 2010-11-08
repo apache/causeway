@@ -30,8 +30,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 @RunWith(JMock.class)
 public class ImageValueSemanticsProviderAbstractTest {

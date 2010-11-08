@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.collections.modify;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.Facet;
 
 /**
  * Remove object to a collection.

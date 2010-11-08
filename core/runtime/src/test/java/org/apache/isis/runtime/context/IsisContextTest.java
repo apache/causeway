@@ -34,7 +34,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
-import org.apache.isis.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authorization.AuthorizationManager;
 import org.apache.isis.runtime.imageloader.TemplateImageLoader;

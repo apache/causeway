@@ -24,8 +24,8 @@ import java.util.Iterator;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.context.RequestContext;
 import org.apache.isis.webapp.context.RequestContext.Scope;

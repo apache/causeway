@@ -23,12 +23,12 @@ package org.apache.isis.metamodel.facets.object.facets;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Facets;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MethodRemover;
 
 
 public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

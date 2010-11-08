@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.facets.object.validate;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest {

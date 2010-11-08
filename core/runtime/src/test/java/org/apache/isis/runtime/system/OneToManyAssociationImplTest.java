@@ -21,10 +21,10 @@
 package org.apache.isis.runtime.system;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.metamodel.specloader.internal.OneToManyAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
 import org.apache.isis.runtime.system.specpeer.DummyOneToManyPeer;
 import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
 

@@ -23,8 +23,8 @@ package org.apache.isis.progmodel.wrapper.metamodel.internal;
 import java.util.Collection;
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
 

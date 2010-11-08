@@ -28,9 +28,9 @@ import java.util.Map;
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public abstract class TimeStampValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstractTemporal {

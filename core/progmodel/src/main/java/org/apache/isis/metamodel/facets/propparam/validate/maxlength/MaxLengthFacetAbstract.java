@@ -22,11 +22,12 @@ package org.apache.isis.metamodel.facets.propparam.validate.maxlength;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.SingleIntValueFacetAbstract;
-import org.apache.isis.metamodel.interactions.ProposedHolder;
-import org.apache.isis.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract implements MaxLengthFacet {

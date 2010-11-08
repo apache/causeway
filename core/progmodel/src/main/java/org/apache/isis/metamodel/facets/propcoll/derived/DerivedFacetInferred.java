@@ -21,9 +21,9 @@
 package org.apache.isis.metamodel.facets.propcoll.derived;
 
 import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.metamodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
 
 
 public class DerivedFacetInferred extends NotPersistedFacetAbstract {

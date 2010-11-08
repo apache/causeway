@@ -23,12 +23,13 @@ package org.apache.isis.metamodel.facets.object.bounded;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
-import org.apache.isis.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implements BoundedFacet {

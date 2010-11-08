@@ -27,13 +27,16 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.specloader.internal.peer.JavaOneToManyAssociationPeer;
 import org.apache.isis.core.metamodel.util.NameUtils;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.facets.MethodScope;
 import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacetViaAccessor;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacetViaMethod;
@@ -46,9 +49,6 @@ import org.apache.isis.metamodel.facets.collections.validate.CollectionValidateR
 import org.apache.isis.metamodel.facets.propcoll.access.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.metamodel.facets.properties.choices.PropertyChoicesFacetViaMethod;
 import org.apache.isis.metamodel.java5.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.metamodel.specloader.internal.peer.JavaOneToManyAssociationPeer;
 
 
 public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements

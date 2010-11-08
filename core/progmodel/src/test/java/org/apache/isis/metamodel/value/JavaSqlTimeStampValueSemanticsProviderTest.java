@@ -28,8 +28,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.applib.value.TestClock;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;

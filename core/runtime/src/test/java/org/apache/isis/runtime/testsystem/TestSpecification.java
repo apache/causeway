@@ -35,6 +35,11 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facets.FacetHolderNoop;
+import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -44,11 +49,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.metamodel.facets.FacetHolderNoop;
-import org.apache.isis.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 
 
 /**

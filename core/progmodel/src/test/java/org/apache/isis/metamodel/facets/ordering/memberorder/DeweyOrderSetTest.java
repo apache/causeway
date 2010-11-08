@@ -27,8 +27,8 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.metamodel.facets.ordering.OrderSet;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 public class DeweyOrderSetTest extends TestCase {

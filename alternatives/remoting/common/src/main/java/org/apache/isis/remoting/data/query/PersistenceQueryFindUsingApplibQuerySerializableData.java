@@ -23,8 +23,8 @@ package org.apache.isis.remoting.data.query;
 import java.io.Serializable;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 
 /**

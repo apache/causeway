@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.object.notpersistable;
 
-import org.apache.isis.metamodel.facets.EnumerationAbstract;
+import org.apache.isis.core.metamodel.facets.EnumerationAbstract;
 
 
 public final class InitiatedBy extends EnumerationAbstract {

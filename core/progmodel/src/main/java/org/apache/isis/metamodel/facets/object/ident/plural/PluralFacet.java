@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.ident.plural;
 
-import org.apache.isis.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.metamodel.facets.object.ident.icon.IconFacet;
 import org.apache.isis.metamodel.facets.object.ident.title.TitleFacet;
 

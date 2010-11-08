@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.remoting.client.authentication.AuthenticationManagerProxy;
 import org.apache.isis.remoting.client.authorization.AuthorizationManagerProxy;
 import org.apache.isis.remoting.client.facetdecorator.ProxyFacetDecorator;

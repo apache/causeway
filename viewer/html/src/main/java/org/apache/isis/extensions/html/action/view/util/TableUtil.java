@@ -20,10 +20,10 @@
 
 package org.apache.isis.extensions.html.action.view.util;
 
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;

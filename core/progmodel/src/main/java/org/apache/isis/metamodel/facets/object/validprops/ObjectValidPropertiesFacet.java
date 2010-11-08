@@ -20,10 +20,10 @@
 
 package org.apache.isis.metamodel.facets.object.validprops;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
-import org.apache.isis.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 
 /**

@@ -34,18 +34,18 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.ConsentAbstract;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolderNoop;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolderNoop;
-import org.apache.isis.metamodel.interactions.InteractionContext;
-import org.apache.isis.metamodel.interactions.PropertyAccessContext;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
-import org.apache.isis.metamodel.interactions.ValidityContext;
-import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 
 
 public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAssociation {

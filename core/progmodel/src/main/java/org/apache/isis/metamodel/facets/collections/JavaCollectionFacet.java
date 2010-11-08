@@ -25,9 +25,9 @@ import java.util.Iterator;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacetAbstract;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 
 
 public class JavaCollectionFacet extends CollectionFacetAbstract {

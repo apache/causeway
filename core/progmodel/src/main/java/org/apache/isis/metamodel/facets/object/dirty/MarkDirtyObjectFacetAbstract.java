@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.facets.object.dirty;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public abstract class MarkDirtyObjectFacetAbstract extends DirtyObjectFacetAbstract implements MarkDirtyObjectFacet {

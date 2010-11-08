@@ -21,9 +21,9 @@
 package org.apache.isis.webapp.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.processor.Request;
 import org.apache.isis.webapp.view.field.LinkedObject;

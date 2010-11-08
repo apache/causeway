@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.help;
 
-import org.apache.isis.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 
 /**

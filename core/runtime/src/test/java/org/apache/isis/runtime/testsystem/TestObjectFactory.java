@@ -21,7 +21,7 @@ package org.apache.isis.runtime.testsystem;
 
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryAbstract;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryAbstract.Mode;
 

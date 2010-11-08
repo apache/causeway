@@ -26,12 +26,13 @@ import java.util.List;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.lang.ListUtils;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.java5.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.facets.actions.DescribedAsFacetViaMethod;
 import org.apache.isis.metamodel.facets.actions.NamedFacetViaMethod;
 import org.apache.isis.metamodel.facets.disable.DisableForContextFacetViaMethod;

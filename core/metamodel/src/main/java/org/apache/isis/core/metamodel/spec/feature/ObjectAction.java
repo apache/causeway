@@ -25,10 +25,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.interactions.AccessContext;
+import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
-import org.apache.isis.metamodel.interactions.AccessContext;
-import org.apache.isis.metamodel.interactions.ActionInvocationContext;
 
 
 public interface ObjectAction extends ObjectMember {

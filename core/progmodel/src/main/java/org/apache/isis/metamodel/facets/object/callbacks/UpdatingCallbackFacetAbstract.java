@@ -20,8 +20,9 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 
 
 public abstract class UpdatingCallbackFacetAbstract extends CallbackFacetAbstract implements UpdatingCallbackFacet {

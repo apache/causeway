@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;

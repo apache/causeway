@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.help;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.help.HelpFacetAbstract;
 
 

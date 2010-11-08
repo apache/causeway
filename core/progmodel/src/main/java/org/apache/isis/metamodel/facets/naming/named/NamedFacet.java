@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.naming.named;
 
-import org.apache.isis.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 
 /**
  * The name of a class, a property, collection, an action or a parameter.

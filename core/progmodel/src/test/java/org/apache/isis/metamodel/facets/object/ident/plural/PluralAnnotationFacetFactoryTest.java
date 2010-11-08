@@ -21,9 +21,9 @@
 package org.apache.isis.metamodel.facets.object.ident.plural;
 
 import org.apache.isis.applib.annotation.Plural;
+import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class PluralAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

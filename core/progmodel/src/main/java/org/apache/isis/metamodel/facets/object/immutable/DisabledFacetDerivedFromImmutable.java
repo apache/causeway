@@ -21,7 +21,8 @@
 package org.apache.isis.metamodel.facets.object.immutable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.metamodel.facets.disable.DisabledFacetAbstract;
 
 

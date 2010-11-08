@@ -42,7 +42,7 @@ import org.apache.isis.applib.events.PropertyAccessEvent;
 import org.apache.isis.applib.events.PropertyModifyEvent;
 import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;

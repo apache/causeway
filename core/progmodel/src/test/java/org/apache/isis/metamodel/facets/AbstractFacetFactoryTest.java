@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
+import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 

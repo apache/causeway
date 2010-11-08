@@ -26,19 +26,19 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.facets.hide.HiddenFacet;
-import org.apache.isis.metamodel.facets.object.aggregated.AggregatedFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.metamodel.interactions.InteractionContext;
-import org.apache.isis.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.metamodel.interactions.ObjectValidityContext;
 
 
 public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical, Dirtiable, DefaultProvider {

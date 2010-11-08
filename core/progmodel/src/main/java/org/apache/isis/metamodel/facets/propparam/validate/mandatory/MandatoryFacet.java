@@ -21,10 +21,10 @@
 package org.apache.isis.metamodel.facets.propparam.validate.mandatory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacet;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 
 /**

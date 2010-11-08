@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.dnd.tree;
 
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;

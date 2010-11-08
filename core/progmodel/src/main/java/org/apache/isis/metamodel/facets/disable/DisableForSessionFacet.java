@@ -20,8 +20,8 @@
 package org.apache.isis.metamodel.facets.disable;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 
 /**
  * Disable a property, collection or action based on the current session.

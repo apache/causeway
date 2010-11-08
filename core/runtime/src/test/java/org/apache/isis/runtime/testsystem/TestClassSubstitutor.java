@@ -19,7 +19,7 @@
 
 package org.apache.isis.runtime.testsystem;
 
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 
 public class TestClassSubstitutor extends ClassSubstitutorAbstract {
 

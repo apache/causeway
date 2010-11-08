@@ -20,11 +20,11 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.actions.debug.DebugFacet;
-import org.apache.isis.metamodel.facets.actions.exploration.ExplorationFacet;
-import org.apache.isis.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
+import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 
 
 public enum ObjectActionType {

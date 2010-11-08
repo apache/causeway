@@ -32,9 +32,9 @@ import java.util.Set;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
 
 public class FacetDecoratorSet implements ApplicationScopedComponent {
 

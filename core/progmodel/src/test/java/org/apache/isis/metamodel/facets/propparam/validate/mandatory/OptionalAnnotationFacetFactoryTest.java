@@ -23,9 +23,10 @@ package org.apache.isis.metamodel.facets.propparam.validate.mandatory;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

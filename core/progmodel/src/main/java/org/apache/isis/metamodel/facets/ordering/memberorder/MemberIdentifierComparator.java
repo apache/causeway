@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 /**

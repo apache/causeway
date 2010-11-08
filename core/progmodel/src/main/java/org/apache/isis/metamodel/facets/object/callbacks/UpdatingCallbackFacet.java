@@ -20,6 +20,10 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
+
 /**
  * Represents the mechanism to inform the object that it is about to be updated in the object store.
  * 

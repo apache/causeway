@@ -20,10 +20,10 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.metamodel.facets.When;
-import org.apache.isis.metamodel.facets.object.bounded.BoundedFacet;
-import org.apache.isis.metamodel.facets.object.cached.CachedFacet;
-import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.When;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
+import org.apache.isis.core.metamodel.facets.object.cached.CachedFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
 
 public class SpecificationFacets {

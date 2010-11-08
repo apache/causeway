@@ -21,8 +21,8 @@
 package org.apache.isis.metamodel.facets.object.callbacks;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.java5.ImperativeFacetMulti;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.java5.ImperativeFacetMulti;
 
 
 /**

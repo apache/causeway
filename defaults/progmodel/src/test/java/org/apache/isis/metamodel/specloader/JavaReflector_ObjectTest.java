@@ -22,12 +22,12 @@ package org.apache.isis.metamodel.specloader;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.facets.naming.describedas.DescribedAsFacet;
-import org.apache.isis.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.metamodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.metamodel.facets.object.notpersistable.NotPersistableFacet;

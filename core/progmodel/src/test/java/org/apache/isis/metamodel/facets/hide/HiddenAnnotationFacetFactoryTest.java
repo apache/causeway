@@ -25,9 +25,10 @@ import java.util.Collection;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.When;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -125,7 +126,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         final Facet facet = facetHolder.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.ALWAYS, hiddenFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, hiddenFacetAbstract.value());
     }
 
     public void testHiddenWhenNeverAnnotationPickedUpOn() {
@@ -141,7 +142,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         final Facet facet = facetHolder.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.NEVER, hiddenFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, hiddenFacetAbstract.value());
     }
 
     public void testHiddenWhenOncePersistedAnnotationPickedUpOn() {
@@ -157,7 +158,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         final Facet facet = facetHolder.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.ONCE_PERSISTED, hiddenFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, hiddenFacetAbstract.value());
     }
 
     public void testDisabledWhenUntilPersistedAnnotationPickedUpOn() {
@@ -173,7 +174,7 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         final Facet facet = facetHolder.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.UNTIL_PERSISTED, hiddenFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, hiddenFacetAbstract.value());
     }
 
 }

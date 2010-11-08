@@ -20,8 +20,10 @@
 package org.apache.isis.metamodel.facets.properties.modify;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 
 /**
  * The mechanism by which the value of the property can be initialised.

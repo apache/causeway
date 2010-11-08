@@ -20,9 +20,10 @@
 
 package org.apache.isis.metamodel.facets.help;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 
 
 public abstract class HelpFacetAbstract extends SingleStringValueFacetAbstract implements HelpFacet {

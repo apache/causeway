@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.facets.object.facets;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 
 
 /**

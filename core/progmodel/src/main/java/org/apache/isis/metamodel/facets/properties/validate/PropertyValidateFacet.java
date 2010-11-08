@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.properties.validate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacetAbstract;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * The mechanism by which the proposed value of a property can be validated, called immediately before

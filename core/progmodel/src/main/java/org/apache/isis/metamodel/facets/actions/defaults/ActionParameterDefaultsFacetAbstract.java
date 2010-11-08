@@ -20,9 +20,10 @@
 
 package org.apache.isis.metamodel.facets.actions.defaults;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actions.defaults.ActionParameterDefaultsFacet;
 
 
 public abstract class ActionParameterDefaultsFacetAbstract extends FacetAbstract implements ActionParameterDefaultsFacet {

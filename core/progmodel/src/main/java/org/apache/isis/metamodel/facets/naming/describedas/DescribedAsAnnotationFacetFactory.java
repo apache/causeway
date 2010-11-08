@@ -24,12 +24,13 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.DescribedAs;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 
 
 public class DescribedAsAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {

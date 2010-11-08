@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.facets.propparam.enums;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 public abstract class ChoicesFacetAbstract extends FacetAbstract implements ChoicesFacet {
 

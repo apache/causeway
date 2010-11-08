@@ -20,9 +20,9 @@
 package org.apache.isis.metamodel.facets.propparam.validate.mask;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.metamodel.facets.propparam.validate.regex.RegExFacet;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Whether the (string) property or a parameter must correspond to a specific mask.

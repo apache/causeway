@@ -29,7 +29,7 @@ import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.lang.WrapperUtils;
 import org.apache.isis.core.metamodel.exceptions.ReflectionException;
-import org.apache.isis.metamodel.specloader.internal.introspector.MethodFinderUtils;
+import org.apache.isis.core.metamodel.specloader.internal.introspector.MethodFinderUtils;
 
 /**
  * TODO: remove duplication with {@link WrapperUtils} and {@link MethodFinderUtils}.

@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.facets.hide;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public class HideForSessionFacetNone extends HideForSessionFacetAbstract {

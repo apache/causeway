@@ -21,8 +21,8 @@
 package org.apache.isis.remoting.protocol.internal;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.remoting.data.query.PersistenceQueryData;
 import org.apache.isis.remoting.data.query.PersistenceQueryFindUsingApplibQuerySerializableData;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;

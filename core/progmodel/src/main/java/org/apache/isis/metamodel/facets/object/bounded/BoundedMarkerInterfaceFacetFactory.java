@@ -23,11 +23,12 @@ package org.apache.isis.metamodel.facets.object.bounded;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.marker.Bounded;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
 
 
 public class BoundedMarkerInterfaceFacetFactory extends FacetFactoryAbstract {

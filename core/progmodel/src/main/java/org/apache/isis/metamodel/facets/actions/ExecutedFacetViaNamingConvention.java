@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.actions;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.actions.executed.ExecutedFacetAbstract;
 
 

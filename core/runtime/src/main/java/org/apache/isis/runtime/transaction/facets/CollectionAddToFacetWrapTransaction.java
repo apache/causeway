@@ -21,8 +21,8 @@
 package org.apache.isis.runtime.transaction.facets;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.DecoratingFacet;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.facets.DecoratingFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;

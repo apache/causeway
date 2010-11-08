@@ -25,13 +25,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.java5.ImperativeFacet;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.metamodel.java5.ImperativeFacet;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.specloader.ReflectiveActionException;
 import org.apache.log4j.Logger;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {

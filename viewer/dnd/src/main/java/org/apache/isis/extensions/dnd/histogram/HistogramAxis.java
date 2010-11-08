@@ -22,8 +22,8 @@ package org.apache.isis.extensions.dnd.histogram;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.ViewAxis;

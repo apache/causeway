@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.propparam.typicallength;
 
-import org.apache.isis.metamodel.facets.SingleIntValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
 
 /**
  * The typical length of a property or a parameter.

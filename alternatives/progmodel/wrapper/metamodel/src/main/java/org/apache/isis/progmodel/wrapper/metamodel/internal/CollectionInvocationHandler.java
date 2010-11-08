@@ -25,8 +25,8 @@ import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 
 
 class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHandler<T, R> {

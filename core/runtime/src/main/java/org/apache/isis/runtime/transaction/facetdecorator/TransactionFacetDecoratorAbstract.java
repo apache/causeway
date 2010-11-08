@@ -22,13 +22,13 @@ package org.apache.isis.runtime.transaction.facetdecorator;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionClearFacet;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
-import org.apache.isis.metamodel.facets.properties.modify.PropertyClearFacet;
-import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 
 
 public abstract class TransactionFacetDecoratorAbstract  extends FacetDecoratorAbstract implements TransactionFacetDecorator {

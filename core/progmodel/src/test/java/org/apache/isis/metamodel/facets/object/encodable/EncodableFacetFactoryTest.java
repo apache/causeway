@@ -23,10 +23,10 @@ package org.apache.isis.metamodel.facets.object.encodable;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableAnnotationFacetFactory;
-import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.metamodel.facets.object.encodeable.EncoderDecoderUtil;
 

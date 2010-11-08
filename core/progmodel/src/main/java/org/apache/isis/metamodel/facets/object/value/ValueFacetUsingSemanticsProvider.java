@@ -21,9 +21,9 @@
 package org.apache.isis.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 
 public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {

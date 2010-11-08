@@ -33,7 +33,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.DeploymentType;

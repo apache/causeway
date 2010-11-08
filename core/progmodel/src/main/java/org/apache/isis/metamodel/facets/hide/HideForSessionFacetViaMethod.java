@@ -26,9 +26,9 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionUtils;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.java5.ImperativeFacet;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.java5.ImperativeFacet;
 
 
 public class HideForSessionFacetViaMethod extends HideForSessionFacetAbstract implements ImperativeFacet {

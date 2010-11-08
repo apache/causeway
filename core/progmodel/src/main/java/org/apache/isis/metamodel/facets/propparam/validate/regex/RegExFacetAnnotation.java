@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.propparam.validate.regex;
 
 import java.util.regex.Pattern;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public class RegExFacetAnnotation extends RegExFacetAbstract {

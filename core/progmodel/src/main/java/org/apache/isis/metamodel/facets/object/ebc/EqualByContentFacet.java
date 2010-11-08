@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.object.ebc;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
-import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 
 /**
  * Indicates that the instances of this class are equal-by-content.

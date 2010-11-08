@@ -23,9 +23,9 @@ package org.apache.isis.metamodel.facets.propparam.validate.regex;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.RegEx;
+import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

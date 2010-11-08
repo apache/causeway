@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.metamodel.wizardpagedesc;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
 
 
 public interface WizardPageDescriptionFacet extends MarkerFacet {

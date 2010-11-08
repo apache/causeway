@@ -25,14 +25,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.MethodScope;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.facets.MethodScope;
 import org.apache.isis.metamodel.facets.actions.MandatoryFacetOverriddenByMethod;
 import org.apache.isis.metamodel.facets.disable.DisabledFacet;
 import org.apache.isis.metamodel.facets.disable.DisabledFacetAlways;
@@ -47,8 +49,6 @@ import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacetVia
 import org.apache.isis.metamodel.facets.properties.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.metamodel.facets.properties.validate.PropertyValidateFacetViaMethod;
 import org.apache.isis.metamodel.java5.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
 
 
 public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements RuntimeContextAware {

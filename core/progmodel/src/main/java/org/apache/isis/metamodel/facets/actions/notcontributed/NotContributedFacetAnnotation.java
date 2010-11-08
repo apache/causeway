@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.actions.notcontributed;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public class NotContributedFacetAnnotation extends NotContributedFacetAbstract {

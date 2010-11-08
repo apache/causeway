@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.metamodel.interactions.ProposedHolder;
 
 /**
  * Mix-in for {@link Instance} implementations, where can hold a

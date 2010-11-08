@@ -29,14 +29,14 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
-import org.apache.isis.metamodel.interactions.ValidityContext;
-import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 
 
 public class TestProxyField extends FacetHolderImpl implements ObjectAssociation {

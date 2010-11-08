@@ -25,12 +25,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.JavaOneToOneAssociationPeer;
 import org.apache.isis.metamodel.facets.actions.choices.ActionChoicesFacetNone;
 import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacetNone;
 import org.apache.isis.metamodel.facets.actions.executed.ExecutedFacetAtDefault;
@@ -41,10 +45,6 @@ import org.apache.isis.metamodel.facets.object.ident.title.TitleFacetNone;
 import org.apache.isis.metamodel.facets.object.notpersistable.NotPersistableFacetNull;
 import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacetNone;
 import org.apache.isis.metamodel.facets.propparam.validate.maxlength.MaxLengthFacetUnlimited;
-import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
-import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectActionPeer;
-import org.apache.isis.metamodel.specloader.internal.peer.JavaObjectMemberPeer;
-import org.apache.isis.metamodel.specloader.internal.peer.JavaOneToOneAssociationPeer;
 
 /**
  * Central point for providing some kind of default for any {@link Facet}s required by the Apache Isis framework itself.

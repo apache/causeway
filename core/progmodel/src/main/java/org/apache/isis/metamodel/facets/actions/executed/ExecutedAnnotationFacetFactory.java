@@ -23,11 +23,12 @@ package org.apache.isis.metamodel.facets.actions.executed;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Executed;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
+import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 
 
 /**

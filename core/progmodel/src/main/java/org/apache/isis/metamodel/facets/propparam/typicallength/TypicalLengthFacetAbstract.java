@@ -20,9 +20,10 @@
 
 package org.apache.isis.metamodel.facets.propparam.typicallength;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 
 
 public abstract class TypicalLengthFacetAbstract extends FacetAbstract implements TypicalLengthFacet {

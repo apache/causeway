@@ -20,9 +20,10 @@
 
 package org.apache.isis.metamodel.facets.actions.debug;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 
 
 public abstract class DebugFacetAbstract extends MarkerFacetAbstract implements DebugFacet {

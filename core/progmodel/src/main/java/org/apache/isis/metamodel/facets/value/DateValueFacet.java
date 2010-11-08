@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.facets.value;
 import java.util.Date;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.Facet;
 
 
 public interface DateValueFacet extends Facet {

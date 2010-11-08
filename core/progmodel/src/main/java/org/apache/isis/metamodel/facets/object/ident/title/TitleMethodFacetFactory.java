@@ -23,10 +23,10 @@ package org.apache.isis.metamodel.facets.object.ident.title;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.java5.FallbackFacetFactory;
 import org.apache.isis.metamodel.java5.MethodPrefixBasedFacetFactoryAbstract;
 

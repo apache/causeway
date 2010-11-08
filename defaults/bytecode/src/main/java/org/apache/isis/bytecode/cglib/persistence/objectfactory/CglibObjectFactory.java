@@ -20,7 +20,7 @@
 package org.apache.isis.bytecode.cglib.persistence.objectfactory;
 
 import org.apache.isis.bytecode.cglib.persistence.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
-import org.apache.isis.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
 import org.apache.isis.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectChanger;

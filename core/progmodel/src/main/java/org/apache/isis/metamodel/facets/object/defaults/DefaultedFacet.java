@@ -21,9 +21,9 @@
 package org.apache.isis.metamodel.facets.object.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.SingleValueFacet;
-import org.apache.isis.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.metamodel.facets.properties.defaults.PropertyDefaultFacet;
+import org.apache.isis.core.metamodel.facets.SingleValueFacet;
+import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
+import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 
 
 /**

@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.propparam.multiline;
 
-import org.apache.isis.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 
 
 /**

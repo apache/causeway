@@ -20,12 +20,12 @@
 
 package org.apache.isis.extensions.html.task;
 
-import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
-import org.apache.isis.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
-import org.apache.isis.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;

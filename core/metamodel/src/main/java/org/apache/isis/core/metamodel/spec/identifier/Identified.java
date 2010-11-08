@@ -21,7 +21,7 @@
 package org.apache.isis.core.metamodel.spec.identifier;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 public interface Identified extends FacetHolder {
 

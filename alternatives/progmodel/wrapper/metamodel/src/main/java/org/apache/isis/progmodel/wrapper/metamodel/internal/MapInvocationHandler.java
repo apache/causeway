@@ -24,8 +24,8 @@ import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
 
 import java.util.Map;
 
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 
 
 class MapInvocationHandler<T, C> extends AbstractCollectionInvocationHandler<T, C> {

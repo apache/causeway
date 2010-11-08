@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.facets.object.aggregated;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
-import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 
 
 /**

@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.object.value;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.object.ebc.EqualByContentFacetAbstract;
 
 

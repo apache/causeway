@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.Test;
-import org.apache.isis.metamodel.specloader.internal.TypeExtractorMethodReturn;
+import org.apache.isis.core.metamodel.specloader.internal.TypeExtractorMethodReturn;
 
 public class TypeExtractorMethodReturnTest {
 

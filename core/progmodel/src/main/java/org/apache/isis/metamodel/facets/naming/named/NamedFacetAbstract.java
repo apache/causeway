@@ -20,9 +20,10 @@
 
 package org.apache.isis.metamodel.facets.naming.named;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 
 
 public abstract class NamedFacetAbstract extends SingleStringValueFacetAbstract implements NamedFacet {

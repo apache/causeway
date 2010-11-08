@@ -27,13 +27,13 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.util.CallbackUtils;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistedCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
 import org.apache.isis.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
 

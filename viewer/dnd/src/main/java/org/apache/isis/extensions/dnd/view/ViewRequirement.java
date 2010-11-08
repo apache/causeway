@@ -22,8 +22,8 @@ package org.apache.isis.extensions.dnd.view;
 
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class ViewRequirement {

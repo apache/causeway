@@ -20,9 +20,9 @@
 
 package org.apache.isis.runtime.system.specpeer;
 
+import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 
 
 public class DummyActionParamPeer extends FacetHolderImpl implements ObjectActionParamPeer {

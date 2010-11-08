@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacetAbstract;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 
 
 public class JavaArrayFacet extends CollectionFacetAbstract {

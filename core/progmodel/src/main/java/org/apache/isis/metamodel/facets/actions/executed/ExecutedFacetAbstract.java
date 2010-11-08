@@ -20,10 +20,11 @@
 
 package org.apache.isis.metamodel.facets.actions.executed;
 
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.spec.Target;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.SingleValueFacetAbstract;
 
 
 public abstract class ExecutedFacetAbstract extends SingleValueFacetAbstract implements ExecutedFacet {

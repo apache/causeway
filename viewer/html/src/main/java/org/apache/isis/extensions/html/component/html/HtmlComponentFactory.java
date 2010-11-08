@@ -26,11 +26,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.metamodel.facets.value.BooleanValueFacet;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.extensions.html.component.Block;

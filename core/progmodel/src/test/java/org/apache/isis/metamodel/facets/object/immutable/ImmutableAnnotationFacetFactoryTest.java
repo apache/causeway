@@ -22,9 +22,10 @@ package org.apache.isis.metamodel.facets.object.immutable;
 
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.When;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -64,7 +65,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.ALWAYS, immutableFacetAnnotation.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, immutableFacetAnnotation.value());
 
         assertNoMethodsRemoved();
     }
@@ -79,7 +80,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.ALWAYS, immutableFacetAnnotation.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, immutableFacetAnnotation.value());
 
         assertNoMethodsRemoved();
     }
@@ -94,7 +95,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.NEVER, immutableFacetAnnotation.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, immutableFacetAnnotation.value());
 
         assertNoMethodsRemoved();
     }
@@ -109,7 +110,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.ONCE_PERSISTED, immutableFacetAnnotation.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, immutableFacetAnnotation.value());
 
         assertNoMethodsRemoved();
     }
@@ -124,7 +125,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
-        assertEquals(org.apache.isis.metamodel.facets.When.UNTIL_PERSISTED, immutableFacetAnnotation.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, immutableFacetAnnotation.value());
 
         assertNoMethodsRemoved();
     }

@@ -19,9 +19,9 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.metamodel.facets.actcoll.typeof.TypeOfFacet;
 
 /**
  * Adapters to domain objects, where the application is written in terms of domain objects and those objects are

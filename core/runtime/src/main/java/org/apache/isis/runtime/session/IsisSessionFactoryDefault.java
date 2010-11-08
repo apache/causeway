@@ -23,7 +23,7 @@ package org.apache.isis.runtime.session;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authorization.AuthorizationManager;
 import org.apache.isis.runtime.imageloader.TemplateImageLoader;

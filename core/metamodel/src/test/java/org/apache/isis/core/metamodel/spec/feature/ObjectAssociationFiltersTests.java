@@ -31,9 +31,9 @@ import org.junit.runner.RunWith;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.metamodel.facets.hide.HiddenFacet;
 
 @RunWith(JMock.class)
 public class ObjectAssociationFiltersTests {

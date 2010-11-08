@@ -27,13 +27,13 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.facets.FacetHolderNoop;
+import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.metamodel.facets.FacetHolderNoop;
-import org.apache.isis.metamodel.interactions.PropertyAccessContext;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
-import org.apache.isis.metamodel.interactions.ValidityContext;
-import org.apache.isis.metamodel.interactions.VisibilityContext;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
 
 

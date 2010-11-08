@@ -25,9 +25,9 @@ import java.util.Collection;
 
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
+import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -125,7 +125,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetHolder.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.ALWAYS, disabledFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, disabledFacetAbstract.value());
     }
 
     public void testDisabledWhenNeverAnnotationPickedUpOn() {
@@ -141,7 +141,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetHolder.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.NEVER, disabledFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, disabledFacetAbstract.value());
     }
 
     public void testDisabledWhenOncePersistedAnnotationPickedUpOn() {
@@ -157,7 +157,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetHolder.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.ONCE_PERSISTED, disabledFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, disabledFacetAbstract.value());
     }
 
     public void testDisabledWhenUntilPersistedAnnotationPickedUpOn() {
@@ -174,7 +174,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         final Facet facet = facetHolder.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
-        assertEquals(org.apache.isis.metamodel.facets.When.UNTIL_PERSISTED, disabledFacetAbstract.value());
+        assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, disabledFacetAbstract.value());
     }
 
 }

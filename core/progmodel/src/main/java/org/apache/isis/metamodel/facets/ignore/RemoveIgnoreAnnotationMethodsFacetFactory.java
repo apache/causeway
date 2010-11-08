@@ -23,10 +23,10 @@ package org.apache.isis.metamodel.facets.ignore;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Ignore;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 
 
 public class RemoveIgnoreAnnotationMethodsFacetFactory extends AnnotationBasedFacetFactoryAbstract {

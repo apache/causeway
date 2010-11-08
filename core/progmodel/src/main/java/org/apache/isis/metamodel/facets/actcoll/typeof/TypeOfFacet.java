@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actcoll.typeof;
 
-import org.apache.isis.metamodel.facets.SingleClassValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacet;
 
 /**
  * The type of the collection or the action.

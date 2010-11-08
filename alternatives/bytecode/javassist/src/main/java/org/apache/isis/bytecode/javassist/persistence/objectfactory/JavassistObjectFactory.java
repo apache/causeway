@@ -21,7 +21,7 @@
 package org.apache.isis.bytecode.javassist.persistence.objectfactory;
 
 import org.apache.isis.bytecode.javassist.persistence.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
-import org.apache.isis.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.PersistenceSessionAware;
 import org.apache.isis.runtime.persistence.container.DomainObjectContainerObjectChanged;

@@ -21,9 +21,9 @@
 package org.apache.isis.metamodel.facets.ordering.actionorder;
 
 import org.apache.isis.applib.annotation.ActionOrder;
+import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class ActionOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

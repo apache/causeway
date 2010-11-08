@@ -33,11 +33,11 @@ import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.extensions.dnd.view.field.TextParseableFieldImpl;
 import org.apache.isis.runtime.testsystem.TestProxySystem;
 

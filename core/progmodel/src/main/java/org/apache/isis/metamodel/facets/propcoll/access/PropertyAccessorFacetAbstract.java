@@ -21,9 +21,10 @@
 package org.apache.isis.metamodel.facets.propcoll.access;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
 
 
 public abstract class PropertyAccessorFacetAbstract extends FacetAbstract implements PropertyAccessorFacet {

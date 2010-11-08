@@ -26,12 +26,12 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionParamPeer;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectActionPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
 import org.apache.isis.runtime.testsystem.TestSpecification;
 
 

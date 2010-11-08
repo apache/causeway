@@ -19,6 +19,9 @@
 
 package org.apache.isis.metamodel.facets.object.callbacks;
 
+import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+
 /**
  * Represents the mechanism to inform the object that it is about to be loaded from the object store.
  * 
@@ -27,7 +30,7 @@ package org.apache.isis.metamodel.facets.object.callbacks;
  * 
  * <p>
  * 
- * @see LoadingCallbackFacet
+ * @see LoadedCallbackFacet
  * @see CreatedCallbackFacet
  */
 public interface LoadingCallbackFacet extends CallbackFacet {

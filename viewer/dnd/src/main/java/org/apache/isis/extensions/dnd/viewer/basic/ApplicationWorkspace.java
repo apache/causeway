@@ -25,7 +25,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
@@ -34,6 +33,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Padding;

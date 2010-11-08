@@ -23,7 +23,7 @@ package org.apache.isis.core.metamodel.consent;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.apache.isis.core.commons.matchers.NofMatchers.nonEmptyString;
 
-import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.Facet;
 
 public class Veto extends ConsentAbstract {
 

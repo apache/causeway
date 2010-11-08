@@ -21,11 +21,11 @@
 package org.apache.isis.metamodel.facets.collections.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.interactions.CollectionAddToContext;
-import org.apache.isis.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class CollectionValidateAddToFacetAbstract extends FacetAbstract implements CollectionValidateAddToFacet {

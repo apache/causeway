@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.ordering.memberorder;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public class MemberOrderFacetAnnotation extends MemberOrderFacetAbstract {

@@ -22,11 +22,11 @@ package org.apache.isis.metamodel.facets.propparam.validate.regex;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
-import org.apache.isis.metamodel.interactions.ProposedHolder;
-import org.apache.isis.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract implements RegExFacet {

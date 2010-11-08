@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.facets.actcoll.typeof;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public class TypeOfFacetDefaultToObject extends TypeOfFacetAbstract {

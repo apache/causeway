@@ -21,11 +21,11 @@
 package org.apache.isis.metamodel.facets.ordering.actionorder;
 
 import org.apache.isis.applib.annotation.ActionOrder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetUtil;
-import org.apache.isis.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 
 
 public class ActionOrderAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {

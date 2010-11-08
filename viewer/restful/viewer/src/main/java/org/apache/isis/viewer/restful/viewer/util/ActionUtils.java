@@ -3,9 +3,9 @@ package org.apache.isis.viewer.restful.viewer.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.metamodel.runtimecontext.spec.feature.ObjectActionSet;
 
 
 public final class ActionUtils {

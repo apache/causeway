@@ -20,11 +20,11 @@
 
 package org.apache.isis.metamodel.java5;
 
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
-import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
 
 public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extends MethodPrefixBasedFacetFactoryAbstract implements

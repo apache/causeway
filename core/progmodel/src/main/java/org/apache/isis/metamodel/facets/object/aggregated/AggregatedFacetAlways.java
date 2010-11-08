@@ -20,8 +20,9 @@
 
 package org.apache.isis.metamodel.facets.object.aggregated;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 
 
 public class AggregatedFacetAlways extends MarkerFacetAbstract {

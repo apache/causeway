@@ -20,8 +20,9 @@
 
 package org.apache.isis.metamodel.facets.propparam.typicallength;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 
 
 public class TypicalLengthFacetDerivedFromType extends TypicalLengthFacetAbstract {

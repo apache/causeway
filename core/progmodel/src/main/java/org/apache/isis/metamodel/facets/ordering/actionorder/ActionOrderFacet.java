@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.ordering.actionorder;
 
-import org.apache.isis.metamodel.facets.SingleStringValueFacet;
+import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
 import org.apache.isis.metamodel.facets.ordering.fieldorder.FieldOrderFacet;
 import org.apache.isis.metamodel.facets.ordering.memberorder.MemberOrderFacet;
 

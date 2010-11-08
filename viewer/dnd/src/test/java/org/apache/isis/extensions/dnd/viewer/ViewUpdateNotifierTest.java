@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.extensions.dnd.DummyView;
 import org.apache.isis.extensions.dnd.DummyWorkspaceView;
 import org.apache.isis.extensions.dnd.view.View;

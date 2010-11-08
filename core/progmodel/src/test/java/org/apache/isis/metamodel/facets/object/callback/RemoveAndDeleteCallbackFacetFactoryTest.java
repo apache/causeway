@@ -23,13 +23,13 @@ package org.apache.isis.metamodel.facets.object.callback;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.object.callbacks.DeleteCallbackFacetFactory;
 import org.apache.isis.metamodel.facets.object.callbacks.RemoveCallbackFacetFactory;
-import org.apache.isis.metamodel.facets.object.callbacks.RemovedCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.RemovedCallbackFacetViaMethod;
-import org.apache.isis.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.metamodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
 
 

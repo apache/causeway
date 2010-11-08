@@ -22,10 +22,10 @@ package org.apache.isis.webapp.view.simple;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.webapp.Dispatcher;
 import org.apache.isis.webapp.processor.Request;
@@ -39,9 +39,9 @@ public class EditLink extends AbstractLink {
         ObjectAssociation[] visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(
                 session, adapter));
         ImmutableFacet facet = (ImmutableFacet) specification.getFacet(ImmutableFacet.class);
-        boolean isImmutable = facet != null && facet.value() == org.apache.isis.metamodel.facets.When.ALWAYS;
+        boolean isImmutable = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ALWAYS;
         boolean isImmutableOncePersisted = facet != null
-                && facet.value() == org.apache.isis.metamodel.facets.When.ONCE_PERSISTED && adapter.isPersistent();
+                && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED && adapter.isPersistent();
         return visibleFields.length > 0 && !isImmutable && !isImmutableOncePersisted;
     }
 

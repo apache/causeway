@@ -27,13 +27,14 @@ import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorAbstract;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
+import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.metamodel.spec.JavaSpecification;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.metamodel.specloader.internal.instances.InstanceCollectionSpecification;
-import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
 
 
 public class JavaReflector extends ObjectReflectorAbstract {

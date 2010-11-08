@@ -26,7 +26,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.runtime.logging.Logger;
 import org.apache.isis.runtime.persistence.PersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtime.persistence.PersistenceSession;

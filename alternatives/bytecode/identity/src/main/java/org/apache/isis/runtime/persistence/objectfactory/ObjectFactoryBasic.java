@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence.objectfactory;
 
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
 
 public class ObjectFactoryBasic extends ObjectFactoryAbstract {
 

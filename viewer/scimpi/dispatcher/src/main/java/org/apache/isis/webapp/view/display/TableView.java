@@ -21,8 +21,8 @@
 package org.apache.isis.webapp.view.display;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.webapp.Dispatcher;
 import org.apache.isis.webapp.context.RequestContext;
 import org.apache.isis.webapp.context.RequestContext.Scope;

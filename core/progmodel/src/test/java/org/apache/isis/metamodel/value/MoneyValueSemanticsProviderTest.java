@@ -31,8 +31,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 
 @RunWith(JMock.class)
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

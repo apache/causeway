@@ -24,10 +24,11 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Executed;
 import org.apache.isis.applib.annotation.Executed.Where;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

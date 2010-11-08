@@ -22,10 +22,10 @@ package org.apache.isis.runtime.persistence.objectfactory;
 
 import java.lang.reflect.Modifier;
 
-import org.apache.isis.metamodel.runtimecontext.ObjectInstantiationException;
-import org.apache.isis.metamodel.services.ServicesInjector;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.metamodel.specloader.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 

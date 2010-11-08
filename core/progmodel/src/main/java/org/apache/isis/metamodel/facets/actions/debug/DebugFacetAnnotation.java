@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.actions.debug;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public class DebugFacetAnnotation extends DebugFacetAbstract {

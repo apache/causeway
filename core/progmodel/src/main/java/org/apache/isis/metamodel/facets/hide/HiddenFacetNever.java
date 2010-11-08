@@ -21,8 +21,8 @@
 package org.apache.isis.metamodel.facets.hide;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.When;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.When;
 
 
 public class HiddenFacetNever extends HiddenFacetAbstract {

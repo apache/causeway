@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.metamodel.consent;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 /**

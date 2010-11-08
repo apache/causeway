@@ -24,8 +24,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Collections;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.services.ServicesInjectorDefault;
-import org.apache.isis.metamodel.services.container.DomainObjectContainerDefault;
+import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerExtended;

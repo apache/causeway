@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.facets.object.bounded;
 
-import org.apache.isis.metamodel.facets.MarkerFacet;
-import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facets.MarkerFacet;
+import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 
 /**

@@ -2,8 +2,8 @@ package org.apache.isis.viewer.restful.viewer.facets;
 
 import nu.xom.Element;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.java5.ImperativeFacetUtils;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.java5.ImperativeFacetUtils;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
 

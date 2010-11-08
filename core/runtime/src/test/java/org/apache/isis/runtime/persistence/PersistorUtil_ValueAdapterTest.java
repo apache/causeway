@@ -23,7 +23,7 @@ package org.apache.isis.runtime.persistence;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.object.aggregated.AggregatedFacetAlways;
 import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.runtime.testsystem.TestProxyField;

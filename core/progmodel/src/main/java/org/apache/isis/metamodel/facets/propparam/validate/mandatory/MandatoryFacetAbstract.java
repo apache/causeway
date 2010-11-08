@@ -21,13 +21,14 @@
 package org.apache.isis.metamodel.facets.propparam.validate.mandatory;
 
 import org.apache.isis.applib.events.ValidityEvent;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
-import org.apache.isis.metamodel.interactions.ActionArgumentContext;
-import org.apache.isis.metamodel.interactions.PropertyModifyContext;
-import org.apache.isis.metamodel.interactions.ProposedHolder;
-import org.apache.isis.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
+import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class MandatoryFacetAbstract extends MarkerFacetAbstract implements MandatoryFacet {

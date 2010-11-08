@@ -20,8 +20,8 @@
 package org.apache.isis.metamodel.facets.properties.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 
 /**
  * Provides a default value for a property of a newly created object.

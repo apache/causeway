@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.object.dirty;
 
-import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.Facet;
 
 /**
  * Mechanisms for explicitly managing the dirty state of the object.

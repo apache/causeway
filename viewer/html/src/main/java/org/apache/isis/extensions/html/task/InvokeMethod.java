@@ -22,9 +22,9 @@ package org.apache.isis.extensions.html.task;
 
 import java.util.List;
 
-import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;

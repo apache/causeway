@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.scalars.value;
 
-import org.apache.isis.metamodel.facets.object.value.ValueFacet;
+import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;

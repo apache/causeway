@@ -20,9 +20,10 @@
 
 package org.apache.isis.metamodel.facets.propparam.multiline;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MultipleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 
 
 public abstract class MultiLineFacetAbstract extends MultipleValueFacetAbstract implements MultiLineFacet {

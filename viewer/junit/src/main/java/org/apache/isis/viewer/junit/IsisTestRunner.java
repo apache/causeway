@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
-import org.apache.isis.metamodel.services.ServicesInjector;
+import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.runtime.authentication.standard.exploration.AuthenticationRequestExploration;

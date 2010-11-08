@@ -26,8 +26,8 @@ import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
+import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.services.container.query.QueryCardinality;
 
 
 /**

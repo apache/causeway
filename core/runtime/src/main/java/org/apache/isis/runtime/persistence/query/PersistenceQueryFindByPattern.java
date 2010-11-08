@@ -20,9 +20,9 @@
 package org.apache.isis.runtime.persistence.query;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.metamodel.services.container.query.QueryFindByPattern;
 
 /**
  * Corresponds to {@link QueryFindByPattern}.

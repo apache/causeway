@@ -20,9 +20,9 @@
 package org.apache.isis.metamodel.facets.actions.validate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * The mechanism by which the set of parameters of the action can be validated before the action itself is invoked.

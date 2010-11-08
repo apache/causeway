@@ -20,10 +20,10 @@
 package org.apache.isis.metamodel.facets.object.validate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Mechanism for determining whether this object is in a valid state, for example so that it can be persisted or

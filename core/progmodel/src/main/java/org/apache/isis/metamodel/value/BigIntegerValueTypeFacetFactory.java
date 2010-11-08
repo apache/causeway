@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.value;
 
 import java.math.BigInteger;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.facets.value.BigIntegerValueFacet;
 
 

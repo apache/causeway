@@ -25,10 +25,10 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionContextType;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.metamodel.interactions.AccessContext;
-import org.apache.isis.metamodel.interactions.InteractionContext;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
-import org.apache.isis.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.AccessContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
 /**

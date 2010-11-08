@@ -20,7 +20,7 @@
 package org.apache.isis.metamodel.facets.properties.choices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.Facet;
 
 /**
  * Provides a set of choices for a property.

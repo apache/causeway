@@ -26,10 +26,11 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.TypeOf;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 
 
 public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

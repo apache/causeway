@@ -22,10 +22,10 @@ package org.apache.isis.runtime.help;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.help.HelpFacet;
 
 
 public class StandardHelpFacetDecorator  extends FacetDecoratorAbstract implements HelpFacetDecorator {

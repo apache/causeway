@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.data.common;
 
-import org.apache.isis.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.remoting.data.Data;
 
 

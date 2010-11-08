@@ -23,9 +23,10 @@ package org.apache.isis.metamodel.facets.actions.prototype;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.metamodel.facets.Facet;
 
 
 public class PrototypeAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

@@ -20,8 +20,8 @@
 package org.apache.isis.metamodel.facets.propparam.validate.maxlength;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.SingleIntValueFacet;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facets.SingleIntValueFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Whether the (string) property or a parameter's length must not exceed a certain length.

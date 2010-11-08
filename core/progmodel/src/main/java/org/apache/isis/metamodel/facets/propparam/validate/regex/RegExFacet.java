@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.facets.propparam.validate.regex;
 
-import org.apache.isis.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.metamodel.facets.propparam.validate.mask.MaskFacet;
-import org.apache.isis.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Whether the (string) property or a parameter must correspond to a specific regular expression.

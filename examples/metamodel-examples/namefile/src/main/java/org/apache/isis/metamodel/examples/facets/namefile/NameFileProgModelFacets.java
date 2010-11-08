@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.examples.facets.namefile;
 
-import org.apache.isis.metamodel.facets.FacetFactory;
-import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 
 

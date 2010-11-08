@@ -20,10 +20,11 @@
 
 package org.apache.isis.metamodel.facets.actcoll.typeof;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.SingleClassValueFacetAbstract;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public abstract class TypeOfFacetAbstract extends SingleClassValueFacetAbstract implements TypeOfFacet {

@@ -21,8 +21,8 @@
 package org.apache.isis.bytecode.cglib.specloader.classsubstitutor;
 
 import org.apache.isis.bytecode.cglib.persistence.objectfactory.internal.CglibEnhanced;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 import org.apache.isis.core.metamodel.util.ClassUtil;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 
 
 public class CglibClassSubstitutor extends ClassSubstitutorAbstract {

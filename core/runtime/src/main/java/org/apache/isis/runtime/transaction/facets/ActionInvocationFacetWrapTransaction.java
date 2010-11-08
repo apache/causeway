@@ -22,9 +22,9 @@ package org.apache.isis.runtime.transaction.facets;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.DecoratingFacet;
+import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.facets.DecoratingFacet;
-import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.metamodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;

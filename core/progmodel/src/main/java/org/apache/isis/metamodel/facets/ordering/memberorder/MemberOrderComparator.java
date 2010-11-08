@@ -23,10 +23,10 @@ package org.apache.isis.metamodel.facets.ordering.memberorder;
 import java.util.Comparator;
 import java.util.StringTokenizer;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.metamodel.facets.ordering.OrderSet;
 import org.apache.isis.metamodel.facets.ordering.OrderSetGroupNameComparator;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 /**

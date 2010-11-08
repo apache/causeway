@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.facets.properties.validate;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 /**

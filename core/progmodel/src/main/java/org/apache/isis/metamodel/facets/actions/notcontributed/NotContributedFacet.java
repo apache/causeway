@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.facets.actions.notcontributed;
 
-import org.apache.isis.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.Facet;
 
 /**
  * Indicates that the (repository) action should not be contributed to any objects.

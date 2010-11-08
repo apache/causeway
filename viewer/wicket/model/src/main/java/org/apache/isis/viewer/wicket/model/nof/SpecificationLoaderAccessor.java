@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.model.nof;
 
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public interface SpecificationLoaderAccessor {
 

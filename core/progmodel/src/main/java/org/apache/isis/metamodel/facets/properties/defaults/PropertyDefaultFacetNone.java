@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.facets.properties.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 public class PropertyDefaultFacetNone extends PropertyDefaultFacetAbstract {

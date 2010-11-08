@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.runtime.context.IsisContext;
 
 

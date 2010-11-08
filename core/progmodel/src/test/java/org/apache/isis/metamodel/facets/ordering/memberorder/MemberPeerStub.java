@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.metamodel.facets.NamedAndDescribedFacetHolderImpl;
-import org.apache.isis.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.facets.NamedAndDescribedFacetHolderImpl;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 final class MemberPeerStub extends NamedAndDescribedFacetHolderImpl implements ObjectMemberPeer {

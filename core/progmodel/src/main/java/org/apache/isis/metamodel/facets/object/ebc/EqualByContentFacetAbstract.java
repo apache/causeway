@@ -20,9 +20,9 @@
 
 package org.apache.isis.metamodel.facets.object.ebc;
 
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.facets.MarkerFacetAbstract;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 
 
 public abstract class EqualByContentFacetAbstract extends MarkerFacetAbstract implements EqualByContentFacet {

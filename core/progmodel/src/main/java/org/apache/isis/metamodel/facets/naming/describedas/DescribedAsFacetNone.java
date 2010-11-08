@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.facets.naming.describedas;
 
-import org.apache.isis.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 
 
 /**

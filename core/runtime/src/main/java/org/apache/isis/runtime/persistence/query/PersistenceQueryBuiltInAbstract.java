@@ -23,8 +23,8 @@ package org.apache.isis.runtime.persistence.query;
 import java.io.IOException;
 
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.metamodel.services.container.query.QueryBuiltInAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.services.container.query.QueryBuiltInAbstract;
 
 /**
  * Corresponds to {@link QueryBuiltInAbstract}.

@@ -24,15 +24,15 @@ import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.metamodel.specloader.ObjectReflector;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.metamodel.specloader.internal.cache.SpecificationCache;
-import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.metamodel.specloader.validator.MetaModelValidator;
+import org.apache.isis.core.metamodel.specloader.ObjectReflector;
+import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
+import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
+import org.apache.isis.core.metamodel.specloader.internal.cache.SpecificationCache;
+import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
+import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
+import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 
 public class ProgrammableReflector implements ObjectReflector {

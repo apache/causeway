@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.consent;
 
-import org.apache.isis.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
 
 /**
  * Powertype for the {@link InteractionContext} hierarchy.

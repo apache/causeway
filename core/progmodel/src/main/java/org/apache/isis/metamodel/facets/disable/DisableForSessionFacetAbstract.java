@@ -22,10 +22,10 @@ package org.apache.isis.metamodel.facets.disable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.metamodel.facets.Facet;
-import org.apache.isis.metamodel.facets.FacetAbstract;
-import org.apache.isis.metamodel.facets.FacetHolder;
-import org.apache.isis.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetAbstract;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 
 public abstract class DisableForSessionFacetAbstract extends FacetAbstract implements DisableForSessionFacet {
