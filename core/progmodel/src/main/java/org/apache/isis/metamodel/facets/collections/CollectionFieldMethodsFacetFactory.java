@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;

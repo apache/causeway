@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence.adaptermanager;
 
-import org.apache.isis.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

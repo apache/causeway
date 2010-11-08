@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.viewer.registries.pages;
 
 import java.util.Map;
 
-import org.apache.isis.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.viewer.wicket.model.util.Classes;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassList;
 import org.apache.isis.viewer.wicket.ui.pages.PageClassRegistry;

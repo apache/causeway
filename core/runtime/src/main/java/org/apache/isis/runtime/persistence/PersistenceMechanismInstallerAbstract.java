@@ -19,7 +19,7 @@
 
 package org.apache.isis.runtime.persistence;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.services.ServicesInjector;

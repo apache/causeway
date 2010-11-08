@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.authentication.standard;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 

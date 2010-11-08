@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.testsystem;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.metamodel.adapter.Instance;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;

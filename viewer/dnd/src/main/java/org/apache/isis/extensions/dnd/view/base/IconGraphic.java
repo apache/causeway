@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.base;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;

@@ -22,7 +22,7 @@ package org.apache.isis.remoting.server;
 
 import java.io.IOException;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.marshalling.ServerMarshaller;

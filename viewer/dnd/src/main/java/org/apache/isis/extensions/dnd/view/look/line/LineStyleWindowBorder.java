@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.look.line;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;

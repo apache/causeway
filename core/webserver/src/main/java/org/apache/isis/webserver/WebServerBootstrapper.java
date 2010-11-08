@@ -31,8 +31,8 @@ import java.util.Map;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.lang.CastUtils;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.metamodel.config.ConfigurationPrimer;
 import org.apache.isis.metamodel.config.IsisConfiguration;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence.services;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.IsisContext;

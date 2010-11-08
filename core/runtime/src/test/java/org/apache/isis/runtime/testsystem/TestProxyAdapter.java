@@ -21,9 +21,9 @@ package org.apache.isis.runtime.testsystem;
 
 import java.util.Hashtable;
 
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.Instance;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;

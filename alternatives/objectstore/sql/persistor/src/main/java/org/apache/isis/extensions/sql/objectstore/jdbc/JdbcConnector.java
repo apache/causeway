@@ -28,7 +28,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.extensions.sql.objectstore.AbstractDatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.Results;

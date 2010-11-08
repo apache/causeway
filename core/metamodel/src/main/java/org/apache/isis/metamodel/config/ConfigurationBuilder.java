@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.config;
 
 import java.util.Properties;
 
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.resource.ResourceStreamSource;
-import org.apache.isis.commons.resource.ResourceStreamSourceComposite;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 
 /**
  * Holds a mutable set of properties representing the configuration.

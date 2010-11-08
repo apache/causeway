@@ -30,7 +30,7 @@ import org.apache.isis.applib.RepositoryException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.consent.InteractionResult;

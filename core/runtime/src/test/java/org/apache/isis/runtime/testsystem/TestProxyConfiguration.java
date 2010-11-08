@@ -27,9 +27,9 @@ import java.util.Hashtable;
 
 import junit.framework.AssertionFailedError;
 
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 
 

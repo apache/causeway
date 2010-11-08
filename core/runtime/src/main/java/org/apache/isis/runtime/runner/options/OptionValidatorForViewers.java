@@ -22,7 +22,7 @@ package org.apache.isis.runtime.runner.options;
 
 import java.util.List;
 
-import org.apache.isis.commons.lang.Maybe;
+import org.apache.isis.core.commons.lang.Maybe;
 import org.apache.isis.runtime.options.standard.OptionHandlerViewer;
 import org.apache.isis.runtime.runner.IsisRunner;
 import org.apache.isis.runtime.system.DeploymentType;

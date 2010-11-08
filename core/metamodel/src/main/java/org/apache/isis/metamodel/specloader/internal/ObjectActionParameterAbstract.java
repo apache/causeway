@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.consent.Allow;

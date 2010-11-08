@@ -21,7 +21,7 @@
 package org.apache.isis.remoting.client.facets;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;

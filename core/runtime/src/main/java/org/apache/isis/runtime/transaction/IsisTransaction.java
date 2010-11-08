@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.transaction;
 
-import org.apache.isis.commons.components.TransactionScopedComponent;
+import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 

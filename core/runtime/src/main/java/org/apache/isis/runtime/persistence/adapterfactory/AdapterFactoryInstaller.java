@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence.adapterfactory;
 
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 
 
 public interface AdapterFactoryInstaller extends Installer {

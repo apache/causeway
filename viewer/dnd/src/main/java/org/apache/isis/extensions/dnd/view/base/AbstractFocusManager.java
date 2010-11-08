@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.dnd.view.base;
 
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.extensions.dnd.view.FocusManager;
 import org.apache.isis.extensions.dnd.view.View;
 

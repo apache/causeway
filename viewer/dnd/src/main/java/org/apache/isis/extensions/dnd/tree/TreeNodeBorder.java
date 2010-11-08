@@ -21,7 +21,7 @@
 package org.apache.isis.extensions.dnd.tree;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.consent.Consent;

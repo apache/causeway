@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view;
 
-import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

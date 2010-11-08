@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.Predicate;
-import org.apache.isis.commons.lang.Threads;
+import org.apache.isis.core.commons.lang.Threads;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.runner.IsisBootstrapper;

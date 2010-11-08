@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view;
 
-import org.apache.isis.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugInfo;
 
 public interface ViewUpdateNotifier extends DebugInfo {
 

@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.adapter.version.VersionUserAndTimeAbstract;
 import org.apache.isis.metamodel.encoding.DataInputExtended;

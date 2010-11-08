@@ -22,7 +22,7 @@ package org.apache.isis.extensions.nosql;
 
 import java.util.List;
 
-import org.apache.isis.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.AggregatedOid;

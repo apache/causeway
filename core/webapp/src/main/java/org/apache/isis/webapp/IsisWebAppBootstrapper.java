@@ -27,7 +27,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.resource.ResourceStreamSourceContextLoaderClassPath;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.metamodel.config.ConfigurationBuilderResourceStreams;
 import org.apache.isis.metamodel.config.ConfigurationPrimer;

@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.commons.filters.AbstractFilter;
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.AbstractFilter;
+import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

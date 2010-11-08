@@ -27,9 +27,9 @@ import java.util.Properties;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.metamodel.config.ConfigurationConstants;
 import org.apache.isis.metamodel.config.ConfigurationException;
 import org.apache.isis.metamodel.config.IsisConfiguration;

@@ -23,7 +23,7 @@ package org.apache.isis.extensions.dnd.configurable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.view.View;

@@ -20,8 +20,8 @@
 
 package org.apache.isis.alternatives.embedded;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -33,8 +33,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.isis.alternatives.embedded.internal.RuntimeContextForEmbeddedMetaModel;
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.metamodel.facetdecorator.FacetDecorator;

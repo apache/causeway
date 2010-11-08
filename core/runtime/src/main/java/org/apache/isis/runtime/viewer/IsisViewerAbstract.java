@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.viewer;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.metamodel.config.ConfigurationBuilderAware;
 import org.apache.isis.metamodel.config.IsisConfiguration;

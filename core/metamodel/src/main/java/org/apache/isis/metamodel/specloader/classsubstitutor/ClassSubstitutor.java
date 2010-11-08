@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.specloader.classsubstitutor;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.components.Injectable;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.Injectable;
 
 /**
  * Provides capability to translate or ignore classes.

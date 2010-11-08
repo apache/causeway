@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.imageloader;
 
-import org.apache.isis.commons.components.Noop;
+import org.apache.isis.core.commons.components.Noop;
 
 /**
  * No-op implementation, for tests.

@@ -23,9 +23,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.remoting.exchange.OpenSessionRequest;
 import org.apache.isis.remoting.exchange.Request;

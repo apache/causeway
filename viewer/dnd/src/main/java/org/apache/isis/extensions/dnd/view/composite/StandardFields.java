@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.composite;
 
-import org.apache.isis.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.GlobalViewFactory;

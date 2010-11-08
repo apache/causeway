@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.specloader.internal.facetprocessor;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -32,7 +32,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.isis.commons.lang.ListUtils;
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.FacetFactory;
 import org.apache.isis.metamodel.facets.FacetHolder;

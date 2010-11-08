@@ -23,7 +23,7 @@ package org.apache.isis.remoting.data.common;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.encoding.DataInputExtended;

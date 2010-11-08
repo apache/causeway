@@ -24,9 +24,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.Enumeration;
 
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 
 /**

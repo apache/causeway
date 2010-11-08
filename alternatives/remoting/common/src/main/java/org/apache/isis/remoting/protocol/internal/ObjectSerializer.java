@@ -21,9 +21,9 @@ package org.apache.isis.remoting.protocol.internal;
 
 import java.util.Enumeration;
 
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

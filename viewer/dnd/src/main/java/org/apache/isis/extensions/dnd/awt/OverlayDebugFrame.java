@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.awt;
 
-import org.apache.isis.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.base.AbstractView;
 import org.apache.isis.extensions.dnd.view.content.NullContent;

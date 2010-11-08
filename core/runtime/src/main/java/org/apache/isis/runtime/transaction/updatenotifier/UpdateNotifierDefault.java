@@ -25,10 +25,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 

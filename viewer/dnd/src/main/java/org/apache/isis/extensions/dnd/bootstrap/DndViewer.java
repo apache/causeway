@@ -24,9 +24,9 @@ import java.awt.Dimension;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.factory.InstanceCreationException;
-import org.apache.isis.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.factory.InstanceCreationException;
+import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.config.ConfigurationException;
 import org.apache.isis.extensions.dnd.awt.AwtImageFactory;

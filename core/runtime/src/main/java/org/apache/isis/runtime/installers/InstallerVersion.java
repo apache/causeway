@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.isis.commons.components.Installer;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtime.about.AboutIsis;
 import org.apache.isis.runtime.about.ComponentDetails;
 

@@ -27,8 +27,8 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.isis.commons.ensure.Ensure;
-import org.apache.isis.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;
 

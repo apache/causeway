@@ -22,8 +22,8 @@ package org.apache.isis.runtime.system;
 
 import java.util.List;
 
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.context.IsisContextStatic;
 import org.apache.isis.runtime.session.IsisSessionFactory;

@@ -32,7 +32,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.applib.Identifier;
-import static org.apache.isis.commons.matchers.NofMatchers.anInstanceOf;
+
+import static org.apache.isis.core.commons.matchers.NofMatchers.anInstanceOf;
+
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.MethodRemover;
 import org.apache.isis.metamodel.spec.identifier.Identified;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence.services;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 public class ServiceException extends IsisException {

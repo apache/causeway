@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Vector;
 
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.xml.objectstore.internal.data.CollectionData;
 import org.apache.isis.extensions.xml.objectstore.internal.data.Data;

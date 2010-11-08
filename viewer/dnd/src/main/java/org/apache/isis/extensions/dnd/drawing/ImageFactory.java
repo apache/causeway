@@ -27,7 +27,7 @@ import java.awt.image.RGBImageFilter;
 */
 import java.util.Hashtable;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.extensions.dnd.util.Properties;

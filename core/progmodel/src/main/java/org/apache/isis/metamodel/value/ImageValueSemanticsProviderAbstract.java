@@ -27,8 +27,8 @@ import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.Facet;

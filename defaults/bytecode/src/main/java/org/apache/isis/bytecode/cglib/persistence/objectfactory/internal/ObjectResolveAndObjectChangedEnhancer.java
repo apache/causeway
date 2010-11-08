@@ -29,7 +29,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.apache.isis.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.metamodel.java5.ImperativeFacet;
 import org.apache.isis.metamodel.java5.ImperativeFacetUtils;
 import org.apache.isis.metamodel.java5.ImperativeFacetUtils.ImperativeFacetFlags;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.spec;
 
-import org.apache.isis.commons.lang.HashCodeUtils;
+import org.apache.isis.core.commons.lang.HashCodeUtils;
 
 
 /**

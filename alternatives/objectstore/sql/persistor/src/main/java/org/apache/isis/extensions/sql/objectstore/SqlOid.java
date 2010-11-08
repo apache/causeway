@@ -22,7 +22,7 @@ package org.apache.isis.extensions.sql.objectstore;
 
 import java.io.IOException;
 
-import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.encoding.DataInputExtended;
 import org.apache.isis.metamodel.encoding.DataOutputExtended;

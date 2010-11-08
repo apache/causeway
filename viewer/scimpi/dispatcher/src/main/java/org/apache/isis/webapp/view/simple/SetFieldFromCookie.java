@@ -20,7 +20,7 @@
 
 package org.apache.isis.webapp.view.simple;
 
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.processor.Request;
 

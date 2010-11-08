@@ -20,9 +20,9 @@
 
 package org.apache.isis.runtime.installers;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.metamodel.config.ConfigurationBuilderAware;
 import org.apache.isis.metamodel.config.IsisConfiguration;

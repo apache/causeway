@@ -23,7 +23,7 @@ package org.apache.isis.runtime.memento;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.encoding.DataInputExtended;

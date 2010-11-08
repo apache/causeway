@@ -27,7 +27,7 @@ import java.util.Enumeration;
 import java.util.List;
 
 import org.apache.commons.collections.iterators.IteratorEnumeration;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 

@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.encoding.DataInputExtended;
 import org.apache.isis.metamodel.encoding.DataOutputExtended;

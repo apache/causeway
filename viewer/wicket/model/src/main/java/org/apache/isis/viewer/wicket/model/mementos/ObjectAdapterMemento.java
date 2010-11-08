@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
-import org.apache.isis.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

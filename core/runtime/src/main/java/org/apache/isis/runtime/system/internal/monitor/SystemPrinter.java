@@ -29,8 +29,8 @@ import java.util.Locale;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.io.IoUtils;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.io.IoUtils;
 import org.apache.isis.runtime.about.AboutIsis;
 
 public class SystemPrinter {

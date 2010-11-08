@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.actions;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.MethodFilteringFacetFactory;

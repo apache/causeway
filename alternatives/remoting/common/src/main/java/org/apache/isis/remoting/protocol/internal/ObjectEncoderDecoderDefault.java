@@ -23,9 +23,9 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.UnknownTypeException;
-import org.apache.isis.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

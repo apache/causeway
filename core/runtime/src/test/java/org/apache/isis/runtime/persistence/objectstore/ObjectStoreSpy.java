@@ -25,7 +25,7 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

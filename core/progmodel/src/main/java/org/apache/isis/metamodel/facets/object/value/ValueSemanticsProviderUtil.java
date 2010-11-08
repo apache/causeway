@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.util.ClassUtil;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.progmodel.wrapper.metamodel.internal;
 
-import static org.apache.isis.commons.lang.MethodUtils.getMethod;
+import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
 
 import java.util.Map;
 

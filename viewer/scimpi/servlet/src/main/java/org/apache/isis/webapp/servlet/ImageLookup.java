@@ -30,8 +30,8 @@ import java.util.Set;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 

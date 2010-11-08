@@ -24,9 +24,9 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.extensions.dnd.drawing.Location;
 
 

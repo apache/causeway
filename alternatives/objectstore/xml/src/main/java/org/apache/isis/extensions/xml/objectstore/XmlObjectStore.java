@@ -24,9 +24,9 @@ import java.text.MessageFormat;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

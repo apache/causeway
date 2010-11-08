@@ -26,9 +26,9 @@ import java.util.concurrent.Future;
 
 import net.sf.cglib.proxy.Enhancer;
 
-import org.apache.isis.commons.futures.FutureFactory;
-import org.apache.isis.commons.futures.FutureResultFactory;
-import org.apache.isis.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.futures.FutureFactory;
+import org.apache.isis.core.commons.futures.FutureResultFactory;
+import org.apache.isis.core.commons.lang.ArrayUtils;
 
 public class FutureFactoryCglib implements FutureFactory {
 

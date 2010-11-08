@@ -27,7 +27,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.metamodel.spec.feature.ObjectActionParameter;

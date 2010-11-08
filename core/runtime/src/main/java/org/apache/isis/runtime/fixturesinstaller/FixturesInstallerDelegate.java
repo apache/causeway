@@ -31,7 +31,7 @@ import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.applib.profiles.ProfileService;
 import org.apache.isis.applib.profiles.ProfileServiceAware;
-import org.apache.isis.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.metamodel.services.ServicesInjector;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;

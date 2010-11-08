@@ -22,7 +22,7 @@ import javax.ws.rs.core.UriInfo;
 import nu.xom.Attribute;
 import nu.xom.Element;
 
-import org.apache.isis.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;

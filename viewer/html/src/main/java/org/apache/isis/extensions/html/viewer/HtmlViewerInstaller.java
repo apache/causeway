@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.html.viewer;
 
-import org.apache.isis.commons.lang.MapUtils;
+import org.apache.isis.core.commons.lang.MapUtils;
 import org.apache.isis.extensions.html.servlet.ControllerServlet;
 import org.apache.isis.extensions.html.servlet.HtmlServletConstants;
 import org.apache.isis.extensions.html.servlet.LogonServlet;

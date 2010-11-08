@@ -22,7 +22,7 @@ package org.apache.isis.runtime.bytecode;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import java.lang.reflect.Method;
 

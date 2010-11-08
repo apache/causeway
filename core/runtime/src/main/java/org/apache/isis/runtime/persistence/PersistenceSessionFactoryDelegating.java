@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 import java.util.List;
 

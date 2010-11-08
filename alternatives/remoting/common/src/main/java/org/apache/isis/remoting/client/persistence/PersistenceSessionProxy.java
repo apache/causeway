@@ -25,9 +25,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.components.SessionScopedComponent;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

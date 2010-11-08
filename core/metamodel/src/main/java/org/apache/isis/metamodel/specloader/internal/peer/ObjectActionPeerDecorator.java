@@ -21,8 +21,8 @@
 package org.apache.isis.metamodel.specloader.internal.peer;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.specloader.ReflectiveActionException;

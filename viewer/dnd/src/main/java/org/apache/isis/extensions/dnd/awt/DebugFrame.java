@@ -45,8 +45,8 @@ import java.net.URL;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.extensions.dnd.view.debug.DebugOutput;
 
 

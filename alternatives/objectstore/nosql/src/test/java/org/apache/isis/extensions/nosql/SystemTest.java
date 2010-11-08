@@ -22,7 +22,7 @@ package org.apache.isis.extensions.nosql;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.IsisContext;

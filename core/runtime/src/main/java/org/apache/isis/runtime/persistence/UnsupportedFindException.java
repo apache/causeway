@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 public class UnsupportedFindException extends IsisException {

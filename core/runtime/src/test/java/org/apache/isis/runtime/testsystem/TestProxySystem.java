@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

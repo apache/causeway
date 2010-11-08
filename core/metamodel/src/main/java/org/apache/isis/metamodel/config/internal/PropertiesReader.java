@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-import org.apache.isis.commons.io.IoUtils;
-import org.apache.isis.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.io.IoUtils;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
 
 
 /**

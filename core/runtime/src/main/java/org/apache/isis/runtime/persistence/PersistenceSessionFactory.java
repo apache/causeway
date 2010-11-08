@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence;
 
 import java.util.List;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;

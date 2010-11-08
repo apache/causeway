@@ -25,9 +25,7 @@
 
     <modules>
         <module>archetypes</module>
-	<!--
-    <module>myapp</module>
-        -->
+        <module>prototype</module>
   </modules>
 
     <reporting>

@@ -20,8 +20,8 @@
 
 package org.apache.isis.runtime.system.internal.monitor;
 
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 
 
 public class MonitorEvent {

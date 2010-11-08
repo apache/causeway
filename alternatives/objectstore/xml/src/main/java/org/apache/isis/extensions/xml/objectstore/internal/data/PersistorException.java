@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.xml.objectstore.internal.data;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 public class PersistorException extends IsisException {

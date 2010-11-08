@@ -26,8 +26,8 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.Debug;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.Debug;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;
@@ -61,7 +61,7 @@ import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 
 public class InMemoryObjectStore implements ObjectStore {

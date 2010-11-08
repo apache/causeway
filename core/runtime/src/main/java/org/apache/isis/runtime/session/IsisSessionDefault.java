@@ -19,7 +19,7 @@
 
 package org.apache.isis.runtime.session;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -27,10 +27,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.isis.commons.components.SessionScopedComponent;
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.specloader.SpecificationLoader;

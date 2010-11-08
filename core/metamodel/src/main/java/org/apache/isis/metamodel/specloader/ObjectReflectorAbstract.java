@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.specloader;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
@@ -31,11 +31,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetdecorator.FacetDecorator;

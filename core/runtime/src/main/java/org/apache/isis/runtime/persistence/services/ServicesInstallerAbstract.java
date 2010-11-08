@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence.services;
 
-import static org.apache.isis.commons.lang.CastUtils.collectionOf;
+import static org.apache.isis.core.commons.lang.CastUtils.collectionOf;
 
 import java.util.ArrayList;
 import java.util.Collection;

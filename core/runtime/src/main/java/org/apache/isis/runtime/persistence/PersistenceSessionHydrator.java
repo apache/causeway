@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence;
 
-import org.apache.isis.commons.components.Injectable;
+import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

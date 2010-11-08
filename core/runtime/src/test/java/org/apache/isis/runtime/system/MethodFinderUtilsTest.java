@@ -34,7 +34,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.apache.isis.commons.lang.MethodUtils;
+import org.apache.isis.core.commons.lang.MethodUtils;
 import org.apache.isis.metamodel.facets.MethodScope;
 import org.apache.isis.metamodel.specloader.internal.introspector.MethodFinderUtils;
 

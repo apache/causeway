@@ -24,7 +24,7 @@ import java.awt.event.KeyEvent;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.Veto;

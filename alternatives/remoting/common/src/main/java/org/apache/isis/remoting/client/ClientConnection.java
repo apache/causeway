@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.client;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.exchange.ResponseEnvelope;
 import org.apache.isis.remoting.marshalling.ClientMarshaller;

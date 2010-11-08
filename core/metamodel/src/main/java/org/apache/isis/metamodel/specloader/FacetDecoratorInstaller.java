@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.specloader;
 
 import java.util.List;
 
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
 
 

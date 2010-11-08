@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.services;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -33,9 +33,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.lang.CastUtils;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.exceptions.ReflectionException;
 
 

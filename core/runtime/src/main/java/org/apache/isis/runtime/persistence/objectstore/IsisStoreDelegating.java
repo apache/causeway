@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence.objectstore;
 
 import java.util.List;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

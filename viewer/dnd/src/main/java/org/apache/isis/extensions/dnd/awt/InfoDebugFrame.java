@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.awt;
 
-import org.apache.isis.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugInfo;
 
 
 public class InfoDebugFrame extends DebugFrame {

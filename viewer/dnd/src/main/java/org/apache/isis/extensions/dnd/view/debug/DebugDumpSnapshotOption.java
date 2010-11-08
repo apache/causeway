@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.debug;
 
-import static org.apache.isis.commons.lang.CastUtils.enumerationOver;
+import static org.apache.isis.core.commons.lang.CastUtils.enumerationOver;
 
 import java.util.Enumeration;
 

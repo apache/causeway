@@ -23,8 +23,8 @@ package org.apache.isis.metamodel.services;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
 
 
 /**

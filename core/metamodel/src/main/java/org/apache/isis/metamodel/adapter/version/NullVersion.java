@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.adapter.version;
 
 import java.util.Date;
 
-import org.apache.isis.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 
 
 public class NullVersion implements Version {

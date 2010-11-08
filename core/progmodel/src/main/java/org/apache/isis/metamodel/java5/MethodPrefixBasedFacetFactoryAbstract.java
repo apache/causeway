@@ -25,7 +25,7 @@ import java.lang.reflect.Modifier;
 import java.util.List;
 
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.commons.lang.ListUtils;
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.metamodel.facets.FacetHolder;

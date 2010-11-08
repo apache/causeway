@@ -24,10 +24,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.ensure.Ensure;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.Instance;
 import org.apache.isis.metamodel.adapter.InstanceAbstract;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;

@@ -23,7 +23,7 @@ package org.apache.isis.runtime.persistence.objectstore;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.services.ServicesInjector;

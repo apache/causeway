@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.adapter.version;
 import java.io.IOException;
 import java.util.Date;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.encoding.DataInputExtended;
 import org.apache.isis.metamodel.encoding.DataOutputExtended;
 

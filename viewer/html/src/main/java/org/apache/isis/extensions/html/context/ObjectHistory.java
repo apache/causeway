@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.extensions.html.component.Block;
 import org.apache.isis.extensions.html.component.Component;

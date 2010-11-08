@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.restful.viewer.embedded;
 
-import org.apache.isis.commons.lang.MapUtils;
+import org.apache.isis.core.commons.lang.MapUtils;
 import org.apache.isis.runtime.web.EmbeddedWebViewer;
 import org.apache.isis.runtime.web.WebAppSpecification;
 import org.apache.isis.viewer.restful.viewer.RestfulApplication;

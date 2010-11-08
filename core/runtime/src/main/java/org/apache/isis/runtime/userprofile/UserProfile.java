@@ -23,9 +23,9 @@ package org.apache.isis.runtime.userprofile;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
 

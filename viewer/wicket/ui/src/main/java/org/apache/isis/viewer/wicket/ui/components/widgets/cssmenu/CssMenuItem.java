@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.consent.Consent;

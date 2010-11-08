@@ -23,7 +23,7 @@ package org.apache.isis.runtime.installers;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.metamodel.config.ConfigurationBuilderAware;
 import org.apache.isis.metamodel.config.IsisConfiguration;

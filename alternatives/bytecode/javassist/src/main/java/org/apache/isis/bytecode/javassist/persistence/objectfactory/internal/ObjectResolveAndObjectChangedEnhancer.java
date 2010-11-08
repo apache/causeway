@@ -27,8 +27,8 @@ import javassist.util.proxy.MethodHandler;
 import javassist.util.proxy.ProxyFactory;
 import javassist.util.proxy.ProxyObject;
 
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.metamodel.java5.ImperativeFacet;
 import org.apache.isis.metamodel.java5.ImperativeFacetUtils;
 import org.apache.isis.metamodel.java5.ImperativeFacetUtils.ImperativeFacetFlags;

@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.facets;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.commons.filters.Filter;
-import org.apache.isis.commons.filters.Filters;
+import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.Filters;
 
 
 public class FacetFiltersTest extends TestCase {

@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.fixturesinstaller;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 
 public interface FixturesInstaller extends Installer {
 	

@@ -27,8 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.lang.JavaClassUtils;
-import org.apache.isis.commons.lang.WrapperUtils;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.lang.WrapperUtils;
 import org.apache.isis.metamodel.facets.MethodScope;
 
 

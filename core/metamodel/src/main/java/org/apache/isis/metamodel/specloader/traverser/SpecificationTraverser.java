@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.specloader.traverser;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 public interface SpecificationTraverser extends ApplicationScopedComponent {

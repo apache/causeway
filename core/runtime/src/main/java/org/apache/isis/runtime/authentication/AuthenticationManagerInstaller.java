@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.authentication;
 
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 
 
 public interface AuthenticationManagerInstaller extends Installer {

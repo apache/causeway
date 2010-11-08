@@ -23,10 +23,10 @@ import java.io.File;
 import java.util.List;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.commons.components.Installer;
-import org.apache.isis.commons.components.NoopUtils;
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.commons.components.NoopUtils;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.specloader.ObjectReflector;
 import org.apache.isis.runtime.about.AboutIsis;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.fixturesinstaller;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 public class FixtureException extends IsisException {

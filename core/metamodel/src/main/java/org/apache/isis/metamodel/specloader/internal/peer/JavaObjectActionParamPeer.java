@@ -21,7 +21,7 @@
 package org.apache.isis.metamodel.specloader.internal.peer;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 

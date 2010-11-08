@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.transaction;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBrokerDefault;
@@ -30,7 +30,7 @@ import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifierDefault;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 public abstract class IsisTransactionManagerAbstract<T extends IsisTransaction> implements IsisTransactionManager {
 

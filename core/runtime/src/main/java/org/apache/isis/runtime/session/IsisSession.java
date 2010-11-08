@@ -20,9 +20,9 @@
 
 package org.apache.isis.runtime.session;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.components.SessionScopedComponent;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.persistence.PersistenceSession;

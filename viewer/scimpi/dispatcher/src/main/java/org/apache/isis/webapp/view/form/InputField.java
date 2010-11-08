@@ -20,7 +20,7 @@
 
 package org.apache.isis.webapp.view.form;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 
 
 public class InputField {

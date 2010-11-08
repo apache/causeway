@@ -26,7 +26,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.authentication.AuthenticationSessionAbstract;
 import org.apache.isis.metamodel.encoding.DataInputExtended;
 import org.apache.isis.metamodel.encoding.DataOutputExtended;

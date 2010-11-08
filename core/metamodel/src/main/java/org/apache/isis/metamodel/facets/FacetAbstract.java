@@ -23,10 +23,10 @@ package org.apache.isis.metamodel.facets;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
-import org.apache.isis.commons.ensure.Ensure;
-import org.apache.isis.commons.matchers.NofMatchers;
+import org.apache.isis.core.commons.ensure.Ensure;
+import org.apache.isis.core.commons.matchers.NofMatchers;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.metamodel.interactions.HidingInteractionAdvisor;

@@ -20,8 +20,8 @@
 
 package org.apache.isis.runtime.persistence.adapterfactory;
 
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 

@@ -23,7 +23,7 @@ package org.apache.isis.extensions.nosql;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;

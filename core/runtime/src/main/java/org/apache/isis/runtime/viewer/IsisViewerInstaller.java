@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.viewer;
 
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.runtime.installers.InstallerLookupAware;
 
 

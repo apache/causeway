@@ -22,7 +22,7 @@ package org.apache.isis.extensions.dnd.view.border;
 
 import java.awt.event.KeyEvent;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Location;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.transaction.messagebroker;
 
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 
 
 public interface MessageBrokerInstaller extends Installer {

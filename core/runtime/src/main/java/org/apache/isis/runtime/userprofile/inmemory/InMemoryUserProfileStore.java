@@ -23,8 +23,8 @@ package org.apache.isis.runtime.userprofile.inmemory;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.runtime.userprofile.UserProfile;
 import org.apache.isis.runtime.userprofile.UserProfileStore;
 

@@ -22,7 +22,7 @@ package org.apache.isis.extensions.xml.objectstore.internal.data;
 
 import java.util.Vector;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 
 

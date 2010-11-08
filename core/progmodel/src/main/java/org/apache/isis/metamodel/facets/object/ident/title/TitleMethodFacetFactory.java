@@ -22,7 +22,7 @@ package org.apache.isis.metamodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.commons.lang.JavaClassUtils;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.metamodel.facets.FacetHolder;
 import org.apache.isis.metamodel.facets.FacetUtil;
 import org.apache.isis.metamodel.facets.MethodRemover;

@@ -23,8 +23,8 @@ package org.apache.isis.runtime.persistence;
 import java.util.List;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.services.ServicesInjector;

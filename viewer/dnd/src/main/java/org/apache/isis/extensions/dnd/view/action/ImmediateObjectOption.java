@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.action;
 
-import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;

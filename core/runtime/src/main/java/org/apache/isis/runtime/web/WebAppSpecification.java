@@ -27,7 +27,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.lang.MapUtils;
+import org.apache.isis.core.commons.lang.MapUtils;
 
 
 /**

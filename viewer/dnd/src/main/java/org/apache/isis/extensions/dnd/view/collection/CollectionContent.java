@@ -22,7 +22,7 @@ package org.apache.isis.extensions.dnd.view.collection;
 
 import java.util.Enumeration;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;

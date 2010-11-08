@@ -21,7 +21,7 @@
 package org.apache.isis.extensions.dnd.view.border;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Location;

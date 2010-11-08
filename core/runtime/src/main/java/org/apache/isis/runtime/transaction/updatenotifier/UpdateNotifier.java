@@ -22,8 +22,8 @@ package org.apache.isis.runtime.transaction.updatenotifier;
 
 import java.util.List;
 
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.components.TransactionScopedComponent;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.components.TransactionScopedComponent;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
 /**

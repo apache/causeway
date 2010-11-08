@@ -22,7 +22,7 @@ package org.apache.isis.remoting.marshalling;
 
 import java.io.IOException;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.remoting.exchange.Request;
 
 public interface ServerMarshaller extends Marshaller {

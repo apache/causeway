@@ -3,7 +3,7 @@ package org.apache.isis.viewer.bdd.common.fixtures;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.facets.properties.modify.PropertyClearFacet;

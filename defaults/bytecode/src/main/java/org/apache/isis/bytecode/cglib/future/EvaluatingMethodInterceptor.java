@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
-import org.apache.isis.commons.futures.FutureResultFactory;
+import org.apache.isis.core.commons.futures.FutureResultFactory;
 
 final class EvaluatingMethodInterceptor<T> implements
 		MethodInterceptor {

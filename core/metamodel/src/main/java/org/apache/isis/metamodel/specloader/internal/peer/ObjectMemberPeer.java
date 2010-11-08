@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.specloader.internal.peer;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.spec.identifier.Identified;
 
 

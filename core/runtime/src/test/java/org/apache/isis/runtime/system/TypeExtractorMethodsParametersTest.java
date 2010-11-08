@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.Test;
-import org.apache.isis.commons.matchers.NofMatchers;
+import org.apache.isis.core.commons.matchers.NofMatchers;
 import org.apache.isis.metamodel.specloader.internal.TypeExtractorMethodParameters;
 
 public class TypeExtractorMethodsParametersTest {

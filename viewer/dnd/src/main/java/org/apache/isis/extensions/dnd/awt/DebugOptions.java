@@ -23,8 +23,8 @@ package org.apache.isis.extensions.dnd.awt;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.MenuOptions;

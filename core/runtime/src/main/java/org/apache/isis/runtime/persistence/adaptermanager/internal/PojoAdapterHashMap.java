@@ -26,8 +26,8 @@ import java.util.Map;
 
 import org.apache.commons.collections.map.IdentityMap;
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
 

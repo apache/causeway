@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.nosql;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class NoSqlStoreException extends IsisException {
     private static final long serialVersionUID = 1L;

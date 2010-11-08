@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.dnd.view.border;
 
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;

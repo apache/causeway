@@ -19,7 +19,7 @@
 
 package org.apache.isis.remoting.marshalling;
 
-import org.apache.isis.commons.components.Installer;
+import org.apache.isis.core.commons.components.Installer;
 
 /**
  * TODO: not yet in use, but holds the {@link #TYPE} constant.

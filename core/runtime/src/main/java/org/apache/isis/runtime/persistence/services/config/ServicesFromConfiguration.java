@@ -25,10 +25,10 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.factory.InstanceCreationClassException;
-import org.apache.isis.commons.factory.InstanceCreationException;
-import org.apache.isis.commons.lang.ArrayUtils;
-import org.apache.isis.commons.lang.ListUtils;
+import org.apache.isis.core.commons.factory.InstanceCreationClassException;
+import org.apache.isis.core.commons.factory.InstanceCreationException;
+import org.apache.isis.core.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.metamodel.config.ConfigurationConstants;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.fixture.ObjectFixtureService;

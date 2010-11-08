@@ -29,8 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.exceptions.ReflectionException;
 import org.apache.isis.metamodel.facets.Facet;
 import org.apache.isis.metamodel.facets.FacetHolder;

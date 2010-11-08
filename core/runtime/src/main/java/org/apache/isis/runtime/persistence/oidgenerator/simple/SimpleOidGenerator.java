@@ -21,10 +21,10 @@
 package org.apache.isis.runtime.persistence.oidgenerator.simple;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.commons.matchers.NofMatchers.greaterThan;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.matchers.NofMatchers.greaterThan;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;

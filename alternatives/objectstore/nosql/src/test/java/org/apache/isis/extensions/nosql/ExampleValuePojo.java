@@ -22,7 +22,7 @@ package org.apache.isis.extensions.nosql;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.applib.annotation.NotPersisted;
-import org.apache.isis.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 
 public class ExampleValuePojo extends ExamplePojo {
     // {{ Name

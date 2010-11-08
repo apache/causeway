@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.value;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.metamodel.config.IsisConfiguration;

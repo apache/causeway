@@ -25,10 +25,10 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.resource.ResourceStreamSource;
-import org.apache.isis.commons.resource.ResourceStreamSourceComposite;
-import org.apache.isis.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.metamodel.config.internal.PropertiesReader;
 import org.apache.log4j.Logger;

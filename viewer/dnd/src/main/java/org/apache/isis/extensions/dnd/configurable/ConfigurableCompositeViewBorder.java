@@ -22,7 +22,7 @@ package org.apache.isis.extensions.dnd.configurable;
 
 import java.util.Enumeration;
 
-import org.apache.isis.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.extensions.dnd.configurable.GridListSpecification.ElementFactory;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.util.Properties;

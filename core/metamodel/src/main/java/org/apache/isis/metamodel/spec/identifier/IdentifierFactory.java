@@ -29,7 +29,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 

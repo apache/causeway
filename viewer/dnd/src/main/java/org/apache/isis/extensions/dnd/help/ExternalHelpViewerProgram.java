@@ -23,7 +23,7 @@ package org.apache.isis.extensions.dnd.help;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.extensions.dnd.drawing.Location;
 
 

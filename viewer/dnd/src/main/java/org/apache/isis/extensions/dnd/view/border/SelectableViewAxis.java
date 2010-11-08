@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.border;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.ViewAxis;
 import org.apache.isis.extensions.dnd.view.Selectable;;

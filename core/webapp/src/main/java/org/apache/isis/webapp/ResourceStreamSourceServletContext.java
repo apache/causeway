@@ -25,8 +25,8 @@ import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
-import org.apache.isis.commons.lang.PathUtils;
-import org.apache.isis.commons.resource.ResourceStreamSourceAbstract;
+import org.apache.isis.core.commons.lang.PathUtils;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceAbstract;
 
 public class ResourceStreamSourceServletContext extends ResourceStreamSourceAbstract {
 

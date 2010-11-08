@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.config;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 public class ConfigurationException extends IsisException {

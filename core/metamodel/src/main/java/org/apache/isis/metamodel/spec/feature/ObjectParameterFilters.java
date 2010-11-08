@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.spec.feature;
 
-import org.apache.isis.commons.filters.AbstractFilter;
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.AbstractFilter;
+import org.apache.isis.core.commons.filters.Filter;
 
 
 public class ObjectParameterFilters {

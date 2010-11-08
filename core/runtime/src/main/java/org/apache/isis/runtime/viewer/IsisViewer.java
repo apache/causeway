@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.viewer;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.metamodel.config.ConfigurationBuilderAware;
 import org.apache.isis.runtime.installers.InstallerLookupAware;
 import org.apache.isis.runtime.web.WebAppSpecification;

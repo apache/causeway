@@ -24,7 +24,7 @@ import org.apache.isis.applib.profiles.Perspective;
 import org.apache.isis.applib.profiles.Profile;
 import org.apache.isis.applib.profiles.ProfileService;
 import org.apache.isis.applib.profiles.ProfileServiceAware;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.runtime.userprofile.UserProfile;

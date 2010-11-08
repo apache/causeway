@@ -22,7 +22,7 @@ package org.apache.isis.extensions.file.server;
 
 import java.io.IOException;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class FileServerException extends IsisException {
 

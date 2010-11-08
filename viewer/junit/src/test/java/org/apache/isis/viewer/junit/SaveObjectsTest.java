@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.junit;
 
-import static org.apache.isis.commons.matchers.NofMatchers.classEqualTo;
+import static org.apache.isis.core.commons.matchers.NofMatchers.classEqualTo;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;

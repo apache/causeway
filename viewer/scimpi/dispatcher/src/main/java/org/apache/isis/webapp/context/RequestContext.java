@@ -30,7 +30,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.version.Version;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;

@@ -24,7 +24,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.interaction.KeyboardActionImpl;
 import org.apache.isis.extensions.dnd.view.FocusManager;

@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.metamodel.runtimecontext.spec.feature.ObjectActionSet;

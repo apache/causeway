@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.web;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 public interface EmbeddedWebServer extends ApplicationScopedComponent {
     

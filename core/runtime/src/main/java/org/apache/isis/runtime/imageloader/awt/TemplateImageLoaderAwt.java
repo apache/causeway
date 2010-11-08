@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.imageloader.awt;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 import java.awt.Canvas;
 import java.awt.Image;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.lang.Resources;
+import org.apache.isis.core.commons.lang.Resources;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.imageloader.TemplateImage;
 import org.apache.isis.runtime.imageloader.TemplateImageImpl;

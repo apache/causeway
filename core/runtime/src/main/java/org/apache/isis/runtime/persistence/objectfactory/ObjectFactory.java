@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.persistence.objectfactory;
 
-import org.apache.isis.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.metamodel.runtimecontext.ObjectInstantiationException;
 
 

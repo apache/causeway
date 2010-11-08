@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.config.ConfigurationConstants;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.xml.sax.ContentHandler;

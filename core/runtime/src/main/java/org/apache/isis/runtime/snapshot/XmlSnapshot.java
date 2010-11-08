@@ -34,7 +34,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.snapshot.Snapshottable;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;

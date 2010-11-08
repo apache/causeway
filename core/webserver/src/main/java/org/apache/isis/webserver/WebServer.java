@@ -22,7 +22,7 @@ package org.apache.isis.webserver;
 
 
 
-import org.apache.isis.commons.lang.ArrayUtils;
+import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.runtime.runner.IsisRunner;
 import org.apache.isis.webserver.internal.OptionHandlerAddress;
 import org.apache.isis.webserver.internal.OptionHandlerDeploymentTypeWebServer;

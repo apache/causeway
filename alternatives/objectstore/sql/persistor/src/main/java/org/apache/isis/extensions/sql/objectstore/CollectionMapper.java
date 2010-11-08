@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.sql.objectstore;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 
 

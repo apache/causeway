@@ -21,11 +21,11 @@
 package org.apache.isis.metamodel.consent;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.apache.isis.commons.matchers.NofMatchers.nonEmptyStringOrNull;
+import static org.apache.isis.core.commons.matchers.NofMatchers.nonEmptyStringOrNull;
 
 import java.io.Serializable;
 
-import org.apache.isis.commons.ensure.Ensure;
+import org.apache.isis.core.commons.ensure.Ensure;
 
 public abstract class ConsentAbstract implements Serializable, Consent {
 

@@ -21,7 +21,7 @@
 package org.apache.isis.runtime.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 
 public interface Authorizor extends ApplicationScopedComponent {

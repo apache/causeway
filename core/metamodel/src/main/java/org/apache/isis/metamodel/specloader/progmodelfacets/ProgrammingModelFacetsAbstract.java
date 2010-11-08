@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.metamodel.facets.FacetFactory;
 
 

@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.drawing;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 
 
 public class DebugCanvas implements Canvas {

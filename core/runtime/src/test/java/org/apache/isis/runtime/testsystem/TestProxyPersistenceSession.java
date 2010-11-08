@@ -19,14 +19,14 @@
 
 package org.apache.isis.runtime.testsystem;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.Hashtable;
 import java.util.Vector;
 
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

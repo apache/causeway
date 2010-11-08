@@ -23,7 +23,7 @@ package org.apache.isis.extensions.html.image;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class ImageProviderDirectoryBasedReworked extends ImageProviderAbstract {
 

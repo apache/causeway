@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.commons.lang.Resources;
+import org.apache.isis.core.commons.lang.Resources;
 
 
 public class ImageProviderResourceBased extends ImageProviderAbstract {

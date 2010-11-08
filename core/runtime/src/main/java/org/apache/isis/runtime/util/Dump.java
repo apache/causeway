@@ -23,9 +23,9 @@ package org.apache.isis.runtime.util;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.commons.debug.Debug;
-import org.apache.isis.commons.debug.DebugInfo;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.Debug;
+import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.facets.Facet;

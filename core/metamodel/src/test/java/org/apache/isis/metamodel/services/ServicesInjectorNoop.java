@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.services;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.commons.components.Noop;
+import org.apache.isis.core.commons.components.Noop;
 
 public class ServicesInjectorNoop implements ServicesInjector, Noop {
 

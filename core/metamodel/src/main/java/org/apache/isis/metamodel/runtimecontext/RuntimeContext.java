@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.commons.components.Injectable;
+import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;

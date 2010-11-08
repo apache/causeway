@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.facets;
 
-import org.apache.isis.commons.filters.AbstractFilter;
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.AbstractFilter;
+import org.apache.isis.core.commons.filters.Filter;
 
 
 public final class FacetFilters {

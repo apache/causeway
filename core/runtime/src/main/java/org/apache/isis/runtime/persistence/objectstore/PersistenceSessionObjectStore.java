@@ -19,8 +19,8 @@
 
 package org.apache.isis.runtime.persistence.objectstore;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.commons.ensure.Ensure.ensureThatState;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.notNullValue;
@@ -29,9 +29,9 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.adapter.oid.Oid;

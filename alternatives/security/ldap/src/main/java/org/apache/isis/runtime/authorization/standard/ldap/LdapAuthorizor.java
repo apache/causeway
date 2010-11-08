@@ -39,7 +39,7 @@ import javax.naming.directory.SearchResult;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authorization.standard.AuthorizorAbstract;
 

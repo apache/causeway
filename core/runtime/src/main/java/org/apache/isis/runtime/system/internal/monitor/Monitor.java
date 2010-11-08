@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebugInfo;
 
 
 public class Monitor {

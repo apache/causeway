@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.consent;
 
-import static org.apache.isis.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.commons.matchers.NofMatchers.nonEmptyString;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.matchers.NofMatchers.nonEmptyString;
 
 import org.apache.isis.metamodel.facets.Facet;
 

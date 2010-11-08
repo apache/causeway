@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.wicket.ui.components.value;
 
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;

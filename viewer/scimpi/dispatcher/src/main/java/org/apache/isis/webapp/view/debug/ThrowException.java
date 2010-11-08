@@ -20,7 +20,7 @@
 
 package org.apache.isis.webapp.view.debug;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.context.RequestContext;
 import org.apache.isis.webapp.processor.Request;

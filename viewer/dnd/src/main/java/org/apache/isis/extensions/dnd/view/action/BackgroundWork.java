@@ -21,7 +21,7 @@
 package org.apache.isis.extensions.dnd.view.action;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.exceptions.IsisApplicationException;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.extensions.dnd.view.BackgroundTask;
 import org.apache.isis.extensions.dnd.view.View;
 

@@ -22,8 +22,8 @@ package org.apache.isis.metamodel.spec.feature;
 
 import java.util.List;
 
-import org.apache.isis.commons.filters.Filter;
-import org.apache.isis.commons.filters.Filters;
+import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.Filters;
 import org.apache.isis.metamodel.spec.ObjectSpecificationException;
 
 

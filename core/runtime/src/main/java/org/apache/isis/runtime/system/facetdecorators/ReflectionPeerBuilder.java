@@ -23,8 +23,8 @@ package org.apache.isis.runtime.system.facetdecorators;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.metamodel.facets.Facet;

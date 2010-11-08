@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.system;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 /**
  * Pluggable mechanism for creating {@link IsisSystem}s.

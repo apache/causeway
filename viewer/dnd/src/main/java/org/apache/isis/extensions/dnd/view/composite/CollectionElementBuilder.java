@@ -23,7 +23,7 @@ package org.apache.isis.extensions.dnd.view.composite;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.ensure.Assert;
+import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.extensions.dnd.view.Axes;

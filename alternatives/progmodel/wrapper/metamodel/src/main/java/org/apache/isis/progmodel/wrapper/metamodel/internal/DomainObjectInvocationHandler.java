@@ -32,7 +32,7 @@ import org.apache.isis.applib.events.PropertyAccessEvent;
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
-import org.apache.isis.commons.lang.StringUtils;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.consent.InteractionInvocationMethod;

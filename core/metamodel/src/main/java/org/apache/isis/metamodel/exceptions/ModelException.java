@@ -19,7 +19,7 @@
 
 package org.apache.isis.metamodel.exceptions;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 /**
  * Thrown when a problem is found with the domain model, and Isis cannot proceed.

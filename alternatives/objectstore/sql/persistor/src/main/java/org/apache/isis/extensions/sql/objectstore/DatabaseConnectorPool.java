@@ -23,7 +23,7 @@ package org.apache.isis.extensions.sql.objectstore;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 
 
 public class DatabaseConnectorPool {

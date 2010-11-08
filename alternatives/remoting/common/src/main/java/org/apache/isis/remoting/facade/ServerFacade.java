@@ -21,7 +21,7 @@
 package org.apache.isis.remoting.facade;
 
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.remoting.exchange.AuthorizationRequestUsability;
 import org.apache.isis.remoting.exchange.AuthorizationRequestVisibility;
 import org.apache.isis.remoting.exchange.ClearAssociationRequest;

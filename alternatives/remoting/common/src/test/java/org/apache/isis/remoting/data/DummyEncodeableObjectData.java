@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.data;
 
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.remoting.data.common.EncodableObjectData;
 
 

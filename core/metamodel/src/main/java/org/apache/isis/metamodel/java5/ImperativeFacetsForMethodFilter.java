@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.java5;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.commons.filters.AbstractFilter;
+import org.apache.isis.core.commons.filters.AbstractFilter;
 import org.apache.isis.metamodel.facets.Facet;
 
 /**

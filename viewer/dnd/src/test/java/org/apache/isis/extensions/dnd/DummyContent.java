@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.dnd;
 
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.Veto;

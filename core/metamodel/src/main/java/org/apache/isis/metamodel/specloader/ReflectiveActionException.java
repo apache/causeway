@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.specloader;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 public class ReflectiveActionException extends IsisException {

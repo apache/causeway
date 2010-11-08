@@ -21,8 +21,8 @@
 package org.apache.isis.runtime.system;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.debug.DebugSelection;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.debug.DebugSelection;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 

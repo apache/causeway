@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.junit.internal;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.runtime.authentication.standard.noop.NoopAuthenticationManagerInstaller;
 import org.apache.isis.runtime.authorization.standard.noop.NoopAuthorizationManagerInstaller;
 import org.apache.isis.runtime.installers.InstallerLookup;

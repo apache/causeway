@@ -22,7 +22,7 @@ package org.apache.isis.extensions.html.task;
 
 import java.util.List;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.spec.feature.ObjectAction;

@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll;
 
 import java.util.List;
 
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.validate.ValidateObjectFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

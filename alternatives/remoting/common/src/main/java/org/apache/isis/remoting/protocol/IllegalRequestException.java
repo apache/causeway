@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.protocol;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 /**

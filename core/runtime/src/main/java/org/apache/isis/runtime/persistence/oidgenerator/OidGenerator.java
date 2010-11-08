@@ -20,9 +20,9 @@
 
 package org.apache.isis.runtime.persistence.oidgenerator;
 
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.components.SessionScopedComponent;
-import org.apache.isis.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.components.SessionScopedComponent;
+import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.adapter.oid.stringable.OidStringifier;

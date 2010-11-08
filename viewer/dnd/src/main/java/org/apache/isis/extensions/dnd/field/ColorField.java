@@ -22,7 +22,7 @@ package org.apache.isis.extensions.dnd.field;
 
 import org.apache.isis.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.metamodel.facets.value.ColorValueFacet;
-import org.apache.isis.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;

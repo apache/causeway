@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.transaction;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 
 public class ObjectPersistenceException extends IsisException {

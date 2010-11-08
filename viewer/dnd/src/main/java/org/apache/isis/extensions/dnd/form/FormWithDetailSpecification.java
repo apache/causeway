@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.dnd.form;
 
-import org.apache.isis.commons.filters.AbstractFilter;
+import org.apache.isis.core.commons.filters.AbstractFilter;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 import org.apache.isis.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.metamodel.spec.feature.OneToOneAssociation;

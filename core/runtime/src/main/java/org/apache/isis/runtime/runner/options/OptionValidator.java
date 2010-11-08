@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.runner.options;
 
-import org.apache.isis.commons.lang.Maybe;
+import org.apache.isis.core.commons.lang.Maybe;
 import org.apache.isis.runtime.system.DeploymentType;
 
 public interface OptionValidator {

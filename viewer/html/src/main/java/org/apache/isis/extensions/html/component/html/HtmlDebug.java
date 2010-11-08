@@ -22,7 +22,7 @@ package org.apache.isis.extensions.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.extensions.html.component.DebugPane;
 
 

@@ -23,8 +23,8 @@ package org.apache.isis.runtime.persistence.objectstore.algorithm.twopass;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.lang.ToString;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.ResolveState;
 import org.apache.isis.metamodel.facets.collections.modify.CollectionFacet;

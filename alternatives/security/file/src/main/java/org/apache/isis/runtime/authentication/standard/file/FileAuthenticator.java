@@ -27,10 +27,10 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.io.IoUtils;
-import org.apache.isis.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.io.IoUtils;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.metamodel.config.IsisConfiguration;
 import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;

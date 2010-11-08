@@ -19,9 +19,9 @@
 
 package org.apache.isis.metamodel.config;
 
-import org.apache.isis.commons.resource.ResourceStreamSource;
-import org.apache.isis.commons.resource.ResourceStreamSourceComposite;
-import org.apache.isis.commons.resource.ResourceStreamSourceFileSystem;
+import org.apache.isis.core.commons.resource.ResourceStreamSource;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
+import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.log4j.Logger;
 
 /**

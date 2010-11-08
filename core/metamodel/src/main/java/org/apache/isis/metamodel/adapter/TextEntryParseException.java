@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.adapter;
 
-import org.apache.isis.commons.exceptions.IsisApplicationException;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 
 
 /**

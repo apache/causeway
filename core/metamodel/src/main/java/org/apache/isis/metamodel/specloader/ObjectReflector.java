@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.specloader;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutor;

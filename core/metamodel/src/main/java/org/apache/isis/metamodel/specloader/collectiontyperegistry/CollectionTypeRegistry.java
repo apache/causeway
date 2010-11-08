@@ -20,8 +20,8 @@
 
 package org.apache.isis.metamodel.specloader.collectiontyperegistry;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.components.Injectable;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.Injectable;
 
 /**
  * TODO: plan is to allow new collection types to be installed dynamically, allowing the domain programmer to

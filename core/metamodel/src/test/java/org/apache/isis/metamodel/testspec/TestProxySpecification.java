@@ -25,10 +25,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.IsisException;
-import org.apache.isis.commons.factory.InstanceFactory;
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.metamodel.consent.Consent;

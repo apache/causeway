@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.dnd.view.message;
 
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.exceptions.ExceptionHelper;
-import org.apache.isis.commons.exceptions.IsisApplicationException;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.ExceptionHelper;
+import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.consent.Consent;
 import org.apache.isis.metamodel.consent.Veto;

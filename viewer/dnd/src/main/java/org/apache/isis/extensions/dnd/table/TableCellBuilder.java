@@ -21,9 +21,9 @@
     package org.apache.isis.extensions.dnd.table;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.ensure.Assert;
-import org.apache.isis.commons.exceptions.UnexpectedCallException;
-import org.apache.isis.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.value.BooleanValueFacet;
 import org.apache.isis.metamodel.facets.value.ImageValueFacet;

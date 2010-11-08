@@ -22,9 +22,9 @@ package org.apache.isis.metamodel.specloader;
 
 import java.util.List;
 
-import org.apache.isis.commons.components.ApplicationScopedComponent;
-import org.apache.isis.commons.components.Injectable;
-import org.apache.isis.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.metamodel.spec.ObjectSpecification;
 
 

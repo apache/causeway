@@ -2,7 +2,7 @@ package org.apache.isis.viewer.bdd.common.fixtures;
 
 import java.util.List;
 
-import org.apache.isis.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 

@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.facets;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.commons.filters.Filter;
+import org.apache.isis.core.commons.filters.Filter;
 
 
 /**

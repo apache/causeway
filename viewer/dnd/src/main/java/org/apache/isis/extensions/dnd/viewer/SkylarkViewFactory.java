@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.commons.debug.DebugString;
-import org.apache.isis.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.metamodel.spec.ObjectSpecification;

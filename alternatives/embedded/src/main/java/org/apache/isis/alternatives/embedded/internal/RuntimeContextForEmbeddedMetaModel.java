@@ -29,7 +29,7 @@ import org.apache.isis.alternatives.embedded.internal.PersistenceState;
 import org.apache.isis.alternatives.embedded.internal.ServiceAdapter;
 import org.apache.isis.alternatives.embedded.internal.StandaloneAdapter;
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.metamodel.adapter.oid.Oid;
 import org.apache.isis.metamodel.authentication.AuthenticationSession;
