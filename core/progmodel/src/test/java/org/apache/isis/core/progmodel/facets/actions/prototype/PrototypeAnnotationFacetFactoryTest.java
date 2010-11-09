@@ -26,9 +26,9 @@ import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.prototype.PrototypeAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.prototype.PrototypeFacetAbstract;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class PrototypeAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

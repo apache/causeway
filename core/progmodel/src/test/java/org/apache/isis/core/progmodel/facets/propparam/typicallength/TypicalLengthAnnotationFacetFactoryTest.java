@@ -26,9 +26,9 @@ import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.propparam.typicallength.TypicalLengthAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.propparam.typicallength.TypicalLengthFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

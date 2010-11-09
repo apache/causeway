@@ -26,9 +26,9 @@ import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.OptionalAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.OptionalFacet;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

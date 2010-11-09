@@ -25,9 +25,9 @@ import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

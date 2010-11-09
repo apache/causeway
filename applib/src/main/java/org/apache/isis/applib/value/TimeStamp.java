@@ -17,20 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
 
-
 /**
- * Value object representing a date/time value marking a point in time This is a user facing date/time value,
- * more a marker used to indicate the temporal relationship between two objects.
- *
+ * Value object representing a date/time value marking a point in time This is a user facing date/time value, more a
+ * marker used to indicate the temporal relationship between two objects.
+ * 
  * @see DateTime
  */
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.TimeStampValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.TimeStampValueSemanticsProvider")
 public class TimeStamp extends Magnitude<TimeStamp> {
 
     private static final long serialVersionUID = 1L;
@@ -52,7 +50,7 @@ public class TimeStamp extends Magnitude<TimeStamp> {
      */
     @Override
     public boolean isEqualTo(final TimeStamp timeStamp) {
-        return this.time == ((TimeStamp) timeStamp).time;
+        return this.time == (timeStamp).time;
     }
 
     /**
@@ -60,7 +58,7 @@ public class TimeStamp extends Magnitude<TimeStamp> {
      */
     @Override
     public boolean isLessThan(final TimeStamp timeStamp) {
-        return time < ((TimeStamp) timeStamp).time;
+        return time < (timeStamp).time;
     }
 
     public long longValue() {

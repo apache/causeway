@@ -27,9 +27,9 @@ import org.apache.isis.applib.marker.NeverImmutable;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableFacetMarkerInterface;
 import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableMarkerInterfacesFacetFactory;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {

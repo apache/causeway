@@ -28,9 +28,9 @@ import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.hide.HiddenAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAbstract;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

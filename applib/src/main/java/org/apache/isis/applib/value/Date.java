@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.lang.reflect.InvocationTargetException;
@@ -29,10 +28,9 @@ import java.util.TimeZone;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
 
-
 /**
  * Value object representing a date (not time) value.
- *
+ * 
  * <p>
  * TODO: other methods to implement comparison methods:
  * <ul>
@@ -42,7 +40,7 @@ import org.apache.isis.applib.clock.Clock;
  * <li>withinPreviousDatePeriod(int days, int months, int years)</li>
  * </ul>
  */
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.DateValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.DateValueSemanticsProvider")
 public class Date extends Magnitude<Date> {
     private static final long serialVersionUID = 1L;
     private static final TimeZone UTC_TIME_ZONE;
@@ -83,8 +81,7 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Create a Date object based on the specified Java date object. The time portion of the Java date is
-     * disposed of.
+     * Create a Date object based on the specified Java date object. The time portion of the Java date is disposed of.
      */
     public Date(final java.util.Date date) {
         final Calendar cal = Calendar.getInstance();
@@ -104,8 +101,7 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Add the specified days, years and months to this date value and return a new date object containing the
-     * result.
+     * Add the specified days, years and months to this date value and return a new date object containing the result.
      */
     public Date add(final int years, final int months, final int days) {
         final Calendar cal = Calendar.getInstance();
@@ -144,7 +140,7 @@ public class Date extends Magnitude<Date> {
 
     /**
      * Return this date value as a Java Date object.
-     *
+     * 
      * @see java.util.Date
      */
     public java.util.Date dateValue() {
@@ -176,8 +172,7 @@ public class Date extends Magnitude<Date> {
         try {
             final Method getActualMaximum = cls.getMethod("getActualMaximum", new Class[] { int.class });
             Integer dayOfMonth = Integer.valueOf(Calendar.DAY_OF_MONTH);
-            return ((Integer) getActualMaximum.invoke(originalCalendar, new Object[] { dayOfMonth }))
-                    .intValue();
+            return ((Integer) getActualMaximum.invoke(originalCalendar, new Object[] { dayOfMonth })).intValue();
         } catch (final NoSuchMethodException ignore) {
             // expected if pre java 1.2 - fall through
         } catch (final IllegalAccessException e) {
@@ -190,7 +185,7 @@ public class Date extends Magnitude<Date> {
 
     /**
      * Calculates, and returns, a date representing the last day of the month relative to the current date.
-     *
+     * 
      * @author Joshua Cassidy
      */
     public Date endOfMonth() {
@@ -232,9 +227,9 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Calculates, and returns, an int representing the day of the week relative to the current date. With Mon =
-     * 0 through to Sun = 6
-     *
+     * Calculates, and returns, an int representing the day of the week relative to the current date. With Mon = 0
+     * through to Sun = 6
+     * 
      * @author Joshua Cassidy
      */
     public int getDayOfWeek() {
@@ -274,7 +269,7 @@ public class Date extends Magnitude<Date> {
      */
     @Override
     public boolean isEqualTo(final Date date) {
-        return this.date.equals(((Date) date).date);
+        return this.date.equals((date).date);
     }
 
     /**
@@ -282,7 +277,7 @@ public class Date extends Magnitude<Date> {
      */
     @Override
     public boolean isLessThan(final Date date) {
-        return this.date.before(((Date) date).date);
+        return this.date.before((date).date);
     }
 
     private boolean sameAs(final Date as, final int field) {
@@ -298,40 +293,39 @@ public class Date extends Magnitude<Date> {
     }
 
     /**
-     * Determines if this date and the specified date represent the same day of the month, eg both dates are
-     * for the 3rd.
+     * Determines if this date and the specified date represent the same day of the month, eg both dates are for the
+     * 3rd.
      */
     public boolean sameDayOfMonthAs(final Date as) {
         return sameAs(as, Calendar.DAY_OF_MONTH);
     }
 
     /**
-     * Determines if this date and the specified date represent the same day of the week, eg both dates are on
-     * a Tuesday.
+     * Determines if this date and the specified date represent the same day of the week, eg both dates are on a
+     * Tuesday.
      */
     public boolean sameDayOfWeekAs(final Date as) {
         return sameAs(as, Calendar.DAY_OF_WEEK);
     }
 
     /**
-     * Determines if this date and the specified date represent the same day of the year, eg both dates are
-     * for the 108th day of the year.
+     * Determines if this date and the specified date represent the same day of the year, eg both dates are for the
+     * 108th day of the year.
      */
     public boolean sameDayOfYearAs(final Date as) {
         return sameAs(as, Calendar.DAY_OF_YEAR);
     }
 
     /**
-     * Determines if this date and the specified date represent the same month, eg both dates are for the
-     * March.
+     * Determines if this date and the specified date represent the same month, eg both dates are for the March.
      */
     public boolean sameMonthAs(final Date as) {
         return sameAs(as, Calendar.MONTH);
     }
 
     /**
-     * Determines if this date and the specified date represent the same week in the year, eg both dates are
-     * the for the 18th week of the year.
+     * Determines if this date and the specified date represent the same week in the year, eg both dates are the for the
+     * 18th week of the year.
      */
     public boolean sameWeekAs(final Date as) {
         return sameAs(as, Calendar.WEEK_OF_YEAR);

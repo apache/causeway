@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.text.DateFormat;
@@ -28,22 +27,21 @@ import java.util.TimeZone;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
 
-
 /**
  * Value object representing a time value.
- *
+ * 
  * <p>
  * TODO: other methods to implement:
  * <ul>
  * <li>comparison methods</li>
- * <li>sameHourAs() hour ==hour sameMinuteAs() minutes = minutes sameTimeAs(hour, min) hour == hour & minutes ==
- * minutes</li>
+ * <li>sameHourAs() hour ==hour sameMinuteAs() minutes = minutes sameTimeAs(hour, min) hour == hour & minutes == minutes
+ * </li>
  * <li>withinNextTimePeriod(int hours, int minutes); withinTimePeriod(Date d, int hours, int minutes)</li>
  * <li>withinPreviousTimePeriod(int hours, int minutes); d.hour >= this.hour >= d.hour + hours & d.minutes >=
  * this.minutes >= d.minutes + minutes</li>
  * </ul>
  */
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.TimeValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.TimeValueSemanticsProvider")
 public class Time extends Magnitude<Time> {
 
     private static final long serialVersionUID = 1L;
@@ -115,8 +113,7 @@ public class Time extends Magnitude<Time> {
     }
 
     /**
-     * Create a Time object for storing a time with the time set to the specified time of the Java Date
-     * object.
+     * Create a Time object for storing a time with the time set to the specified time of the Java Date object.
      */
     public Time(final Date date) {
         final Calendar localTime = createCalendar();
@@ -183,7 +180,6 @@ public class Time extends Magnitude<Time> {
         return (date == null) ? null : date;
     }
 
-
     public int getHour() {
         final Calendar c = Calendar.getInstance();
         c.setTimeZone(UtcTimeZone);
@@ -203,7 +199,7 @@ public class Time extends Magnitude<Time> {
      */
     @Override
     public boolean isEqualTo(final Time time) {
-        return (date == null) ? false : (date.equals(((Time) time).date));
+        return (date == null) ? false : (date.equals((time).date));
     }
 
     /**
@@ -211,7 +207,7 @@ public class Time extends Magnitude<Time> {
      */
     @Override
     public boolean isLessThan(final Time time) {
-        return (date != null) && date.before(((Time) time).date);
+        return (date != null) && date.before((time).date);
     }
 
     /**
@@ -268,7 +264,5 @@ public class Time extends Magnitude<Time> {
             return false;
         return true;
     }
-
-
 
 }

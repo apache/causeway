@@ -23,10 +23,10 @@ package org.apache.isis.core.progmodel.facets.ordering.fieldorder;
 import org.apache.isis.applib.annotation.FieldOrder;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.ordering.fieldorder.FieldOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.ordering.fieldorder.FieldOrderFacet;
 import org.apache.isis.core.progmodel.facets.ordering.fieldorder.FieldOrderFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

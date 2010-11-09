@@ -25,10 +25,10 @@ import java.lang.reflect.Method;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.propparam.validate.regex.RegExAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.propparam.validate.regex.RegExFacet;
 import org.apache.isis.core.progmodel.facets.propparam.validate.regex.RegExFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

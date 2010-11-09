@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.math.BigDecimal;
 
 import org.apache.isis.applib.annotation.Value;
 
-
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.MoneyValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.MoneyValueSemanticsProvider")
 public class Money extends Magnitude<Money> {
 
     private static final long serialVersionUID = 1L;
@@ -111,10 +109,10 @@ public class Money extends Magnitude<Money> {
 
     @Override
     public boolean isEqualTo(final Money magnitude) {
-        if (!hasSameCurrency((Money) magnitude)) {
+        if (!hasSameCurrency(magnitude)) {
             throw new IllegalArgumentException("Parameter must be of type Money and have the same currency");
         }
-        return ((Money) magnitude).amount == amount;
+        return (magnitude).amount == amount;
     }
 
     public boolean isGreaterThanZero() {
@@ -123,10 +121,10 @@ public class Money extends Magnitude<Money> {
 
     @Override
     public boolean isLessThan(final Money magnitude) {
-        if (!hasSameCurrency((Money) magnitude)) {
+        if (!hasSameCurrency(magnitude)) {
             throw new IllegalArgumentException("Parameter must be of type Money and have the same currency");
         }
-        return amount < ((Money) magnitude).amount;
+        return amount < (magnitude).amount;
     }
 
     /**

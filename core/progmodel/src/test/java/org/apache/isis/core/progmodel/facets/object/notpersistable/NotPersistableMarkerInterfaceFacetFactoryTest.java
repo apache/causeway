@@ -24,10 +24,10 @@ import org.apache.isis.applib.marker.NonPersistable;
 import org.apache.isis.applib.marker.ProgramPersistable;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacetMarkerInterface;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableMarkerInterfacesFacetFactory;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {

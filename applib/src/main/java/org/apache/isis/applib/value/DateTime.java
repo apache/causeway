@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.util.Calendar;
@@ -26,11 +25,10 @@ import java.util.Date;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.applib.clock.Clock;
 
-
 /**
  * Value object representing a date and time value.
  */
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.DateTimeValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.DateTimeValueSemanticsProvider")
 public class DateTime extends Magnitude<DateTime> {
 
     private static final long serialVersionUID = 1L;
@@ -157,7 +155,7 @@ public class DateTime extends Magnitude<DateTime> {
      */
     @Override
     public boolean isEqualTo(final DateTime timeStamp) {
-        return this.date.equals(((DateTime) timeStamp).date);
+        return this.date.equals((timeStamp).date);
     }
 
     /**
@@ -165,15 +163,12 @@ public class DateTime extends Magnitude<DateTime> {
      */
     @Override
     public boolean isLessThan(final DateTime timeStamp) {
-        return date.before(((DateTime) timeStamp).date);
+        return date.before((timeStamp).date);
     }
 
     public long longValue() {
         return date.getTime();
     }
-
-
-
 
     @Override
     public boolean equals(Object obj) {
@@ -192,7 +187,6 @@ public class DateTime extends Magnitude<DateTime> {
         return true;
     }
 
-
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -200,7 +194,6 @@ public class DateTime extends Magnitude<DateTime> {
         result = prime * result + ((date == null) ? 0 : date.hashCode());
         return result;
     }
-
 
     @Override
     public String toString() {

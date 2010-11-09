@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.java5;
 
 import java.lang.reflect.Method;
@@ -31,19 +30,18 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
-
 /**
- * A {@link Facet} implementation that ultimately wraps a {@link Method} or possibly several equivalent methods, 
- * for a Java implementation of a {@link ObjectMember}.
+ * A {@link Facet} implementation that ultimately wraps a {@link Method} or possibly several equivalent methods, for a
+ * Java implementation of a {@link ObjectMember}.
  * 
  * <p>
- * Used by <tt>JavaSpecification#getMember(Method)</tt> in order to reverse lookup {@link ObjectMember}s
- * from underlying {@link Method}s. So, for example, the facets that represents an action xxx, or an
- * <tt>validateXxx</tt> method, or an <tt>addToXxx</tt> collection, can all be used to lookup the member.
+ * Used by <tt>JavaSpecification#getMember(Method)</tt> in order to reverse lookup {@link ObjectMember}s from underlying
+ * {@link Method}s. So, for example, the facets that represents an action xxx, or an <tt>validateXxx</tt> method, or an
+ * <tt>addToXxx</tt> collection, can all be used to lookup the member.
  * 
  * <p>
- * Note that {@link Facet}s relating to the class itself (ie for {@link ObjectSpecification}) should not
- * implement this interface.
+ * Note that {@link Facet}s relating to the class itself (ie for {@link ObjectSpecification}) should not implement this
+ * interface.
  */
 public interface ImperativeFacet {
 
@@ -51,22 +49,24 @@ public interface ImperativeFacet {
      * The {@link Method}s invoked by this {@link Facet}.
      * 
      * <p>
-     * In the vast majority of cases there is only a single {@link Method} (eg wrapping a property's getter).  However,
-     * some {@link Facet}s, such as those for callbacks, could map to multiple {@link Method}s.
-     * Implementations that will return multiple {@link Method}s should implement the
-     * {@link ImperativeFacetMulti} sub-interface that provides the ability to
-     * {@link ImperativeFacetMulti#addMethod(Method) add} {@link Method}s as part of the interface API.  For example:
+     * In the vast majority of cases there is only a single {@link Method} (eg wrapping a property's getter). However,
+     * some {@link Facet}s, such as those for callbacks, could map to multiple {@link Method}s. Implementations that
+     * will return multiple {@link Method}s should implement the {@link ImperativeFacetMulti} sub-interface that
+     * provides the ability to {@link ImperativeFacetMulti#addMethod(Method) add} {@link Method}s as part of the
+     * interface API. For example:
+     * 
      * <pre>
      * if (someFacet instanceof ImperativeFacetMulti) {
      *     ImperativeFacetMulti ifm = (ImperativeFacetMulti)someFacet;
      *     ifm.addMethod(...);
      * }
-     * </pre> 
+     * </pre>
      */
     public List<Method> getMethods();
 
     /**
-     * For use by {@link FacetHolder#getFacets(org.apache.isis.metamodel.facets.org.apache.isis.nof.arch.facets.Facet.Filter)}
+     * For use by
+     * {@link FacetHolder#getFacets(org.apache.isis.core.progmodel.facets.org.apache.isis.nof.arch.facets.Facet.Filter)}
      */
     public static Filter<Facet> FILTER = new AbstractFilter<Facet>() {
         @Override
@@ -76,15 +76,15 @@ public interface ImperativeFacet {
     };
 
     /**
-     * Whether invoking this requires a {@link DomainObjectContainer#resolve(Object)} to occur first. 
+     * Whether invoking this requires a {@link DomainObjectContainer#resolve(Object)} to occur first.
      */
-	public boolean impliesResolve();
+    public boolean impliesResolve();
 
-	/**
-	 * Whether invoking this method requires an {@link DomainObjectContainer#objectChanged(Object)}
-	 * to occur afterwards.
-	 * @return
-	 */
-	public boolean impliesObjectChanged();
+    /**
+     * Whether invoking this method requires an {@link DomainObjectContainer#objectChanged(Object)} to occur afterwards.
+     * 
+     * @return
+     */
+    public boolean impliesObjectChanged();
 
 }

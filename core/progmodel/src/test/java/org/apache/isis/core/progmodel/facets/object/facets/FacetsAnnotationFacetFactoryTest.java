@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.facets;
 
 import java.lang.reflect.Method;
@@ -28,11 +27,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.facets.FacetsFacet;
-import org.apache.isis.core.progmodel.facets.object.facets.FacetsFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -62,36 +57,46 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public static class CustomerFacetFactory implements FacetFactory {
+        @Override
         public ObjectFeatureType[] getFeatureTypes() {
             return null;
         }
 
+        @Override
         public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
             return false;
         }
 
-        public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
+        @Override
+        public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover,
+            final FacetHolder holder) {
             return false;
         }
 
+        @Override
         public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
             return false;
         }
     }
 
     public static class CustomerFacetFactory2 implements FacetFactory {
+        @Override
         public ObjectFeatureType[] getFeatureTypes() {
             return null;
         }
 
+        @Override
         public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
             return false;
         }
 
-        public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
+        @Override
+        public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover,
+            final FacetHolder holder) {
             return false;
         }
 
+        @Override
         public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
             return false;
         }
@@ -99,9 +104,10 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testFacetsFactoryNames() {
         @Facets(facetFactoryNames = {
-                "org.apache.isis.metamodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerFacetFactory",
-                "org.apache.isis.metamodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerNotAFacetFactory" })
-        class Customer {}
+            "org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerFacetFactory",
+            "org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerNotAFacetFactory" })
+        class Customer {
+        }
 
         facetFactory.process(Customer.class, methodRemover, facetHolder);
 
@@ -118,9 +124,10 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testFacetsFactoryClass() {
         @Facets(facetFactoryClasses = {
-                org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerFacetFactory.class,
-                org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerNotAFacetFactory.class })
-        class Customer {}
+            org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerFacetFactory.class,
+            org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerNotAFacetFactory.class })
+        class Customer {
+        }
 
         facetFactory.process(Customer.class, methodRemover, facetHolder);
 
@@ -133,11 +140,13 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals(CustomerFacetFactory.class, facetFactories[0]);
     }
 
-    public static class CustomerNotAFacetFactory {}
+    public static class CustomerNotAFacetFactory {
+    }
 
     public void testFacetsFactoryNameAndClass() {
-        @Facets(facetFactoryNames = { "org.apache.isis.metamodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerFacetFactory" }, facetFactoryClasses = { org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerFacetFactory2.class })
-        class Customer {}
+        @Facets(facetFactoryNames = { "org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest$CustomerFacetFactory" }, facetFactoryClasses = { org.apache.isis.core.progmodel.facets.object.facets.FacetsAnnotationFacetFactoryTest.CustomerFacetFactory2.class })
+        class Customer {
+        }
 
         facetFactory.process(Customer.class, methodRemover, facetHolder);
 
@@ -153,7 +162,8 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testFacetsFactoryNoop() {
         @Facets
-        class Customer {}
+        class Customer {
+        }
 
         facetFactory.process(Customer.class, methodRemover, facetHolder);
 
@@ -162,4 +172,3 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

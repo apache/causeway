@@ -23,10 +23,10 @@ package org.apache.isis.core.progmodel.facets.ordering.actionorder;
 import org.apache.isis.applib.annotation.ActionOrder;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.ordering.actionorder.ActionOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.ordering.actionorder.ActionOrderFacet;
 import org.apache.isis.core.progmodel.facets.ordering.actionorder.ActionOrderFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class ActionOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

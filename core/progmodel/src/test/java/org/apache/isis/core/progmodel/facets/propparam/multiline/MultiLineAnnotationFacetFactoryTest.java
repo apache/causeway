@@ -26,9 +26,9 @@ import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.propparam.multiline.MultiLineAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.propparam.multiline.MultiLineFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

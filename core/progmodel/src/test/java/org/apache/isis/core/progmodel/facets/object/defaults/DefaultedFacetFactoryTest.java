@@ -17,19 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
-import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetAbstract;
-import org.apache.isis.core.progmodel.facets.object.defaults.DefaultsProviderUtil;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -86,17 +80,19 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     abstract static class DefaultsProviderNoop<T> implements DefaultsProvider<T> {
 
+        @Override
         public abstract T getDefaultValue();
 
     }
 
-    @Defaulted(defaultsProviderName = "org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedUsingDefaultsProvider")
+    @Defaulted(defaultsProviderName = "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedUsingDefaultsProvider")
     public static class MyDefaultedUsingDefaultsProvider extends DefaultsProviderNoop<MyDefaultedUsingDefaultsProvider> {
 
         /**
          * Required since is a DefaultsProvider.
          */
-        public MyDefaultedUsingDefaultsProvider() {}
+        public MyDefaultedUsingDefaultsProvider() {
+        }
 
         @Override
         public MyDefaultedUsingDefaultsProvider getDefaultValue() {
@@ -111,12 +107,14 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     @Defaulted(defaultsProviderClass = MyDefaultedUsingDefaultsProviderClass.class)
-    public static class MyDefaultedUsingDefaultsProviderClass extends DefaultsProviderNoop<MyDefaultedUsingDefaultsProviderClass> {
+    public static class MyDefaultedUsingDefaultsProviderClass extends
+        DefaultsProviderNoop<MyDefaultedUsingDefaultsProviderClass> {
 
         /**
          * Required since is a DefaultsProvider.
          */
-        public MyDefaultedUsingDefaultsProviderClass() {}
+        public MyDefaultedUsingDefaultsProviderClass() {
+        }
 
         @Override
         public MyDefaultedUsingDefaultsProviderClass getDefaultValue() {
@@ -131,16 +129,18 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedMustBeADefaultsProvider() {
-    // no test, because compiler prevents us from nominating a class that doesn't
-    // implement DefaultsProvider
+        // no test, because compiler prevents us from nominating a class that doesn't
+        // implement DefaultsProvider
     }
 
     @Defaulted(defaultsProviderClass = MyDefaultedWithoutNoArgConstructor.class)
-    public static class MyDefaultedWithoutNoArgConstructor extends DefaultsProviderNoop<MyDefaultedWithoutNoArgConstructor> {
+    public static class MyDefaultedWithoutNoArgConstructor extends
+        DefaultsProviderNoop<MyDefaultedWithoutNoArgConstructor> {
 
         // no no-arg constructor
 
-        public MyDefaultedWithoutNoArgConstructor(final int value) {}
+        public MyDefaultedWithoutNoArgConstructor(final int value) {
+        }
 
         @Override
         public MyDefaultedWithoutNoArgConstructor getDefaultValue() {
@@ -157,12 +157,14 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Defaulted(defaultsProviderClass = MyDefaultedWithoutPublicNoArgConstructor.class)
     public static class MyDefaultedWithoutPublicNoArgConstructor extends
-            DefaultsProviderNoop<MyDefaultedWithoutPublicNoArgConstructor> {
+        DefaultsProviderNoop<MyDefaultedWithoutPublicNoArgConstructor> {
 
         // no public no-arg constructor
-        MyDefaultedWithoutPublicNoArgConstructor() {}
+        MyDefaultedWithoutPublicNoArgConstructor() {
+        }
 
-        public MyDefaultedWithoutPublicNoArgConstructor(final int value) {}
+        public MyDefaultedWithoutPublicNoArgConstructor(final int value) {
+        }
 
         @Override
         public MyDefaultedWithoutPublicNoArgConstructor getDefaultValue() {
@@ -179,12 +181,13 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Defaulted()
     public static class MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration extends
-            DefaultsProviderNoop<MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration> {
+        DefaultsProviderNoop<MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a DefaultsProvider.
          */
-        public MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration() {}
+        public MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration() {
+        }
 
         @Override
         public MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration getDefaultValue() {
@@ -193,22 +196,25 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedProviderNameCanBePickedUpFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
         propertiesConfiguration.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
-                + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
+            + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
+        facetFactory.process(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover,
+            facetHolder);
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
         assertEquals(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, facet.getDefaultsProviderClass());
     }
 
     public static class NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration extends
-            DefaultsProviderNoop<NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration> {
+        DefaultsProviderNoop<NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a DefaultsProvider.
          */
-        public NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration() {}
+        public NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration() {
+        }
 
         @Override
         public NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration getDefaultValue() {
@@ -217,13 +223,16 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testNonAnnotatedDefaultedCanBePickedUpFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
         propertiesConfiguration.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
-                + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
+            + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
+        facetFactory.process(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover,
+            facetHolder);
         final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
-        assertEquals(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, facet.getDefaultsProviderClass());
+        assertEquals(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class,
+            facet.getDefaultsProviderClass());
     }
 
     private String canonical(final String className) {
@@ -231,4 +240,3 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

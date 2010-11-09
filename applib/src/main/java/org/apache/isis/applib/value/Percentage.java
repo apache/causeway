@@ -17,13 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import org.apache.isis.applib.annotation.Value;
 
-
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.PercentageValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.PercentageValueSemanticsProvider")
 public class Percentage extends Magnitude<Percentage> {
 
     private static final long serialVersionUID = 1L;
@@ -66,12 +64,12 @@ public class Percentage extends Magnitude<Percentage> {
      */
     @Override
     public boolean isEqualTo(final Percentage magnitude) {
-        return ((Percentage) magnitude).value == value;
+        return (magnitude).value == value;
     }
 
     @Override
     public boolean isLessThan(final Percentage magnitude) {
-        return value < ((Percentage) magnitude).value;
+        return value < (magnitude).value;
     }
 
     /**

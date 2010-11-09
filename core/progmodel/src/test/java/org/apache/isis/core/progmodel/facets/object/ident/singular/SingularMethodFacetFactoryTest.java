@@ -25,9 +25,9 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.ident.singular.NamedFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.ident.singular.SingularMethodFacetFactory;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {

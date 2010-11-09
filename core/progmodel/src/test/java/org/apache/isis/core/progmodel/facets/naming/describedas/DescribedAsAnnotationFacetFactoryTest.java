@@ -27,9 +27,9 @@ import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

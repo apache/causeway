@@ -25,11 +25,11 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.runtimecontext.spec.IntrospectableSpecificationAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacetViaTitleMethod;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacetViaToStringMethod;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleMethodFacetFactory;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {

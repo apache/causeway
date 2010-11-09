@@ -24,9 +24,9 @@ import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.bounded.BoundedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.bounded.BoundedFacetAbstract;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

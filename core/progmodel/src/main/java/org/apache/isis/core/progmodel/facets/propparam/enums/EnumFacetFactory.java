@@ -24,7 +24,7 @@ package org.apache.isis.core.progmodel.facets.propparam.enums;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.metamodel.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 public class EnumFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
 

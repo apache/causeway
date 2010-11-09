@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.encodable;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
@@ -25,11 +24,10 @@ import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.encodeable.EncoderDecoderUtil;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-
 
 public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -87,22 +85,26 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
     abstract static class EncoderDecoderNoop<T> implements EncoderDecoder<T> {
 
+        @Override
         public T fromEncodedString(final String encodedString) {
             return null;
         }
 
+        @Override
         public String toEncodedString(final T toEncode) {
             return null;
         }
     }
 
-    @Encodable(encoderDecoderName = "org.apache.isis.metamodel.facets.object.encodable.EncodableFacetFactoryTest$MyEncodableUsingEncoderDecoderName")
-    public static class MyEncodableUsingEncoderDecoderName extends EncoderDecoderNoop<MyEncodableUsingEncoderDecoderName> {
+    @Encodable(encoderDecoderName = "org.apache.isis.core.progmodel.facets.object.encodable.EncodableFacetFactoryTest$MyEncodableUsingEncoderDecoderName")
+    public static class MyEncodableUsingEncoderDecoderName extends
+        EncoderDecoderNoop<MyEncodableUsingEncoderDecoderName> {
 
         /**
          * Required since is an EncoderDecoder
          */
-        public MyEncodableUsingEncoderDecoderName() {}
+        public MyEncodableUsingEncoderDecoderName() {
+        }
 
     }
 
@@ -110,17 +112,20 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(MyEncodableUsingEncoderDecoderName.class, methodRemover, facetHolder);
 
-        final EncodableFacetAbstract encodeableFacet = (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
+        final EncodableFacetAbstract encodeableFacet =
+            (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
         assertEquals(MyEncodableUsingEncoderDecoderName.class, encodeableFacet.getEncoderDecoderClass());
     }
 
     @Encodable(encoderDecoderClass = MyEncodeableUsingEncoderDecoderClass.class)
-    public static class MyEncodeableUsingEncoderDecoderClass extends EncoderDecoderNoop<MyEncodeableUsingEncoderDecoderClass> {
+    public static class MyEncodeableUsingEncoderDecoderClass extends
+        EncoderDecoderNoop<MyEncodeableUsingEncoderDecoderClass> {
 
         /**
          * Required since is a EncoderDecoder.
          */
-        public MyEncodeableUsingEncoderDecoderClass() {}
+        public MyEncodeableUsingEncoderDecoderClass() {
+        }
 
     }
 
@@ -128,86 +133,100 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(MyEncodeableUsingEncoderDecoderClass.class, methodRemover, facetHolder);
 
-        final EncodableFacetAbstract encodeableFacet = (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
+        final EncodableFacetAbstract encodeableFacet =
+            (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
         assertEquals(MyEncodeableUsingEncoderDecoderClass.class, encodeableFacet.getEncoderDecoderClass());
     }
 
     public void testEncodeableMustBeAEncoderDecoder() {
-    // no test, because compiler prevents us from nominating a class that doesn't
-    // implement EncoderDecoder
+        // no test, because compiler prevents us from nominating a class that doesn't
+        // implement EncoderDecoder
     }
 
     @Encodable(encoderDecoderClass = MyEncodeableWithoutNoArgConstructor.class)
-    public static class MyEncodeableWithoutNoArgConstructor extends EncoderDecoderNoop<MyEncodeableWithoutNoArgConstructor> {
+    public static class MyEncodeableWithoutNoArgConstructor extends
+        EncoderDecoderNoop<MyEncodeableWithoutNoArgConstructor> {
 
         // no no-arg constructor
 
-        public MyEncodeableWithoutNoArgConstructor(final int value) {}
+        public MyEncodeableWithoutNoArgConstructor(final int value) {
+        }
 
     }
 
     public void testEncodeableHaveANoArgConstructor() {
         facetFactory.process(MyEncodeableWithoutNoArgConstructor.class, methodRemover, facetHolder);
 
-        final EncodableFacetAbstract encodeableFacet = (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
+        final EncodableFacetAbstract encodeableFacet =
+            (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
         assertNull(encodeableFacet);
     }
 
     @Encodable(encoderDecoderClass = MyEncodeableWithoutPublicNoArgConstructor.class)
     public static class MyEncodeableWithoutPublicNoArgConstructor extends
-            EncoderDecoderNoop<MyEncodeableWithoutPublicNoArgConstructor> {
+        EncoderDecoderNoop<MyEncodeableWithoutPublicNoArgConstructor> {
 
         // no public no-arg constructor
-        MyEncodeableWithoutPublicNoArgConstructor() {}
+        MyEncodeableWithoutPublicNoArgConstructor() {
+        }
 
-        public MyEncodeableWithoutPublicNoArgConstructor(final int value) {}
+        public MyEncodeableWithoutPublicNoArgConstructor(final int value) {
+        }
 
     }
 
     public void testEncodeableHaveAPublicNoArgConstructor() {
         facetFactory.process(MyEncodeableWithoutPublicNoArgConstructor.class, methodRemover, facetHolder);
 
-        final EncodableFacetAbstract encodeableFacet = (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
+        final EncodableFacetAbstract encodeableFacet =
+            (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
         assertNull(encodeableFacet);
     }
 
     @Encodable()
     public static class MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration extends
-            EncoderDecoderNoop<MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration> {
+        EncoderDecoderNoop<MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a EncoderDecoder.
          */
-        public MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration() {}
+        public MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration() {
+        }
     }
 
     public void testEncoderDecoderNameCanBePickedUpFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.encodable.EncodableFacetFactoryTest$MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration";
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.encodable.EncodableFacetFactoryTest$MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration";
         propertiesConfiguration.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className)
-                + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
+            + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
+        facetFactory
+            .process(MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
         final EncodableFacetAbstract facet = (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
         assertNotNull(facet);
         assertEquals(MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration.class, facet.getEncoderDecoderClass());
     }
 
     public static class NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration extends
-            EncoderDecoderNoop<NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration> {
+        EncoderDecoderNoop<NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a EncoderDecoder.
          */
-        public NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration() {}
+        public NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration() {
+        }
     }
 
     public void testNonAnnotatedEncodeableCanPickUpEncoderDecoderFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.encodable.EncodableFacetFactoryTest$NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration";
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.encodable.EncodableFacetFactoryTest$NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration";
         propertiesConfiguration.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className)
-                + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
+            + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
+        facetFactory.process(NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover,
+            facetHolder);
         final EncodableFacetAbstract facet = (EncodableFacetAbstract) facetHolder.getFacet(EncodableFacet.class);
         assertNotNull(facet);
-        assertEquals(NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration.class, facet.getEncoderDecoderClass());
+        assertEquals(NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration.class,
+            facet.getEncoderDecoderClass());
     }
 
     private String canonical(final String className) {
@@ -215,4 +234,3 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

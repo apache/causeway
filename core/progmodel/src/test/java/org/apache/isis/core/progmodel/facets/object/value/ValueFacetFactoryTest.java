@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.AbstractValueSemanticsProvider;
@@ -34,15 +33,10 @@ import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLeng
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.progmodel.facets.object.ebc.EqualByContentFacet;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
-import org.apache.isis.core.progmodel.facets.object.value.ValueFacetAbstract;
-import org.apache.isis.core.progmodel.facets.object.value.ValueFacetAnnotation;
-import org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderUtil;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-
 
 public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -59,7 +53,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         runtimeContext = new RuntimeContextNoRuntime();
         facetFactory.setIsisConfiguration(propertiesConfiguration);
         facetFactory.setRuntimeContext(runtimeContext);
-        
+
     }
 
     @Override
@@ -78,14 +72,15 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyParseableUsingParserName2")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyParseableUsingParserName2")
     public static class MyParseableUsingParserName2 extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderName> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderName> {
 
         /**
          * Required since is a Parser.
          */
-        public MyParseableUsingParserName2() {}
+        public MyParseableUsingParserName2() {
+        }
 
     }
 
@@ -113,14 +108,15 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNoMethodsRemoved();
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderUsingSemanticsProviderName")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderUsingSemanticsProviderName")
     public static class MyValueSemanticsProviderUsingSemanticsProviderName extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderName> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderName> {
 
         /**
          * Required since is a ValueSemanticsProvider.
          */
-        public MyValueSemanticsProviderUsingSemanticsProviderName() {}
+        public MyValueSemanticsProviderUsingSemanticsProviderName() {
+        }
     }
 
     public void testPickUpSemanticsProviderViaNameAndInstallsValueFacet() {
@@ -132,12 +128,13 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Value(semanticsProviderClass = MyValueSemanticsProviderUsingSemanticsProviderClass.class)
     public static class MyValueSemanticsProviderUsingSemanticsProviderClass extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderClass> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderUsingSemanticsProviderClass> {
 
         /**
          * Required since is a ValueSemanticsProvider.
          */
-        public MyValueSemanticsProviderUsingSemanticsProviderClass() {}
+        public MyValueSemanticsProviderUsingSemanticsProviderClass() {
+        }
     }
 
     public void testPickUpSemanticsProviderViaClassAndInstallsValueFacet() {
@@ -148,13 +145,13 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testValueSemanticsProviderMustBeAValueSemanticsProvider() {
-    // no test, because compiler prevents us from nominating a class that doesn't
-    // implement ValueSemanticsProvider
+        // no test, because compiler prevents us from nominating a class that doesn't
+        // implement ValueSemanticsProvider
     }
 
     @Value(semanticsProviderClass = MyValueSemanticsProviderWithoutNoArgConstructor.class)
     public static class MyValueSemanticsProviderWithoutNoArgConstructor extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderWithoutNoArgConstructor> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderWithoutNoArgConstructor> {
 
         // no no-arg constructor
 
@@ -173,7 +170,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Value(semanticsProviderClass = MyValueSemanticsProviderWithoutPublicNoArgConstructor.class)
     public static class MyValueSemanticsProviderWithoutPublicNoArgConstructor extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderWithoutPublicNoArgConstructor> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderWithoutPublicNoArgConstructor> {
 
         // no public no-arg constructor
 
@@ -182,7 +179,8 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
             super(false, false);
         }
 
-        public MyValueSemanticsProviderWithoutPublicNoArgConstructor(final int value) {}
+        public MyValueSemanticsProviderWithoutPublicNoArgConstructor(final int value) {
+        }
     }
 
     public void testValueSemanticsProviderMustHaveAPublicNoArgConstructor() {
@@ -197,34 +195,39 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNull(facetHolder.getFacet(ParseableFacet.class));
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsAParser")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsAParser")
     public static class MyValueSemanticsProviderThatIsAParser extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsAParser> implements
-            Parser<MyValueSemanticsProviderThatIsAParser> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsAParser> implements
+        Parser<MyValueSemanticsProviderThatIsAParser> {
 
         /**
          * Required since is a ValueSemanticsProvider.
          */
-        public MyValueSemanticsProviderThatIsAParser() {}
+        public MyValueSemanticsProviderThatIsAParser() {
+        }
 
+        @Override
         public MyValueSemanticsProviderThatIsAParser parseTextEntry(
-                final MyValueSemanticsProviderThatIsAParser context,
-                final String entry) {
+            final MyValueSemanticsProviderThatIsAParser context, final String entry) {
             return null;
         }
 
+        @Override
         public String displayTitleOf(final MyValueSemanticsProviderThatIsAParser object) {
             return null;
         }
-        
+
+        @Override
         public String displayTitleOf(MyValueSemanticsProviderThatIsAParser object, String usingMask) {
             return null;
         }
 
+        @Override
         public String parseableTitleOf(final MyValueSemanticsProviderThatIsAParser existing) {
             return null;
         }
 
+        @Override
         public int typicalLength() {
             return 0;
         }
@@ -250,16 +253,18 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNull(facetHolder.getFacet(DefaultedFacet.class));
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsADefaultsProvider")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsADefaultsProvider")
     public static class MyValueSemanticsProviderThatIsADefaultsProvider extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsADefaultsProvider> implements
-            DefaultsProvider<MyValueSemanticsProviderThatIsADefaultsProvider> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsADefaultsProvider> implements
+        DefaultsProvider<MyValueSemanticsProviderThatIsADefaultsProvider> {
 
         /**
          * Required since is a ValueSemanticsProvider.
          */
-        public MyValueSemanticsProviderThatIsADefaultsProvider() {}
+        public MyValueSemanticsProviderThatIsADefaultsProvider() {
+        }
 
+        @Override
         public MyValueSemanticsProviderThatIsADefaultsProvider getDefaultValue() {
             return new MyValueSemanticsProviderThatIsADefaultsProvider();
         }
@@ -277,20 +282,23 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNull(facetHolder.getFacet(EncodableFacet.class));
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsAnEncoderDecoder")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsAnEncoderDecoder")
     public static class MyValueSemanticsProviderThatIsAnEncoderDecoder extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsAnEncoderDecoder> implements
-            EncoderDecoder<MyValueSemanticsProviderThatIsAnEncoderDecoder> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderThatIsAnEncoderDecoder> implements
+        EncoderDecoder<MyValueSemanticsProviderThatIsAnEncoderDecoder> {
 
         /**
          * Required since is a ValueSemanticsProvider.
          */
-        public MyValueSemanticsProviderThatIsAnEncoderDecoder() {}
+        public MyValueSemanticsProviderThatIsAnEncoderDecoder() {
+        }
 
+        @Override
         public MyValueSemanticsProviderThatIsAnEncoderDecoder fromEncodedString(final String encodedString) {
             return null;
         }
 
+        @Override
         public String toEncodedString(final MyValueSemanticsProviderThatIsAnEncoderDecoder toEncode) {
             return null;
         }
@@ -306,7 +314,8 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testImmutableFacetsIsInstalledIfNoSemanticsProviderSpecified() {
 
         @Value()
-        class MyNumberImmutableDefault {}
+        class MyNumberImmutableDefault {
+        }
 
         facetFactory.process(MyNumberImmutableDefault.class, methodRemover, facetHolder);
 
@@ -314,9 +323,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesImmutableSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesImmutableSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesImmutableSemantic extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesImmutableSemantic> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesImmutableSemantic> {
 
         /**
          * Required since is a ValueSemanticsProvider.
@@ -334,9 +343,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic> {
 
         /**
          * Required since is a ValueSemanticsProvider.
@@ -348,7 +357,8 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testImmutableFacetsIsNotInstalledIfSpecifiesNotImmutable() {
 
-        facetFactory.process(MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic.class, methodRemover, facetHolder);
+        facetFactory.process(MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic.class, methodRemover,
+            facetHolder);
 
         final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
         assertNull(facet);
@@ -357,7 +367,8 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testEqualByContentFacetsIsInstalledIfNoSemanticsProviderSpecified() {
 
         @Value()
-        class MyNumberEqualByContentDefault {}
+        class MyNumberEqualByContentDefault {
+        }
 
         facetFactory.process(MyNumberEqualByContentDefault.class, methodRemover, facetHolder);
 
@@ -365,9 +376,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic> {
 
         /**
          * Required since is a ValueSemanticsProvider.
@@ -379,15 +390,16 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testEqualByContentFacetsIsInstalledIfSpecifiesEqualByContent() {
 
-        facetFactory.process(MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic.class, methodRemover, facetHolder);
+        facetFactory.process(MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic.class, methodRemover,
+            facetHolder);
 
         final EqualByContentFacet facet = facetHolder.getFacet(EqualByContentFacet.class);
         assertNotNull(facet);
     }
 
-    @Value(semanticsProviderName = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic")
+    @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic")
     public static class MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic extends
-            AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic> {
+        AbstractValueSemanticsProvider<MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic> {
 
         /**
          * Required since is a ValueSemanticsProvider.
@@ -399,7 +411,8 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testEqualByContentFacetsIsNotInstalledIfSpecifiesNotEqualByContent() {
 
-        facetFactory.process(MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic.class, methodRemover, facetHolder);
+        facetFactory.process(MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic.class, methodRemover,
+            facetHolder);
 
         final EqualByContentFacet facet = facetHolder.getFacet(EqualByContentFacet.class);
         assertNull(facet);
@@ -407,41 +420,47 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Value()
     public static class MyValueWithSemanticsProviderSpecifiedUsingConfiguration extends
-            AbstractValueSemanticsProvider<MyValueWithSemanticsProviderSpecifiedUsingConfiguration> implements
-            Parser<MyValueWithSemanticsProviderSpecifiedUsingConfiguration> {
+        AbstractValueSemanticsProvider<MyValueWithSemanticsProviderSpecifiedUsingConfiguration> implements
+        Parser<MyValueWithSemanticsProviderSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a SemanticsProvider.
          */
-        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration() {}
+        public MyValueWithSemanticsProviderSpecifiedUsingConfiguration() {
+        }
 
+        @Override
         public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
-                final MyValueWithSemanticsProviderSpecifiedUsingConfiguration context,
-                final String entry) {
+            final MyValueWithSemanticsProviderSpecifiedUsingConfiguration context, final String entry) {
             return null;
         }
 
+        @Override
         public String displayTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration object) {
             return null;
         }
-        
+
+        @Override
         public String displayTitleOf(MyValueWithSemanticsProviderSpecifiedUsingConfiguration object, String usingMask) {
             return null;
         }
 
+        @Override
         public String parseableTitleOf(final MyValueWithSemanticsProviderSpecifiedUsingConfiguration existing) {
             return null;
         }
 
+        @Override
         public int typicalLength() {
             return 0;
         }
     }
 
     public void testSemanticsProviderNameCanBePickedUpFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
-                + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
+        propertiesConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
+            + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
         final ValueFacetAbstract facet = (ValueFacetAbstract) facetHolder.getFacet(ValueFacet.class);
         assertNotNull(facet);
@@ -451,41 +470,49 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public static class NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration extends
-            AbstractValueSemanticsProvider<NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration> implements
-            Parser<NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration> {
+        AbstractValueSemanticsProvider<NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration> implements
+        Parser<NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration> {
         /**
          * Required since is a SemanticsProvider.
          */
-        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration() {}
+        public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration() {
+        }
 
+        @Override
         public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
-                final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration context,
-                final String entry) {
+            final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration context, final String entry) {
             return null;
         }
 
+        @Override
         public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object) {
             return null;
         }
-        
-        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object, String usingMask) {
+
+        @Override
+        public String displayTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration object,
+            String usingMask) {
             return null;
         }
 
+        @Override
         public String parseableTitleOf(final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration existing) {
             return null;
         }
 
+        @Override
         public int typicalLength() {
             return 0;
         }
     }
 
     public void testNonAnnotatedValueCanPickUpSemanticsProviderFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.value.ValueFacetFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
-                + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
+        propertiesConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
+            + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
+        facetFactory.process(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover,
+            facetHolder);
         final ValueFacetAbstract facet = (ValueFacetAbstract) facetHolder.getFacet(ValueFacet.class);
         assertNotNull(facet);
         // should also be a ParserFacet, since the VSP implements Parser
@@ -498,4 +525,3 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

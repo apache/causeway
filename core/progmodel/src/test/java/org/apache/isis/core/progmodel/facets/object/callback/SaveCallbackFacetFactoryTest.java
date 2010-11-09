@@ -26,10 +26,10 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.callbacks.PersistedCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.PersistingCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.SaveCallbackFacetFactory;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class SaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {

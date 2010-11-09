@@ -24,9 +24,9 @@ import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.aggregated.AggregatedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.aggregated.AggregatedFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

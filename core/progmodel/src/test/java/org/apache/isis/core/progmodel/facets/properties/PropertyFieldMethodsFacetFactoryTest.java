@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFace
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.DescribedAsFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.NamedFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.disable.DisableForContextFacet;
@@ -60,7 +61,6 @@ import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFac
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {

@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.io.Serializable;
 
 import org.apache.isis.applib.annotation.Value;
 
-
 /**
  * Represents an image.
  */
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.ImageValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.ImageValueSemanticsProvider")
 public class Image implements Serializable {
     private static final long serialVersionUID = 1L;
     private final int[][] image;

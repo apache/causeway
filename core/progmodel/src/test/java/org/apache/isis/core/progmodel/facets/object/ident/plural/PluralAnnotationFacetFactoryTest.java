@@ -23,10 +23,10 @@ package org.apache.isis.core.progmodel.facets.object.ident.plural;
 import org.apache.isis.applib.annotation.Plural;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class PluralAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

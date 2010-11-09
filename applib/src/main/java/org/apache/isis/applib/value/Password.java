@@ -17,15 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.io.Serializable;
 
 import org.apache.isis.applib.annotation.Value;
 
-
-@Value(semanticsProviderName = "org.apache.isis.metamodel.value.PasswordValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.metamodel.value.PasswordValueSemanticsProvider")
 public class Password implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String STARS = "********************";

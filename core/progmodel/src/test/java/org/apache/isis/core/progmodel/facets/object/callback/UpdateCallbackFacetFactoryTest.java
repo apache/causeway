@@ -26,10 +26,10 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.callbacks.UpdateCallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.UpdatedCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.UpdatingCallbackFacetViaMethod;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {

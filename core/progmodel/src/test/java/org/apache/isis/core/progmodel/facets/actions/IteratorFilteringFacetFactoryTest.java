@@ -24,8 +24,8 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.IteratorFilteringFacetFactory;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {

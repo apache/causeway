@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedFacetAbstract;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

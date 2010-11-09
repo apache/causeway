@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
@@ -32,18 +31,21 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
 
 public final class ReflectorConstants {
-    
+
     /**
      * Key used to lookup implementation of {@link ClassSubstitutor} in {@link IsisConfiguration}.
      */
-    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.class-substitutor";
-    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT = "org.apache.isis.bytecode.cglib.specloader.classsubstitutor.CglibClassSubstitutor";
+    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_LIST = ConfigurationConstants.ROOT
+        + "reflector.class-substitutor";
+    public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT =
+        "org.apache.isis.bytecode.cglib.specloader.classsubstitutor.CglibClassSubstitutor";
 
     /**
      * Key used to lookup implementation of {@link SpecificationTraverser} in {@link IsisConfiguration}.
      */
     public static final String SPECIFICATION_TRAVERSER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.traverser";
-    public static final String SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT = SpecificationTraverserDefault.class.getName();
+    public static final String SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT = SpecificationTraverserDefault.class
+        .getName();
 
     /**
      * Key used to lookup implementation of {@link ProgrammingModelFacets} in {@link IsisConfiguration}.
@@ -52,32 +54,34 @@ public final class ReflectorConstants {
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
      */
     public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.facets";
-    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT = "org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5";
+    public static final String PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT =
+        "org.apache.isis.core.progmodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5";
 
     /**
-     * Key used to lookup comma-separated list of {@link FacetFactory}s to include
-     * (over and above those specified by {@link #PROGRAMMING_MODEL_FACETS_CLASS_NAME}.
+     * Key used to lookup comma-separated list of {@link FacetFactory}s to include (over and above those specified by
+     * {@link #PROGRAMMING_MODEL_FACETS_CLASS_NAME}.
      * 
      * @see #PROGRAMMING_MODEL_FACETS_CLASS_NAME
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST
      */
-	public static final String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.include";
-	
+    public static final String FACET_FACTORY_INCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT
+        + "reflector.facets.include";
+
     /**
-     * Key used to lookup comma-separated list of {@link FacetFactory}s to exclude
-     * (that might otherwise be included specified by the {@link #PROGRAMMING_MODEL_FACETS_CLASS_NAME}.
+     * Key used to lookup comma-separated list of {@link FacetFactory}s to exclude (that might otherwise be included
+     * specified by the {@link #PROGRAMMING_MODEL_FACETS_CLASS_NAME}.
      * 
      * @see #PROGRAMMING_MODEL_FACETS_CLASS_NAME
      * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
      */
-	public static final String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT + "reflector.facets.exclude";
-    
+    public static final String FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST = ConfigurationConstants.ROOT
+        + "reflector.facets.exclude";
 
     /**
      * Key used to lookup comma-separated list of {@link FacetDecorator}s.
      */
-	public static final String FACET_DECORATOR_CLASS_NAMES = ConfigurationConstants.ROOT + "reflector.facet-decorators";
-	
+    public static final String FACET_DECORATOR_CLASS_NAMES = ConfigurationConstants.ROOT + "reflector.facet-decorators";
+
     /**
      * Key used to lookup implementation of {@link MetaModelValidator} in {@link IsisConfiguration}.
      */

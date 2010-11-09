@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.progmodel.facets.actions.DescribedAsFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.NamedFacetViaMethod;
@@ -61,7 +62,6 @@ import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAlways;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacet;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.propcoll.access.PropertyAccessorFacetViaAccessor;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {

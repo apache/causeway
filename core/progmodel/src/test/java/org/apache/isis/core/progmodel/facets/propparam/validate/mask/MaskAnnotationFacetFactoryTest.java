@@ -27,10 +27,10 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskFacet;
 import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

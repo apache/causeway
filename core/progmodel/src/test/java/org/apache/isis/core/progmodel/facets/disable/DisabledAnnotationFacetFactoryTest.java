@@ -27,10 +27,10 @@ import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.disable.DisabledAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.disable.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.disable.DisabledFacetAbstract;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {

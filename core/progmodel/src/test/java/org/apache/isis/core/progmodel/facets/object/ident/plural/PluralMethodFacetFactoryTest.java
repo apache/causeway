@@ -24,10 +24,10 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralMethodFacetFactory;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class PluralMethodFacetFactoryTest extends AbstractFacetFactoryTest {

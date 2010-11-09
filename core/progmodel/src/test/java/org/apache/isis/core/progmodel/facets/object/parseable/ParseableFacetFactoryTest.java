@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
@@ -25,11 +24,7 @@ import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetAbstract;
-import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.parseable.ParserUtil;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
-
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -74,7 +69,8 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory.process(MyParseableUsingParserName.class, methodRemover, facetHolder);
 
-        final ParseableFacetAbstract parseableFacet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
+        final ParseableFacetAbstract parseableFacet =
+            (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
         assertEquals(facetHolder, parseableFacet.getFacetHolder());
     }
 
@@ -85,40 +81,47 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
         assertNoMethodsRemoved();
     }
 
-    @Parseable(parserName = "org.apache.isis.metamodel.facets.object.parseable.ParseableFacetFactoryTest$MyParseableUsingParserName")
+    @Parseable(parserName = "org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactoryTest$MyParseableUsingParserName")
     public static class MyParseableUsingParserName extends ParserNoop<MyParseableUsingParserName> {
 
         /**
          * Required since is a Parser.
          */
-        public MyParseableUsingParserName() {}
+        public MyParseableUsingParserName() {
+        }
     }
 
     public void testParseableUsingParserName() {
 
         facetFactory.process(MyParseableUsingParserName.class, methodRemover, facetHolder);
 
-        final ParseableFacetAbstract parseableFacet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
+        final ParseableFacetAbstract parseableFacet =
+            (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
         assertEquals(MyParseableUsingParserName.class, parseableFacet.getParserClass());
     }
 
     public static class ParserNoop<T> implements Parser<T> {
+        @Override
         public T parseTextEntry(final T context, final String entry) {
             return null;
         }
 
+        @Override
         public int typicalLength() {
             return 0;
         }
 
+        @Override
         public String displayTitleOf(final T object) {
             return null;
         }
-        
+
+        @Override
         public String displayTitleOf(T object, String usingMask) {
             return null;
         }
 
+        @Override
         public String parseableTitleOf(final T existing) {
             return null;
         }
@@ -129,20 +132,22 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
         /**
          * Required since is a Parser.
          */
-        public MyParseableUsingParserClass() {}
+        public MyParseableUsingParserClass() {
+        }
     }
 
     public void testParseableUsingParserClass() {
 
         facetFactory.process(MyParseableUsingParserClass.class, methodRemover, facetHolder);
 
-        final ParseableFacetAbstract parseableFacet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
+        final ParseableFacetAbstract parseableFacet =
+            (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
         assertEquals(MyParseableUsingParserClass.class, parseableFacet.getParserClass());
     }
 
     public void testParseableMustBeAParser() {
-    // no test, because compiler prevents us from nominating a class that doesn't
-    // implement Parser
+        // no test, because compiler prevents us from nominating a class that doesn't
+        // implement Parser
     }
 
     @Parseable(parserClass = MyParseableWithoutNoArgConstructor.class)
@@ -150,48 +155,55 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
 
         // no no-arg constructor
 
-        public MyParseableWithoutNoArgConstructor(final int value) {}
+        public MyParseableWithoutNoArgConstructor(final int value) {
+        }
     }
 
     public void testParseableHaveANoArgConstructor() {
         facetFactory.process(MyParseableWithoutNoArgConstructor.class, methodRemover, facetHolder);
 
-        final ParseableFacetAbstract parseableFacet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
+        final ParseableFacetAbstract parseableFacet =
+            (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
         assertNull(parseableFacet);
     }
 
     @Parseable(parserClass = MyParseableWithoutPublicNoArgConstructor.class)
-    public static class MyParseableWithoutPublicNoArgConstructor extends ParserNoop<MyParseableWithoutPublicNoArgConstructor> {
+    public static class MyParseableWithoutPublicNoArgConstructor extends
+        ParserNoop<MyParseableWithoutPublicNoArgConstructor> {
 
         // no public no-arg constructor
         MyParseableWithoutPublicNoArgConstructor() {
             this(0);
         }
 
-        public MyParseableWithoutPublicNoArgConstructor(final int value) {}
+        public MyParseableWithoutPublicNoArgConstructor(final int value) {
+        }
     }
 
     public void testParseableHaveAPublicNoArgConstructor() {
         facetFactory.process(MyParseableWithoutPublicNoArgConstructor.class, methodRemover, facetHolder);
 
-        final ParseableFacetAbstract parseableFacet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
+        final ParseableFacetAbstract parseableFacet =
+            (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
         assertNull(parseableFacet);
     }
 
     @Parseable()
     public static class MyParseableWithParserSpecifiedUsingConfiguration extends
-            ParserNoop<MyParseableWithParserSpecifiedUsingConfiguration> {
+        ParserNoop<MyParseableWithParserSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a Parser.
          */
-        public MyParseableWithParserSpecifiedUsingConfiguration() {}
+        public MyParseableWithParserSpecifiedUsingConfiguration() {
+        }
     }
 
     public void testParserNameCanBePickedUpFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.parseable.ParseableFacetFactoryTest$MyParseableWithParserSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className) + ParserUtil.PARSER_NAME_KEY_SUFFIX,
-                className);
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactoryTest$MyParseableWithParserSpecifiedUsingConfiguration";
+        propertiesConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className)
+            + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
         facetFactory.process(MyParseableWithParserSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
         final ParseableFacetAbstract facet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
         assertNotNull(facet);
@@ -199,18 +211,20 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public static class NonAnnotatedParseableParserSpecifiedUsingConfiguration extends
-            ParserNoop<NonAnnotatedParseableParserSpecifiedUsingConfiguration> {
+        ParserNoop<NonAnnotatedParseableParserSpecifiedUsingConfiguration> {
 
         /**
          * Required since is a Parser.
          */
-        public NonAnnotatedParseableParserSpecifiedUsingConfiguration() {}
+        public NonAnnotatedParseableParserSpecifiedUsingConfiguration() {
+        }
     }
 
     public void testNonAnnotatedParseableCanPickUpParserFromConfiguration() {
-        final String className = "org.apache.isis.metamodel.facets.object.parseable.ParseableFacetFactoryTest$NonAnnotatedParseableParserSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className) + ParserUtil.PARSER_NAME_KEY_SUFFIX,
-                className);
+        final String className =
+            "org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactoryTest$NonAnnotatedParseableParserSpecifiedUsingConfiguration";
+        propertiesConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className)
+            + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
         facetFactory.process(NonAnnotatedParseableParserSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
         final ParseableFacetAbstract facet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
         assertNotNull(facet);
@@ -222,4 +236,3 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
 }
-

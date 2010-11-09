@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionP
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.ActionMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionParameterChoicesFacetViaMethod;
@@ -65,7 +66,6 @@ import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacet;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {

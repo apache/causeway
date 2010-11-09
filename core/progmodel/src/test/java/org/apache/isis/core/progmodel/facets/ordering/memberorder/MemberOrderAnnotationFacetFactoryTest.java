@@ -26,10 +26,10 @@ import java.util.Collection;
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderFacet;
 import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderFacetAnnotation;
-import org.apache.isis.metamodel.facets.AbstractFacetFactoryTest;
 
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
