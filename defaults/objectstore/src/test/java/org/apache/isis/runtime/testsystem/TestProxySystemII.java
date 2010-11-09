@@ -30,6 +30,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.runtime.authorization.AuthorizationManager;
@@ -41,7 +42,6 @@ import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.installers.JavaReflectorInstaller;
 import org.apache.isis.runtime.userprofile.UserProfileLoader;
 
 /*

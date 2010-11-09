@@ -17,11 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.support.prototype.viewer.wicket.claimwizard;
 
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.metamodel.facets.object.validate.ValidateObjectFacet;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.progmodel.facets.object.validate.ValidateObjectFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.ProcessObjectPanelAbstract;
 import org.apache.wicket.Session;
@@ -33,7 +32,6 @@ import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
 import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.Model;
-
 
 public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
 
@@ -54,8 +52,7 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
         EntityModel entityModel = getModel();
         entityModel.toEditMode();
 
-        claimWizardForm = new ClaimWizardForm(ID_CLAIM_WIZARD_PROPERTIES_FORM,
-                getModel());
+        claimWizardForm = new ClaimWizardForm(ID_CLAIM_WIZARD_PROPERTIES_FORM, getModel());
         addOrReplace(claimWizardForm);
     }
 
@@ -94,8 +91,7 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
             add(createButton(ID_FINISH, "Finish", FINISH_ACTION_ID));
         }
 
-        private Button createButton(final String id, final String label,
-                final String actionId) {
+        private Button createButton(final String id, final String label, final String actionId) {
             return new Button(id, Model.of(label)) {
                 private static final long serialVersionUID = 1L;
 
@@ -116,8 +112,7 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
 
             ObjectAdapter adapter = getModel().getObject();
             if (adapter == null) {
-                feedback.error("cannot locate object:"
-                        + getEntityModel().getObjectAdapterMemento().toString());
+                feedback.error("cannot locate object:" + getEntityModel().getObjectAdapterMemento().toString());
             }
         }
 
@@ -142,16 +137,14 @@ public class ClaimWizardPanel extends ProcessObjectPanelAbstract {
                 public void validate(Form<?> form) {
                     EntityModel entityModel = (EntityModel) getModel();
                     ObjectAdapter adapter = entityModel.getObject();
-                    ValidateObjectFacet facet = adapter.getSpecification()
-                            .getFacet(ValidateObjectFacet.class);
+                    ValidateObjectFacet facet = adapter.getSpecification().getFacet(ValidateObjectFacet.class);
                     if (facet == null) {
                         return;
                     }
                     String invalidReasonIfAny = facet.invalidReason(adapter);
                     if (invalidReasonIfAny != null) {
-                        Session.get().getFeedbackMessages().add(
-                                new FeedbackMessage(form, invalidReasonIfAny,
-                                        FeedbackMessage.ERROR));
+                        Session.get().getFeedbackMessages()
+                            .add(new FeedbackMessage(form, invalidReasonIfAny, FeedbackMessage.ERROR));
                     }
                 }
             });

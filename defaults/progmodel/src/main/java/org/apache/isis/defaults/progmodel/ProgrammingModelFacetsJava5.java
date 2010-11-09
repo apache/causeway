@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.metamodel.specloader.progmodelfacets;
+package org.apache.isis.defaults.progmodel;
 
 import org.apache.isis.core.metamodel.java5.RemoveGetClassMethodFacetFactory;
 import org.apache.isis.core.metamodel.java5.RemoveInitMethodFacetFactory;

@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.support.prototype.viewer.wicket.claimwizard;
 
-
-import org.apache.isis.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.support.prototype.dom.claim.ClaimWizard;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
@@ -31,29 +29,29 @@ import org.apache.wicket.model.IModel;
 
 public class ClaimWizardComponentFactory extends EntityComponentFactoryAbstract {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final String NAME = "wizard";
+    private static final String NAME = "wizard";
 
-	public ClaimWizardComponentFactory() {
-		super(ComponentType.ENTITY, NAME);
-	}
+    public ClaimWizardComponentFactory() {
+        super(ComponentType.ENTITY, NAME);
+    }
 
-	@Override
-	protected ApplicationAdvice appliesTo(IModel<?> model) {
-		return appliesExclusivelyIf(super.appliesTo(model).applies() && isModelForWizard((EntityModel)model));
-	}
+    @Override
+    protected ApplicationAdvice appliesTo(IModel<?> model) {
+        return appliesExclusivelyIf(super.appliesTo(model).applies() && isModelForWizard((EntityModel) model));
+    }
 
-	private boolean isModelForWizard(EntityModel model) {
-		final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
-		final ObjectSpecification claimWizardSpec = getSpecificationLoader().loadSpecification(ClaimWizard.class);
-		return typeOfSpec.isOfType(claimWizardSpec);
-	}
-	
-	@Override
-	public Component createComponent(String id, IModel<?> model) {
-		final EntityModel entityModel = (EntityModel)model;
-		return new ClaimWizardPanel(id, entityModel);
-	}
+    private boolean isModelForWizard(EntityModel model) {
+        final ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
+        final ObjectSpecification claimWizardSpec = getSpecificationLoader().loadSpecification(ClaimWizard.class);
+        return typeOfSpec.isOfType(claimWizardSpec);
+    }
+
+    @Override
+    public Component createComponent(String id, IModel<?> model) {
+        final EntityModel entityModel = (EntityModel) model;
+        return new ClaimWizardPanel(id, entityModel);
+    }
 
 }

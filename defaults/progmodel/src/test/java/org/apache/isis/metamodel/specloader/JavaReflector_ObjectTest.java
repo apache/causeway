@@ -32,7 +32,7 @@ import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacet;
-import org.apache.isis.metamodel.specloader.JavaReflector;
+import org.apache.isis.defaults.progmodel.JavaReflector;
 import org.apache.isis.runtime.system.TestDomainObject;
 
 

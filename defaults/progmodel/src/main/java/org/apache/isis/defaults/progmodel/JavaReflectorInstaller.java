@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtime.system.installers;
+package org.apache.isis.defaults.progmodel;
 
 import java.util.Collections;
 import java.util.LinkedHashSet;
@@ -42,7 +42,6 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.metamodel.specloader.JavaReflector;
 import org.apache.isis.runtime.installers.InstallerAbstract;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.installers.InstallerLookupAware;

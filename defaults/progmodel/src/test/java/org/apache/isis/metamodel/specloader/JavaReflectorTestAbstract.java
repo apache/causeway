@@ -35,7 +35,8 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
 import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
-import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
+import org.apache.isis.defaults.progmodel.JavaReflector;
+import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
 import org.apache.isis.runtime.authorization.AuthorizationManager;
 import org.apache.isis.runtime.context.IsisContextStatic;

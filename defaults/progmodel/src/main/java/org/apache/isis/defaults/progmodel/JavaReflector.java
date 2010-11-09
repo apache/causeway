@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.metamodel.specloader;
+package org.apache.isis.defaults.progmodel;
 
 import java.util.Set;
 

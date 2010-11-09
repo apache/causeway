@@ -52,9 +52,9 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
-import org.apache.isis.metamodel.specloader.JavaReflector;
+import org.apache.isis.defaults.progmodel.JavaReflector;
+import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutorIdentity;
-import org.apache.isis.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsJava5;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerHeadlessWrapper;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
