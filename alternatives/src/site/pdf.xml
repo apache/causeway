@@ -25,7 +25,7 @@
 		<coverSubTitle>v. ${project.version}</coverSubTitle>
 		<coverdate>${date}</coverdate>
 		<projectName>${project.name}</projectName>
-	    <projectLogo>${trunkBaseDir/src/site/resources/images/logo.png</projectLogo>
+	    <projectLogo>${trunkBaseDir}/src/site/resources/images/logo.png</projectLogo>
 		<companyName>${project.organization.name}</companyName>
 	</cover>
 
