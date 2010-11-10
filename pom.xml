@@ -80,6 +80,9 @@
         <pmd.ruleset>${trunkBaseDir}/src/site/resources/codequality/pmd.xml</pmd.ruleset>
 
         <projectUrl>${project.url}</projectUrl>
+		
+		<!-- plugin versions -->
+		<maven-project-info-reports-plugin>2.2</maven-project-info-reports-plugin>
     </properties>
 
 
@@ -662,7 +665,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
-                    <version>2.2</version>
+                    <version>${maven-project-info-reports-plugin}</version>
                     <!-- main configuration in reporting section (in inheriting 
                         modules) -->
                 </plugin>
@@ -791,6 +794,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin}</version>
                 <!-- it seems to be necessary to set inherited=false, otherwise 
                     the default reportSet seems to be inherited even if explicitly overridden 
                     in the inheriting POM by a different reportSet. In practice this is no great 
@@ -1100,16 +1104,25 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
+	                    <version>2.5</version>
                     </plugin>
+					
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-project-info-reports-plugin</artifactId>
+						<version>${maven-project-info-reports-plugin}</version>
+					</plugin>
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>cobertura-maven-plugin</artifactId>
+	                    <version>2.4</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
+	                    <version>2.6</version>
                         <configuration>
                             <configLocation>${checkstyle.configLocation}</configLocation>
                         </configuration>
@@ -1118,6 +1131,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-pmd-plugin</artifactId>
+	                    <version>2.5</version>
                         <configuration>
                             <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
                             <minimumTokens>100</minimumTokens>
@@ -1141,21 +1155,25 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>findbugs-maven-plugin</artifactId>
+	                    <version>2.3.1</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>javancss-maven-plugin</artifactId>
+	                    <version>2.0</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>jdepend-maven-plugin</artifactId>
+	                    <version>2.0-beta-2</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jxr-plugin</artifactId>
+	                    <version>2.2</version>
                         <configuration>
                             <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
                             <linkJavadoc>true</linkJavadoc>
@@ -1166,6 +1184,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>taglist-maven-plugin</artifactId>
+	                    <version>2.4</version>
                         <configuration>
                             <!-- causes out of memory <aggregate>true</aggregate> -->
                             <tagListOptions>
@@ -1199,6 +1218,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
+	                    <version>2.7</version>
                         <configuration>
                             <quiet>true</quiet>
                             <doctitle>${project.name} ${project.version}</doctitle>
