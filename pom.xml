@@ -1406,7 +1406,7 @@
                 </property>
             </activation>
             <modules>
-                <module>modules-alternatives</module>
+                <module>alternatives</module>
             </modules>
         </profile>
         <profile>
