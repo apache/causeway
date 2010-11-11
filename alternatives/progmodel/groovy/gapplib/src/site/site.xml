@@ -1,11 +1,8 @@
 <project name="${project.name}">
-	<version position="right"/>
 	<body>
 		<breadcrumbs>
-			<item name="AppLib"/>
+			<item name="AppLib" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Groovy AppLib">
 			<item name="About" href="index.html" />

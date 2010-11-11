@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Default Security" />
+			<item name="Default Security"  href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Default Security">
 			<item name="About" href="index.html" />

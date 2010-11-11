@@ -6,8 +6,6 @@
 			<item name="HTML"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
 		<menu name="HTML Viewer">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

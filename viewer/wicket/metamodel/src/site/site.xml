@@ -1,11 +1,9 @@
 <project name="${project.name}">
 	<body>
 		<breadcrumbs>
-			<item name="AppLib"/>
+			<item name="AppLib" href="index.html"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-        
 		<menu name="Wicket AppLib">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

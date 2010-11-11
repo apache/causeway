@@ -6,8 +6,6 @@
 			<item name="Dispatcher"/>
 		</breadcrumbs>
 		
-        <menu ref="parent"/>
-
 		<menu name="Scimpi Dispatcher">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

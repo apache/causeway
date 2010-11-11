@@ -2,10 +2,8 @@
 <project>
 	<body>
 		<breadcrumbs>
-			<item name="Encodeable Marshalling"/>
+			<item name="Encodeable Marshalling" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Encodeable Marshalling">
 			<item name="About" href="index.html" />

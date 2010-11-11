@@ -3,7 +3,7 @@
 
     <body>
         <breadcrumbs>
-            <item name="Tests" />
+            <item name="Tests"  href="index.html"/>
         </breadcrumbs>
 
         <menu name="SQL ObjectStore Tests">

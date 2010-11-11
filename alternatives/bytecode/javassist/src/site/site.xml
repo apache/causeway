@@ -6,8 +6,6 @@
 			<item name="Javassist Bytecode" href="index.html" />
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
 		<menu name="Javassist ByteCode Support">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

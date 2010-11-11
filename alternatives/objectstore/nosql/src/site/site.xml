@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="NoSQL"/>
+			<item name="NoSQL" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="NoSQL ObjectStore">
 			<item name="About" href="index.html" />

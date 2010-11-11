@@ -19,6 +19,18 @@
 
 ObjectStore Implementations
  
- The <objectstores> module is the parent of the various objectstore implementations.
+ The <objectstores> module is the parent of the various objectstore implementations:
+
+ * {{{./xml/index.html}XML object store}}
  
+   The <xml> object store provides a simple way to persist domain objects to file storage. The format of this file is a proprietary XML schema.
+
+ * {{{./sql/index.html}SQL object store}}
+ 
+  The <sql> object store module provides the ability to persist domain objects into an RDBMS. It has no external dependencies, using simply JDBC.
+ 
+ * {{{./nosql/index.html}SQL object store}}
+
+  The <nosql> object store module ...
+
  []

@@ -19,7 +19,17 @@
 
 Security Alternatives
  
- The <security> module is the parent for alternative implementations of the security APIs
- defined in the core.
+ The <security> module is the parent for alternative implementations of the 
+ security APIs defined in the {{{../core/index.html}core}}:
+
+ * {{{./file/index.html}file}}
+
+   The <file> implementation uses simple flat files to store 
+   user account/password (authentication) and permissions (authorization) data.
+
+ * {{{./ldap/index.html}ldap}}
+
+   The <ldap> implementation provides integration with an LDAP provider.
+
  
  []

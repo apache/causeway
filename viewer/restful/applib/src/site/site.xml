@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="AppLib"/>
+			<item name="AppLib" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Restful AppLib">
 			<item name="About" href="index.html" />

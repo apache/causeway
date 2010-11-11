@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="MetaModel"/>
+			<item name="MetaModel" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="MetaModel">
 			<item name="About" href="index.html" />

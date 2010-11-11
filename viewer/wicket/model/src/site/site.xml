@@ -2,10 +2,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Model"/>
+			<item name="Model" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Wicket Model">
 			<item name="About" href="index.html" />

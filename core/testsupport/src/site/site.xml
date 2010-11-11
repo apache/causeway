@@ -3,11 +3,9 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Test Support"/>
+			<item name="Test Support" href="index.html"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-        
 		<menu name="Test Support">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

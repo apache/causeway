@@ -29,7 +29,6 @@ WebServer (Jetty)
    
  * if using a viewer that does not use the <webapp> module but instead defines
    has its own web app structure in <<<WEB-INF/web.xml>>> then again you can use 
-   <webserver> to run your web application.  (For example, the <Wicket Objects>
-   sister project works this way).
+   <webserver> to run your web application.  
    
  [] 

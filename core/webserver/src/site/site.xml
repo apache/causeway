@@ -6,8 +6,6 @@
 			<item name="WebServer" href="index.html" />
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
 		<menu name="WebServer Bootstrapping">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

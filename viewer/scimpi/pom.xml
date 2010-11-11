@@ -26,7 +26,7 @@
 		<docbkxGuideName>isis-scimpi-viewer</docbkxGuideName>
     </properties>
 
-	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<build>
 		<plugins>

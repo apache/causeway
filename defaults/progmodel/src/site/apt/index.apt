@@ -30,7 +30,7 @@ Alternatives
 
   Alternatives include:
   
-  * the {{{../../alternatives/progmodel/headless/index.html}headless}} programming model.
+  * the {{{../../alternatives/progmodel/wrapper/index.html}wrapper}} programming model.
   
     This extends the default programming model by providing the ability for domain objects to
     interact with each other <as if> through the user interface (that is, obeying any business

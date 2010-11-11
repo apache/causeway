@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Identity"/>
+			<item name="Identity" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Identity ByteCode">
 			<item name="About" href="index.html" />

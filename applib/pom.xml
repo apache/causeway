@@ -25,7 +25,7 @@
 		<docbkxGuideName>isis-applib</docbkxGuideName>
 	</properties>
 
-	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<build>
 		<plugins>

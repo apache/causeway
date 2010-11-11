@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Implementation"/>
+			<item name="Implementation" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="SQL ObjectStore Implementation">
 			<item name="About" href="index.html" />

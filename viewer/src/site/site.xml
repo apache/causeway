@@ -3,17 +3,15 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Viewers"/>
+			<item name="Viewers" href="index.html"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-        
 		<menu name="Viewers">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
 
-        <menu ref="modules"/>
+        <menu name="Viewer Modules" ref="modules"/>
 	</body>
 </project>

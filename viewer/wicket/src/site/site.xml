@@ -2,16 +2,15 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Wicket"/>
+			<item name="Wicket" href="index.html"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-        
 		<menu name="Wicket Viewer">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
-        <menu ref="modules"/>
+
+        <menu ref="Wicket Modules"/>
         
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

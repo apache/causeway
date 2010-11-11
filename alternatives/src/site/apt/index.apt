@@ -55,6 +55,16 @@ Alternatives
    marshalling mechanism for network interactions.  The <remoting> component both defines these APIs
    and provides several implementations.
  
+ * {{{./embedded/index.html}embedded}} APIs
+
+   The embedded module provides an API to allows the Isis {{{../core/metamodel/index.html}metamodel}} to be embedded as the
+   'back end' of an application that has its own custom implementation of the presentation and application 
+   layers.  The application can also either implement its own persistence layers or can use 
+   Isis' {{{../core/runtime/index.html}runtime}} to take care of this concern.
+
+   One possible implementation is to make the Isis metamodel available for tooling, for example a Maven
+   plugin.
+ 
  []
  
  Note that alternatives are versioned separately from the main {{{../core/index.html}core}} framework.

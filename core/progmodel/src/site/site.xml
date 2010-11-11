@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="ProgModel"/>
+			<item name="ProgModel" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="ProgModel">
 			<item name="About" href="index.html" />

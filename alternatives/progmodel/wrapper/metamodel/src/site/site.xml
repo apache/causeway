@@ -6,9 +6,7 @@
 			<item name="Viewer" href="index.html" />
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
-		<menu name="Headless Viewer">
+		<menu name="Wrapper MetaModel">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>

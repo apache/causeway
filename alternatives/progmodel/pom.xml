@@ -23,7 +23,7 @@
     	<pdf.outputName>alternative-progmodels</pdf.outputName>
 	</properties>
 
-	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
 		<module>groovy</module>

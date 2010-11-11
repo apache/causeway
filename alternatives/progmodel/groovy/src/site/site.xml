@@ -2,17 +2,15 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Groovy"/>
+			<item name="Groovy" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Groovy Support">
 			<item name="About" href="index.html" />
             <item name="Groovy" href="http://groovy.codehaus.org" />
 		</menu>
 		
-        <menu ref="modules"/>
+        <menu name="Groovy Modules" ref="modules"/>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

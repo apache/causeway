@@ -3,19 +3,14 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Sockets Transport"/>
+			<item name="Sockets Transport" href="index.html"/>
 		</breadcrumbs>
 
 		<menu name="Sockets Transport">
 			<item name="About" href="index.html" />
+            <item name="Jottings" href="jottings.html" />
 		</menu>
 
-        <menu ref="parent"/>
-
         <menu name="Maven Reports" ref="reports" />
-
-        <menu name="For Contributors">
-            <item name="Jottings" href="jottings.html" />
-        </menu>
 	</body>
 </project>

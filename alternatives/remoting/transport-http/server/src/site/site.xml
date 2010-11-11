@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Server"/>
+			<item name="Server" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="HTTP Remoting on Server">
 			<item name="About" href="index.html" />

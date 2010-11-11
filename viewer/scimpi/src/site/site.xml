@@ -6,14 +6,12 @@
 			<item name="Scimpi"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
 		<menu name="Scimpi">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
         
-        <menu ref="modules"/>
+        <menu name="Scimpi Modules" ref="modules"/>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

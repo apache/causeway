@@ -1,10 +1,8 @@
 <project name="${project.name}">
 	<body>
 		<breadcrumbs>
-			<item name="MetaModel"/>
+			<item name="MetaModel" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Groovy MetaModel">
 			<item name="About" href="index.html" />

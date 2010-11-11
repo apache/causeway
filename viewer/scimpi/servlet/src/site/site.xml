@@ -6,8 +6,6 @@
 			<item name="Servlet"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
 		<menu name="Scimpi Servlet">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

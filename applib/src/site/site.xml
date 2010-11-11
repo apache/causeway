@@ -3,11 +3,9 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="AppLib"/>
+			<item name="AppLib" href="index.html"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-        
 		<menu name="Application Library">
 			<item name="About" href="index.html" />
 		</menu>

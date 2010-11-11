@@ -19,6 +19,14 @@
 
 Programming Model Alternatives
  
- The <progmodel> module is the parent of a number of alternative programming models.
+ The <progmodel> module is the parent of a number of alternative programming models:
+
+ * {{{./groovy/index.html}Groovy Support}}
  
+   The <groovy> progmodel configures Isis to allow you to write your domain objects in {{{http://groovy.codehaus.org}Groovy}}.
+
+ * {{{./wrapper/index.html}Wrapper Programming Model}}
+
+  The <wrapper> programming model allows one domain object to interact with another as if through a viewer. That is, if a property or action is unusable, then the calling domain object will be receive an exception indicating the fact.
+
  []

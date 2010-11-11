@@ -6,8 +6,6 @@
 			<item name="DnD"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
 		<menu name="DnD Viewer">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

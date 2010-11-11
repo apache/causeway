@@ -2,10 +2,8 @@
     <version position="right"/>
 	<body>
 		<breadcrumbs>
-			<item name="Viewer"/>
+			<item name="Viewer" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Restful Viewer">
 			<item name="About" href="index.html" />

@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Common"/>
+			<item name="Common" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Common">
 			<item name="About" href="index.html" />

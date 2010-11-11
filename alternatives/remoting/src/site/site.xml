@@ -3,17 +3,15 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Remoting"/>
+			<item name="Remoting" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Remoting">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
         
-        <menu ref="modules"/>
+        <menu name="Remoting Modules" ref="modules"/>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

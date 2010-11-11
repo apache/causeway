@@ -19,11 +19,21 @@
 
 Alternative Bytecode Implementations
  
- This module is module is the parent for a
+ This module is the parent for a
  number of alternative implementations for the bytecode enhancement API
- as defined in the {{{../../core/index.html}core}} framework.
+ as defined in the {{{../../core/index.html}core}} framework:
 
+ * {{{./javassist/index.html}Javassist}}
 
- 
+   The <javassist> bytecode module provides an implementation of the bytecode
+   enhancement API using {{{http://www.javassist.org/}Javassist}}.
+
+ * {{{./identity/index.html}Identity}}
+
+   The <identity> bytecode module provides a do-nothing implementation of 
+   the bytecode enhancement API.  This is required by some object stores
+   that perform equivalent bytecode enhancement.  It's also relevant if the 
+   programmer prefers to code the calls for lazy loading and object dirtying 
+   directly (perhaps using an AOP technology).
  
  []

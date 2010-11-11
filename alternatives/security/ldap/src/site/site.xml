@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="LDAP"/>
+			<item name="LDAP" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="LDAP Security">
 			<item name="About" href="index.html" />

@@ -2,10 +2,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="UI Components"/>
+			<item name="UI Components" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Wicket UI Components">
 			<item name="About" href="index.html" />

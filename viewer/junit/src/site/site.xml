@@ -6,8 +6,6 @@
 			<item name="JUnit"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
 		<menu name="JUnit Support">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

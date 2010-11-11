@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="XML" />
+			<item name="XML"  href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="XML ObjectStore">
 			<item name="About" href="index.html" />

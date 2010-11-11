@@ -15,7 +15,7 @@
 		<relativeUrl>alternatives/remoting/transport-http/client/</relativeUrl>
 	</properties>
 
-	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
     <reporting>
         <plugins>

@@ -21,7 +21,7 @@
         <mysql.version>5.0.5</mysql.version>
     </properties>
 
-	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
+	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
     <description>Runs the common tests against a few server implementations.
 Just add your server implementation to org.apache.isis.extensions.sql.objectstore</description>

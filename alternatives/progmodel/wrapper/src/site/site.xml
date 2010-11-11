@@ -3,17 +3,15 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Headless"/>
+			<item name="Wrapper" href="index.html"/>
 		</breadcrumbs>
 
-        <menu ref="parent"/>
-
-		<menu name="Headless ProgModel">
+		<menu name="Wrapper ProgModel">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>
         
-        <menu ref="modules"/>
+        <menu name="Wrapper Modules" ref="modules"/>
 
 		<menu name="Documentation">
 			<item name="${docbkxGuideTitle} (PDF)" href="docbkx/pdf/${docbkxGuideName}.pdf" />

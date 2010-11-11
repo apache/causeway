@@ -12,7 +12,7 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Apache Isis" />
+			<item name="Apache Isis" href="index.html"/>
 		</breadcrumbs>
 
 		<menu name="Apache Isis">
@@ -28,8 +28,9 @@
 		</menu>
 
 		<menu name="Help">
-            <item name="Isis Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
-			<item name="Isis JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
+            <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
+			<item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
+			<item name="IRC" href="http://webchat.freenode.net/?channels=apache-isis&amp;uio=d4" />
             <item name="Mailing List">
                 <item name="Post to"
                     href="mailto:isis-dev@incubator.apache.org" />
@@ -48,8 +49,8 @@
             <item name="Case Study" href="naked-objects-case-study.html" />
         </menu>
 
-		<!-- Components menu is inherited -->
-		<menu name="Components" inherit="bottom" href="core/index.html">
+		<!-- This 'global' menu is inherited -->
+		<menu name="Isis Modules" inherit="bottom" href="core/index.html">
 			<item name="Application Library" href="applib/index.html" />
 			<item name="Core Framework" href="core/index.html"/>
 			<item name="Defaults" href="defaults/index.html">
@@ -72,6 +73,8 @@
 				<item name="Security" href="alternatives/security/index.html">
                 </item>
 				<item name="Remoting" href="alternatives/remoting/index.html">
+                </item>
+				<item name="Embedded" href="alternatives/embedded/index.html">
                 </item>
             </item>
 			<item name="Viewers" href="viewer/index.html">

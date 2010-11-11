@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="WebApp Support"/>
+			<item name="WebApp Support" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="WebApp Support">
 			<item name="About" href="index.html" />

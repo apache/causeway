@@ -3,11 +3,9 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="XStream"/>
+			<item name="XStream" href="index.html"/>
 		</breadcrumbs>
         
-        <menu ref="parent"/>
-
 		<menu name="XStream Marshalling">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />

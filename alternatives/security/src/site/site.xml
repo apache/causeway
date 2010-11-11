@@ -3,10 +3,8 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="Security"/>
+			<item name="Security" href="index.html"/>
 		</breadcrumbs>
-
-        <menu ref="parent"/>
 
 		<menu name="Alternative Security Implementations">
 			<item name="About" href="index.html" />
@@ -14,7 +12,7 @@
 			<item name="${pdf.title} (PDF)" href="${pdf.outputName}.pdf" />
 		</menu>
         
-        <menu ref="modules"/>
+        <menu name="Security Modules" ref="modules"/>
 
         <menu name="Maven Reports" ref="reports" />
 	</body>
