@@ -3,12 +3,12 @@
 
 	<body>
 		<breadcrumbs>
-			<item name="MetaModel"/>
+			<item name="ProgModel"/>
 		</breadcrumbs>
 
         <menu ref="parent"/>
 
-		<menu name="MetaModel">
+		<menu name="ProgModel">
 			<item name="About" href="index.html" />
             <item name="Jottings" href="jottings.html" />
 		</menu>

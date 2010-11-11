@@ -11,10 +11,9 @@
 	<artifactId>bdd-fitnesse</artifactId>
 	<name>BDD Viewers: FitNesse</name>
 
-        <properties>
+    <properties>
 		<siteBaseDir>../../..</siteBaseDir>
 	</properties>
-
 
 	<build>
 		<plugins>

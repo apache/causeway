@@ -13,7 +13,10 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>defaults/bytecode/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>

@@ -15,6 +15,7 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>alternatives/embedded/</relativeUrl>
 
         <wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
         <identity-bytecode.version>0.1-SNAPSHOT</identity-bytecode.version>
@@ -23,6 +24,8 @@
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-embedded-deployment</docbkxGuideName>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>

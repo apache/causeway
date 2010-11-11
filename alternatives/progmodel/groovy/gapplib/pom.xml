@@ -14,8 +14,10 @@
 
 	<properties>
 		<siteBaseDir>../../../..</siteBaseDir>
+		<relativeUrl>alternatives/progmodel/groovy/applib/</relativeUrl>
 	</properties>
 
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <dependencies>
         <dependency>

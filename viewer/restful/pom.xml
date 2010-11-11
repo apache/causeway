@@ -19,12 +19,15 @@
 
     <properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>viewer/restful/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Restful Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-restful-viewer</docbkxGuideName>
     </properties>
 	
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
+
 	<repositories>
 		<!-- required for RestEasy -->
 		<repository>

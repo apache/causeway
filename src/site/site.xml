@@ -52,36 +52,36 @@
 		<menu name="Components" inherit="bottom" href="core/index.html">
 			<item name="Application Library" href="applib/index.html" />
 			<item name="Core Framework" href="core/index.html"/>
-            <item name="Defaults" href="defaults/index.html">
-                <item name="Object Store" href="defaults/objectstore/index.html">
+			<item name="Defaults" href="defaults/index.html">
+				<item name="Object Store" href="defaults/objectstore/index.html">
                 </item>
-                <item name="Programming Model" href="defaults/progmodel/index.html">
+				<item name="Programming Model" href="defaults/progmodel/index.html">
                 </item>
-                <item name="Bytecode Provider" href="defaults/bytecode/index.html">
+				<item name="Bytecode Provider" href="defaults/bytecode/index.html">
                 </item>
-                <item name="Security" href="defaults/security/index.html">
-                </item>
-            </item>
-            <item name="Alternatives" href="alternatives/index.html">
-                <item name="Object Stores" href="alternatives/objectstore/index.html">
-                </item>
-                <item name="Programming Models" href="alternatives/progmodel/index.html">
-                </item>
-                <item name="Bytecode Providers" href="alternatives/bytecode/index.html">
-                </item>
-                <item name="Security" href="alternatives/security/index.html">
-                </item>
-                <item name="Remoting" href="alternatives/remoting/index.html">
+				<item name="Security" href="defaults/security/index.html">
                 </item>
             </item>
-            <item name="Viewers" href="viewer/index.html">
-                <item name="DnD" href="viewer/dnd/index.html" />
+			<item name="Alternatives" href="alternatives/index.html">
+				<item name="Object Stores" href="alternatives/objectstore/index.html">
+                </item>
+				<item name="Programming Models" href="alternatives/progmodel/index.html">
+                </item>
+				<item name="Bytecode Providers" href="alternatives/bytecode/index.html">
+                </item>
+				<item name="Security" href="alternatives/security/index.html">
+                </item>
+				<item name="Remoting" href="alternatives/remoting/index.html">
+                </item>
+            </item>
+			<item name="Viewers" href="viewer/index.html">
+				<item name="DnD" href="viewer/dnd/index.html" />
                 <item name="HTML" href="viewer/html/index.html" />
-                <item name="Scimpi" href="viewer/scimpi/index.html" />
-                <item name="Wicket" href="viewer/wicket/index.html" />
-                <item name="Restful" href="viewer/restful/index.html" />
-                <item name="BDD (Concordion)" href="viewer/bdd/index.html" />
-                <item name="JUnit" href="viewer/junit/index.html" />
+				<item name="Scimpi" href="viewer/scimpi/index.html" />
+				<item name="Wicket" href="viewer/wicket/index.html" />
+				<item name="Restful" href="viewer/restful/index.html" />
+				<item name="BDD (Concordion)" href="viewer/bdd/index.html" />
+				<item name="JUnit" href="viewer/junit/index.html" />
             </item>
 		</menu>
 

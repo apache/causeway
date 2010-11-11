@@ -22,11 +22,14 @@
 
     <properties>
         <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>alternatives/objectstore/sql/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis SQL ObjectStore</docbkxGuideTitle>
         <docbkxGuideSubTitle>Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-sql-objectstore</docbkxGuideName>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <build>
         <plugins>

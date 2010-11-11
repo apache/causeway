@@ -14,10 +14,14 @@
     <name>SQL ObjectStore Integration Tests - Common</name>
 
     <properties>
+	    <siteBaseDir>../../../..</siteBaseDir>
+		<relativeUrl>alternatives/objecstore/sql/tests-common/</relativeUrl>
+
         <xml-objectstore.version>0.1-SNAPSHOT</xml-objectstore.version>
         <hsqldb.version>1.8.0.10</hsqldb.version>
-	<siteBaseDir>../../../..</siteBaseDir>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <description>Common code to test the sql persistor. Uses the HSQLDB for maximum compatibility.</description>
     <build>

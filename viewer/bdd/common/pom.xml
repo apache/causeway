@@ -11,9 +11,12 @@
 	<artifactId>bdd-common</artifactId>
 	<name>BDD Viewers: Common</name>
 
-        <properties>
+    <properties>
 		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/bdd/common/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<dependencies>
 		<dependency>

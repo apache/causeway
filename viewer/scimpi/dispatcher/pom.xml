@@ -7,14 +7,16 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-    <groupId>org.apache.isis.viewer</groupId>
 	<artifactId>scimpi-dispatcher</artifactId>
 
 	<name>Scimpi Viewer Dispatcher</name>
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/scimpi/dispatcher/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>

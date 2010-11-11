@@ -16,12 +16,16 @@
 
 	<packaging>pom</packaging>
 
+
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>alternatives/progmodel/wrapper/</relativeUrl>
 
         <docbkx.title>Apache Isis Wrapper Programming Model</docbkx.title>
         <docbkx.outputName>isis-wrapper</docbkx.outputName>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<build>
 		<plugins>

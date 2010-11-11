@@ -19,11 +19,14 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>viewer/scimpi/</relativeUrl>
 
 		<docbkxGuideTitle>Apache Isis Scimpi</docbkxGuideTitle>
         <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-scimpi-viewer</docbkxGuideName>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<build>
 		<plugins>

@@ -13,7 +13,10 @@
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>alternatives/remoting/marshalling-serialize/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>

@@ -11,9 +11,12 @@
 	<artifactId>wicket-metamodel</artifactId>
 	<name>Wicket Viewer MetaModel Support</name>
 
-        <properties>
+    <properties>
 		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/wicket/metamodel/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<dependencies>
 		<dependency>

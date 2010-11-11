@@ -14,7 +14,10 @@
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/scimpi/servlet/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>

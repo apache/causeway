@@ -9,12 +9,15 @@
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
-	<name>Wicket Viewer UI Components</name>
 	<artifactId>wicket-ui</artifactId>
+	<name>Wicket Viewer UI Components</name>
 
-        <properties>
+    <properties>
 		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/wicket/ui/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<build>
 		<resources>

@@ -14,10 +14,14 @@
     <name>SQL ObjectStore Integration Tests - Served</name>
 
     <properties>
+	    <siteBaseDir>../../../..</siteBaseDir>
+		<relativeUrl>alternatives/objecstore/sql/tests-served/</relativeUrl>
+
         <postgresql.version>8.4-701.jdbc4</postgresql.version>
         <mysql.version>5.0.5</mysql.version>
-	<siteBaseDir>../../../..</siteBaseDir>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <description>Runs the common tests against a few server implementations.
 Just add your server implementation to org.apache.isis.extensions.sql.objectstore</description>

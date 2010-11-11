@@ -18,11 +18,14 @@
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>applib/</relativeUrl>
 
 		<docbkxGuideTitle>Apache Isis Application Library</docbkxGuideTitle>
         <docbkxGuideSubTitle>Developing domain driven applications using Apache Isis</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-applib</docbkxGuideName>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<build>
 		<plugins>

@@ -9,12 +9,14 @@
 	</parent>
 
 	<artifactId>wicket-applib</artifactId>
-	
 	<name>Wicket Viewer AppLib</name>
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/wicket/applib/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<dependencies>
 		<dependency>

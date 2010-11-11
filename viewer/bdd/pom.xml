@@ -17,11 +17,14 @@
 
     <properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>viewer/bdd/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis BDD Testing Guide</docbkxGuideTitle>
         <docbkxGuideSubTitle>Concordion Integration with Apache Isis</docbkxGuideSubTitle>
         <docbkxGuideName>isis-bdd-viewer</docbkxGuideName>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <dependencyManagement>
         <dependencies>

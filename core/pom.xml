@@ -22,18 +22,22 @@
 	
 	<packaging>pom</packaging>
 
+
 	<properties>
+        <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>core/</relativeUrl>
+		
         <!-- REVIEW -->
 		<current40xVersion>4.0</current40xVersion>
         <!-- REVIEW -->
 		<dependency.locations.enabled>false</dependency.locations.enabled>
         
-        <siteBaseDir>..</siteBaseDir>
-		
 		<docbkxGuideTitle>Apache Isis Core</docbkxGuideTitle>
         <docbkxGuideSubTitle>Design, APIs and Customization</docbkxGuideSubTitle>
 		<docbkxGuideName>isis-core</docbkxGuideName>	
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<modules>
         <module>testsupport</module>

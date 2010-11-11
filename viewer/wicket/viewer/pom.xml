@@ -14,7 +14,10 @@
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/wicket/viewer/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<build>
 		<resources>

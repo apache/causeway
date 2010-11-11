@@ -15,10 +15,13 @@
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>alternatives/security/ldap/</relativeUrl>
 
         <docbkx.title>Apache Isis LDAP Security</docbkx.title>
         <docbkx.outputName>isis-ldap-security</docbkx.outputName>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>

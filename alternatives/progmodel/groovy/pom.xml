@@ -18,15 +18,17 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<groovy.version>1.7.2</groovy.version>
-
 		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>alternatives/progmodel/groovy/</relativeUrl>
+
+		<groovy.version>1.7.2</groovy.version>
 
         <docbkxGuideTitle>Apache Isis Groovy Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Developing domain objects using Groovy</docbkxGuideSubTitle>
         <docbkxGuideName>isis-groovy-support</docbkxGuideName>
 	</properties>
 
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<modules>
 		<module>gapplib</module>

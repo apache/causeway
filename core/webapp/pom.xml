@@ -13,7 +13,10 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>core/webapp/</relativeUrl>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<build>
 		<plugins>

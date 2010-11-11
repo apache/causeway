@@ -20,11 +20,14 @@
 
     <properties>
         <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>defaults/</relativeUrl>
 
         <docbkxGuideTitle>Apache Isis Defaults</docbkxGuideTitle>
         <docbkxGuideSubTitle>Default Implementations of Core APIs</docbkxGuideSubTitle>
         <docbkxGuideName>isis-defaults</docbkxGuideName>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <modules>
         <module>bytecode</module>

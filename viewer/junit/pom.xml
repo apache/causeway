@@ -14,6 +14,7 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>viewer/junit/</relativeUrl>
 
         <core.version>0.1-SNAPSHOT</core.version>
     	<wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
@@ -23,6 +24,8 @@
         <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
         <docbkxGuideName>isis-junit-support</docbkxGuideName>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <build>
         <plugins>

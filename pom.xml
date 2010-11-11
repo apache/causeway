@@ -52,7 +52,7 @@
     </scm>
 
     <!-- used in Site generation for relative references. -->
-    <url>http://incubator.apache.org/isis/</url>
+	<url>http://incubator.apache.org/isis/</url>
 
     <properties>
         <compileSource>1.6</compileSource>

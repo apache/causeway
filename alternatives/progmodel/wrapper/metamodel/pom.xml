@@ -11,9 +11,13 @@
 
 	<name>Wrapper MetaModel</name>
 
+
 	<properties>
         <siteBaseDir>../../../..</siteBaseDir>
+		<relativeUrl>alternatives/progmodel/wrapper/metamodel/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>

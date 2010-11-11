@@ -17,7 +17,8 @@
         <!-- REVIEW -->
         <current40xVersion>4.0</current40xVersion>
 
-        <siteBaseDir>..</siteBaseDir>
+		<siteBaseDir>..</siteBaseDir>
+		<relativeUrl>support/</relativeUrl>
         
         <pdf.title>Isis Support Guide</pdf.title>
         <pdf.outputName>isis-support-guide</pdf.outputName>

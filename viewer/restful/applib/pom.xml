@@ -14,7 +14,10 @@
 
 	<properties>
 		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>viewer/restful/applib/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<dependencies>
 		<dependency>

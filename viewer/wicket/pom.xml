@@ -18,15 +18,18 @@
 	<packaging>pom</packaging>
 
     <properties>
+        <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>viewer/wicket/</relativeUrl>
+
 		<wicket.version>1.4.12</wicket.version>
 		<wicketstuff.version>1.4.12</wicketstuff.version>
-
-        <siteBaseDir>../..</siteBaseDir>
 
         <docbkxGuideTitle>Apache Isis Wicket Viewer</docbkxGuideTitle>
         <docbkxGuideSubTitle>Customization, Configuration and Deployment Guide</docbkxGuideSubTitle>
         <docbkxGuideName>isis-wicket-viewer</docbkxGuideName>
     </properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<modules>
 		<module>applib</module>

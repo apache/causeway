@@ -17,10 +17,13 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>alternatives/remoting/</relativeUrl>
 
         <docbkx.title>Apache Isis Remoting Guide</docbkx.title>
         <docbkx.outputName>isis-remoting</docbkx.outputName>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <build>
         <plugins>

@@ -17,7 +17,8 @@
     <packaging>maven-archetype</packaging>
 
     <properties>
-        <siteBaseDir>../../..</siteBaseDir>
+		<siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>support/archetypes/exploration/</relativeUrl>
     </properties>
 
     <build>

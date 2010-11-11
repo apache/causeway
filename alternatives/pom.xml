@@ -21,10 +21,13 @@
 
 	<properties>
         <siteBaseDir>..</siteBaseDir>
+		<relativeUrl>alternatives/</relativeUrl>
 
         <pdf.title>Apache Isis Alternatives</pdf.title>
         <pdf.outputName>apache-isis-alternatives</pdf.outputName>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<modules>
 		<module>bytecode</module>

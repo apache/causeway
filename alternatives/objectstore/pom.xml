@@ -17,10 +17,13 @@
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>
+		<relativeUrl>alternatives/objectstore/</relativeUrl>
 
         <pdf.title>Apache Isis Alternative ObjectStores</pdf.title>
         <pdf.outputName>apache-isis-alternatives-objectstores</pdf.outputName>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
 	<modules>
 		<module>xml</module>

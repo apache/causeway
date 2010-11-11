@@ -15,7 +15,10 @@
 
 	<properties>
         <siteBaseDir>../../..</siteBaseDir>
+		<relativeUrl>alternatives/bytecode/javassist/</relativeUrl>
 	</properties>
+
+	<url>http://incubator.apache.org/isis/${relativeUrl}/</url>
 
     <reporting>
         <plugins>
