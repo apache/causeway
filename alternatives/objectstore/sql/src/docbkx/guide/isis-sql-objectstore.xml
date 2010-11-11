@@ -16,9 +16,15 @@
   KIND, either express or implied.  See the License for the
   specific language governing permissions and limitations
   under the License.
+  
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:${resourceDir}/resources/docbook-xml-4.5/docbookx.dtd" >
+
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:&resourceDir;/resources/docbook-xml-4.5/docbookx.dtd" >
 -->
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"file:./resources/docbook-xml-4.5/docbookx.dtd">
+"file:./resources/docbook-xml-4.5/docbookx.dtd" >
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
