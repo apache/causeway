@@ -17,6 +17,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
+				<version>2.3.1</version>
 				<configuration>
 					<archive>
 						<manifest>
@@ -43,7 +44,7 @@
 					<descriptors>
 						<descriptor>src/main/assembly/descriptor.xml</descriptor>
 					</descriptors>
-					<finalName>claims-demo-${version}</finalName>
+					<finalName>claims-demo-${project.version}</finalName>
 					<attach>false</attach>
 				</configuration>
 			</plugin>
