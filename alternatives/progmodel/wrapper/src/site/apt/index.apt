@@ -17,11 +17,14 @@
 
 
 
-Headless Programming Model
+Wrapper Programming Model
  
- The <headless> programming model allows one domain object to interact with another <as if> through a viewer.  That is, 
- if a property or action is unusable, then the calling domain object will be receive an exception indicating the fact.
+ The <wrapper> programming model allows a domain object to be "wrapped" so that when another domain object interact with it,
+ it is <as if> through a viewer.  That is, if a property or action is unusable on the wrapped domain object, then the 
+ calling domain object will be receive an exception indicating the fact.
  
- The headless programming model is provided as an implementation of [[NAME]]' <<<DomainObjectContainer>>> interface.
- This can be downcast into <<<HeadlessViewer>>>, from which the domain object is wrapped in cglib proxy.  This proxy
- implements the "see it, use it, do it" business rules.
+ The wrapper programming model is provided as an implementation of Isis' <<<DomainObjectContainer>>> interface (in the
+ {{{../../../applib/index.html}applib}}.  
+ This can be downcast into a <<<WrapperFactory>>>, from which the domain object is wrapped using a {{{http://cglib.sourceforge.net/}CgLib}} proxy.  
+ This proxy implements the checks to ensure that the wrapped object is visible, is not disabled, and the interactoin is
+ valid ("see it, use it, do it").

@@ -56,7 +56,7 @@ import org.apache.isis.defaults.progmodel.JavaReflector;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
-import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerHeadlessWrapper;
+import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;
 
 
@@ -128,7 +128,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 
 		services = createServices(serviceTypes);
 		runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
-		DomainObjectContainerDefault container = new DomainObjectContainerHeadlessWrapper();
+		DomainObjectContainerDefault container = new DomainObjectContainerWrapperFactory();
 
 		runtimeContext.injectInto(container);
 		runtimeContext.setContainer(container);
