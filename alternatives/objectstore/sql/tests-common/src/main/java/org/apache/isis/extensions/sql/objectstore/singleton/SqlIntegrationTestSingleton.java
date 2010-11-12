@@ -139,7 +139,7 @@ public class SqlIntegrationTestSingleton {
 		}
 		/**/
 		try {
-			s.executeUpdate("DROP TABLE "+tableName+";");
+			s.executeUpdate("DROP TABLE "+tableName+"");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
