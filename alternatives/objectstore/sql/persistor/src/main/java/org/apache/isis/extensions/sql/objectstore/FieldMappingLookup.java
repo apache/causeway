@@ -23,7 +23,6 @@ package org.apache.isis.extensions.sql.objectstore;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -34,6 +33,7 @@ import org.apache.isis.extensions.sql.objectstore.mapping.FieldMappingFactory;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMappingFactory;
 import org.apache.isis.runtime.context.IsisContext;
+import org.apache.log4j.Logger;
 
 
 public class FieldMappingLookup {

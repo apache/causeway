@@ -20,9 +20,11 @@
 
 package org.apache.isis.extensions.sql.objectstore.jdbc;
 
+import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMappingFactory;
 
@@ -39,7 +41,19 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
         super(field);
     }
 
-    public String valueAsDBString(final ObjectAdapter value) {
+    //TODO:KAM:here XYZ
+    public String valueAsDBString(final ObjectAdapter value, DatabaseConnector connector) {
+    	java.sql.Date xxx; 
+    	if (value.getObject() instanceof java.sql.Date){
+    		xxx = (java.sql.Date) value.getObject();
+    	}else {// if (value instanceof Date){
+    		Date asDate = (Date) value.getObject();
+        	xxx = new java.sql.Date(asDate.dateValue().getTime());
+    	} 
+    	//java.sql.Date xxx = java.sql.Date.valueOf(asDate.toString());
+    	connector.addToQueryValues(xxx);
+    	return "?";
+    	/*
         EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
         String encodedString = encodeableFacet.toEncodedString(value);
         String year = encodedString.substring(0, 4);
@@ -47,6 +61,7 @@ public class JdbcDateMapper extends AbstractJdbcFieldMapping {
         String day = encodedString.substring(6, 8);
         String encodedWithAdaptions = year + "-" + month + "-" + day;
         return "'" + encodedWithAdaptions + "'";
+        */
     }
 
     public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field) {

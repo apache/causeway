@@ -24,6 +24,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.Results;
 import org.apache.isis.extensions.sql.objectstore.Sql;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
@@ -40,7 +41,7 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
 
     private final ObjectAssociation field;
 
-    public void appendWhereClause(StringBuffer sql, ObjectAdapter object) {
+    public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         ObjectAdapter fieldValue = field.get(object);
         appendWhereClause(sql, fieldValue.getOid());
     }
@@ -54,14 +55,14 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
         return Sql.sqlFieldName(field.getId());
     }
 
-    public void appendInsertValues(StringBuffer sb, ObjectAdapter object) {
+    public void appendInsertValues(DatabaseConnector connector, StringBuffer sb, ObjectAdapter object) {
         ObjectAdapter fieldValue = field.get(object);
-        super.appendInsertValues(sb, fieldValue);
+        super.appendInsertValues(connector, sb, fieldValue);
     }
 
-    public void appendUpdateValues(StringBuffer sql, ObjectAdapter object) {
+    public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         ObjectAdapter fieldValue = field.get(object);
-        super.appendUpdateValues(sql, fieldValue);
+        super.appendUpdateValues(connector, sql, fieldValue);
     }
 
     public void initializeField(ObjectAdapter object, Results rs) {

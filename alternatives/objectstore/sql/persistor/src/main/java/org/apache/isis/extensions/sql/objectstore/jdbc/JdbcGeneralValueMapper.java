@@ -17,56 +17,85 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.sql.objectstore.jdbc;
 
+import org.apache.isis.applib.value.Color;
+import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.extensions.sql.objectstore.Sql;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMappingFactory;
 
-
 public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
-    
-    public static class Factory implements FieldMappingFactory {
-        private final String type;
 
-        public Factory(final String type) {
-            this.type = type;
-        }
+	public static class Factory implements FieldMappingFactory {
+		private final String type;
 
-        public FieldMapping createFieldMapping(final ObjectAssociation field) {
-            return new JdbcGeneralValueMapper(field, type);
-        }
-    }
+		public Factory(final String type) {
+			this.type = type;
+		}
 
-    private String type;
+		@Override
+		public FieldMapping createFieldMapping(final ObjectAssociation field) {
+			return new JdbcGeneralValueMapper(field, type);
+		}
+	}
 
-    public JdbcGeneralValueMapper(final ObjectAssociation field, final String type) {
-        super(field);
-        this.type = type;
-    }
+	private final String type;
 
-    public String valueAsDBString(final ObjectAdapter value) {
-        if (value == null) {
-            return "NULL";
-        } else {
-            EncodableFacet facet = value.getSpecification().getFacet(EncodableFacet.class);
-            String encodedString = facet.toEncodedString(value);
-            return Sql.escapeAndQuoteValue(encodedString);
-        }
+	public JdbcGeneralValueMapper(final ObjectAssociation field,
+			final String type) {
+		super(field);
+		this.type = type;
+	}
 
-    }
+	// TODO:KAM: here X
+	@Override
+	public String valueAsDBString(final ObjectAdapter value,
+			DatabaseConnector connector) {
+		if (value == null) {
+			connector.addToQueryValues(null);
+		} else {
+			Object o = value.getObject();
+			if (o instanceof Color) {
+				connector.addToQueryValues(((Color) o).intValue());
+			} else if (o instanceof Percentage) {
+				connector.addToQueryValues(((Percentage) o).floatValue());
+			} else {
 
-    public ObjectAdapter setFromDBColumn(final String encodeValue, final ObjectAssociation field) {
-        EncodableFacet facet = field.getSpecification().getFacet(EncodableFacet.class);
-        return facet.fromEncodedString(encodeValue);
-    }
+				EncodableFacet facet = value.getSpecification().getFacet(
+						EncodableFacet.class);
+				String encodedString = facet.toEncodedString(value);
+				connector.addToQueryValues(encodedString);
+			}
 
-    public String columnType() {
-        return type;
-    }
+			/*
+			 * EncodableFacet facet =
+			 * value.getSpecification().getFacet(EncodableFacet.class); String
+			 * encodedString = facet.toEncodedString(value);
+			 * 
+			 * if (this.columnType().startsWith("VARCHAR")){ return
+			 * Sql.escapeAndQuoteValue(encodedString); } else { return
+			 * encodedString; }
+			 */
+		}
+		return "?";
+
+	}
+
+	@Override
+	public ObjectAdapter setFromDBColumn(final String encodeValue,
+			final ObjectAssociation field) {
+		EncodableFacet facet = field.getSpecification().getFacet(
+				EncodableFacet.class);
+		return facet.fromEncodedString(encodeValue);
+	}
+
+	@Override
+	public String columnType() {
+		return type;
+	}
 
 }

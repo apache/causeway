@@ -22,6 +22,7 @@ package org.apache.isis.extensions.sql.objectstore.mapping;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.Results;
 
 
@@ -30,13 +31,13 @@ public interface FieldMapping {
     
     void appendColumnNames(StringBuffer sql);
 
-    void appendInsertValues(StringBuffer sql, ObjectAdapter object);
+    void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
 
-    void appendUpdateValues(StringBuffer sql, ObjectAdapter object);
+    void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
     
     void initializeField(ObjectAdapter object, Results rs);
 
-    void appendWhereClause(StringBuffer sql, ObjectAdapter object);
+    void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
 
     void debugData(DebugString debug);
 

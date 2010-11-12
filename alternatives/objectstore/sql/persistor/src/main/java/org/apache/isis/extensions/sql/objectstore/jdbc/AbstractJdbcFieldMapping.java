@@ -24,6 +24,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.Results;
 import org.apache.isis.extensions.sql.objectstore.Sql;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
@@ -48,28 +49,29 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
         sql.append(columnName);
     }
 
-    public void appendInsertValues(StringBuffer sql, ObjectAdapter object) {
+    public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         ObjectAdapter fieldValue = field.get(object);
         if (fieldValue == null) {
-            sql.append("NULL");
+            //KAM sql.append("NULL");
+        	sql.append(connector.addToQueryValues(null));
         } else {
-            sql.append(valueAsDBString(fieldValue));
+        	sql.append(valueAsDBString(fieldValue, connector));
         }
     }
 
-    public void appendUpdateValues(StringBuffer sql, ObjectAdapter object) {
-        appendEqualsClause(sql, object, "=");
+    public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+        appendEqualsClause(connector, sql, object, "=");
     }
 
-    public void appendWhereClause(StringBuffer sql, ObjectAdapter object) {
-        appendEqualsClause(sql, object, "=");
+    public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
+        appendEqualsClause(connector, sql, object, "=");
     }
 
-    private void appendEqualsClause(StringBuffer sql, ObjectAdapter object, String condition) {
+    private void appendEqualsClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object, String condition) {
         sql.append(Sql.sqlFieldName(field.getId()));
         sql.append(condition);
         ObjectAdapter fieldValue = field.get(object);
-        sql.append(valueAsDBString(fieldValue));
+        sql.append(valueAsDBString(fieldValue, connector));
     }
     
     public void initializeField(ObjectAdapter object, Results rs) {
@@ -91,7 +93,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
 
     protected abstract String columnType();
 
-    protected abstract String valueAsDBString(ObjectAdapter value);
+    protected abstract String valueAsDBString(ObjectAdapter value, DatabaseConnector connector);
 
     protected abstract ObjectAdapter setFromDBColumn(String encodeValue, ObjectAssociation field);
 

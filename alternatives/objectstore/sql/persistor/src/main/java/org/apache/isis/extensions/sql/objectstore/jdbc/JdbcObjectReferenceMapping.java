@@ -23,6 +23,7 @@ package org.apache.isis.extensions.sql.objectstore.jdbc;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.IdMappingAbstract;
 import org.apache.isis.extensions.sql.objectstore.Results;
 import org.apache.isis.extensions.sql.objectstore.Sql;
@@ -39,7 +40,7 @@ public class JdbcObjectReferenceMapping extends IdMappingAbstract implements Obj
         setColumn(idColumn);
     }
 
-     public void appendUpdateValues(StringBuffer sql, ObjectAdapter object) {
+     public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         sql.append(getColumn());
         if (object == null) {
             sql.append("= NULL ");

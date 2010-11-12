@@ -23,6 +23,7 @@ package org.apache.isis.extensions.sql.objectstore.mapping;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.Results;
 
 
@@ -30,11 +31,11 @@ public interface ObjectReferenceMapping {
 
     void appendColumnDefinitions(StringBuffer sql);
 
-    void appendInsertValues(StringBuffer sb, ObjectAdapter value);
+    void appendInsertValues(DatabaseConnector connector, StringBuffer sb, ObjectAdapter value);
 
     void appendColumnNames(StringBuffer sql);
 
-    void appendUpdateValues(StringBuffer sql, ObjectAdapter object);
+    void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object);
 
     Oid recreateOid(final Results rs, final ObjectSpecification specification);
         

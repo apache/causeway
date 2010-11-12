@@ -20,11 +20,9 @@
 
 package org.apache.isis.extensions.sql.objectstore;
 
-import org.apache.isis.extensions.sql.objectstore.IntegerPrimaryKey;
-import org.apache.isis.extensions.sql.objectstore.SqlOid;
-import org.apache.isis.extensions.sql.objectstore.SqlOid.State;
-
 import junit.framework.TestCase;
+
+import org.apache.isis.extensions.sql.objectstore.SqlOid.State;
 
 
 public class SqlOidTest extends TestCase {

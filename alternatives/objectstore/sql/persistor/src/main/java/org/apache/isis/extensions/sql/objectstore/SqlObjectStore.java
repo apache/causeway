@@ -23,7 +23,6 @@ package org.apache.isis.extensions.sql.objectstore;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
@@ -45,6 +44,7 @@ import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.log4j.Logger;
 
 
 public final class SqlObjectStore implements ObjectStore {

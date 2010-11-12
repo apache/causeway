@@ -26,8 +26,9 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.extensions.sql.objectstore.AbstractDatabaseConnector;
@@ -36,6 +37,7 @@ import org.apache.isis.extensions.sql.objectstore.SqlMetaData;
 import org.apache.isis.extensions.sql.objectstore.SqlObjectStore;
 import org.apache.isis.extensions.sql.objectstore.SqlObjectStoreException;
 import org.apache.isis.runtime.context.IsisContext;
+import org.apache.log4j.Logger;
 
 
 public class JdbcConnector extends AbstractDatabaseConnector {
@@ -162,7 +164,16 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         PreparedStatement statement;
         try {
             statement = connection.prepareStatement(sql);
+            if (queryValues.size() > 0){
+            	int i = 1;
+            	for (Object value : queryValues) {
+					statement.setObject(i++, value);
+				}
+            }
             int updateCount = statement.executeUpdate();
+            
+            queryValues.clear();
+            
             statement.close();
             return updateCount;
         } catch (SQLException e) {
@@ -240,6 +251,7 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         try {
             LOG.debug("begin transaction");
             connection.setAutoCommit(false);
+            queryValues.clear();
         } catch (SQLException e) {
             throw new SqlObjectStoreException("Rollback error", e);
         }
@@ -288,5 +300,20 @@ public class JdbcConnector extends AbstractDatabaseConnector {
         } catch (SQLException e) {
             throw new SqlObjectStoreException("Metadata error", e);
         }
+    }
+    
+    // TODO:KAM All insert/update call must add their values via this
+    private List<Object> queryValues = new ArrayList<Object>();
+    public String addToQueryValues(int i){
+    	queryValues.add(i);
+    	return "?";
+    }
+    public String addToQueryValues(String s){
+    	queryValues.add(s);
+    	return "?";
+    }
+    public String addToQueryValues(Object o){
+    	queryValues.add(o);
+    	return "?";
     }
 }

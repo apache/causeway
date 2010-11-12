@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -42,6 +41,7 @@ import org.apache.isis.extensions.sql.objectstore.SqlObjectStoreException;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.log4j.Logger;
 
 
 public abstract class AbstractAutoMapper extends AbstractMapper {
@@ -239,10 +239,10 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
                 + specification.getFullName() + "]";
     }
 
-    protected String values(final ObjectAdapter object) {
+    protected String values(DatabaseConnector connector, final ObjectAdapter object) {
         StringBuffer sql = new StringBuffer();
         for (FieldMapping mapping : fieldMappings) {
-            mapping.appendInsertValues(sql, object);
+            mapping.appendInsertValues(connector, sql, object);
             sql.append(",");
         }
         return sql.toString();

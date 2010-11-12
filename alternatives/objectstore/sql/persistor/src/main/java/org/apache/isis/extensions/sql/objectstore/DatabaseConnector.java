@@ -66,4 +66,11 @@ public interface DatabaseConnector {
     void debug(DebugString debug);
 
     SqlMetaData getMetaData();
+    
+    // Full PreparedStatement support
+    public String addToQueryValues(int i);
+    public String addToQueryValues(String s);
+
+	public String addToQueryValues(Object object);
+    
 }

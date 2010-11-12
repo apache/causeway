@@ -20,9 +20,11 @@
 
 package org.apache.isis.extensions.sql.objectstore.jdbc;
 
+import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMappingFactory;
 
@@ -39,7 +41,13 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
         super(field);
     }
 
-    public String valueAsDBString(final ObjectAdapter value) {
+    //TODO:KAM:here XYZ
+    public String valueAsDBString(final ObjectAdapter value, DatabaseConnector connector) {
+    	DateTime asDate = (DateTime) value.getObject();
+    	java.sql.Timestamp xxx = new java.sql.Timestamp(asDate.longValue());
+    	connector.addToQueryValues(xxx);
+    	return "?";
+    	/*
         EncodableFacet encodeableFacet = value.getSpecification().getFacet(EncodableFacet.class);
         String encodedString = encodeableFacet.toEncodedString(value);
         String year = encodedString.substring(0, 4);
@@ -49,6 +57,7 @@ public class JdbcDateTimeMapper extends AbstractJdbcFieldMapping {
         String minute = encodedString.substring(11, 13);
         String encodedWithAdaptions = year + "-" + month + "-" + day + " " + hour + ":" + minute+ ":00000";
         return "'" + encodedWithAdaptions + "'";
+        */
     }
 
     public ObjectAdapter setFromDBColumn(final String encodedValue, final ObjectAssociation field)             {

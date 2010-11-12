@@ -23,7 +23,6 @@ package org.apache.isis.extensions.sql.objectstore.auto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -42,6 +41,7 @@ import org.apache.isis.extensions.sql.objectstore.VersionMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
 
 public class CombinedCollectionMapper extends AbstractAutoMapper implements CollectionMapper {
     private static final Logger LOG = Logger.getLogger(CombinedCollectionMapper.class);
@@ -122,7 +122,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             sql.append(" from ");
             sql.append(table);
             sql.append(" where ");
-            foreignKeyMapping.appendUpdateValues(sql, parent);
+            foreignKeyMapping.appendUpdateValues(connector, sql, parent);
             
             Results rs = connector.select(sql.toString());
             List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
@@ -162,7 +162,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         sql.append(" set ");
         sql.append(foreignKeyName);
         sql.append(" = NULL where ");
-        foreignKeyMapping.appendUpdateValues(sql, parent);
+        foreignKeyMapping.appendUpdateValues(connector, sql, parent);
         connector.update(sql.toString()); 
          
         sql = new StringBuffer();
@@ -173,7 +173,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
         CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
         for (ObjectAdapter element : collectionFacet.iterable(collection)) {
             StringBuffer update = new StringBuffer(sql);
-            foreignKeyMapping.appendUpdateValues(update, parent);
+            foreignKeyMapping.appendUpdateValues(connector, update, parent);
             update.append(" where ");
             idMapping.appendWhereClause(update, element.getOid());
             connector.insert(update.toString());

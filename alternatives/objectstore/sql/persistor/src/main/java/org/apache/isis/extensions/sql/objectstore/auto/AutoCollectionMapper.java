@@ -23,7 +23,6 @@ package org.apache.isis.extensions.sql.objectstore.auto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -41,6 +40,7 @@ import org.apache.isis.extensions.sql.objectstore.Sql;
 import org.apache.isis.extensions.sql.objectstore.jdbc.JdbcObjectReferenceMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
 
 
 public class AutoCollectionMapper extends AbstractMapper implements CollectionMapper {
@@ -134,13 +134,13 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         sql.append(", ");
         elementMapping.appendColumnNames(sql);
         sql.append(" ) values (");
-        idMapping.appendInsertValues(sql, parent);
+        idMapping.appendInsertValues(connector, sql, parent);
         sql.append(", ");
 
         CollectionFacet collectionFacet = collection.getSpecification().getFacet(CollectionFacet.class);
         for (ObjectAdapter element : collectionFacet.iterable(collection)) {
             StringBuffer values = new StringBuffer();
-            elementMapping.appendInsertValues(values, element);
+            elementMapping.appendInsertValues(connector, values, element);
             connector.update(sql.toString() + values + ")");
         }
     }

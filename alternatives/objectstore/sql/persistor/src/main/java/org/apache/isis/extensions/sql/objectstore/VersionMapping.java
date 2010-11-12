@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.sql.objectstore;
 
 import java.sql.Timestamp;
@@ -26,73 +25,80 @@ import java.util.Date;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 
-
 public class VersionMapping {
-    private String lastActivityDateColumn;
-    private String lastActivityUserColumn;
-    private String versionColumn;
+	private String lastActivityDateColumn;
+	private String lastActivityUserColumn;
+	private String versionColumn;
 
-    public void init() {
-        lastActivityDateColumn = Sql.identifier("MODIFIED_ON");
-        lastActivityUserColumn = Sql.identifier("MODIFIED_BY");
-        versionColumn = Sql.identifier("VERSION");
-    }
+	public void init() {
+		lastActivityDateColumn = Sql.identifier("MODIFIED_ON");
+		lastActivityUserColumn = Sql.identifier("MODIFIED_BY");
+		versionColumn = Sql.identifier("VERSION");
+	}
 
-    public String insertColumns() {
-        return versionColumn + ", " + lastActivityUserColumn + ", " + lastActivityDateColumn;
-    }
+	public String insertColumns() {
+		return versionColumn + ", " + lastActivityUserColumn + ", "
+				+ lastActivityDateColumn;
+	}
 
-    public String insertValues(SerialNumberVersion version) {
-        String timestamp = new Timestamp(new Date().getTime()).toString();
-        return version.sequence() + ", '" + version.getUser() + "',  '" + timestamp + "'";
-    }
+	// TODO:KAM: here
+	public String insertValues(DatabaseConnector connector,
+			SerialNumberVersion version) {
+		// String timestamp = new Timestamp(new Date().getTime()).toString();
+		// return version.sequence() + ", '" + version.getUser() + "',  '" +
+		// timestamp + "'";
+		connector.addToQueryValues(version.getSequence());
+		connector.addToQueryValues(version.getUser());
+		connector.addToQueryValues(new Timestamp(new Date().getTime()));
+		return "?,?,?";
+	}
 
-    public String whereClause(SerialNumberVersion version) {
-        return versionColumn + " = " + version.getSequence();
-    }
+	public String whereClause(SerialNumberVersion version) {
+		return versionColumn + " = " + version.getSequence();
+	}
 
-    public String updateAssigment(long nextSequence) {
-        return versionColumn + " = " + nextSequence;
-    }
+	public String updateAssigment(DatabaseConnector connector, long nextSequence) {
+		connector.addToQueryValues(nextSequence);
+		return versionColumn + " = ?";// + nextSequence;
+	}
 
-    public String appendSelectColumns() {
-        StringBuffer sql = new StringBuffer();
-        sql.append(versionColumn);
-        sql.append(",");
-        sql.append(lastActivityUserColumn);
-        sql.append(",");
-        sql.append(lastActivityDateColumn);
-        return sql.toString();
-    }
+	public String appendSelectColumns() {
+		StringBuffer sql = new StringBuffer();
+		sql.append(versionColumn);
+		sql.append(",");
+		sql.append(lastActivityUserColumn);
+		sql.append(",");
+		sql.append(lastActivityDateColumn);
+		return sql.toString();
+	}
 
-    public String appendColumnDefinitions() {
-        StringBuffer sql = new StringBuffer();
+	public String appendColumnDefinitions() {
+		StringBuffer sql = new StringBuffer();
 
-        sql.append(versionColumn);
-        sql.append(" bigint");
+		sql.append(versionColumn);
+		sql.append(" bigint");
 
-        sql.append(",");
-        sql.append(lastActivityUserColumn);
-        sql.append(" varchar(32)");
+		sql.append(",");
+		sql.append(lastActivityUserColumn);
+		sql.append(" varchar(32)");
 
-        sql.append(",");
-        sql.append(lastActivityDateColumn);
-        sql.append(" timestamp");
+		sql.append(",");
+		sql.append(lastActivityDateColumn);
+		sql.append(" timestamp");
 
-        return sql.toString();
-    }
+		return sql.toString();
+	}
 
-    public Object appendUpdateValues(long versionSequence) {
-        return versionColumn + "=" + versionSequence;
-    }
+	public Object appendUpdateValues(long versionSequence) {
+		return versionColumn + "=" + versionSequence;
+	}
 
-    public Version getLock(Results rs) {
-        long number = rs.getLong(versionColumn);
-        String user = rs.getString(lastActivityUserColumn);
-        Date time = rs.getDate(lastActivityDateColumn);
-        Version version = new SerialNumberVersion(number, user, time);
-        return version;
-    }
+	public Version getLock(Results rs) {
+		long number = rs.getLong(versionColumn);
+		String user = rs.getString(lastActivityUserColumn);
+		Date time = rs.getDate(lastActivityDateColumn);
+		Version version = new SerialNumberVersion(number, user, time);
+		return version;
+	}
 
 }
-

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -41,6 +40,7 @@ import org.apache.isis.extensions.sql.objectstore.VersionMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMapping;
 import org.apache.isis.runtime.persistence.PersistorUtil;
+import org.apache.log4j.Logger;
 
 
 /** used where there is a one to many association, and the elements are only known to parent */
@@ -102,7 +102,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
             sql.append(" from ");
             sql.append(table);
             sql.append(" where ");
-            idMapping.appendUpdateValues(sql, parent);
+            idMapping.appendUpdateValues(connector, sql, parent);
             
             Results rs = connector.select(sql.toString());
             List<ObjectAdapter> list = new ArrayList<ObjectAdapter>();
@@ -158,15 +158,15 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
         sql.append(", ");
         sql.append(versionMapping.insertColumns());
         sql.append(") values (" );
-        idMapping.appendInsertValues(sql, parent);
+        idMapping.appendInsertValues(connector, sql, parent);
         sql.append(", ");
         
         CollectionFacet collectionFacet = field.getFacet(CollectionFacet.class);
         for (ObjectAdapter element : collectionFacet.iterable(collection)) {
             StringBuffer insert = new StringBuffer(sql);
-            insert.append(values(element));
+            insert.append(values(connector, element));
             SerialNumberVersion version = new SerialNumberVersion(0, "", new Date());
-            insert.append(versionMapping.insertValues(version));
+            insert.append(versionMapping.insertValues(connector, version));
             insert.append(") " );
             
             connector.insert(insert.toString());
@@ -179,7 +179,7 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
         sql.append("delete from ");
         sql.append(table);
         sql.append(" where ");
-        idMapping.appendUpdateValues(sql, parent);
+        idMapping.appendUpdateValues(connector, sql, parent);
         connector.update(sql.toString());
     }
 

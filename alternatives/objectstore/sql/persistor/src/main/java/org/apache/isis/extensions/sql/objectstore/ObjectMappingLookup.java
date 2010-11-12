@@ -24,7 +24,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -35,6 +34,7 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.transaction.ObjectPersistenceException;
+import org.apache.log4j.Logger;
 
 
 public class ObjectMappingLookup implements DebugInfo {

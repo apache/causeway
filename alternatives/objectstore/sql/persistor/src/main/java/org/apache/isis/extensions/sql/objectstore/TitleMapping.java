@@ -50,12 +50,16 @@ public class TitleMapping {
         sql.append(column);
     }
 
-    public void appendInsertValues(StringBuffer sql, ObjectAdapter object) {
+    //TODO:KAM:here 
+    public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         if (object == null) {
-            sql.append("NULL");
+            //sql.append("NULL");
+        	connector.addToQueryValues(null);
         } else {
-            appendTitle(sql, object.titleString());
+            //appendTitle(sql, object.titleString());
+        	connector.addToQueryValues(object.titleString().toLowerCase());
         }
+    	sql.append("?");
     }
 
     private void appendTitle(StringBuffer sql, String title) {
@@ -63,10 +67,10 @@ public class TitleMapping {
         sql.append(Sql.escapeAndQuoteValue(titleString));
     }
 
-    public void appendUpdateAssignment(StringBuffer sql, ObjectAdapter object) {
+    public void appendUpdateAssignment(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         sql.append(column);
         sql.append(" = ");
-        appendInsertValues(sql, object);
+        appendInsertValues(connector, sql, object);
         
     }
 }
