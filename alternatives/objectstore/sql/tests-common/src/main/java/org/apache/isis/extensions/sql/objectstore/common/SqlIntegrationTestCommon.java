@@ -520,7 +520,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 		}
 	}
 
-	public void testUpdate() {
+	public void testUpdate1() {
 		SqlDataClassFactory factory = SqlIntegrationTestSingleton
 				.getSqlDataClassFactory();
 		List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
@@ -528,9 +528,15 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 
 		SimpleClassTwo simpleClass = classes.get(0);
 		simpleClass.setText("XXX");
+	}
 
-		// factory.update(simpleClass);
+	public void testUpdate2() {
+		SqlDataClassFactory factory = SqlIntegrationTestSingleton
+				.getSqlDataClassFactory();
+		List<SimpleClassTwo> classes = factory.allSimpleClassTwos();
+		assertEquals(1, classes.size());
 
+		SimpleClassTwo simpleClass = classes.get(0);
 		assertEquals("XXX", simpleClass.getText());
 	}
 
