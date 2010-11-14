@@ -175,7 +175,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             StringBuffer update = new StringBuffer(sql);
             foreignKeyMapping.appendUpdateValues(connector, update, parent);
             update.append(" where ");
-            idMapping.appendWhereClause(update, element.getOid());
+            idMapping.appendWhereClause(connector, update, element.getOid());
             connector.insert(update.toString());
         }
     }

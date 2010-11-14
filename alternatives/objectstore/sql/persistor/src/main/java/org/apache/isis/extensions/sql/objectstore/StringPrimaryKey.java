@@ -17,39 +17,47 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.sql.objectstore;
 
 public class StringPrimaryKey implements PrimaryKey {
-    private static final long serialVersionUID = 1L;
-    private final String primaryKey;
+	private static final long serialVersionUID = 1L;
+	private final String primaryKey;
 
-    public StringPrimaryKey(final String primaryKey) {
-        this.primaryKey = primaryKey;
-    }
+	public StringPrimaryKey(final String primaryKey) {
+		this.primaryKey = primaryKey;
+	}
 
-    public boolean equals(final Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj instanceof StringPrimaryKey) {
-            StringPrimaryKey o = ((StringPrimaryKey) obj);
-            return primaryKey == o.primaryKey;
-        }
-        return false;
-    }
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj instanceof StringPrimaryKey) {
+			StringPrimaryKey o = ((StringPrimaryKey) obj);
+			return primaryKey == o.primaryKey;
+		}
+		return false;
+	}
 
-    public int hashCode() {
-        int hash = 17;
-        hash = 37 * hash + primaryKey.hashCode();
-        return hash;
-    }
+	@Override
+	public int hashCode() {
+		int hash = 17;
+		hash = 37 * hash + primaryKey.hashCode();
+		return hash;
+	}
 
-    public String stringValue() {
-        return "" + primaryKey;
-    }
+	@Override
+	public String stringValue() {
+		return "" + primaryKey;
+	}
 
-    public String toString() {
-        return "" + primaryKey;
-    }
+	@Override
+	public String toString() {
+		return "" + primaryKey;
+	}
+
+	@Override
+	public Object naturalValue() {
+		return stringValue();
+	}
 }

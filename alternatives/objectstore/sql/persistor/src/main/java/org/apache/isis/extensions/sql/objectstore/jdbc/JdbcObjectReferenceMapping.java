@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.sql.objectstore.jdbc;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -30,39 +29,42 @@ import org.apache.isis.extensions.sql.objectstore.Sql;
 import org.apache.isis.extensions.sql.objectstore.SqlObjectStoreException;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMapping;
 
+public class JdbcObjectReferenceMapping extends IdMappingAbstract implements
+		ObjectReferenceMapping {
+	private final ObjectSpecification specification;
 
-public class JdbcObjectReferenceMapping extends IdMappingAbstract implements ObjectReferenceMapping {
-    private ObjectSpecification specification;
+	public JdbcObjectReferenceMapping(String columnName,
+			ObjectSpecification specification) {
+		this.specification = specification;
+		String idColumn = Sql.sqlName("fk_" + columnName);
+		setColumn(idColumn);
+	}
 
-    public JdbcObjectReferenceMapping(String columnName, ObjectSpecification specification) {
-        this.specification = specification;
-        String idColumn = Sql.sqlName("fk_" + columnName);
-        setColumn(idColumn);
-    }
+	@Override
+	public void appendUpdateValues(DatabaseConnector connector,
+			StringBuffer sql, ObjectAdapter object) {
+		sql.append(getColumn());
+		if (object == null) {
+			sql.append("= NULL ");
+		} else {
+			sql.append("= ?");
+			// sql.append(primaryKey(object.getOid()));
+			connector.addToQueryValues(primaryKeyAsObject(object.getOid()));
+		}
+	}
 
-     public void appendUpdateValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
-        sql.append(getColumn());
-        if (object == null) {
-            sql.append("= NULL ");
-        } else {
-            sql.append("=");
-            sql.append(primaryKey(object.getOid()));
-        }
-    }
-
-    public ObjectAdapter initializeField(Results rs) {
-        Oid oid = recreateOid(rs, specification);
-        if (oid != null) {
-            if (specification.isAbstract()) {
-                throw new SqlObjectStoreException("NOT DEALING WITH POLYMORPHIC ASSOCIATIONS");
-            } else {
-                return getAdapter(specification, oid);
-            }
-        } else {
-            return null;
-        }
-    }
-
+	public ObjectAdapter initializeField(Results rs) {
+		Oid oid = recreateOid(rs, specification);
+		if (oid != null) {
+			if (specification.isAbstract()) {
+				throw new SqlObjectStoreException(
+						"NOT DEALING WITH POLYMORPHIC ASSOCIATIONS");
+			} else {
+				return getAdapter(specification, oid);
+			}
+		} else {
+			return null;
+		}
+	}
 
 }
-

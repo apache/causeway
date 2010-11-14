@@ -126,9 +126,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 			final ObjectAdapter object) {
 		StringBuffer sql = new StringBuffer();
 		sql.append("delete from " + table + " where ");
-		idMapping.appendWhereClause(sql, object.getOid());
+		idMapping.appendWhereClause(connector, sql, object.getOid());
 		sql.append(" and ");
-		sql.append(versionMapping.whereClause((SerialNumberVersion) object
+		sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object
 				.getVersion()));
 		int updateCount = connector.update(sql.toString());
 		if (updateCount == 0) {
@@ -183,7 +183,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 			final Oid oid, final ObjectSpecification hint) {
 		StringBuffer sql = createSelectStatement();
 		sql.append(" where ");
-		idMapping.appendWhereClause(sql, oid);
+		idMapping.appendWhereClause(connector, sql, oid);
 		Results rs = connector.select(completeSelectStatement(sql));
 		if (rs.next()) {
 			return loadObject(connector, hint, rs);
@@ -290,7 +290,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 		sql.append(",");
 		sql.append(versionMapping.appendSelectColumns());
 		sql.append(" from " + table + " where ");
-		idMapping.appendWhereClause(sql, object.getOid());
+		idMapping.appendWhereClause(connector, sql, object.getOid());
 
 		Results rs = connector.select(sql.toString());
 		if (rs.next()) {
@@ -346,9 +346,9 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 		sql.append(", ");
 		titleMapping.appendUpdateAssignment(connector, sql, object);
 		sql.append(" where ");
-		idMapping.appendWhereClause(sql, object.getOid());
+		idMapping.appendWhereClause(connector, sql, object.getOid());
 		sql.append(" and ");
-		sql.append(versionMapping.whereClause((SerialNumberVersion) object
+		sql.append(versionMapping.whereClause(connector, (SerialNumberVersion) object
 				.getVersion()));
 
 		int updateCount = connector.update(sql.toString());

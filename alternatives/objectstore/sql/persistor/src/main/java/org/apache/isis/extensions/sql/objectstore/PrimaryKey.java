@@ -17,13 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.sql.objectstore;
 
 import java.io.Serializable;
 
-
 public interface PrimaryKey extends Serializable {
 
-    public String stringValue();
+	public String stringValue();
+
+	public Object naturalValue();
 }

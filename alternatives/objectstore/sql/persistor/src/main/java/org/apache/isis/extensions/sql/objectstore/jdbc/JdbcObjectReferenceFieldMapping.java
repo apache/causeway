@@ -43,7 +43,7 @@ public class JdbcObjectReferenceFieldMapping extends JdbcObjectReferenceMapping 
 
     public void appendWhereClause(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         ObjectAdapter fieldValue = field.get(object);
-        appendWhereClause(sql, fieldValue.getOid());
+        appendWhereClause(connector, sql, fieldValue.getOid());
     }
 
     public JdbcObjectReferenceFieldMapping(ObjectAssociation field) {

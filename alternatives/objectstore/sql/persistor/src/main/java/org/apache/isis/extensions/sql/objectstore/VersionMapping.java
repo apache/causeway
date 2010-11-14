@@ -44,22 +44,21 @@ public class VersionMapping {
 	// TODO:KAM: here
 	public String insertValues(DatabaseConnector connector,
 			SerialNumberVersion version) {
-		// String timestamp = new Timestamp(new Date().getTime()).toString();
-		// return version.sequence() + ", '" + version.getUser() + "',  '" +
-		// timestamp + "'";
 		connector.addToQueryValues(version.getSequence());
 		connector.addToQueryValues(version.getUser());
 		connector.addToQueryValues(new Timestamp(new Date().getTime()));
 		return "?,?,?";
 	}
 
-	public String whereClause(SerialNumberVersion version) {
-		return versionColumn + " = " + version.getSequence();
+	public String whereClause(DatabaseConnector connector,
+			SerialNumberVersion version) {
+		connector.addToQueryValues(version.getSequence());
+		return versionColumn + " = ?";
 	}
 
 	public String updateAssigment(DatabaseConnector connector, long nextSequence) {
 		connector.addToQueryValues(nextSequence);
-		return versionColumn + " = ?";// + nextSequence;
+		return versionColumn + " = ?";
 	}
 
 	public String appendSelectColumns() {
@@ -89,8 +88,10 @@ public class VersionMapping {
 		return sql.toString();
 	}
 
-	public Object appendUpdateValues(long versionSequence) {
-		return versionColumn + "=" + versionSequence;
+	public Object appendUpdateValues(DatabaseConnector connector,
+			long versionSequence) {
+		connector.addToQueryValues(versionSequence);
+		return versionColumn + "= ?";
 	}
 
 	public Version getLock(Results rs) {

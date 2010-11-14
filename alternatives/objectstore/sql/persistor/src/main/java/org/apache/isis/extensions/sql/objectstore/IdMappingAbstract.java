@@ -38,11 +38,13 @@ public class IdMappingAbstract {
 		return column;
 	}
 
-	public void appendWhereClause(StringBuffer sql, Oid oid) {
+	public void appendWhereClause(DatabaseConnector connector,
+			StringBuffer sql, Oid oid) {
 		sql.append(column);
-		sql.append(" = ");
-		String id = primaryKey(oid);
-		sql.append(id);
+		connector.addToQueryValues(primaryKeyAsObject(oid));
+		sql.append(" = ?");
+		// String id = primaryKey(oid);
+		// sql.append(id);
 	}
 
 	public void appendCreateColumnDefinitions(StringBuffer sql) {
@@ -66,20 +68,18 @@ public class IdMappingAbstract {
 		if (object == null) {
 			sql.append(connector.addToQueryValues(null));
 		} else {
-			sql.append(connector.addToQueryValues(primaryKeyAsInt(object
+			sql.append(connector.addToQueryValues(primaryKeyAsObject(object
 					.getOid())));
 		}
 	}
 
-	public long primaryKeyAsInt(final Oid oid) {
+	/*
+	 * This doesn't have to be an Int, it should be any object.
+	 */
+	public Object primaryKeyAsObject(final Oid oid) {
 		if (oid instanceof SqlOid) {
-			if (((SqlOid) oid).getPrimaryKey() instanceof IntegerPrimaryKey) {
-				long i = ((IntegerPrimaryKey) ((SqlOid) oid).getPrimaryKey())
-						.intValue();
-				return i;
-			} else {
-				return 0;
-			}
+			PrimaryKey pk = ((SqlOid) oid).getPrimaryKey();
+			return pk.naturalValue();
 		} else
 			return ((SerialOid) oid).getSerialNo();
 	}

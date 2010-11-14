@@ -123,7 +123,7 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         sql.append("delete from ");
         sql.append(tableName);
         sql.append(" where ");
-        idMapping.appendWhereClause(sql, parent.getOid());
+        idMapping.appendWhereClause(connector, sql, parent.getOid());
         connector.update(sql.toString());
 
         sql = new StringBuffer();

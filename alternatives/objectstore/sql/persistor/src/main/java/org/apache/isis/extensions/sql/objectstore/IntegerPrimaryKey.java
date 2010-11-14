@@ -60,4 +60,9 @@ public class IntegerPrimaryKey implements PrimaryKey {
 		return primaryKey;
 	}
 
+	@Override
+	public Object naturalValue() {
+		return intValue();
+	}
+
 }

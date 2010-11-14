@@ -17,18 +17,23 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.sql.objectstore;
 
 public class TransientKey implements PrimaryKey {
-    private static final long serialVersionUID = 1L;
-    private long transientId;
+	private static final long serialVersionUID = 1L;
+	private final long transientId;
 
-    public TransientKey(final long id) {
-        transientId = id;
-    }
+	public TransientKey(final long id) {
+		transientId = id;
+	}
 
-    public String stringValue() {
-        return "" + transientId;
-    }
+	@Override
+	public String stringValue() {
+		return "" + transientId;
+	}
+
+	@Override
+	public Object naturalValue() {
+		return transientId;
+	}
 }

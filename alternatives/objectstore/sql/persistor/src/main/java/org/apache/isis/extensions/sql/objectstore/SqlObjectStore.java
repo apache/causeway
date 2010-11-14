@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.extensions.sql.objectstore;
 
 import java.util.List;
@@ -46,312 +45,376 @@ import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
-
 public final class SqlObjectStore implements ObjectStore {
-    private static final String TABLE_NAME = "no_services";
-    private static final String ID_COLUMN = "id";
-    private static final String PRIMARYKEY_COLUMN = "pk_id";
-    public static final String BASE_NAME = "isis.persistence.sql";
-    private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
-    private DatabaseConnectorPool connectionPool;
-    private ObjectMappingLookup objectMappingLookup;
-    private boolean isInitialized;
+	private static final String TABLE_NAME = "no_services";
+	private static final String ID_COLUMN = "id";
+	private static final String PRIMARYKEY_COLUMN = "pk_id";
+	public static final String BASE_NAME = "isis.persistence.sql";
+	private static final Logger LOG = Logger.getLogger(SqlObjectStore.class);
+	private DatabaseConnectorPool connectionPool;
+	private ObjectMappingLookup objectMappingLookup;
+	private boolean isInitialized;
 
-    public void abortTransaction() {}
+	@Override
+	public void abortTransaction() {
+	}
 
-    public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
-        return new CreateObjectCommand() {
-            public void execute(final PersistenceCommandContext context) {
-                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
-                LOG.debug("  create object " + object);
-                ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
-                mapping.createObject(connection, object);
-            }
+	@Override
+	public CreateObjectCommand createCreateObjectCommand(
+			final ObjectAdapter object) {
+		return new CreateObjectCommand() {
+			@Override
+			public void execute(final PersistenceCommandContext context) {
+				DatabaseConnector connection = ((SqlExecutionContext) context)
+						.getConnection();
+				LOG.debug("  create object " + object);
+				ObjectMapping mapping = objectMappingLookup.getMapping(object,
+						connection);
+				mapping.createObject(connection, object);
+			}
 
-            public ObjectAdapter onObject() {
-                return object;
-            }
+			@Override
+			public ObjectAdapter onObject() {
+				return object;
+			}
 
-            public String toString() {
-                return "CreateObjectCommand [object=" + object + "]";
-            }
-        };
-    }
+			@Override
+			public String toString() {
+				return "CreateObjectCommand [object=" + object + "]";
+			}
+		};
+	}
 
-    public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
-        return new DestroyObjectCommand() {
-            public void execute(final PersistenceCommandContext context) {
-                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
-                LOG.debug("  destroy object " + object);
-                ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
-                mapping.destroyObject(connection, object);
-            }
+	@Override
+	public DestroyObjectCommand createDestroyObjectCommand(
+			final ObjectAdapter object) {
+		return new DestroyObjectCommand() {
+			@Override
+			public void execute(final PersistenceCommandContext context) {
+				DatabaseConnector connection = ((SqlExecutionContext) context)
+						.getConnection();
+				LOG.debug("  destroy object " + object);
+				ObjectMapping mapping = objectMappingLookup.getMapping(object,
+						connection);
+				mapping.destroyObject(connection, object);
+			}
 
-            public ObjectAdapter onObject() {
-                return object;
-            }
+			@Override
+			public ObjectAdapter onObject() {
+				return object;
+			}
 
-            public String toString() {
-                return "DestroyObjectCommand [object=" + object + "]";
-            }
-        };
-    }
+			@Override
+			public String toString() {
+				return "DestroyObjectCommand [object=" + object + "]";
+			}
+		};
+	}
 
-    public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
-        return new SaveObjectCommand() {
-            public void execute(final PersistenceCommandContext context) {
-                DatabaseConnector connection = ((SqlExecutionContext) context).getConnection();
-                LOG.debug("  save object " + object);
-                if (object.getSpecification().isCollectionOrIsAggregated()) {
-                    /*
-                     * ObjectAdapter parent = object.getSpecification().getAggregate(object);
-                     * LOG.debug("change to internal collection being persisted through parent");
-                     * 
-                     * // TODO a better plan would be ask the mapper to save the collection // -
-                     * saveCollection(parent, collection) mapperLookup.getMapper(connection,
-                     * parent).save(connection, parent); connectionPool.release(connection);
-                     */
-                    throw new NotYetImplementedException(object.toString());
-                } else {
-                    ObjectMapping mapping = objectMappingLookup.getMapping(object, connection);
-                    mapping.save(connection, object);
-                    connectionPool.release(connection);
-                }
-            }
+	@Override
+	public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
+		return new SaveObjectCommand() {
+			@Override
+			public void execute(final PersistenceCommandContext context) {
+				DatabaseConnector connection = ((SqlExecutionContext) context)
+						.getConnection();
+				LOG.debug("  save object " + object);
+				if (object.getSpecification().isCollectionOrIsAggregated()) {
+					/*
+					 * ObjectAdapter parent =
+					 * object.getSpecification().getAggregate(object);
+					 * LOG.debug(
+					 * "change to internal collection being persisted through parent"
+					 * );
+					 * 
+					 * // TODO a better plan would be ask the mapper to save the
+					 * collection // - saveCollection(parent, collection)
+					 * mapperLookup.getMapper(connection,
+					 * parent).save(connection, parent);
+					 * connectionPool.release(connection);
+					 */
+					throw new NotYetImplementedException(object.toString());
+				} else {
+					ObjectMapping mapping = objectMappingLookup.getMapping(
+							object, connection);
+					mapping.save(connection, object);
+					connectionPool.release(connection);
+				}
+			}
 
-            public ObjectAdapter onObject() {
-                return object;
-            }
+			@Override
+			public ObjectAdapter onObject() {
+				return object;
+			}
 
-            public String toString() {
-                return "SaveObjectCommand [object=" + object + "]";
-            }
+			@Override
+			public String toString() {
+				return "SaveObjectCommand [object=" + object + "]";
+			}
 
-        };
-    }
+		};
+	}
 
-    public void debugData(final DebugString debug) {
-        debug.appendln("initialised", isInitialized);
-        debug.appendln("connection pool", connectionPool);
-        debug.appendln("Database:");
-        debug.indent();
-        connectionPool.debug(debug);
-        debug.unindent();
-        objectMappingLookup.debugData(debug);
-    }
+	@Override
+	public void debugData(final DebugString debug) {
+		debug.appendln("initialised", isInitialized);
+		debug.appendln("connection pool", connectionPool);
+		debug.appendln("Database:");
+		debug.indent();
+		connectionPool.debug(debug);
+		debug.unindent();
+		objectMappingLookup.debugData(debug);
+	}
 
-    public String debugTitle() {
-        return null;
-    }
+	@Override
+	public String debugTitle() {
+		return null;
+	}
 
-    public void endTransaction() {}
+	@Override
+	public void endTransaction() {
+	}
 
-    public void execute(final List<PersistenceCommand> commands) {
-        DatabaseConnector connector = connectionPool.acquire();
-        connector.begin();
+	@Override
+	public void execute(final List<PersistenceCommand> commands) {
+		DatabaseConnector connector = connectionPool.acquire();
+		connector.begin();
 
-        IsisTransactionManager transactionManager = IsisContext.getTransactionManager();
-        MessageBroker messageBroker = IsisContext.getMessageBroker();
-        UpdateNotifier updateNotifier = IsisContext.getUpdateNotifier();
-        SqlExecutionContext context = new SqlExecutionContext(connector, transactionManager, messageBroker, updateNotifier);
-        try {
-            for (PersistenceCommand command : commands) {
-                command.execute(context);
-            }
-            connector.commit();
-        } catch (IsisException e) {
-            LOG.warn("Failure during execution", e);
-            connector.rollback();
-            throw e;
-        } finally {
-            connectionPool.release(connector);
-        }
-    }
+		IsisTransactionManager transactionManager = IsisContext
+				.getTransactionManager();
+		MessageBroker messageBroker = IsisContext.getMessageBroker();
+		UpdateNotifier updateNotifier = IsisContext.getUpdateNotifier();
+		SqlExecutionContext context = new SqlExecutionContext(connector,
+				transactionManager, messageBroker, updateNotifier);
+		try {
+			for (PersistenceCommand command : commands) {
+				command.execute(context);
+			}
+			connector.commit();
+		} catch (IsisException e) {
+			LOG.warn("Failure during execution", e);
+			connector.rollback();
+			throw e;
+		} finally {
+			connectionPool.release(connector);
+		}
+	}
 
-    public boolean flush(final PersistenceCommand[] commands) {
-        return false;
-    }
+	public boolean flush(final PersistenceCommand[] commands) {
+		return false;
+	}
 
-    public ObjectAdapter[] getInstances(final PersistenceQuery query) {
-        if (query instanceof PersistenceQueryFindByTitle) {
-            return findByTitle((PersistenceQueryFindByTitle) query);
-        } else if (query instanceof PersistenceQueryFindAllInstances) {
-            return getAllInstances((PersistenceQueryFindAllInstances) query);
-        } else if (query instanceof PersistenceQueryFindByPattern)  {
-            return findByPattern((PersistenceQueryFindByPattern) query);
-        } else {
-            throw new SqlObjectStoreException("Query type not supported: " + query);
-        }
-    }
+	@Override
+	public ObjectAdapter[] getInstances(final PersistenceQuery query) {
+		if (query instanceof PersistenceQueryFindByTitle) {
+			return findByTitle((PersistenceQueryFindByTitle) query);
+		} else if (query instanceof PersistenceQueryFindAllInstances) {
+			return getAllInstances((PersistenceQueryFindAllInstances) query);
+		} else if (query instanceof PersistenceQueryFindByPattern) {
+			return findByPattern((PersistenceQueryFindByPattern) query);
+		} else {
+			throw new SqlObjectStoreException("Query type not supported: "
+					+ query);
+		}
+	}
 
-    private ObjectAdapter[] findByPattern(final PersistenceQueryFindByPattern query) {
-        ObjectSpecification specification = query.getSpecification();
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(specification, connector);
-        ObjectAdapter instances[] = mapper.getInstances(connector, specification, query);
-        connectionPool.release(connector);
-        return instances;
-    }
+	private ObjectAdapter[] findByPattern(
+			final PersistenceQueryFindByPattern query) {
+		ObjectSpecification specification = query.getSpecification();
+		DatabaseConnector connector = connectionPool.acquire();
+		ObjectMapping mapper = objectMappingLookup.getMapping(specification,
+				connector);
+		ObjectAdapter instances[] = mapper.getInstances(connector,
+				specification, query);
+		connectionPool.release(connector);
+		return instances;
+	}
 
-    private ObjectAdapter[] getAllInstances(final PersistenceQueryFindAllInstances criteria) {
-        ObjectSpecification spec = criteria.getSpecification();
-        return allInstances(spec);
-    }
+	private ObjectAdapter[] getAllInstances(
+			final PersistenceQueryFindAllInstances criteria) {
+		ObjectSpecification spec = criteria.getSpecification();
+		return allInstances(spec);
+	}
 
-    private ObjectAdapter[] allInstances(ObjectSpecification spec) {
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
-        ObjectAdapter[] instances = mapper.getInstances(connector, spec);
-        Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
-        for (int i = 0; i < instances.length; i++) {
-            matchingInstances.addElement(instances[i]);
-        }
-        connectionPool.release(connector);
-        ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances.size()];
-        matchingInstances.copyInto(instanceArray);
-        return instanceArray;
-    }
+	private ObjectAdapter[] allInstances(ObjectSpecification spec) {
+		DatabaseConnector connector = connectionPool.acquire();
+		ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
+		ObjectAdapter[] instances = mapper.getInstances(connector, spec);
+		Vector<ObjectAdapter> matchingInstances = new Vector<ObjectAdapter>();
+		for (int i = 0; i < instances.length; i++) {
+			matchingInstances.addElement(instances[i]);
+		}
+		connectionPool.release(connector);
+		ObjectAdapter[] instanceArray = new ObjectAdapter[matchingInstances
+				.size()];
+		matchingInstances.copyInto(instanceArray);
+		return instanceArray;
+	}
 
-    private ObjectAdapter[] findByTitle(final PersistenceQueryFindByTitle criteria) {
-        ObjectSpecification spec = criteria.getSpecification();
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
+	private ObjectAdapter[] findByTitle(
+			final PersistenceQueryFindByTitle criteria) {
+		ObjectSpecification spec = criteria.getSpecification();
+		DatabaseConnector connector = connectionPool.acquire();
+		ObjectMapping mapper = objectMappingLookup.getMapping(spec, connector);
 
-        ObjectAdapter[] instances = mapper.getInstances(connector, spec, criteria.getTitle());
-        connectionPool.release(connector);
-        return instances;
-    }
+		ObjectAdapter[] instances = mapper.getInstances(connector, spec,
+				criteria.getTitle());
+		connectionPool.release(connector);
+		return instances;
+	}
 
-    public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
-        DatabaseConnector connection = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(hint, connection);
-        ObjectAdapter object = mapper.getObject(connection, oid, hint);
-        connectionPool.release(connection);
-        return object;
-    }
+	@Override
+	public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) {
+		DatabaseConnector connection = connectionPool.acquire();
+		ObjectMapping mapper = objectMappingLookup.getMapping(hint, connection);
+		ObjectAdapter object = mapper.getObject(connection, oid, hint);
+		connectionPool.release(connection);
+		return object;
+	}
 
-    public Oid getOidForService(String name) {
-        DatabaseConnector connector = connectionPool.acquire();
+	@Override
+	public Oid getOidForService(String name) {
+		DatabaseConnector connector = connectionPool.acquire();
 
-        
-        StringBuffer sql = new StringBuffer();
-        sql.append("select ");
-        sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
-        sql.append(" from ");
-        sql.append(Sql.identifier(TABLE_NAME));
-        sql.append(" where ");
-        sql.append(Sql.identifier(ID_COLUMN));
-        sql.append(" = ");
-        sql.append(Sql.escapeAndQuoteValue(name));
-        
-        Results results = connector.select(sql.toString());
-        if (results.next()) {
-            int key = results.getInt(PRIMARYKEY_COLUMN);
-            connectionPool.release(connector);
-            return SqlOid.createPersistent(name, new IntegerPrimaryKey(key));
-        } else {
-            connectionPool.release(connector);
-            return null;
-        }
-    }
+		StringBuffer sql = new StringBuffer();
+		sql.append("select ");
+		sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
+		sql.append(" from ");
+		sql.append(Sql.identifier(TABLE_NAME));
+		sql.append(" where ");
+		sql.append(Sql.identifier(ID_COLUMN));
+		sql.append(" = ?");
+		// sql.append(Sql.escapeAndQuoteValue(name));
+		connector.addToQueryValues(name);
 
-    public boolean hasInstances(final ObjectSpecification spec) {
-        DatabaseConnector connection = connectionPool.acquire();
-        ObjectMapping mapper = objectMappingLookup.getMapping(spec, connection);
-        boolean hasInstances = mapper.hasInstances(connection, spec);
-        connectionPool.release(connection);
-        return hasInstances;
-    }
+		Results results = connector.select(sql.toString());
+		if (results.next()) {
+			int key = results.getInt(PRIMARYKEY_COLUMN);
+			connectionPool.release(connector);
+			return SqlOid.createPersistent(name, new IntegerPrimaryKey(key));
+		} else {
+			connectionPool.release(connector);
+			return null;
+		}
+	}
 
-    public boolean isFixturesInstalled() {
-        return isInitialized;
-    }
+	@Override
+	public boolean hasInstances(final ObjectSpecification spec) {
+		DatabaseConnector connection = connectionPool.acquire();
+		ObjectMapping mapper = objectMappingLookup.getMapping(spec, connection);
+		boolean hasInstances = mapper.hasInstances(connection, spec);
+		connectionPool.release(connection);
+		return hasInstances;
+	}
 
-    public void open() {
-        Sql.setMetaData(connectionPool.acquire().getMetaData());
-        
-        DebugString debug = new DebugString();
-        connectionPool.debug(debug);
-        LOG.info("Database: " + debug);
-        
-        objectMappingLookup.init();
+	@Override
+	public boolean isFixturesInstalled() {
+		return isInitialized;
+	}
 
-        DatabaseConnector connector = connectionPool.acquire();
-        isInitialized = connector.hasTable(Sql.identifier(TABLE_NAME));
-        if (!isInitialized) {
-            StringBuffer sql = new StringBuffer();
-            sql.append("create table ");
-            sql.append(Sql.identifier(TABLE_NAME));
-            sql.append(" (");
-            sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
-            sql.append(" int, ");
-            sql.append(Sql.identifier(ID_COLUMN));
-            sql.append(" varchar(255)");
-            sql.append(")");
-            connector.update(sql.toString());
-        }
-    }
+	@Override
+	public void open() {
+		Sql.setMetaData(connectionPool.acquire().getMetaData());
 
-    public String name() {
-        return "SQL Object Store";
-    }
+		DebugString debug = new DebugString();
+		connectionPool.debug(debug);
+		LOG.info("Database: " + debug);
 
-    public void registerService(final String name, final Oid oid) {
-        DatabaseConnector connector = connectionPool.acquire();
-        String soid = ((SqlOid) oid).getPrimaryKey().stringValue();
-        
-        StringBuffer sql = new StringBuffer();
-        sql.append("insert into ");
-        sql.append(Sql.identifier(TABLE_NAME));
-        sql.append(" (");
-        sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
-        sql.append(", ");
-        sql.append(Sql.identifier(ID_COLUMN));
-        sql.append(") values (");
-        sql.append(soid);
-        sql.append(", ");
-        sql.append(Sql.escapeAndQuoteValue(name));
-        sql.append(")");
-        connector.insert(sql.toString());
-        connectionPool.release(connector);
-    }
+		objectMappingLookup.init();
 
-    public void reset() {}
+		DatabaseConnector connector = connectionPool.acquire();
+		isInitialized = connector.hasTable(Sql.identifier(TABLE_NAME));
+		if (!isInitialized) {
+			StringBuffer sql = new StringBuffer();
+			sql.append("create table ");
+			sql.append(Sql.identifier(TABLE_NAME));
+			sql.append(" (");
+			sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
+			sql.append(" int, ");
+			sql.append(Sql.identifier(ID_COLUMN));
+			sql.append(" varchar(255)");
+			sql.append(")");
+			connector.update(sql.toString());
+		}
+	}
 
-    public void resolveField(final ObjectAdapter object, final ObjectAssociation field) {
-        if (field.isOneToManyAssociation()) {
-            DatabaseConnector connection = connectionPool.acquire();
-            ObjectSpecification spec = object.getSpecification();
-            ObjectMapping mapper = objectMappingLookup.getMapping(spec, connection);
-            mapper.resolveCollection(connection, object, field);
-            connectionPool.release(connection);
-        } else {
-            resolveImmediately(field.get(object));
-        }
-    }
+	@Override
+	public String name() {
+		return "SQL Object Store";
+	}
 
-    public void resolveImmediately(final ObjectAdapter object) {
-        DatabaseConnector connector = connectionPool.acquire();
-        ObjectMapping mapping = objectMappingLookup.getMapping(object, connector);
-        mapping.resolve(connector, object);
-        connectionPool.release(connector);
-    }
+	@Override
+	public void registerService(final String name, final Oid oid) {
+		DatabaseConnector connector = connectionPool.acquire();
+		// String soid = ((SqlOid) oid).getPrimaryKey().stringValue();
 
-    public void setConnectionPool(final DatabaseConnectorPool connectionPool) {
-        this.connectionPool = connectionPool;
-    }
+		StringBuffer sql = new StringBuffer();
+		sql.append("insert into ");
+		sql.append(Sql.identifier(TABLE_NAME));
+		sql.append(" (");
+		sql.append(Sql.identifier(PRIMARYKEY_COLUMN));
+		sql.append(", ");
+		sql.append(Sql.identifier(ID_COLUMN));
+		sql.append(") values (?,?)");
+		// sql.append(soid);
+		// sql.append(", ");
+		// sql.append(Sql.escapeAndQuoteValue(name));
+		// sql.append(")");
 
-    public void setMapperLookup(final ObjectMappingLookup mapperLookup) {
-        this.objectMappingLookup = mapperLookup;
-    }
+		connector.addToQueryValues(((SqlOid) oid).getPrimaryKey()
+				.naturalValue());
+		connector.addToQueryValues(name);
 
-    public void close() {
-        objectMappingLookup.shutdown();
-        // DatabaseConnector connection = connectionPool.acquire();
-        // connection.update("SHUTDOWN");
-        connectionPool.shutdown();
-    }
+		connector.insert(sql.toString());
+		connectionPool.release(connector);
+	}
 
-    public void startTransaction() {}
+	@Override
+	public void reset() {
+	}
+
+	@Override
+	public void resolveField(final ObjectAdapter object,
+			final ObjectAssociation field) {
+		if (field.isOneToManyAssociation()) {
+			DatabaseConnector connection = connectionPool.acquire();
+			ObjectSpecification spec = object.getSpecification();
+			ObjectMapping mapper = objectMappingLookup.getMapping(spec,
+					connection);
+			mapper.resolveCollection(connection, object, field);
+			connectionPool.release(connection);
+		} else {
+			resolveImmediately(field.get(object));
+		}
+	}
+
+	@Override
+	public void resolveImmediately(final ObjectAdapter object) {
+		DatabaseConnector connector = connectionPool.acquire();
+		ObjectMapping mapping = objectMappingLookup.getMapping(object,
+				connector);
+		mapping.resolve(connector, object);
+		connectionPool.release(connector);
+	}
+
+	public void setConnectionPool(final DatabaseConnectorPool connectionPool) {
+		this.connectionPool = connectionPool;
+	}
+
+	public void setMapperLookup(final ObjectMappingLookup mapperLookup) {
+		this.objectMappingLookup = mapperLookup;
+	}
+
+	@Override
+	public void close() {
+		objectMappingLookup.shutdown();
+		// DatabaseConnector connection = connectionPool.acquire();
+		// connection.update("SHUTDOWN");
+		connectionPool.shutdown();
+	}
+
+	@Override
+	public void startTransaction() {
+	}
 
 }
