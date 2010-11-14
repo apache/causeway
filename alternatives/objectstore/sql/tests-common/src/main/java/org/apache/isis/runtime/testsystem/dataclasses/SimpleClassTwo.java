@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * 
  */
@@ -27,23 +26,27 @@ import org.apache.isis.applib.AbstractDomainObject;
 
 /**
  * @author Kevin
- *
+ * 
  */
 public class SimpleClassTwo extends AbstractDomainObject {
-    public String title() {
-        return text;
-    }
-    // {{ String type
-    private String text;
-    public String getText() {
-        return text;
-    }
-    public void setText(final String text) {
-        this.text = text;
-    }
-    // }}
-    
-    // {{ Value
+	public String title() {
+		return text;
+	}
+
+	// {{ String type
+	public String text;
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(final String text) {
+		this.text = text;
+	}
+
+	// }}
+
+	// {{ Value
 	private Integer integer;
 
 	public Integer getValue() {
@@ -54,6 +57,5 @@ public class SimpleClassTwo extends AbstractDomainObject {
 		this.integer = integer;
 	}
 	// }}
-
 
 }

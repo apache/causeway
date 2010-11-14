@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.runtime.testsystem.dataclasses;
 
 import java.util.ArrayList;
@@ -41,40 +40,47 @@ import org.apache.isis.extensions.sql.objectstore.common.SqlIntegrationTestCommo
  * It's properties are stored and retrieved using the persistor, to confirm
  * accurate persistence behaviour.
  * 
- * Each property here requires an equivalent test in {@link SqlIntegrationTestCommon}
+ * Each property here requires an equivalent test in
+ * {@link SqlIntegrationTestCommon}
  * 
  * @author Kevin Meyer
- *
+ * 
  */
 
-public class SqlDataClass extends AbstractDomainObject{
-    public String title() {
-        return string;
-    }
+public class SqlDataClass extends AbstractDomainObject {
+	public String title() {
+		return string;
+	}
 
-    // Isis Date Type
-    // {{ Date
-    private Date date;
-    public Date getDate() {
-        return date;
-    }
-    public void setDate(final Date date) {
-        this.date = date;
-    }
-    // }}
+	// Isis Date Type
+	// {{ Date
+	private Date date;
 
-    // {{ String type
-    private String string;
-    public String getString() {
-        return string;
-    }
-    public void setString(final String string) {
-        this.string = string;
-    }
-    // }}
+	public Date getDate() {
+		return date;
+	}
 
-    // SQL Date Type
-    // {{ SqlDate
+	public void setDate(final Date date) {
+		this.date = date;
+	}
+
+	// }}
+
+	// {{ String type
+	private String string;
+
+	public String getString() {
+		return string;
+	}
+
+	public void setString(final String string) {
+		this.string = string;
+	}
+
+	// }}
+
+	// SQL Date Type
+	// {{ SqlDate
 	private java.sql.Date sqlDate;
 
 	@MemberOrder(sequence = "1")
@@ -85,6 +91,7 @@ public class SqlDataClass extends AbstractDomainObject{
 	public void setSqlDate(final java.sql.Date sqlDate) {
 		this.sqlDate = sqlDate;
 	}
+
 	// }}
 
 	// {{ Money
@@ -98,6 +105,7 @@ public class SqlDataClass extends AbstractDomainObject{
 	public void setMoney(final Money money) {
 		this.money = money;
 	}
+
 	// }}
 
 	// {{ DateTime
@@ -111,6 +119,7 @@ public class SqlDataClass extends AbstractDomainObject{
 	public void setDateTime(final DateTime dateTime) {
 		this.dateTime = dateTime;
 	}
+
 	// }}
 
 	// {{ TimeStamp
@@ -124,68 +133,82 @@ public class SqlDataClass extends AbstractDomainObject{
 	public void setTimeStamp(final TimeStamp timeStamp) {
 		this.timeStamp = timeStamp;
 	}
-	// }}
 
+	// }}
 
 	// Color, Image, Password, Percentage, Time
 	// {{ Time
 	private Time time;
+
 	@MemberOrder(sequence = "1")
 	public Time getTime() {
 		return time;
 	}
+
 	public void setTime(final Time time) {
 		this.time = time;
 	}
-	// }}
 
+	// }}
 
 	// {{ Color
 	private Color color;
+
 	@MemberOrder(sequence = "1")
 	public Color getColor() {
 		return color;
 	}
+
 	public void setColor(final Color color) {
 		this.color = color;
 	}
+
 	// }}
-	
+
 	// {{ Image
 	private Image image;
+
 	@MemberOrder(sequence = "1")
 	public Image getImage() {
 		return image;
 	}
+
 	public void setImage(final Image image) {
 		this.image = image;
 	}
+
 	// }}
 
 	// {{ Password
 	private Password password;
+
 	@MemberOrder(sequence = "1")
 	public Password getPassword() {
 		return password;
 	}
+
 	public void setPassword(final Password password) {
 		this.password = password;
 	}
+
 	// }}
 
 	// {{ Percentage
 	private Percentage percentage;
+
 	@MemberOrder(sequence = "1")
 	public Percentage getPercentage() {
 		return percentage;
 	}
+
 	public void setPercentage(final Percentage percentage) {
 		this.percentage = percentage;
 	}
+
 	// }}
 
 	// {{ SimpleClasses
-	private List<SimpleClass> simpleClasses1 = new ArrayList<SimpleClass>();
+	public List<SimpleClass> simpleClasses1 = new ArrayList<SimpleClass>();
 
 	@MemberOrder(sequence = "1")
 	public List<SimpleClass> getSimpleClasses1() {
@@ -195,6 +218,7 @@ public class SqlDataClass extends AbstractDomainObject{
 	public void setSimpleClasses1(final List<SimpleClass> simpleClasses) {
 		this.simpleClasses1 = simpleClasses;
 	}
+
 	public void addToSimpleClasses1(final SimpleClass simpleClass) {
 		// check for no-op
 		if (simpleClass == null || getSimpleClasses1().contains(simpleClass)) {
@@ -219,8 +243,10 @@ public class SqlDataClass extends AbstractDomainObject{
 
 	protected void onAddToSimpleClasses1(final SimpleClass simpleClass) {
 	}
+
 	protected void onRemoveFromSimpleClasses1(final SimpleClass simpleClass) {
 	}
+
 	// }}
 
 	// {{ SimpleClasses2
@@ -235,6 +261,7 @@ public class SqlDataClass extends AbstractDomainObject{
 	public void setSimpleClasses2(final List<SimpleClass> simpleClasses) {
 		this.simpleClasses2 = simpleClasses;
 	}
+
 	public void addToSimpleClasses2(final SimpleClass simpleClass) {
 		// check for no-op
 		if (simpleClass == null || getSimpleClasses2().contains(simpleClass)) {
@@ -259,16 +286,20 @@ public class SqlDataClass extends AbstractDomainObject{
 
 	protected void onAddToSimpleClasses2(final SimpleClass simpleClass) {
 	}
+
 	protected void onRemoveFromSimpleClasses2(final SimpleClass simpleClass) {
 	}
+
 	/**/
 	// }}
-	
-    // {{ SimpleClassTwo
+
+	// {{ SimpleClassTwo
 	private SimpleClassTwo simplyClassTwo;
+
 	public SimpleClassTwo getSimpleClassTwo() {
 		return simplyClassTwo;
 	}
+
 	public void setSimpleClassTwo(final SimpleClassTwo simpleClassTwo) {
 		this.simplyClassTwo = simpleClassTwo;
 	}

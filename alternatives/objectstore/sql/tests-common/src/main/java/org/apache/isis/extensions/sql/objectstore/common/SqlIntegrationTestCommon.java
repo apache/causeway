@@ -273,6 +273,19 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 		getSingletonInstance().setState(1);
 	}
 
+	public void testSimpleClassCollection1Lazy() {
+		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+		List<SimpleClass> collection = sqlDataClass.simpleClasses1;// getSimpleClasses1();
+
+		assertEquals("collection size is not equal!", collection.size(),
+				simpleClassList1.size());
+		/*
+		 * if (collection.size() == 0) { SqlDataClassFactory factory =
+		 * SqlIntegrationTestSingleton .getSqlDataClassFactory();
+		 * factory.resolve(sqlDataClass); }
+		 */
+	}
+
 	/**
 	 * Test {@link SqlDataClass} {@link String} field.
 	 * 
@@ -417,17 +430,12 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	 * string); } }
 	 */
 
-	public void testSimpleClassCollection1Lazy() {
+	public void testSingleReferenceLazy() {
 		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
-		List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
-
-		// assertEquals("collection size is not equal!",
-		// SqlIntegrationTestCommon.simpleClassList1.size(),
-		// collection.size());
-		if (collection.size() == 0) {
-			SqlDataClassFactory factory = SqlIntegrationTestSingleton
-					.getSqlDataClassFactory();
-			factory.resolve(sqlDataClass);
+		SimpleClassTwo a = sqlDataClass.getSimpleClassTwo();
+		if (getProperties().getProperty("isis.persistence") != "in-memory") {
+			assertEquals(null, a.text); // must check direct value, as
+			// framework can auto-resolve, if you use getText()
 		}
 	}
 
@@ -468,22 +476,18 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 		}
 	}
 
-	/*
-	 * public void testSingleReferenceLazy() { SqlDataClass sqlDataClass =
-	 * SqlIntegrationTestSingleton.getPerson(); SimpleClassTwo a =
-	 * sqlDataClass.getSimpleClassTwo(); if
-	 * (getProperties().getProperty("isis.persistence") != "in-memory") {
-	 * assertEquals(null, a.getText()); } }
-	 */
-
-	/*
-	 * public void testSimpleClassTwoReferenceLazy() { SqlDataClass sqlDataClass
-	 * = SqlIntegrationTestSingleton.getPerson(); List<SimpleClass> collection =
-	 * sqlDataClass.getSimpleClasses1(); if
-	 * (getProperties().getProperty("isis.persistence") != "in-memory") { for
-	 * (SimpleClass simpleClass : collection) { SimpleClassTwo a =
-	 * simpleClass.getSimpleClassTwoA(); assertEquals(null, a.getText()); } } }
-	 */
+	public void testSimpleClassTwoReferenceLazy() {
+		SqlDataClass sqlDataClass = SqlIntegrationTestSingleton.getPerson();
+		List<SimpleClass> collection = sqlDataClass.getSimpleClasses1();
+		if (getProperties().getProperty("isis.persistence") != "in-memory") {
+			for (SimpleClass simpleClass : collection) {
+				SimpleClassTwo a = simpleClass.getSimpleClassTwoA();
+				assertEquals(null, a.text); // must check direct value, as
+											// framework can auto-resolve, if
+											// you use getText()
+			}
+		}
+	}
 
 	public void testSingleReferenceResolve() {
 		SqlDataClassFactory factory = SqlIntegrationTestSingleton
