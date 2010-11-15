@@ -1,52 +1,53 @@
-package org.apache.isis.extensions.bdd.fitnesse;
+package net.sf.isiscontrib.bdd.fitnesse;
 
 import java.util.Date;
 
-import org.apache.isis.extensions.bdd.common.Story;
-import org.apache.isis.extensions.bdd.common.StoryValueException;
-import org.apache.isis.extensions.bdd.common.fixtures.SetUpObjectsPeer;
-import org.apache.isis.extensions.bdd.common.fixtures.CheckListPeer.CheckMode;
-import org.apache.isis.extensions.bdd.common.fixtures.perform.Perform;
-import org.apache.isis.extensions.bdd.common.parsers.JavaUtilDateParser;
-import org.apache.isis.extensions.bdd.common.story.bootstrapping.InitNakedObjects;
-import org.apache.isis.extensions.bdd.fitnesse.internal.FitnesseConfigurationBuilder;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.AliasItemsInListForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.AliasServicesForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.CheckListForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.CheckSpecificationsLoadedForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.DebugClockForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.DebugObjectStoreForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.DebugServicesForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.SetUpObjectsForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.UsingNakedObjectsViewerForFitNesse;
-import org.apache.isis.metamodel.config.ConfigurationBuilder;
+import net.sf.isiscontrib.bdd.fitnesse.internal.FitnesseConfigurationBuilder;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.AliasItemsInListForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.AliasServicesForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.CheckListForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.CheckSpecificationsLoadedForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.DebugClockForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.DebugObjectStoreForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.DebugServicesForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.SetUpObjectsForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.UsingIsisViewerForFitNesse;
+
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.IsisSystem;
+import org.apache.isis.viewer.bdd.common.Story;
+import org.apache.isis.viewer.bdd.common.StoryValueException;
+import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
+import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
+import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
+import org.apache.isis.viewer.bdd.common.parsers.JavaUtilDateParser;
+import org.apache.isis.viewer.bdd.common.story.bootstrapping.IsisInitializer;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
 
 public class StoryFixture extends DoFixture {
 
-	private static ThreadLocal<Story> storyThreadLocal = new ThreadLocal<Story>() {
-		@Override
-		protected Story initialValue() {
-			return new Story();
-		}
-	};
-	
-	public static Story getStory() {
-		return storyThreadLocal.get();
-	}
+    private static ThreadLocal<Story> storyThreadLocal = new ThreadLocal<Story>() {
+        @Override
+        protected Story initialValue() {
+            return new Story();
+        }
+    };
+
+    public static Story getStory() {
+        return storyThreadLocal.get();
+    }
 
     public StoryFixture() {
         registerParseDelegate(java.util.Date.class, new JavaUtilDateParser());
     }
 
-    public void initNakedObjects() {
-        InitNakedObjects initializer = new InitNakedObjects(getStory(), newConfigurationBuilder(), getDeploymentType());
-		initializer.initialize();
+    public void initIsis() {
+        IsisInitializer initializer = new IsisInitializer(getStory(), newConfigurationBuilder(), getDeploymentType());
+        initializer.initialize();
     }
 
     public void logonAs(final String userName) {
@@ -54,42 +55,41 @@ public class StoryFixture extends DoFixture {
     }
 
     public void logonAsWithRoles(final String userName, final String roleList) {
-    	getStory().logonAsWithRoles(userName, roleList);
+        getStory().logonAsWithRoles(userName, roleList);
     }
 
     /**
      * Switch user, specifying no roles.
      */
     public void switchUser(final String userName) {
-    	getStory().switchUser(userName);
+        getStory().switchUser(userName);
     }
 
     /**
      * Switch user, specifying roles.
      */
     public void switchUserWithRoles(final String userName, final String roleList) {
-    	getStory().switchUserWithRoles(userName, roleList);
+        getStory().switchUserWithRoles(userName, roleList);
     }
 
     public Fixture aliasServices() {
         return new AliasServicesForFitNesse(getStory());
     }
 
-    
     public void dateIsNow(final Date dateAndTime) {
         getStory().dateIs(dateAndTime);
     }
 
     public void dateIs(final Date dateAndTime) {
-    	getStory().timeIs(dateAndTime);
+        getStory().timeIs(dateAndTime);
     }
 
     public void timeIsNow(final Date dateAndTime) {
-    	getStory().timeIs(dateAndTime);
+        getStory().timeIs(dateAndTime);
     }
 
     public void timeIs(final Date dateAndTime) {
-    	getStory().timeIs(dateAndTime);
+        getStory().timeIs(dateAndTime);
     }
 
     public void shutdownNakedObjects() {
@@ -119,8 +119,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture setUpTransientObjects(final String className) {
-        return new SetUpObjectsForFitNesse(getStory(), className, 
-                SetUpObjectsPeer.Mode.DO_NOT_PERSIST);
+        return new SetUpObjectsForFitNesse(getStory(), className, SetUpObjectsPeer.Mode.DO_NOT_PERSIST);
     }
 
     public Fixture usingNakedObjectsViewer() {
@@ -139,7 +138,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture usingNakedObjectsViewer(final Perform.Mode mode) {
-        return new UsingNakedObjectsViewerForFitNesse(getStory(), mode);
+        return new UsingIsisViewerForFitNesse(getStory(), mode);
     }
 
     public Fixture checkListContains(final String listAlias) {
@@ -169,14 +168,13 @@ public class StoryFixture extends DoFixture {
         getStory().runViewer();
     }
 
-
     public String getConfigDirectory() {
         return getStory().getConfigDirectory();
     }
+
     public void setConfigDirectory(final String configDirectory) {
         getStory().setConfigDirectory(configDirectory);
     }
-
 
     public void enableExploration() {
         getStory().enableExploration();
@@ -207,14 +205,13 @@ public class StoryFixture extends DoFixture {
     }
 
     public void aliasServiceAs(final String alias, final String serviceClassName) {
-    	try {
-			getStory().registerService(alias, serviceClassName);
-		} catch (StoryValueException ex) {
-			throw new StoryFitNesseException(ex);
-		}
+        try {
+            getStory().registerService(alias, serviceClassName);
+        } catch (StoryValueException ex) {
+            throw new StoryFitNesseException(ex);
+        }
     }
 
-    
     // /////////////////////////////////////////////////////////
     // System
     // /////////////////////////////////////////////////////////
@@ -223,9 +220,8 @@ public class StoryFixture extends DoFixture {
         return getStory().getSystem();
     }
 
-    public void setNakedObjectsSystem(
-            final IsisSystem nakedObjectsSystem) {
-        getStory().setNakedObjectsSystem(nakedObjectsSystem);
+    public void setIsisSystem(final IsisSystem isisSystem) {
+        getStory().setIsisSystem(isisSystem);
     }
 
     public InstallerLookup getInstallerLookup() {
@@ -237,9 +233,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public ConfigurationBuilder newConfigurationBuilder() {
-    	return new FitnesseConfigurationBuilder(
-    			getConfigDirectory());
+        return new FitnesseConfigurationBuilder(getConfigDirectory());
     }
-    
-    
+
 }

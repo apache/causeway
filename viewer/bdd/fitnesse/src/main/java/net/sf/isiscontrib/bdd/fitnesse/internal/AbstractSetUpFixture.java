@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.bdd.fitnesse.internal;
+package net.sf.isiscontrib.bdd.fitnesse.internal;
 
 import fitlibrary.SetUpFixture;
 

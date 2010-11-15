@@ -10,7 +10,7 @@ import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.Constants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
-import org.apache.isis.viewer.bdd.common.fixtures.UsingNakedObjectsViewerPeer;
+import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.bindings.CellBindingForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.perform.StoryCellForConcordion;
@@ -18,7 +18,7 @@ import org.apache.isis.viewer.bdd.concordion.internal.fixtures.perform.StoryCell
 import com.google.common.collect.Lists;
 
 public class UsingIsisViewerForConcordion extends
-		AbstractFixture<UsingNakedObjectsViewerPeer> {
+		AbstractFixture<UsingIsisViewerPeer> {
 
 	private final List<String> argumentCells = new ArrayList<String>();
 
@@ -54,7 +54,7 @@ public class UsingIsisViewerForConcordion extends
 			final CellBinding performBinding,
 			final CellBinding onMemberBinding, final CellBinding thatItBinding,
 			final CellBinding arg0Binding) {
-		super(new UsingNakedObjectsViewerPeer(aliasesRegistry, mode,
+		super(new UsingIsisViewerPeer(aliasesRegistry, mode,
 				onObjectBinding, aliasResultAsBinding, performBinding,
 				onMemberBinding, thatItBinding, arg0Binding));
 	}

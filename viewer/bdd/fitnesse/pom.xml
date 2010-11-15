@@ -3,17 +3,16 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.apache.isis.viewer</groupId>
-		<artifactId>bdd</artifactId>
+		<groupId>org.apache.isis</groupId>
+		<artifactId>isis-parent</artifactId>
 		<version>0.1-SNAPSHOT</version>
 	</parent>
 
+    <groupId>net.sf.isis-contrib</groupId>
 	<artifactId>bdd-fitnesse</artifactId>
-	<name>BDD Viewers: FitNesse</name>
-
-    <properties>
-		<siteBaseDir>../../..</siteBaseDir>
-	</properties>
+    <version>0.1-SNAPSHOT</version>
+    
+	<name>FitNesse Integration for Isis</name>
 
 	<build>
 		<plugins>
@@ -26,8 +25,9 @@
 	</build>
 
 	<properties>
-		<fitnesse.version>20100103</fitnesse.version>
+		<fitnesse.version>20101101</fitnesse.version>
 		<fitlibrary.version>20091020</fitlibrary.version>
+        <isis.version>0.1-SNAPSHOT</isis.version>
 	</properties>
 
 	<dependencyManagement>
@@ -35,21 +35,27 @@
 
 			<!-- 3rd party dependencies -->
 
-			<!-- download from http://fitnesse.org/fitnesse.jar?responder=releaseDownload&release=20100103 
-				and install using mvn install:install-file -->
-			<dependency>
+			<!-- download from http://fitnesse.org/fitnesse.jar?responder=releaseDownload&release=20101101 
+				and install using mvn install:install-file -D groupId=org.fitnesse -D artifactId=fitnesse -D version=20101101 -D packaging=jar -D file=fitnesse.jar -->
+    		<dependency>
 				<groupId>org.fitnesse</groupId>
 				<artifactId>fitnesse</artifactId>
 				<version>${fitnesse.version}</version>
 			</dependency>
 
 			<!-- download from http://sourceforge.net/projects/fitlibrary/files/ and 
-				install using mvn install:install-file -->
+				install using mvn install:install-file -D groupId=org.fitnesse -D artifactId=fitlibrary -D version=20091020 -D packaging=jar -D file=fitlibrary.jar -->
 			<dependency>
 				<groupId>org.fitnesse</groupId>
 				<artifactId>fitlibrary</artifactId>
 				<version>${fitlibrary.version}</version>
 			</dependency>
+
+            <dependency>
+    			<groupId>org.apache.isis.viewer</groupId>
+    			<artifactId>bdd-common</artifactId>
+    			<version>${isis.version}</version>
+            </dependency>
 
 		</dependencies>
 	</dependencyManagement>
@@ -58,19 +64,16 @@
 		<dependency>
 			<groupId>org.apache.isis.viewer</groupId>
 			<artifactId>bdd-common</artifactId>
-			<type>jar</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.fitnesse</groupId>
 			<artifactId>fitnesse</artifactId>
-			<type>jar</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.fitnesse</groupId>
 			<artifactId>fitlibrary</artifactId>
-			<type>jar</type>
 		</dependency>
 
 	</dependencies>

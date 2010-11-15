@@ -1,48 +1,45 @@
-package org.apache.isis.extensions.bdd.fitnesse.internal.fixtures;
+package net.sf.isiscontrib.bdd.fitnesse.internal.fixtures;
 
 import java.util.List;
 
-import org.apache.isis.extensions.bdd.common.AliasRegistry;
-import org.apache.isis.extensions.bdd.common.CellBinding;
-import org.apache.isis.extensions.bdd.common.Constants;
-import org.apache.isis.extensions.bdd.common.StoryValueException;
-import org.apache.isis.extensions.bdd.common.fixtures.CheckListPeer;
-import org.apache.isis.extensions.bdd.common.fixtures.CheckListPeer.CheckMode;
-import org.apache.isis.extensions.bdd.fitnesse.internal.AbstractFixture;
-import org.apache.isis.extensions.bdd.fitnesse.internal.CellBindingForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.util.FitnesseUtil;
-import org.apache.isis.metamodel.adapter.ObjectAdapter;
+import net.sf.isiscontrib.bdd.fitnesse.internal.AbstractFixture;
+import net.sf.isiscontrib.bdd.fitnesse.internal.CellBindingForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
+
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.viewer.bdd.common.AliasRegistry;
+import org.apache.isis.viewer.bdd.common.CellBinding;
+import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.StoryValueException;
+import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer;
+import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
 
 import fit.Fixture;
 import fit.Parse;
 
 public class CheckListForFitNesse extends AbstractFixture<CheckListPeer> {
 
-    public CheckListForFitNesse(final AliasRegistry aliasesRegistry, final String listAlias,
-            final CheckMode checkMode) {
-        this(aliasesRegistry, listAlias, checkMode, CellBindingForFitNesse.builder(
-                Constants.TITLE_NAME, Constants.TITLE_HEAD).build(),
-                CellBindingForFitNesse.builder(Constants.TYPE_NAME, Constants.TYPE_HEAD)
-                .optional().build());
+    public CheckListForFitNesse(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode) {
+        this(aliasesRegistry, listAlias, checkMode, CellBindingForFitNesse.builder(Constants.TITLE_NAME,
+            Constants.TITLE_HEAD).build(), CellBindingForFitNesse.builder(Constants.TYPE_NAME, Constants.TYPE_HEAD)
+            .optional().build());
     }
 
-    protected CheckListForFitNesse(final AliasRegistry aliasesRegistry,
-            final String listAlias, final CheckMode checkMode,
-            final CellBinding titleBinding, final CellBinding typeBinding) {
+    protected CheckListForFitNesse(final AliasRegistry aliasesRegistry, final String listAlias,
+        final CheckMode checkMode, final CellBinding titleBinding, final CellBinding typeBinding) {
         super(new CheckListPeer(aliasesRegistry, listAlias, checkMode, titleBinding, typeBinding));
     }
-
 
     @Override
     public void doTable(final Parse table) {
         final Parse listAliasCell = table.parts.parts.more;
 
         try {
-			getPeer().assertIsList();
-		} catch (StoryValueException e) {
-			FitnesseUtil.exception(this, listAliasCell, e.getMessage());
-			return;
-		}
+            getPeer().assertIsList();
+        } catch (StoryValueException e) {
+            FitnesseUtil.exception(this, listAliasCell, e.getMessage());
+            return;
+        }
 
         super.doTable(table);
 
@@ -51,7 +48,6 @@ public class CheckListForFitNesse extends AbstractFixture<CheckListPeer> {
         }
     }
 
-    
     private void reportSurplus(final Parse table) {
 
         final List<ObjectAdapter> notFoundAdapters = getPeer().getNotFoundAdapters();
@@ -86,13 +82,11 @@ public class CheckListForFitNesse extends AbstractFixture<CheckListPeer> {
 
         try {
             if (!getPeer().findAndAddObject()) {
-				FitnesseUtil.exception(this, getPeer().getTitleBinding().getCurrentCell(),
-				"(not found)");
-			}
+                FitnesseUtil.exception(this, getPeer().getTitleBinding().getCurrentCell(), "(not found)");
+            }
         } catch (final Exception e) {
             reportError(row, e);
         }
     }
-
 
 }

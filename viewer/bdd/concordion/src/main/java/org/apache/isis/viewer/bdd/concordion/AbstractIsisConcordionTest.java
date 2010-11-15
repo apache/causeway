@@ -166,7 +166,7 @@ public class AbstractIsisConcordionTest {
         ConfigurationBuilderFileSystem configurationBuilder = new ConfigurationBuilderFileSystem(getConfigDirectory());
         IsisInitializer initializer = new IsisInitializer(getStory(), configurationBuilder, getDeploymentType());
         initializer.initialize();
-        return true; // any runtime exception will propogate
+        return true; // any runtime exception will propagate
     }
 
     public void aliasAs(String alias, ObjectAdapter adapter) {
@@ -323,91 +323,86 @@ public class AbstractIsisConcordionTest {
     private UsingIsisViewerForConcordion usingIsisViewer;
 
     public String usingIsisViewer(String onObject, String aliasResultAs, String perform, String usingMember) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, null, null,
-            null);
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, null, null, null);
     }
 
-    public String usingIsisViewerThat(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, null,
-            null, null);
+    public String usingIsisViewerThat(String onObject, String aliasResultAs, String perform, String usingMember,
+        String thatIt) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, null, null, null);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String arg0) {
+    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String arg0) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String arg0, String arg1) {
+    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String arg0, String arg1) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String arg0, String arg1, String arg2) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1,
-            arg2);
+    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String arg0, String arg1, String arg2) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String arg0, String arg1, String arg2, String arg3) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1,
-            arg2, arg3);
+    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String arg0, String arg1, String arg2, String arg3) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2,
+            arg3);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String arg0, String arg1, String arg2, String arg3, String arg4) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1,
-            arg2, arg3, arg4);
+    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String arg0, String arg1, String arg2, String arg3, String arg4) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2,
+            arg3, arg4);
     }
 
-    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String arg0, String arg1, String arg2, String arg3, String arg4, String arg5) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1,
-            arg2, arg3, arg4, arg5);
+    public String usingIsisViewerArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String arg0, String arg1, String arg2, String arg3, String arg4, String arg5) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, null, arg0, arg1, arg2,
+            arg3, arg4, arg5);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt, String arg0) {
+    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String thatIt, String arg0) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt, String arg0, String arg1) {
+    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String thatIt, String arg0, String arg1) {
         return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt, String arg0, String arg1, String arg2) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
-            arg1, arg2);
+    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String thatIt, String arg0, String arg1, String arg2) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1, arg2);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt, String arg0, String arg1, String arg2, String arg3) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
-            arg1, arg2, arg3);
+    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String thatIt, String arg0, String arg1, String arg2, String arg3) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1, arg2,
+            arg3);
     }
 
-    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform,
-        String usingMember, String thatIt, String arg0, String arg1, String arg2, String arg3, String arg4) {
-        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
-            arg1, arg2, arg3, arg4);
+    public String usingIsisViewerThatArgs(String onObject, String aliasResultAs, String perform, String usingMember,
+        String thatIt, String arg0, String arg1, String arg2, String arg3, String arg4) {
+        return usingIsisViewerThatArgsVarargs(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, arg1, arg2,
+            arg3, arg4);
     }
 
     private String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
         String usingMember, String thatIt, String arg0, String... remainingArgs) {
         if (executingInline()) {
             usingIsisViewer = new UsingIsisViewerForConcordion(getStory(), Perform.Mode.TEST);
-            usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
-                remainingArgs);
+            usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, remainingArgs);
             return usingIsisViewer.executeRow(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                 remainingArgs);
         } else {
             if (executingTableHeader()) {
                 usingIsisViewer = new UsingIsisViewerForConcordion(getStory(), Perform.Mode.TEST);
-                return usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt,
-                    arg0, remainingArgs);
+                return usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
+                    remainingArgs);
             } else {
                 return usingIsisViewer.executeRow(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                     remainingArgs);

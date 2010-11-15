@@ -8,10 +8,10 @@ import org.apache.isis.runtime.system.installers.IsisSystemUsingInstallers;
 import org.apache.isis.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.runtime.userprofile.inmemory.InMemoryUserProfileStoreInstaller;
 
-public class NakedObjectsSystemUsingInstallersWithinStory extends
+public class IsisSystemUsingInstallersWithinStory extends
         IsisSystemUsingInstallers {
 
-    public NakedObjectsSystemUsingInstallersWithinStory(
+    public IsisSystemUsingInstallersWithinStory(
             final DeploymentType deploymentType,
             final InstallerLookup installerLookup) {
         super(deploymentType, installerLookup);

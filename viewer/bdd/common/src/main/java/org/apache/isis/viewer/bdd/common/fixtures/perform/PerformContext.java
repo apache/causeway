@@ -9,7 +9,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
-import org.apache.isis.viewer.bdd.common.fixtures.UsingNakedObjectsViewerPeer;
+import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 
 /**
  * Represents the context for a single {@link Perform} command; in effect, a row
@@ -17,13 +17,13 @@ import org.apache.isis.viewer.bdd.common.fixtures.UsingNakedObjectsViewerPeer;
  */
 public class PerformContext {
 
-	private final UsingNakedObjectsViewerPeer peer;
+	private final UsingIsisViewerPeer peer;
 
 	private final ObjectAdapter onAdapter;
 	private final ObjectMember nakedObjectMember;
 	private final List<StoryCell> argumentCells;
 
-	public PerformContext(final UsingNakedObjectsViewerPeer peer,
+	public PerformContext(final UsingIsisViewerPeer peer,
 			final ObjectAdapter onAdapter,
 			final ObjectMember nakedObjectMember,
 			final List<StoryCell> argumentCells) {
@@ -33,7 +33,7 @@ public class PerformContext {
 		this.argumentCells = argumentCells;
 	}
 
-	public UsingNakedObjectsViewerPeer getPeer() {
+	public UsingIsisViewerPeer getPeer() {
 		return peer;
 	}
 

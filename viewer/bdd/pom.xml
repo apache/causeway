@@ -101,9 +101,7 @@
     <modules>
 	    <module>common</module>
 	    <module>concordion</module>
-        <!-- 
 	    <module>fitnesse</module>
-        -->
 	</modules>
 
 </project>

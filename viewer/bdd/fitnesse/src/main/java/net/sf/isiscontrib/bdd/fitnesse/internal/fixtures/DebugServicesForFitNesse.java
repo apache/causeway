@@ -1,8 +1,9 @@
-package org.apache.isis.extensions.bdd.fitnesse.internal.fixtures;
+package net.sf.isiscontrib.bdd.fitnesse.internal.fixtures;
 
-import org.apache.isis.extensions.bdd.common.AliasRegistry;
-import org.apache.isis.extensions.bdd.common.fixtures.DebugServicesPeer;
-import org.apache.isis.extensions.bdd.fitnesse.internal.AbstractFixture;
+import net.sf.isiscontrib.bdd.fitnesse.internal.AbstractFixture;
+
+import org.apache.isis.viewer.bdd.common.AliasRegistry;
+import org.apache.isis.viewer.bdd.common.fixtures.DebugServicesPeer;
 
 import fit.Parse;
 
@@ -23,7 +24,7 @@ public class DebugServicesForFitNesse extends AbstractFixture<DebugServicesPeer>
     }
 
     private String debugServices() {
-    	return getPeer().debugServices();
+        return getPeer().debugServices();
     }
 
 }

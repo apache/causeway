@@ -1,39 +1,41 @@
-package org.apache.isis.extensions.bdd.fitnesse.internal;
+package net.sf.isiscontrib.bdd.fitnesse.internal;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.apache.isis.extensions.bdd.common.CellBinding;
-import org.apache.isis.extensions.bdd.common.StoryCell;
-import org.apache.isis.extensions.bdd.common.fixtures.AbstractFixturePeer;
-import org.apache.isis.extensions.bdd.fitnesse.internal.fixtures.perform.StoryCellForFitNesse;
-import org.apache.isis.extensions.bdd.fitnesse.internal.util.FitnesseUtil;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.StoryCellForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
+
+import org.apache.isis.viewer.bdd.common.CellBinding;
+import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.fixtures.AbstractFixturePeer;
 
 import fit.Fixture;
 import fit.Parse;
 
 public abstract class AbstractFixture<T extends AbstractFixturePeer> extends Fixture {
 
-	private final T peer;
+    private final T peer;
 
     private Parse currentRow;
     private Parse table;
 
     protected AbstractFixture(final T fixturePeer) {
-    	this.peer = fixturePeer;
+        this.peer = fixturePeer;
     }
-    
+
     protected T getPeer() {
-    	return peer;
+        return peer;
     }
-    
+
     protected Parse getCurrentRow() {
         return currentRow;
     }
+
     protected void setCurrentRow(final Parse currentRow) {
         this.currentRow = currentRow;
     }
-    
+
     @Override
     public void doTable(final Parse table) {
         this.table = table;
@@ -43,12 +45,11 @@ public abstract class AbstractFixture<T extends AbstractFixturePeer> extends Fix
     @Override
     public void doRows(final Parse headRow) {
         for (final CellBinding binding : getPeer().getCellBindings()) {
-            ((CellBindingForFitNesse)binding).find(headRow.parts);
+            ((CellBindingForFitNesse) binding).find(headRow.parts);
         }
         for (final CellBinding binding : getPeer().getCellBindings()) {
             if (!binding.isOptional() && !binding.isFound()) {
-                FitnesseUtil.exception(this, table.parts.parts, "require '"
-                        + binding.getName() + "' column");
+                FitnesseUtil.exception(this, table.parts.parts, "require '" + binding.getName() + "' column");
             }
         }
         doRowsWithBindings(headRow);
@@ -56,10 +57,10 @@ public abstract class AbstractFixture<T extends AbstractFixturePeer> extends Fix
     }
 
     /**
-     * Hook method for logic to be done after finding bindings, and before
-     * continuing processing.
+     * Hook method for logic to be done after finding bindings, and before continuing processing.
      */
-    protected void doRowsWithBindings(final Parse headRow) {}
+    protected void doRowsWithBindings(final Parse headRow) {
+    }
 
     @Override
     public void doRow(final Parse row) {
@@ -105,7 +106,7 @@ public abstract class AbstractFixture<T extends AbstractFixturePeer> extends Fix
     }
 
     protected void right(StoryCell storyValue) {
-    	right(FitnesseUtil.asParse(storyValue));
-	}
+        right(FitnesseUtil.asParse(storyValue));
+    }
 
 }

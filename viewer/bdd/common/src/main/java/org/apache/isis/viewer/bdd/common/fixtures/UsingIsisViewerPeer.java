@@ -42,7 +42,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.SaveObject;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.SetProperty;
 import org.apache.isis.viewer.bdd.common.util.Strings;
 
-public class UsingNakedObjectsViewerPeer extends AbstractFixturePeer {
+public class UsingIsisViewerPeer extends AbstractFixturePeer {
 
 	private static List<Perform> performCommands(final Perform.Mode mode) {
 		ArrayList<Perform> commands = new ArrayList<Perform>();
@@ -83,7 +83,7 @@ public class UsingNakedObjectsViewerPeer extends AbstractFixturePeer {
 
 	private final Map<String, Perform> commandByKey = new HashMap<String, Perform>();
 
-	public UsingNakedObjectsViewerPeer(final AliasRegistry aliasesRegistry,
+	public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry,
 			final Perform.Mode mode, final CellBinding onObjectBinding,
 			final CellBinding aliasResultAsBinding,
 			final CellBinding performBinding,

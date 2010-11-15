@@ -1,4 +1,4 @@
-package org.apache.isis.extensions.bdd.fitnesse;
+package net.sf.isiscontrib.bdd.fitnesse;
 
 public class StoryFitNesseException extends RuntimeException {
 
