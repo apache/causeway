@@ -1,8 +1,8 @@
 package net.sf.isiscontrib.bdd.fitnesse;
 
 import java.util.Date;
+import java.util.List;
 
-import net.sf.isiscontrib.bdd.fitnesse.internal.FitnesseConfigurationBuilder;
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.AliasItemsInListForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.AliasServicesForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.CheckListForFitNesse;
@@ -13,17 +13,14 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.DebugServicesForFitNess
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.SetUpObjectsForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.UsingIsisViewerForFitNesse;
 
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.IsisSystem;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 import org.apache.isis.viewer.bdd.common.parsers.JavaUtilDateParser;
-import org.apache.isis.viewer.bdd.common.story.bootstrapping.IsisInitializer;
+import org.apache.isis.viewer.bdd.common.util.Strings;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
@@ -45,56 +42,103 @@ public class StoryFixture extends DoFixture {
         registerParseDelegate(java.util.Date.class, new JavaUtilDateParser());
     }
 
-    public void initIsis() {
-        IsisInitializer initializer = new IsisInitializer(getStory(), newConfigurationBuilder(), getDeploymentType());
-        initializer.initialize();
+    // ////////////////////////////////////////////////////////////
+    // Bootstrap / shutdown
+    // ////////////////////////////////////////////////////////////
+
+    /**
+     * Bootstrapping
+     * 
+     * @param configDirectory
+     * @param deploymentTypeStr
+     */
+    public void bootstrapIsisConfiguredFromInMode(String configDirectory, String deploymentTypeStr) {
+        DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeStr);
+        getStory().bootstrapIsis(configDirectory, deploymentType);
     }
+
+    public String getConfigDirectory() {
+        return getStory().getConfigDirectory();
+    }
+
+    public DeploymentType getDeploymentType() {
+        return getStory().getDeploymentType();
+    }
+
+    public void shutdownIsis() {
+        getStory().shutdownIsis();
+    }
+
+    // ////////////////////////////////////////////////////////////
+    // Date/Time
+    // ////////////////////////////////////////////////////////////
+
+    public void dateIsNow(final Date dateAndTime) {
+        dateAndTimeIs(dateAndTime);
+    }
+
+    public void dateIs(final Date dateAndTime) {
+        dateAndTimeIs(dateAndTime);
+    }
+
+    public void timeIsNow(final Date dateAndTime) {
+        dateAndTimeIs(dateAndTime);
+    }
+
+    public void timeIs(final Date dateAndTime) {
+        dateAndTimeIs(dateAndTime);
+    }
+
+    private void dateAndTimeIs(final Date dateAndTime) {
+        getStory().dateAndTimeIs(dateAndTime);
+    }
+
+    // ////////////////////////////////////////////////////////////
+    // LogonAs / SwitchUser
+    // ////////////////////////////////////////////////////////////
 
     public void logonAs(final String userName) {
-        getStory().logonAs(userName);
+        getStory().logonAsOrSwitchUserTo(userName);
     }
 
-    public void logonAsWithRoles(final String userName, final String roleList) {
-        getStory().logonAsWithRoles(userName, roleList);
+    public void logonAsWithRoles(final String userName, final String roleListStr) {
+        List<String> roleList = Strings.splitOnCommas(roleListStr);
+        getStory().logonAsOrSwitchUserTo(userName, roleList);
     }
 
     /**
      * Switch user, specifying no roles.
      */
     public void switchUser(final String userName) {
-        getStory().switchUser(userName);
+        logonAs(userName);
     }
 
     /**
      * Switch user, specifying roles.
      */
     public void switchUserWithRoles(final String userName, final String roleList) {
-        getStory().switchUserWithRoles(userName, roleList);
+        logonAsWithRoles(userName, roleList);
     }
+
+    // ////////////////////////////////////////////////////////////
+    // Alias Services
+    // ////////////////////////////////////////////////////////////
 
     public Fixture aliasServices() {
-        return new AliasServicesForFitNesse(getStory());
+        return new AliasServicesForFitNesse(getStory().getAliasRegistry());
     }
 
-    public void dateIsNow(final Date dateAndTime) {
-        getStory().dateIs(dateAndTime);
+    public void aliasServiceAs(final String alias, final String serviceClassName) {
+        try {
+            getStory().getAliasRegistry().aliasService(alias, serviceClassName);
+        } catch (StoryValueException ex) {
+            throw new StoryFitNesseException(ex);
+        }
     }
 
-    public void dateIs(final Date dateAndTime) {
-        getStory().timeIs(dateAndTime);
-    }
-
-    public void timeIsNow(final Date dateAndTime) {
-        getStory().timeIs(dateAndTime);
-    }
-
-    public void timeIs(final Date dateAndTime) {
-        getStory().timeIs(dateAndTime);
-    }
-
-    public void shutdownNakedObjects() {
-        getStory().shutdownNakedObjects();
-    }
+    // ////////////////////////////////////////////////////////////
+    // setUp story
+    // ////////////////////////////////////////////////////////////
 
     /**
      * Allow for singular form.
@@ -106,7 +150,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture setUpObjects(final String className) {
-        return new SetUpObjectsForFitNesse(getStory(), className, SetUpObjectsPeer.Mode.PERSIST);
+        return new SetUpObjectsForFitNesse(getStory().getAliasRegistry(), className, SetUpObjectsPeer.Mode.PERSIST);
     }
 
     /**
@@ -119,34 +163,43 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture setUpTransientObjects(final String className) {
-        return new SetUpObjectsForFitNesse(getStory(), className, SetUpObjectsPeer.Mode.DO_NOT_PERSIST);
+        return new SetUpObjectsForFitNesse(getStory().getAliasRegistry(), className,
+            SetUpObjectsPeer.Mode.DO_NOT_PERSIST);
     }
 
-    public Fixture usingNakedObjectsViewer() {
-        return usingNakedObjectsViewer(Perform.Mode.TEST);
+    // ////////////////////////////////////////////////////////////
+    // Isis Viewer
+    // ////////////////////////////////////////////////////////////
+
+    public Fixture usingIsisViewer() {
+        return usingIsisViewer(Perform.Mode.TEST);
     }
 
     /**
      * Allow for mis-spellings.
      */
-    public Fixture usingNakedObjectsViewerForSetup() {
-        return usingNakedObjectsViewerForSetUp();
+    public Fixture usingIsisViewerForSetup() {
+        return usingIsisViewerForSetUp();
     }
 
-    public Fixture usingNakedObjectsViewerForSetUp() {
-        return usingNakedObjectsViewer(Perform.Mode.SETUP);
+    public Fixture usingIsisViewerForSetUp() {
+        return usingIsisViewer(Perform.Mode.SETUP);
     }
 
-    public Fixture usingNakedObjectsViewer(final Perform.Mode mode) {
-        return new UsingIsisViewerForFitNesse(getStory(), mode);
+    private Fixture usingIsisViewer(final Perform.Mode mode) {
+        return new UsingIsisViewerForFitNesse(getStory().getAliasRegistry(), mode);
     }
+
+    // ////////////////////////////////////////////////////////////
+    // Check List
+    // ////////////////////////////////////////////////////////////
 
     public Fixture checkListContains(final String listAlias) {
-        return new CheckListForFitNesse(getStory(), listAlias, CheckMode.NOT_EXACT);
+        return new CheckListForFitNesse(getStory().getAliasRegistry(), listAlias, CheckMode.NOT_EXACT);
     }
 
     public Fixture checkListPreciselyContains(final String listAlias) {
-        return new CheckListForFitNesse(getStory(), listAlias, CheckMode.EXACT);
+        return new CheckListForFitNesse(getStory().getAliasRegistry(), listAlias, CheckMode.EXACT);
     }
 
     /**
@@ -157,83 +210,35 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture aliasItemsInList(final String listAlias) {
-        return new AliasItemsInListForFitNesse(getStory(), listAlias);
+        return new AliasItemsInListForFitNesse(getStory().getAliasRegistry(), listAlias);
     }
 
     // ///////////////////////////////////////////////////////
-    // StoryDriver (delegates)
+    // run viewer
     // ///////////////////////////////////////////////////////
 
     public void runViewer() {
         getStory().runViewer();
     }
 
-    public String getConfigDirectory() {
-        return getStory().getConfigDirectory();
-    }
-
-    public void setConfigDirectory(final String configDirectory) {
-        getStory().setConfigDirectory(configDirectory);
-    }
-
-    public void enableExploration() {
-        getStory().enableExploration();
-    }
-
-    public DeploymentType getDeploymentType() {
-        return getStory().getDeploymentType();
-    }
-
     // ///////////////////////////////////////////////////////
-    // Diagnostics
+    // Debugging
     // ///////////////////////////////////////////////////////
 
     public Fixture checkSpecificationsLoaded() {
-        return new CheckSpecificationsLoadedForFitNesse(getStory());
+        return new CheckSpecificationsLoadedForFitNesse(getStory().getAliasRegistry());
     }
 
     public Fixture debugServices() {
-        return new DebugServicesForFitNesse(getStory());
+        return new DebugServicesForFitNesse(getStory().getAliasRegistry());
     }
 
     public Fixture debugObjectStore() {
-        return new DebugObjectStoreForFitNesse(getStory());
+        return new DebugObjectStoreForFitNesse(getStory().getAliasRegistry());
     }
 
     public Fixture debugClock() {
-        return new DebugClockForFitNesse(getStory());
-    }
-
-    public void aliasServiceAs(final String alias, final String serviceClassName) {
-        try {
-            getStory().registerService(alias, serviceClassName);
-        } catch (StoryValueException ex) {
-            throw new StoryFitNesseException(ex);
-        }
-    }
-
-    // /////////////////////////////////////////////////////////
-    // System
-    // /////////////////////////////////////////////////////////
-
-    public IsisSystem getSystem() {
-        return getStory().getSystem();
-    }
-
-    public void setIsisSystem(final IsisSystem isisSystem) {
-        getStory().setIsisSystem(isisSystem);
-    }
-
-    public InstallerLookup getInstallerLookup() {
-        return getStory().getInstallerLookup();
-    }
-
-    public void setInstallerLookup(final InstallerLookup installerLookup) {
-        getStory().setInstallerLookup(installerLookup);
-    }
-
-    public ConfigurationBuilder newConfigurationBuilder() {
-        return new FitnesseConfigurationBuilder(getConfigDirectory());
+        return new DebugClockForFitNesse(getStory().getAliasRegistry());
     }
 
 }

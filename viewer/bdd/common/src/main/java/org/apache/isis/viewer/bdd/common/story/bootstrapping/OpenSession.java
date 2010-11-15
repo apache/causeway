@@ -1,5 +1,7 @@
 package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
+import java.util.List;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.runtime.authentication.AuthenticationManager;
@@ -16,11 +18,10 @@ public class OpenSession {
         this.story = story;
     }
 
-    public void openSession(final String userName, final String[] roles) {
+    public void openSession(final String userName, final List<String> roles) {
         IsisContext.closeSession();
         final LogonFixture logonFixture = new LogonFixture(userName, roles);
-        final AuthenticationRequestLogonFixture authRequest = new AuthenticationRequestLogonFixture(
-                logonFixture);
+        final AuthenticationRequestLogonFixture authRequest = new AuthenticationRequestLogonFixture(logonFixture);
         final AuthenticationSession authSession = getAuthenticationManager().authenticate(authRequest);
 
         IsisContext.openSession(authSession);

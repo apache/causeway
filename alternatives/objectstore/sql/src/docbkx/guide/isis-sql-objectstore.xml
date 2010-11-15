@@ -24,7 +24,7 @@
 "file:&resourceDir;/resources/docbook-xml-4.5/docbookx.dtd" >
 -->
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"file:./resources/docbook-xml-4.5/docbookx.dtd" >
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>

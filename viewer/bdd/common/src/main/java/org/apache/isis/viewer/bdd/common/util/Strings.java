@@ -1,10 +1,14 @@
 package org.apache.isis.viewer.bdd.common.util;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public final class Strings {
 
-    private Strings() {}
+    private Strings() {
+    }
 
     /**
      * Simply forces first char to be lower case.
@@ -13,8 +17,7 @@ public final class Strings {
         if (Strings.emptyString(str)) {
             return str;
         }
-        return str.substring(0, 1).toLowerCase()
-                + (str.length() > 1 ? str.substring(1) : "");
+        return str.substring(0, 1).toLowerCase() + (str.length() > 1 ? str.substring(1) : "");
     }
 
     public static boolean emptyString(final String str) {
@@ -31,20 +34,19 @@ public final class Strings {
     public static String memberIdFor(final String member) {
         return Strings.lowerLeading(camel(member));
     }
-    
+
     public static String camel(String name) {
         StringBuffer b = new StringBuffer(name.length());
         StringTokenizer t = new StringTokenizer(name);
         b.append(t.nextToken());
         while (t.hasMoreTokens()) {
-          String token = t.nextToken();
-          b.append(token.substring(0, 1).toUpperCase()); // replace spaces with
-          // camelCase
-          b.append(token.substring(1));
+            String token = t.nextToken();
+            b.append(token.substring(0, 1).toUpperCase()); // replace spaces with
+            // camelCase
+            b.append(token.substring(1));
         }
         return b.toString();
-      }
-
+    }
 
     public static String simpleName(final String str) {
         final int lastDot = str.lastIndexOf('.');
@@ -57,17 +59,17 @@ public final class Strings {
         return str.substring(lastDot + 1);
     }
 
-    public static String[] splitOnCommas(final String commaSeparatedList) {
+    public static List<String> splitOnCommas(final String commaSeparatedList) {
         if (commaSeparatedList == null) {
             return null;
         }
-        final String removeLeadingWhiteSpace = Strings
-                .removeLeadingWhiteSpace(commaSeparatedList);
+        final String removeLeadingWhiteSpace = Strings.removeLeadingWhiteSpace(commaSeparatedList);
         // special handling
         if (removeLeadingWhiteSpace.length() == 0) {
-            return new String[0];
+            return Collections.emptyList();
         }
-        return removeLeadingWhiteSpace.split("\\W*,\\W*");
+        String[] splitAsArray = removeLeadingWhiteSpace.split("\\W*,\\W*");
+        return Arrays.asList(splitAsArray);
     }
 
     public static String removeLeadingWhiteSpace(final String str) {

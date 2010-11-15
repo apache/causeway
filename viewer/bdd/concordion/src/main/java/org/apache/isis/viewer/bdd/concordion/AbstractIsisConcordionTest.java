@@ -9,20 +9,19 @@ import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.isis.core.commons.io.IoUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.Mode;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
-import org.apache.isis.viewer.bdd.common.story.bootstrapping.IsisInitializer;
+import org.apache.isis.viewer.bdd.common.util.Strings;
 import org.apache.isis.viewer.bdd.concordion.internal.concordion.ExecuteCommandWithHeader;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.AliasItemsInListForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.AliasServicesForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.SetUpObjectsForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.UsingIsisViewerForConcordion;
 import org.concordion.Concordion;
@@ -158,72 +157,83 @@ public class AbstractIsisConcordionTest {
         return getStory().getDeploymentType();
     }
 
-    public boolean bootstrapIsis(String configDirectory, String deploymentType) {
-        getStory().setConfigDirectory(configDirectory);
-        if (DeploymentType.EXPLORATION.toString().equalsIgnoreCase(deploymentType)) {
-            getStory().enableExploration();
-        }
-        ConfigurationBuilderFileSystem configurationBuilder = new ConfigurationBuilderFileSystem(getConfigDirectory());
-        IsisInitializer initializer = new IsisInitializer(getStory(), configurationBuilder, getDeploymentType());
-        initializer.initialize();
+    /**
+     * For calling within a <tt>#setUp()</tt> method.
+     * 
+     * @see {@link #bootstrapIsis(String, String)}
+     */
+    public void bootstrapIsis(String configDirectory, DeploymentType deploymentType) {
+        getStory().bootstrapIsis(configDirectory, deploymentType);
+    }
+
+    /**
+     * For calling from XHTML script.
+     * 
+     * @see #bootstrapIsis(String, DeploymentType)
+     * @return <tt>boolean</tt> so that XHTML can assert on it.
+     */
+    public boolean bootstrapIsis(String configDirectory, String deploymentTypeStr) {
+        bootstrapIsis(configDirectory, DeploymentType.lookup(deploymentTypeStr));
         return true; // any runtime exception will propagate
     }
 
     public void aliasAs(String alias, ObjectAdapter adapter) {
-        getStory().aliasAs(alias, adapter);
+        getStory().getAliasRegistry().aliasAs(alias, adapter);
     }
 
     public String aliasPrefixedAs(String prefix, ObjectAdapter adapter) {
-        return getStory().aliasPrefixedAs(prefix, adapter);
+        return getStory().getAliasRegistry().aliasPrefixedAs(prefix, adapter);
     }
 
     public void aliasServiceAs(String alias, String serviceClassName) throws StoryValueException {
-        getStory().registerService(alias, serviceClassName);
+        getStory().getAliasRegistry().aliasService(alias, serviceClassName);
     }
 
     public String getAlias(ObjectAdapter adapter) {
-        return getStory().getAlias(adapter);
+        return getStory().getAliasRegistry().getAlias(adapter);
     }
 
     public ObjectAdapter getAliased(String alias) {
-        return getStory().getAliased(alias);
+        return getStory().getAliasRegistry().getAliased(alias);
     }
 
     public boolean logonAs(String userName) {
-        getStory().logonAs(userName);
+        getStory().logonAsOrSwitchUserTo(userName);
         return true;
     }
 
-    public boolean logonAsWithRoles(String userName, String roleList) {
-        getStory().logonAsWithRoles(userName, roleList);
+    public boolean logonAsWithRoles(String userName, String roleListStr) {
+        List<String> roleList = Strings.splitOnCommas(roleListStr);
+        getStory().logonAsOrSwitchUserTo(userName, roleList);
         return true;
     }
 
     public void switchUser(String userName) {
-        getStory().switchUser(userName);
+        logonAs(userName);
     }
 
-    public void switchUserWithRoles(String userName, String roleList) {
-        getStory().switchUserWithRoles(userName, roleList);
+    public void switchUserWithRoles(String userName, String roleListStr) {
+        logonAsWithRoles(userName, roleListStr);
     }
 
     public boolean dateIs(String dateAndTimeStr) throws StoryValueException {
-        getStory().dateIs(asDateAndTime(dateAndTimeStr));
-        return true;
+        return dateAndTimeIsNow(dateAndTimeStr);
     }
 
     public boolean dateIsNow(String dateAndTimeStr) throws StoryValueException {
-        getStory().dateIsNow(asDateAndTime(dateAndTimeStr));
-        return true;
+        return dateAndTimeIsNow(dateAndTimeStr);
     }
 
     public boolean timeIs(String dateAndTimeStr) throws StoryValueException {
-        getStory().timeIs(asDateAndTime(dateAndTimeStr));
-        return true;
+        return dateAndTimeIsNow(dateAndTimeStr);
     }
 
     public boolean timeIsNow(String dateAndTimeStr) throws StoryValueException {
-        getStory().timeIsNow(asDateAndTime(dateAndTimeStr));
+        return dateAndTimeIsNow(dateAndTimeStr);
+    }
+
+    protected boolean dateAndTimeIsNow(String dateAndTimeStr) throws StoryValueException {
+        getStory().dateAndTimeIs(asDateAndTime(dateAndTimeStr));
         return true;
     }
 
@@ -236,22 +246,21 @@ public class AbstractIsisConcordionTest {
         }
     }
 
-    private AliasServicesForConcordion aliasServices;
-
-    public boolean aliasService(String className, String alias) {
+    public boolean aliasService(String alias, String className) {
         return aliasServices(className, alias);
     }
 
-    public boolean aliasServices(String className, String alias) {
-        if (aliasServices == null) {
-            aliasServices = new AliasServicesForConcordion(getStory());
+    public boolean aliasServices(String alias, String className) {
+        try {
+            getStory().getAliasRegistry().aliasService(alias, className);
+            return true;
+        } catch (StoryValueException e) {
+            return false;
         }
-        aliasServices.execute(alias, className);
-        return true;
     }
 
     public void shutdownNakedObjects() {
-        getStory().shutdownNakedObjects();
+        getStory().shutdownIsis();
     }
 
     public String setUpObject(String className, String alias, String arg0) {
@@ -307,12 +316,12 @@ public class AbstractIsisConcordionTest {
      */
     private String setUpObjectsVarargs(String className, String alias, String... propertyValues) {
         if (executingInline()) {
-            setUpObjects = new SetUpObjectsForConcordion(getStory(), className, Mode.PERSIST);
+            setUpObjects = new SetUpObjectsForConcordion(getStory().getAliasRegistry(), className, Mode.PERSIST);
             setUpObjects.executeHeader(alias, propertyValues);
             return setUpObjects.executeRow(alias, propertyValues);
         } else {
             if (executingTableHeader()) {
-                setUpObjects = new SetUpObjectsForConcordion(getStory(), className, Mode.PERSIST);
+                setUpObjects = new SetUpObjectsForConcordion(getStory().getAliasRegistry(), className, Mode.PERSIST);
                 return setUpObjects.executeHeader(alias, propertyValues);
             } else {
                 return setUpObjects.executeRow(alias, propertyValues);
@@ -394,13 +403,13 @@ public class AbstractIsisConcordionTest {
     private String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
         String usingMember, String thatIt, String arg0, String... remainingArgs) {
         if (executingInline()) {
-            usingIsisViewer = new UsingIsisViewerForConcordion(getStory(), Perform.Mode.TEST);
+            usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), Perform.Mode.TEST);
             usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, remainingArgs);
             return usingIsisViewer.executeRow(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                 remainingArgs);
         } else {
             if (executingTableHeader()) {
-                usingIsisViewer = new UsingIsisViewerForConcordion(getStory(), Perform.Mode.TEST);
+                usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), Perform.Mode.TEST);
                 return usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                     remainingArgs);
             } else {
@@ -417,7 +426,7 @@ public class AbstractIsisConcordionTest {
     }
 
     public String aliasItemsInList(String listAlias, String title, String type, String aliasAs) {
-        aliasItemsInList = new AliasItemsInListForConcordion(getStory(), listAlias);
+        aliasItemsInList = new AliasItemsInListForConcordion(getStory().getAliasRegistry(), listAlias);
         return aliasItemsInList.execute(aliasAs, title, type);
     }
 

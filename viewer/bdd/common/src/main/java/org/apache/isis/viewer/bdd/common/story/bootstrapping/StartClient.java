@@ -7,20 +7,19 @@ import org.apache.isis.viewer.bdd.common.Story;
 
 public class StartClient extends AbstractHelper {
 
-	private static final String DND_VIEWER_NAME = "dnd";
+    private static final String DND_VIEWER_NAME = "dnd";
 
-	public StartClient(final Story story) {
-		super(story);
-	}
+    public StartClient(final Story story) {
+        super(story);
+    }
 
-	public void run() {
-		final InstallerLookup installerLookup = getStory().getInstallerLookup();
+    public void run() {
+        final InstallerLookup installerLookup = getStory().getInstallerLookup();
 
-		final IsisViewerInstaller viewerInstaller = installerLookup
-				.viewerInstaller(DND_VIEWER_NAME);
-		final IsisViewer viewer = viewerInstaller.createViewer();
+        final IsisViewerInstaller viewerInstaller = installerLookup.viewerInstaller(DND_VIEWER_NAME);
+        final IsisViewer viewer = viewerInstaller.createViewer();
 
-		viewer.init();
-	}
+        viewer.init();
+    }
 
 }

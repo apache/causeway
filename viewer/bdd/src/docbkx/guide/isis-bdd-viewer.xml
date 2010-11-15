@@ -485,149 +485,84 @@
   </chapter>
 
   <appendix id="apx.Reference">
-    <title>Reference (Online User Guide)</title>
+    <title>Reference</title>
 
-    <para>For convenience when writing tests the FitNesse wiki pages created
-    by the Maven archetype (see <xref
-    linkend="chp.UsingTheFitNesseArchetype" />) also include an online user
-    guide:</para>
+    <para>This appendix shows the features of the common library, and how they
+    are used by the framework-specific integrations.</para>
 
-    <screenshot>
-      <screeninfo>The in-built user guide</screeninfo>
+    <para>Note that due to licensing restrictions the
+    <emphasis>FitNesse</emphasis> integration is not part of Apache Isis.
+    Instead, it can be found in <ulink
+    url="http://isis-contrib.sourceforge.net">isis-contrib</ulink>. We provide
+    an overview of its features here for convenience.</para>
 
-      <mediaobject>
-        <imageobject>
-          <imagedata fileref="images/UserGuide.png" scale="40" />
-        </imageobject>
-      </mediaobject>
-    </screenshot>
-
-    <para>Rather than repeat the text here, this reference guide just consists
-    of screenshotsof the various pages.</para>
+    <para></para>
 
     <sect1>
       <title>Bootstrapping</title>
 
-      <para>The bootstrapping fixtures are used to bootstrap the test
-      framework itself. These are typically referenced in a
-      "BootstrapNakedObjects" page, included in the test's setup page. One
-      option is to use the FitNesse <ulink
-      url="http://fitnesse.org/FitNesse.UserGuide.SpecialPages">SetUp</ulink>
-      page.</para>
+      <para>The common library provides the <classname>Story</classname> class
+      which holds a reference to a running <classname>IsisSystem</classname>.
+      The means by which this bootstrapping occurs is specific to the
+      <acronym>BDD</acronym> framework integration.</para>
 
-      <sect2 id="sec.StoryFixture">
-        <title>Story</title>
+      <table>
+        <title>Bootstrapping</title>
 
-        <para>Concordion: AbstractIsisConcordionTest</para>
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry align="center">Common</entry>
 
-        <para>FitNesse: StoryFixture</para>
+              <entry align="center">Concordion</entry>
 
-        <para></para>
+              <entry align="center">FitNesse (isis-contrib)</entry>
+            </row>
+          </thead>
 
-        <para>Sets up the workflow story test. Boilerplate, should always be
-        the first FitNesse fixture included in a page.</para>
+          <tbody>
+            <row>
+              <entry><classname>Story</classname><para>Provides a context for
+              the story.</para></entry>
 
-        <screenshot>
-          <screeninfo>StoryFixture</screeninfo>
+              <entry><classname>AbstractIsisConcordionTest</classname><para>Test
+              cases should inherit from this class; provides access as
+              inherited methods</para></entry>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/StoryFixture.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-      </sect2>
+              <entry><para><methodname>|StoryFixture|</methodname></para><para>Part
+              of the bootstrapping of the test framework itself, typically
+              referenced in the test suite's setup page. Should appear first
+              within this setup.</para></entry>
+            </row>
 
-      <sect2 id="sec.SetConfigDirectory">
-        <title>SetConfigDirectory</title>
+            <row>
+              <entry><methodname>Story#bootstrapIsis(configDirectory,
+              deploymentType)</methodname><para>Bootstraps the Isis runtime
+              using the specified config directory (containing isis.properties
+              config file) and deployment type. The latter should be either
+              EXPLORATION (meaning exploration actions are enabled) or
+              PROTOTYPE; no other values are valid.</para><para>Even if
+              running in exploration mode, you should still call
+              <filename>Story#logonAs()</filename> in order to indicate which
+              user account to run the story as.</para></entry>
 
-        <para>Concordion:
-        AbstractIsisConcordionTest#bootstrapIsis(configDirectory,
-        deploymentType)</para>
+              <entry><methodname>#bootstrapIsis(String configDirectory,
+              DeploymentType deploymentType)</methodname><para>Typically
+              called from within a <methodname>@Before setUp()</methodname>
+              method.</para><para><methodname>#bootstrapIsis(String
+              configDirectory, String
+              deploymentTypeStr)</methodname></para><para>Overloaded version
+              callable from within <acronym>XHTML</acronym>; use if wish to
+              make it clear how the bootstrapping has been
+              performed.</para></entry>
 
-        <para>FitNesse: StoryFixture#setConfigDirectory</para>
-
-        <para></para>
-
-        <para>Specifies the config directory containing
-        <filename>nakedobjects.properties</filename>. Called after
-        StoryFixture (see <xref linkend="sec.StoryFixture" />), and before
-        InitNakedObjects (see <xref linkend="sec.InitNakedObjects" />). The
-        DebugServices fixture (<xref linkend="sec.DebugServices" />) can be
-        used to debug the set of services specified (after Naked Objects has
-        been initialized).</para>
-
-        <screenshot>
-          <screeninfo>SetConfigDirectory</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/SetConfigDirectory.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-      </sect2>
-
-      <sect2 id="sec.EnableExploration">
-        <title>EnableExploration</title>
-
-        <para>Concordion:
-        AbstractIsisConcordionTest#bootstrapIsis(configDirectory,
-        deploymentType) ... derived from deploymentType</para>
-
-        <para>FitNesse: StoryFixture#enableExploration()</para>
-
-        <para></para>
-
-        <para>Enables exploration actions if required. Should be called before
-        InitNakedObjects (see <xref linkend="sec.InitNakedObjects" />).</para>
-
-        <para>Note that when using the DnD or HTML viewers, exploration mode
-        means that there is no need to logon. For FitNesse tests though you
-        should specify who to login as, see <xref
-        linkend="sec.LogonAs" />.</para>
-
-        <screenshot>
-          <screeninfo>EnableExploration</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/EnableExploration.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-      </sect2>
-
-      <sect2 id="sec.InitNakedObjects">
-        <title>InitIsis</title>
-
-        <para>Concordion:
-        AbstractIsisConcordionTest#bootstrapIsis(configDirectory,
-        deploymentType) ... derived from deploymentType</para>
-
-        <para>FitNesse: StoryFixture#initIsis()</para>
-
-        <para></para>
-
-        <para>Initializes the Naked Objects runtime using the services
-        specified through the UseConfigDirectory fixture (see <xref
-        linkend="sec.SetConfigDirectory" />).</para>
-
-        <para>The CheckSpecificationsLoaded fixture (<xref
-        linkend="sec.CheckSpecificationsLoaded" />) can be used to check which
-        classes have been located from the services as a result of
-        initialization.</para>
-
-        <screenshot>
-          <screeninfo>InitNakedObjects</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/InitNakedObjects.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-      </sect2>
+              <entry><para><methodname>|BootstrapIsisConfiguredFrom|configDirectory|InMode|deploymentType|</methodname></para><para>Typically
+              immediately after the call to
+              <classname>StoryFixture</classname>.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
     </sect1>
 
     <sect1>
@@ -638,60 +573,103 @@
       services that define the application, the effective date and the
       effective user. It also allows the setup of arbitrary objects (typically
       reference/static data objects; for transactional objects see <xref
-      linkend="sec.UsingNakedObjectsViewer" />).</para>
+      linkend="sec.UserInteraction" />).</para>
 
-      <sect2>
-        <title>DateIs</title>
+      <table>
+        <title>SetUp</title>
 
-        <para>Sets the clock to a specific date and time. This installs the
-        <classname>FixtureClock</classname> as the implementation of the
-        <classname>Clock</classname> singleton (in the applib). If this
-        fixture is not called, then the default system clock is used, which
-        gets the time from the host computer. The DebugClock fixture (<xref
-        linkend="sec.DebugClock" />) can be used to verify the clock
-        state.</para>
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry align="center">Common</entry>
 
-        <screenshot>
-          <screeninfo>DateIs</screeninfo>
+              <entry align="center">Concordion</entry>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/DateIs.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-      </sect2>
+              <entry align="center">FitNesse (isis-contrib)</entry>
+            </row>
+          </thead>
 
-      <sect2 id="sec.LogonAs">
-        <title>LogonAs</title>
+          <tbody>
+            <row>
+              <entry><classname>Story#dateAndTimeIs(java.util.Date)</classname><para>Sets
+              the clock to a specific date and time.</para><para>This installs
+              the <classname>FixtureClock</classname> as the implementation of
+              the <classname>Clock</classname> singleton (in the applib). If
+              this fixture is not called, then the default system clock is
+              used, which gets the time from the host computer. The
+              Story#debugClock () method (<xref linkend="sec.Debugging" />)
+              can be used to verify the clock state.</para></entry>
 
-        <para>Logs on as a specific user.</para>
+              <entry><classname>#dateIs(String
+              dateAndTimeStr)</classname><para><methodname>#dateIsNow(String
+              dateAndTimeStr)</methodname></para><para><methodname>#timeIs(String
+              dateAndTimeStr)</methodname></para><para><methodname>#timeIsNow(String
+              dateAndTimeStr)</methodname></para><para>Intended to be called
+              from the <acronym>XHTML</acronym>, as part of the "given".
+              Parsed in format 'dd MMM yyyy hh:mm'</para></entry>
 
-        <para>Unlike Naked Objects' own <classname>LogonFixture</classname>,
-        the login specified is not remembered to the end of the setup. In
-        order to run tests as a particular login it should therefore appear
-        towards the end of the setup.</para>
+              <entry><para><methodname>|DateIs|dateAndTimeStr|</methodname></para><para><methodname>|DateIsNow|dateAndTimeStr|</methodname></para><para><methodname>|TimeIs|dateAndTimeStr|</methodname></para><para><methodname>|TimeIsNow|dateAndTimeStr|</methodname></para><para>Typically
+              called early on in the test, as part of the "given". Parsed in
+              format 'dd MMM yyyy hh:mm'</para></entry>
+            </row>
 
-        <screenshot>
-          <screeninfo>LogonAs</screeninfo>
+            <row>
+              <entry><methodname>Story#logonAsOrSwitchUserTo(String
+              userName)</methodname><para>Logs on / switch user to as a
+              specific
+              user.</para><para><methodname>Story#logonAsOrSwitchUserTo(String
+              userName, List&lt;String&gt;
+              roleNames)</methodname></para><para>Logs on to a specific user,
+              with specified roles. Part of the initialization for a
+              particular story's setup, and typically referenced in the test
+              suite or story's own setup page.</para><para>Also used for
+              switching the current user within a story, eg to check a
+              workflow between different users.</para></entry>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/LogonAs.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-      </sect2>
+              <entry><methodname>#logonAs(String
+              userName)</methodname><para><methodname>#logonAs(String
+              userName, String roleListStr)</methodname></para><para>Intended
+              to be called from the <acronym>XHTML</acronym>, as part of the
+              "given". The role list, if specified, should be
+              comma-separated.</para><methodname>#switchUserTo(String
+              userName)</methodname><para><methodname>#switchUserTo(String
+              userName, String roleListStr)</methodname></para><para>Switch
+              the currently logged-on user to another user, optionally with
+              specified roles.</para></entry>
+
+              <entry><para><methodname>|LogonAs|userName|</methodname></para><para><methodname>|LogonAs|userName|WithRoles|roleList|</methodname></para><para>Typically
+              called early on in the test, as part of the "given". The role
+              list, if specified, should be
+              comma-separated.</para><para><methodname>|SwitchUserTo|userName|</methodname></para><para><methodname>|SwitchUserTo|userName|WithRoles|roleList|</methodname></para><para>Switch
+              the currently logged-on user to another user, optionally with
+              specified roles.</para></entry>
+            </row>
+
+            <row>
+              <entry><methodname>Story#getAliasRegistry()</methodname><para>and</para><para><methodname>AliasRegistry#aliasService(String
+              aliasAs, String
+              serviceClassName)</methodname></para><para>Specifies an alias to
+              a service in order to invoke actions upon them.</para><para>Note
+              that the services are <emphasis>not</emphasis> defined here,
+              merely aliased. </para></entry>
+
+              <entry><methodname>#aliasService(aliasAs, String
+              serviceClassName)</methodname><para><methodname>#aliasServices(aliasAs,
+              String serviceClassName)</methodname></para><para>Aliases a
+              service. Typically called within a table.</para></entry>
+
+              <entry><methodname>|AliasServices|</methodname><para><methodname>|className|alias=|</methodname></para><para>Two-column
+              fixture, first column specifying class name and second column
+              defining the alias.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
       <sect2 id="sec.AliasServices">
         <title>AliasServices</title>
 
-        <para>Specifies an alias to services in order to invoke actions upon
-        them. Note that the services are <emphasis>not</emphasis> defined by
-        this fixture; for that see SetConfigDirectory fixture, section <xref
-        linkend="sec.SetConfigDirectory" />. See also DebugServices (<xref
-        linkend="sec.DebugServices" />) to verify the services that have been
-        identified.</para>
+        <para></para>
 
         <screenshot>
           <screeninfo>AliasServices</screeninfo>
@@ -727,7 +705,7 @@
       </sect2>
     </sect1>
 
-    <sect1>
+    <sect1 id="sec.UserInteraction">
       <title>User Interaction</title>
 
       <para>User interaction fixtures appear in the main body of the test, for
@@ -877,7 +855,7 @@
       </sect2>
     </sect1>
 
-    <sect1>
+    <sect1 id="sec.Debugging">
       <title>Debugging</title>
 
       <para>Debugging and diagnostics. Useful for checking setup, for

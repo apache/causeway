@@ -1,142 +1,189 @@
 package org.apache.isis.viewer.bdd.common;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+
+import java.util.Collections;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
 import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.runtime.fixturesinstaller.FixturesInstallerNoop;
 import org.apache.isis.runtime.installers.InstallerLookup;
+import org.apache.isis.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.runtime.runner.IsisModule;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.IsisSystem;
+import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.viewer.bdd.common.story.bootstrapping.IsisInitializer;
+import org.apache.isis.runtime.userprofile.inmemory.InMemoryUserProfileStoreInstaller;
+import org.apache.isis.viewer.bdd.common.components.StoryAuthenticationManagerInstaller;
+import org.apache.isis.viewer.bdd.common.components.StoryInMemoryPersistenceMechanismInstaller;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownNakedObjects;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.StartClient;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
-import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistrySpi;
-import org.apache.isis.viewer.bdd.common.util.Strings;
+import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryHolder;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 /**
- * Holds the bootstrapped {@link NakedObjectsSystem} and provides access to
- * the {@link AliasRegistry aliases}.
+ * Holds the bootstrapped {@link IsisSystem} and provides access to the {@link AliasRegistry aliases}.
  * 
  * <p>
  * Typically held in a thread-local by the test framework, acting as a context to the story.
  * 
  * <p>
- * Implementation note: this class directly implements {@link AliasRegistrySpi}, though delegates to an
- * underlying {@link AliasRegistryDefault}.  This is needed because the underlying {@link AliasRegistry}
- * can change on {@link #switchUserWithRoles(String, String)} (see {@link #reAdapt(AliasRegistrySpi)} method).
+ * Implementation note: this class directly implements {@link AliasRegistrySpi}, though delegates to an underlying
+ * {@link AliasRegistryDefault}. This is needed because the underlying {@link AliasRegistry} can change on
+ * {@link #switchUserWithRoles(String, String)} (see {@link #reAdapt(AliasRegistrySpi)} method).
  */
-public class Story implements StoryBootstrapper, AliasRegistrySpi {
+public class Story implements AliasRegistryHolder {
 
-	private AliasRegistrySpi aliasRegistry = new AliasRegistryDefault();
+    private AliasRegistry aliasRegistry = new AliasRegistryDefault();
 
-	private String configDirectory;
-    private boolean exploration;
-    
-	private InstallerLookup installerLookup;
-	private IsisSystem nakedObjectsSystem;
+    private DeploymentType deploymentType;
+    private String configDirectory;
 
+    private IsisSystem isisSystem;
+
+    private InstallerLookupDefault installerLookup;
+
+    // /////////////////////////////////////////////////////////////
+    // bootstrap / shutdown
+    // /////////////////////////////////////////////////////////////
 
     public String getConfigDirectory() {
         return configDirectory;
     }
-    public void setConfigDirectory(final String configDirectory) {
-    	this.configDirectory = configDirectory;
+
+    public DeploymentType getDeploymentType() {
+        return deploymentType;
     }
 
-    public void enableExploration() {
-    	this.exploration = true;
-    }
-    
-    public DeploymentType getDeploymentType() {
-        return exploration ? DeploymentType.EXPLORATION
-                : DeploymentType.PROTOTYPE;
+    public IsisSystem getSystem() {
+        return isisSystem;
     }
 
     public InstallerLookup getInstallerLookup() {
         return installerLookup;
     }
-    public void setInstallerLookup(final InstallerLookup installerLookup) {
-        this.installerLookup = installerLookup;
+
+    @SuppressWarnings("unchecked")
+    public void bootstrapIsis(String configDirectory, DeploymentType deploymentType) {
+        this.configDirectory = configDirectory;
+        this.deploymentType =
+            ensureThatArg(deploymentType,
+                is(anyOf(equalTo(DeploymentType.EXPLORATION), equalTo(DeploymentType.PROTOTYPE))));
+
+        ConfigurationBuilderFileSystem configurationBuilder = new ConfigurationBuilderFileSystem(getConfigDirectory());
+
+        configurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY, deploymentType.name());
+        defaultStoryComponentsInto(configurationBuilder);
+
+        try {
+            // create system...
+            isisSystem = createSystem(deploymentType, configurationBuilder);
+
+            // ... and provide a session in order to install fixtures
+            IsisContext.openSession(new InitialisationSession());
+
+        } catch (final RuntimeException e) {
+            if (isisSystem != null) {
+                isisSystem.shutdown();
+            }
+            throw e;
+        }
     }
 
-    public IsisSystem getSystem() {
-        return nakedObjectsSystem;
+    private IsisSystem createSystem(DeploymentType deploymentType, ConfigurationBuilder configurationBuilder) {
+        this.installerLookup = new InstallerLookupDefault(this.getClass());
+        configurationBuilder.injectInto(installerLookup);
+
+        Injector injector = createGuiceInjector(deploymentType, configurationBuilder, installerLookup);
+        IsisSystem system = injector.getInstance(IsisSystem.class);
+        return system;
     }
 
-    /**
-     * Called by {@link IsisInitializer}.
-     */
-    public void setIsisSystem(
-            final IsisSystem nakedObjectsSystem) {
-        this.nakedObjectsSystem = nakedObjectsSystem;
+    private void defaultStoryComponentsInto(ConfigurationBuilder configurationBuilder) {
+        configurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY,
+            StoryAuthenticationManagerInstaller.class.getName());
+        configurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY,
+            StoryInMemoryPersistenceMechanismInstaller.class.getName());
+        configurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY,
+            InMemoryUserProfileStoreInstaller.class.getName());
+        configurationBuilder.add(SystemConstants.FIXTURES_INSTALLER_KEY, FixturesInstallerNoop.class.getName());
+        configurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true);
     }
 
-    
+    private Injector createGuiceInjector(DeploymentType deploymentType, ConfigurationBuilder configurationBuilder,
+        InstallerLookup installerLookup) {
+        IsisModule isisModule = new IsisModule(deploymentType, configurationBuilder, installerLookup);
+        return Guice.createInjector(isisModule);
+    }
+
+    public void shutdownIsis() {
+        new ShutdownNakedObjects(this).shutdown();
+    }
+
+    // /////////////////////////////////////////////////////////////
+    // date+time / logon+switch user
+    // /////////////////////////////////////////////////////////////
+
+    public void dateAndTimeIs(final Date dateAndTime) {
+        new SetClock(this).setClock(dateAndTime);
+    }
+
     /**
      * Logon, specifying no roles.
      * <p>
-     * Unlike the {@link LogonFixture} on regular Naked Objects fixtures, the
-     * logonAs is not automatically remembered until the end of the setup. It
-     * should therefore be invoked at the end of setup explicitly.
+     * Unlike the {@link LogonFixture} on regular Naked Objects fixtures, the logonAs is not automatically remembered
+     * until the end of the setup. It should therefore be invoked at the end of setup explicitly.
      */
-    public void logonAs(final String userName) {
-        switchUser(userName);
+    public void logonAsOrSwitchUserTo(final String userName) {
+        List<String> noRoles = Collections.emptyList();
+        logonAsOrSwitchUserTo(userName, noRoles);
     }
 
     /**
      * Logon, specifying roles.
      * <p>
-     * Unlike the {@link LogonFixture} on regular Naked Objects fixtures, the
-     * logonAs is not automatically remembered until the end of the setup. It
-     * should therefore be invoked at the end of setup explicitly.
+     * Unlike the {@link LogonFixture} on regular Isis fixtures, the logonAs is not automatically remembered until the
+     * end of the setup. It should therefore be invoked at the end of setup explicitly.
      */
-    public void logonAsWithRoles(final String userName, final String roleList) {
-        switchUserWithRoles(userName, roleList);
-    }
-
-    /**
-     * Switch user, specifying no roles.
-     */
-    public void switchUser(final String userName) {
-        switchUserWithRoles(userName, null);
-    }
-
-    /**
-     * Switch user, specifying roles.
-     */
-    public void switchUserWithRoles(final String userName, final String roleList) {
-        new OpenSession(this).openSession(userName, Strings
-                .splitOnCommas(roleList));
+    public void logonAsOrSwitchUserTo(final String userName, final List<String> roleList) {
+        new OpenSession(this).openSession(userName, roleList);
         aliasRegistry = reAdapt(aliasRegistry);
     }
 
     /**
      * Need to recreate aliases whenever logout/login.
      */
-    private AliasRegistrySpi reAdapt(final AliasRegistrySpi aliasesRegistrySpi) {
-        final AliasRegistrySpi newAliasesRegistry = new AliasRegistryDefault();
+    private AliasRegistry reAdapt(final AliasRegistry aliasesRegistry) {
+        final AliasRegistry newAliasesRegistry = new AliasRegistryDefault();
 
         // first pass: root adapters
-        for (final Map.Entry<String, ObjectAdapter> aliasAdapter : aliasesRegistrySpi) {
+        for (final Map.Entry<String, ObjectAdapter> aliasAdapter : aliasesRegistry) {
             final String alias = aliasAdapter.getKey();
             final ObjectAdapter oldAdapter = aliasAdapter.getValue();
 
             if (oldAdapter.getOid() instanceof AggregatedOid) {
                 continue;
             }
-            newAliasesRegistry.alias(alias, getAdapterManager().adapterFor(
-                    oldAdapter.getObject()));
+            newAliasesRegistry.aliasAs(alias, getAdapterManager().adapterFor(oldAdapter.getObject()));
         }
 
         // for now, not supporting aggregated adapters (difficulty in looking up
@@ -147,7 +194,7 @@ public class Story implements StoryBootstrapper, AliasRegistrySpi {
         // {
         // final String alias = aliasAdapter.getKey();
         // final ObjectAdapter oldAdapter = aliasAdapter.getValue();
-        //			
+        //
         // if(!(oldAdapter.getOid() instanceof AggregatedOid)) {
         // continue;
         // }
@@ -161,57 +208,29 @@ public class Story implements StoryBootstrapper, AliasRegistrySpi {
         // final ObjectAdapter newAdapter =
         // getAdapterManager().adapterFor(oldAdapter.getObject(), parentAdapter,
         // association);
-        //			
+        //
         // newAliasesRegistry.put(alias, newAdapter);
         // }
         return newAliasesRegistry;
     }
 
-    public void registerService(final String aliasAs, final String serviceClassName) throws StoryValueException {
-        aliasRegistry.aliasService(aliasAs, serviceClassName);
-    }
-
-
-    /**
-     * Holds a new {@link NakedObject adapter}, automatically assigning it a new
-     * heldAs alias.
-     */
-    public String aliasPrefixedAs(final String prefix, final ObjectAdapter adapter) {
-        return aliasRegistry.aliasPrefixedAs(prefix, adapter);
-    }
-
-    /**
-     * Holds a new {@link ObjectAdapter}.
-     */
-    public void aliasAs(final String alias, final ObjectAdapter adapter) {
-        aliasRegistry.aliasAs(alias, adapter);
-    }
-
-    public void dateIsNow(final Date dateAndTime) {
-        dateIs(dateAndTime);
-    }
-
-    public void dateIs(final Date dateAndTime) {
-        timeIs(dateAndTime);
-    }
-
-    public void timeIsNow(final Date dateAndTime) {
-        timeIs(dateAndTime);
-    }
-
-    public void timeIs(final Date dateAndTime) {
-        new SetClock(this).setClock(dateAndTime);
-    }
-
-    public void shutdownNakedObjects() {
-        new ShutdownNakedObjects(this).shutdown();
-    }
+    // /////////////////////////////////////////////////////////
+    // run viewer
+    // /////////////////////////////////////////////////////////
 
     public void runViewer() {
         new StartClient(this).run();
     }
 
-    
+    // //////////////////////////////////////////////////////////////////
+    // AliasRegistry impl
+    // //////////////////////////////////////////////////////////////////
+
+    @Override
+    public AliasRegistry getAliasRegistry() {
+        return aliasRegistry;
+    }
+
     // /////////////////////////////////////////////////////////
     // Dependencies (from context)
     // /////////////////////////////////////////////////////////
@@ -227,28 +246,5 @@ public class Story implements StoryBootstrapper, AliasRegistrySpi {
     public IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
-    
-    
-    ////////////////////////////////////////////////////////////////////
-    // AliasRegistry impl
-    ////////////////////////////////////////////////////////////////////
-    
-	public String getAlias(ObjectAdapter adapter) {
-		return aliasRegistry.getAlias(adapter);
-	}
-	public ObjectAdapter getAliased(String alias) {
-		return aliasRegistry.getAliased(alias);
-	}
-	public void alias(String alias, ObjectAdapter adapter) {
-		aliasRegistry.alias(alias, adapter);
-	}
-	public void aliasService(String aliasAs, String className)
-			throws StoryValueException {
-		aliasRegistry.aliasService(aliasAs, className);
-	}
-	public Iterator<Entry<String, ObjectAdapter>> iterator() {
-		return aliasRegistry.iterator();
-	}
-    
 
 }
