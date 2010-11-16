@@ -315,8 +315,13 @@
 
       <para>Due to licensing restrictions, the FitNesse integration is not
       part of Apache Isis proper. However, it is available on the companion
-      isis-contrib site, hosted at <ulink
-      url="http://isis-contrib.sourceforge.net">esourceforge</ulink>.</para>
+      <emphasis>isis-contrib</emphasis> site, hosted at <ulink
+      url="http://isis-contrib.sourceforge.net">sourceforge</ulink>.</para>
+
+      <para>An outline of the FitNesse integration is provided here, if only
+      to help compare and contrast the means by which two different frameworks
+      integrate with the common library (this should help make it easier to
+      integrate other frameworks in the future).</para>
     </sect1>
   </chapter>
 
@@ -1048,9 +1053,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <sect3>
           <title>FitNesse</title>
 
-          <para></para>
-
-          <para></para>
+          <para>The FitNesse integration uses the "Set Up Objects" table,
+          called like so:</para>
 
           <informaltable>
             <tgroup cols="3">
@@ -1102,10 +1106,6 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
               </tbody>
             </tgroup>
           </informaltable>
-
-          <para></para>
-
-          <para></para>
         </sect3>
       </sect2>
     </sect1>
