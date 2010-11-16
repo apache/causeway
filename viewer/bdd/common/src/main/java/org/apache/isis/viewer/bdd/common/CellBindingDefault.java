@@ -1,9 +1,7 @@
-package org.apache.isis.viewer.bdd.concordion.internal.fixtures.bindings;
+package org.apache.isis.viewer.bdd.common;
 
-import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryCell;
 
-public class CellBindingForConcordion extends CellBinding {
+public class CellBindingDefault extends CellBinding {
 
     public static class Builder {
         private final String name;
@@ -32,8 +30,8 @@ public class CellBindingForConcordion extends CellBinding {
             return this;
         }
 
-        public CellBindingForConcordion build() {
-            return new CellBindingForConcordion(name, autoCreate, ditto, optional, headText);
+        public CellBindingDefault build() {
+            return new CellBindingDefault(name, autoCreate, ditto, optional, headText);
         }
     }
 
@@ -41,7 +39,7 @@ public class CellBindingForConcordion extends CellBinding {
         return new Builder(name, headText);
     }
 
-    private CellBindingForConcordion(final String name, final boolean autoCreate,
+    private CellBindingDefault(final String name, final boolean autoCreate,
             final boolean ditto, final boolean optional,
             final String[] headTexts) {
     	super(name, autoCreate, ditto, optional, headTexts);

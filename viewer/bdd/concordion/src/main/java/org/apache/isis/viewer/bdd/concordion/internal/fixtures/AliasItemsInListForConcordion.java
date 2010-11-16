@@ -2,23 +2,23 @@ package org.apache.isis.viewer.bdd.concordion.internal.fixtures;
 
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
+import org.apache.isis.viewer.bdd.common.CellBindingDefault;
 import org.apache.isis.viewer.bdd.common.Constants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.StoryCellDefault;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.AliasItemsInListPeer;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.bindings.CellBindingForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.perform.StoryCellForConcordion;
 
 public class AliasItemsInListForConcordion extends
 		AbstractFixture<AliasItemsInListPeer> {
 
 	public AliasItemsInListForConcordion(final AliasRegistry aliasRegistry,
 			final String listAlias) {
-		this(aliasRegistry, listAlias, CellBindingForConcordion.builder(
+		this(aliasRegistry, listAlias, CellBindingDefault.builder(
 				Constants.TITLE_NAME, Constants.TITLE_HEAD).build(),
-				CellBindingForConcordion.builder(Constants.TYPE_NAME,
+				CellBindingDefault.builder(Constants.TYPE_NAME,
 						Constants.TYPE_HEAD).optional().build(),
-				CellBindingForConcordion.builder(Constants.ALIAS_RESULT_NAME,
+				CellBindingDefault.builder(Constants.ALIAS_RESULT_NAME,
 						Constants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
 	}
 
@@ -56,7 +56,7 @@ public class AliasItemsInListForConcordion extends
 
 		if (type != null) {
 			getPeer().getTypeBinding().foundHeadColumn(2,
-					new StoryCellForConcordion(type));
+					new StoryCellDefault(type));
 		}
 		
 		return null;
@@ -79,10 +79,10 @@ public class AliasItemsInListForConcordion extends
 	}
 
 	private void captureCurrent(String aliasAs, String title, String type) {
-		getPeer().getAliasBinding().captureCurrent(new StoryCellForConcordion(aliasAs));
-		getPeer().getTitleBinding().captureCurrent(new StoryCellForConcordion(title));
+		getPeer().getAliasBinding().captureCurrent(new StoryCellDefault(aliasAs));
+		getPeer().getTitleBinding().captureCurrent(new StoryCellDefault(title));
 		if (type != null) {
-			getPeer().getTitleBinding().captureCurrent(new StoryCellForConcordion(type));
+			getPeer().getTitleBinding().captureCurrent(new StoryCellDefault(type));
 		}
 	}
 

@@ -7,13 +7,13 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
+import org.apache.isis.viewer.bdd.common.CellBindingDefault;
 import org.apache.isis.viewer.bdd.common.Constants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.StoryCellDefault;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.bindings.CellBindingForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.perform.StoryCellForConcordion;
 
 import com.google.common.collect.Lists;
 
@@ -26,22 +26,22 @@ public class UsingIsisViewerForConcordion extends
 			final AliasRegistry aliasesRegistry,
 			final Perform.Mode mode) {
 		this(aliasesRegistry, mode, 
-				CellBindingForConcordion.builder(
+				CellBindingDefault.builder(
 						Constants.ON_OBJECT_NAME, Constants.ON_OBJECT_HEAD_SET)
 						.ditto().build(),
-				CellBindingForConcordion.builder(
+				CellBindingDefault.builder(
 						Constants.ALIAS_RESULT_NAME, Constants.ALIAS_RESULT_HEAD_SET)
 						.optional().build(), 
-				CellBindingForConcordion.builder(
+				CellBindingDefault.builder(
 						Constants.PERFORM_NAME, Constants.PERFORM_HEAD_SET)
 						.ditto().build(), 
-				CellBindingForConcordion.builder(
+				CellBindingDefault.builder(
 						Constants.ON_MEMBER_NAME, Constants.ON_MEMBER_HEAD_SET)
 						.optional().build(),
-				CellBindingForConcordion.builder(
+				CellBindingDefault.builder(
 						Constants.THAT_IT_NAME, Constants.THAT_IT_HEAD_SET)
 						.ditto().optional().build(), 
-				CellBindingForConcordion.builder(
+				CellBindingDefault.builder(
 						Constants.WITH_ARGUMENTS_NAME, Constants.WITH_ARGUMENTS_HEAD_SET)
 						.optional().build());
 	}
@@ -90,15 +90,15 @@ public class UsingIsisViewerForConcordion extends
 				thatIt, arg0);
 
 		// capture current
-		getPeer().getOnObjectBinding().captureCurrent(new StoryCellForConcordion(onObject));
-		getPeer().getAliasResultAsBinding().captureCurrent(new StoryCellForConcordion(aliasResultAs));
-		getPeer().getPerformBinding().captureCurrent(new StoryCellForConcordion(perform));
-		getPeer().getOnMemberBinding().captureCurrent(new StoryCellForConcordion(usingMember));
+		getPeer().getOnObjectBinding().captureCurrent(new StoryCellDefault(onObject));
+		getPeer().getAliasResultAsBinding().captureCurrent(new StoryCellDefault(aliasResultAs));
+		getPeer().getPerformBinding().captureCurrent(new StoryCellDefault(perform));
+		getPeer().getOnMemberBinding().captureCurrent(new StoryCellDefault(usingMember));
 		if (getPeer().getThatItBinding().isFound()) {
-			getPeer().getThatItBinding().captureCurrent(new StoryCellForConcordion(thatIt));
+			getPeer().getThatItBinding().captureCurrent(new StoryCellDefault(thatIt));
 		}
 		if (getPeer().getArg0Binding().isFound()) {
-			getPeer().getArg0Binding().captureCurrent(new StoryCellForConcordion(arg0));
+			getPeer().getArg0Binding().captureCurrent(new StoryCellDefault(arg0));
 			argumentCells.add(arg0);
 		}
 		for (String arg: remainingArgs) {
@@ -132,7 +132,7 @@ public class UsingIsisViewerForConcordion extends
 	private static List<StoryCell> asValues(List<String> argumentCells) {
 		List<StoryCell> storyValues = Lists.newArrayList();
 		for (String arg : argumentCells) {
-			storyValues.add(new StoryCellForConcordion(arg));
+			storyValues.add(new StoryCellDefault(arg));
 		}
 		return storyValues;
 	}

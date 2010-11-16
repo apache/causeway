@@ -1123,7 +1123,44 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
           <title>Common</title>
 
           <para>The common library support for setting up objects using the
-          SetUpObjectsPeer.</para>
+          <classname>SetUpObjectsPeer</classname> class. The constructor for
+          this class takes the following arguments:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><classname>AliasRegistry</classname>
+              <varname>aliasRegistry</varname></para>
+
+              <para>the alias registry which is used to lookup aliases to
+              existing objects, and is populated with aliases for the new
+              created objects (if an alias binding is specified; see
+              below).</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>String</classname>
+              <varname>className</varname></para>
+
+              <para>This is the fully qualified class name of the object to be
+              instantiated</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>SetUpObjectsPeer.Mode</classname>
+              <varname>mode</varname></para>
+
+              <para>This is whether the object is to be persisted or
+              not</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>CellBinding</classname> aliasBinding</para>
+
+              <para>This object represents a binding to a cell that will hold
+              the reference to each newly created object. It can be left
+              <literal>null</literal> if required.</para>
+            </listitem>
+          </itemizedlist>
 
           <para></para>
 
