@@ -48,7 +48,10 @@
     that abstracts the interaction with the Isis metamodel, along with an
     integration (that uses this common library) for one particular
     <acronym>BDD</acronym> framework, namely <ulink
-    url="http://concordion.org">Concordion</ulink>.</para>
+    url="http://concordion.org">Concordion</ulink>. There is also outline
+    coverage of the <ulink url="http://fitnesse.org">FitNesse</ulink>
+    integration (part of <ulink
+    url="http://isis-contrib.sourceforge.net">isis-contrib</ulink>).</para>
 
     <para>This user guide describes how to use the Concordion integration,
     along with details of the common library so that other BDD frameworks can
@@ -131,13 +134,16 @@
           a column of a table to a property or to an alias</para>
 
           <para>This can then be used to wire the values in the rows of the
-          table to the properties specified in the header</para>
+          table to the properties specified in the header. The library
+          provides a default implementation, though subclasses can override if
+          required</para>
         </listitem>
       </itemizedlist>
 
-      <para></para>
-
-      <para></para>
+      <para>In the following chapter (<xref
+      linkend="chp.UsingTheFramework" />), details are provided of how the
+      services of the common library are used by each of the supported
+      <acronym>BDD</acronym> framework integrations.</para>
     </sect1>
 
     <sect1>
@@ -212,7 +218,7 @@
         minutes.</para>
       </sect2>
 
-      <sect2>
+      <sect2 id="sec.HowTheIsisConcordionIntegrationWorks">
         <title>How the Isis/Concordion Integration Works</title>
 
         <para>Although you could test an Apache Isis application using vanilla
@@ -302,6 +308,15 @@
         invoked using special commands provided by the Isis/Concordion
         integration.</para>
       </sect2>
+    </sect1>
+
+    <sect1>
+      <title>FitNesse Integration</title>
+
+      <para>Due to licensing restrictions, the FitNesse integration is not
+      part of Apache Isis proper. However, it is available on the companion
+      isis-contrib site, hosted at <ulink
+      url="http://isis-contrib.sourceforge.net">esourceforge</ulink>.</para>
     </sect1>
   </chapter>
 
@@ -909,7 +924,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
             </listitem>
 
             <listitem>
-              <para><classname>CellBinding</classname> aliasBinding</para>
+              <para><classname>CellBinding</classname>
+              <varname>aliasBinding</varname></para>
 
               <para>This object represents a binding to a cell that will hold
               the reference to each newly created object. It can be left
@@ -964,28 +980,40 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <sect3>
           <title>Concordion</title>
 
-          <para>The Concordion framework integration provides a number of
-          overloaded methods called:</para>
+          <para>The Concordion framework integration provides:</para>
 
           <itemizedlist>
             <listitem>
               <para><methodname>#setUpObject(String className, String aliasAs,
               ...)</methodname></para>
+
+              <para>There are 10 overloaded versions of this method, to
+              account for setting up different types of objects that have up
+              to 10 properties.</para>
+
+              <para>The method returns a string "ok" if has worked, otherwise
+              it returns exception text. This might seem a little odd, but
+              allows a meaningful message to be shown in the
+              <acronym>XHTML</acronym>.</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#setUpObjectVarArgs(String className, String
+              aliasAs, ...)</methodname></para>
+
+              <para>This (protected, not public) method is to cater for
+              setting up objects that require more than 10 properties to be
+              setup. In these cases, the developer should write their own
+              method and call into the
+              <methodname>#setUpObjectsVarargs(...)</methodname> as
+              required.</para>
             </listitem>
           </itemizedlist>
 
-          <para>The varargs allow a variable number of properties to be
-          defined, up to a maximum of 10 properties. If more than this are
-          needed, the developer should write their own method and call the
-          protected method,
-          <methodname>#setUpObjectsVarargs(...)</methodname>.</para>
-
-          <para>This method should be called using isis:execute, not with
-          concordion:execute (where "isis" is</para>
-
-          <para></para>
-
-          <para></para>
+          <para>Note that this method should be called using
+          <emphasis>isis:execute</emphasis>, not with concordion:execute. See
+          <xref linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
+          details.</para>
 
           <programlisting>&lt;p&gt;With Employees (&lt;span concordion:set="#className"&gt;com.mycompany.myapp.dom.employee.Employee&lt;/span&gt;):
 &lt;/p&gt;
@@ -1015,8 +1043,6 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     &lt;td&gt;ok&lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;</programlisting>
-
-          <para></para>
         </sect3>
 
         <sect3>
@@ -1477,12 +1503,14 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
   <chapter id="chp.HintsAndTips">
     <title>Hints and Tips</title>
 
-    <para>This chapter contains a collection of hints, tips and suggestions
-    for writing your own tests.</para>
+    <abstract>
+      <para>This chapter contains a collection of hints, tips and suggestions
+      for writing your own tests.</para>
+    </abstract>
 
-    <para>For further guidance, check out Gojko Adzic's book, <ulink
-    url="http://www.acceptancetesting.info/the-book/">Bridging the
-    Communication Gap</ulink>.</para>
+    <para>For further guidance, we recommend that you check out Gojko Adzic's
+    book, <ulink url="http://www.acceptancetesting.info/the-book/">Bridging
+    the Communication Gap</ulink>.</para>
 
     <sect1>
       <title>Separate In-Progress Stories from the Backlog</title>
