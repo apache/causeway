@@ -27,7 +27,7 @@ import java.util.List;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.Factory;
 
-import org.apache.isis.bytecode.cglib.persistence.objectfactory.internal.CglibEnhanced;
+import org.apache.isis.defaults.bytecode.objectfactory.internal.CglibEnhanced;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 
 

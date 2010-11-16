@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.isis.alternatives.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.alternatives.embedded.internal.RuntimeContextForEmbeddedMetaModel;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -54,7 +55,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
 import org.apache.isis.defaults.progmodel.JavaReflector;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
-import org.apache.isis.metamodel.specloader.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefault;

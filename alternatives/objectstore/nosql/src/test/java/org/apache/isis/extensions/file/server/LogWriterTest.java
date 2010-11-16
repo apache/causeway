@@ -26,6 +26,10 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.alternatives.objectstore.nosql.file.server.DataWriter;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.FileContent;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.LogWriter;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;

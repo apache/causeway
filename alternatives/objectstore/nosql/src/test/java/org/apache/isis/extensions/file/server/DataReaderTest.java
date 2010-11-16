@@ -24,6 +24,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 
+import org.apache.isis.alternatives.objectstore.nosql.file.server.DataReader;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.FileServerException;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
 import org.junit.BeforeClass;
 import org.junit.Test;
 

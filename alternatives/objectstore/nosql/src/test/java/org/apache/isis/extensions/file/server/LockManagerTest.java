@@ -20,6 +20,7 @@
 
 package org.apache.isis.extensions.file.server;
 
+import org.apache.isis.alternatives.objectstore.nosql.file.server.LockManager;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -28,6 +28,9 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.apache.isis.alternatives.objectstore.nosql.file.server.DataWriter;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.FileContent;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
 import org.junit.Before;
 import org.junit.Test;
 

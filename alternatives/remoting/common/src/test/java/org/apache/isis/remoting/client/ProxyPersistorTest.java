@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
+import org.apache.isis.alternatives.bytecode.identity.objectfactory.ObjectFactoryBasic;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -74,7 +75,6 @@ import org.apache.isis.remoting.exchange.KnownObjectsRequest;
 import org.apache.isis.remoting.exchange.ResolveObjectRequest;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryBasic;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

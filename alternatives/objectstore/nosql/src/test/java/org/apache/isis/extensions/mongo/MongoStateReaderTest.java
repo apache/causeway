@@ -20,6 +20,7 @@
 
 package org.apache.isis.extensions.mongo;
 
+import org.apache.isis.alternatives.objectstore.nosql.mongo.MongoStateReader;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;

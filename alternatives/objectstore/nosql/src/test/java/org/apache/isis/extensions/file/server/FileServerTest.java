@@ -27,6 +27,9 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
+import org.apache.isis.alternatives.objectstore.nosql.file.server.FileServerProcessor;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.ServerConnection;
+import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
