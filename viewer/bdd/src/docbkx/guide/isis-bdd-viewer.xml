@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-"file:./resources/docbook-xml-4.5/docbookx.dtd">
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
@@ -371,40 +371,15 @@
       test.</para>
 
       <para>In terms of mechanics, one approach is to put the "given" into the
-      setup page for a test, with the "when" and the "then" in separate pages.
-      Alternatively, as the archetype does (see <xref
-      linkend="chp.UsingTheFitNesseArchetype" />), you could separate out the
-      "given", the "when" and the "then" into a hierarchy of pages.</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Separating out the "given" from the rest of the test makes it
-          easy to include that given in other tests (discussed further in
-          <xref linkend="sec.FactorOutCommonGivens" />), and it also allows us
-          to run up the viewer to inspect the setup (see <xref
-          linkend="sec.UsingTheFixtureViewer" />).</para>
-        </listitem>
-
-        <listitem>
-          <para>Separating out the "then" from the "when" makes it easy to
-          identify the individual post conditions. A new requirement might
-          mean only the addition of a new post condition. A downside is that
-          the "given" and "when" will be run for each post-condition, leading
-          to longer test turn-around times.</para>
-        </listitem>
-      </itemizedlist>
+      setup page for a test, with the "when" and the "then" in separate
+      pages.d</para>
     </sect1>
 
     <sect1 id="sec.UsingTheFixtureViewer">
       <title>Using the RunViewer fixture</title>
 
-      <para>One reason that the archetype (<xref
-      linkend="chp.UsingTheFitNesseArchetype" />) separates out the "given",
-      "when" and "then" is so that the "given" - which is often the hardest
-      part to get setup - can be verified independently from the rest of the
-      test.</para>
-
-      <para>To do this, we can use the RunViewer fixture (see <xref
+      <para>The "given" can often be the hardest part to get setup. To check
+      it, we can use the <classname>RunViewer</classname> fixture (see <xref
       linkend="sec.RunViewer" />). This will run up the drag-n-drop viewer at
       the specified point in the test; a visual equivalent of
       <code>System.out.println()</code>, really. We can therefore take the
@@ -426,11 +401,23 @@
 
       <para>In terms of size, the "given" is far larger than either the "when"
       or the "then", and therefore this is the area where tests can quickly
-      become unmaintainable. So instead, factor out your givens into separate
-      pages, and then use FitNesse's <ulink
-      url="http://fitnesse.org/FitNesse.UserGuide.MarkupPageInclude">!include</ulink>
-      directive to assemble the pages you need (as done by the archetype,
-      <xref linkend="chp.UsingTheFitNesseArchetype" />).</para>
+      become unmaintainable. So instead, try to factor out your givens into
+      separate pages.</para>
+
+      <para>For example:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>if using Concordion, you can use &lt;a href's&gt; with a
+          concordion:execute tag to include another page.</para>
+        </listitem>
+
+        <listitem>
+          <para>if usingFitNesse, then use it's <ulink
+          url="http://fitnesse.org/FitNesse.UserGuide.MarkupPageInclude">!include</ulink>
+          directive to assemble the pages you need</para>
+        </listitem>
+      </itemizedlist>
 
       <para>The names of these pages should also follow a declarative style,
       see <xref linkend="sec.UseADeclarativeStyle" />.</para>
@@ -451,36 +438,15 @@
       again could be "JoeBloggsFiveOrders".</para>
     </sect1>
 
-    <sect1>
-      <title>Run against a real database</title>
-
-      <para>The Tested Objects' integration exercises the Naked Objects domain
-      model as configured in nakedobjects.properties (as per the
-      SetUpConfigDirectory fixture, <xref
-      linkend="sec.SetUpConfigDirectory" />). Out-of-the-box, of course, Naked
-      Objects uses an in-memory object store, and so there are no issues
-      running one scenario test against another.</para>
-
-      <para>You can if you want though configure Naked Objects to go against a
-      real database, for example by using the Hibernate-based object store
-      provided by the <ulink url="http://jpaobjects.sourceforge.net">JPA
-      Objects</ulink> sister project. In this case you will need to ensure
-      that you reset the database at the end; Tested Objects doesn't provide
-      any fixtures to help you though, so you are on your own here. An
-      alternative might be to use JPA Objects against HSQLDB configured to for
-      in-memory use. This would let you verify your database mappings, but
-      without no need to tear anything down.</para>
-    </sect1>
-
     <sect1 id="sec.SettingUpContinuousIntegration">
       <title>Set up Continuous Integration</title>
 
-      <para>Since Tested Objects is a Maven application, it is easy enough to
-      configure it to run under a CI server, such as <ulink
+      <para>Since Isis is a Maven application, it is easy enough to configure
+      it to run under a CI server, such as <ulink
       url="http://hudson-ci.org/">Hudson</ulink>. If you google around you
-      should be able find <ulink
-      url="http://andypalmer.com/2009/04/showing-fitnesse-test-results-in-hudson/">a
-      way</ulink> to publish the FitNesse test results through Hudson.</para>
+      should also be able find a way to make Hudson publish the test results
+      onto a website so that they can be inspected by your domain experts /
+      business analysts.</para>
     </sect1>
   </chapter>
 
@@ -536,15 +502,12 @@
             </row>
 
             <row>
-              <entry><methodname>Story#bootstrapIsis(configDirectory,
-              deploymentType)</methodname><para>Bootstraps the Isis runtime
-              using the specified config directory (containing isis.properties
-              config file) and deployment type. The latter should be either
-              EXPLORATION (meaning exploration actions are enabled) or
-              PROTOTYPE; no other values are valid.</para><para>Even if
-              running in exploration mode, you should still call
-              <filename>Story#logonAs()</filename> in order to indicate which
-              user account to run the story as.</para></entry>
+              <entry><methodname></methodname><para>Bootstraps the Isis
+              runtime using the specified config directory (containing
+              isis.properties config file) and deployment type. The latter
+              should be either EXPLORATION (meaning exploration actions are
+              enabled) or PROTOTYPE; no other values are
+              valid.</para><para></para></entry>
 
               <entry><methodname>#bootstrapIsis(String configDirectory,
               DeploymentType deploymentType)</methodname><para>Typically
@@ -563,6 +526,150 @@
           </tbody>
         </tgroup>
       </table>
+
+      <sect2>
+        <title>Story Context</title>
+
+        <para>The common library provides an object to represent the story
+        context to manage such things as the Isis configuration, the date/time
+        that the story is running as, the user that is logged-in, and managing
+        the aliases of objects so that they can be interacted with.</para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para>An instance of the <classname>Story</classname> class provides
+          a context for the story. Framework integrations are expected to
+          instantiate this class, and then use it as the primary means to
+          interact with the system.</para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para>The <classname>AbstractIsisConcordionTest</classname>
+          instantiates the <classname>Story</classname> and provides methods
+          that can be invoked from within <acronym>XHTML</acronym> (ie taking
+          <classname>String</classname>s). Test cases should inherit from this
+          abstract class, with the <acronym>XHTML</acronym> typically calling
+          to the inherited methods directly. The developer may optionally add
+          small helper methods to be called from the <acronym>XHTML</acronym>
+          instead; these can factor out any boilerplate in the script.</para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para>The <classname>StoryFixture</classname> fixture is a
+          <acronym>FIT</acronym> <classname>DoFixture</classname> that
+          provides the overall context for the framework. Whereas other
+          fixtures are instantiated once per table, the
+          <classname>StoryFixture</classname> exists for the duration of the
+          test page. It should typically be referenced in the test suite's
+          setup page, and should appear first within this setup.</para>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>Bootstrapping Isis</title>
+
+        <para>An Isis runtime can be bootstrapped with a single call. This
+        installs no-op implementations of some of the main components, along
+        with an in-memory object store.</para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para>The <methodname>Story#bootstrapIsis(String configDirectory,
+          DeploymentType deploymentType)</methodname> is used to bootstrap the
+          Isis runtime:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The specified config directory contains
+              <filename>isis.properties</filename> config file, from which the
+              services are registered. Any fixtures in that properties file
+              are ignored (the <acronym>BDD</acronym> integration requires
+              that any objects are created through the test scripts, see <xref
+              linkend="sec.SetUpObjects" /> and <xref
+              linkend="sec.UsingIsisViewer" />).</para>
+            </listitem>
+
+            <listitem>
+              <para>The deployment type must be either EXPLORATION (meaning
+              exploration actions are enabled) or PROTOTYPE; no other values
+              are valid).</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Even if running in exploration mode, you must still logon (see
+          <xref linkend="sec.LogonAsSwitchUserTo" />) in order to indicate
+          which user account to run the story as.</para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para>The <classname>AbstractIsisConcordionTest</classname> class
+          provides two overloaded versions of
+          <methodname>bootstrapIsis(...)</methodname> method:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>#bootstrapIsis(String configDirectory,
+              DeploymentType deploymentType)</methodname></para>
+
+              <para>Intended to be called from within an <methodname>@Before
+              setUp()</methodname> method, when there's no particular need to
+              document the bootstrapping process within the story</para>
+            </listitem>
+          </itemizedlist>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>#bootstrapIsis(String configDirectory, String
+              deploymentType)</methodname></para>
+
+              <para>Intended to be called from the <acronym>XHTML</acronym>
+              page, allowing the story document the bootstrapping process.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para>The <classname>BootstrapIsisConfiguredFromInMode</classname>
+          fixture is used to bootstrap Isis. It takes the form:</para>
+
+          <table>
+            <title>Bootstrap Isis</title>
+
+            <tgroup cols="4">
+              <tbody>
+                <row>
+                  <entry><classname>BootstrapIsisConfiguredFrom</classname></entry>
+
+                  <entry><emphasis>configDirectory</emphasis></entry>
+
+                  <entry><methodname>InMode</methodname></entry>
+
+                  <entry><emphasis>deploymentType</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
+      </sect2>
     </sect1>
 
     <sect1>
@@ -662,46 +769,128 @@
               fixture, first column specifying class name and second column
               defining the alias.</para></entry>
             </row>
+
+            <row>
+              <entry><methodname>Story#getAliasRegistry()</methodname><para>and</para><para><methodname>AliasRegistry#aliasService(String
+              aliasAs, String
+              serviceClassName)</methodname></para><para>Specifies an alias to
+              a service in order to invoke actions upon them.</para><para>Note
+              that the services are <emphasis>not</emphasis> defined here,
+              merely aliased. </para></entry>
+
+              <entry><methodname>#aliasService(aliasAs, String
+              serviceClassName)</methodname><para><methodname>#aliasServices(aliasAs,
+              String serviceClassName)</methodname></para><para>Aliases a
+              service. Typically called within a table.</para></entry>
+
+              <entry><methodname>|AliasServices|</methodname><para><methodname>|className|alias=|</methodname></para><para>Two-column
+              fixture, first column specifying class name and second column
+              defining the alias.</para></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
 
-      <sect2 id="sec.AliasServices">
-        <title>AliasServices</title>
+      <sect2>
+        <title>Setting Date and Time</title>
 
         <para></para>
 
-        <screenshot>
-          <screeninfo>AliasServices</screeninfo>
+        <sect3>
+          <title>Common</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/AliasServices.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
+      </sect2>
+
+      <sect2 id="sec.LogonAsSwitchUserTo">
+        <title>Logging On / Switching User</title>
+
+        <para></para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
+      </sect2>
+
+      <sect2 id="sec.AliasServices">
+        <title>Aliasing Services</title>
+
+        <para></para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
 
       <sect2 id="sec.SetUpObjects">
-        <title>SetUpObjects</title>
+        <title>Setting Up Objects</title>
 
-        <para id="sec.UsingNakedObjectsForViewer">Initializes objects.
-        Typically used for immutable reference/standing data objects). Can
-        also be to setup used for transaction/operational data objects (though
+        <para>Initializes objects. Typically used for immutable
+        reference/standing data objects). Can also be to setup used for
+        transaction/operational data objects (though
         UsingNakedObjectsViewerForSetup, <xref
         linkend="sec.UsingNakedObjectsViewer" />, is preferable). The
         DebugObjectStore fixture (<xref linkend="sec.DebugObjectStore" />) can
         be used to check the state of objects created.</para>
 
-        <screenshot>
-          <screeninfo>SetUpObjects</screeninfo>
+        <sect3>
+          <title>Common</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/SetUpObjects.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
     </sect1>
 
@@ -713,6 +902,78 @@
       transactional objects), for the "when" (the interaction being tested) or
       the "then" (assertions on the state after the interaction being
       tested).</para>
+
+      <sect2 id="sec.UsingIsisViewer">
+        <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
+
+        <para></para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>Check List</title>
+
+        <para></para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>Alias Items In List</title>
+
+        <para></para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
+      </sect2>
 
       <sect2 id="sec.UsingNakedObjectsViewer">
         <title>UsingNakedObjectsViewer /
@@ -862,88 +1123,132 @@
       example.</para>
 
       <sect2 id="sec.DebugServices">
-        <title>DebugServices</title>
+        <title>Debugging Services</title>
 
         <para>Lists service class names, as picked up from configuration.
         Useful with AliasServices (see <xref
         linkend="sec.AliasServices" />).</para>
 
-        <screenshot>
-          <screeninfo>DebugServices</screeninfo>
+        <sect3>
+          <title>Common</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/DebugServices.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
 
       <sect2 id="sec.DebugClock">
-        <title>DebugClock</title>
+        <title>Debugging the Clock</title>
 
         <para>Reads the current value of the clock. Useful for debugging and
         diagnostics.</para>
 
-        <screenshot>
-          <screeninfo>DebugClock</screeninfo>
+        <sect3>
+          <title>Common</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/DebugClock.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
 
       <sect2 id="sec.DebugObjectStore">
-        <title>DebugObjectStore</title>
+        <title>Debugging the Clock</title>
 
         <para>Dumps the contents of the object store. Useful for debugging
         setup (through SetupObjects, <xref linkend="sec.SetUpObjects" />, and
         UsingNakedObjectsViewerForSetup, <xref
-        linkend="sec.UsingNakedObjectsViewer" />).</para>
+        linkend="sec.UsingIsisViewer" />).</para>
 
-        <screenshot>
-          <screeninfo>DebugObjectStore</screeninfo>
+        <sect3>
+          <title>Common</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/DebugObjectStore.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
 
       <sect2 id="sec.CheckSpecificationsLoaded">
-        <title>CheckSpecificationsLoaded</title>
+        <title>Check Specifications Loaded</title>
 
-        <para>Verifies that listed NakedObjectSpecifications have been loaded
-        into the metamodel.</para>
+        <para>Verifies that listed <classname>ObjectSpecification</classname>s
+        have been loaded into the metamodel</para>
 
-        <screenshot>
-          <screeninfo>CheckSpecificationsLoaded</screeninfo>
+        <sect3>
+          <title>Common</title>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/CheckSpecificationsLoaded.png"
-                         scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
 
       <sect2 id="sec.RunViewer">
-        <title>RunViewer</title>
+        <title>Run Viewer</title>
 
         <para>Runs up the DnD viewer with the current state of the objects.
         This is a great way to inspect the state of the system, for example if
         a test is failing and you can't see why.</para>
 
-        <para>Of course, other alternatives are writing unit tests and
-        debugging with break points. But failing scenario tests usually arise
-        because of an integration issue between two different bits of the
-        system. Being able to have a "poke around" can be invaluable.</para>
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
     </sect1>
 
@@ -952,13 +1257,30 @@
 
       <para>The opposite of setting up...</para>
 
-      <sect2>
-        <title>ShutDownNakedObjects</title>
+      <sect2 id="sec.ShutdownIsis">
+        <title>Shutdown Isis</title>
 
         <para>This fixture shuts down the Naked Objects runtime, releasing
-        memory and so on. A good place to put this is in the test's <ulink
-        url="http://fitnesse.org/FitNesse.UserGuide.SpecialPages">TearDown</ulink>
-        page (which could be inherited).</para>
+        memory and so on. A good place to put this is in the test's
+        teardown.</para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+        </sect3>
       </sect2>
     </sect1>
   </appendix>
