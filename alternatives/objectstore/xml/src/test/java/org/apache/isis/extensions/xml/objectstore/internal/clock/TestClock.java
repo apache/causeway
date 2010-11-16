@@ -20,6 +20,8 @@
 
 package org.apache.isis.extensions.xml.objectstore.internal.clock;
 
+import org.apache.isis.alternatives.objectstore.xml.internal.clock.Clock;
+
 
 
 

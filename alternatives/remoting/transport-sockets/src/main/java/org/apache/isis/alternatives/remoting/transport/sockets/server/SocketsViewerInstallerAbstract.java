@@ -20,10 +20,10 @@
 
 package org.apache.isis.alternatives.remoting.transport.sockets.server;
 
+import org.apache.isis.alternatives.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.core.runtime.viewer.IsisViewer;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 
 public abstract class SocketsViewerInstallerAbstract extends IsisViewerInstallerAbstract {
 

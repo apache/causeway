@@ -26,6 +26,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.alternatives.objectstore.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.ContextCategory;
 import org.apache.isis.core.runtime.system.DeploymentCategory;

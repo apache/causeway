@@ -25,6 +25,11 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
+import org.apache.isis.alternatives.objectstore.xml.internal.data.Data;
+import org.apache.isis.alternatives.objectstore.xml.internal.data.DataManager;
+import org.apache.isis.alternatives.objectstore.xml.internal.data.ObjectData;
+import org.apache.isis.alternatives.objectstore.xml.internal.data.ObjectDataVector;
+import org.apache.isis.alternatives.objectstore.xml.internal.data.PersistorException;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;

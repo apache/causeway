@@ -31,11 +31,11 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.alternatives.remoting.transport.ConnectionException;
+import org.apache.isis.alternatives.remoting.transport.ProfilingInputStream;
+import org.apache.isis.alternatives.remoting.transport.ProfilingOutputStream;
+import org.apache.isis.alternatives.remoting.transport.TransportAbstract;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.remoting.transport.ConnectionException;
-import org.apache.isis.remoting.transport.ProfilingInputStream;
-import org.apache.isis.remoting.transport.ProfilingOutputStream;
-import org.apache.isis.remoting.transport.TransportAbstract;
 
 public class SocketTransport extends TransportAbstract {
 

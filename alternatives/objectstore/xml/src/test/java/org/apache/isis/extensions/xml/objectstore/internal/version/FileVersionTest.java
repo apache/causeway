@@ -28,6 +28,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;

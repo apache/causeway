@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.alternatives.objectstore.xml.internal.data.ReferenceVector;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 
 public class ReferenceVectorTest {

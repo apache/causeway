@@ -31,6 +31,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.alternatives.profilestore.xml.internal.UserProfileDataHandler;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;

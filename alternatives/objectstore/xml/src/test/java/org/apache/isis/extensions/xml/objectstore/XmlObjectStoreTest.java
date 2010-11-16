@@ -26,6 +26,8 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.alternatives.objectstore.xml.XmlObjectStore;
+import org.apache.isis.alternatives.objectstore.xml.internal.clock.DefaultClock;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
@@ -41,7 +43,6 @@ import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
-import org.apache.isis.extensions.xml.objectstore.internal.clock.DefaultClock;
 import org.apache.isis.extensions.xml.objectstore.internal.data.MockDataManager;
 import org.apache.isis.extensions.xml.objectstore.internal.services.DummyServiceManager;
 

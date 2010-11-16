@@ -20,8 +20,8 @@
 
 package org.apache.isis.alternatives.remoting.transport.sockets.shared;
 
+import org.apache.isis.alternatives.remoting.transport.TransportInstaller;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.remoting.transport.TransportInstaller;
 
 
 public final class SocketTransportConstants {
