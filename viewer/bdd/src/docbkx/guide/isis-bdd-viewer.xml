@@ -635,6 +635,9 @@
               </para>
             </listitem>
           </itemizedlist>
+
+          <para>Whichever is used, they both delegate to the common
+          <methodname>Story#bootstrapIsis(...)</methodname> method.</para>
         </sect3>
 
         <sect3>
@@ -643,31 +646,27 @@
           <para>The <classname>BootstrapIsisConfiguredFromInMode</classname>
           fixture is used to bootstrap Isis. It takes the form:</para>
 
-          <table>
-            <title>Bootstrap Isis</title>
-
+          <informaltable>
             <tgroup cols="4">
+              <colspec colwidth="3*" />
+
               <tbody>
                 <row>
-                  <entry><classname>BootstrapIsisConfiguredFrom</classname></entry>
+                  <entry><classname>Bootstrap Isis Configured
+                  From</classname></entry>
 
-                  <entry><emphasis>configDirectory</emphasis></entry>
+                  <entry><emphasis>config Directory</emphasis></entry>
 
-                  <entry><methodname>InMode</methodname></entry>
+                  <entry><methodname>In Mode</methodname></entry>
 
-                  <entry><emphasis>deploymentType</emphasis></entry>
+                  <entry><emphasis>deployment Type</emphasis></entry>
                 </row>
               </tbody>
             </tgroup>
-          </table>
+          </informaltable>
 
-          <para></para>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
+          <para>This delegates to the common
+          <methodname>Story#bootstrapIsis(...)</methodname> method.</para>
         </sect3>
       </sect2>
     </sect1>
@@ -697,61 +696,6 @@
           </thead>
 
           <tbody>
-            <row>
-              <entry><classname>Story#dateAndTimeIs(java.util.Date)</classname><para>Sets
-              the clock to a specific date and time.</para><para>This installs
-              the <classname>FixtureClock</classname> as the implementation of
-              the <classname>Clock</classname> singleton (in the applib). If
-              this fixture is not called, then the default system clock is
-              used, which gets the time from the host computer. The
-              Story#debugClock () method (<xref linkend="sec.Debugging" />)
-              can be used to verify the clock state.</para></entry>
-
-              <entry><classname>#dateIs(String
-              dateAndTimeStr)</classname><para><methodname>#dateIsNow(String
-              dateAndTimeStr)</methodname></para><para><methodname>#timeIs(String
-              dateAndTimeStr)</methodname></para><para><methodname>#timeIsNow(String
-              dateAndTimeStr)</methodname></para><para>Intended to be called
-              from the <acronym>XHTML</acronym>, as part of the "given".
-              Parsed in format 'dd MMM yyyy hh:mm'</para></entry>
-
-              <entry><para><methodname>|DateIs|dateAndTimeStr|</methodname></para><para><methodname>|DateIsNow|dateAndTimeStr|</methodname></para><para><methodname>|TimeIs|dateAndTimeStr|</methodname></para><para><methodname>|TimeIsNow|dateAndTimeStr|</methodname></para><para>Typically
-              called early on in the test, as part of the "given". Parsed in
-              format 'dd MMM yyyy hh:mm'</para></entry>
-            </row>
-
-            <row>
-              <entry><methodname>Story#logonAsOrSwitchUserTo(String
-              userName)</methodname><para>Logs on / switch user to as a
-              specific
-              user.</para><para><methodname>Story#logonAsOrSwitchUserTo(String
-              userName, List&lt;String&gt;
-              roleNames)</methodname></para><para>Logs on to a specific user,
-              with specified roles. Part of the initialization for a
-              particular story's setup, and typically referenced in the test
-              suite or story's own setup page.</para><para>Also used for
-              switching the current user within a story, eg to check a
-              workflow between different users.</para></entry>
-
-              <entry><methodname>#logonAs(String
-              userName)</methodname><para><methodname>#logonAs(String
-              userName, String roleListStr)</methodname></para><para>Intended
-              to be called from the <acronym>XHTML</acronym>, as part of the
-              "given". The role list, if specified, should be
-              comma-separated.</para><methodname>#switchUserTo(String
-              userName)</methodname><para><methodname>#switchUserTo(String
-              userName, String roleListStr)</methodname></para><para>Switch
-              the currently logged-on user to another user, optionally with
-              specified roles.</para></entry>
-
-              <entry><para><methodname>|LogonAs|userName|</methodname></para><para><methodname>|LogonAs|userName|WithRoles|roleList|</methodname></para><para>Typically
-              called early on in the test, as part of the "given". The role
-              list, if specified, should be
-              comma-separated.</para><para><methodname>|SwitchUserTo|userName|</methodname></para><para><methodname>|SwitchUserTo|userName|WithRoles|roleList|</methodname></para><para>Switch
-              the currently logged-on user to another user, optionally with
-              specified roles.</para></entry>
-            </row>
-
             <row>
               <entry><methodname>Story#getAliasRegistry()</methodname><para>and</para><para><methodname>AliasRegistry#aliasService(String
               aliasAs, String
@@ -791,51 +735,267 @@
         </tgroup>
       </table>
 
-      <sect2>
-        <title>Setting Date and Time</title>
-
-        <para></para>
-
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-        </sect3>
-      </sect2>
-
       <sect2 id="sec.LogonAsSwitchUserTo">
         <title>Logging On / Switching User</title>
 
-        <para></para>
+        <para>Used to specify the currently logged-on user. Should always be
+        called near the top of the story, as part of the "given". Can also be
+        used for switching the current user later on in the story, eg to check
+        a workflow between different users.</para>
 
         <sect3>
           <title>Common</title>
 
-          <para></para>
+          <para>The common library provides two overloaded methods, depending
+          on whether the roles for the user need to be specified or
+          not:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>Story#logonAsOrSwitchUserTo(String
+              userName)</methodname></para>
+
+              <para>Logs on / switch user to as a specific user.</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>Story#logonAsOrSwitchUserTo(String userName,
+              List&lt;String&gt; roleNames)</methodname></para>
+
+              <para>Logs on to a specific user, with specified roles. Part of
+              the initialization for a particular story's setup, and typically
+              referenced in the test suite or story's own setup page.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The username and roles are not validated against.</para>
         </sect3>
 
         <sect3>
           <title>Concordion</title>
 
-          <para></para>
+          <para>The Concordion integration provides two sets of overloaded
+          methods:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>#logonAs(String userName)</methodname> and
+              <methodname>#logonAs(String userName, String
+              roleListStr)</methodname></para>
+
+              <para>Intended to be called in the initial setup, as part of the
+              story's "given".</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#switchUserTo(String userName)</methodname>
+              and <methodname>#switchUserTo(String userName, String
+              roleListStr)</methodname></para>
+
+              <para>(Optional); intended to be called later on in the story,
+              eg, to test workflow.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Each of these is intended to be called from the
+          <acronym>XHTML</acronym>. The role list, if specified, should be
+          comma-separated (any white space will be ignored).</para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
 
-          <para></para>
+          <para>The FitNesse integration provides two sets of overloaded
+          fixtures:</para>
+
+          <informaltable>
+            <tgroup cols="2">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Logon As</classname></entry>
+
+                  <entry><emphasis>user name</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <informaltable>
+            <tgroup cols="4">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Logon As</classname></entry>
+
+                  <entry><emphasis>user name</emphasis></entry>
+
+                  <entry><classname>With Roles</classname></entry>
+
+                  <entry><emphasis>role list</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <para>Intended to be called in the initial setup, as part of the
+          story's "given".</para>
+
+          <informaltable>
+            <tgroup cols="2">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Switch User To</classname></entry>
+
+                  <entry><emphasis>user name</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <informaltable>
+            <tgroup cols="4">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Switch User To</classname></entry>
+
+                  <entry><emphasis>user name</emphasis></entry>
+
+                  <entry><classname>With Roles</classname></entry>
+
+                  <entry><emphasis>role list</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <para>Optional; intended to be called later on in the story, eg, to
+          test workflow.</para>
+
+          <para>The role list, if specified, should be comma-separated (any
+          white space will be ignored).</para>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>Setting Date and Time</title>
+
+        <para>Sets the story's clock to a specific date and time. Stories that
+        deal with domain objects that use the clock (eg for the defaulting of
+        a date/time property) will typically need to call this fixture.</para>
+
+        <para>Typically called within the "given", though may be called many
+        times throughout the story.</para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para><methodname>Story#dateAndTimeIs(java.util.Date)</methodname></para>
+
+          <para>This fixture installs the <classname>FixtureClock</classname>
+          as the implementation of the <classname>Clock</classname> singleton
+          (in the applib). Every call to the <classname>Clock</classname> will
+          return the same date/time until the method is called again.</para>
+
+          <para>If this fixture is not called, then the default system clock
+          is used, which gets the time from the host computer. The
+          <methodname>Story#debugClock()</methodname> method (<xref
+          linkend="sec.DebugClock" />) can be used to verify the clock
+          state.</para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para>The Concordion integration provides a number of overloaded
+          methods, all designed to be called from the XHTML:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>#dateIs(String
+              dateAndTimeStr)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#timeIs(String
+              dateAndTimeStr)</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The overloaded forms are just for convenience. The date/time
+          provided is parsed against the format 'dd MMM yyyy hh:mm'</para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para>The FitNesse integration provides four versions (overloaded
+          only so reads well in the page):</para>
+
+          <informaltable>
+            <tgroup cols="2">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>yDate Is</classname></entry>
+
+                  <entry><emphasis>date and time</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <informaltable>
+            <tgroup cols="2">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Date Is Now</classname></entry>
+
+                  <entry><emphasis>date and time</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <informaltable>
+            <tgroup cols="2">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Time Is</classname></entry>
+
+                  <entry><emphasis>date and time</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <informaltable>
+            <tgroup cols="2">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Time Is Now</classname></entry>
+
+                  <entry><emphasis>date and time</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <para>In each case the date/time provided is parsed against the
+          format 'dd MMM yyyy hh:mm'</para>
         </sect3>
       </sect2>
 
@@ -1174,7 +1334,7 @@
       </sect2>
 
       <sect2 id="sec.DebugObjectStore">
-        <title>Debugging the Clock</title>
+        <title>Debugging the Object Store</title>
 
         <para>Dumps the contents of the object store. Useful for debugging
         setup (through SetupObjects, <xref linkend="sec.SetUpObjects" />, and
