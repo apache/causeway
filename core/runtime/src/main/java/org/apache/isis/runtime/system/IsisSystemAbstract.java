@@ -34,9 +34,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstaller;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.runtime.imageloader.awt.TemplateImageLoaderAwt;
-import org.apache.isis.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
+import org.apache.isis.core.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;
@@ -44,7 +45,6 @@ import org.apache.isis.runtime.system.internal.InitialisationSession;
 import org.apache.isis.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.runtime.system.internal.SplashWindow;
-import org.apache.isis.runtime.userprofile.UserProfileStore;
 import org.apache.log4j.Logger;
 
 /**

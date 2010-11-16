@@ -34,12 +34,12 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.transaction.IsisTransaction;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.userprofile.UserProfile;
 import org.apache.log4j.Logger;
 
 /**

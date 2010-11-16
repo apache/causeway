@@ -32,6 +32,7 @@ import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.dialog.ActionDialogSpecification;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.interaction.ContentDragImpl;
@@ -49,7 +50,6 @@ import org.apache.isis.extensions.dnd.view.border.DisposedObjectBorder;
 import org.apache.isis.extensions.dnd.view.collection.CollectionContent;
 import org.apache.isis.extensions.dnd.viewer.basic.FallbackView;
 import org.apache.isis.extensions.dnd.viewer.basic.MinimizedView;
-import org.apache.isis.runtime.userprofile.Options;
 
 
 /**

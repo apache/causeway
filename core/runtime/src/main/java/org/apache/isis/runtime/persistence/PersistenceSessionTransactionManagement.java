@@ -23,7 +23,7 @@ package org.apache.isis.runtime.persistence;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.Dirtiable;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 
 /**
  * As called by the {@link IsisTransactionManager}.

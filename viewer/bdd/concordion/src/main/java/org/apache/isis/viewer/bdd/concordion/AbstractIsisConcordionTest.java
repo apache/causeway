@@ -234,10 +234,6 @@ public class AbstractIsisConcordionTest {
     // ////////////////////////////////////////////////////////////////////////
 
     public boolean aliasService(String aliasAs, String className) {
-        return aliasServices(aliasAs, className);
-    }
-
-    public boolean aliasServices(String aliasAs, String className) {
         try {
             getStory().getAliasRegistry().aliasService(aliasAs, className);
             return true;

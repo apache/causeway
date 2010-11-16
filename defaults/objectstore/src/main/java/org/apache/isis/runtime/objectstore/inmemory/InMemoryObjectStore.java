@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStoreInstances;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStorePersistedObjectsDefault;
@@ -57,7 +58,6 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCo
 import org.apache.isis.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;

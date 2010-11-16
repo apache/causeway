@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.sql.objectstore;
 
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 
 
 public interface Parameter {

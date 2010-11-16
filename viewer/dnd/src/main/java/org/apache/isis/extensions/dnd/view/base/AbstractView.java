@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
@@ -71,7 +72,6 @@ import org.apache.isis.extensions.dnd.view.content.FieldContent;
 import org.apache.isis.extensions.dnd.view.content.RootObject;
 import org.apache.isis.extensions.dnd.view.option.OpenViewOption;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
-import org.apache.isis.runtime.userprofile.Options;
 
 
 public abstract class AbstractView implements View {

@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.Toolkit;
@@ -36,7 +37,6 @@ import org.apache.isis.extensions.dnd.view.border.LabelBorder;
 import org.apache.isis.extensions.dnd.view.composite.CompositeView;
 import org.apache.isis.extensions.dnd.view.composite.StackLayout;
 import org.apache.isis.extensions.dnd.view.content.FieldContent;
-import org.apache.isis.runtime.userprofile.Options;
 
 public class NewObjectView extends CompositeView {
     StackLayout layout = new StackLayout();

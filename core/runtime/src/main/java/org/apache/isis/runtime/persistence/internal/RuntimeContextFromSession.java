@@ -34,14 +34,14 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 
 /**
  * Provides services to the metamodel based on the currently running

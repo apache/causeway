@@ -628,15 +628,22 @@
           <itemizedlist>
             <listitem>
               <para><methodname>#bootstrapIsis(String configDirectory, String
-              deploymentType)</methodname></para>
+              deploymentType):boolean</methodname></para>
 
               <para>Intended to be called from the <acronym>XHTML</acronym>
-              page, allowing the story document the bootstrapping process.
-              </para>
+              page, allowing the story document the bootstrapping process. For
+              example, to bootstrap in exploration mode, use:</para>
+
+              <programlisting>&lt;p concordion:execute="#result=bootstrapIsis(#configDir,#deploymentType)"&gt;
+Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt; from config directory &lt;span concordion:set="#configDir"&gt;../quickrun/config&lt;/span&gt; and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span&gt; mode.
+&lt;/p&gt;</programlisting>
+
+              <para>The method always returns <literal>true</literal>, but any
+              runtime exception will propagate to the generated page.</para>
             </listitem>
           </itemizedlist>
 
-          <para>Whichever is used, they both delegate to the common
+          <para>Whichever method is used, they both delegate to the common
           <methodname>Story#bootstrapIsis(...)</methodname> method.</para>
         </sect3>
 
@@ -697,12 +704,8 @@
 
           <tbody>
             <row>
-              <entry><methodname>Story#getAliasRegistry()</methodname><para>and</para><para><methodname>AliasRegistry#aliasService(String
-              aliasAs, String
-              serviceClassName)</methodname></para><para>Specifies an alias to
-              a service in order to invoke actions upon them.</para><para>Note
-              that the services are <emphasis>not</emphasis> defined here,
-              merely aliased. </para></entry>
+              <entry><methodname></methodname><para>and</para><para><methodname></methodname></para><para></para><para>
+              </para></entry>
 
               <entry><methodname>#aliasService(aliasAs, String
               serviceClassName)</methodname><para><methodname>#aliasServices(aliasAs,
@@ -798,8 +801,12 @@
           </itemizedlist>
 
           <para>Each of these is intended to be called from the
-          <acronym>XHTML</acronym>. The role list, if specified, should be
-          comma-separated (any white space will be ignored).</para>
+          <acronym>XHTML</acronym>. For example:</para>
+
+          <programlisting>&lt;p concordion:execute="#result=logonAs(#userName)"&gt;&lt;span concordion:assertTrue="#result"&gt;logged on&lt;/span&gt; as &lt;span concordion:set="#userName"&gt;fsmith&lt;/span&gt;&lt;/p&gt;</programlisting>
+
+          <para>The role list, if specified, should be comma-separated (any
+          white space will be ignored).</para>
         </sect3>
 
         <sect3>
@@ -914,7 +921,8 @@
           <title>Concordion</title>
 
           <para>The Concordion integration provides a number of overloaded
-          methods, all designed to be called from the XHTML:</para>
+          methods, all designed to be called from the
+          <acronym>XHTML</acronym>:</para>
 
           <itemizedlist>
             <listitem>
@@ -928,8 +936,14 @@
             </listitem>
           </itemizedlist>
 
-          <para>The overloaded forms are just for convenience. The date/time
-          provided is parsed against the format 'dd MMM yyyy hh:mm'</para>
+          <para>For example:</para>
+
+          <programlisting>&lt;p concordion:execute="#result=timeIs(#dateTime)"&gt;The &lt;span concordion:assertTrue="#result"&gt;date/time&lt;/span&gt; is &lt;span concordion:set="#dateTime"&gt;2 mar 2007 09:20&lt;/span&gt;.&lt;/p&gt; </programlisting>
+
+          <para>The overloaded forms are just for convenience; sometimes the
+          story will want to emphasis the date, other times the time. In all
+          case the date/time provided is parsed against the format 'dd MMM
+          yyyy hh:mm'</para>
         </sect3>
 
         <sect3>
@@ -1002,22 +1016,84 @@
       <sect2 id="sec.AliasServices">
         <title>Aliasing Services</title>
 
-        <para></para>
+        <para>Specifies an alias to a service in order to invoke actions upon
+        it. Typically this will be done for most if not all of the registered
+        repositories. The class name (as defined in
+        <filename>isis.properties</filename>) is used as the key; the alias
+        defines a simple handle.</para>
+
+        <para>For example, a service
+        <classname>com.mycompany.customers.defaults.CustomerRepositoryDefault</classname>
+        can be mapped to "customers".</para>
 
         <sect3>
           <title>Common</title>
 
-          <para></para>
+          <para>The common library provides two methods:<itemizedlist>
+              <listitem>
+                <para><methodname>Story#getAliasRegistry()</methodname></para>
+              </listitem>
+
+              <listitem>
+                <para><methodname>AliasRegistry#aliasService(String aliasAs,
+                String serviceClassName)</methodname></para>
+              </listitem>
+            </itemizedlist></para>
+
+          <para>The <acronym>BDD</acronym> framework integration is expected
+          to obtain the <classname>AliasRegistry</classname> from the
+          <classname>Story</classname>, and then use the
+          <classname>AliasRegisty</classname> to register the alias.</para>
         </sect3>
 
         <sect3>
           <title>Concordion</title>
+
+          <para>The Concordion integration provides a corresponding method,
+          <methodname>#aliasService(aliasAs, String
+          serviceClassName)</methodname>. This returns <literal>true</literal>
+          if the service was found, false otherwise. Call within a table to
+          alias multiple services, for example:<programlisting>&lt;table concordion:execute="#result=aliasService(#aliasAs, #className)"&gt;
+  &lt;tr&gt;
+    &lt;th concordion:set="#className"&gt;Class Name&lt;/th&gt;
+    &lt;th concordion:set="#aliasAs"&gt;aliasAs&lt;/th&gt;
+    &lt;th concordion:assertTrue="#result"/&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;org.apache.isis.support.prototype.objstore.dflt.claim.ClaimRepositoryInMemory&lt;/td&gt;
+    &lt;td&gt;claims&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;org.apache.isis.support.prototype.objstore.dflt.employee.EmployeeRepositoryInMemory&lt;/td&gt;
+    &lt;td&gt;employees&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</programlisting></para>
 
           <para></para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
+
+          <para></para>
+
+          <para></para>
+
+          <informaltable>
+            <tgroup cols="2">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Time Is Now</classname></entry>
+
+                  <entry><emphasis>date and time</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
 
           <para></para>
         </sect3>

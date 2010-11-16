@@ -38,6 +38,9 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.transaction.TransactionalClosureWithReturnAbstract;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.data.common.ObjectData;
@@ -66,9 +69,6 @@ import org.apache.isis.runtime.persistence.objectstore.PersistenceSessionObjectS
 import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
-import org.apache.isis.runtime.transaction.TransactionalClosureAbstract;
-import org.apache.isis.runtime.transaction.TransactionalClosureWithReturnAbstract;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 

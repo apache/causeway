@@ -25,7 +25,7 @@ import java.text.DateFormat;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 
 
 public class ConcurrencyException extends ObjectPersistenceException {

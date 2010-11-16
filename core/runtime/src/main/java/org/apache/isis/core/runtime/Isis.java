@@ -21,11 +21,11 @@
 package org.apache.isis.core.runtime;
 
 
-import org.apache.isis.runtime.options.standard.OptionHandlerDeploymentTypeIsis;
-import org.apache.isis.runtime.options.standard.OptionHandlerPassword;
-import org.apache.isis.runtime.options.standard.OptionHandlerUser;
-import org.apache.isis.runtime.runner.IsisRunner;
-import org.apache.isis.runtime.runner.options.OptionValidatorUserAndPasswordCombo;
+import org.apache.isis.core.runtime.options.standard.OptionHandlerDeploymentTypeIsis;
+import org.apache.isis.core.runtime.options.standard.OptionHandlerPassword;
+import org.apache.isis.core.runtime.options.standard.OptionHandlerUser;
+import org.apache.isis.core.runtime.runner.IsisRunner;
+import org.apache.isis.core.runtime.runner.options.OptionValidatorUserAndPasswordCombo;
 import org.apache.isis.runtime.system.SystemConstants;
 
 

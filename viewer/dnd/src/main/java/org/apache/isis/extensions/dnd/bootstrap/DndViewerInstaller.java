@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.dnd.bootstrap;
 
-import org.apache.isis.runtime.viewer.IsisViewer;
-import org.apache.isis.runtime.viewer.IsisViewerInstallerAbstract;
+import org.apache.isis.core.runtime.viewer.IsisViewer;
+import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
 
 
 public class DndViewerInstaller extends IsisViewerInstallerAbstract {

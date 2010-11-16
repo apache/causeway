@@ -23,6 +23,7 @@ package org.apache.isis.extensions.dnd.configurable;
 import java.util.Enumeration;
 
 import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.configurable.GridListSpecification.ElementFactory;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.util.Properties;
@@ -37,7 +38,6 @@ import org.apache.isis.extensions.dnd.view.base.AbstractBorder;
 import org.apache.isis.extensions.dnd.view.base.UserViewSpecification;
 import org.apache.isis.extensions.dnd.view.composite.CompositeViewDecorator;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
-import org.apache.isis.runtime.userprofile.Options;
 
 
 public class ConfigurableCompositeViewBorder extends AbstractBorder {

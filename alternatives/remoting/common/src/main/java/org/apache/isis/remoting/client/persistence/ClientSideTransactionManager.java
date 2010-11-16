@@ -26,6 +26,9 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManagerAbstract;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.remoting.client.transaction.ClientSideTransaction;
 import org.apache.isis.remoting.client.transaction.ClientTransactionEvent;
 import org.apache.isis.remoting.data.common.ObjectData;
@@ -39,9 +42,6 @@ import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtime.persistence.PersistenceSessionTransactionManagement;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerProxy;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.transaction.IsisTransactionManagerAbstract;
-import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public class ClientSideTransactionManager extends IsisTransactionManagerAbstract<ClientSideTransaction> {

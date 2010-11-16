@@ -26,6 +26,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Location;
@@ -53,7 +54,6 @@ import org.apache.isis.extensions.dnd.view.ViewState;
 import org.apache.isis.extensions.dnd.view.Viewer;
 import org.apache.isis.extensions.dnd.view.Workspace;
 import org.apache.isis.extensions.dnd.view.base.Layout;
-import org.apache.isis.runtime.userprofile.Options;
 
 
 public abstract class AbstractControlView implements View {

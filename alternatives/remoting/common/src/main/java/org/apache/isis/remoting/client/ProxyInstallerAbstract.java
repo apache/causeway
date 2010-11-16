@@ -32,6 +32,8 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
+import org.apache.isis.core.runtime.remoting.ClientConnectionInstaller;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.remoting.client.authentication.AuthenticationManagerProxy;
 import org.apache.isis.remoting.client.authorization.AuthorizationManagerProxy;
 import org.apache.isis.remoting.client.facetdecorator.ProxyFacetDecorator;
@@ -53,9 +55,7 @@ import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerExtended
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerProxy;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectFactory;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtime.remoting.ClientConnectionInstaller;
 import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 
 public abstract class ProxyInstallerAbstract extends PersistenceMechanismInstallerAbstract implements

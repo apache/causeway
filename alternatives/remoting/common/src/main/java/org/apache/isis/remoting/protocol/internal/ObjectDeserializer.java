@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.remoting.IsisRemoteException;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.CollectionData;
@@ -51,7 +52,6 @@ import org.apache.isis.runtime.persistence.PersistenceSessionHydrator;
 import org.apache.isis.runtime.persistence.PersistorUtil;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.persistence.objectstore.PersistenceSessionObjectStore;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public class ObjectDeserializer {

@@ -22,10 +22,10 @@ package org.apache.isis.runtime.persistence.objectstore;
 
 import java.util.List;
 
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.persistence.objectstore.transaction.ObjectStoreTransaction;
 import org.apache.isis.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 
 
 /**

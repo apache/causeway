@@ -24,11 +24,11 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerTestSupport;
 import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 
 
 public abstract class ProxyJunit4TestCase {

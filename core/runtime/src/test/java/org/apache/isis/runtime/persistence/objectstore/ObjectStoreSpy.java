@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtime.persistence.UnsupportedFindException;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
@@ -38,7 +39,6 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCo
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 
 public class ObjectStoreSpy implements ObjectStore, ObjectStoreTransactionManagement {

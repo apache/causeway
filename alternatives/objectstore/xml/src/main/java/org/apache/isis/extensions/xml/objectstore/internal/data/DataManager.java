@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.xml.objectstore.internal.data;
 
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 
 public interface DataManager {

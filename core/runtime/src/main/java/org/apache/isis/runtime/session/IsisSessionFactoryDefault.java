@@ -26,10 +26,10 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.userprofile.UserProfileLoader;
 
 /**
  * As its superclass, but provides a default for some of more basic components (that

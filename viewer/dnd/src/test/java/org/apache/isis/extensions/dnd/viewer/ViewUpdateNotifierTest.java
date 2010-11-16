@@ -48,12 +48,16 @@ import org.apache.isis.core.runtime.authentication.standard.exploration.Explorat
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.extensions.dnd.DummyView;
 import org.apache.isis.extensions.dnd.DummyWorkspaceView;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.base.ViewUpdateNotifierImpl;
 import org.apache.isis.extensions.dnd.view.content.RootObject;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.session.IsisSessionFactory;
@@ -61,10 +65,6 @@ import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.runtime.testsystem.TestProxySystem;
-import org.apache.isis.runtime.transaction.IsisTransaction;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.userprofile.UserProfile;
-import org.apache.isis.runtime.userprofile.UserProfileLoader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

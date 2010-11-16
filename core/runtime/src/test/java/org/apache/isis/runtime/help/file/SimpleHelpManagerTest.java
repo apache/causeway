@@ -29,6 +29,7 @@ import junit.framework.TestCase;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.runtime.help.file.FileBasedHelpManager;
 
 
 public class SimpleHelpManagerTest extends TestCase {

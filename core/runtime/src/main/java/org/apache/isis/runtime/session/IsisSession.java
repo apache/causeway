@@ -25,10 +25,10 @@ import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.IsisSystem;
-import org.apache.isis.runtime.transaction.IsisTransaction;
-import org.apache.isis.runtime.userprofile.UserProfile;
 
 
 /**

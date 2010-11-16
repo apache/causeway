@@ -47,6 +47,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.CallbackUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.TransactionalClosureAbstract;
+import org.apache.isis.core.runtime.transaction.TransactionalClosureWithReturnAbstract;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtime.persistence.PersistenceSessionAbstract;
@@ -63,10 +67,6 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.ObjectStoreTr
 import org.apache.isis.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.transaction.TransactionalClosureAbstract;
-import org.apache.isis.runtime.transaction.TransactionalClosureWithReturnAbstract;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public class PersistenceSessionObjectStore extends PersistenceSessionAbstract implements ToPersistObjectSet {

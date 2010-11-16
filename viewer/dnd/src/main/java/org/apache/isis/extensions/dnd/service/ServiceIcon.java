@@ -22,6 +22,7 @@ package org.apache.isis.extensions.dnd.service;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.icon.Icon;
@@ -38,7 +39,6 @@ import org.apache.isis.extensions.dnd.view.action.OptionFactory;
 import org.apache.isis.extensions.dnd.view.base.IconGraphic;
 import org.apache.isis.extensions.dnd.view.option.CloseViewOption;
 import org.apache.isis.extensions.dnd.view.text.ObjectTitleText;
-import org.apache.isis.runtime.userprofile.PerspectiveEntry;
 
 
 public class ServiceIcon extends Icon {

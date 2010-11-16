@@ -22,9 +22,9 @@ package org.apache.isis.viewer.wicket.viewer.integration.wicket;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransaction;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.transaction.IsisTransaction;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Response;
 import org.apache.wicket.protocol.http.WebApplication;

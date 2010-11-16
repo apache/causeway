@@ -36,25 +36,25 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstaller;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.runtime.imageloader.TemplateImageLoaderInstaller;
-import org.apache.isis.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
+import org.apache.isis.core.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.remoting.ClientConnectionInstaller;
+import org.apache.isis.core.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoaderDefault;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtime.persistence.services.ServicesInstaller;
-import org.apache.isis.runtime.remoting.ClientConnectionInstaller;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.IsisSystemAbstract;
 import org.apache.isis.runtime.system.IsisSystemException;
 import org.apache.isis.runtime.system.SystemConstants;
-import org.apache.isis.runtime.transaction.facetdecorator.standard.TransactionFacetDecoratorInstaller;
-import org.apache.isis.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.runtime.userprofile.UserProfileLoaderDefault;
-import org.apache.isis.runtime.userprofile.UserProfileStore;
-import org.apache.isis.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.log4j.Logger;
 
 public class IsisSystemUsingInstallers extends IsisSystemAbstract {

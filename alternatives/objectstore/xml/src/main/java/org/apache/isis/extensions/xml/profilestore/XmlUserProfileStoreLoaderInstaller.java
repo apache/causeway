@@ -23,9 +23,9 @@ package org.apache.isis.extensions.xml.profilestore;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.installers.InstallerAbstract;
-import org.apache.isis.runtime.userprofile.UserProfileStore;
-import org.apache.isis.runtime.userprofile.UserProfileStoreInstaller;
+import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Module;

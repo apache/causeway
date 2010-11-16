@@ -27,10 +27,10 @@ import org.apache.isis.core.metamodel.config.ConfigurationException;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.view.ViewSpecification;
-import org.apache.isis.runtime.userprofile.Options;
 
 
 public class Properties {

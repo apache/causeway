@@ -26,11 +26,11 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManagerAbstract;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtime.persistence.PersistenceSessionTransactionManagement;
 import org.apache.isis.runtime.persistence.objectstore.ObjectStoreTransactionManagement;
-import org.apache.isis.runtime.transaction.IsisTransactionManagerAbstract;
-import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 
 
 public class ObjectStoreTransactionManager extends IsisTransactionManagerAbstract<ObjectStoreTransaction> {

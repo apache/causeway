@@ -50,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
@@ -62,7 +63,6 @@ import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 import org.apache.isis.runtime.persistence.services.ServiceUtil;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 
 
 public abstract class PersistenceSessionAbstract implements PersistenceSession {

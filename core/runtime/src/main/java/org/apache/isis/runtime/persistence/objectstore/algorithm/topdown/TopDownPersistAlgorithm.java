@@ -34,9 +34,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.util.CallbackUtils;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.runtime.persistence.objectstore.algorithm.PersistAlgorithmAbstract;
 import org.apache.isis.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 
 public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {

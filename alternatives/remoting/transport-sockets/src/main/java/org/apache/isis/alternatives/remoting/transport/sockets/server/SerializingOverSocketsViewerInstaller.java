@@ -23,8 +23,8 @@ package org.apache.isis.alternatives.remoting.transport.sockets.server;
 import java.util.List;
 
 import org.apache.isis.core.runtime.Isis;
+import org.apache.isis.core.runtime.viewer.IsisViewer;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.viewer.IsisViewer;
 
 
 /**

@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.Clock;
 import org.apache.isis.extensions.xml.objectstore.internal.commands.XmlCreateObjectCommand;
 import org.apache.isis.extensions.xml.objectstore.internal.commands.XmlDestroyObjectCommand;
@@ -67,7 +68,6 @@ import org.apache.isis.runtime.persistence.objectstore.transaction.SaveObjectCom
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 
 public class XmlObjectStore implements ObjectStore {

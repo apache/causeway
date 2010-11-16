@@ -32,11 +32,11 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstaller;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.runtime.imageloader.awt.TemplateImageLoaderAwt;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.awt.TemplateImageLoaderAwt;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.runtime.userprofile.UserProfileStore;
 
 
 /**

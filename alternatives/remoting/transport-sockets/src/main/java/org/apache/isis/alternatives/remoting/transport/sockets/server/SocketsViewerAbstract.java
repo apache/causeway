@@ -35,6 +35,7 @@ import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.Threads;
+import org.apache.isis.core.runtime.viewer.IsisViewerAbstract;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.facade.ServerFacadeLogger;
 import org.apache.isis.remoting.facade.impl.ServerFacadeImpl;
@@ -46,7 +47,6 @@ import org.apache.isis.remoting.transport.ProfilingOutputStream;
 import org.apache.isis.runtime.system.IsisSystem;
 import org.apache.isis.runtime.system.internal.monitor.HttpServerMonitor;
 import org.apache.isis.runtime.system.internal.monitor.SocketServerMonitor;
-import org.apache.isis.runtime.viewer.IsisViewerAbstract;
 
 
 public abstract class SocketsViewerAbstract extends IsisViewerAbstract implements DebugInfo {

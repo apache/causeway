@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.system;
 
-import org.apache.isis.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.system.installers.IsisSystemUsingInstallers;
 
 import com.google.inject.Inject;

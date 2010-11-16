@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 
 
 public class SwitchUserServiceImpl implements SwitchUserService {

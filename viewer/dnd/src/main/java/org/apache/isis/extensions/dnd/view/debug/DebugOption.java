@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.service.PerspectiveContent;
 import org.apache.isis.extensions.dnd.view.Content;
@@ -33,7 +34,6 @@ import org.apache.isis.extensions.dnd.view.Toolkit;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.Workspace;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
-import org.apache.isis.runtime.userprofile.PerspectiveEntry;
 
 
 /**

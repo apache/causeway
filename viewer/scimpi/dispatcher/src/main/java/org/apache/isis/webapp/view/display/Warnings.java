@@ -23,7 +23,7 @@ package org.apache.isis.webapp.view.display;
 import java.util.List;
 
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.processor.Request;
 

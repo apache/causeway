@@ -20,11 +20,11 @@
 
 package org.apache.isis.core.webserver.internal;
 
-import static org.apache.isis.runtime.runner.Constants.TYPE_SERVER;
-import static org.apache.isis.runtime.runner.Constants.TYPE_SERVER_EXPLORATION;
-import static org.apache.isis.runtime.runner.Constants.TYPE_SERVER_PROTOTYPE;
+import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER;
+import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_EXPLORATION;
+import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_PROTOTYPE;
 
-import org.apache.isis.runtime.options.standard.OptionHandlerDeploymentType;
+import org.apache.isis.core.runtime.options.standard.OptionHandlerDeploymentType;
 import org.apache.isis.runtime.system.DeploymentType;
 
 

@@ -22,11 +22,11 @@ package org.apache.isis.core.webserver.embedded.jetty;
 
 import java.util.List;
 
-import org.apache.isis.runtime.installers.InstallerAbstract;
-import org.apache.isis.runtime.viewer.IsisViewerInstaller;
-import org.apache.isis.runtime.web.EmbeddedWebServer;
-import org.apache.isis.runtime.web.EmbeddedWebServerInstaller;
-import org.apache.isis.runtime.web.EmbeddedWebViewer;
+import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
+import org.apache.isis.core.runtime.web.EmbeddedWebServer;
+import org.apache.isis.core.runtime.web.EmbeddedWebServerInstaller;
+import org.apache.isis.core.runtime.web.EmbeddedWebViewer;
 
 /**
  * Not to be confused with {@link IsisViewerInstaller}, this installer

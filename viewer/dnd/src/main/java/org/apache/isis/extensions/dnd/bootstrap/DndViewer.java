@@ -33,6 +33,8 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
+import org.apache.isis.core.runtime.viewer.IsisViewerAbstract;
 import org.apache.isis.extensions.dnd.awt.AwtImageFactory;
 import org.apache.isis.extensions.dnd.awt.AwtToolkit;
 import org.apache.isis.extensions.dnd.awt.LoginDialog;
@@ -95,8 +97,6 @@ import org.apache.isis.extensions.dnd.viewer.basic.DragContentSpecification;
 import org.apache.isis.extensions.dnd.viewer.basic.InnerWorkspaceSpecification;
 import org.apache.isis.extensions.dnd.viewer.basic.RootWorkspaceSpecification;
 import org.apache.isis.extensions.dnd.viewer.basic.WrappedTextFieldSpecification;
-import org.apache.isis.runtime.userprofile.UserProfile;
-import org.apache.isis.runtime.viewer.IsisViewerAbstract;
 
 
 public class DndViewer extends IsisViewerAbstract {

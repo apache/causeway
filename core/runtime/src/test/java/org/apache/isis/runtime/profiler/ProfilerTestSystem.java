@@ -20,6 +20,8 @@
 
 package org.apache.isis.runtime.profiler;
 
+import org.apache.isis.core.runtime.profiler.ProfilerSystem;
+
 
 
 

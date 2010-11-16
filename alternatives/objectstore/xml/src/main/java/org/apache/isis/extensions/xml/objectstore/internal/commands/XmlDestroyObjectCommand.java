@@ -22,11 +22,11 @@ package org.apache.isis.extensions.xml.objectstore.internal.commands;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.extensions.xml.objectstore.internal.data.DataManager;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 public final class XmlDestroyObjectCommand extends AbstractXmlPersistenceCommand implements DestroyObjectCommand {
 	private static final Logger LOG = Logger.getLogger(XmlDestroyObjectCommand.class);

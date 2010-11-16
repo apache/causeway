@@ -37,8 +37,16 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
-import org.apache.isis.runtime.imageloader.TemplateImageLoaderNoop;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderNoop;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifierDefault;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoaderDefault;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoaderDefault.Mode;
+import org.apache.isis.core.runtime.userprofile.inmemory.InMemoryUserProfileStore;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
@@ -50,14 +58,6 @@ import org.apache.isis.runtime.session.IsisSessionDefault;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifierDefault;
-import org.apache.isis.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.runtime.userprofile.UserProfileLoaderDefault;
-import org.apache.isis.runtime.userprofile.UserProfileStore;
-import org.apache.isis.runtime.userprofile.UserProfileLoaderDefault.Mode;
-import org.apache.isis.runtime.userprofile.inmemory.InMemoryUserProfileStore;
 
 
 //TODO replace with TestProxySystemII

@@ -22,12 +22,12 @@ package org.apache.isis.extensions.xml.objectstore.internal.commands;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.extensions.xml.objectstore.internal.data.DataManager;
 import org.apache.isis.extensions.xml.objectstore.internal.data.ObjectData;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 
 public final class XmlCreateObjectCommand extends AbstractXmlPersistenceCommand implements CreateObjectCommand {
 	private static final Logger LOG = Logger.getLogger(XmlCreateObjectCommand.class);

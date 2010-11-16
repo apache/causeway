@@ -1,8 +1,8 @@
 package org.apache.isis.viewer.restful.viewer.embedded;
 
-import org.apache.isis.runtime.viewer.IsisViewer;
-import org.apache.isis.runtime.viewer.IsisViewerInstallerAbstract;
-import org.apache.isis.runtime.web.WebAppSpecification;
+import org.apache.isis.core.runtime.viewer.IsisViewer;
+import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
+import org.apache.isis.core.runtime.web.WebAppSpecification;
 
 /**
  * Convenience implementation of a {@link NakedObjectsViewer} providing the

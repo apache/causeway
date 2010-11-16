@@ -35,6 +35,11 @@ import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDe
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransactionDefault;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManagerAbstract;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.PersistenceSessionAbstract;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
@@ -43,11 +48,6 @@ import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerDefault;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryAbstract.Mode;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.transaction.IsisTransactionDefault;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.transaction.IsisTransactionManagerAbstract;
-import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 
 /**
  * Static mock implementation of {@link PersistenceSession} that provides some partial implementation but also has

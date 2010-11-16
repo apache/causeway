@@ -36,9 +36,9 @@ import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.runner.IsisBootstrapper;
+import org.apache.isis.core.runtime.runner.IsisRunner;
 import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.runtime.runner.IsisBootstrapper;
-import org.apache.isis.runtime.runner.IsisRunner;
 
 import com.google.inject.Injector;
 

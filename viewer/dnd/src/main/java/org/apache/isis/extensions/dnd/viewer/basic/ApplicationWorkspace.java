@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.standard.exploration.MultiUserExplorationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Padding;
@@ -68,7 +69,6 @@ import org.apache.isis.extensions.dnd.view.window.SubviewFocusManager;
 import org.apache.isis.extensions.dnd.view.window.WindowBorder;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.runtime.userprofile.PerspectiveEntry;
 
 
 public final class ApplicationWorkspace extends CompositeViewUsingBuilder implements Workspace {

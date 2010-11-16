@@ -24,8 +24,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.runtime.testsystem.TestProxySystemII;
-import org.apache.isis.runtime.userprofile.Options;
 
 import static org.junit.Assert.*;
 

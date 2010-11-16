@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.runtime.installers.InstallerAbstract;
 
 
 public abstract class AuthorizationManagerStandardInstallerAbstract extends InstallerAbstract implements AuthorizationManagerInstaller {

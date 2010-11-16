@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.memento.Memento;
+import org.apache.isis.core.runtime.memento.Memento;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 

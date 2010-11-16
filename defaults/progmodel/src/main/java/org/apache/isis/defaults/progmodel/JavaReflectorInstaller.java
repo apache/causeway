@@ -42,9 +42,9 @@ import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.Collecti
 import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
-import org.apache.isis.runtime.installers.InstallerAbstract;
-import org.apache.isis.runtime.installers.InstallerLookup;
-import org.apache.isis.runtime.installers.InstallerLookupAware;
+import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.installers.InstallerLookupAware;
 
 import com.google.common.collect.Lists;
 

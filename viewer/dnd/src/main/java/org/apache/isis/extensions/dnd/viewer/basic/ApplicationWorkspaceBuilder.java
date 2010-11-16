@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.service.PerspectiveContent;
@@ -34,7 +35,6 @@ import org.apache.isis.extensions.dnd.view.Placement;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.base.Layout;
 import org.apache.isis.extensions.dnd.view.composite.AbstractViewBuilder;
-import org.apache.isis.runtime.userprofile.PerspectiveEntry;
 
 
 /**

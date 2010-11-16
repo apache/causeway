@@ -20,6 +20,7 @@
 
 package org.apache.isis.extensions.dnd.view.composite;
 
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.UserActionSet;
@@ -27,7 +28,6 @@ import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.Workspace;
 import org.apache.isis.extensions.dnd.view.base.AbstractBorder;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
-import org.apache.isis.runtime.userprofile.Options;
 
 
 public class GridLayoutControlBorder extends AbstractBorder {

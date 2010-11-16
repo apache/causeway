@@ -25,6 +25,7 @@ import java.util.Iterator;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.runtime.userprofile.Options;
 
 import static org.junit.Assert.*;
 

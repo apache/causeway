@@ -26,9 +26,9 @@ import org.apache.isis.applib.profiles.ProfileService;
 import org.apache.isis.applib.profiles.ProfileServiceAware;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.userprofile.PerspectiveEntry;
-import org.apache.isis.runtime.userprofile.UserProfile;
-import org.apache.isis.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 
 public class ProfileServiceImpl implements ProfileService {
 

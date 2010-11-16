@@ -22,7 +22,7 @@ package org.apache.isis.alternatives.remoting.transport.sockets.server;
 
 import org.apache.isis.alternatives.remoting.transport.sockets.shared.SocketTransportConstants;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.runtime.viewer.IsisViewerInstaller;
+import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
 
 
 public final class SocketsViewerConstants {

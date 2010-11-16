@@ -36,17 +36,17 @@ import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
 import org.apache.isis.extensions.sql.objectstore.SqlPersistorInstaller;
 import org.apache.isis.extensions.xml.objectstore.XmlPersistenceMechanismInstaller;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.runtime.objectstore.inmemory.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
 import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.userprofile.UserProfileLoader;
 
 /*
  * TODO allow to be created with specific requirements for components being set up rather than using mocks.

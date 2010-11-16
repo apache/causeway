@@ -25,9 +25,9 @@ import java.io.StringWriter;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtime.userprofile.Options;
-import org.apache.isis.runtime.userprofile.PerspectiveEntry;
-import org.apache.isis.runtime.userprofile.UserProfile;
+import org.apache.isis.core.runtime.userprofile.Options;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
 
 import static org.junit.Assert.*;
 

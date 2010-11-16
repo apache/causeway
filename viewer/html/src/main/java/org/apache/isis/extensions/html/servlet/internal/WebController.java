@@ -33,6 +33,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
+import org.apache.isis.core.runtime.util.Dump;
 import org.apache.isis.extensions.html.action.Action;
 import org.apache.isis.extensions.html.action.ActionException;
 import org.apache.isis.extensions.html.action.ChangeContext;
@@ -64,8 +66,6 @@ import org.apache.isis.extensions.html.task.TaskLookupException;
 import org.apache.isis.extensions.html.task.TaskStep;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.system.internal.monitor.Monitor;
-import org.apache.isis.runtime.userprofile.UserProfile;
-import org.apache.isis.runtime.util.Dump;
 
 
 

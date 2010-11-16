@@ -33,12 +33,12 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtime.persistence.objectstore.ObjectStoreSpy;
 import org.apache.isis.runtime.testsystem.TestProxySystem;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 
 
 @RunWith(JMock.class)

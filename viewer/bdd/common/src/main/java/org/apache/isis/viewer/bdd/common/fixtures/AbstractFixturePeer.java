@@ -6,11 +6,11 @@ import java.util.List;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.persistence.objectstore.ObjectStorePersistence;
 import org.apache.isis.runtime.persistence.objectstore.PersistenceSessionObjectStore;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 

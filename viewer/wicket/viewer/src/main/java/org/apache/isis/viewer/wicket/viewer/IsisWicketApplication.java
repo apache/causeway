@@ -25,7 +25,7 @@ import java.util.ServiceLoader;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.runner.IsisModule;
+import org.apache.isis.core.runtime.runner.IsisModule;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.IsisSystem;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;

@@ -30,6 +30,9 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
+import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -40,9 +43,6 @@ import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
-import org.apache.isis.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.log4j.Logger;
 
 public final class SqlObjectStore implements ObjectStore {

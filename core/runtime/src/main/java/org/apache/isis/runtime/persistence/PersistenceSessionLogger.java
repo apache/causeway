@@ -32,13 +32,13 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.logging.Logger;
+import org.apache.isis.core.runtime.logging.Logger;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectFactory;
 import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 
 
 public class PersistenceSessionLogger extends Logger implements PersistenceSession, DebugInfo {

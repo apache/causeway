@@ -43,12 +43,12 @@ import org.apache.isis.core.runtime.authentication.standard.exploration.Authenti
 import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationSession;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.installers.InstallerLookupDefault;
+import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.isis.runtime.system.Splash;
 import org.apache.isis.runtime.system.SystemConstants;
-import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.junit.internal.IsisSystemUsingInstallersWithinJunit;
 
 

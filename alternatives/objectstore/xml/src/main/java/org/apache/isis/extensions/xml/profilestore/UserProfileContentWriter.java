@@ -30,12 +30,12 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.userprofile.Options;
+import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
+import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.extensions.xml.objectstore.internal.data.xml.ContentWriter;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.services.ServiceUtil;
-import org.apache.isis.runtime.userprofile.Options;
-import org.apache.isis.runtime.userprofile.PerspectiveEntry;
-import org.apache.isis.runtime.userprofile.UserProfile;
 
 public class UserProfileContentWriter  implements ContentWriter {
     private final UserProfile userProfile;

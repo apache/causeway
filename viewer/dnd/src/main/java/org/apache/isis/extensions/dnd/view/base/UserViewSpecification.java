@@ -22,13 +22,13 @@ package org.apache.isis.extensions.dnd.view.base;
 
 import java.util.Date;
 
+import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.extensions.dnd.util.Properties;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.ViewRequirement;
 import org.apache.isis.extensions.dnd.view.ViewSpecification;
-import org.apache.isis.runtime.userprofile.Options;
 
 public class UserViewSpecification implements ViewSpecification {
 

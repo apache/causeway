@@ -33,9 +33,9 @@ import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.runtime.installers.InstallerAbstract;
-import org.apache.isis.runtime.installers.InstallerLookup;
-import org.apache.isis.runtime.installers.InstallerLookupAware;
+import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.installers.InstallerLookupAware;
 import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.runtime.persistence.adapterfactory.pojo.PojoAdapterFactory;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManagerDefault;
@@ -57,7 +57,7 @@ import org.apache.log4j.Logger;
 public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbstract implements
     PersistenceMechanismInstaller, InstallerLookupAware {
 
-    private static final String LOGGING_PROPERTY = org.apache.isis.runtime.logging.Logger.PROPERTY_ROOT
+    private static final String LOGGING_PROPERTY = org.apache.isis.core.runtime.logging.Logger.PROPERTY_ROOT
         + "persistenceSession";
     private static final Logger LOG = Logger.getLogger(PersistenceMechanismInstallerAbstract.class);
 

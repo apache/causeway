@@ -24,12 +24,12 @@ import java.awt.Toolkit;
 import java.awt.image.FilteredImageSource;
 import java.awt.image.RGBImageFilter;
 
+import org.apache.isis.core.runtime.imageloader.TemplateImage;
+import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.Image;
 import org.apache.isis.extensions.dnd.drawing.ImageFactory;
 import org.apache.isis.extensions.dnd.view.base.AwtImage;
-import org.apache.isis.runtime.imageloader.TemplateImage;
-import org.apache.isis.runtime.imageloader.TemplateImageLoader;
 
 
 public class AwtImageFactory extends ImageFactory {
