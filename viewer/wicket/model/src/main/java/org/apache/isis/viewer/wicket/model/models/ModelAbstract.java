@@ -21,8 +21,8 @@
 package org.apache.isis.viewer.wicket.model.models;
 
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.wicket.model.LoadableDetachableModel;
 
 /**

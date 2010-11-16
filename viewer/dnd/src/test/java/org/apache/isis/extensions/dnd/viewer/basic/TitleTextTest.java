@@ -21,6 +21,8 @@
 package org.apache.isis.extensions.dnd.viewer.basic;
 
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.extensions.dnd.DummyCanvas;
 import org.apache.isis.extensions.dnd.DummyView;
 import org.apache.isis.extensions.dnd.TestToolkit;
@@ -30,8 +32,6 @@ import org.apache.isis.extensions.dnd.drawing.Text;
 import org.apache.isis.extensions.dnd.view.Toolkit;
 import org.apache.isis.extensions.dnd.view.text.TitleText;
 import org.apache.isis.extensions.dnd.viewer.drawing.DummyText;
-import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.runtime.testsystem.TestProxyConfiguration;
 
 
 public class TitleTextTest extends ProxyJunit3TestCase {

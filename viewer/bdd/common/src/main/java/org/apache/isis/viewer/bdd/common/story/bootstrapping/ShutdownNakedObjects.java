@@ -1,7 +1,7 @@
 package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.viewer.bdd.common.Story;
 
 public class ShutdownNakedObjects extends AbstractHelper {

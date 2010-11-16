@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.core.commons.lang.Maybe;
 import org.apache.isis.core.runtime.options.standard.OptionHandlerViewer;
 import org.apache.isis.core.runtime.runner.IsisRunner;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 public final class OptionValidatorForViewers implements
         OptionValidator {

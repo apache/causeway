@@ -27,13 +27,13 @@ import org.apache.isis.core.metamodel.facets.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.exchange.SetAssociationRequest;
 import org.apache.isis.remoting.exchange.SetAssociationResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.log4j.Logger;
 
 

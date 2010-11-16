@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.EncodableObjectData;
 import org.apache.isis.remoting.data.common.IdentityData;
@@ -35,7 +36,6 @@ import org.apache.isis.remoting.exchange.AuthorizationResponse;
 import org.apache.isis.remoting.exchange.ExecuteClientActionResponse;
 import org.apache.isis.remoting.exchange.ExecuteServerActionResponse;
 import org.apache.isis.remoting.exchange.KnownObjectsRequest;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 
 public interface ObjectEncoderDecoder {
 

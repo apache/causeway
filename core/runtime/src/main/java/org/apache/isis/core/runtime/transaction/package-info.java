@@ -19,7 +19,7 @@
 
 
 /**
- * These interfaces are extended by {@link org.apache.isis.runtime.persistence.PersistenceSession}
+ * These interfaces are extended by {@link org.apache.isis.core.runtime.persistence.PersistenceSession}
  * and not intended to be implemented directly.
  */
 package org.apache.isis.core.runtime.transaction;

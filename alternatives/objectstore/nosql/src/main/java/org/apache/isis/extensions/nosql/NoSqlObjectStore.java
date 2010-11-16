@@ -34,14 +34,14 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
+import org.apache.isis.core.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 
 public class NoSqlObjectStore implements ObjectStore {
     private final NoSqlDataDatabase database;

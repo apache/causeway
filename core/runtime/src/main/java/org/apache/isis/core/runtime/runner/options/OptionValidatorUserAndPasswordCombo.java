@@ -23,7 +23,7 @@ package org.apache.isis.core.runtime.runner.options;
 import org.apache.isis.core.commons.lang.Maybe;
 import org.apache.isis.core.runtime.options.standard.OptionHandlerPassword;
 import org.apache.isis.core.runtime.options.standard.OptionHandlerUser;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 public final class OptionValidatorUserAndPasswordCombo implements
         OptionValidator {

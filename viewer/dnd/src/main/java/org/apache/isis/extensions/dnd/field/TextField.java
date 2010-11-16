@@ -29,6 +29,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
+import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
@@ -53,7 +54,6 @@ import org.apache.isis.extensions.dnd.view.text.CursorPosition;
 import org.apache.isis.extensions.dnd.view.text.TextBlockTarget;
 import org.apache.isis.extensions.dnd.view.text.TextContent;
 import org.apache.isis.extensions.dnd.view.text.TextSelection;
-import org.apache.isis.runtime.persistence.ConcurrencyException;
 
 
 public abstract class TextField extends TextParseableFieldAbstract implements TextBlockTarget {

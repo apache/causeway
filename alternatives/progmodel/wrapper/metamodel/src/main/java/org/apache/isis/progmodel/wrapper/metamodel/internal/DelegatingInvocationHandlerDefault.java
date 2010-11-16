@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
+import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
-import org.apache.isis.runtime.persistence.container.DomainObjectContainerObjectChanged;
-import org.apache.isis.runtime.persistence.container.DomainObjectContainerResolve;
 
 
 

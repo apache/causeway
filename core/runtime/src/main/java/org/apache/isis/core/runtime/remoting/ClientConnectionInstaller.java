@@ -23,7 +23,7 @@ package org.apache.isis.core.runtime.remoting;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
 
 
 public interface ClientConnectionInstaller extends PersistenceMechanismInstaller, FacetDecoratorInstaller, AuthenticationManagerInstaller, AuthorizationManagerInstaller {

@@ -33,16 +33,16 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.transaction.IsisTransaction;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.log4j.Logger;
 
 /**

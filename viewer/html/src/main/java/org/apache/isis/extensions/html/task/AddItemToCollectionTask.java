@@ -26,9 +26,9 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.context.Context;
-import org.apache.isis.runtime.persistence.PersistenceSession;
 
 
 

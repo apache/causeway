@@ -21,6 +21,8 @@
 package org.apache.isis.extensions.dnd.viewer.tree;
 
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.extensions.dnd.DummyContent;
 import org.apache.isis.extensions.dnd.DummyView;
 import org.apache.isis.extensions.dnd.DummyViewSpecification;
@@ -30,8 +32,6 @@ import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.composite.MasterDetailPanel;
-import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.runtime.testsystem.TestProxyConfiguration;
 
 
 /*

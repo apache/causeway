@@ -21,11 +21,11 @@ package org.apache.isis.bytecode.cglib.persistence.objectfactory;
 
 import org.apache.isis.bytecode.cglib.persistence.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
-import org.apache.isis.runtime.persistence.container.DomainObjectContainerObjectChanged;
-import org.apache.isis.runtime.persistence.container.DomainObjectContainerResolve;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectChanger;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryAbstract;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectResolver;
+import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
+import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactoryAbstract;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
 
 public class CglibObjectFactory extends ObjectFactoryAbstract {
 

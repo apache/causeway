@@ -25,9 +25,9 @@ import org.apache.isis.core.metamodel.facets.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.transaction.TransactionalClosureAbstract;
-import org.apache.isis.runtime.persistence.PersistenceSession;
 
 
 public class CollectionAddToFacetWrapTransaction extends CollectionAddToFacetAbstract implements

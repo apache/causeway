@@ -23,7 +23,7 @@ package org.apache.isis.extensions.xml.objectstore.internal.clock;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.apache.isis.runtime.testsystem.ProxyJunit4TestCase;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
 
 
 

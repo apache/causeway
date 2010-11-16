@@ -24,9 +24,9 @@ import java.util.Collections;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.runtime.testsystem.TestProxyAdapter;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
 
 
 public class InMemoryObjectStore_persist extends AbstractInMemoryObjectStoreTest {

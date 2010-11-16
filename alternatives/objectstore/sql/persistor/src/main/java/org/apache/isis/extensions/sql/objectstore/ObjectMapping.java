@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByPattern;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 
 
 public interface ObjectMapping {

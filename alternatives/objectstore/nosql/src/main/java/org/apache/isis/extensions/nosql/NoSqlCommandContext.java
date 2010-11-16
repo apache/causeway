@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.nosql;
 
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 
 public interface NoSqlCommandContext extends PersistenceCommandContext {
 

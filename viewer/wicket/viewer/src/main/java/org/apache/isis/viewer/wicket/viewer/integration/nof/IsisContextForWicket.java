@@ -27,10 +27,10 @@ import java.util.Map;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.runtime.system.ContextCategory;
-import org.apache.isis.runtime.system.internal.InitialisationSession;
+import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.ContextCategory;
+import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.viewer.wicket.viewer.integration.wicket.AuthenticatedWebSessionForIsis;
 import org.apache.wicket.Session;
 

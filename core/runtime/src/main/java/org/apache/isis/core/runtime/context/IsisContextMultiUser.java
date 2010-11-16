@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.runtime.context;
 
-import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 
 /**

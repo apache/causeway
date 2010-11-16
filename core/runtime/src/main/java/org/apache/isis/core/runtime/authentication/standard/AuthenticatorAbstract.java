@@ -23,8 +23,8 @@ package org.apache.isis.core.runtime.authentication.standard;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 
 

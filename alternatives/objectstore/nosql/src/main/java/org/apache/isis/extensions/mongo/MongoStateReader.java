@@ -24,8 +24,8 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.extensions.nosql.StateReader;
-import org.apache.isis.runtime.persistence.ObjectNotFoundException;
 
 import com.mongodb.DB;
 import com.mongodb.DBCollection;

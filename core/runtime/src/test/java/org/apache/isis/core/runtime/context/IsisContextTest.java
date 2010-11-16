@@ -40,17 +40,17 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.testsystem.TestProxyPersistenceSession;
+import org.apache.isis.core.runtime.testsystem.TestProxyReflector;
+import org.apache.isis.core.runtime.testsystem.TestProxySession;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtime.persistence.internal.RuntimeContextFromSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.testsystem.TestProxyPersistenceSession;
-import org.apache.isis.runtime.testsystem.TestProxyReflector;
-import org.apache.isis.runtime.testsystem.TestProxySession;
 
 
 @RunWith(JMock.class)

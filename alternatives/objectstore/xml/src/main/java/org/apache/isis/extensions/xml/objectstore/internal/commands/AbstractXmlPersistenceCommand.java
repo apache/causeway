@@ -25,11 +25,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.extensions.xml.objectstore.internal.data.DataManager;
 import org.apache.isis.extensions.xml.objectstore.internal.data.ObjectData;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommandAbstract;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 
 abstract class AbstractXmlPersistenceCommand extends PersistenceCommandAbstract {
 	private static final Logger LOG = Logger.getLogger(AbstractXmlPersistenceCommand.class);

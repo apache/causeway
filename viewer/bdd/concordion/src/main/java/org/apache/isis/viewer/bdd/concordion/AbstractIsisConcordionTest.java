@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.isis.core.commons.io.IoUtils;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.Mode;

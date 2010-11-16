@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.components.Installer;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilderAware;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
 
 import com.google.inject.Module;
 import com.google.inject.internal.Lists;

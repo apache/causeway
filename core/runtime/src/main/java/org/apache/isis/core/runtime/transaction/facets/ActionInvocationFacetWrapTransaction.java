@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFace
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.transaction.TransactionalClosureWithReturnAbstract;
-import org.apache.isis.runtime.persistence.PersistenceSession;
 
 
 public class ActionInvocationFacetWrapTransaction extends ActionInvocationFacetAbstract implements

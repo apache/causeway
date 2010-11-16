@@ -21,10 +21,10 @@
 package org.apache.isis.remoting.protocol.internal;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.remoting.data.query.PersistenceQueryData;
 import org.apache.isis.remoting.data.query.PersistenceQueryFindAllInstancesData;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
 
 public class PersistenceQueryFindAllInstancesEncoder extends PersistenceQueryEncoderAbstract {
 

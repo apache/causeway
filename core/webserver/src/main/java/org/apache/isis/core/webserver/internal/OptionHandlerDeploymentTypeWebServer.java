@@ -25,7 +25,7 @@ import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_EXPLORAT
 import static org.apache.isis.core.runtime.runner.Constants.TYPE_SERVER_PROTOTYPE;
 
 import org.apache.isis.core.runtime.options.standard.OptionHandlerDeploymentType;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 
 public class OptionHandlerDeploymentTypeWebServer extends OptionHandlerDeploymentType {

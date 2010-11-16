@@ -28,8 +28,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.runtime.system.IsisSystem;
 
 public abstract class AuthenticationSessionLookupStrategyAbstract implements
 		AuthenticationSessionLookupStrategy {

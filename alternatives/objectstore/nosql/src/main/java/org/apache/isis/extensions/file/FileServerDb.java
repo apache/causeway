@@ -25,11 +25,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.core.runtime.persistence.ConcurrencyException;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.extensions.nosql.NoSqlCommandContext;
 import org.apache.isis.extensions.nosql.NoSqlDataDatabase;
 import org.apache.isis.extensions.nosql.StateReader;
-import org.apache.isis.runtime.persistence.ConcurrencyException;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 
 
 public class FileServerDb implements NoSqlDataDatabase {

@@ -23,7 +23,7 @@ package org.apache.isis.core.runtime.runner.options;
 import org.apache.isis.core.commons.lang.Maybe;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.options.standard.OptionHandlerPersistor;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 public final class OptionValidatorForPersistor implements
         OptionValidator {

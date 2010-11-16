@@ -25,8 +25,8 @@ import javax.servlet.ServletContext;
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
 
 public final class WebAppConstants {
 	

@@ -28,7 +28,7 @@ import org.apache.commons.cli.Options;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 
 public class OptionHandlerNoSplash extends OptionHandlerAbstract {

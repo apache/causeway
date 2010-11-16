@@ -36,9 +36,9 @@ import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
 import org.apache.isis.core.runtime.runner.IsisModule;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.IsisSystem;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

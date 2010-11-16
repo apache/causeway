@@ -23,10 +23,10 @@ package org.apache.isis.extensions.dnd.viewer.basic;
 import junit.framework.TestCase;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.extensions.dnd.view.collection.CollectionSorter;
 import org.apache.isis.extensions.dnd.view.collection.SimpleCollectionSorter;
 import org.apache.isis.extensions.dnd.view.collection.TitleComparator;
-import org.apache.isis.runtime.testsystem.TestProxyAdapter;
 
 
 public class SimpleCollectionSorterTest extends TestCase {

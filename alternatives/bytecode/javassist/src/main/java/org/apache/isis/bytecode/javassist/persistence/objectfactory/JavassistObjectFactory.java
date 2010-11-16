@@ -22,13 +22,13 @@ package org.apache.isis.bytecode.javassist.persistence.objectfactory;
 
 import org.apache.isis.bytecode.javassist.persistence.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.PersistenceSessionAware;
-import org.apache.isis.runtime.persistence.container.DomainObjectContainerObjectChanged;
-import org.apache.isis.runtime.persistence.container.DomainObjectContainerResolve;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectChanger;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectFactoryAbstract;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectResolver;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionAware;
+import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
+import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactoryAbstract;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
 
 public class JavassistObjectFactory extends ObjectFactoryAbstract {
 

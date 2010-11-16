@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentType;

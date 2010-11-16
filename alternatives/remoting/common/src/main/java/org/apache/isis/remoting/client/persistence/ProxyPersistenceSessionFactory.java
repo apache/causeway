@@ -20,9 +20,9 @@
 
 package org.apache.isis.remoting.client.persistence;
 
-import org.apache.isis.runtime.persistence.PersistenceSessionFactoryDelegate;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 public class ProxyPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 

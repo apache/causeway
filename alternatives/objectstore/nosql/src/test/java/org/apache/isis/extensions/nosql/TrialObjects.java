@@ -34,13 +34,13 @@ import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
+import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
+import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactoryAbstract;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.core.runtime.testsystem.TestClassSubstitutor;
+import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.defaults.progmodel.JavaReflector;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
-import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactoryAbstract;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtime.testsystem.TestClassSubstitutor;
-import org.apache.isis.runtime.testsystem.TestProxyAdapter;
 
 public class TrialObjects {
 

@@ -29,8 +29,8 @@ import org.apache.isis.core.metamodel.config.NotFoundPolicy;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 import static org.apache.isis.core.runtime.runner.Constants.TYPE_LONG_OPT;
 import static org.apache.isis.core.runtime.runner.Constants.TYPE_OPT;

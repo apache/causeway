@@ -23,11 +23,11 @@ package org.apache.isis.remoting.protocol.internal;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 import org.apache.isis.remoting.data.query.PersistenceQueryData;
 import org.apache.isis.remoting.data.query.PersistenceQueryFindUsingApplibQuerySerializableData;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQuerySerializable;
 
 public class PersistenceQueryFindUsingApplibQuerySerializableEncoder extends PersistenceQueryEncoderAbstract {
 

@@ -26,11 +26,11 @@ import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.core.runtime.installers.InstallerRepository;
+import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
-import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 import static org.apache.isis.core.runtime.runner.Constants.OBJECT_PERSISTENCE_LONG_OPT;
 import static org.apache.isis.core.runtime.runner.Constants.OBJECT_PERSISTENCE_OPT;

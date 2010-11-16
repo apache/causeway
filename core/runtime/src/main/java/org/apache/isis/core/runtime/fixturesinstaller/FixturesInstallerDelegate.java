@@ -34,9 +34,9 @@ import org.apache.isis.applib.profiles.ProfileServiceAware;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.system.DeploymentType;
 
 
 /**

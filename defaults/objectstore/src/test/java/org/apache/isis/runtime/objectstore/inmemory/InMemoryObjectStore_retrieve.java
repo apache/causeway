@@ -23,11 +23,11 @@ package org.apache.isis.runtime.objectstore.inmemory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.runtime.testsystem.TestPojo;
-import org.apache.isis.runtime.testsystem.TestProxyOid;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.core.runtime.testsystem.TestPojo;
+import org.apache.isis.core.runtime.testsystem.TestProxyOid;
 
 
 public class InMemoryObjectStore_retrieve extends AbstractInMemoryObjectStoreTest {

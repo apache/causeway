@@ -39,6 +39,8 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.ConcurrencyException;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.extensions.html.component.Block;
 import org.apache.isis.extensions.html.component.ComponentFactory;
@@ -49,8 +51,6 @@ import org.apache.isis.extensions.html.crumb.ObjectFieldCrumb;
 import org.apache.isis.extensions.html.crumb.TaskCrumb;
 import org.apache.isis.extensions.html.request.Request;
 import org.apache.isis.extensions.html.task.Task;
-import org.apache.isis.runtime.persistence.ConcurrencyException;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 
 
 public class Context {

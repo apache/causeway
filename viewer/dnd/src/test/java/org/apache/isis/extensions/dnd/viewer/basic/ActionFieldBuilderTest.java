@@ -44,6 +44,9 @@ import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.extensions.dnd.DummyView;
@@ -52,9 +55,6 @@ import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.ViewFactory;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
-import org.apache.isis.runtime.system.DeploymentType;
 
 
 @RunWith(JMock.class)

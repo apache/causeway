@@ -22,7 +22,7 @@ package org.apache.isis.runtime.objectstore.inmemory;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.runtime.testsystem.TestProxyOid;
+import org.apache.isis.core.runtime.testsystem.TestProxyOid;
 
 
 public class InMemoryObjectStore_serviceRegistry extends AbstractInMemoryObjectStoreTest {

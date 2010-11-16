@@ -26,10 +26,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.extensions.nosql.ExampleValuePojo;
 import org.apache.isis.extensions.nosql.SerialKeyCreator;
 import org.apache.isis.extensions.nosql.TrialObjects;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;

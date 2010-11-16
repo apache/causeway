@@ -24,8 +24,8 @@ package org.apache.isis.viewer.wicket.model.util;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 
 import com.google.common.base.Function;

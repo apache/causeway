@@ -33,7 +33,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 
 import com.google.common.collect.Lists;
 

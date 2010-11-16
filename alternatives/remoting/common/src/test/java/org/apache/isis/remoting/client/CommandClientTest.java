@@ -21,6 +21,9 @@
 package org.apache.isis.remoting.client;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.core.runtime.testsystem.TestProxyOid;
+import org.apache.isis.core.runtime.testsystem.TestProxySession;
 import org.apache.isis.remoting.IsisRemoteException;
 import org.apache.isis.remoting.data.DummyIdentityData;
 import org.apache.isis.remoting.data.common.IdentityData;
@@ -36,9 +39,6 @@ import org.apache.isis.remoting.exchange.RequestAbstract;
 import org.apache.isis.remoting.exchange.ResponseEnvelope;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.facade.proxy.ServerFacadeProxy;
-import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.runtime.testsystem.TestProxyOid;
-import org.apache.isis.runtime.testsystem.TestProxySession;
 import org.easymock.MockControl;
 
 

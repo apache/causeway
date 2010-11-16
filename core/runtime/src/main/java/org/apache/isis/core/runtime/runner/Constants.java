@@ -21,11 +21,11 @@
 package org.apache.isis.core.runtime.runner;
 
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
+import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.remoting.ClientConnectionInstaller;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
-import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
-import org.apache.isis.runtime.system.DeploymentType;
 
 public final class Constants {
     

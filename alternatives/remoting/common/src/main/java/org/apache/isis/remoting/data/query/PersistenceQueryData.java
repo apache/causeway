@@ -20,8 +20,8 @@
 
 package org.apache.isis.remoting.data.query;
 
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.remoting.data.Data;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 
 /**
  * Serializable representation of {@link PersistenceQuery}.

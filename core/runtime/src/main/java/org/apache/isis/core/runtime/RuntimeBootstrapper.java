@@ -30,13 +30,13 @@ import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.runner.IsisBootstrapper;
 import org.apache.isis.core.runtime.runner.IsisModule.ViewerList;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.viewer.IsisViewer;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
 import org.apache.isis.core.runtime.web.EmbeddedWebServer;
 import org.apache.isis.core.runtime.web.EmbeddedWebServerInstaller;
 import org.apache.isis.core.runtime.web.WebAppSpecification;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.IsisSystem;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Injector;

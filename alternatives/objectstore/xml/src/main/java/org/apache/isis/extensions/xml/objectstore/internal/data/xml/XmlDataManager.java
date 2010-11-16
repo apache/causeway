@@ -28,6 +28,8 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.extensions.xml.objectstore.internal.data.CollectionData;
 import org.apache.isis.extensions.xml.objectstore.internal.data.Data;
@@ -37,8 +39,6 @@ import org.apache.isis.extensions.xml.objectstore.internal.data.ObjectDataVector
 import org.apache.isis.extensions.xml.objectstore.internal.data.PersistorException;
 import org.apache.isis.extensions.xml.objectstore.internal.data.ReferenceVector;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
-import org.apache.isis.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

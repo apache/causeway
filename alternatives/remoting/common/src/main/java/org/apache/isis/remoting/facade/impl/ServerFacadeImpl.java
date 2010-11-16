@@ -52,6 +52,9 @@ import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceConstants;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
@@ -100,9 +103,6 @@ import org.apache.isis.remoting.exchange.SetValueRequest;
 import org.apache.isis.remoting.exchange.SetValueResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.persistence.PersistenceConstants;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 import org.apache.log4j.Logger;
 
 /**

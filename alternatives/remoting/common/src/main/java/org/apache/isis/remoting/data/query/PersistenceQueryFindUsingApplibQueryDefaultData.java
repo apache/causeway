@@ -24,8 +24,8 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.remoting.data.common.ObjectData;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 /**
  * Serializable representation of {@link PersistenceQueryFindUsingApplibQueryDefault}.

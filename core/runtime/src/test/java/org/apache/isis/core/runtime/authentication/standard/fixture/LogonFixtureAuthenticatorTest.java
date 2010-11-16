@@ -36,7 +36,7 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract
 import org.apache.isis.core.runtime.authentication.standard.exploration.MultiUserExplorationSession;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.authentication.standard.fixture.LogonFixtureAuthenticator;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.CoreMatchers.*;

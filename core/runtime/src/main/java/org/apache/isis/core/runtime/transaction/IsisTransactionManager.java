@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSession;
 
 
 public interface IsisTransactionManager extends SessionScopedComponent, Injectable {

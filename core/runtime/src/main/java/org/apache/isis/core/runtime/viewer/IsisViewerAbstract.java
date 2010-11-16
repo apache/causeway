@@ -31,10 +31,10 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupAware;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.web.WebAppSpecification;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.IsisSystem;
-import org.apache.isis.runtime.system.SystemConstants;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;

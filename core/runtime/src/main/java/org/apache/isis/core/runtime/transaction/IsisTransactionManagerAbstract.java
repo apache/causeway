@@ -22,11 +22,11 @@ package org.apache.isis.core.runtime.transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.core.runtime.transaction.messagebroker.MessageBrokerDefault;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifierDefault;
-import org.apache.isis.runtime.session.IsisSession;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;

@@ -21,8 +21,8 @@ package org.apache.isis.core.runtime.context;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 /**
  * A specialised IsisContext implementation that provides two sets of components: one for the server; and one for the

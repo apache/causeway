@@ -26,7 +26,7 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 
 import static org.junit.Assert.*;
 

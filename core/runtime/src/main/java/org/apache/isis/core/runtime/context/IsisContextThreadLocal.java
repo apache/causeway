@@ -24,8 +24,8 @@ import java.util.Map;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.log4j.Logger;
 
 /**

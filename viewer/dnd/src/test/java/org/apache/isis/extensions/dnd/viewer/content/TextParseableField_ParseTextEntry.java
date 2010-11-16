@@ -38,8 +38,8 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.testsystem.TestProxySystem;
 import org.apache.isis.extensions.dnd.view.field.TextParseableFieldImpl;
-import org.apache.isis.runtime.testsystem.TestProxySystem;
 
 
 @RunWith(JMock.class)

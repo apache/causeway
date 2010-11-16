@@ -31,6 +31,8 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.extensions.dnd.view.Content;
@@ -38,8 +40,6 @@ import org.apache.isis.extensions.dnd.view.ObjectContent;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.ViewUpdateNotifier;
 import org.apache.isis.extensions.dnd.view.collection.RootCollection;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 
 
 public class ViewUpdateNotifierImpl implements ViewUpdateNotifier {

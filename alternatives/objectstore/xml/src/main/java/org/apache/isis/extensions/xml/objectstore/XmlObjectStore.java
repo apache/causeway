@@ -40,6 +40,18 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistorUtil;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.core.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
+import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.Clock;
 import org.apache.isis.extensions.xml.objectstore.internal.commands.XmlCreateObjectCommand;
@@ -56,18 +68,6 @@ import org.apache.isis.extensions.xml.objectstore.internal.data.xml.XmlFile;
 import org.apache.isis.extensions.xml.objectstore.internal.services.ServiceManager;
 import org.apache.isis.extensions.xml.objectstore.internal.services.xml.XmlServiceManager;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
-import org.apache.isis.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.PersistorUtil;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtime.persistence.objectstore.transaction.CreateObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
-import org.apache.isis.runtime.persistence.objectstore.transaction.SaveObjectCommand;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryBuiltIn;
 
 
 public class XmlObjectStore implements ObjectStore {

@@ -20,7 +20,7 @@
 
 package org.apache.isis.runtime.objectstore.inmemory;
 
-import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
 
 
 public class InMemoryObjectStore_name extends ProxyJunit3TestCase {

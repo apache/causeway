@@ -43,9 +43,9 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.PersistenceSessionHydrator;
-import org.apache.isis.runtime.persistence.PersistorUtil;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionHydrator;
+import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;

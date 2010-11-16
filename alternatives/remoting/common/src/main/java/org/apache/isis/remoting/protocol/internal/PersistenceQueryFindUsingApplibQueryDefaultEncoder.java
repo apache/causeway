@@ -26,12 +26,12 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.data.query.PersistenceQueryData;
 import org.apache.isis.remoting.data.query.PersistenceQueryFindUsingApplibQueryDefaultData;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
 
 public class PersistenceQueryFindUsingApplibQueryDefaultEncoder extends PersistenceQueryEncoderAbstract {
 

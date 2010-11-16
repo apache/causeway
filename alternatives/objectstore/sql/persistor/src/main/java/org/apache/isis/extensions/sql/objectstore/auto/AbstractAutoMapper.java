@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.extensions.sql.objectstore.AbstractMapper;
 import org.apache.isis.extensions.sql.objectstore.CollectionMapper;
 import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
@@ -40,7 +41,6 @@ import org.apache.isis.extensions.sql.objectstore.ObjectMappingLookup;
 import org.apache.isis.extensions.sql.objectstore.Sql;
 import org.apache.isis.extensions.sql.objectstore.SqlObjectStoreException;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.log4j.Logger;
 
 

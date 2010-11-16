@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;

@@ -31,12 +31,12 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.monitor.Monitor;
 import org.apache.isis.remoting.exchange.OpenSessionRequest;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.exchange.ResponseEnvelope;
 import org.apache.isis.remoting.server.ServerConnection;
 import org.apache.isis.remoting.transport.ServerConnectionHandler;
-import org.apache.isis.runtime.system.internal.monitor.Monitor;
 
 public class Worker implements Runnable {
     private static final Logger LOG = Logger.getLogger(Worker.class);

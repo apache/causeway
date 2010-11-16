@@ -29,6 +29,10 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.persistence.ConcurrencyException;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.PersistorUtil;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.isis.extensions.sql.objectstore.CollectionMapper;
 import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.FieldMappingLookup;
@@ -40,10 +44,6 @@ import org.apache.isis.extensions.sql.objectstore.SqlObjectStoreException;
 import org.apache.isis.extensions.sql.objectstore.TitleMapping;
 import org.apache.isis.extensions.sql.objectstore.VersionMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
-import org.apache.isis.runtime.persistence.ConcurrencyException;
-import org.apache.isis.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtime.persistence.PersistorUtil;
-import org.apache.isis.runtime.persistence.query.PersistenceQueryFindByPattern;
 import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,

@@ -25,13 +25,13 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.extensions.dnd.DummyContent;
 import org.apache.isis.extensions.dnd.DummyViewSpecification;
 import org.apache.isis.extensions.dnd.TestToolkit;
 import org.apache.isis.extensions.dnd.configurable.PanelView.Position;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
-import org.apache.isis.runtime.testsystem.TestProxyConfiguration;
 
 import static org.junit.Assert.assertEquals;
 

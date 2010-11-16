@@ -24,10 +24,10 @@ import java.util.List;
 import java.util.Stack;
 
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.services.ServiceUtil;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
-import org.apache.isis.runtime.persistence.services.ServiceUtil;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;

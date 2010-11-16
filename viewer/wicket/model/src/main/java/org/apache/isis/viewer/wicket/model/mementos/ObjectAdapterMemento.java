@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.memento.Memento;
-import org.apache.isis.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.wicket.model.util.Oids;
 
 public class ObjectAdapterMemento implements Serializable {

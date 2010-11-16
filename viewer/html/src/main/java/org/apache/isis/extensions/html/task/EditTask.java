@@ -34,9 +34,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.IsisUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.context.Context;
-import org.apache.isis.runtime.persistence.PersistenceSession;
 
 
 public class EditTask extends Task {

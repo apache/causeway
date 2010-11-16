@@ -24,12 +24,12 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.extensions.dnd.DummyView;
 import org.apache.isis.extensions.dnd.DummyWorkspaceView;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.view.PlacementStrategyImpl;
-import org.apache.isis.runtime.testsystem.TestProxyConfiguration;
 
 
 public class PlacementStrategyImplTest {

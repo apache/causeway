@@ -39,14 +39,14 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.extensions.dnd.view.text.CursorPosition;
 import org.apache.isis.extensions.dnd.view.text.TextBlockTarget;
 import org.apache.isis.extensions.dnd.view.text.TextContent;
 import org.apache.isis.extensions.dnd.view.text.TextSelection;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtime.session.IsisSessionFactoryDefault;
-import org.apache.isis.runtime.system.DeploymentType;
 
 
 @RunWith(JMock.class)

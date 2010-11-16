@@ -21,14 +21,14 @@
 package org.apache.isis.extensions.nosql;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactory;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.runtime.persistence.adapterfactory.AdapterFactory;
-import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.isis.runtime.persistence.objectstore.ObjectStore;
-import org.apache.isis.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
-import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.isis.core.runtime.persistence.objectstore.ObjectStore;
+import org.apache.isis.core.runtime.persistence.objectstore.ObjectStorePersistenceMechanismInstallerAbstract;
+import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 
 public abstract class NoSqlPersistorMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {

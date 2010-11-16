@@ -31,7 +31,7 @@ import org.junit.Test;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.runtime.testsystem.ProxyJunit4TestCase;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
 
 public class FileVersionTest extends ProxyJunit4TestCase {
     Mockery context = new JUnit4Mockery();

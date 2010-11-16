@@ -20,8 +20,8 @@
 package org.apache.isis.remoting.protocol;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.remoting.data.query.PersistenceQueryData;
-import org.apache.isis.runtime.persistence.query.PersistenceQuery;
 
 /**
  * TODO: this would be a good candidate for genericizing.

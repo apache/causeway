@@ -20,10 +20,10 @@
 
 package org.apache.isis.viewer.wicket.viewer.integration.nof;
 
-import org.apache.isis.runtime.system.ContextCategory;
-import org.apache.isis.runtime.system.DeploymentCategory;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.Splash;
+import org.apache.isis.core.runtime.system.ContextCategory;
+import org.apache.isis.core.runtime.system.DeploymentCategory;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.Splash;
 import org.apache.wicket.Application;
 
 /**

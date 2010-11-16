@@ -9,7 +9,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.AbstractSubsetFixture;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 
 public class CheckSpecificationsLoadedForFitNesse extends AbstractSubsetFixture {

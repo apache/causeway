@@ -22,12 +22,12 @@ package org.apache.isis.remoting.client;
 
 import java.io.IOException;
 
+import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.remoting.IsisRemoteException;
 import org.apache.isis.remoting.exchange.Request;
 import org.apache.isis.remoting.exchange.ResponseEnvelope;
 import org.apache.isis.remoting.marshalling.ClientMarshaller;
 import org.apache.isis.remoting.transport.ConnectionException;
-import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.log4j.Logger;
 
 

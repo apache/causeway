@@ -21,7 +21,7 @@
 
 package org.apache.isis.core.runtime.options.standard;
 
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 import static org.apache.isis.core.runtime.runner.Constants.TYPE_CLIENT;
 import static org.apache.isis.core.runtime.runner.Constants.TYPE_EXPLORATION;

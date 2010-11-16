@@ -52,14 +52,14 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstalle
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstaller;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
+import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.persistence.services.ServicesInstaller;
 import org.apache.isis.core.runtime.remoting.ClientConnectionInstaller;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
 import org.apache.isis.core.runtime.web.EmbeddedWebServerInstaller;
-import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
-import org.apache.isis.runtime.persistence.services.ServicesInstaller;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.SystemConstants;
 import org.apache.log4j.Logger;
 
 import com.google.inject.Inject;

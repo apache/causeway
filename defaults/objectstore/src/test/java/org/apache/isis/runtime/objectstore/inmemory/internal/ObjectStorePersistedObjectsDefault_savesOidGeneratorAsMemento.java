@@ -29,8 +29,8 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SimpleOidGenerator.Memento;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SimpleOidGenerator.Memento;
 
 public class ObjectStorePersistedObjectsDefault_savesOidGeneratorAsMemento {
 

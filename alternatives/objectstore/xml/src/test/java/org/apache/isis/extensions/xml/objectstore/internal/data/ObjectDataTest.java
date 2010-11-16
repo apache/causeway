@@ -25,9 +25,9 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.DefaultClock;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 
 
 public class ObjectDataTest extends TestCase {

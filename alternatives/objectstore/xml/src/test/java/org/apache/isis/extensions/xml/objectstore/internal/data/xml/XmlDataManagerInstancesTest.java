@@ -25,13 +25,13 @@ import java.io.FilenameFilter;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.DefaultClock;
 import org.apache.isis.extensions.xml.objectstore.internal.clock.DefaultClockTest;
 import org.apache.isis.extensions.xml.objectstore.internal.data.ObjectData;
 import org.apache.isis.extensions.xml.objectstore.internal.data.ObjectDataVector;
 import org.apache.isis.extensions.xml.objectstore.internal.version.FileVersion;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
-import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
 
 
 public class XmlDataManagerInstancesTest extends ProxyJunit3TestCase {

@@ -25,9 +25,9 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.lang.Maybe;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.session.IsisSession;
-import org.apache.isis.runtime.session.IsisSessionFactory;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.session.IsisSession;
+import org.apache.isis.core.runtime.session.IsisSessionFactory;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 import com.google.inject.Injector;
 

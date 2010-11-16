@@ -35,8 +35,8 @@ import org.apache.isis.core.runtime.authentication.AuthenticationRequestAbstract
 import org.apache.isis.core.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationAuthenticator;
 import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationAuthenticatorConstants;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.SystemConstants;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.SystemConstants;
 
 @RunWith(JMock.class)
 public class ExplorationAuthenticatorTest {

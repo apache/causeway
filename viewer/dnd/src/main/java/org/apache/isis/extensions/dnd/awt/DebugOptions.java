@@ -27,6 +27,7 @@ import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.system.internal.monitor.SystemPrinter;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.MenuOptions;
 import org.apache.isis.extensions.dnd.view.Toolkit;
@@ -34,7 +35,6 @@ import org.apache.isis.extensions.dnd.view.UserActionSet;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.Workspace;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
-import org.apache.isis.runtime.system.internal.monitor.SystemPrinter;
 
 
 public class DebugOptions implements MenuOptions {

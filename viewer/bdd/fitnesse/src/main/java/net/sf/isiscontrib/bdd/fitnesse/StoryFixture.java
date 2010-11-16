@@ -13,7 +13,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.DebugServicesForFitNess
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.SetUpObjectsForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.UsingIsisViewerForFitNesse;
 
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;

@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.extensions.sql.objectstore.CollectionMapper;
 import org.apache.isis.extensions.sql.objectstore.DatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.FieldMappingLookup;
@@ -39,7 +40,6 @@ import org.apache.isis.extensions.sql.objectstore.Results;
 import org.apache.isis.extensions.sql.objectstore.VersionMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.FieldMapping;
 import org.apache.isis.extensions.sql.objectstore.mapping.ObjectReferenceMapping;
-import org.apache.isis.runtime.persistence.PersistorUtil;
 import org.apache.log4j.Logger;
 
 

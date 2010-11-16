@@ -31,9 +31,9 @@ import junit.framework.Assert;
 
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.fixture.ObjectFixtureService;
-import org.apache.isis.runtime.testdomain.Movie;
-import org.apache.isis.runtime.testdomain.Person;
-import org.apache.isis.runtime.testdomain.Role;
+import org.apache.isis.core.runtime.testdomain.Movie;
+import org.apache.isis.core.runtime.testdomain.Person;
+import org.apache.isis.core.runtime.testdomain.Role;
 import org.apache.isis.runtime.testsystem.TestProxySystemII;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;

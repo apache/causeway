@@ -2,11 +2,11 @@ package org.apache.isis.viewer.bdd.common.components;
 
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.installers.IsisSystemUsingInstallers;
 import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 import org.apache.isis.core.runtime.userprofile.inmemory.InMemoryUserProfileStoreInstaller;
-import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.installers.IsisSystemUsingInstallers;
 
 public class IsisSystemUsingInstallersWithinStory extends
         IsisSystemUsingInstallers {

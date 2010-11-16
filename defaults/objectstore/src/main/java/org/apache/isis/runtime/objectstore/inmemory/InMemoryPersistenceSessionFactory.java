@@ -20,15 +20,15 @@
 
 package org.apache.isis.runtime.objectstore.inmemory;
 
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegate;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStoreInstances;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStorePersistedObjectsDefault;
-import org.apache.isis.runtime.persistence.PersistenceSession;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactoryDelegate;
-import org.apache.isis.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SimpleOidGenerator;
-import org.apache.isis.runtime.system.DeploymentType;
 
 
 public class InMemoryPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {

@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 
 /**
  * Acts like a bridge, loading the profile from the underlying store.

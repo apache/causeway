@@ -23,6 +23,7 @@ package org.apache.isis.runtime.persistence.objectfactory;
 import java.lang.reflect.Modifier;
 
 import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactoryAbstract;
 
 public class ObjectFactoryBasic extends ObjectFactoryAbstract {
 

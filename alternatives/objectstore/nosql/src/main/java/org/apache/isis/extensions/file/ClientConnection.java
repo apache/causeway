@@ -31,9 +31,9 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.extensions.file.server.Util;
 import org.apache.isis.extensions.nosql.NoSqlStoreException;
-import org.apache.isis.runtime.persistence.ConcurrencyException;
 
 
 public class ClientConnection {

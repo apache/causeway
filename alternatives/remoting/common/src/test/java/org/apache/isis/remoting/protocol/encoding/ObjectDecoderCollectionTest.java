@@ -30,6 +30,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionFacetAbstract;
+import org.apache.isis.core.runtime.persistence.adaptermanager.ObjectToAdapterTransformer;
+import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.core.runtime.testsystem.TestPojo;
+import org.apache.isis.core.runtime.testsystem.TestProxyOid;
+import org.apache.isis.core.runtime.testsystem.TestProxyVersion;
 import org.apache.isis.remoting.data.DummyCollectionData;
 import org.apache.isis.remoting.data.DummyObjectData;
 import org.apache.isis.remoting.data.common.CollectionData;
@@ -37,11 +42,6 @@ import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.data.common.ReferenceData;
 import org.apache.isis.remoting.protocol.internal.FieldOrderCache;
 import org.apache.isis.remoting.protocol.internal.ObjectDeserializer;
-import org.apache.isis.runtime.persistence.adaptermanager.ObjectToAdapterTransformer;
-import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.runtime.testsystem.TestPojo;
-import org.apache.isis.runtime.testsystem.TestProxyOid;
-import org.apache.isis.runtime.testsystem.TestProxyVersion;
 
 
 public class ObjectDecoderCollectionTest extends ProxyJunit3TestCase {

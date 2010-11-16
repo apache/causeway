@@ -21,7 +21,7 @@
 package org.apache.isis.webapp.view.simple;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.context.RequestContext;
 import org.apache.isis.webapp.context.RequestContext.Scope;

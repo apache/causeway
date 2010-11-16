@@ -35,8 +35,8 @@ import org.apache.isis.core.runtime.installers.InstallerRepository;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
+import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
-import org.apache.isis.runtime.system.SystemConstants;
 
 public class OptionHandlerViewer extends OptionHandlerAbstract {
 

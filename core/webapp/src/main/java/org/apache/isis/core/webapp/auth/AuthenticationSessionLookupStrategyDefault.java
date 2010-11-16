@@ -30,8 +30,8 @@ import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.webapp.WebAppConstants;
-import org.apache.isis.runtime.system.IsisSystem;
 
 /**
  * Looks up from the {@link HttpSession}, failing that attempts to logon using a {@link LogonFixture} (if available and

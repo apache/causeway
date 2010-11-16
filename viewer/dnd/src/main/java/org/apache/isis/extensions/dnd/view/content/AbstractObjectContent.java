@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.extensions.dnd.drawing.Image;
 import org.apache.isis.extensions.dnd.drawing.ImageFactory;
 import org.apache.isis.extensions.dnd.drawing.Location;
@@ -47,7 +48,6 @@ import org.apache.isis.extensions.dnd.view.UserActionSet;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.Workspace;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
-import org.apache.isis.runtime.persistence.PersistenceSession;
 
 
 public abstract class AbstractObjectContent extends AbstractContent implements ObjectContent {

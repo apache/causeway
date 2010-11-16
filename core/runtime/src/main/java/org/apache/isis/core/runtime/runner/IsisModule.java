@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.config.ConfigurationBuilderDefault;
 import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.IsiSsystemUsingInstallersFactory;
+import org.apache.isis.core.runtime.system.IsisSystem;
+import org.apache.isis.core.runtime.system.IsisSystemFactory;
 import org.apache.isis.core.runtime.viewer.IsisViewer;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.IsisSystemFactory;
-import org.apache.isis.runtime.system.IsiSsystemUsingInstallersFactory;
-import org.apache.isis.runtime.system.IsisSystem;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;

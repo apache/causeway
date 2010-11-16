@@ -38,8 +38,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.apache.isis.bytecode.cglib.persistence.objectfactory.internal.ObjectResolveAndObjectChangedEnhancer;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectChanger;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectResolver;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
 
 
 @RunWith(JMock.class)

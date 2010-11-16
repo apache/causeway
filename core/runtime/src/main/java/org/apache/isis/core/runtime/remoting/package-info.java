@@ -24,7 +24,7 @@
  * <p>
  * Defines two installers, one for client and one for server:
  * <ul>
- * <li> the {@link ClientConnectionInstaller} is an extension of {@link org.apache.isis.runtime.persistence.PersistenceMechanismInstaller},
+ * <li> the {@link ClientConnectionInstaller} is an extension of {@link org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller},
  *      intended to install a <tt>persistor-proxy</tt> as well as any additional {@link org.apache.isis.core.metamodel.facetdecorator.FacetDecorator}s
  *      for authentication, authorisation and so forth.  The implementation must specify the marshalling mechanism (encoding, xstream etc) as
  *      well as the transport (sockets etc).

@@ -26,13 +26,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Test;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
 import org.apache.isis.extensions.dnd.DummyView;
 import org.apache.isis.extensions.dnd.TestToolkit;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.table.TableAxis;
 import org.apache.isis.extensions.dnd.table.TableRowLayout;
 import org.apache.isis.extensions.dnd.view.View;
-import org.apache.isis.runtime.testsystem.TestProxyConfiguration;
 
 
 public class TableRowLayoutTest {

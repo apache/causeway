@@ -21,7 +21,7 @@
 package org.apache.isis.core.runtime.runner.options;
 
 import org.apache.isis.core.commons.lang.Maybe;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 public interface OptionValidator {
     public Maybe<String> validate(final DeploymentType deploymentType);

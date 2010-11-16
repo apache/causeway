@@ -958,7 +958,7 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
 
               <tbody>
                 <row>
-                  <entry><classname>yDate Is</classname></entry>
+                  <entry><classname>Date Is</classname></entry>
 
                   <entry><emphasis>date and time</emphasis></entry>
                 </row>
@@ -1060,42 +1060,51 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
     &lt;th concordion:assertTrue="#result"/&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-    &lt;td&gt;org.apache.isis.support.prototype.objstore.dflt.claim.ClaimRepositoryInMemory&lt;/td&gt;
+    &lt;td&gt;com.mycompany.myapp.objstore.dflt.claim.ClaimRepositoryDefault&lt;/td&gt;
     &lt;td&gt;claims&lt;/td&gt;
     &lt;td&gt;ok&lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-    &lt;td&gt;org.apache.isis.support.prototype.objstore.dflt.employee.EmployeeRepositoryInMemory&lt;/td&gt;
+    &lt;td&gt;com.mycompany.myapp.objstore.dflt.employee.EmployeeRepositoryDefault&lt;/td&gt;
     &lt;td&gt;employees&lt;/td&gt;
     &lt;td&gt;ok&lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;</programlisting></para>
-
-          <para></para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
 
-          <para></para>
+          <para>The FitNesse integration provides an implementation of a
+          <classname>ColumnFixture</classname>, which is used as
+          follows:</para>
 
-          <para></para>
+          <para><informaltable>
+              <tgroup cols="2">
+                <colspec colname="_1" />
 
-          <informaltable>
-            <tgroup cols="2">
-              <colspec />
+                <colspec colname="_2" />
 
-              <tbody>
-                <row>
-                  <entry><classname>Time Is Now</classname></entry>
+                <tbody>
+                  <row>
+                    <entry nameend="_2" namest="_1"><classname>Alias
+                    Services</classname></entry>
+                  </row>
 
-                  <entry><emphasis>date and time</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
+                  <row>
+                    <entry><classname>class name</classname></entry>
 
-          <para></para>
+                    <entry><classname>alias=</classname></entry>
+                  </row>
+
+                  <row>
+                    <entry><emphasis>com.mycompany.myapp.objstore.dflt.claim.ClaimRepositoryDefault</emphasis></entry>
+
+                    <entry><emphasis>claims</emphasis></entry>
+                  </row>
+                </tbody>
+              </tgroup>
+            </informaltable></para>
         </sect3>
       </sect2>
 

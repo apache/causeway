@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 
 /**

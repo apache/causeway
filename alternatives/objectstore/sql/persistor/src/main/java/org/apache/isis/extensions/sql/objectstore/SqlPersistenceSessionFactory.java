@@ -20,8 +20,8 @@
 
 package org.apache.isis.extensions.sql.objectstore;
 
-import org.apache.isis.runtime.persistence.PersistenceSessionFactoryDelegating;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 public class SqlPersistenceSessionFactory extends PersistenceSessionFactoryDelegating {
 

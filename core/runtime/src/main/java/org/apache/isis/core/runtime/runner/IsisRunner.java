@@ -57,7 +57,7 @@ import org.apache.isis.core.runtime.runner.options.OptionValidator;
 import org.apache.isis.core.runtime.runner.options.OptionValidatorForConnector;
 import org.apache.isis.core.runtime.runner.options.OptionValidatorForPersistor;
 import org.apache.isis.core.runtime.runner.options.OptionValidatorForViewers;
-import org.apache.isis.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.DeploymentType;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;

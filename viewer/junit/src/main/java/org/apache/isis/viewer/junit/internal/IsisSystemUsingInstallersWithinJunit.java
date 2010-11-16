@@ -22,11 +22,11 @@ package org.apache.isis.viewer.junit.internal;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
+import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.isis.core.runtime.system.installers.IsisSystemUsingInstallers;
 import org.apache.isis.core.runtime.userprofile.inmemory.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.runtime.authentication.standard.noop.NoopAuthenticationManagerInstaller;
 import org.apache.isis.runtime.authorization.standard.noop.NoopAuthorizationManagerInstaller;
-import org.apache.isis.runtime.system.DeploymentType;
-import org.apache.isis.runtime.system.installers.IsisSystemUsingInstallers;
 import org.junit.internal.runners.TestClass;
 
 public class IsisSystemUsingInstallersWithinJunit extends IsisSystemUsingInstallers {

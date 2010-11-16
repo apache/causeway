@@ -25,9 +25,9 @@ import java.util.Vector;
 
 import junit.framework.Assert;
 
+import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
-import org.apache.isis.runtime.persistence.ObjectNotFoundException;
-import org.apache.isis.runtime.persistence.oidgenerator.simple.SerialOid;
 
 
 public class MockDataManager implements DataManager {

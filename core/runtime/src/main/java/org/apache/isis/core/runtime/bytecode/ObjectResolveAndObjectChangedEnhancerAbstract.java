@@ -30,8 +30,8 @@ import org.apache.isis.core.metamodel.java5.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.progmodel.spec.JavaSpecification;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectChanger;
-import org.apache.isis.runtime.persistence.objectfactory.ObjectResolver;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
+import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
 
 public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
 
