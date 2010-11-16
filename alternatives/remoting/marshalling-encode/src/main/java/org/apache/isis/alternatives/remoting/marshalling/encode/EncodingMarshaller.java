@@ -26,6 +26,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.alternatives.remoting.common.exchange.Request;
+import org.apache.isis.alternatives.remoting.common.marshalling.MarshallerAbstract;
+import org.apache.isis.alternatives.remoting.common.marshalling.MarshallingConstants;
+import org.apache.isis.alternatives.remoting.common.transport.Transport;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
@@ -35,10 +39,6 @@ import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.metamodel.encoding.DebugDataInputExtended;
 import org.apache.isis.core.metamodel.encoding.DebugDataOutputExtended;
 import org.apache.isis.core.metamodel.encoding.Encodable;
-import org.apache.isis.remoting.exchange.Request;
-import org.apache.isis.remoting.marshalling.MarshallerAbstract;
-import org.apache.isis.remoting.marshalling.MarshallingConstants;
-import org.apache.isis.remoting.transport.Transport;
 
 
 public class EncodingMarshaller extends MarshallerAbstract {

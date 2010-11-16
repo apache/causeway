@@ -2,7 +2,7 @@ package org.apache.isis.viewer.bdd.common.components;
 
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.runtime.objectstore.inmemory.InMemoryPersistenceMechanismInstaller;
+import org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller;
 
 public class StoryInMemoryPersistenceMechanismInstaller extends
         InMemoryPersistenceMechanismInstaller {

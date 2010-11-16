@@ -21,11 +21,11 @@ package org.apache.isis.remoting.server;
 
 import java.io.IOException;
 
+import org.apache.isis.alternatives.remoting.common.client.ClientConnection;
+import org.apache.isis.alternatives.remoting.common.exchange.Request;
+import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
+import org.apache.isis.alternatives.remoting.common.marshalling.ServerMarshaller;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.remoting.client.ClientConnection;
-import org.apache.isis.remoting.exchange.Request;
-import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.marshalling.ServerMarshaller;
 
 /**
  * Acts as the mediator between the {@link ServerMarshaller} (which pulls stuff off the transport and pushes stuff on)

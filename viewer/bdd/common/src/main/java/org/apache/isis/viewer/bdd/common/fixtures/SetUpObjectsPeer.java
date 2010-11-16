@@ -72,6 +72,10 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
     private final List<String> cellTextList = new ArrayList<String>();
     private String alias;
 
+    // ///////////////////////////////////////////////////////////////////////
+    // constructor
+    // ///////////////////////////////////////////////////////////////////////
+
     public SetUpObjectsPeer(AliasRegistry aliasRegistry, final String className, final SetUpObjectsPeer.Mode mode,
         final CellBinding aliasBinding) {
         super(aliasRegistry, aliasBinding);
@@ -101,6 +105,10 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
     public CellBinding getAliasBinding() {
         return aliasBinding;
     }
+
+    // ///////////////////////////////////////////////////////////////////////
+    // header
+    // ///////////////////////////////////////////////////////////////////////
 
     public PropertyResult definePropertyOrAlias(String heading, int colNum) {
 
@@ -133,10 +141,9 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         }
     }
 
-    public void resetForNextObject() {
-        cellTextList.clear();
-        this.alias = null;
-    }
+    // ///////////////////////////////////////////////////////////////////////
+    // each row
+    // ///////////////////////////////////////////////////////////////////////
 
     /**
      * Used by Concordion only.
@@ -159,6 +166,11 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         persistIfNecessary(adapter);
         alias(adapter);
         resetForNextObject();
+    }
+
+    public void resetForNextObject() {
+        cellTextList.clear();
+        this.alias = null;
     }
 
     public ObjectAdapter createInstance() {

@@ -20,7 +20,7 @@
 
 package org.apache.isis.remoting.data;
 
-import org.apache.isis.remoting.data.common.NullData;
+import org.apache.isis.alternatives.remoting.common.data.common.NullData;
 
 public class DummyNullValue implements NullData {
 

@@ -25,6 +25,7 @@ import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
 import org.apache.isis.extensions.dnd.DummyView;
 import org.apache.isis.extensions.dnd.TestToolkit;
 import org.apache.isis.extensions.dnd.drawing.Location;
@@ -32,7 +33,6 @@ import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.content.NullContent;
 import org.apache.isis.extensions.dnd.view.look.LookFactory;
-import org.apache.isis.runtime.testsystem.TestProxySystemII;
 
 import static org.junit.Assert.assertEquals;
 

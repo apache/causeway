@@ -24,13 +24,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
+import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
+import org.apache.isis.alternatives.remoting.common.server.ServerConnection;
+import org.apache.isis.alternatives.remoting.common.server.ServerConnectionDefault;
+import org.apache.isis.alternatives.remoting.common.transport.ConnectionException;
+import org.apache.isis.alternatives.remoting.common.transport.simple.SimpleTransport;
 import org.apache.isis.alternatives.remoting.marshalling.serialize.SerializingMarshaller;
-import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.remoting.server.ServerConnection;
-import org.apache.isis.remoting.server.ServerConnectionDefault;
-import org.apache.isis.remoting.transport.ConnectionException;
-import org.apache.isis.remoting.transport.simple.SimpleTransport;
 
 
 public class SerializingOverSocketsViewer extends SocketsViewerAbstract {

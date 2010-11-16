@@ -8,8 +8,8 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.object.cached.CachedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SimpleOidGenerator.Memento;
-import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStoreInstances;
-import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStorePersistedObjects;
+import org.apache.isis.defaults.objectstore.internal.ObjectStoreInstances;
+import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects;
 
 import com.google.common.collect.Iterables;
 

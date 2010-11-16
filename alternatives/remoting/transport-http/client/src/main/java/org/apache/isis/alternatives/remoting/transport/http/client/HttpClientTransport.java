@@ -29,9 +29,9 @@ import java.io.OutputStream;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.methods.InputStreamRequestEntity;
 import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.isis.alternatives.remoting.common.transport.TransportAbstract;
 import org.apache.isis.core.commons.io.LazyInputStream;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.remoting.transport.TransportAbstract;
 
 public class HttpClientTransport extends TransportAbstract {
 

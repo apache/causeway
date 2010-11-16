@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.util.Dump;
-import org.apache.isis.runtime.testsystem.TestProxySystemII;
+import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
 
 
 public class SystemTest {

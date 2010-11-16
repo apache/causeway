@@ -22,11 +22,11 @@ package org.apache.isis.alternatives.remoting.transport.sockets.client;
 
 import java.util.List;
 
+import org.apache.isis.alternatives.remoting.common.client.ProxyInstallerAbstract;
+import org.apache.isis.alternatives.remoting.common.marshalling.ClientMarshaller;
+import org.apache.isis.alternatives.remoting.common.transport.Transport;
 import org.apache.isis.alternatives.remoting.marshalling.encode.EncodingMarshaller;
 import org.apache.isis.alternatives.remoting.transport.sockets.shared.SocketTransport;
-import org.apache.isis.remoting.client.ProxyInstallerAbstract;
-import org.apache.isis.remoting.marshalling.ClientMarshaller;
-import org.apache.isis.remoting.transport.Transport;
 
 
 public class EncodingOverSocketsProxyInstaller extends ProxyInstallerAbstract {

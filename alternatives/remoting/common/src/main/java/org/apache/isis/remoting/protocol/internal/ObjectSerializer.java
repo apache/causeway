@@ -21,6 +21,13 @@ package org.apache.isis.remoting.protocol.internal;
 
 import java.util.Enumeration;
 
+import org.apache.isis.alternatives.remoting.common.data.Data;
+import org.apache.isis.alternatives.remoting.common.data.DataFactory;
+import org.apache.isis.alternatives.remoting.common.data.common.CollectionData;
+import org.apache.isis.alternatives.remoting.common.data.common.EncodableObjectData;
+import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
+import org.apache.isis.alternatives.remoting.common.data.common.ReferenceData;
+import org.apache.isis.alternatives.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -33,13 +40,6 @@ import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
-import org.apache.isis.remoting.data.Data;
-import org.apache.isis.remoting.data.DataFactory;
-import org.apache.isis.remoting.data.common.CollectionData;
-import org.apache.isis.remoting.data.common.EncodableObjectData;
-import org.apache.isis.remoting.data.common.ObjectData;
-import org.apache.isis.remoting.data.common.ReferenceData;
-import org.apache.isis.remoting.exchange.KnownObjectsRequest;
 
 /**
  * Utility class to create Data objects representing a graph of Isis.

@@ -23,15 +23,15 @@ package org.apache.isis.remoting.protocol.internal;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
+import org.apache.isis.alternatives.remoting.common.data.query.PersistenceQueryData;
+import org.apache.isis.alternatives.remoting.common.data.query.PersistenceQueryFindUsingApplibQueryDefaultData;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindUsingApplibQueryDefault;
-import org.apache.isis.remoting.data.common.ObjectData;
-import org.apache.isis.remoting.data.query.PersistenceQueryData;
-import org.apache.isis.remoting.data.query.PersistenceQueryFindUsingApplibQueryDefaultData;
 
 public class PersistenceQueryFindUsingApplibQueryDefaultEncoder extends PersistenceQueryEncoderAbstract {
 

@@ -43,10 +43,10 @@ import org.apache.isis.core.runtime.persistence.objectstore.ObjectStorePersisten
 import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
+import org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
 import org.apache.isis.extensions.sql.objectstore.SqlPersistorInstaller;
 import org.apache.isis.extensions.xml.objectstore.XmlPersistenceMechanismInstaller;
-import org.apache.isis.runtime.objectstore.inmemory.InMemoryPersistenceMechanismInstaller;
 
 /*
  * TODO allow to be created with specific requirements for components being set up rather than using mocks.

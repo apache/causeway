@@ -22,10 +22,11 @@ package org.apache.isis.remoting.data;
 
 import java.util.Arrays;
 
+import org.apache.isis.alternatives.remoting.common.data.Data;
+import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.remoting.data.common.ObjectData;
 
 
 public class DummyObjectData extends DummyReferenceData implements ObjectData {

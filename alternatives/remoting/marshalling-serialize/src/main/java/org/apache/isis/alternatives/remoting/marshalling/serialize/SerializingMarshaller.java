@@ -27,13 +27,13 @@ import java.io.Serializable;
 import java.net.SocketException;
 
 import org.apache.log4j.Logger;
+import org.apache.isis.alternatives.remoting.common.exchange.Request;
+import org.apache.isis.alternatives.remoting.common.marshalling.MarshallerAbstract;
+import org.apache.isis.alternatives.remoting.common.protocol.IllegalRequestException;
+import org.apache.isis.alternatives.remoting.common.transport.ConnectionException;
+import org.apache.isis.alternatives.remoting.common.transport.Transport;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.remoting.exchange.Request;
-import org.apache.isis.remoting.marshalling.MarshallerAbstract;
-import org.apache.isis.remoting.protocol.IllegalRequestException;
-import org.apache.isis.remoting.transport.ConnectionException;
-import org.apache.isis.remoting.transport.Transport;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 

@@ -21,9 +21,9 @@ package org.apache.isis.alternatives.remoting.transport.http.client;
 
 import java.util.List;
 
+import org.apache.isis.alternatives.remoting.common.client.ProxyInstallerAbstract;
+import org.apache.isis.alternatives.remoting.common.transport.Transport;
 import org.apache.isis.alternatives.remoting.marshalling.encode.EncodingMarshaller;
-import org.apache.isis.remoting.client.ProxyInstallerAbstract;
-import org.apache.isis.remoting.transport.Transport;
 
 public class EncodingOverHttpProxyInstaller extends ProxyInstallerAbstract {
 

@@ -22,6 +22,15 @@ package org.apache.isis.remoting.protocol.internal;
 
 import java.util.Enumeration;
 
+import org.apache.isis.alternatives.remoting.common.IsisRemoteException;
+import org.apache.isis.alternatives.remoting.common.data.Data;
+import org.apache.isis.alternatives.remoting.common.data.common.CollectionData;
+import org.apache.isis.alternatives.remoting.common.data.common.EncodableObjectData;
+import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
+import org.apache.isis.alternatives.remoting.common.data.common.NullData;
+import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
+import org.apache.isis.alternatives.remoting.common.data.common.ReferenceData;
+import org.apache.isis.alternatives.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -43,15 +52,6 @@ import org.apache.isis.core.runtime.persistence.PersistorUtil;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.persistence.objectstore.PersistenceSessionObjectStore;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
-import org.apache.isis.remoting.IsisRemoteException;
-import org.apache.isis.remoting.data.Data;
-import org.apache.isis.remoting.data.common.CollectionData;
-import org.apache.isis.remoting.data.common.EncodableObjectData;
-import org.apache.isis.remoting.data.common.IdentityData;
-import org.apache.isis.remoting.data.common.NullData;
-import org.apache.isis.remoting.data.common.ObjectData;
-import org.apache.isis.remoting.data.common.ReferenceData;
-import org.apache.isis.remoting.exchange.KnownObjectsRequest;
 import org.apache.log4j.Logger;
 
 public class ObjectDeserializer {

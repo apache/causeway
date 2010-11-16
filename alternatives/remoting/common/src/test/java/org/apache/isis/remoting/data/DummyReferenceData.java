@@ -20,10 +20,10 @@
 
 package org.apache.isis.remoting.data;
 
+import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.remoting.data.common.IdentityData;
 
 
 public class DummyReferenceData implements IdentityData {

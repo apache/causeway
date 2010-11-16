@@ -20,11 +20,11 @@
 
 package org.apache.isis.remoting.protocol.internal;
 
+import org.apache.isis.alternatives.remoting.common.data.query.PersistenceQueryData;
+import org.apache.isis.alternatives.remoting.common.data.query.PersistenceQueryFindByTitleData;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
-import org.apache.isis.remoting.data.query.PersistenceQueryData;
-import org.apache.isis.remoting.data.query.PersistenceQueryFindByTitleData;
 
 public class PersistenceQueryFindByTitleEncoder extends PersistenceQueryEncoderAbstract {
 

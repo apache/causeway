@@ -26,6 +26,7 @@ import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
+import org.apache.isis.alternatives.remoting.common.exchange.GetObjectRequest;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
 import org.apache.isis.core.metamodel.encoding.Encodable;

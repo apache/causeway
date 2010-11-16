@@ -20,25 +20,26 @@
 
 package org.apache.isis.remoting.client;
 
+import org.apache.isis.alternatives.remoting.common.IsisRemoteException;
+import org.apache.isis.alternatives.remoting.common.client.ClientConnection;
+import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
+import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
+import org.apache.isis.alternatives.remoting.common.exchange.ClearAssociationRequest;
+import org.apache.isis.alternatives.remoting.common.exchange.ClearAssociationResponse;
+import org.apache.isis.alternatives.remoting.common.exchange.HasInstancesRequest;
+import org.apache.isis.alternatives.remoting.common.exchange.HasInstancesResponse;
+import org.apache.isis.alternatives.remoting.common.exchange.OidForServiceRequest;
+import org.apache.isis.alternatives.remoting.common.exchange.OidForServiceResponse;
+import org.apache.isis.alternatives.remoting.common.exchange.Request;
+import org.apache.isis.alternatives.remoting.common.exchange.RequestAbstract;
+import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
+import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
+import org.apache.isis.alternatives.remoting.common.facade.proxy.ServerFacadeProxy;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.core.runtime.testsystem.TestProxyOid;
 import org.apache.isis.core.runtime.testsystem.TestProxySession;
-import org.apache.isis.remoting.IsisRemoteException;
 import org.apache.isis.remoting.data.DummyIdentityData;
-import org.apache.isis.remoting.data.common.IdentityData;
-import org.apache.isis.remoting.data.common.ObjectData;
-import org.apache.isis.remoting.exchange.ClearAssociationRequest;
-import org.apache.isis.remoting.exchange.ClearAssociationResponse;
-import org.apache.isis.remoting.exchange.HasInstancesRequest;
-import org.apache.isis.remoting.exchange.HasInstancesResponse;
-import org.apache.isis.remoting.exchange.OidForServiceRequest;
-import org.apache.isis.remoting.exchange.OidForServiceResponse;
-import org.apache.isis.remoting.exchange.Request;
-import org.apache.isis.remoting.exchange.RequestAbstract;
-import org.apache.isis.remoting.exchange.ResponseEnvelope;
-import org.apache.isis.remoting.facade.ServerFacade;
-import org.apache.isis.remoting.facade.proxy.ServerFacadeProxy;
 import org.easymock.MockControl;
 
 

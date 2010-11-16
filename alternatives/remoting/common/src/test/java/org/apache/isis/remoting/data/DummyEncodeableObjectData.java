@@ -20,8 +20,8 @@
 
 package org.apache.isis.remoting.data;
 
+import org.apache.isis.alternatives.remoting.common.data.common.EncodableObjectData;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.remoting.data.common.EncodableObjectData;
 
 
 public final class DummyEncodeableObjectData implements EncodableObjectData {

@@ -20,9 +20,9 @@
 
 package org.apache.isis.remoting.transport.pipe;
 
-import org.apache.isis.remoting.client.ClientConnection;
-import org.apache.isis.remoting.exchange.Request;
-import org.apache.isis.remoting.exchange.ResponseEnvelope;
+import org.apache.isis.alternatives.remoting.common.client.ClientConnection;
+import org.apache.isis.alternatives.remoting.common.exchange.Request;
+import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
 
 
 public class PipedClient implements ClientConnection {
