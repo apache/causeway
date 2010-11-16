@@ -33,13 +33,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.component.html.HtmlComponentFactory;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.extensions.html.request.Request;
 import org.apache.isis.extensions.html.request.ServletRequest;
 import org.apache.isis.extensions.html.servlet.internal.WebController;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 

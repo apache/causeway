@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.facets.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetAbstract;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.remoting.data.common.EncodableObjectData;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.data.common.ObjectData;
@@ -35,7 +36,6 @@ import org.apache.isis.remoting.exchange.SetValueRequest;
 import org.apache.isis.remoting.exchange.SetValueResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 
 

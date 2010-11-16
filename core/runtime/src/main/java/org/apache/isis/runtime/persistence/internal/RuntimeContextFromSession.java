@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.runtime.persistence.container.DomainObjectContainerObjectChanged;

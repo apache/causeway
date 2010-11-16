@@ -28,7 +28,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.i18n.resourcebundle.I18nFacetDecorator;
 import org.apache.isis.runtime.i18n.resourcebundle.ResourceBasedI18nManager;
 import org.apache.isis.runtime.transaction.facetdecorator.standard.StandardTransactionFacetDecorator;

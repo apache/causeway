@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.bdd.common.Story;
 
 public class OpenSession {

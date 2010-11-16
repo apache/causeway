@@ -23,6 +23,7 @@ package org.apache.isis.extensions.dnd.view.base;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Offset;
 import org.apache.isis.extensions.dnd.interaction.ViewDragImpl;
@@ -38,7 +39,6 @@ import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.ViewSpecification;
 import org.apache.isis.extensions.dnd.view.Workspace;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 

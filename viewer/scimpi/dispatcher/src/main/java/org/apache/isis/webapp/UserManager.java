@@ -22,9 +22,9 @@ package org.apache.isis.webapp;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.context.RequestContext;
 
 

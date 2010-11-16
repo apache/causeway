@@ -25,9 +25,9 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.context.Context;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 

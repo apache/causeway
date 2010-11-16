@@ -33,9 +33,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.IsisUtils;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.context.Context;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 

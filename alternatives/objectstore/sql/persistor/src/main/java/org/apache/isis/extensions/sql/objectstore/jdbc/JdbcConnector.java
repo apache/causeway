@@ -30,12 +30,12 @@ import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.sql.objectstore.AbstractDatabaseConnector;
 import org.apache.isis.extensions.sql.objectstore.Results;
 import org.apache.isis.extensions.sql.objectstore.SqlMetaData;
 import org.apache.isis.extensions.sql.objectstore.SqlObjectStore;
 import org.apache.isis.extensions.sql.objectstore.SqlObjectStoreException;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.log4j.Logger;
 
 public class JdbcConnector extends AbstractDatabaseConnector {

@@ -23,6 +23,6 @@ package org.apache.isis;
 public class Isis {
 	
     public static void main(final String[] args) {
-    	org.apache.isis.runtime.Isis.main(args);
+    	org.apache.isis.core.runtime.Isis.main(args);
 	}
 }

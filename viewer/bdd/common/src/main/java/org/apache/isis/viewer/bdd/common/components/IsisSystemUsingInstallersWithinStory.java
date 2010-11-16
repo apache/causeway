@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.bdd.common.components;
 
-import org.apache.isis.runtime.authentication.AuthenticationManagerInstaller;
+import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 import org.apache.isis.runtime.installers.InstallerLookup;
 import org.apache.isis.runtime.persistence.PersistenceMechanismInstaller;
 import org.apache.isis.runtime.system.DeploymentType;

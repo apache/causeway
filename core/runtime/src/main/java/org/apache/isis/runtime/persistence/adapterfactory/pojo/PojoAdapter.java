@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 

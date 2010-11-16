@@ -23,7 +23,7 @@ package org.apache.isis.webapp.logon;
 import java.io.IOException;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.Action;
 import org.apache.isis.webapp.UserManager;
 import org.apache.isis.webapp.context.RequestContext;

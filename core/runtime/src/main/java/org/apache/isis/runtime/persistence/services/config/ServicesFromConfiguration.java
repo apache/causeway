@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.fixture.ObjectFixtureService;
+import org.apache.isis.core.runtime.fixture.ObjectFixtureService;
 import org.apache.isis.runtime.installers.InstallerAbstract;
 import org.apache.isis.runtime.persistence.services.InitialisationException;
 import org.apache.isis.runtime.persistence.services.ServicesInstaller;

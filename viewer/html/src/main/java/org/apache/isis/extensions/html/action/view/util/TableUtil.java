@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.ComponentFactory;
 import org.apache.isis.extensions.html.component.Table;
 import org.apache.isis.extensions.html.context.Context;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.PROPERTIES;

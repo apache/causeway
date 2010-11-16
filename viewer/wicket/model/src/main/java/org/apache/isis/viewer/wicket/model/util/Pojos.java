@@ -23,7 +23,7 @@ package org.apache.isis.viewer.wicket.model.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.adaptermanager.AdapterManager;
 
 import com.google.common.base.Function;

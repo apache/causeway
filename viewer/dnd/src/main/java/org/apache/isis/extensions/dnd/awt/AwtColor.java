@@ -20,9 +20,9 @@
 
 package org.apache.isis.extensions.dnd.awt;
 
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.util.Properties;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class AwtColor implements Color {

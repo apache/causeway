@@ -22,7 +22,7 @@ package org.apache.isis.webapp;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.processor.Request;
 
 public abstract class AbstractObjectProcessor extends AbstractElementProcessor {

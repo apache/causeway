@@ -22,7 +22,7 @@ package org.apache.isis.runtime.persistence.adaptermanager;
 
 import org.apache.commons.collections.Transformer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 /**

@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.view.ButtonAction;
 import org.apache.isis.extensions.dnd.view.Content;
@@ -35,7 +36,6 @@ import org.apache.isis.extensions.dnd.view.Workspace;
 import org.apache.isis.extensions.dnd.view.content.FieldContent;
 import org.apache.isis.extensions.dnd.view.content.RootObject;
 import org.apache.isis.extensions.dnd.view.control.AbstractButtonAction;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 
 

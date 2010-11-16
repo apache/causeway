@@ -33,10 +33,10 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionLookupStrategy;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionLookupStrategyDefault;
-import org.apache.isis.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class IsisSessionFilter implements Filter {

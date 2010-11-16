@@ -23,7 +23,7 @@ package org.apache.isis.runtime.transaction;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.session.IsisSession;
 
 

@@ -22,8 +22,8 @@ package org.apache.isis.runtime.system;
 
 import java.util.List;
 
-import org.apache.isis.runtime.context.IsisContextStatic;
-import org.apache.isis.runtime.context.IsisContextThreadLocal;
+import org.apache.isis.core.runtime.context.IsisContextStatic;
+import org.apache.isis.core.runtime.context.IsisContextThreadLocal;
 import org.apache.isis.runtime.session.IsisSessionFactory;
 
 /**

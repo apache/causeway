@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionClearFacetAbstract;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.runtime.transaction.TransactionalClosureAbstract;

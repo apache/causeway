@@ -31,7 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.context.RequestContext.Scope;
 import org.apache.isis.webapp.debug.DebugView;
 import org.apache.isis.webapp.processor.Request;

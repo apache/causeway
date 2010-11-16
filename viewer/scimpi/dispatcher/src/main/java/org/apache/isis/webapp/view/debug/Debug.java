@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.util.Dump;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.context.RequestContext;

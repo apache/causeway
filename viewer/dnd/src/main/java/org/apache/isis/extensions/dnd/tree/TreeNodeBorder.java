@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
@@ -57,7 +58,6 @@ import org.apache.isis.extensions.dnd.view.field.OneToManyField;
 import org.apache.isis.extensions.dnd.view.option.UserActionAbstract;
 import org.apache.isis.extensions.dnd.view.text.ObjectTitleText;
 import org.apache.isis.extensions.dnd.view.text.TitleText;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 // TODO use ObjectBorder to provide the basic border functionality

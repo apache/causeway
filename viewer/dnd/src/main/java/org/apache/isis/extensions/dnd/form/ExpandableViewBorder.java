@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Shape;
@@ -47,7 +48,6 @@ import org.apache.isis.extensions.dnd.view.collection.CollectionContent;
 import org.apache.isis.extensions.dnd.view.collection.CollectionElement;
 import org.apache.isis.extensions.dnd.view.content.FieldContent;
 import org.apache.isis.extensions.dnd.view.field.OneToOneFieldImpl;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class ExpandableViewBorder extends AbstractBorder {

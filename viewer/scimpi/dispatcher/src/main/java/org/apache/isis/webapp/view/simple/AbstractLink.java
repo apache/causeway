@@ -22,7 +22,7 @@ package org.apache.isis.webapp.view.simple;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.ForbiddenException;
 import org.apache.isis.webapp.ScimpiException;

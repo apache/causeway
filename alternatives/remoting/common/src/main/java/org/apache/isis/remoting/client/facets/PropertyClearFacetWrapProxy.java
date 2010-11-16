@@ -25,13 +25,13 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facets.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetAbstract;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.remoting.data.common.IdentityData;
 import org.apache.isis.remoting.data.common.ObjectData;
 import org.apache.isis.remoting.exchange.ClearAssociationRequest;
 import org.apache.isis.remoting.exchange.ClearAssociationResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.ConcurrencyException;
 
 

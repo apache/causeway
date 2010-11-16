@@ -20,7 +20,7 @@
 
 package org.apache.isis.extensions.html.action.misc;
 
-import org.apache.isis.runtime.about.AboutIsis;
+import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.extensions.html.action.Action;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.component.ViewPane;

@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 
 
 public abstract class EmbeddedWebServerAbstract implements EmbeddedWebServer {

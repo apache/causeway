@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.java5.ImperativeFacetUtils.ImperativeFacet
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.progmodel.spec.JavaSpecification;
-import org.apache.isis.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract;
+import org.apache.isis.core.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.runtime.persistence.objectfactory.ObjectResolver;
 

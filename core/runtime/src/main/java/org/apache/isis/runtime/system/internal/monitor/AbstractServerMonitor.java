@@ -33,7 +33,7 @@ import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.services.InitialisationException;
 import org.apache.isis.runtime.system.IsisSystem;
 

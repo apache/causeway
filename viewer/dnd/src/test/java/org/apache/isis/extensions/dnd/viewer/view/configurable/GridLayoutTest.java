@@ -27,11 +27,11 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.composite.GridLayout;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.testsystem.TestProxyConfiguration;
 
 

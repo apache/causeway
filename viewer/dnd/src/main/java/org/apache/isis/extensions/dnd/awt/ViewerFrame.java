@@ -31,7 +31,7 @@ import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.apache.isis.runtime.about.AboutIsis;
+import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.view.Toolkit;
 

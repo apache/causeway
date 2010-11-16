@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.util.IsisUtils;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.ObjectContent;
@@ -38,7 +39,6 @@ import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.ViewFactory;
 import org.apache.isis.extensions.dnd.view.base.FieldErrorView;
 import org.apache.isis.extensions.dnd.view.content.FieldContent;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class ObjectFieldBuilder extends AbstractViewBuilder {

@@ -29,7 +29,7 @@ import org.apache.log4j.helpers.CyclicBuffer;
 import org.apache.log4j.helpers.OptionConverter;
 import org.apache.log4j.spi.LoggingEvent;
 import org.apache.log4j.spi.TriggeringEventEvaluator;
-import org.apache.isis.runtime.about.AboutIsis;
+import org.apache.isis.core.runtime.about.AboutIsis;
 
 
 class DefaultEvaluator implements TriggeringEventEvaluator {

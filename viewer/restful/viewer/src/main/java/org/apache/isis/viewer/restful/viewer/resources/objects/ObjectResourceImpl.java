@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.restful.applib.resources.ObjectResource;
 import org.apache.isis.viewer.restful.viewer.Constants;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;

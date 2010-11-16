@@ -20,11 +20,11 @@
 
 package org.apache.isis.extensions.dnd.view.border;
 
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.util.Properties;
 import org.apache.isis.extensions.dnd.view.View;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 // TODO enhance so the direction of resizing can be specified (could limit to width on right, height on bottom, or width/height from corner

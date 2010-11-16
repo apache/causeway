@@ -26,13 +26,13 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.Block;
 import org.apache.isis.extensions.html.component.Component;
 import org.apache.isis.extensions.html.component.ComponentFactory;
 import org.apache.isis.extensions.html.component.ViewPane;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.extensions.html.request.Request;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 

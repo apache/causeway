@@ -33,10 +33,10 @@ import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLen
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.ObjectContent;
 import org.apache.isis.extensions.dnd.view.content.AbstractTextParsableContent;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class TextParseableFieldImpl extends AbstractTextParsableContent implements TextParseableField, ObjectContent {

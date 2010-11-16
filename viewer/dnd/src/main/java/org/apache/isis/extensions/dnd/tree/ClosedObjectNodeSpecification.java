@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.ObjectContent;
@@ -31,7 +32,6 @@ import org.apache.isis.extensions.dnd.view.SubviewDecorator;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.ViewRequirement;
 import org.apache.isis.extensions.dnd.view.border.SelectObjectBorder;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 /**

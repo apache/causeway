@@ -30,7 +30,7 @@ import java.util.List;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 
 
 public class MonitorListenerImpl implements MonitorListener {

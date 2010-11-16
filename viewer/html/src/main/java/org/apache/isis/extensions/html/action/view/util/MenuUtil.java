@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.Component;
 import org.apache.isis.extensions.html.context.Context;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class MenuUtil {

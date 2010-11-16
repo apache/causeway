@@ -20,7 +20,7 @@
 
 package org.apache.isis.webapp.view.logon;
 
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.Dispatcher;
 import org.apache.isis.webapp.processor.Request;

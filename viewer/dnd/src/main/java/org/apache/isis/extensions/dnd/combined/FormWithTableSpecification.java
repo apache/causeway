@@ -25,6 +25,7 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.form.FormSpecification;
 import org.apache.isis.extensions.dnd.table.InternalTableSpecification;
 import org.apache.isis.extensions.dnd.view.Axes;
@@ -34,7 +35,6 @@ import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.base.Layout;
 import org.apache.isis.extensions.dnd.view.composite.GridLayout;
 import org.apache.isis.extensions.dnd.view.composite.StackLayout;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class FormWithTableSpecification extends SplitViewSpecification {

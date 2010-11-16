@@ -12,11 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtime.authentication.standard.exploration.ExplorationSession;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationSession;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.system.DeploymentType;
 import org.apache.log4j.Logger;
 

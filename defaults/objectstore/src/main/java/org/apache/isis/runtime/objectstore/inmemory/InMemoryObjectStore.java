@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStoreInstances;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStorePersistedObjects;
 import org.apache.isis.runtime.objectstore.inmemory.internal.ObjectStorePersistedObjectsDefault;

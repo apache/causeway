@@ -32,9 +32,9 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.io.IoUtils;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
 
 import com.google.inject.Inject;
 

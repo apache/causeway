@@ -32,7 +32,7 @@ import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.transaction.ObjectPersistenceException;
 import org.apache.log4j.Logger;
 

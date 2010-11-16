@@ -20,10 +20,10 @@
 
 package org.apache.isis.viewer.wicket.viewer;
 
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.testsupport.jmock.MockFixture;
 import org.apache.isis.core.testsupport.jmock.MockFixtureAdapter;
-import org.apache.isis.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtime.authentication.AuthenticationRequest;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 

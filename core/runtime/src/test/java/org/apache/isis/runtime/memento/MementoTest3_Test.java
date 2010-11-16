@@ -44,7 +44,7 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
-import org.apache.isis.runtime.context.IsisContextStatic;
+import org.apache.isis.core.runtime.context.IsisContextStatic;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.runtime.session.IsisSession;
 import org.apache.isis.runtime.session.IsisSessionFactory;

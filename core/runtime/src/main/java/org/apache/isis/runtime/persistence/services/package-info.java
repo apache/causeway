@@ -22,6 +22,6 @@
  * Used to specify the set of services (including repositories) to inject into
  * domain objects.
  * 
- * @see org.apache.isis.runtime.fixturesinstaller.FixturesInstaller
+ * @see org.apache.isis.core.runtime.fixturesinstaller.FixturesInstaller
  */
 package org.apache.isis.runtime.persistence.services;

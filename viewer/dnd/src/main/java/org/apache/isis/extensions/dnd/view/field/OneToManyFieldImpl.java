@@ -28,12 +28,12 @@ import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Image;
 import org.apache.isis.extensions.dnd.drawing.ImageFactory;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.UserActionSet;
 import org.apache.isis.extensions.dnd.view.collection.AbstractCollectionContent;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class OneToManyFieldImpl extends AbstractCollectionContent implements OneToManyField {

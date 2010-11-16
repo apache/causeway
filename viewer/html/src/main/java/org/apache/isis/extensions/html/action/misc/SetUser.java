@@ -20,13 +20,13 @@
 
 package org.apache.isis.extensions.html.action.misc;
 
+import org.apache.isis.core.runtime.authentication.standard.exploration.MultiUserExplorationSession;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.action.Action;
 import org.apache.isis.extensions.html.component.Page;
 import org.apache.isis.extensions.html.component.ViewPane;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.extensions.html.request.Request;
-import org.apache.isis.runtime.authentication.standard.exploration.MultiUserExplorationSession;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class SetUser implements Action {

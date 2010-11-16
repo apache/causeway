@@ -22,8 +22,8 @@ package org.apache.isis.runtime.authentication.standard.noop;
 
 import org.apache.isis.core.commons.components.Noop;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtime.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 
 public class AuthenticatorNoop extends AuthenticatorAbstract implements Noop {
 

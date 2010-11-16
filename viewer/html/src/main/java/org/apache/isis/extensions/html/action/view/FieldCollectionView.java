@@ -23,12 +23,12 @@ package org.apache.isis.extensions.html.action.view;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.action.view.util.TableUtil;
 import org.apache.isis.extensions.html.component.Table;
 import org.apache.isis.extensions.html.component.ViewPane;
 import org.apache.isis.extensions.html.context.Context;
 import org.apache.isis.extensions.html.request.Request;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 

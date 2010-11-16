@@ -46,7 +46,7 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.CallbackUtils;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.FixturesInstalledFlag;
 import org.apache.isis.runtime.persistence.NotPersistableException;
 import org.apache.isis.runtime.persistence.PersistenceSessionAbstract;

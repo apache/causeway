@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.StoryValueException;

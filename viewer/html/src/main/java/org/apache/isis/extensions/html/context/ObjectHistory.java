@@ -29,9 +29,9 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.Block;
 import org.apache.isis.extensions.html.component.Component;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class ObjectHistory {

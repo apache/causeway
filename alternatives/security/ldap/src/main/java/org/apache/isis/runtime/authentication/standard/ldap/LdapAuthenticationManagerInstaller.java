@@ -21,8 +21,8 @@
 package org.apache.isis.runtime.authentication.standard.ldap;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.authentication.standard.Authenticator;
-import org.apache.isis.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandardInstallerAbstract;
+import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 
 
 public class LdapAuthenticationManagerInstaller extends AuthenticationManagerStandardInstallerAbstract {

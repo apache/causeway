@@ -23,7 +23,7 @@ package org.apache.isis.extensions.xml.profilestore;
 import java.util.List;
 import java.util.Stack;
 
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.services.ServiceUtil;
 import org.apache.isis.runtime.userprofile.Options;
 import org.apache.isis.runtime.userprofile.PerspectiveEntry;

@@ -22,10 +22,10 @@ package org.apache.isis.remoting.client.authentication;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 import org.apache.isis.remoting.exchange.CloseSessionRequest;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.authentication.standard.AuthenticationManagerStandard;
 
 
 public class AuthenticationManagerProxy extends AuthenticationManagerStandard {

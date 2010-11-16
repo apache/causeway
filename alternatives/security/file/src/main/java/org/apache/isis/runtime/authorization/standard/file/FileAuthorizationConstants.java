@@ -21,8 +21,8 @@
 package org.apache.isis.runtime.authorization.standard.file;
 
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.runtime.authorization.AuthorizationManagerInstaller;
-import org.apache.isis.runtime.authorization.standard.AuthorizationConstants;
+import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
+import org.apache.isis.core.runtime.authorization.standard.AuthorizationConstants;
 
 public final class FileAuthorizationConstants {
 	

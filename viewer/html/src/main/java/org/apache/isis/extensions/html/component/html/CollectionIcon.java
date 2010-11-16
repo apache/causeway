@@ -25,10 +25,10 @@ import java.io.PrintWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.html.component.Component;
 import org.apache.isis.extensions.html.image.ImageLookup;
 import org.apache.isis.extensions.html.request.Request;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 

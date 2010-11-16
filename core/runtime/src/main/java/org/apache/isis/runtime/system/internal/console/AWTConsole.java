@@ -31,7 +31,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.log4j.Logger;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;

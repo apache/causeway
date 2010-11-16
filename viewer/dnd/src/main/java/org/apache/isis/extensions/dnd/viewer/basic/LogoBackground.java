@@ -22,6 +22,7 @@ package org.apache.isis.extensions.dnd.viewer.basic;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Background;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Image;
@@ -29,7 +30,6 @@ import org.apache.isis.extensions.dnd.drawing.ImageFactory;
 import org.apache.isis.extensions.dnd.drawing.Location;
 import org.apache.isis.extensions.dnd.drawing.Size;
 import org.apache.isis.extensions.dnd.util.Properties;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class LogoBackground implements Background {

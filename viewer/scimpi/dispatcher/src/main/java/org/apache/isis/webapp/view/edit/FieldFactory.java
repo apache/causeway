@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLeng
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.context.RequestContext;
 import org.apache.isis.webapp.context.RequestContext.Scope;
 import org.apache.isis.webapp.view.form.InputField;

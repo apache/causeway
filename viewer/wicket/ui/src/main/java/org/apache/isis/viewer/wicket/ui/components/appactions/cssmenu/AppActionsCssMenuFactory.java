@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu.NotInRepositoryMenuFacet;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;

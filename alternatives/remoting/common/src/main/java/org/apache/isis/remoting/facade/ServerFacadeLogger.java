@@ -30,6 +30,7 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.remoting.client.transaction.ClientTransactionEvent;
 import org.apache.isis.remoting.data.Data;
 import org.apache.isis.remoting.data.common.CollectionData;
@@ -73,7 +74,6 @@ import org.apache.isis.remoting.exchange.SetAssociationResponse;
 import org.apache.isis.remoting.exchange.SetValueRequest;
 import org.apache.isis.remoting.exchange.SetValueResponse;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.logging.Logger;
 
 import com.google.inject.internal.Lists;

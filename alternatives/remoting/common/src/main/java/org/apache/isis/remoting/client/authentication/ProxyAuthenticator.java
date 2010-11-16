@@ -28,15 +28,15 @@ import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
+import org.apache.isis.core.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
+import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.remoting.exchange.OpenSessionRequest;
 import org.apache.isis.remoting.exchange.OpenSessionResponse;
 import org.apache.isis.remoting.facade.ServerFacade;
 import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-import org.apache.isis.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtime.authentication.standard.AuthenticatorAbstract;
-import org.apache.isis.runtime.authentication.standard.PasswordRequestAuthenticatorAbstract;
-import org.apache.isis.runtime.authentication.standard.SimpleSession;
 
 public final class ProxyAuthenticator extends PasswordRequestAuthenticatorAbstract {
 	

@@ -27,10 +27,10 @@ import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Text;
 import org.apache.isis.extensions.dnd.util.Properties;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class AwtText implements Text {

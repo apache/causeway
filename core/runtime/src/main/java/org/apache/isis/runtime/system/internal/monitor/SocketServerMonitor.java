@@ -25,7 +25,7 @@ import java.io.PrintWriter;
 import java.net.URLDecoder;
 
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.system.IsisSystem;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;

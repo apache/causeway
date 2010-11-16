@@ -20,8 +20,8 @@
 
 package org.apache.isis.runtime.authentication.standard.ldap;
 
-import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.context.IsisContext;
 
 
 public class LdapAuthenticatorTester {

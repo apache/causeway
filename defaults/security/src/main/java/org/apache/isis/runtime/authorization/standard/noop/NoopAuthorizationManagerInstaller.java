@@ -21,8 +21,8 @@
 package org.apache.isis.runtime.authorization.standard.noop;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
-import org.apache.isis.runtime.authorization.standard.Authorizor;
+import org.apache.isis.core.runtime.authorization.standard.AuthorizationManagerStandardInstallerAbstract;
+import org.apache.isis.core.runtime.authorization.standard.Authorizor;
 
 public class NoopAuthorizationManagerInstaller extends
 		AuthorizationManagerStandardInstallerAbstract {

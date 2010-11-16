@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.value.BooleanValueFacet;
 import org.apache.isis.core.progmodel.facets.value.ImageValueFacet;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.field.CheckboxField;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
@@ -47,7 +48,6 @@ import org.apache.isis.extensions.dnd.view.content.TextParseableContent;
 import org.apache.isis.extensions.dnd.view.field.OneToOneFieldImpl;
 import org.apache.isis.extensions.dnd.view.field.TextParseableFieldImpl;
 import org.apache.isis.extensions.dnd.viewer.basic.UnlinedTextFieldSpecification;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 class TableCellBuilder extends AbstractViewBuilder {

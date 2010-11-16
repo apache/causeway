@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.util.Properties;
 import org.apache.isis.extensions.dnd.view.Axes;
 import org.apache.isis.extensions.dnd.view.Content;
@@ -34,7 +35,6 @@ import org.apache.isis.extensions.dnd.view.ViewAxis;
 import org.apache.isis.extensions.dnd.view.ViewSpecification;
 import org.apache.isis.extensions.dnd.view.base.Layout;
 import org.apache.isis.extensions.dnd.view.window.SubviewFocusManager;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.userprofile.Options;
 
 

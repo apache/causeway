@@ -23,13 +23,13 @@ package org.apache.isis.extensions.dnd.view.debug;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.DebugCanvas;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.ObjectContent;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.collection.CollectionContent;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.util.Dump;
 
 

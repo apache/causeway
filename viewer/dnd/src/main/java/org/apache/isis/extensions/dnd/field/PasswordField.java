@@ -21,6 +21,7 @@
 package org.apache.isis.extensions.dnd.field;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
 import org.apache.isis.extensions.dnd.drawing.Color;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
@@ -33,7 +34,6 @@ import org.apache.isis.extensions.dnd.view.UserActionSet;
 import org.apache.isis.extensions.dnd.view.ViewSpecification;
 import org.apache.isis.extensions.dnd.view.content.TextParseableContent;
 import org.apache.isis.extensions.dnd.view.text.TextContent;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class PasswordField extends TextField {

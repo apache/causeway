@@ -23,7 +23,7 @@ package org.apache.isis.runtime.objectstore.inmemory;
 import java.util.Collections;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.runtime.testsystem.ProxyJunit3TestCase;
 

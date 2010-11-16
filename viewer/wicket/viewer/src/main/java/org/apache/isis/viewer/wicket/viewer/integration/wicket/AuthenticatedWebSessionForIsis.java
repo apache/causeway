@@ -29,10 +29,10 @@ import java.util.List;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.runtime.authentication.AuthenticationManager;
-import org.apache.isis.runtime.authentication.AuthenticationRequest;
-import org.apache.isis.runtime.authentication.AuthenticationRequestPassword;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.authentication.AuthenticationManager;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
+import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.nof.AuthenticationSessionAccessor;
 import org.apache.wicket.Request;
 import org.apache.wicket.Session;

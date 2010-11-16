@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.view.BackgroundTask;
 import org.apache.isis.extensions.dnd.view.Content;
 import org.apache.isis.extensions.dnd.view.Feedback;
@@ -32,7 +33,6 @@ import org.apache.isis.extensions.dnd.view.ObjectContent;
 import org.apache.isis.extensions.dnd.view.View;
 import org.apache.isis.extensions.dnd.view.message.ExceptionMessageContent;
 import org.apache.isis.extensions.dnd.view.message.TextMessageContent;
-import org.apache.isis.runtime.context.IsisContext;
 import org.apache.isis.runtime.transaction.messagebroker.MessageBroker;
 
 

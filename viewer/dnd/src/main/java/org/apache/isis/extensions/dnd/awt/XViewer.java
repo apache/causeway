@@ -39,6 +39,7 @@ import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.Background;
 import org.apache.isis.extensions.dnd.drawing.Bounds;
 import org.apache.isis.extensions.dnd.drawing.Canvas;
@@ -72,7 +73,6 @@ import org.apache.isis.extensions.dnd.view.debug.LoggingOptions;
 import org.apache.isis.extensions.dnd.view.menu.PopupMenuContainer;
 import org.apache.isis.extensions.dnd.view.message.MessageContent;
 import org.apache.isis.extensions.dnd.viewer.ApplicationOptions;
-import org.apache.isis.runtime.context.IsisContext;
 
 
 public class XViewer implements Viewer {

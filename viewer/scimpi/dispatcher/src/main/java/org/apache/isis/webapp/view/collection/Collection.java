@@ -25,7 +25,7 @@ import java.util.Iterator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.webapp.AbstractElementProcessor;
 import org.apache.isis.webapp.ScimpiException;
 import org.apache.isis.webapp.context.RequestContext;

@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifierFactory;
-import org.apache.isis.runtime.authorization.standard.AuthorizorAbstract;
+import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 
 
 public class FileAuthorizor extends AuthorizorAbstract {

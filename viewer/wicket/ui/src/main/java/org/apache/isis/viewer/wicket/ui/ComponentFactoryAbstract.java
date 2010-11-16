@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.wicket.ui;
 
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.nof.SpecificationLoaderAccessor;
 import org.apache.wicket.Component;
 import org.apache.wicket.model.IModel;

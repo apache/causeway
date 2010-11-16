@@ -21,6 +21,7 @@
 package org.apache.isis.extensions.dnd.view.composite;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.extensions.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.extensions.dnd.drawing.Text;
 import org.apache.isis.extensions.dnd.icon.Icon;
@@ -35,7 +36,6 @@ import org.apache.isis.extensions.dnd.view.base.Layout;
 import org.apache.isis.extensions.dnd.view.border.IconBorder;
 import org.apache.isis.extensions.dnd.view.border.LineBorder;
 import org.apache.isis.extensions.dnd.view.text.ObjectTitleText;
-import org.apache.isis.runtime.context.IsisContext;
 
 public class IconGridViewSpecification extends AbstractCollectionViewSpecification {
 
