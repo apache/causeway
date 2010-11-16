@@ -41,6 +41,7 @@ import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionP
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
+import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFacetViaMethod;
@@ -48,7 +49,6 @@ import org.apache.isis.core.progmodel.facets.actions.defaults.ActionParameterDef
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetInferred;
-import org.apache.isis.core.progmodel.java5.MethodPrefixBasedFacetFactoryAbstract;
 
 
 /**

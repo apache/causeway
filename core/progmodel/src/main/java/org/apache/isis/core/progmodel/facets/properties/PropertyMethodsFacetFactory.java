@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
+import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actions.MandatoryFacetOverriddenByMethod;
 import org.apache.isis.core.progmodel.facets.disable.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.disable.DisabledFacetAlways;
@@ -48,7 +49,6 @@ import org.apache.isis.core.progmodel.facets.properties.modify.PropertyInitializ
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
-import org.apache.isis.core.progmodel.java5.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 
 
 public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements RuntimeContextAware {

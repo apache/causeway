@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaOneToManyAssociationPeer;
 import org.apache.isis.core.metamodel.util.NameUtils;
+import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetViaAccessor;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetViaMethod;
@@ -48,7 +49,6 @@ import org.apache.isis.core.progmodel.facets.collections.validate.CollectionVali
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.propcoll.access.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetViaMethod;
-import org.apache.isis.core.progmodel.java5.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 
 
 public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements

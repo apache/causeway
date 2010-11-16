@@ -27,8 +27,8 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.progmodel.java5.FallbackFacetFactory;
-import org.apache.isis.core.progmodel.java5.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.progmodel.facets.FallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
 public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {

@@ -297,7 +297,7 @@ public class AbstractIsisConcordionTest {
     /**
      * Workaround for OGNL defect.
      */
-    private String setUpObjectsVarargs(String className, String alias, String... propertyValues) {
+    protected String setUpObjectsVarargs(String className, String alias, String... propertyValues) {
         if (executingInline()) {
             setUpObjects = new SetUpObjectsForConcordion(getStory().getAliasRegistry(), className, Mode.PERSIST);
             setUpObjects.executeHeader(alias, propertyValues);

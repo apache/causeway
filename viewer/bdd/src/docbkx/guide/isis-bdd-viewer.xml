@@ -168,6 +168,20 @@
         url="http://concordion.org/Tutorial.html">tutorial</ulink> that
         demonstrates all the above, and can be completed in 20~30
         minutes.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>&lt;html
+        xmlns:concordion="http://www.concordion.org/2007/concordion"
+        xmlns:isis="http://isis.apache.org/2010/concordion"&gt; &lt;link
+        href="../concordion.css" rel="stylesheet" type="text/css" /&gt;
+        </para>
+
+        <para></para>
+
+        <para></para>
       </sect2>
 
       <sect2>
@@ -635,7 +649,9 @@
               example, to bootstrap in exploration mode, use:</para>
 
               <programlisting>&lt;p concordion:execute="#result=bootstrapIsis(#configDir,#deploymentType)"&gt;
-Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt; from config directory &lt;span concordion:set="#configDir"&gt;../quickrun/config&lt;/span&gt; and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span&gt; mode.
+Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt; 
+from config directory &lt;span concordion:set="#configDir"&gt;../quickrun/config&lt;/span&gt;
+and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span&gt; mode.
 &lt;/p&gt;</programlisting>
 
               <para>The method always returns <literal>true</literal>, but any
@@ -687,56 +703,6 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
       effective user. It also allows the setup of arbitrary objects (typically
       reference/static data objects; for transactional objects see <xref
       linkend="sec.UserInteraction" />).</para>
-
-      <table>
-        <title>SetUp</title>
-
-        <tgroup cols="3">
-          <thead>
-            <row>
-              <entry align="center">Common</entry>
-
-              <entry align="center">Concordion</entry>
-
-              <entry align="center">FitNesse (isis-contrib)</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><methodname></methodname><para>and</para><para><methodname></methodname></para><para></para><para>
-              </para></entry>
-
-              <entry><methodname>#aliasService(aliasAs, String
-              serviceClassName)</methodname><para><methodname>#aliasServices(aliasAs,
-              String serviceClassName)</methodname></para><para>Aliases a
-              service. Typically called within a table.</para></entry>
-
-              <entry><methodname>|AliasServices|</methodname><para><methodname>|className|alias=|</methodname></para><para>Two-column
-              fixture, first column specifying class name and second column
-              defining the alias.</para></entry>
-            </row>
-
-            <row>
-              <entry><methodname>Story#getAliasRegistry()</methodname><para>and</para><para><methodname>AliasRegistry#aliasService(String
-              aliasAs, String
-              serviceClassName)</methodname></para><para>Specifies an alias to
-              a service in order to invoke actions upon them.</para><para>Note
-              that the services are <emphasis>not</emphasis> defined here,
-              merely aliased. </para></entry>
-
-              <entry><methodname>#aliasService(aliasAs, String
-              serviceClassName)</methodname><para><methodname>#aliasServices(aliasAs,
-              String serviceClassName)</methodname></para><para>Aliases a
-              service. Typically called within a table.</para></entry>
-
-              <entry><methodname>|AliasServices|</methodname><para><methodname>|className|alias=|</methodname></para><para>Two-column
-              fixture, first column specifying class name and second column
-              defining the alias.</para></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
 
       <sect2 id="sec.LogonAsSwitchUserTo">
         <title>Logging On / Switching User</title>
@@ -1123,8 +1089,13 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
           <title>Common</title>
 
           <para>The common library support for setting up objects using the
-          <classname>SetUpObjectsPeer</classname> class. The constructor for
-          this class takes the following arguments:</para>
+          <classname>SetUpObjectsPeer</classname> class. This represents the
+          context for creating a set of objects all of the same type, and is
+          usually called multiple times (eg corresponding to a table structure
+          in the story text itself).</para>
+
+          <para>The constructor for this class takes the following
+          arguments:</para>
 
           <itemizedlist>
             <listitem>
@@ -1162,19 +1133,167 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
             </listitem>
           </itemizedlist>
 
-          <para></para>
+          <para>Different methods are available for <acronym>BDD</acronym>
+          framework integrations to call. Typically the BDD framework is
+          expected to setup header information (the names of the properties),
+          and then process each row.</para>
 
-          <para></para>
+          <para>On the header of the table, the main method to call
+          is:<itemizedlist>
+              <listitem>
+                <para><methodname>SetUpObjectsPeer#definePropertyOrAlias(String
+                propertyNameOrAlias, int colNum)</methodname></para>
+
+                <para>This associates each column with a property of the
+                class, or an alias for the object overall</para>
+              </listitem>
+            </itemizedlist></para>
+
+          <para>When processing each row, typically the main methods to call
+          are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>SetUpObjectsPeer#addPropertyValueOrAlias(String
+              propertyOrAliasValue)</methodname></para>
+
+              <para>This provides the value of each property of the object to
+              be created, or the alias to know the object by once created. The
+              property value can either be an existing alias, else must be
+              parseable (nb: Isis' own value types itself perform the parsing,
+              so there's no additional work to be done here)</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>SetUpObjectsPeer#createObject()</methodname></para>
+
+              <para>This actually instantiates the object, either persistent
+              or non-persistent as specified in the constructor, and assigns
+              it an alias</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>That said, there are some other public methods that are
+          available for more complex integrations (notably: FitNesse).</para>
         </sect3>
 
         <sect3>
           <title>Concordion</title>
+
+          <para>The Concordion framework integration provides a number of
+          overloaded methods called:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>#setUpObject(String className, String aliasAs,
+              ...)</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The varargs allow a variable number of properties to be
+          defined, up to a maximum of 10 properties. If more than this are
+          needed, the developer should write their own method and call the
+          protected method,
+          <methodname>#setUpObjectsVarargs(...)</methodname>.</para>
+
+          <para>This method should be called using isis:execute, not with
+          concordion:execute (where "isis" is </para>
+
+          <para></para>
+
+          <para></para>
+
+          <programlisting>&lt;p&gt;With Employees (&lt;span concordion:set="#className"&gt;com.mycompany.myapp.dom.employee.Employee&lt;/span&gt;):
+&lt;/p&gt;
+&lt;table isis:execute="#result=setUpObject(#className, #aliasAs, #name, #approver)"&gt;
+  &lt;tr&gt;
+    &lt;th concordion:set="#name"&gt;Name&lt;/th&gt;
+    &lt;th concordion:set="#approver"&gt;Approver&lt;/th&gt;
+    &lt;th concordion:set="#aliasAs"&gt;aliasAs&lt;/th&gt;
+    &lt;th concordion:assertEquals="#result"/&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Fred Smith&lt;/td&gt;
+    &lt;td&gt;&lt;/td&gt;
+    &lt;td&gt;Employee:Fred Smith&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Tom Brown&lt;/td&gt;
+    &lt;td&gt;Employee:Fred Smith&lt;/td&gt;
+    &lt;td&gt;Employee:Tom Brown&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Sam Jones&lt;/td&gt;
+    &lt;td&gt;Employee:Fred Smith&lt;/td&gt;
+    &lt;td&gt;Employee:Sam Jones&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</programlisting>
 
           <para></para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
+
+          <para></para>
+
+          <para></para>
+
+          <informaltable>
+            <tgroup cols="3">
+              <colspec colname="_1" />
+
+              <colspec colname="_2" />
+
+              <colspec colname="_3" />
+
+              <tbody>
+                <row>
+                  <entry><classname>Set Up Objects</classname></entry>
+
+                  <entry nameend="_3"
+                  namest="_2"><emphasis>com.mycompany.myapp.dom.employee.Employee</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><classname>Name</classname></entry>
+
+                  <entry><classname>Approver</classname></entry>
+
+                  <entry><classname>alias as</classname></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>Fred Smith</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>Tom Brown</emphasis></entry>
+
+                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+
+                  <entry><emphasis>Employee:Tom Brown</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>Sam Jones</emphasis></entry>
+
+                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+
+                  <entry><emphasis>Employee:Sam Jones</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
+
+          <para></para>
 
           <para></para>
         </sect3>
