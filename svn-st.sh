@@ -1,1 +1,1 @@
-svn st --ignore-externals | grep -v "^X"
+svn status --ignore-externals | grep -v ^X
