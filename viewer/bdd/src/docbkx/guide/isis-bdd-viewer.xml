@@ -1111,16 +1111,21 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
       <sect2 id="sec.SetUpObjects">
         <title>Setting Up Objects</title>
 
-        <para>Initializes objects. Typically used for immutable
-        reference/standing data objects). Can also be to setup used for
-        transaction/operational data objects (though
-        UsingNakedObjectsViewerForSetup, <xref
-        linkend="sec.UsingNakedObjectsViewer" />, is preferable). The
-        DebugObjectStore fixture (<xref linkend="sec.DebugObjectStore" />) can
-        be used to check the state of objects created.</para>
+        <para>Creates objects, and persists them to the object store. .
+        Typically used for immutable reference/standing data objects). Can
+        also be to setup used for transaction/operational data objects (though
+        <classname>UsingIsisViewerForSetup</classname>, <xref
+        linkend="sec.UsingIsisViewer" />, is preferable). The DebugObjectStore
+        fixture (<xref linkend="sec.DebugObjectStore" />) can be used to check
+        the state of objects created.</para>
 
         <sect3>
           <title>Common</title>
+
+          <para>The common library support for setting up objects using the
+          SetUpObjectsPeer.</para>
+
+          <para></para>
 
           <para></para>
         </sect3>
@@ -1220,9 +1225,8 @@ Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt
         </sect3>
       </sect2>
 
-      <sect2 id="sec.UsingNakedObjectsViewer">
-        <title>UsingNakedObjectsViewer /
-        UsingNakedObjectsViewerForSetup</title>
+      <sect2 id="sec.UsingIsisViewer">
+        <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
 
         <para>Simulates interacting with domain objects as if through a
         viewer. Interact with objects, check their state, alias referenced or
