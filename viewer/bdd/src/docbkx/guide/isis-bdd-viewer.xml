@@ -99,6 +99,48 @@
     </sect1>
 
     <sect1>
+      <title>Common Library</title>
+
+      <para>Isis integrates with <acronym>BDD</acronym> frameworks through the
+      services of a common library. The main concepts that the common library
+      exposes are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the Story class, which provides the context for a single
+          scenario of a story</para>
+        </listitem>
+
+        <listitem>
+          <para>the <classname>AliasRegistry</classname>, which allows a
+          user-friendly alias (eg "fredCustomer") to be assigned to any domain
+          object and to be referenced subsequently</para>
+        </listitem>
+
+        <listitem>
+          <para>the <classname>StoryCell</classname> interface, which is an
+          abstraction over a single element of data</para>
+
+          <para>The default implementation just wraps a
+          <classname>java.lang.String</classname>, but some frameworks (eg
+          FitNesse) have other means of </para>
+        </listitem>
+
+        <listitem>
+          <para>the <classname>CellBinding</classname> interface, which binds
+          a column of a table to a property or to an alias</para>
+
+          <para>This can then be used to wire the values in the rows of the
+          table to the properties specified in the header</para>
+        </listitem>
+      </itemizedlist>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
       <title>Concordion Integration</title>
 
       <sect2>
@@ -168,20 +210,6 @@
         url="http://concordion.org/Tutorial.html">tutorial</ulink> that
         demonstrates all the above, and can be completed in 20~30
         minutes.</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>&lt;html
-        xmlns:concordion="http://www.concordion.org/2007/concordion"
-        xmlns:isis="http://isis.apache.org/2010/concordion"&gt; &lt;link
-        href="../concordion.css" rel="stylesheet" type="text/css" /&gt;
-        </para>
-
-        <para></para>
-
-        <para></para>
       </sect2>
 
       <sect2>
@@ -250,224 +278,37 @@
         </itemizedlist>
 
         <para>For each <acronym>XHTML</acronym> scenario test, the developer
-        writes subclasses the AbstractIsisConcordionTest, creating a name
-        matching the scenario test (ie as per regular Concordion). He
-        then</para>
-
-        <para>annotates the original <acronym>XHTML</acronym>, either calling
+        writes subclasses the
+        <classname>AbstractIsisConcordionTest</classname>, creating a name
+        matching the scenario test (ie as per regular Concordion). He then
+        annotates the original <acronym>XHTML</acronym>, either calling
         directly into the inherited methods, or writing small simple methods
         to delegate to these inherited methods as required. The Concordion
         website has some <ulink
         url="http://concordion.org/Technique.html">hints and tips</ulink> to
         help you find the right balance between these two approaches.</para>
+
+        <para>The <acronym>XHTML</acronym> script that you write should have
+        the following namespace declaration:</para>
+
+        <programlisting>&lt;html 
+   xmlns:concordion="http://www.concordion.org/2007/concordion" 
+   xmlns:isis="http://isis.apache.org/2010/concordion"&gt;
+   ...
+&lt;/html&gt;</programlisting>
+
+        <para>The "concordion" namespace is the usual namespace required by
+        Concordion. The "isis" namespace is to allow certain commands to be
+        invoked using special commands provided by the Isis/Concordion
+        integration.</para>
       </sect2>
     </sect1>
-
-    <sect1>
-      <title>Common Library</title>
-
-      <para>The Concordion integration is based on a library that factors out
-      interactions with the running Isis system. This library is intended to
-      make it easy to support other BDD frameworks if required.<footnote>
-          <para>In fact, the first BDD framework integration was to <ulink
-          url="http://fitnesse.org">FitNesse</ulink>. This has now been
-          dropped because FitNesse has an incompatible license with Apache
-          Software Foundation. The original FitNesse code can still be found
-          on the <ulink
-          url="http://isis-contrib.sourceforge.net">Isis-contrib</ulink>
-          companion site, and does indeed use the common library.</para>
-        </footnote></para>
-
-      <para>The main concepts that the common library exposes are:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>AliasItemsInListPeer</para>
-        </listitem>
-
-        <listitem>
-          <para>AliasServicesPeer</para>
-        </listitem>
-
-        <listitem>
-          <para>CheckListPeer</para>
-        </listitem>
-
-        <listitem>
-          <para></para>
-        </listitem>
-      </itemizedlist>
-
-      <para></para>
-
-      <para></para>
-    </sect1>
   </chapter>
 
-  <chapter id="chp.HintsAndTips">
-    <title>Hints and Tips</title>
+  <chapter id="chp.UsingTheFramework">
+    <title>Using the Framework</title>
 
-    <para>This chapter contains a collection of hints, tips and suggestions
-    for writing your own tests.</para>
-
-    <para>For further guidance, check out Gojko Adzic's book, <ulink
-    url="http://www.acceptancetesting.info/the-book/">Bridging the
-    Communication Gap</ulink>.</para>
-
-    <sect1>
-      <title>Separate In-Progress Stories from the Backlog</title>
-
-      <para>If you are using an agile methodology then you will be
-      implementing a number of stories per iteration; the remainder will be in
-      a backlog. When you select a story for implementation, create a new page
-      for it in a "CurrentIteration" suite. The objective for the team is
-      therefore to get the entire CurrentIteration suite green.</para>
-
-      <para>Other stories that you may have identified but not selected for
-      the iteration can remain in a Backlog suite.</para>
-    </sect1>
-
-    <sect1>
-      <title>Use a Story Page to Collect A Set of Scenario Tests</title>
-
-      <para>Part of estimating the size of a story includes identifying the
-      acceptance criteria. These can be created as children of the story page
-      as placeholders, so that the story page becomes a suite. The child
-      scenario tests can be fleshed out as required with plain text during the
-      estimation meeting, and with actual FitNesse tests once the iteration
-      starts. The FitNesse <ulink
-      url="http://fitnesse.org/FitNesse.UserGuide.MarkupContents">!contents</ulink>
-      instruction will then list all the acceptance criteria for the
-      story.</para>
-
-      <para>For the story page itself, the "as a ... I want ... so that... "
-      template is a good way to summarize the intent of the story.</para>
-    </sect1>
-
-    <sect1>
-      <title>Organize Completed Stories by Component</title>
-
-      <para>Once you have completed an iteration and implements its stories,
-      move those stories out to the relevant component that the story relates
-      to. The scenario tests for stories ultimately <emphasis>are</emphasis>
-      the documentation of the behaviour of the system. A year on you won't
-      remember (and won't care) which iteration you implemented a story,
-      you'll be searching for it by the component whose behaviour you want to
-      understand.</para>
-    </sect1>
-
-    <sect1>
-      <title>Structure your test using Given/When/Then</title>
-
-      <para>A standard template for organizing structuring tests is
-      given/when/then<footnote>
-          <para>As first described, I believe, by Dan North in a blog post,
-          <ulink url="http://dannorth.net/introducing-bdd">Introducing
-          BDD</ulink>.</para>
-        </footnote>:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>given ... the system is in this particular state</para>
-        </listitem>
-
-        <listitem>
-          <para>when ... this interesting thing happens</para>
-        </listitem>
-
-        <listitem>
-          <para>then ... these are the consequences</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>This structure is readily understood by non-technical business
-      users, and helps them (and the team) focus on the point of the
-      test.</para>
-
-      <para>In terms of mechanics, one approach is to put the "given" into the
-      setup page for a test, with the "when" and the "then" in separate
-      pages.d</para>
-    </sect1>
-
-    <sect1 id="sec.UsingTheFixtureViewer">
-      <title>Using the RunViewer fixture</title>
-
-      <para>The "given" can often be the hardest part to get setup. To check
-      it, we can use the <classname>RunViewer</classname> fixture (see <xref
-      linkend="sec.RunViewer" />). This will run up the drag-n-drop viewer at
-      the specified point in the test; a visual equivalent of
-      <code>System.out.println()</code>, really. We can therefore take the
-      Given page and add a RunViewer fixture at the end.</para>
-
-      <para>Note that to do this you must temporarily mark the Given page as a
-      <ulink url="http://fitnesse.org/FitNesse.UserGuide.PageProperties">test
-      page</ulink>.</para>
-    </sect1>
-
-    <sect1 id="sec.FactorOutCommonGivens">
-      <title>Factor out common "Given"s</title>
-
-      <para>Just like code, tests need to be actively managed, because if the
-      tests become hard to maintain, they'll end up being deleted. In fact, we
-      probably should take even more care with the tests than the code if they
-      represent the primary documentation of the behaviour of the
-      system.</para>
-
-      <para>In terms of size, the "given" is far larger than either the "when"
-      or the "then", and therefore this is the area where tests can quickly
-      become unmaintainable. So instead, try to factor out your givens into
-      separate pages.</para>
-
-      <para>For example:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>if using Concordion, you can use &lt;a href's&gt; with a
-          concordion:execute tag to include another page.</para>
-        </listitem>
-
-        <listitem>
-          <para>if usingFitNesse, then use it's <ulink
-          url="http://fitnesse.org/FitNesse.UserGuide.MarkupPageInclude">!include</ulink>
-          directive to assemble the pages you need</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>The names of these pages should also follow a declarative style,
-      see <xref linkend="sec.UseADeclarativeStyle" />.</para>
-    </sect1>
-
-    <sect1 id="sec.UseADeclarativeStyle">
-      <title>Use a Declarative Style for Page Names</title>
-
-      <para>When factoring out "given"s (see <xref
-      linkend="sec.FactorOutCommonGivens" />), or indeed when writing the
-      "when"s and the "then"s, use a declarative style for the pages. The page
-      should describe what it does, not how it does it.</para>
-
-      <para>For example, a good page would be "SetUpCountries". It's clear
-      that this will set up all <classname>Country</classname> reference data
-      classes. This could be included into a "SetUpReferenceData" page. For
-      transaction data, we could have a page "JoeBloggsCustomer"; another one
-      again could be "JoeBloggsFiveOrders".</para>
-    </sect1>
-
-    <sect1 id="sec.SettingUpContinuousIntegration">
-      <title>Set up Continuous Integration</title>
-
-      <para>Since Isis is a Maven application, it is easy enough to configure
-      it to run under a CI server, such as <ulink
-      url="http://hudson-ci.org/">Hudson</ulink>. If you google around you
-      should also be able find a way to make Hudson publish the test results
-      onto a website so that they can be inspected by your domain experts /
-      business analysts.</para>
-    </sect1>
-  </chapter>
-
-  <appendix id="apx.Reference">
-    <title>Reference</title>
-
-    <para>This appendix shows the features of the common library, and how they
+    <para>This chapter shows the features of the common library, and how they
     are used by the framework-specific integrations.</para>
 
     <para>Note that due to licensing restrictions the
@@ -476,8 +317,6 @@
     url="http://isis-contrib.sourceforge.net">isis-contrib</ulink>. We provide
     an overview of its features here for convenience.</para>
 
-    <para></para>
-
     <sect1>
       <title>Bootstrapping</title>
 
@@ -485,61 +324,6 @@
       which holds a reference to a running <classname>IsisSystem</classname>.
       The means by which this bootstrapping occurs is specific to the
       <acronym>BDD</acronym> framework integration.</para>
-
-      <table>
-        <title>Bootstrapping</title>
-
-        <tgroup cols="3">
-          <thead>
-            <row>
-              <entry align="center">Common</entry>
-
-              <entry align="center">Concordion</entry>
-
-              <entry align="center">FitNesse (isis-contrib)</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><classname>Story</classname><para>Provides a context for
-              the story.</para></entry>
-
-              <entry><classname>AbstractIsisConcordionTest</classname><para>Test
-              cases should inherit from this class; provides access as
-              inherited methods</para></entry>
-
-              <entry><para><methodname>|StoryFixture|</methodname></para><para>Part
-              of the bootstrapping of the test framework itself, typically
-              referenced in the test suite's setup page. Should appear first
-              within this setup.</para></entry>
-            </row>
-
-            <row>
-              <entry><methodname></methodname><para>Bootstraps the Isis
-              runtime using the specified config directory (containing
-              isis.properties config file) and deployment type. The latter
-              should be either EXPLORATION (meaning exploration actions are
-              enabled) or PROTOTYPE; no other values are
-              valid.</para><para></para></entry>
-
-              <entry><methodname>#bootstrapIsis(String configDirectory,
-              DeploymentType deploymentType)</methodname><para>Typically
-              called from within a <methodname>@Before setUp()</methodname>
-              method.</para><para><methodname>#bootstrapIsis(String
-              configDirectory, String
-              deploymentTypeStr)</methodname></para><para>Overloaded version
-              callable from within <acronym>XHTML</acronym>; use if wish to
-              make it clear how the bootstrapping has been
-              performed.</para></entry>
-
-              <entry><para><methodname>|BootstrapIsisConfiguredFrom|configDirectory|InMode|deploymentType|</methodname></para><para>Typically
-              immediately after the call to
-              <classname>StoryFixture</classname>.</para></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
 
       <sect2>
         <title>Story Context</title>
@@ -1197,7 +981,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           <methodname>#setUpObjectsVarargs(...)</methodname>.</para>
 
           <para>This method should be called using isis:execute, not with
-          concordion:execute (where "isis" is </para>
+          concordion:execute (where "isis" is</para>
 
           <para></para>
 
@@ -1688,5 +1472,165 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         </sect3>
       </sect2>
     </sect1>
-  </appendix>
+  </chapter>
+
+  <chapter id="chp.HintsAndTips">
+    <title>Hints and Tips</title>
+
+    <para>This chapter contains a collection of hints, tips and suggestions
+    for writing your own tests.</para>
+
+    <para>For further guidance, check out Gojko Adzic's book, <ulink
+    url="http://www.acceptancetesting.info/the-book/">Bridging the
+    Communication Gap</ulink>.</para>
+
+    <sect1>
+      <title>Separate In-Progress Stories from the Backlog</title>
+
+      <para>If you are using an agile methodology then you will be
+      implementing a number of stories per iteration; the remainder will be in
+      a backlog. When you select a story for implementation, create a new page
+      for it in a "CurrentIteration" suite. The objective for the team is
+      therefore to get the entire CurrentIteration suite green.</para>
+
+      <para>Other stories that you may have identified but not selected for
+      the iteration can remain in a Backlog suite.</para>
+    </sect1>
+
+    <sect1>
+      <title>Use a Story Page to Collect A Set of Scenario Tests</title>
+
+      <para>Part of estimating the size of a story includes identifying the
+      acceptance criteria. These can be created as children of the story page
+      as placeholders, so that the story page becomes a suite. The child
+      scenario tests can be fleshed out as required with plain text during the
+      estimation meeting, and with actual FitNesse tests once the iteration
+      starts. The FitNesse <ulink
+      url="http://fitnesse.org/FitNesse.UserGuide.MarkupContents">!contents</ulink>
+      instruction will then list all the acceptance criteria for the
+      story.</para>
+
+      <para>For the story page itself, the "as a ... I want ... so that... "
+      template is a good way to summarize the intent of the story.</para>
+    </sect1>
+
+    <sect1>
+      <title>Organize Completed Stories by Component</title>
+
+      <para>Once you have completed an iteration and implements its stories,
+      move those stories out to the relevant component that the story relates
+      to. The scenario tests for stories ultimately <emphasis>are</emphasis>
+      the documentation of the behaviour of the system. A year on you won't
+      remember (and won't care) which iteration you implemented a story,
+      you'll be searching for it by the component whose behaviour you want to
+      understand.</para>
+    </sect1>
+
+    <sect1>
+      <title>Structure your test using Given/When/Then</title>
+
+      <para>A standard template for organizing structuring tests is
+      given/when/then<footnote>
+          <para>As first described, I believe, by Dan North in a blog post,
+          <ulink url="http://dannorth.net/introducing-bdd">Introducing
+          BDD</ulink>.</para>
+        </footnote>:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>given ... the system is in this particular state</para>
+        </listitem>
+
+        <listitem>
+          <para>when ... this interesting thing happens</para>
+        </listitem>
+
+        <listitem>
+          <para>then ... these are the consequences</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This structure is readily understood by non-technical business
+      users, and helps them (and the team) focus on the point of the
+      test.</para>
+
+      <para>In terms of mechanics, one approach is to put the "given" into the
+      setup page for a test, with the "when" and the "then" in separate
+      pages.d</para>
+    </sect1>
+
+    <sect1 id="sec.UsingTheFixtureViewer">
+      <title>Using the RunViewer fixture</title>
+
+      <para>The "given" can often be the hardest part to get setup. To check
+      it, we can use the <classname>RunViewer</classname> fixture (see <xref
+      linkend="sec.RunViewer" />). This will run up the drag-n-drop viewer at
+      the specified point in the test; a visual equivalent of
+      <code>System.out.println()</code>, really. We can therefore take the
+      Given page and add a RunViewer fixture at the end.</para>
+
+      <para>Note that to do this you must temporarily mark the Given page as a
+      <ulink url="http://fitnesse.org/FitNesse.UserGuide.PageProperties">test
+      page</ulink>.</para>
+    </sect1>
+
+    <sect1 id="sec.FactorOutCommonGivens">
+      <title>Factor out common "Given"s</title>
+
+      <para>Just like code, tests need to be actively managed, because if the
+      tests become hard to maintain, they'll end up being deleted. In fact, we
+      probably should take even more care with the tests than the code if they
+      represent the primary documentation of the behaviour of the
+      system.</para>
+
+      <para>In terms of size, the "given" is far larger than either the "when"
+      or the "then", and therefore this is the area where tests can quickly
+      become unmaintainable. So instead, try to factor out your givens into
+      separate pages.</para>
+
+      <para>For example:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>if using Concordion, you can use &lt;a href's&gt; with a
+          concordion:execute tag to include another page.</para>
+        </listitem>
+
+        <listitem>
+          <para>if usingFitNesse, then use it's <ulink
+          url="http://fitnesse.org/FitNesse.UserGuide.MarkupPageInclude">!include</ulink>
+          directive to assemble the pages you need</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The names of these pages should also follow a declarative style,
+      see <xref linkend="sec.UseADeclarativeStyle" />.</para>
+    </sect1>
+
+    <sect1 id="sec.UseADeclarativeStyle">
+      <title>Use a Declarative Style for Page Names</title>
+
+      <para>When factoring out "given"s (see <xref
+      linkend="sec.FactorOutCommonGivens" />), or indeed when writing the
+      "when"s and the "then"s, use a declarative style for the pages. The page
+      should describe what it does, not how it does it.</para>
+
+      <para>For example, a good page would be "SetUpCountries". It's clear
+      that this will set up all <classname>Country</classname> reference data
+      classes. This could be included into a "SetUpReferenceData" page. For
+      transaction data, we could have a page "JoeBloggsCustomer"; another one
+      again could be "JoeBloggsFiveOrders".</para>
+    </sect1>
+
+    <sect1 id="sec.SettingUpContinuousIntegration">
+      <title>Set up Continuous Integration</title>
+
+      <para>Since Isis is a Maven application, it is easy enough to configure
+      it to run under a CI server, such as <ulink
+      url="http://hudson-ci.org/">Hudson</ulink>. If you google around you
+      should also be able find a way to make Hudson publish the test results
+      onto a website so that they can be inspected by your domain experts /
+      business analysts.</para>
+    </sect1>
+  </chapter>
 </book>
