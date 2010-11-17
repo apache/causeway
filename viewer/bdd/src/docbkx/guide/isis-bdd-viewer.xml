@@ -53,9 +53,10 @@
     integration (part of <ulink
     url="http://isis-contrib.sourceforge.net">isis-contrib</ulink>).</para>
 
-    <para>This user guide describes how to use the Concordion integration,
-    along with details of the common library so that other BDD frameworks can
-    be integrated if required.</para>
+    <para>This user guide describes how to use the
+    <emphasis>Concordion</emphasis> integration, along with details of the
+    common library so that other <acronym>BDD</acronym> frameworks can be
+    integrated if required.</para>
 
     <para><emphasis>Apache Isis</emphasis> is licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
@@ -96,22 +97,22 @@
       non-technical businesss person. Compare this to unit testing which
       exercises the behaviour / method of a single class.</para>
 
-      <para>Scenario testing is closely related to (and sometimes a synonym
-      for) "agile acceptance testing"; I must admit though that I find that
-      term rather clumsy.</para>
+      <para>Another commonly-used name for scenario testing is "agile
+      acceptance testing". We've used "scenario testing" throughout (it's a
+      somewhat less clumsy term).</para>
     </sect1>
 
     <sect1>
       <title>Common Library</title>
 
-      <para>Isis integrates with <acronym>BDD</acronym> frameworks through the
-      services of a common library. The main concepts that the common library
-      exposes are:</para>
+      <para><emphasis>Apache Isis</emphasis> integrates with
+      <acronym>BDD</acronym> frameworks through the services of a common
+      library. The main concepts that the common library exposes are:</para>
 
       <itemizedlist>
         <listitem>
-          <para>the Story class, which provides the context for a single
-          scenario of a story</para>
+          <para>the <classname>Story</classname> class, which provides the
+          context for a single scenario of a story</para>
         </listitem>
 
         <listitem>
@@ -126,17 +127,24 @@
 
           <para>The default implementation just wraps a
           <classname>java.lang.String</classname>, but some frameworks (eg
-          FitNesse) have other means of </para>
+          <emphasis>FitNesse</emphasis>) have other means of </para>
         </listitem>
 
         <listitem>
           <para>the <classname>CellBinding</classname> interface, which binds
           a column of a table to a property or to an alias</para>
 
-          <para>This can then be used to wire the values in the rows of the
-          table to the properties specified in the header. The library
-          provides a default implementation, though subclasses can override if
-          required</para>
+          <para>Many of the <acronym>BDD</acronym> frameworks (eg
+          <emphasis>Concordion</emphasis>, <emphasis>FitNesse</emphasis>)
+          encourage the use of tables as a means of succinctly capturing story
+          actions. This is reflected in the design of several of the classes
+          provided by the common library. The
+          <classname>CellBinding</classname> interface is used to wire the
+          values in the rows of the table to the properties specified in the
+          header.</para>
+
+          <para>The library provides a default implementation, though
+          subclasses can override if required.</para>
         </listitem>
       </itemizedlist>
 
@@ -165,21 +173,21 @@
         going" even if it hits a failure. Thus the developer can identify
         several issues and fix them in a single pass.</para>
 
-        <para>Another way to think of Concordion is as a replacement
-        presentation layer, hitting the underlying domain model in the same
-        way that the regular <acronym>UI</acronym> would. (This is why we call
-        this module is called the <acronym>BDD
+        <para>Another way to think of <emphasis>Concordion</emphasis> is as a
+        replacement presentation layer, hitting the underlying domain model in
+        the same way that the regular <acronym>UI</acronym> would. (This is
+        why we call this module is called the <acronym>BDD
         </acronym><emphasis>viewer</emphasis>).</para>
 
-        <para><acronym>Concordion</acronym> works using a "convention over
+        <para><emphasis>Concordion</emphasis> works using a "convention over
         configuration" approach, matching the <acronym>XHTML</acronym> text
         file with a corresponding JUnit4 test run set up to run using
-        Concordion's <classname>ConcordionRunner</classname>, The developer
-        then annotates the <acronym>XHTML</acronym> using special
-        (Concordion-namespaced) attributes in order identify the inputs to and
-        expected results of the test. This is used by the
-        <classname>ConcordionRunner</classname> to call into corresponding
-        methods in the test.</para>
+        <emphasis>Concordion</emphasis>'s
+        <classname>ConcordionRunner</classname>, The developer then annotates
+        the <acronym>XHTML</acronym> using special (Concordion-namespaced)
+        attributes in order identify the inputs to and expected results of the
+        test. This is used by the <classname>ConcordionRunner</classname> to
+        call into corresponding methods in the test.</para>
 
         <para>For example, suppose the analyst writes a scenario test called
         <filename>CustomerPlacesOrder.xhtml</filename>. In the
@@ -202,17 +210,17 @@
 
         <para>Then, the developer writes a JUnit4 test alongside the
         <acronym>XHTML</acronym>; in this example it would be called
-        <filename>CustomerPlacesOrderTest.java</filename>. Concordion calls
-        into this JUnit4 test as it comes across the annotations in the
-        <acronym>XHTML</acronym>, and the JUnit4 test mediates with the system
-        under test.</para>
+        <filename>CustomerPlacesOrderTest.java</filename>.
+        <emphasis>Concordion</emphasis> calls into this JUnit4 test as it
+        comes across the annotations in the <acronym>XHTML</acronym>, and the
+        JUnit4 test mediates with the system under test.</para>
 
-        <para>When the test runs, Concordion generates a copy of the
-        <acronym>XHTML</acronym> in a output directory (by default specified
-        by a system property) which can then made available for inspection by
-        the business analyst (eg published on a website).</para>
+        <para>When the test runs, <emphasis>Concordion</emphasis> generates a
+        copy of the <acronym>XHTML</acronym> in a output directory (by default
+        specified by a system property) which can then made available for
+        inspection by the business analyst (eg published on a website).</para>
 
-        <para>The Concordion website has a good <ulink
+        <para>The <emphasis>Concordion</emphasis> website has a good <ulink
         url="http://concordion.org/Tutorial.html">tutorial</ulink> that
         demonstrates all the above, and can be completed in 20~30
         minutes.</para>
@@ -221,12 +229,12 @@
       <sect2 id="sec.HowTheIsisConcordionIntegrationWorks">
         <title>How the Isis/Concordion Integration Works</title>
 
-        <para>Although you could test an Apache Isis application using vanilla
-        Concordion, this would entail you having to write all the glue code
-        yourself to interact with the domain objects. You would also need to
-        encode the rules that are normally implemented by the viewer, eg so
-        that a hidden action cannot be invoked, and an invalid value for a
-        property cannot be set.</para>
+        <para>Although you could test an <emphasis>Apache Isis</emphasis>
+        application using vanilla <emphasis>Concordion</emphasis>, this would
+        entail you having to write all the glue code yourself to interact with
+        the domain objects. You would also need to encode the rules that are
+        normally implemented by the viewer, eg so that a hidden action cannot
+        be invoked, and an invalid value for a property cannot be set.</para>
 
         <para>The <emphasis>BDD viewer</emphasis> integration provided by
         <emphasis>Apache Isis</emphasis> works by providing a superclass for
@@ -286,10 +294,11 @@
         <para>For each <acronym>XHTML</acronym> scenario test, the developer
         writes subclasses the
         <classname>AbstractIsisConcordionTest</classname>, creating a name
-        matching the scenario test (ie as per regular Concordion). He then
-        annotates the original <acronym>XHTML</acronym>, either calling
-        directly into the inherited methods, or writing small simple methods
-        to delegate to these inherited methods as required. The Concordion
+        matching the scenario test (ie as per regular
+        <emphasis>Concordion</emphasis>). He then annotates the original
+        <acronym>XHTML</acronym>, either calling directly into the inherited
+        methods, or writing small simple methods to delegate to these
+        inherited methods as required. The <emphasis>Concordion</emphasis>
         website has some <ulink
         url="http://concordion.org/Technique.html">hints and tips</ulink> to
         help you find the right balance between these two approaches.</para>
@@ -304,24 +313,28 @@
 &lt;/html&gt;</programlisting>
 
         <para>The "concordion" namespace is the usual namespace required by
-        Concordion. The "isis" namespace is to allow certain commands to be
-        invoked using special commands provided by the Isis/Concordion
-        integration.</para>
+        <emphasis>Concordion</emphasis>. The "isis" namespace is to allow
+        certain commands to be invoked using special commands provided by the
+        Isis/Concordion integration.</para>
       </sect2>
     </sect1>
 
-    <sect1>
+    <sect1 id="sec.FitNesseIntegration">
       <title>FitNesse Integration</title>
 
-      <para>Due to licensing restrictions, the FitNesse integration is not
-      part of Apache Isis proper. However, it is available on the companion
+      <para>Due to licensing restrictions, the <emphasis>FitNesse</emphasis>
+      integration is not part of <emphasis>Apache Isis</emphasis> proper.
+      However, it is available on the companion
       <emphasis>isis-contrib</emphasis> site, hosted at <ulink
-      url="http://isis-contrib.sourceforge.net">sourceforge</ulink>.</para>
+      url="http://isis-contrib.sourceforge.net">sourceforge</ulink>. Check
+      that site for its release status (it is not guaranteed to be in sync
+      with <emphasis>Isis</emphasis> releases).</para>
 
-      <para>An outline of the FitNesse integration is provided here, if only
-      to help compare and contrast the means by which two different frameworks
-      integrate with the common library (this should help make it easier to
-      integrate other frameworks in the future).</para>
+      <para>An outline of the <emphasis>FitNesse</emphasis> integration is
+      provided here, if only to help compare and contrast the means by which
+      two different frameworks integrate with the common library. We hope that
+      this will make it easier to integrate other <acronym>BDD</acronym>
+      frameworks in the future.</para>
     </sect1>
   </chapter>
 
@@ -332,26 +345,25 @@
     are used by the framework-specific integrations.</para>
 
     <para>Note that due to licensing restrictions the
-    <emphasis>FitNesse</emphasis> integration is not part of Apache Isis.
-    Instead, it can be found in <ulink
-    url="http://isis-contrib.sourceforge.net">isis-contrib</ulink>. We provide
-    an overview of its features here for convenience.</para>
+    <emphasis>FitNesse</emphasis> integration is not part of <emphasis>Apache
+    Isis</emphasis>. See <xref linkend="sec.FitNesseIntegration" /> for
+    further details.</para>
 
     <sect1>
       <title>Bootstrapping</title>
 
-      <para>The common library provides the <classname>Story</classname> class
-      which holds a reference to a running <classname>IsisSystem</classname>.
-      The means by which this bootstrapping occurs is specific to the
-      <acronym>BDD</acronym> framework integration.</para>
+      <para>In order to test an <emphasis>Apache Isis</emphasis> domain
+      application, a running instance of an <classname>IsisSystem</classname>
+      must be bootstrapped, with the appropriate configuration. </para>
 
       <sect2>
         <title>Story Context</title>
 
-        <para>The common library provides an object to represent the story
-        context to manage such things as the Isis configuration, the date/time
-        that the story is running as, the user that is logged-in, and managing
-        the aliases of objects so that they can be interacted with.</para>
+        <para>The common library provides a context object which holds a
+        reference to a running <classname>IsisSystem</classname>. Moreover, it
+        tracks such things as the date/time that the story is running as, the
+        user that is logged-in, and managing the aliases of objects so that
+        they can be interacted with.</para>
 
         <sect3>
           <title>Common</title>
@@ -360,40 +372,66 @@
           a context for the story. Framework integrations are expected to
           instantiate this class, and then use it as the primary means to
           interact with the system.</para>
+
+          <para>The <classname>Story</classname> class has a public no-arg
+          constructor. Instantiating the Story does not do anything; it must
+          also be bootstrapped (see <xref
+          linkend="sec.BootstrappingIsis" />).</para>
         </sect3>
 
         <sect3>
           <title>Concordion</title>
 
           <para>The <classname>AbstractIsisConcordionTest</classname>
-          instantiates the <classname>Story</classname> and provides methods
-          that can be invoked from within <acronym>XHTML</acronym> (ie taking
-          <classname>String</classname>s). Test cases should inherit from this
-          abstract class, with the <acronym>XHTML</acronym> typically calling
-          to the inherited methods directly. The developer may optionally add
-          small helper methods to be called from the <acronym>XHTML</acronym>
-          instead; these can factor out any boilerplate in the script.</para>
+          instantiates the <classname>Story</classname> object (from the
+          common library) automatically and binding it to a threadlocal. In
+          addition, <classname>AbstractIsisConcordionTest</classname> provides
+          methods that can be invoked from within <acronym>XHTML</acronym> (ie
+          taking <classname>String</classname>s).</para>
+
+          <para>Test cases should inherit from this abstract class, with the
+          <acronym>XHTML</acronym> typically calling to the inherited methods
+          directly. The developer may optionally add small helper methods to
+          be called from the <acronym>XHTML</acronym> instead; these can
+          factor out any boilerplate in the script.</para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
 
-          <para>The <classname>StoryFixture</classname> fixture is a
-          <acronym>FIT</acronym> <classname>DoFixture</classname> that
-          provides the overall context for the framework. Whereas other
-          fixtures are instantiated once per table, the
-          <classname>StoryFixture</classname> exists for the duration of the
-          test page. It should typically be referenced in the test suite's
-          setup page, and should appear first within this setup.</para>
+          <para>Every FitNesse story must reference the
+          <classname>StoryFixture</classname> fixture which provides the
+          overall context for the framework. This instantiates a
+          <classname>Story</classname> object from the common library and
+          binding it to a thread-local.</para>
+
+          <para>Whereas other <emphasis>FitNesse</emphasis> fixtures are
+          instantiated once per table, the <classname>StoryFixture</classname>
+          is a <acronym>FIT</acronym> <classname>DoFixture</classname> that
+          exists for the duration of the test page. It should typically be
+          referenced in the test suite's setup page, and should appear first
+          within this setup:</para>
+
+          <informaltable>
+            <tgroup cols="1">
+              <colspec />
+
+              <tbody>
+                <row>
+                  <entry><classname>Story Fixture</classname></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
         </sect3>
       </sect2>
 
-      <sect2>
+      <sect2 id="sec.BootstrappingIsis">
         <title>Bootstrapping Isis</title>
 
-        <para>An Isis runtime can be bootstrapped with a single call. This
-        installs no-op implementations of some of the main components, along
-        with an in-memory object store.</para>
+        <para>An <emphasis>Isis</emphasis> runtime can be bootstrapped with a
+        single call. This installs no-op implementations of some of the main
+        components, along with an in-memory object store.</para>
 
         <sect3>
           <title>Common</title>
@@ -471,7 +509,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           <title>FitNesse</title>
 
           <para>The <classname>BootstrapIsisConfiguredFromInMode</classname>
-          fixture is used to bootstrap Isis. It takes the form:</para>
+          fixture is used to bootstrap <emphasis>Isis</emphasis>. It takes the
+          form:</para>
 
           <informaltable>
             <tgroup cols="4">
@@ -1015,9 +1054,10 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
             </listitem>
           </itemizedlist>
 
-          <para>Note that this method should be called using
-          <emphasis>isis:execute</emphasis>, not with concordion:execute. See
-          <xref linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
+          <para>Note that this method should be called from the
+          <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>,
+          not with concordion:execute. See <xref
+          linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
           details.</para>
 
           <programlisting>&lt;p&gt;With Employees (&lt;span concordion:set="#className"&gt;com.mycompany.myapp.dom.employee.Employee&lt;/span&gt;):
@@ -1120,10 +1160,10 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <sect2 id="sec.UsingIsisViewer">
         <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
 
-        <para>The centrepiece of the BDD framework, simulates interacting with
-        domain objects as if through a viewer. Using this feature, the story
-        can interact with objects, check their state, alias referenced or
-        returned objects.</para>
+        <para>The centrepiece of the <acronym>BDD</acronym> framework,
+        simulates interacting with domain objects as if through a viewer.
+        Using this feature, the story can interact with objects, check their
+        state, alias referenced or returned objects.</para>
 
         <para>The "For Setup" version disables checks for visibility and
         usability, making it easier to reuse functionality for setting up
@@ -1135,13 +1175,161 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <sect3>
           <title>Common</title>
 
+          <para>The common library provides the
+          <classname>UsingIsisViewerPeer</classname> class as a means by which
+          the BDD framework integration can interact with Apache Isis
+          runtime.</para>
+
+          <para>The <classname>UsingIsisViewerPeer</classname> class is
+          generally called from within a table format, with each row
+          representing a specific interaction with the domain object. For
+          example, a row might invoke an action, or could check that a class
+          member is unavailable.</para>
+
+          <para>Some interactions can be used to create or assign aliases to
+          domain objects. For example, invoking a non-void action will return
+          a result. If the result is a domain object, then the alias can be
+          used directly subsequently in the story. If the result is a
+          collection, then typically it is the story will make an assertion on
+          that collection using "Check List" (see <xref
+          linkend="sec.CheckList" />) or alias an object out of that list
+          using "Alias Items In List" (see <xref
+          linkend="sec.AliasItemsInList" />).</para>
+
+          <para>The UsingIsisViewerPeer uses
+          <classname>CellBinding</classname>s (see ) to defin</para>
+
+          <para>In order to be able to fit different types of interactions
+          into a table structure, the
+          <classname>UsingIsisViewerPeer</classname> is quite flexible, with
+          support for various columns, some of which are optional dependent
+          upon context. The column names below </para>
+
+          <itemizedlist>
+            <listitem>
+              <para>on object</para>
+
+              <para>Always required, this is the (alias of) the obejct to
+              interact with.</para>
+
+              <para>Can also use 'object', or 'on'</para>
+            </listitem>
+
+            <listitem>
+              <para>alias result as</para>
+
+              <para>the alias to assign the result of any interaction.
+              Optional, but common in most interactions.</para>
+            </listitem>
+
+            <listitem>
+              <para>perform</para>
+
+              <para>the interaction to perform (see below)</para>
+            </listitem>
+
+            <listitem>
+              <para>on member</para>
+
+              <para>the property, collection or action to use</para>
+            </listitem>
+
+            <listitem>
+              <para>that it</para>
+
+              <para></para>
+            </listitem>
+
+            <listitem>
+              <para>with arguments</para>
+
+              <para></para>
+            </listitem>
+
+            <listitem>
+              <para>on object</para>
+
+              <para></para>
+            </listitem>
+          </itemizedlist>
+
           <para></para>
+
+          <para></para>
+
+          <para>The constructor for UsingIsisViewerPeer takes the following
+          parameters:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>UsingIsisViewerPeer</para>
+            </listitem>
+          </itemizedlist>
 
           <para></para>
         </sect3>
 
         <sect3>
           <title>Concordion</title>
+
+          <para>The </para>
+
+          <itemizedlist>
+            <listitem>
+              <para></para>
+            </listitem>
+          </itemizedlist>
+
+          <para></para>
+
+          <para>Returns ok</para>
+
+          <para></para>
+
+          <para>Note that this method should be called from the
+          <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>,
+          not with concordion:execute. See <xref
+          linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
+          details.</para>
+
+          <para>For example, calling inline:</para>
+
+          <programlisting>&lt;p
+  isis:execute="#result=usingIsisViewer(#onObject,#aliasResultAs, #perform, #usingMember)"&gt;
+  With the &lt;span concordion:set="#onObject"&gt;employees&lt;/span&gt; service, &lt;span
+  concordion:set="#perform"&gt;invoke action&lt;/span&gt; &lt;span
+  concordion:set="#usingMember"&gt;All Employees&lt;/span&gt; and alias the resulting list as &lt;span
+  concordion:set="#aliasResultAs"&gt;list1&lt;/span&gt;; &lt;span
+  concordion:assertEquals="#result"&gt;ok&lt;/span&gt;
+&lt;/p&gt;</programlisting>
+
+          <para></para>
+
+          <para>The method can also be called within a table:</para>
+
+          <programlisting>&lt;table
+ isis:execute="#result=usingIsisViewerThatArgs(#onObject, #aliasResultAs, #perform, #onMember, #thatIt, #value)"&gt;
+  &lt;tr&gt;
+    &lt;th concordion:set="#onObject"&gt;on object&lt;/th&gt;
+    &lt;th concordion:set="#aliasResultAs"&gt;alias result as&lt;/th&gt;
+    &lt;th concordion:set="#perform"&gt;perform&lt;/th&gt;
+    &lt;th concordion:set="#onMember"&gt;on member&lt;/th&gt;
+    &lt;th concordion:set="#thatIt"&gt;that it&lt;/th&gt;
+    &lt;th concordion:set="#value"&gt;value&lt;/th&gt;
+    &lt;th concordion:assertEquals="#result" /&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;tomEmployee&lt;/td&gt;
+    &lt;td&gt;tomsApprover&lt;/td&gt;
+    &lt;td&gt;check property&lt;/td&gt;
+    &lt;td&gt;Approver&lt;/td&gt;
+    &lt;td&gt;is&lt;/td&gt;
+    &lt;td&gt;Employee:Fred Smith&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</programlisting>
+
+          <para></para>
 
           <para></para>
 
@@ -1152,6 +1340,85 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           <title>FitNesse</title>
 
           <para></para>
+
+          <para></para>
+
+          <informaltable>
+            <tgroup cols="5">
+              <colspec colname="_1" />
+
+              <colspec colname="_2" />
+
+              <colspec />
+
+              <colspec />
+
+              <colspec colname="_3" />
+
+              <tbody>
+                <row>
+                  <entry><classname>Using Isis Viewer</classname></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry nameend="_3"
+                  namest="_2"><emphasis></emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><classname>On Object</classname></entry>
+
+                  <entry><classname>Alias Result As</classname></entry>
+
+                  <entry>Perform</entry>
+
+                  <entry></entry>
+
+                  <entry><classname>alias as</classname></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>Fred Smith</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>Tom Brown</emphasis></entry>
+
+                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry><emphasis>Employee:Tom Brown</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>Sam Jones</emphasis></entry>
+
+                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+
+                  <entry></entry>
+
+                  <entry></entry>
+
+                  <entry><emphasis>Employee:Sam Jones</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable>
 
           <para></para>
         </sect3>
