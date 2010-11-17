@@ -26,7 +26,7 @@ import org.apache.isis.support.prototype.dom.employee.Employee;
 import org.apache.isis.support.prototype.dom.employee.EmployeeRepository;
 import org.apache.isis.support.prototype.dom.employee.EmployeeTakeOn;
 
-public class EmployeeRepositoryInMemory extends AbstractFactoryAndRepository implements EmployeeRepository {
+public class EmployeeRepositoryDefault extends AbstractFactoryAndRepository implements EmployeeRepository {
 
     // {{ Id, iconName
     @Override

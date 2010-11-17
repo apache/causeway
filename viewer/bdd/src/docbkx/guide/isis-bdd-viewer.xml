@@ -102,7 +102,7 @@
       somewhat less clumsy term).</para>
     </sect1>
 
-    <sect1>
+    <sect1 id="sec.CommonLibrary">
       <title>Common Library</title>
 
       <para><emphasis>Apache Isis</emphasis> integrates with
@@ -142,6 +142,17 @@
           <classname>CellBinding</classname> interface is used to wire the
           values in the rows of the table to the properties specified in the
           header.</para>
+
+          <para>Each <classname>CellBinding</classname> has a name (eg "on
+          object") and some alternative names (eg "using"). This is useful for
+          <acronym>BDD</acronym> frameworks (such as
+          <emphasis>FitNesse</emphasis>) where the provided text from the
+          story needs to be parsed in some way, matching up columns with the
+          fixture. Other <acronym>BDD</acronym> frameworks (eg
+          <emphasis>Concordion</emphasis>) don't need this particular feature
+          (the <emphasis>Concordion</emphasis> integration calls pre-canned
+          methods so the matching is done simply by parameter position to
+          these method).</para>
 
           <para>The library provides a default implementation, though
           subclasses can override if required.</para>
@@ -1196,40 +1207,65 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           using "Alias Items In List" (see <xref
           linkend="sec.AliasItemsInList" />).</para>
 
-          <para>The UsingIsisViewerPeer uses
-          <classname>CellBinding</classname>s (see ) to defin</para>
-
-          <para>In order to be able to fit different types of interactions
-          into a table structure, the
-          <classname>UsingIsisViewerPeer</classname> is quite flexible, with
-          support for various columns, some of which are optional dependent
-          upon context. The column names below </para>
+          <para>Because <classname>UsingIsisViewerPeer</classname> is
+          table-oriented, it uses <classname>CellBinding</classname>s (see
+          <xref linkend="sec.CommonLibrary" />) to bind table headers to rows.
+          The constructor takes the following parameters:</para>
 
           <itemizedlist>
             <listitem>
-              <para>on object</para>
+              <para><classname>AliasRegistry</classname></para>
 
-              <para>Always required, this is the (alias of) the obejct to
-              interact with.</para>
-
-              <para>Can also use 'object', or 'on'</para>
+              <para>Used to access aliases for existing domain objects, and to
+              register aliases for newly created/found objects.</para>
             </listitem>
 
             <listitem>
-              <para>alias result as</para>
+              <para><classname>Perform.Mode</classname></para>
 
-              <para>the alias to assign the result of any interaction.
-              Optional, but common in most interactions.</para>
+              <para>Whether to actually perform the interactions or not</para>
             </listitem>
 
             <listitem>
-              <para>perform</para>
+              <para><classname>CellBinding</classname>s for each of the
+              standard columns of the table</para>
 
-              <para>the interaction to perform (see below)</para>
+              <para>These are discussed below.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The <classname>CellBinding</classname>s passed into the
+          constructor correspond to the standard columns of the table.
+          Although all must be passed in, not all are needed for every
+          interaction; in these cases the value can be left blank. The
+          <classname>CellBinding</classname>s correspond to the following
+          column names:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>"on object" column (can also use 'object', or 'on')</para>
+
+              <para>The (alias of) the obejct to interact with. A value must
+              always be provided.</para>
             </listitem>
 
             <listitem>
-              <para>on member</para>
+              <para>"alias result as" column (can also use "result=",
+              "alias=", "alias as")</para>
+
+              <para>The alias to assign the result of any interaction.</para>
+            </listitem>
+
+            <listitem>
+              <para>"perform" column (can also use "do", "interaction",
+              "interaction type")</para>
+
+              <para>the interaction to perform; discussed further below</para>
+            </listitem>
+
+            <listitem>
+              <para>"on member" column (can also use "member", "using member",
+              using")</para>
 
               <para>the property, collection or action to use</para>
             </listitem>
@@ -1254,6 +1290,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           </itemizedlist>
 
           <para></para>
+
+          <para>In addition, further CellBindings can be defined</para>
 
           <para></para>
 

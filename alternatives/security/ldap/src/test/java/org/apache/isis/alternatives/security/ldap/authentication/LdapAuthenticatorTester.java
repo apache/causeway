@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.runtime.authentication.standard.ldap;
+package org.apache.isis.alternatives.security.ldap.authentication;
 
 import org.apache.isis.alternatives.security.ldap.authentication.LdapAuthenticator;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;

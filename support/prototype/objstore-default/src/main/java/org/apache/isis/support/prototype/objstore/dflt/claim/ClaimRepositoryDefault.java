@@ -38,7 +38,7 @@ import org.apache.isis.support.prototype.dom.claim.ClaimantExpenseSummary;
 
 import com.google.common.collect.Maps;
 
-public class ClaimRepositoryInMemory extends AbstractFactoryAndRepository implements ClaimRepository {
+public class ClaimRepositoryDefault extends AbstractFactoryAndRepository implements ClaimRepository {
 
     // {{ Id, iconName
     @Override

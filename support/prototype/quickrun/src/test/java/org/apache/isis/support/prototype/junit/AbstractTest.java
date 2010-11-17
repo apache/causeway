@@ -25,8 +25,8 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.support.prototype.dom.claim.ClaimRepository;
 import org.apache.isis.support.prototype.dom.employee.Employee;
 import org.apache.isis.support.prototype.dom.employee.EmployeeRepository;
-import org.apache.isis.support.prototype.objstore.dflt.claim.ClaimRepositoryInMemory;
-import org.apache.isis.support.prototype.objstore.dflt.employee.EmployeeRepositoryInMemory;
+import org.apache.isis.support.prototype.objstore.dflt.claim.ClaimRepositoryDefault;
+import org.apache.isis.support.prototype.objstore.dflt.employee.EmployeeRepositoryDefault;
 import org.apache.isis.viewer.junit.IsisTestRunner;
 import org.apache.isis.viewer.junit.Service;
 import org.apache.isis.viewer.junit.Services;
@@ -35,7 +35,7 @@ import org.junit.Before;
 import org.junit.runner.RunWith;
 
 @RunWith(IsisTestRunner.class)
-@Services({ @Service(ClaimRepositoryInMemory.class), @Service(EmployeeRepositoryInMemory.class) })
+@Services({ @Service(ClaimRepositoryDefault.class), @Service(EmployeeRepositoryDefault.class) })
 public abstract class AbstractTest {
 
     private DomainObjectContainer domainObjectContainer;
