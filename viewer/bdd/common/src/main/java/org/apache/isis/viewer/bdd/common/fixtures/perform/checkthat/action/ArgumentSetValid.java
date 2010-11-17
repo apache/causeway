@@ -23,7 +23,7 @@ public class ArgumentSetValid extends ThatSubcommandAbstract {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final ObjectMember nakedObjectMember = performContext
-                .getNakedObjectMember();
+                .getObjectMember();
         final CellBinding onMemberBinding = performContext
         .getPeer().getOnMemberBinding();
         final List<StoryCell> argumentCells = performContext.getArgumentCells();

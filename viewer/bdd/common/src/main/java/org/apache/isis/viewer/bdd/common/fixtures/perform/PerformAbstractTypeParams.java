@@ -92,7 +92,7 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
 		final StoryCell onMemberCell = onMemberBinding.getCurrentCell();
 
 		final String reason = type.ensureMemberIsOfType(performContext
-				.getNakedObjectMember());
+				.getObjectMember());
 		if (reason != null) {
 			throw StoryBoundValueException.current(onMemberBinding, 
 					reason);

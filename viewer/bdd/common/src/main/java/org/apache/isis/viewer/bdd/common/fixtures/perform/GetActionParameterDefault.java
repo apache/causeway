@@ -21,7 +21,7 @@ public class GetActionParameterDefault extends PerformAbstractTypeParams {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final ObjectMember nakedObjectMember = performContext
-                .getNakedObjectMember();
+                .getObjectMember();
         CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
 		final StoryCell arg0Cell = arg0Binding.getCurrentCell();
         int requestedParamNum = -1;

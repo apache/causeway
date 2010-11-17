@@ -127,7 +127,7 @@
 
           <para>The default implementation just wraps a
           <classname>java.lang.String</classname>, but some frameworks (eg
-          <emphasis>FitNesse</emphasis>) have other means of </para>
+          <emphasis>FitNesse</emphasis>) have other means of</para>
         </listitem>
 
         <listitem>
@@ -365,7 +365,7 @@
 
       <para>In order to test an <emphasis>Apache Isis</emphasis> domain
       application, a running instance of an <classname>IsisSystem</classname>
-      must be bootstrapped, with the appropriate configuration. </para>
+      must be bootstrapped, with the appropriate configuration.</para>
 
       <sect2>
         <title>Story Context</title>
@@ -769,8 +769,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <sect3>
           <title>FitNesse</title>
 
-          <para>The FitNesse integration provides four versions (overloaded
-          only so reads well in the page):</para>
+          <para>The <emphasis>FitNesse</emphasis> integration provides four
+          versions (overloaded only so reads well in the page):</para>
 
           <informaltable>
             <tgroup cols="2">
@@ -1040,6 +1040,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           <itemizedlist>
             <listitem>
               <para><methodname>#setUpObject(String className, String aliasAs,
+              String propertyName1, String propertyName2,
               ...)</methodname></para>
 
               <para>There are 10 overloaded versions of this method, to
@@ -1166,7 +1167,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
       <para>User interaction fixtures appear predominantly in the main body of
       the test, either to simulating user interactions or to assert on the
-      results of those actions. </para>
+      results of those actions.</para>
 
       <sect2 id="sec.UsingIsisViewer">
         <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
@@ -1243,76 +1244,823 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
           <itemizedlist>
             <listitem>
-              <para>"on object" column (can also use 'object', or 'on')</para>
+              <para>the "on object" column (can also use 'object', or 'on' if
+              parsing column name provided by story text)</para>
 
-              <para>The (alias of) the obejct to interact with. A value must
+              <para>The (alias of) the object to interact with. A value must
               always be provided.</para>
             </listitem>
 
             <listitem>
-              <para>"alias result as" column (can also use "result=",
+              <para>the "alias result as" column (can also use "result=",
               "alias=", "alias as")</para>
 
               <para>The alias to assign the result of any interaction.</para>
             </listitem>
 
             <listitem>
-              <para>"perform" column (can also use "do", "interaction",
+              <para>the "perform" column (can also use "do", "interaction",
               "interaction type")</para>
 
               <para>the interaction to perform; discussed further below</para>
             </listitem>
 
             <listitem>
-              <para>"on member" column (can also use "member", "using member",
-              using")</para>
+              <para>the "on member" column (can also use "member", "using
+              member", using")</para>
 
               <para>the property, collection or action to use</para>
             </listitem>
 
             <listitem>
-              <para>that it</para>
+              <para>the "that it" column (can also use "that", "verb")</para>
 
-              <para></para>
+              <para>optional qualifier for interactions that make checks;
+              discussed below</para>
             </listitem>
 
             <listitem>
-              <para>with arguments</para>
+              <para>the "with arguments" (can also "arguments", "parameters",
+              "with parameters", "for", "value", "for parameters", "value",
+              "reference")</para>
 
-              <para></para>
-            </listitem>
-
-            <listitem>
-              <para>on object</para>
-
-              <para></para>
+              <para>the first argument, to the interaction, if any. It is
+              possible to perform interactions with multiple arguments (for
+              example, invoking an action); but the UsingIsisViewerPeer needs
+              to have a binding for the first argument so that it can knows to
+              interpret any following columns as further arguments.</para>
             </listitem>
           </itemizedlist>
 
-          <para></para>
-
-          <para>In addition, further CellBindings can be defined</para>
-
-          <para></para>
-
-          <para>The constructor for UsingIsisViewerPeer takes the following
-          parameters:</para>
+          <para>The valid values that can be provided for the "perform"
+          binding are:</para>
 
           <itemizedlist>
             <listitem>
-              <para>UsingIsisViewerPeer</para>
+              <para>check property / check collection / check add to
+              collection / check remove from collection / check action</para>
+
+              <para>These are combined with a value in the "that it" binding;
+              for example "check property XXX is hidden", or "check action XXX
+              is valid for (<emphasis>some argument list</emphasis>)"</para>
+            </listitem>
+
+            <listitem>
+              <para>get property / set property / clear property</para>
+
+              <para>Read from or write to a collection. If setting, a single
+              argument is required</para>
+            </listitem>
+
+            <listitem>
+              <para>get collection / add to collection / remove from
+              collection</para>
+
+              <para>Read or write from a collection. If writing, a single
+              argument is required</para>
+            </listitem>
+
+            <listitem>
+              <para>invoke action</para>
+
+              <para>Invoke action, with 0 to many arguments</para>
+            </listitem>
+
+            <listitem>
+              <para>get property default / get property choices / get action
+              parameter default / get action choices</para>
+
+              <para>To enable the testing of the choicesXxx() and defaultXxx()
+              supporting methods</para>
             </listitem>
           </itemizedlist>
 
-          <para></para>
+          <para>The tables below summarizes the full of interactions that are
+          supported for properties:</para>
+
+          <table>
+            <title>Supported Interactions for Properties</title>
+
+            <tgroup cols="6">
+              <colspec colname="_4" colnum="4" />
+
+              <colspec colname="_5" />
+
+              <colspec colname="_6" />
+
+              <thead>
+                <row>
+                  <entry align="center">on object</entry>
+
+                  <entry align="center">alias as</entry>
+
+                  <entry align="center">perform</entry>
+
+                  <entry align="center">using member</entry>
+
+                  <entry align="center">that it</entry>
+
+                  <entry align="center">value</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  hidden</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  visible</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  disabled</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  enabled</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  empty</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is not
+                  empty</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry><classname>contains</classname></entry>
+
+                  <entry><emphasis>value or object alias</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry><classname>does not contain</classname></entry>
+
+                  <entry><emphasis>value or object alias</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check set property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry><classname>is valid for</classname></entry>
+
+                  <entry><emphasis>value or object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check set property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry><classname>is not valid for</classname></entry>
+
+                  <entry><emphasis> value or object alias</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check clear property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  valid</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check clear property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is not
+                  valid</classname></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>set property</classname></entry>
+
+                  <entry><emphasis>property name</emphasis></entry>
+
+                  <entry><classname> </classname></entry>
+
+                  <entry><emphasis>value or object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>clear property</classname></entry>
+
+                  <entry nameend="_6" namest="_4"><emphasis>property
+                  name</emphasis><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis>alias for referenced object
+                  </emphasis></entry>
+
+                  <entry><classname>get property</classname></entry>
+
+                  <entry nameend="_6" namest="_4"><emphasis>property
+                  name</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis>alias for default object
+                  </emphasis></entry>
+
+                  <entry><classname>get property default</classname></entry>
+
+                  <entry nameend="_6" namest="_4"><emphasis>property
+                  name</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>sobject alias</emphasis></entry>
+
+                  <entry><emphasis>alias for list of
+                  choices</emphasis></entry>
+
+                  <entry><classname>get property choices</classname></entry>
+
+                  <entry nameend="_6" namest="_4"><emphasis>property
+                  name</emphasis><emphasis> </emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>Obtaining a alias for the (value of) a property only makes
+          sense if the property is a reference type, not value type.</para>
+
+          <para>We likewise have a table for collections:</para>
+
+          <table>
+            <title>Supported Interactions for Collections</title>
+
+            <tgroup cols="6">
+              <colspec colname="_4" colnum="4" />
+
+              <colspec colname="_5" />
+
+              <colspec colname="_6" />
+
+              <thead>
+                <row>
+                  <entry align="center">on object</entry>
+
+                  <entry align="center">alias as</entry>
+
+                  <entry align="center">perform</entry>
+
+                  <entry align="center">using member</entry>
+
+                  <entry align="center">that it</entry>
+
+                  <entry align="center">reference</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  hidden</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  visible</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  disabled</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  enabled</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  empty</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is not
+                  empty</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis>alias for collection </emphasis></entry>
+
+                  <entry><classname>get collection</classname></entry>
+
+                  <entry nameend="_6" namest="_4"><emphasis>collection
+                  name</emphasis><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname>contains</classname></entry>
+
+                  <entry><emphasis>object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname>does not contain</classname></entry>
+
+                  <entry><emphasis>object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check add to
+                  collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname>is valid for</classname></entry>
+
+                  <entry><emphasis>object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check add to
+                  collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname>is not valid for</classname></entry>
+
+                  <entry><emphasis>object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check remove from
+                  collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname>is valid for</classname></entry>
+
+                  <entry><emphasis>object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check remove from
+                  collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname>is not valid for</classname></entry>
+
+                  <entry><emphasis>object alias</emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>add to collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname> </classname></entry>
+
+                  <entry><emphasis>object alias </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>remove from collection</classname></entry>
+
+                  <entry><emphasis>collection name</emphasis></entry>
+
+                  <entry><classname> </classname></entry>
+
+                  <entry><emphasis> object alias</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>Obtaining a reference to a collection allows objects to be
+          aliased from within it, using <xref
+          linkend="sec.AliasItemsInList" />.</para>
+
+          <para>Finally, we have a table for actions:</para>
+
+          <table>
+            <title>Supported Interactions for Actions</title>
+
+            <tgroup cols="6">
+              <colspec colname="_5" colnum="5" />
+
+              <colspec colname="_6" />
+
+              <thead>
+                <row>
+                  <entry align="center">on object</entry>
+
+                  <entry align="center">alias as</entry>
+
+                  <entry align="center">perform</entry>
+
+                  <entry align="center">using member</entry>
+
+                  <entry align="center">that it</entry>
+
+                  <entry align="center">with arguments (one or more
+                  cols)</entry>
+                </row>
+              </thead>
+
+              <tbody>
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check action</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  hidden</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check action</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  visble</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check action</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  disabled</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check action</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry nameend="_6" namest="_5"><classname>is
+                  enabled</classname><emphasis> </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check action</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry><classname>is valid for</classname></entry>
+
+                  <entry><emphasis>argument list </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis> </emphasis></entry>
+
+                  <entry><classname>check action</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry><classname>is not valid for</classname></entry>
+
+                  <entry><emphasis>argument list </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis>alias for returned object
+                  </emphasis></entry>
+
+                  <entry><classname>invoke action</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry><classname> </classname></entry>
+
+                  <entry><emphasis>argument list </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis>alias for parameter defaut
+                  </emphasis></entry>
+
+                  <entry><classname>get action default
+                  parameter</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry><classname> </classname></entry>
+
+                  <entry><emphasis>param number (0-based) </emphasis></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>object alias</emphasis></entry>
+
+                  <entry><emphasis>alias for list of parameter
+                  choices</emphasis></entry>
+
+                  <entry><classname>get action parameter
+                  choices</classname></entry>
+
+                  <entry><emphasis>action name</emphasis></entry>
+
+                  <entry><classname> </classname></entry>
+
+                  <entry><emphasis>param number (0-based) </emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+
+          <para>Note:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the <acronym>API</acronym> provided by the common library
+              is not type-safe; the values (as provided in
+              <classname>StoryCell</classname>) must match the values given
+              here. While it is tempting to refactor the common library to use
+              type safe enums, this would move the need to translate story
+              text into each and every <acronym>BDD</acronym> framework
+              integration. The API is probably correct as it is, even though
+              it is reliant on the exact string phrases that appear in the
+              tables above.</para>
+            </listitem>
+          </itemizedlist>
         </sect3>
 
         <sect3>
           <title>Concordion</title>
 
-          <para>The </para>
+          <para>The <emphasis>Concordion</emphasis> framework integration
+          provides a set of overloaded methods in
+          <classname>AbstractIsisConcordionTest</classname> which call into
+          the <classname>UsingIsisViewerPeer</classname>:</para>
 
           <itemizedlist>
+            <listitem>
+              <para><methodname>#usingIsisViewer(String onObject, String
+              aliasResultAs, String perform, String usingMember)
+              </methodname></para>
+
+              <para>For interactions that have no "that it" or arguments (eg
+              "get collectoin recentlyPlacedOrders")</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#usingIsisViewerThat(String onObject, String
+              aliasResultAs, String perform, String usingMember, String
+              thatIt)</methodname></para>
+
+              <para>For interactions that require a "that it" but no arguments
+              (eg, "check property firstName that it is hidden")</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#usingIsisViewerArgs(String onObject, String
+              aliasResultAs, String perform, String usingMember, String arg0,
+              String arg1, ...</methodname>)</para>
+
+              <para>For interactions that require arguments, but no "that it"
+              (eg "invoke action placeOrder with arguments arg1, arg2,
+              arg3").</para>
+
+              <para>There are multiple overloaded versions of this method
+              taking from 1 to 5 arguments.</para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>usingIsisViewerThatArgs(String onObject,
+              String aliasResultAs, String perform, String usingMember, String
+              arg0, String arg1, ...)</methodname></para>
+
+              <para>For interactions that require a "that it" and also an
+              argumetn or arguments (eg "check action placeOrder is not valid
+              for arg1, arg2, arg3)</para>
+
+              <para>There are multiple overloaded versions of this method
+              taking from 1 to 5 arguments.</para>
+            </listitem>
+
             <listitem>
               <para></para>
             </listitem>

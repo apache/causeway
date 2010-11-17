@@ -19,7 +19,7 @@ public class ProposedClear extends ThatValidityAbstract {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-                .getNakedObjectMember();
+                .getObjectMember();
 
         final Consent validityConsent = otoa
                 .isAssociationValid(onAdapter, null);

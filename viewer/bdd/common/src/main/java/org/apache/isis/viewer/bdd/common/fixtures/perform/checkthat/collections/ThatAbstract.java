@@ -17,7 +17,7 @@ public abstract class ThatAbstract extends ThatSubcommandAbstract {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final OneToManyAssociation otma = (OneToManyAssociation) performContext
-                .getNakedObjectMember();
+                .getObjectMember();
 
         final ObjectAdapter nakedObjectRepresentingCollection = otma
                 .get(onAdapter);

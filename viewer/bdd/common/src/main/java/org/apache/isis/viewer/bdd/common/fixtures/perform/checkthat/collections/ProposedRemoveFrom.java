@@ -19,7 +19,7 @@ public class ProposedRemoveFrom extends ProposedArgumentValidityAbstract {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final OneToManyAssociation otma = (OneToManyAssociation) performContext
-                .getNakedObjectMember();
+                .getObjectMember();
 
         return otma.isValidToRemove(onAdapter, toValidateAdapter);
     }

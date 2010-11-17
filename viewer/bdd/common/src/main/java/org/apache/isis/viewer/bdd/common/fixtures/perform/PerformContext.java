@@ -20,15 +20,15 @@ public class PerformContext {
 	private final UsingIsisViewerPeer peer;
 
 	private final ObjectAdapter onAdapter;
-	private final ObjectMember nakedObjectMember;
+	private final ObjectMember objectMember;
 	private final List<StoryCell> argumentCells;
 
 	public PerformContext(final UsingIsisViewerPeer peer,
 			final ObjectAdapter onAdapter,
-			final ObjectMember nakedObjectMember,
+			final ObjectMember objectMember,
 			final List<StoryCell> argumentCells) {
 		this.onAdapter = onAdapter;
-		this.nakedObjectMember = nakedObjectMember;
+		this.objectMember = objectMember;
 		this.peer = peer;
 		this.argumentCells = argumentCells;
 	}
@@ -41,8 +41,8 @@ public class PerformContext {
 		return onAdapter;
 	}
 
-	public ObjectMember getNakedObjectMember() {
-		return nakedObjectMember;
+	public ObjectMember getObjectMember() {
+		return objectMember;
 	}
 
 	public List<StoryCell> getArgumentCells() {
@@ -50,12 +50,12 @@ public class PerformContext {
 	}
 
 	public Consent visibleMemberConsent() {
-		return getNakedObjectMember().isVisible(getAuthenticationSession(),
+		return getObjectMember().isVisible(getAuthenticationSession(),
 				getOnAdapter());
 	}
 
 	public Consent usableMemberConsent() {
-		return getNakedObjectMember().isUsable(getAuthenticationSession(),
+		return getObjectMember().isUsable(getAuthenticationSession(),
 				getOnAdapter());
 	}
 
@@ -66,7 +66,7 @@ public class PerformContext {
 
 	public void ensureVisible(CellBinding onMemberBinding, final StoryCell onMemberCell)
 	throws StoryBoundValueException {
-		final Consent visible = nakedObjectMember.isVisible(getAuthenticationSession(),
+		final Consent visible = objectMember.isVisible(getAuthenticationSession(),
 				getOnAdapter());
 		if (visible.isVetoed()) {
 			throw StoryBoundValueException.current(onMemberBinding, "(not visible)");
@@ -75,7 +75,7 @@ public class PerformContext {
 	
 	public void ensureUsable(CellBinding onMemberBinding, final StoryCell onMemberCell)
 			throws StoryBoundValueException {
-		final Consent usable = nakedObjectMember.isUsable(getAuthenticationSession(),
+		final Consent usable = objectMember.isUsable(getAuthenticationSession(),
 				getOnAdapter());
 		if (usable.isVetoed()) {
 			throw StoryBoundValueException.current(onMemberBinding, "(not usable)");

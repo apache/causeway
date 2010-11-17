@@ -50,12 +50,12 @@
 
     <servlet>
         <servlet-name>Logon</servlet-name>
-        <servlet-class>org.apache.isis.extensions.html.servlet.LogonServlet</servlet-class>
+        <servlet-class>org.apache.isis.viewer.html.servlet.LogonServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>Controller</servlet-name>
-        <servlet-class>org.apache.isis.extensions.html.servlet.ControllerServlet</servlet-class>
+        <servlet-class>org.apache.isis.viewer.html.servlet.ControllerServlet</servlet-class>
     </servlet>
 
     <servlet>

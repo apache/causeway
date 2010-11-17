@@ -18,7 +18,7 @@ public class Contains extends ThatSubcommandAbstract {
     public ObjectAdapter that(final PerformContext performContext) throws StoryBoundValueException {
 
         final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-                .getNakedObjectMember();
+                .getObjectMember();
 
         // if we have an expected result
         CellBinding arg0Binding = performContext.getPeer().getArg0Binding();

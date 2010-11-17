@@ -24,7 +24,7 @@ public class InvokeAction extends PerformAbstractTypeParams {
 
 		final ObjectAdapter onAdapter = performContext.getOnAdapter();
 		final ObjectMember nakedObjectMember = performContext
-				.getNakedObjectMember();
+				.getObjectMember();
 		final CellBinding onMemberBinding = performContext.getPeer()
 				.getOnMemberBinding();
 		final List<StoryCell> argumentCells = performContext.getArgumentCells();

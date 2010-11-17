@@ -17,7 +17,7 @@ public class GetCollection extends PerformAbstractTypeParams {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final ObjectMember nakedObjectMember = performContext
-                .getNakedObjectMember();
+                .getObjectMember();
 
         final OneToManyAssociation otma = (OneToManyAssociation) nakedObjectMember;
 

@@ -23,7 +23,7 @@ public class Containment extends ThatAbstract {
 			throws StoryBoundValueException {
 
 		final ObjectMember nakedObjectMember = performContext
-				.getNakedObjectMember();
+				.getObjectMember();
 		final CellBinding thatBinding = performContext.getPeer()
 				.getThatItBinding();
 		final CellBinding arg0Binding = performContext.getPeer()

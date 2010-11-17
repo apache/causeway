@@ -17,7 +17,7 @@ public class Empty extends ThatSubcommandAbstract {
 			throws StoryBoundValueException {
 
 		final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-				.getNakedObjectMember();
+				.getObjectMember();
 
 		// get
 		final ObjectAdapter resultAdapter = otoa.get(performContext

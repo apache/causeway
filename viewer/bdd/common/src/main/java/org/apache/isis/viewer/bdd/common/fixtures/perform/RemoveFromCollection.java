@@ -27,7 +27,7 @@ public class RemoveFromCollection extends PerformAbstractTypeParams {
 
 		final ObjectAdapter onAdapter = performContext.getOnAdapter();
 		final ObjectMember nakedObjectMember = performContext
-				.getNakedObjectMember();
+				.getObjectMember();
 		final CellBinding onMemberBinding = performContext.getPeer()
 				.getOnMemberBinding();
 		final StoryCell onMemberCell = onMemberBinding.getCurrentCell();

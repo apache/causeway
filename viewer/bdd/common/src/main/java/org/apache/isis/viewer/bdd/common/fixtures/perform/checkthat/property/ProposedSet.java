@@ -19,7 +19,7 @@ public class ProposedSet extends ProposedArgumentValidityAbstract {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final OneToOneAssociation otoa = (OneToOneAssociation) performContext
-                .getNakedObjectMember();
+                .getObjectMember();
 
         return otoa.isAssociationValid(onAdapter, toValidateAdapter);
     }

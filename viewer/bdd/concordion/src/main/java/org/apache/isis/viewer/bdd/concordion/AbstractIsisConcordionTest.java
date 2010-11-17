@@ -387,7 +387,10 @@ public class AbstractIsisConcordionTest {
             arg3, arg4);
     }
 
-    private String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
+    /**
+     * With <tt>protected</tt> visibility so that it can be called by custom methods if required.
+     */
+    protected String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
         String usingMember, String thatIt, String arg0, String... remainingArgs) {
         if (executingInline()) {
             usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), Perform.Mode.TEST);
