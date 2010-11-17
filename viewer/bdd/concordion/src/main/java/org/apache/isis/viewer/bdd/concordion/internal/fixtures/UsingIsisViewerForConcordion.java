@@ -121,12 +121,12 @@ public class UsingIsisViewerForConcordion extends
 		String aliasAs = getPeer().validateAliasAs();
 		Perform performCommand = getPeer().validatePerform();
 		
-		ObjectMember nakedObjectMember = null;
+		ObjectMember objectMember = null;
 		if (performCommand.requiresMember()) {
-			nakedObjectMember = getPeer().validateOnMember(onAdapter);
+			objectMember = getPeer().validateOnMember(onAdapter);
 		}
 
-		getPeer().performCommand(performCommand, onAdapter, nakedObjectMember, asValues(argumentCells), aliasAs);
+		getPeer().performCommand(onAdapter, aliasAs, objectMember, performCommand, asValues(argumentCells));
 	}
 
 	private static List<StoryCell> asValues(List<String> argumentCells) {

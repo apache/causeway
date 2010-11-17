@@ -109,10 +109,10 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
             return;
         }
 
-        ObjectMember nakedObjectMember = null;
+        ObjectMember objectMember = null;
         if (performCommand.requiresMember()) {
             try {
-                nakedObjectMember = getPeer().validateOnMember(onAdapter);
+                objectMember = getPeer().validateOnMember(onAdapter);
             } catch (StoryBoundValueException ex) {
                 FitnesseUtil.exception(this, ex);
                 return;
@@ -121,7 +121,7 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
 
         try {
             List<StoryCell> argumentStoryCells = asValues(argumentCells);
-            getPeer().performCommand(performCommand, onAdapter, nakedObjectMember, argumentStoryCells, aliasAs);
+            getPeer().performCommand(onAdapter, aliasAs, objectMember, performCommand, argumentStoryCells);
         } catch (StoryBoundValueException ex) {
             FitnesseUtil.exception(this, ex);
             return;
@@ -139,7 +139,19 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
     }
 
     private void rightMemberElseOnObjectCell() {
-        right(getPeer().getMemberElseOnObjectCell());
+        UsingIsisViewerPeer peer = getPeer();
+        StoryCell storyCell =
+            coalesce(peer.getOnMemberBinding().getCurrentCell(), peer.getOnObjectBinding().getCurrentCell());
+        right(storyCell);
+    }
+
+    private static <T> T coalesce(T... objects) {
+        for (T object : objects) {
+            if (object != null) {
+                return object;
+            }
+        }
+        return null;
     }
 
 }

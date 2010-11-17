@@ -44,318 +44,308 @@ import org.apache.isis.viewer.bdd.common.util.Strings;
 
 public class UsingIsisViewerPeer extends AbstractFixturePeer {
 
-	private static List<Perform> performCommands(final Perform.Mode mode) {
-		ArrayList<Perform> commands = new ArrayList<Perform>();
+    private static List<Perform> performCommands(final Perform.Mode mode) {
+        ArrayList<Perform> commands = new ArrayList<Perform>();
 
-		commands.add(new CheckProperty(mode));
-		commands.add(new CheckSetProperty(mode));
-		commands.add(new CheckClearProperty(mode));
-		commands.add(new GetProperty(mode));
-		commands.add(new SetProperty(mode));
-		commands.add(new ClearProperty(mode));
-		commands.add(new GetPropertyDefault(mode));
-		commands.add(new GetPropertyChoices(mode));
+        commands.add(new CheckProperty(mode));
+        commands.add(new CheckSetProperty(mode));
+        commands.add(new CheckClearProperty(mode));
+        commands.add(new GetProperty(mode));
+        commands.add(new SetProperty(mode));
+        commands.add(new ClearProperty(mode));
+        commands.add(new GetPropertyDefault(mode));
+        commands.add(new GetPropertyChoices(mode));
 
-		commands.add(new CheckCollection(mode));
-		commands.add(new CheckAddToCollection(mode));
-		commands.add(new CheckRemoveFromCollection(mode));
-		commands.add(new AddToCollection(mode));
-		commands.add(new RemoveFromCollection(mode));
-		commands.add(new GetCollection(mode));
+        commands.add(new CheckCollection(mode));
+        commands.add(new CheckAddToCollection(mode));
+        commands.add(new CheckRemoveFromCollection(mode));
+        commands.add(new AddToCollection(mode));
+        commands.add(new RemoveFromCollection(mode));
+        commands.add(new GetCollection(mode));
 
-		commands.add(new CheckAction(mode));
-		commands.add(new InvokeAction(mode));
-		commands.add(new GetActionParameterDefault(mode));
-		commands.add(new GetActionParameterChoices(mode));
+        commands.add(new CheckAction(mode));
+        commands.add(new InvokeAction(mode));
+        commands.add(new GetActionParameterDefault(mode));
+        commands.add(new GetActionParameterChoices(mode));
 
-		commands.add(new CheckObject(mode));
-		commands.add(new SaveObject(mode));
+        commands.add(new CheckObject(mode));
+        commands.add(new SaveObject(mode));
 
-		return commands;
-	}
+        return commands;
+    }
 
-	private final CellBinding onObjectBinding;
-	private final CellBinding aliasResultAsBinding;
-	private final CellBinding performBinding;
-	private final CellBinding onMemberBinding;
-	private final CellBinding thatItBinding;
-	private final CellBinding arg0Binding;
+    // //////////////////////////////////////////////////////////////////
+    // constructor
+    // //////////////////////////////////////////////////////////////////
 
-	private final Map<String, Perform> commandByKey = new HashMap<String, Perform>();
+    private final CellBinding onObjectBinding;
+    private final CellBinding aliasResultAsBinding;
+    private final CellBinding performBinding;
+    private final CellBinding onMemberBinding;
+    private final CellBinding thatItBinding;
+    private final CellBinding arg0Binding;
 
-	public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry,
-			final Perform.Mode mode, final CellBinding onObjectBinding,
-			final CellBinding aliasResultAsBinding,
-			final CellBinding performBinding,
-			final CellBinding onMemberBinding, final CellBinding thatItBinding,
-			final CellBinding arg0Binding) {
-		super(aliasesRegistry, onObjectBinding, aliasResultAsBinding,
-				performBinding, onMemberBinding, thatItBinding, arg0Binding);
+    private final Map<String, Perform> commandByKey = new HashMap<String, Perform>();
 
-		this.onObjectBinding = onObjectBinding;
-		this.aliasResultAsBinding = aliasResultAsBinding;
-		this.performBinding = performBinding;
-		this.onMemberBinding = onMemberBinding;
-		this.thatItBinding = thatItBinding;
-		this.arg0Binding = arg0Binding;
+    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, final Perform.Mode mode,
+        final CellBinding onObjectBinding, final CellBinding aliasResultAsBinding, final CellBinding performBinding,
+        final CellBinding onMemberBinding, final CellBinding thatItBinding, final CellBinding arg0Binding) {
+        super(aliasesRegistry, onObjectBinding, aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding,
+            arg0Binding);
 
-		final List<Perform> performCommands = performCommands(mode);
-		for (final Perform command : performCommands) {
-			commandByKey.put(command.getKey(), command);
-		}
-	}
+        this.onObjectBinding = onObjectBinding;
+        this.aliasResultAsBinding = aliasResultAsBinding;
+        this.performBinding = performBinding;
+        this.onMemberBinding = onMemberBinding;
+        this.thatItBinding = thatItBinding;
+        this.arg0Binding = arg0Binding;
 
-	public CellBinding getOnObjectBinding() {
-		return onObjectBinding;
-	}
+        final List<Perform> performCommands = performCommands(mode);
+        for (final Perform command : performCommands) {
+            commandByKey.put(command.getKey(), command);
+        }
+    }
 
-	public CellBinding getAliasResultAsBinding() {
-		return aliasResultAsBinding;
-	}
+    public CellBinding getOnObjectBinding() {
+        return onObjectBinding;
+    }
 
-	public CellBinding getOnMemberBinding() {
-		return onMemberBinding;
-	}
+    public CellBinding getAliasResultAsBinding() {
+        return aliasResultAsBinding;
+    }
 
-	public CellBinding getPerformBinding() {
-		return performBinding;
-	}
+    public CellBinding getOnMemberBinding() {
+        return onMemberBinding;
+    }
 
-	public CellBinding getThatItBinding() {
-		return thatItBinding;
-	}
+    public CellBinding getPerformBinding() {
+        return performBinding;
+    }
 
-	public CellBinding getArg0Binding() {
-		return arg0Binding;
-	}
+    public CellBinding getThatItBinding() {
+        return thatItBinding;
+    }
 
-	public boolean isArg0BindingLast() {
-		return !bindingAfterArg0();
+    public CellBinding getArg0Binding() {
+        return arg0Binding;
+    }
 
-	}
+    public boolean isArg0BindingLast() {
+        return !bindingAfterArg0();
 
-	private boolean bindingAfterArg0() {
-		if (!getArg0Binding().isFound()) {
-			return false;
-		}
-		for (final CellBinding binding : getCellBindings()) {
-			if (binding.getColumn() > getArg0Binding().getColumn()) {
-				return true;
-			}
-		}
-		return false;
-	}
+    }
 
-	// //////////////////////////////////////////////////////////////////
-	// 
-	// //////////////////////////////////////////////////////////////////
+    private boolean bindingAfterArg0() {
+        if (!getArg0Binding().isFound()) {
+            return false;
+        }
+        for (final CellBinding binding : getCellBindings()) {
+            if (binding.getColumn() > getArg0Binding().getColumn()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	public void makePersistent(ObjectAdapter adapter) {
-		getPersistenceSession().makePersistent(adapter);
-	}
+    // //////////////////////////////////////////////////////////////////
+    // validate API
+    // //////////////////////////////////////////////////////////////////
 
-	public void provideDefault(StoryCell storySource, String resultStr) {
-		// TODO Auto-generated method stub
-		throw new NotYetImplementedException();
-	}
+    public ObjectAdapter validateOnObject() throws StoryBoundValueException {
 
-	private String previousOnObject = null;
+        StoryCell onObjectCell = onObjectBinding.getCurrentCell();
+        String onObject = onObjectCell.getText();
+        if (onObject == null) {
+            if (previousOnObject == null) {
+                throw StoryBoundValueException.current(onObjectBinding, "(required)");
+            }
+            onObject = previousOnObject;
+        } else {
+            previousOnObject = onObject;
+        }
+        final ObjectAdapter onAdapter = getAliasRegistry().getAliased(onObject);
+        if (onAdapter == null) {
+            throw StoryBoundValueException.current(onMemberBinding, "(unknown object)");
+        }
+        return onAdapter;
+    }
 
-	public ObjectAdapter validateOnObject() throws StoryBoundValueException {
+    public String validateAliasAs() throws StoryBoundValueException {
+        if (getAliasResultAsBinding() == null) {
+            return null;
+        }
+        final StoryCell aliasCell = aliasResultAsBinding.getCurrentCell();
+        if (aliasCell == null) {
+            return null;
+        }
 
-		StoryCell onObjectCell = onObjectBinding.getCurrentCell();
-		String onObject = onObjectCell.getText();
-		if (onObject == null) {
-			if (previousOnObject == null) {
-				throw StoryBoundValueException.current(onObjectBinding, "(required)");
-			}
-			onObject = previousOnObject;
-		} else {
-			previousOnObject = onObject;
-		}
-		final ObjectAdapter onAdapter = getAliasRegistry().getAliased(onObject);
-		if (onAdapter == null) {
-			throw StoryBoundValueException.current(onMemberBinding, "(unknown object)");
-		}
-		return onAdapter;
-	}
+        String aliasAs = aliasCell.getText();
+        if (getAliasRegistry().getAliased(aliasAs) != null) {
+            throw StoryBoundValueException.current(aliasResultAsBinding, "(already used)");
+        }
+        return aliasAs;
+    }
 
-	public String validateAliasAs() throws StoryBoundValueException {
-		if (getAliasResultAsBinding() == null) {
-			return null;
-		}
-		final StoryCell aliasCell = aliasResultAsBinding
-				.getCurrentCell();
-		if (aliasCell == null) {
-			return null;
-		}
+    public ObjectMember validateOnMember(ObjectAdapter onAdapter) throws StoryBoundValueException {
 
-		String aliasAs = aliasCell.getText();
-		if (getAliasRegistry().getAliased(aliasAs) != null) {
-			throw StoryBoundValueException.current(aliasResultAsBinding, "(already used)");
-		}
-		return aliasAs;
-	}
+        final StoryCell onMemberCell = onMemberBinding.getCurrentCell();
+        final String onMember = onMemberCell.getText();
 
-	public ObjectMember validateOnMember(ObjectAdapter onAdapter)
-			throws StoryBoundValueException {
+        if (Strings.emptyString(onMember)) {
+            throw StoryBoundValueException.current(onMemberBinding, "(required)");
+        }
 
-		final StoryCell onMemberCell = onMemberBinding.getCurrentCell();
-		final String onMember = onMemberCell.getText();
+        if (onAdapter == null) {
+            return null;
+        }
 
-		if (Strings.emptyString(onMember)) {
-			throw StoryBoundValueException.current(onMemberBinding, "(required)");
-		}
+        // see if property, collection or action.
+        final String memberId = Strings.memberIdFor(onMember);
+        final ObjectSpecification spec = onAdapter.getSpecification();
+        final List<ObjectMember> objectMembers = new ArrayList<ObjectMember>();
 
-		if (onAdapter == null) {
-			return null;
-		}
+        objectMembers.addAll(spec.getAssociationList());
 
-		// see if property, collection or action.
-		final String memberId = Strings.memberIdFor(onMember);
-		final ObjectSpecification spec = onAdapter.getSpecification();
-		final List<ObjectMember> objectMembers = new ArrayList<ObjectMember>();
+        // see if action (of any type)
+        objectMembers.addAll(spec.getObjectActionList(ObjectActionType.USER));
+        objectMembers.addAll(spec.getObjectActionList(ObjectActionType.EXPLORATION));
+        objectMembers.addAll(spec.getObjectActionList(ObjectActionType.DEBUG));
+        for (final ObjectMember member : objectMembers) {
+            if (matchesId(member, memberId)) {
+                return member;
+            }
+            // special handling for contributed actions.
+            if (member instanceof ObjectActionSet) {
+                final ObjectActionSet actionSet = (ObjectActionSet) member;
+                for (final ObjectAction contributedAction : actionSet.getActions()) {
+                    if (contributedAction.getId().equals(memberId)) {
+                        return contributedAction;
+                    }
+                }
+            }
+        }
+        throw StoryBoundValueException.current(onMemberBinding, "(unknown member)");
+    }
 
-		objectMembers.addAll(spec.getAssociationList());
+    public Perform validatePerform() throws StoryBoundValueException {
+        final String perform = performBinding.getCurrentCell().getText();
+        if (perform == null) {
+            throw StoryBoundValueException.current(performBinding, "(required)");
+        }
+        final Perform performCommand = commandByKey.get(perform);
+        if (performCommand == null) {
+            throw StoryBoundValueException.current(performBinding, "(unknown interaction)");
+        }
+        return performCommand;
+    }
 
-		// see if action (of any type)
-		objectMembers.addAll(spec
-				.getObjectActionList(ObjectActionType.USER));
-		objectMembers.addAll(spec
-				.getObjectActionList(ObjectActionType.EXPLORATION));
-		objectMembers.addAll(spec
-				.getObjectActionList(ObjectActionType.DEBUG));
-		for (final ObjectMember member : objectMembers) {
-			if (matchesId(member, memberId)) {
-				return member;
-			}
-			// special handling for contributed actions.
-			if (member instanceof ObjectActionSet) {
-				final ObjectActionSet actionSet = (ObjectActionSet) member;
-				for (final ObjectAction contributedAction : actionSet
-						.getActions()) {
-					if (contributedAction.getId().equals(memberId)) {
-						return contributedAction;
-					}
-				}
-			}
-		}
-		throw StoryBoundValueException.current(onMemberBinding, "(unknown member)");
-	}
+    private boolean matchesId(final ObjectMember member, final String memberId) {
+        return member.getId().equals(memberId);
+    }
 
-	private boolean matchesId(final ObjectMember member,
-			final String memberId) {
-		return member.getId().equals(memberId);
-	}
+    // //////////////////////////////////////////////////////////////////
+    // "perform" API
+    // //////////////////////////////////////////////////////////////////
 
-	public Perform validatePerform() throws StoryBoundValueException {
-		final String perform = performBinding.getCurrentCell()
-				.getText();
-		if (perform == null) {
-			throw StoryBoundValueException.current(performBinding, "(required)");
-		}
-		final Perform performCommand = commandByKey.get(perform);
-		if (performCommand == null) {
-			throw StoryBoundValueException.current(performBinding, "(unknown interaction)");
-		}
-		return performCommand;
-	}
+    public void performCommand(ObjectAdapter onAdapter, String aliasAs, ObjectMember objectMember,
+        Perform performCommand, List<StoryCell> argumentStoryCells) throws StoryBoundValueException {
+        PerformContext performContext = new PerformContext(this, onAdapter, objectMember, argumentStoryCells);
+        try {
+            performCommand.perform(performContext);
+        } catch (final RuntimeException ex) {
+            // handler should have colored in invalid cells.
+        }
+        aliasResultFromPerformCommand(performCommand, aliasAs);
+    }
 
-	private void aliasResultFromPerformCommand(Perform performCommand,
-			String aliasAs) throws StoryBoundValueException {
-		if (Strings.emptyString(aliasAs)) {
-			return;
-		}
-		final ObjectAdapter resultAdapter = performCommand.getResult();
-		if (resultAdapter == null) {
-			throw StoryBoundValueException.current(onMemberBinding, "(no result)");
-		}
-		getAliasRegistry().aliasAs(aliasAs, resultAdapter);
-	}
+    private void aliasResultFromPerformCommand(Perform performCommand, String aliasAs) throws StoryBoundValueException {
+        if (Strings.emptyString(aliasAs)) {
+            return;
+        }
+        final ObjectAdapter resultAdapter = performCommand.getResult();
+        if (resultAdapter == null) {
+            throw StoryBoundValueException.current(onMemberBinding, "(no result)");
+        }
+        getAliasRegistry().aliasAs(aliasAs, resultAdapter);
+    }
 
-	public StoryCell getMemberElseOnObjectCell() {
-		StoryCell storyCell = getOnMemberBinding().getCurrentCell();
-		if (storyCell == null) {
-			storyCell = getOnObjectBinding().getCurrentCell();
-		}
-		return storyCell;
-	}
+    // //////////////////////////////////////////////////////////////////
+    //
+    // //////////////////////////////////////////////////////////////////
 
-	public void performCommand(Perform performCommand, ObjectAdapter onAdapter,
-			ObjectMember nakedObjectMember,
-			List<StoryCell> argumentStoryCells, 
-			String aliasAs)
-			throws StoryBoundValueException {
-		PerformContext performContext = new PerformContext(this, onAdapter,
-				nakedObjectMember, argumentStoryCells);
-		try {
-			performCommand.perform(performContext);
-		} catch (final RuntimeException ex) {
-			// handler should have colored in invalid cells.
-		}
-		aliasResultFromPerformCommand(performCommand, aliasAs);
-	}
+    private String previousOnObject = null;
 
-	public ObjectAdapter getAdapter(final ObjectAdapter contextAdapter,
-			final ObjectSpecification noSpec, final CellBinding contextBinding, final StoryCell paramCell)
-			throws StoryBoundValueException {
+    /**
+     * Not public API
+     */
+    public void provideDefault(StoryCell storySource, String resultStr) {
+        // TODO Auto-generated method stub
+        throw new NotYetImplementedException();
+    }
 
-		final String cellText = paramCell.getText();
+    /**
+     * Not public API
+     */
+    public ObjectAdapter getAdapter(final ObjectAdapter contextAdapter, final ObjectSpecification noSpec,
+        final CellBinding contextBinding, final StoryCell paramCell) throws StoryBoundValueException {
 
-		// see if can handle as parseable value
-		final ParseableFacet parseableFacet = noSpec
-				.getFacet(ParseableFacet.class);
-		if (parseableFacet != null) {
-			try {
-				return parseableFacet.parseTextEntry(contextAdapter, cellText);
-			} catch (final IllegalArgumentException ex) {
-				throw StoryBoundValueException.arg(contextBinding, paramCell, "(cannot parse)");
-			}
-		}
+        final String cellText = paramCell.getText();
 
-		// otherwise, handle as reference to known object
-		final ObjectAdapter adapter = getAliasRegistry().getAliased(cellText);
-		if (adapter == null) {
-			throw StoryBoundValueException.arg(contextBinding, paramCell, "(unknown reference)");
-		}
+        // see if can handle as parseable value
+        final ParseableFacet parseableFacet = noSpec.getFacet(ParseableFacet.class);
+        if (parseableFacet != null) {
+            try {
+                return parseableFacet.parseTextEntry(contextAdapter, cellText);
+            } catch (final IllegalArgumentException ex) {
+                throw StoryBoundValueException.arg(contextBinding, paramCell, "(cannot parse)");
+            }
+        }
 
-		return adapter;
-	}
+        // otherwise, handle as reference to known object
+        final ObjectAdapter adapter = getAliasRegistry().getAliased(cellText);
+        if (adapter == null) {
+            throw StoryBoundValueException.arg(contextBinding, paramCell, "(unknown reference)");
+        }
 
-	/**
-	 * Ensures that there are at least enough arguments for the number of parameters required.
-	 */
-	public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter,
-			final ObjectAction nakedObjectAction,
-			CellBinding onMemberBinding, final List<StoryCell> argumentCells) throws StoryBoundValueException {
-		final ObjectActionParameter[] parameters = nakedObjectAction
-				.getParameters();
-		
-		int parameterCount = parameters.length;
-		if (argumentCells.size() < parameterCount) {
-			throw StoryBoundValueException.current(onMemberBinding, 
-					"(action requires " + parameterCount + " arguments)");
-		}
-		final ObjectAdapter[] adapters = new ObjectAdapter[parameterCount];
+        return adapter;
+    }
 
+    /**
+     * Not public API
+     * 
+     * <p>
+     * Ensures that there are at least enough arguments for the number of parameters required.
+     */
+    public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter, final ObjectAction nakedObjectAction,
+        CellBinding onMemberBinding, final List<StoryCell> argumentCells) throws StoryBoundValueException {
+        final ObjectActionParameter[] parameters = nakedObjectAction.getParameters();
 
-		for (int i = 0; i < parameterCount; i++) {
-			final StoryCell paramCell = argumentCells.get(i);
-			final ObjectActionParameter parameter = parameters[i];
-			adapters[i] = getAdapter(null, parameter.getSpecification(),
-					onMemberBinding, paramCell);
-		}
-		return adapters;
-	}
+        int parameterCount = parameters.length;
+        if (argumentCells.size() < parameterCount) {
+            throw StoryBoundValueException.current(onMemberBinding, "(action requires " + parameterCount
+                + " arguments)");
+        }
+        final ObjectAdapter[] adapters = new ObjectAdapter[parameterCount];
 
-	public ObjectAdapter toAdaptedListOfPojos(final ObjectAdapter[] choiceAdapters) {
-		final List<Object> choiceList = new ArrayList<Object>();
-		if (choiceAdapters != null) {
-			for (final ObjectAdapter adapter : choiceAdapters) {
-				choiceList.add(adapter.getObject());
-			}
-		}
-		return getAdapterManager().adapterFor(choiceList);
-	}
+        for (int i = 0; i < parameterCount; i++) {
+            final StoryCell paramCell = argumentCells.get(i);
+            final ObjectActionParameter parameter = parameters[i];
+            adapters[i] = getAdapter(null, parameter.getSpecification(), onMemberBinding, paramCell);
+        }
+        return adapters;
+    }
+
+    /**
+     * Not public API
+     */
+    public ObjectAdapter toAdaptedListOfPojos(final ObjectAdapter[] choiceAdapters) {
+        final List<Object> choiceList = new ArrayList<Object>();
+        if (choiceAdapters != null) {
+            for (final ObjectAdapter adapter : choiceAdapters) {
+                choiceList.add(adapter.getObject());
+            }
+        }
+        return getAdapterManager().adapterFor(choiceList);
+    }
 
 }

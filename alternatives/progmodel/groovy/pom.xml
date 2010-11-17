@@ -31,8 +31,8 @@
 	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
 	<modules>
-		<module>gapplib</module>
-		<module>gmetamodel</module>
+		<module>applib</module>
+		<module>metamodel</module>
 	</modules>
 
 	<build>

@@ -154,8 +154,17 @@
           methods so the matching is done simply by parameter position to
           these method).</para>
 
-          <para>The library provides a default implementation, though
-          subclasses can override if required.</para>
+          <para>***</para>
+
+          <para></para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>The library provides a default implementation of
+          <classname>CellBinding</classname>, though subclasses can override
+          if required.</para>
         </listitem>
       </itemizedlist>
 
@@ -1575,7 +1584,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
                 </row>
 
                 <row>
-                  <entry><emphasis>sobject alias</emphasis></entry>
+                  <entry><emphasis>object alias</emphasis></entry>
 
                   <entry><emphasis>alias for list of
                   choices</emphasis></entry>
@@ -2001,11 +2010,61 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
               here. While it is tempting to refactor the common library to use
               type safe enums, this would move the need to translate story
               text into each and every <acronym>BDD</acronym> framework
-              integration. The API is probably correct as it is, even though
-              it is reliant on the exact string phrases that appear in the
-              tables above.</para>
+              integration. The <acronym>API</acronym> is probably correct as
+              it is, even though it is reliant on the exact string phrases
+              that appear in the tables above.</para>
             </listitem>
           </itemizedlist>
+
+          <para>To actually perform, these interaction, the set</para>
+
+          <para></para>
+
+          <para>*** discuss captureCurrent()</para>
+
+          <para></para>
+
+          <para>the <classname>UsingIsisViewerPeer</classname> provides the
+          following methods:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>#validateOnObject():
+              ObjectAdapter</methodname></para>
+
+              <para></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#validateAliasAs(): String</methodname></para>
+
+              <para></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#validateOnMember():
+              ObjectMember</methodname></para>
+
+              <para></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#validatePerform():
+              Perform</methodname></para>
+
+              <para></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>#performCommand(ObjectAdapter onObject, String
+              aliasAs, ObjectMember onMember, Perform perform,
+              List&lt;StoryCell&gt; args)</methodname></para>
+
+              <para></para>
+            </listitem>
+          </itemizedlist>
+
+          <para></para>
         </sect3>
 
         <sect3>
@@ -2049,7 +2108,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
             </listitem>
 
             <listitem>
-              <para><methodname>usingIsisViewerThatArgs(String onObject,
+              <para><methodname>#usingIsisViewerThatArgs(String onObject,
               String aliasResultAs, String perform, String usingMember, String
               arg0, String arg1, ...)</methodname></para>
 
@@ -2060,13 +2119,16 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
               <para>There are multiple overloaded versions of this method
               taking from 1 to 5 arguments.</para>
             </listitem>
-
-            <listitem>
-              <para></para>
-            </listitem>
           </itemizedlist>
 
-          <para></para>
+          <para>If there is a requirement for more than 5 arguments, then you
+          can write your own method and delegate to the (protected visibility)
+          <methodname>#usingIsisViewerThatArgsVarargs(...)</methodname>
+          method.</para>
+
+          <para>In all cases these methods return the string "ok", or return
+          the text of an exception otherwise. This makes them easy to
+          embed</para>
 
           <para>Returns ok</para>
 
@@ -2210,162 +2272,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         </sect3>
       </sect2>
 
-      <sect2>
-        <title>Check List</title>
-
-        <para></para>
-
-        <para></para>
-
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-      </sect2>
-
-      <sect2>
-        <title>Alias Items In List</title>
-
-        <para></para>
-
-        <para></para>
-
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-      </sect2>
-
-      <sect2 id="sec.UsingIsisViewer">
-        <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
-
-        <para>Simulates interacting with domain objects as if through a
-        viewer. Interact with objects, check their state, alias referenced or
-        returned objects.</para>
-
-        <para>The "ForSetup" version disables checks for visibility and
-        usability, making it easier to reuse functionality for setting up
-        objects prior to a test scenario (the "given"). The DebugObjectStore
-        fixture (<xref linkend="sec.DebugObjectStore" />) can be used to check
-        the state of objects created.</para>
-
-        <screenshot>
-          <screeninfo>UsingNakedObjectsViewer</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/UsingNakedObjectsViewer.png"
-                         scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>Example usage:</para>
-
-        <screenshot>
-          <screeninfo>ExampleUsage</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/UsingNakedObjectsViewer.ExampleUsage.png"
-                         scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>On properties:</para>
-
-        <screenshot>
-          <screeninfo>On Properties</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnProperties.png"
-                         scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>On collections:</para>
-
-        <screenshot>
-          <screeninfo>On Collections</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnCollections.png"
-                         scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>On actions:</para>
-
-        <screenshot>
-          <screeninfo>On Actions</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnActions.png"
-                         scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-
-        <para>On objects:</para>
-
-        <screenshot>
-          <screeninfo>On Objects</screeninfo>
-
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/UsingNakedObjectsViewer.PerformOnObjects.png"
-                         scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
-      </sect2>
-
       <sect2 id="sec.CheckList">
-        <title>CheckList</title>
+        <title>Check List</title>
 
         <para>Check items in list, either precisely or just for presence,
         using their title. Lists are either aliased results of actions, or
@@ -2379,19 +2287,35 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         check (will fail if the objects are not in the list) and aliases them
         for further use.</para>
 
-        <screenshot>
-          <screeninfo>CheckList</screeninfo>
+        <para></para>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/CheckList.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
       </sect2>
 
       <sect2 id="sec.AliasItemsInList">
-        <title>AliasItemsInList</title>
+        <title>Alias Items In List</title>
 
         <para>Allows an alias to be associated with items in a list. The list
         items are located by their title, and are presumed to exist. This
@@ -2402,15 +2326,33 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <para>Typically used both in the "Given" (to simplify writing the rest
         of a test).</para>
 
-        <screenshot>
-          <screeninfo>AliasItemsInList</screeninfo>
+        <para></para>
 
-          <mediaobject>
-            <imageobject>
-              <imagedata fileref="images/AliasItemsInList.png" scale="40" />
-            </imageobject>
-          </mediaobject>
-        </screenshot>
+        <para></para>
+
+        <sect3>
+          <title>Common</title>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>Concordion</title>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
+
+        <sect3>
+          <title>FitNesse</title>
+
+          <para></para>
+
+          <para></para>
+        </sect3>
       </sect2>
     </sect1>
 
