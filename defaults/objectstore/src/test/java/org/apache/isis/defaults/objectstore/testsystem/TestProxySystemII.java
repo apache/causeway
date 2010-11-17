@@ -23,10 +23,6 @@ package org.apache.isis.defaults.objectstore.testsystem;
 import java.util.Collections;
 import java.util.List;
 
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.jmock.lib.legacy.ClassImposteriser;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -43,6 +39,10 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 
 /*
  * TODO allow to be created with specific requirements for components being set up rather than using mocks.

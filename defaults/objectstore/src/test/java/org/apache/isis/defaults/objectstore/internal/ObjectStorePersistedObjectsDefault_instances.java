@@ -23,6 +23,7 @@ package org.apache.isis.defaults.objectstore.internal;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -30,9 +31,6 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.defaults.objectstore.internal.ObjectStoreInstances;
-import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjectsDefault;
 
 @RunWith(JMock.class)
 public class ObjectStorePersistedObjectsDefault_instances {

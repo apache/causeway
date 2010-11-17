@@ -27,7 +27,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommand;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.defaults.objectstore.InMemoryObjectStore;
 
 
 public class InMemoryObjectStore_debug extends ProxyJunit3TestCase {

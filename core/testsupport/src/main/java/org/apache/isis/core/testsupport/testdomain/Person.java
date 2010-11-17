@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.runtime.testdomain;
+package org.apache.isis.core.testsupport.testdomain;
 
 import java.util.Date;
 

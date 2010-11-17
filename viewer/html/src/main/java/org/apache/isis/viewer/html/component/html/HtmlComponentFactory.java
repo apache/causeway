@@ -41,7 +41,7 @@ import org.apache.isis.viewer.html.component.Form;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.Table;
 
-import static org.apache.isis.viewer.html.viewer.HtmlViewerConstants.*;
+import static org.apache.isis.viewer.html.HtmlViewerConstants.*;
 
 
 public class HtmlComponentFactory implements ComponentFactory {

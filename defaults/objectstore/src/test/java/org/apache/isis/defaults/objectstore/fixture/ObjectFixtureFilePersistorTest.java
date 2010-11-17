@@ -37,8 +37,8 @@ import junit.framework.Assert;
 
 import org.apache.isis.core.runtime.fixture.ObjectFixtureFilePersistor;
 import org.apache.isis.core.runtime.fixturesinstaller.FixtureException;
-import org.apache.isis.core.runtime.testdomain.Movie;
-import org.apache.isis.core.runtime.testdomain.Person;
+import org.apache.isis.core.testsupport.testdomain.Movie;
+import org.apache.isis.core.testsupport.testdomain.Person;
 import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -50,6 +50,7 @@ import org.junit.Test;
  */
 public class ObjectFixtureFilePersistorTest {
 
+    private static final String PACKAGE_BASE = "org.apache.isis.core.testsupport";
     private ObjectFixtureFilePersistor persistor;
     private TestProxySystemII system;
     private Person person;
@@ -73,8 +74,7 @@ public class ObjectFixtureFilePersistorTest {
     @Test
     public void loadInstance() throws Exception {
         StringReader reader =
-            new StringReader(
-                "org.apache.isis.runtime.testdomain.Person#1\n  name: Fred Smith\n  date: 08-Mar-2010 00:00");
+            new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  name: Fred Smith\n  date: 08-Mar-2010 00:00");
         Set<Object> objects = persistor.loadData(reader);
 
         Assert.assertEquals(1, objects.size());
@@ -87,7 +87,7 @@ public class ObjectFixtureFilePersistorTest {
     @Test
     public void invalidFieldLine() throws Exception {
         try {
-            StringReader reader = new StringReader("org.apache.isis.runtime.testdomain.Person#1\n  name Fred Smith");
+            StringReader reader = new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  name Fred Smith");
             persistor.loadData(reader);
             Assert.fail();
         } catch (FixtureException e) {
@@ -98,7 +98,7 @@ public class ObjectFixtureFilePersistorTest {
 
     @Test
     public void oldFieldNameSkipped() throws Exception {
-        StringReader reader = new StringReader("org.apache.isis.runtime.testdomain.Person#1\n  xname: Fred Smith");
+        StringReader reader = new StringReader(PACKAGE_BASE + ".testdomain.Person#1\n  xname: Fred Smith");
         Set<Object> objects = persistor.loadData(reader);
         Object object = objects.toArray()[0];
         Assert.assertNull(((Person) object).getName());
@@ -121,9 +121,8 @@ public class ObjectFixtureFilePersistorTest {
 
         StringWriter out = new StringWriter();
         persistor.save(objects, out);
-        String string1 = "org.apache.isis.runtime.testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
-        String string2 =
-            "org.apache.isis.runtime.testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
+        String string1 = PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
+        String string2 = PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
         // *nix vs Windows?
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
             Assert.assertEquals(string1, out.toString());
@@ -155,9 +154,11 @@ public class ObjectFixtureFilePersistorTest {
 
         // *nix vs Windows?
         String string1 =
-            "org.apache.isis.runtime.testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\norg.apache.isis.runtime.testdomain.Person#3\n  date: \n  name: \n";
+            PACKAGE_BASE + ".testdomain.Person#2\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n" + PACKAGE_BASE
+                + ".testdomain.Person#3\n  date: \n  name: \n";
         String string2 =
-            "org.apache.isis.runtime.testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\norg.apache.isis.runtime.testdomain.Person#3\r\n  date: \r\n  name: \r\n";
+            PACKAGE_BASE + ".testdomain.Person#2\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n" + PACKAGE_BASE
+                + ".testdomain.Person#3\r\n  date: \r\n  name: \r\n";
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
             Assert.assertEquals(string1, out.toString());
         }
@@ -187,11 +188,13 @@ public class ObjectFixtureFilePersistorTest {
         StringWriter out = new StringWriter();
         persistor.save(objects, out);
         String string1 =
-            "org.apache.isis.runtime.testdomain.Movie#2\n  director: org.apache.isis.runtime.testdomain.Person#3\n  name: The Blockbuster\n  roles: \n"
-                + "org.apache.isis.runtime.testdomain.Person#3\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
+            PACKAGE_BASE + ".testdomain.Movie#2\n  director: " + PACKAGE_BASE
+                + ".testdomain.Person#3\n  name: The Blockbuster\n  roles: \n" + PACKAGE_BASE
+                + ".testdomain.Person#3\n  date: 08-Mar-2010 00:00\n  name: Fred Smith\n";
         String string2 =
-            "org.apache.isis.runtime.testdomain.Movie#2\r\n  director: org.apache.isis.runtime.testdomain.Person#3\r\n  name: The Blockbuster\r\n  roles: \r\n"
-                + "org.apache.isis.runtime.testdomain.Person#3\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
+            PACKAGE_BASE + ".testdomain.Movie#2\r\n  director: " + PACKAGE_BASE
+                + ".testdomain.Person#3\r\n  name: The Blockbuster\r\n  roles: \r\n" + PACKAGE_BASE
+                + ".testdomain.Person#3\r\n  date: 08-Mar-2010 00:00\r\n  name: Fred Smith\r\n";
         if ((out.toString().compareTo(string1) != 0) && (out.toString().compareTo(string2) != 0)) {
             Assert.assertEquals(string1, out.toString());
         }

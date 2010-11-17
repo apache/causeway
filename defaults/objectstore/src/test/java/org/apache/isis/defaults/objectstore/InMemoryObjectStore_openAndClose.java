@@ -20,23 +20,19 @@
 
 package org.apache.isis.defaults.objectstore;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.*;
 
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.runtime.persistence.PersistenceSession;
-import org.apache.isis.defaults.objectstore.InMemoryObjectStore;
-import org.apache.isis.defaults.objectstore.InMemoryPersistenceSessionFactory;
-import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects;
 
 
 /**

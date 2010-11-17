@@ -24,14 +24,13 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjectsDefault;
 
 @RunWith(JMock.class)
 public class ObjectStorePersistedObjectsDefault_services {

@@ -67,14 +67,14 @@ import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSessi
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactory;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
-import org.apache.isis.core.runtime.testdomain.Movie;
-import org.apache.isis.core.runtime.testdomain.Person;
 import org.apache.isis.core.runtime.testspec.MovieSpecification;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.core.runtime.testsystem.TestProxyOid;
 import org.apache.isis.core.runtime.testsystem.TestProxyOidGenerator;
 import org.apache.isis.core.runtime.testsystem.TestProxyVersion;
+import org.apache.isis.core.testsupport.testdomain.Movie;
+import org.apache.isis.core.testsupport.testdomain.Person;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;

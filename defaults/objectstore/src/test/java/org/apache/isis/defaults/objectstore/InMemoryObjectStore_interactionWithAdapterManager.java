@@ -25,7 +25,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindAllInstances;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
-import org.apache.isis.defaults.objectstore.InMemoryObjectStore;
 
 
 public class InMemoryObjectStore_interactionWithAdapterManager extends ProxyJunit3TestCase {

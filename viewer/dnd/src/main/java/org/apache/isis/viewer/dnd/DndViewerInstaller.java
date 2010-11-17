@@ -18,26 +18,22 @@
  */
 
 
-package org.apache.isis.defaults.objectstore;
+package org.apache.isis.viewer.dnd;
 
-import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.core.runtime.viewer.IsisViewer;
+import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
 
 
-public class InMemoryObjectStore_init extends ProxyJunit3TestCase {
-    private InMemoryObjectStore store;
+public class DndViewerInstaller extends IsisViewerInstallerAbstract {
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        store = new InMemoryObjectStore();
-        store.open();
+	public DndViewerInstaller() {
+		super("dnd");
+	}
+
+	@Override
+	public IsisViewer doCreateViewer() {
+        return new DndViewer();
     }
-
-
-    public void testStartsUpInUnitializedSate() throws Exception {
-        assertFalse(store.isFixturesInstalled());
-    }
-
 
 
 }

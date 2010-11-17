@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.viewer.html.viewer;
+package org.apache.isis.viewer.html;
 
 import org.apache.isis.core.commons.lang.MapUtils;
 import org.apache.isis.core.runtime.Isis;

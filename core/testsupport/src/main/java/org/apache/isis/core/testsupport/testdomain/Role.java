@@ -18,23 +18,29 @@
  */
 
 
-package org.apache.isis.viewer.dnd.bootstrap;
+package org.apache.isis.core.testsupport.testdomain;
 
-import org.apache.isis.core.runtime.viewer.IsisViewer;
-import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
+public class Role {
+    private Person actor;
+    private String name;
 
-
-public class DndViewerInstaller extends IsisViewerInstallerAbstract {
-
-	public DndViewerInstaller() {
-		super("dnd");
-	}
-
-	@Override
-	public IsisViewer doCreateViewer() {
-        return new DndViewer();
+    public Person getActor() {
+        return actor;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public void setActor(final Person actor) {
+        this.actor = actor;
+    }
+
+    public void setName(final String name) {
+        this.name = name;
+    }
+
+    public String title() {
+        return name;
+    }
 }
-

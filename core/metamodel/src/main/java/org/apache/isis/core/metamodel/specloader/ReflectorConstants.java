@@ -38,7 +38,7 @@ public final class ReflectorConstants {
     public static final String CLASS_SUBSTITUTOR_CLASS_NAME_LIST = ConfigurationConstants.ROOT
         + "reflector.class-substitutor";
     public static final String CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT =
-        "org.apache.isis.bytecode.cglib.specloader.classsubstitutor.CglibClassSubstitutor";
+        "org.apache.isis.defaults.bytecode.classsubstitutor.CglibClassSubstitutor";
 
     /**
      * Key used to lookup implementation of {@link SpecificationTraverser} in {@link IsisConfiguration}.

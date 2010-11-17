@@ -26,15 +26,14 @@ import static org.junit.Assert.assertThat;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.defaults.objectstore.internal.ObjectStoreInstances;
 
 /**
  * Tested in style of <i>Working Effectively with Legacy Code</i> (Feathers) 

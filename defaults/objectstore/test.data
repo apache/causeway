@@ -1,4 +1,4 @@
-org.apache.isis.runtime.testdomain.Person#1
+org.apache.isis.core.testsupport.testdomain.Person#1
   name: Fred Smith
   # ignores: data
   date: 08-Mar-2010 13:32

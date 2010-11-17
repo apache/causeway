@@ -32,9 +32,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.testdomain.Movie;
-import org.apache.isis.core.runtime.testdomain.Person;
 import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
+import org.apache.isis.core.testsupport.testdomain.Movie;
+import org.apache.isis.core.testsupport.testdomain.Person;
 
 
 

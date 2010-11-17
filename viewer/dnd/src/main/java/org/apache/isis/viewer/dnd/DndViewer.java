@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.viewer.dnd.bootstrap;
+package org.apache.isis.viewer.dnd;
 
 import java.awt.Dimension;
 import java.util.StringTokenizer;
