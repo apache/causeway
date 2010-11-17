@@ -25,7 +25,6 @@ import java.util.Iterator;
 import junit.framework.TestCase;
 
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.DefaultClock;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.ObjectData;
 import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;

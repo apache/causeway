@@ -25,10 +25,10 @@ import static org.junit.Assert.assertTrue;
 
 import org.apache.isis.alternatives.remoting.common.data.Data;
 import org.apache.isis.alternatives.remoting.common.data.common.NullData;
-import org.apache.isis.alternatives.remoting.common.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.alternatives.remoting.data.DummyEncodeableObjectData;
 import org.apache.isis.alternatives.remoting.data.DummyNullValue;
 import org.apache.isis.alternatives.remoting.data.DummyObjectData;
+import org.apache.isis.alternatives.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.facets.Facet;

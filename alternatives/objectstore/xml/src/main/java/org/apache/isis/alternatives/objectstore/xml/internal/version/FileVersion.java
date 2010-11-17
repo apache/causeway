@@ -25,12 +25,10 @@ import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.Clock;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.adapter.version.VersionUserAndTimeAbstract;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.encoding.Encodable;
 

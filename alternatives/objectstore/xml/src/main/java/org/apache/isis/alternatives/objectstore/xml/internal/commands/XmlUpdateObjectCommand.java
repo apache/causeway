@@ -20,7 +20,6 @@
 
 package org.apache.isis.alternatives.objectstore.xml.internal.commands;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.objectstore.xml.internal.data.Data;
 import org.apache.isis.alternatives.objectstore.xml.internal.data.DataManager;
 import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
@@ -28,6 +27,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.PersistenceCommandContext;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
+import org.apache.log4j.Logger;
 
 public final class XmlUpdateObjectCommand 
 		extends AbstractXmlPersistenceCommand 

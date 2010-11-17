@@ -21,14 +21,12 @@
 package org.apache.isis.alternatives.remoting.common.data.common;
 
 import java.io.IOException;
-import java.io.Serializable;
 
 import org.apache.isis.alternatives.remoting.common.data.Data;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.encoding.Encodable;
 

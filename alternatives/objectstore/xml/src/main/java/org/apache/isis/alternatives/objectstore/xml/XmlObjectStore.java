@@ -23,7 +23,6 @@ package org.apache.isis.alternatives.objectstore.xml;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.Clock;
 import org.apache.isis.alternatives.objectstore.xml.internal.commands.XmlCreateObjectCommand;
 import org.apache.isis.alternatives.objectstore.xml.internal.commands.XmlDestroyObjectCommand;
@@ -68,6 +67,7 @@ import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
+import org.apache.log4j.Logger;
 
 
 public class XmlObjectStore implements ObjectStore {

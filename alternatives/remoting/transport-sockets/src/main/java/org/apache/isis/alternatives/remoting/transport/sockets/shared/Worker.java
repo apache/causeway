@@ -21,22 +21,12 @@
 package org.apache.isis.alternatives.remoting.transport.sockets.shared;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.net.SocketException;
 
-import org.apache.log4j.Logger;
-import org.apache.isis.alternatives.remoting.exchange.OpenSessionRequest;
-import org.apache.isis.alternatives.remoting.exchange.Request;
-import org.apache.isis.alternatives.remoting.exchange.ResponseEnvelope;
 import org.apache.isis.alternatives.remoting.server.ServerConnection;
 import org.apache.isis.alternatives.remoting.transport.ServerConnectionHandler;
-import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.system.internal.monitor.Monitor;
+import org.apache.log4j.Logger;
 
 public class Worker implements Runnable {
     private static final Logger LOG = Logger.getLogger(Worker.class);

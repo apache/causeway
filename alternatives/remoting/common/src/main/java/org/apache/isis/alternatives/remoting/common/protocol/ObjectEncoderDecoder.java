@@ -30,7 +30,6 @@ import org.apache.isis.alternatives.remoting.common.exchange.AuthorizationRespon
 import org.apache.isis.alternatives.remoting.common.exchange.ExecuteClientActionResponse;
 import org.apache.isis.alternatives.remoting.common.exchange.ExecuteServerActionResponse;
 import org.apache.isis.alternatives.remoting.common.exchange.KnownObjectsRequest;
-import org.apache.isis.alternatives.remoting.common.exchange.OpenSessionRequest;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

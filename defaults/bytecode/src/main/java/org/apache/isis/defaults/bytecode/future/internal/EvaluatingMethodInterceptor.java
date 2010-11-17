@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.defaults.bytecode.future.internal;
 
 import java.lang.reflect.Method;
@@ -27,21 +26,20 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import org.apache.isis.core.commons.futures.FutureResultFactory;
 
-final class EvaluatingMethodInterceptor<T> implements
-		MethodInterceptor {
-	
-	private final FutureResultFactory<T> resultFactory;
-	private T result;
-	
-	public EvaluatingMethodInterceptor(FutureResultFactory<T> resultFactory) {
-		this.resultFactory = resultFactory;
-	}
+public final class EvaluatingMethodInterceptor<T> implements MethodInterceptor {
 
-	public synchronized Object intercept(Object obj, Method method, Object[] args,
-			MethodProxy proxy) throws Throwable {
-		if (result == null) {
-			result = resultFactory.getResult();
-		}
-		return method.invoke(result, args);
-	}
+    private final FutureResultFactory<T> resultFactory;
+    private T result;
+
+    public EvaluatingMethodInterceptor(FutureResultFactory<T> resultFactory) {
+        this.resultFactory = resultFactory;
+    }
+
+    @Override
+    public synchronized Object intercept(Object obj, Method method, Object[] args, MethodProxy proxy) throws Throwable {
+        if (result == null) {
+            result = resultFactory.getResult();
+        }
+        return method.invoke(result, args);
+    }
 }

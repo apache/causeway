@@ -26,7 +26,7 @@ import java.io.StringWriter;
 import org.apache.isis.alternatives.remoting.common.exchange.OpenSessionRequest;
 import org.apache.isis.alternatives.remoting.common.exchange.Request;
 import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
-import org.apache.isis.alternatives.remoting.common.server.ServerConnection;
+import org.apache.isis.alternatives.remoting.server.ServerConnection;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;

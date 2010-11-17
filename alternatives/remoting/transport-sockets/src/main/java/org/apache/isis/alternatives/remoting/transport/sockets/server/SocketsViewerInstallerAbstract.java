@@ -17,27 +17,25 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.remoting.transport.sockets.server;
 
+import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.alternatives.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.core.runtime.viewer.IsisViewer;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstallerAbstract;
-import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
 
 public abstract class SocketsViewerInstallerAbstract extends IsisViewerInstallerAbstract {
 
-	public SocketsViewerInstallerAbstract(String name) {
-		super(name);
-	}
+    public SocketsViewerInstallerAbstract(String name) {
+        super(name);
+    }
 
-	@Override
+    @Override
     public IsisViewer doCreateViewer() {
-        ObjectEncoderDecoderDefault encoder = 
-        	ObjectEncoderDecoderDefault.create(getConfiguration());
+        ObjectEncoderDecoderDefault encoder = ObjectEncoderDecoderDefault.create(getConfiguration());
         return createSocketsViewer(encoder);
     }
-	
+
     protected abstract IsisViewer createSocketsViewer(ObjectEncoderDecoder objectEncoderDecoder);
 
 }

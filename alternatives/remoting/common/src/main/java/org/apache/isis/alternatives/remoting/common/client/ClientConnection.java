@@ -23,7 +23,7 @@ package org.apache.isis.alternatives.remoting.common.client;
 import org.apache.isis.alternatives.remoting.common.exchange.Request;
 import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.alternatives.remoting.common.marshalling.ClientMarshaller;
-import org.apache.isis.alternatives.remoting.common.server.ServerConnection;
+import org.apache.isis.alternatives.remoting.server.ServerConnection;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 /**

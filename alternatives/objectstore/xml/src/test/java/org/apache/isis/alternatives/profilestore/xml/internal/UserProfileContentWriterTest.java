@@ -20,17 +20,16 @@
 
 package org.apache.isis.alternatives.profilestore.xml.internal;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.IOException;
 import java.io.StringWriter;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.apache.isis.alternatives.profilestore.xml.internal.UserProfileContentWriter;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
-
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
 
 
 public class UserProfileContentWriterTest {

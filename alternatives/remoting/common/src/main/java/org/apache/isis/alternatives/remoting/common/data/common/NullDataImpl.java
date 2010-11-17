@@ -25,7 +25,6 @@ import java.io.Serializable;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.encoding.Encodable;
 

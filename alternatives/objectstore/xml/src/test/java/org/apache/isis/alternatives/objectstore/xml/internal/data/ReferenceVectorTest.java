@@ -23,10 +23,9 @@ package org.apache.isis.alternatives.objectstore.xml.internal.data;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.ReferenceVector;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 
 public class ReferenceVectorTest {
 	private ReferenceVector referenceVector;

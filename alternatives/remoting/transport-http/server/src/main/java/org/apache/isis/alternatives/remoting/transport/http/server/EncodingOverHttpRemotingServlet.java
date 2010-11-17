@@ -29,12 +29,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.isis.alternatives.remoting.common.facade.impl.ServerFacadeImpl;
-import org.apache.isis.alternatives.remoting.common.protocol.internal.ObjectEncoderDecoderDefault;
-import org.apache.isis.alternatives.remoting.common.server.ServerConnection;
-import org.apache.isis.alternatives.remoting.common.server.ServerConnectionDefault;
-import org.apache.isis.alternatives.remoting.common.transport.ServerConnectionHandler;
-import org.apache.isis.alternatives.remoting.common.transport.simple.SimpleTransport;
 import org.apache.isis.alternatives.remoting.marshalling.encode.EncodingMarshaller;
+import org.apache.isis.alternatives.remoting.protocol.internal.ObjectEncoderDecoderDefault;
+import org.apache.isis.alternatives.remoting.server.ServerConnection;
+import org.apache.isis.alternatives.remoting.server.ServerConnectionDefault;
+import org.apache.isis.alternatives.remoting.transport.ServerConnectionHandler;
+import org.apache.isis.alternatives.remoting.transport.simple.SimpleTransport;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.webapp.IsisWebAppBootstrapper;

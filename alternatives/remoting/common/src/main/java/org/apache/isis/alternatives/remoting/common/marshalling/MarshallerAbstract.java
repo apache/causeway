@@ -17,91 +17,88 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.remoting.common.marshalling;
 
 import java.io.IOException;
 
-import org.apache.log4j.Logger;
-import org.apache.isis.alternatives.remoting.common.transport.Transport;
+import org.apache.isis.alternatives.remoting.transport.Transport;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-
+import org.apache.log4j.Logger;
 
 public abstract class MarshallerAbstract implements ClientMarshaller, ServerMarshaller {
 
-	private static final Logger LOG = Logger.getLogger(MarshallerAbstract.class);
+    private static final Logger LOG = Logger.getLogger(MarshallerAbstract.class);
 
-	private final IsisConfiguration configuration;
-	private final Transport transport;
-	
-	private boolean keepAlive;
+    private final IsisConfiguration configuration;
+    private final Transport transport;
 
-    
-    public MarshallerAbstract(
-    		final IsisConfiguration configuration, final Transport transport) {
-		this.configuration = configuration;
-		this.transport = transport;
-	}
+    private boolean keepAlive;
 
-    //////////////////////////////////////////////////////////
+    public MarshallerAbstract(final IsisConfiguration configuration, final Transport transport) {
+        this.configuration = configuration;
+        this.transport = transport;
+    }
+
+    // ////////////////////////////////////////////////////////
     // init, shutdown
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
-    	transport.init();
-        keepAlive = getConfiguration().getBoolean(MarshallingConstants.KEEPALIVE_KEY, MarshallingConstants.KEEPALIVE_DEFAULT);
+        transport.init();
+        keepAlive =
+            getConfiguration().getBoolean(MarshallingConstants.KEEPALIVE_KEY, MarshallingConstants.KEEPALIVE_DEFAULT);
         if (LOG.isInfoEnabled()) {
-        	LOG.info("keepAlive=" + keepAlive);
+            LOG.info("keepAlive=" + keepAlive);
         }
     }
 
-	public void shutdown() {
-    	transport.disconnect();
-    	transport.shutdown();
-	}
+    @Override
+    public void shutdown() {
+        transport.disconnect();
+        transport.shutdown();
+    }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // Settings
-    //////////////////////////////////////////////////////////
-	
-	public boolean isKeepAlive() {
-		return keepAlive;
-	}
+    // ////////////////////////////////////////////////////////
 
-	
-    //////////////////////////////////////////////////////////
+    public boolean isKeepAlive() {
+        return keepAlive;
+    }
+
+    // ////////////////////////////////////////////////////////
     // connect
-    //////////////////////////////////////////////////////////
-	
-	public void connect() throws IOException {
-		transport.connect();
-	}
-	
-	public void disconnect() {
-		transport.disconnect();
-	}
-	
-	/**
-	 * Not API.  Whether reconnects are performed depends on the
-	 * marshaller/protocol.
-	 */
+    // ////////////////////////////////////////////////////////
+
+    @Override
+    public void connect() throws IOException {
+        transport.connect();
+    }
+
+    @Override
+    public void disconnect() {
+        transport.disconnect();
+    }
+
+    /**
+     * Not API. Whether reconnects are performed depends on the marshaller/protocol.
+     */
     protected void reconnect() throws IOException {
         disconnect();
         connect();
     }
 
-
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
     // Dependencies (from constructor)
-    //////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////
 
-	public IsisConfiguration getConfiguration() {
-		return configuration;
-	}
-    
-	public Transport getTransport() {
-		return transport;
-	}
-	
+    public IsisConfiguration getConfiguration() {
+        return configuration;
+    }
+
+    public Transport getTransport() {
+        return transport;
+    }
+
 }

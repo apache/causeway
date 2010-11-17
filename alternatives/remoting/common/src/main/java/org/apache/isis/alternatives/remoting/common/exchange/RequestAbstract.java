@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 
 

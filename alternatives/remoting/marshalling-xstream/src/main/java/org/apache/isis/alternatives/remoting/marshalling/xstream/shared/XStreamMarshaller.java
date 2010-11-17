@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.remoting.marshalling.xstream.shared;
 
 import java.io.IOException;
@@ -26,48 +25,45 @@ import java.io.ObjectOutputStream;
 import java.io.StreamCorruptedException;
 import java.net.SocketException;
 
-import org.apache.isis.alternatives.remoting.exchange.Request;
+import org.apache.isis.alternatives.remoting.common.exchange.Request;
+import org.apache.isis.alternatives.remoting.common.marshalling.MarshallerAbstract;
+import org.apache.isis.alternatives.remoting.common.protocol.IllegalRequestException;
 import org.apache.isis.alternatives.remoting.transport.ConnectionException;
 import org.apache.isis.alternatives.remoting.transport.Transport;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.remoting.marshalling.MarshallerAbstract;
-import org.apache.isis.remoting.protocol.IllegalRequestException;
 import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;
 
-
 public class XStreamMarshaller extends MarshallerAbstract {
-    
-	private static final Logger LOG = Logger.getLogger(XStreamMarshaller.class);
+
+    private static final Logger LOG = Logger.getLogger(XStreamMarshaller.class);
     private final XStream xstream = new XStream();
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
-    public XStreamMarshaller(
-    		final IsisConfiguration configuration,
-    		final Transport transport) {
-    	super(configuration, transport);
+    public XStreamMarshaller(final IsisConfiguration configuration, final Transport transport) {
+        super(configuration, transport);
     }
-    
-    
-    ////////////////////////////////////////////////////////
-    // common Marshaller impl
-    ////////////////////////////////////////////////////////
 
-	public void connect() throws IOException {
-		super.connect();
-    	
-    	this.output = new ObjectOutputStream(getTransport().getOutputStream());
+    // //////////////////////////////////////////////////////
+    // common Marshaller impl
+    // //////////////////////////////////////////////////////
+
+    @Override
+    public void connect() throws IOException {
+        super.connect();
+
+        this.output = new ObjectOutputStream(getTransport().getOutputStream());
         this.input = new ObjectInputStream(getTransport().getInputStream());
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // ServerMarshaller impl
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public Object request(final Request request) throws IOException {
         final String requestData = xstream.toXML(request);
         if (LOG.isInfoEnabled()) {
@@ -106,12 +102,11 @@ public class XStreamMarshaller extends MarshallerAbstract {
         }
     }
 
-    
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // ServerMarshaller impl
-    ////////////////////////////////////////////////////////
-    
-    
+    // //////////////////////////////////////////////////////
+
+    @Override
     public Request readRequest() throws IOException {
         try {
             final String requestData = (String) input.readObject();
@@ -125,11 +120,13 @@ public class XStreamMarshaller extends MarshallerAbstract {
         }
     }
 
+    @Override
     public void sendError(final IsisException exception) throws IOException {
         final String responseData = xstream.toXML(exception);
         sendData(responseData);
     }
 
+    @Override
     public void sendResponse(final Object response) throws IOException {
         final String responseData = xstream.toXML(response);
         sendData(responseData);
@@ -142,6 +139,5 @@ public class XStreamMarshaller extends MarshallerAbstract {
         output.writeObject(responseData);
         output.flush();
     }
-
 
 }

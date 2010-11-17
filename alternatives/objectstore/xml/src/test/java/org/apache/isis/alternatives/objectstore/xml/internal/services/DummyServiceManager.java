@@ -20,7 +20,6 @@
 
 package org.apache.isis.alternatives.objectstore.xml.internal.services;
 
-import org.apache.isis.alternatives.objectstore.xml.internal.services.ServiceManager;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 

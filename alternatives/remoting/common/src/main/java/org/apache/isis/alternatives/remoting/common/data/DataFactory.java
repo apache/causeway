@@ -26,7 +26,6 @@ import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
 import org.apache.isis.alternatives.remoting.common.data.common.NullData;
 import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
 import org.apache.isis.alternatives.remoting.common.data.common.ReferenceData;
-import org.apache.isis.alternatives.remoting.common.exchange.AuthorizationResponse;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 

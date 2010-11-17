@@ -22,14 +22,12 @@ package org.apache.isis.alternatives.objectstore.xml.internal.data;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.ObjectData;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.ObjectDataVector;
 import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.junit.Before;
+import org.junit.Test;
 
 public class ObjectDataVectorTest {
 	private ObjectDataVector objectDataVector;

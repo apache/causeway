@@ -20,7 +20,6 @@
 
 package org.apache.isis.alternatives.objectstore.xml;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.objectstore.xml.internal.adapter.XmlAdapterManager;
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.DefaultClock;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
@@ -33,6 +32,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.ObjectStorePersisten
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.core.runtime.persistence.oidgenerator.timebased.TimeBasedOidGenerator;
 import org.apache.isis.core.runtime.system.DeploymentType;
+import org.apache.log4j.Logger;
 
 
 public class XmlPersistenceMechanismInstaller extends ObjectStorePersistenceMechanismInstallerAbstract {

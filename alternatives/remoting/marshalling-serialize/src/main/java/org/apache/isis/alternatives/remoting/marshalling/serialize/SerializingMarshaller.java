@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.remoting.marshalling.serialize;
 
 import java.io.IOException;
@@ -26,47 +25,45 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.net.SocketException;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.remoting.common.exchange.Request;
 import org.apache.isis.alternatives.remoting.common.marshalling.MarshallerAbstract;
 import org.apache.isis.alternatives.remoting.common.protocol.IllegalRequestException;
-import org.apache.isis.alternatives.remoting.common.transport.ConnectionException;
-import org.apache.isis.alternatives.remoting.common.transport.Transport;
+import org.apache.isis.alternatives.remoting.transport.ConnectionException;
+import org.apache.isis.alternatives.remoting.transport.Transport;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.log4j.Logger;
 
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
-
 public class SerializingMarshaller extends MarshallerAbstract {
 
-	private static final Logger LOG = Logger.getLogger(SerializingMarshaller.class);
+    private static final Logger LOG = Logger.getLogger(SerializingMarshaller.class);
 
     private ObjectInputStream input;
     private ObjectOutputStream output;
 
-    public SerializingMarshaller(
-    		final IsisConfiguration configuration,
-    		final Transport transport) {
-    	super(configuration, transport);
+    public SerializingMarshaller(final IsisConfiguration configuration, final Transport transport) {
+        super(configuration, transport);
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // connect (client-side impl)
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
     @Override
     public void connect() throws IOException {
-    	super.connect();
+        super.connect();
 
-    	this.input = new ObjectInputStream(getTransport().getInputStream());
+        this.input = new ObjectInputStream(getTransport().getInputStream());
         this.output = new ObjectOutputStream(getTransport().getOutputStream());
     }
 
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // ServerMarshaller impl
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public Object request(final Request request) throws IOException {
         try {
             if (LOG.isDebugEnabled()) {
@@ -87,8 +84,8 @@ public class SerializingMarshaller extends MarshallerAbstract {
             return object;
             /*
              * } catch (StreamCorruptedException e) { try { int available = input.available();
-             * LOG.debug("error in reading; skipping bytes: " + available); input.skip(available); } catch
-             * (IOException e1) { e1.printStackTrace(); } throw new ConnectionException(e.getMessage(), e);
+             * LOG.debug("error in reading; skipping bytes: " + available); input.skip(available); } catch (IOException
+             * e1) { e1.printStackTrace(); } throw new ConnectionException(e.getMessage(), e);
              */
         } catch (final ClassNotFoundException e) {
             throw new ConnectionException("Failed request", e);
@@ -97,14 +94,14 @@ public class SerializingMarshaller extends MarshallerAbstract {
 
     @SuppressWarnings("BC_UNCONFIRMED_CAST")
     private Serializable asSerializable(final Request request) {
-        return (Serializable)request;
+        return (Serializable) request;
     }
 
-
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
     // ServerMarshaller impl
-    ////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////
 
+    @Override
     public Request readRequest() throws IOException {
         try {
             final Request request = (Request) input.readObject();
@@ -114,10 +111,12 @@ public class SerializingMarshaller extends MarshallerAbstract {
         }
     }
 
+    @Override
     public void sendError(final IsisException exception) throws IOException {
         send(exception);
     }
 
+    @Override
     public void sendResponse(final Object response) throws IOException {
         send(response);
     }

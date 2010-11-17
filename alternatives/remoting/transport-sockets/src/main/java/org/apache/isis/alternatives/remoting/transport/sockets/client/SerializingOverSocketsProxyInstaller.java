@@ -17,44 +17,41 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.remoting.transport.sockets.client;
 
 import java.util.List;
 
 import org.apache.isis.alternatives.remoting.common.client.ProxyInstallerAbstract;
 import org.apache.isis.alternatives.remoting.common.marshalling.ClientMarshaller;
-import org.apache.isis.alternatives.remoting.common.transport.Transport;
 import org.apache.isis.alternatives.remoting.marshalling.serialize.SerializingMarshaller;
+import org.apache.isis.alternatives.remoting.transport.Transport;
 import org.apache.isis.alternatives.remoting.transport.sockets.shared.SocketTransport;
-
 
 public class SerializingOverSocketsProxyInstaller extends ProxyInstallerAbstract {
 
     public SerializingOverSocketsProxyInstaller() {
-		super("serializing-sockets");
-	}
-
-	@Override
-	protected void addConfigurationResources(List<String> configurationResources) {
-		super.addConfigurationResources(configurationResources);
-		// TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
-		// and Transport using the installers.
-		configurationResources.add("protocol.properties");
-		configurationResources.add("protocol_serializing.properties");
-		configurationResources.add("transport.properties");
-		configurationResources.add("transport_sockets.properties");
-	}
-
-
-	@Override
-	protected Transport createTransport() {
-		return new SocketTransport(getConfiguration());
-	}
+        super("serializing-sockets");
+    }
 
     @Override
-	protected ClientMarshaller createMarshaller(Transport transport) {
-		return new SerializingMarshaller(getConfiguration(), transport);
-	}
-	
+    protected void addConfigurationResources(List<String> configurationResources) {
+        super.addConfigurationResources(configurationResources);
+        // TODO: this (small) hack is because we don't load up the Protocol (Marshaller)
+        // and Transport using the installers.
+        configurationResources.add("protocol.properties");
+        configurationResources.add("protocol_serializing.properties");
+        configurationResources.add("transport.properties");
+        configurationResources.add("transport_sockets.properties");
+    }
+
+    @Override
+    protected Transport createTransport() {
+        return new SocketTransport(getConfiguration());
+    }
+
+    @Override
+    protected ClientMarshaller createMarshaller(Transport transport) {
+        return new SerializingMarshaller(getConfiguration(), transport);
+    }
+
 }

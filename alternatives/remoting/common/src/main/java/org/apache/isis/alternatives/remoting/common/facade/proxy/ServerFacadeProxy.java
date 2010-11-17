@@ -21,7 +21,6 @@
 package org.apache.isis.alternatives.remoting.common.facade.proxy;
 
 
-import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.remoting.common.IsisRemoteException;
 import org.apache.isis.alternatives.remoting.common.client.ClientConnection;
 import org.apache.isis.alternatives.remoting.common.exchange.AuthorizationRequestUsability;
@@ -60,6 +59,7 @@ import org.apache.isis.alternatives.remoting.common.exchange.SetAssociationRespo
 import org.apache.isis.alternatives.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.alternatives.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
+import org.apache.log4j.Logger;
 
 /**
  * previously called <tt>ClientConnection</tt>.

@@ -24,13 +24,10 @@ import java.io.File;
 import java.io.FilenameFilter;
 
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.DefaultClock;
-import org.apache.isis.alternatives.objectstore.xml.internal.clock.DefaultClockTest;
 import org.apache.isis.alternatives.objectstore.xml.internal.data.ObjectData;
 import org.apache.isis.alternatives.objectstore.xml.internal.data.ReferenceVector;
 import org.apache.isis.alternatives.objectstore.xml.internal.data.Role;
 import org.apache.isis.alternatives.objectstore.xml.internal.data.Team;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.xml.XmlDataManager;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.xml.XmlFile;
 import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;

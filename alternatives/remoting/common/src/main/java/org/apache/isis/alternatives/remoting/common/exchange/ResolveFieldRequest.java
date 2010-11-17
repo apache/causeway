@@ -22,13 +22,11 @@ package org.apache.isis.alternatives.remoting.common.exchange;
 
 import java.io.IOException;
 
-import org.apache.isis.alternatives.remoting.common.data.Data;
 import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 
 public class ResolveFieldRequest extends RequestAbstract {

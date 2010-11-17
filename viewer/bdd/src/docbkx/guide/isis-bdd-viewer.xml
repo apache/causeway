@@ -1113,19 +1113,29 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <sect1 id="sec.UserInteraction">
       <title>User Interaction</title>
 
-      <para>User interaction fixtures appear in the main body of the test, for
-      the "given" (to setup the rest of the state of the system, typically
-      transactional objects), for the "when" (the interaction being tested) or
-      the "then" (assertions on the state after the interaction being
-      tested).</para>
+      <para>User interaction fixtures appear predominantly in the main body of
+      the test, either to simulating user interactions or to assert on the
+      results of those actions. </para>
 
       <sect2 id="sec.UsingIsisViewer">
         <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
 
-        <para></para>
+        <para>The centrepiece of the BDD framework, simulates interacting with
+        domain objects as if through a viewer. Using this feature, the story
+        can interact with objects, check their state, alias referenced or
+        returned objects.</para>
+
+        <para>The "For Setup" version disables checks for visibility and
+        usability, making it easier to reuse functionality for setting up
+        objects prior to a test scenario (the "given"). The
+        <classname>DebugObjectStore</classname> fixture (<xref
+        linkend="sec.DebugObjectStore" />) can be used to check the state of
+        objects created.</para>
 
         <sect3>
           <title>Common</title>
+
+          <para></para>
 
           <para></para>
         </sect3>
@@ -1134,10 +1144,14 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           <title>Concordion</title>
 
           <para></para>
+
+          <para></para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
+
+          <para></para>
 
           <para></para>
         </sect3>
@@ -1148,8 +1162,12 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
         <para></para>
 
+        <para></para>
+
         <sect3>
           <title>Common</title>
+
+          <para></para>
 
           <para></para>
         </sect3>
@@ -1158,10 +1176,14 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           <title>Concordion</title>
 
           <para></para>
+
+          <para></para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
+
+          <para></para>
 
           <para></para>
         </sect3>
@@ -1172,8 +1194,12 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
         <para></para>
 
+        <para></para>
+
         <sect3>
           <title>Common</title>
+
+          <para></para>
 
           <para></para>
         </sect3>
@@ -1182,10 +1208,14 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           <title>Concordion</title>
 
           <para></para>
+
+          <para></para>
         </sect3>
 
         <sect3>
           <title>FitNesse</title>
+
+          <para></para>
 
           <para></para>
         </sect3>

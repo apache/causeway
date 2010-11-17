@@ -17,42 +17,37 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.remoting.marshalling.xstream.server;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.apache.isis.alternatives.remoting.facade.ServerFacade;
+import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
+import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.alternatives.remoting.marshalling.xstream.shared.XStreamMarshaller;
 import org.apache.isis.alternatives.remoting.server.ServerConnection;
 import org.apache.isis.alternatives.remoting.server.ServerConnectionDefault;
 import org.apache.isis.alternatives.remoting.transport.ConnectionException;
 import org.apache.isis.alternatives.remoting.transport.simple.SimpleTransport;
 import org.apache.isis.alternatives.remoting.transport.sockets.server.SocketsViewerAbstract;
-import org.apache.isis.remoting.protocol.ObjectEncoderDecoder;
-
 
 public class XStreamOverSocketsViewer extends SocketsViewerAbstract {
-	
-    public XStreamOverSocketsViewer(ObjectEncoderDecoder objectEncoderDecoder) {
-    	super(objectEncoderDecoder);
-	}
 
-	@Override
-    protected ServerConnection createServerConnection(
-            final InputStream input,
-            final OutputStream output,
-            final ServerFacade distribution) {
-    	SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
+    public XStreamOverSocketsViewer(ObjectEncoderDecoder objectEncoderDecoder) {
+        super(objectEncoderDecoder);
+    }
+
+    @Override
+    protected ServerConnection createServerConnection(final InputStream input, final OutputStream output,
+        final ServerFacade distribution) {
+        SimpleTransport transport = new SimpleTransport(getConfiguration(), input, output);
         XStreamMarshaller serverMarshaller = new XStreamMarshaller(getConfiguration(), transport);
         try {
-			serverMarshaller.connect();
+            serverMarshaller.connect();
         } catch (IOException e) {
             throw new ConnectionException(e);
         }
         return new ServerConnectionDefault(distribution, serverMarshaller);
     }
 }
-

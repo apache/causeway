@@ -26,7 +26,7 @@ import org.apache.isis.alternatives.remoting.common.IsisRemoteException;
 import org.apache.isis.alternatives.remoting.common.exchange.Request;
 import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.alternatives.remoting.common.marshalling.ClientMarshaller;
-import org.apache.isis.alternatives.remoting.common.transport.ConnectionException;
+import org.apache.isis.alternatives.remoting.transport.ConnectionException;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.log4j.Logger;
 

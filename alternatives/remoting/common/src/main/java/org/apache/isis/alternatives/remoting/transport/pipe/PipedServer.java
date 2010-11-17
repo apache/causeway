@@ -20,10 +20,10 @@
 
 package org.apache.isis.alternatives.remoting.transport.pipe;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.remoting.common.exchange.Request;
 import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
+import org.apache.log4j.Logger;
 
 
 

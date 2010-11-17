@@ -24,7 +24,6 @@ import java.io.IOException;
 
 import org.apache.isis.alternatives.remoting.common.data.common.EncodableObjectData;
 import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
-import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
