@@ -778,7 +778,8 @@
         </plugins>
     </build>
 
-    <reporting>
+	<reporting>
+		<excludeDefaults>true</excludeDefaults>
         <plugins>
             <!-- top-level pom (this pom) should have a reportSet with inherited=false, 
                 and: license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management, 
