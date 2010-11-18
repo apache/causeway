@@ -779,11 +779,10 @@
     </build>
 
     <reporting>
-        <excludeDefaults>true</excludeDefaults>
         <plugins>
             <!-- top-level pom (this pom) should have a reportSet with inherited=false, 
                 and: license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management, 
-                plugin-management, plugins, modules, summary -->
+                plugin-management, plugins, modules -->
             <!-- parent pom of submodules should have a reportSet with inherited=false, 
                 and: dependency-management (*), plugins, modules, summary. -->
             <!-- packaging=jar should have a reportSet with inherited=false, 
@@ -794,30 +793,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${maven-project-info-reports-plugin}</version>
-                <!-- it seems to be necessary to set inherited=false, otherwise 
-                    the default reportSet seems to be inherited even if explicitly overridden 
-                    in the inheriting POM by a different reportSet. In practice this is no great 
-                    hardship, because each level will have a different reportSet anyway (see 
-                    comment above) -->
-                <inherited>false</inherited>
+				<!-- TODO: for some reason the reportSets seems to be being
+					 ignored and generating a full set; not sure why -->
+				<inherited>false</inherited>
                 <reportSets>
-                    <reportSet>
-                        <inherited>false</inherited>
-                        <reports>
+					<reportSet>
+						<reports>
+                            <report>scm</report>
                             <report>license</report>
                             <report>project-team</report>
                             <report>issue-tracking</report>
-                            <report>scm</report>
                             <report>cim</report>
-                            <report>mailing-list</report>
-                            <report>dependency-management</report>
-                            <report>plugin-management</report>
+							<report>mailing-list</report>
+							<report>dependency-management</report>
+							<report>plugin-management</report>
                             <report>plugins</report>
-                            <report>modules</report>
-                            <report>summary</report>
+							<report>modules</report>
                             <!-- <report>dependencies</report> -->
                             <!-- <report>dependency-convergence</report> -->
+							<!-- <report>summary</report> -->
                         </reports>
                     </reportSet>
                 </reportSets>

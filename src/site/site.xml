@@ -23,6 +23,8 @@
 			<item name="License" href="license.html" />
 		</menu>
 		
+		<menu name="Project Info" ref="reports"/>
+
 		<menu name="Getting Started">
 			<item name="Downloads" href="downloads.html" />
             <item name="IDE Support" href="ide-support.html"/>
@@ -57,6 +59,8 @@
 			<item name="Defaults" href="defaults/index.html">
 				<item name="Object Store" href="defaults/objectstore/index.html">
                 </item>
+				<item name="Profile Store" href="defaults/profilestore/index.html">
+                </item>
 				<item name="Programming Model" href="defaults/progmodel/index.html">
                 </item>
 				<item name="Bytecode Provider" href="defaults/bytecode/index.html">
@@ -66,6 +70,8 @@
             </item>
 			<item name="Alternatives" href="alternatives/index.html">
 				<item name="Object Stores" href="alternatives/objectstore/index.html">
+                </item>
+				<item name="Profile Stores" href="alternatives/profilestore/index.html">
                 </item>
 				<item name="Programming Models" href="alternatives/progmodel/index.html">
                 </item>

@@ -23,7 +23,7 @@ Building Isis
  
 Prerequisites
 
- Install {{{http://maven.apache.org}Maven}} 3.0.
+ Install {{{http://maven.apache.org}Maven}} 2.2.1 (we believe 3.0.0 also works).
  
  
 Build the Code Base
@@ -31,15 +31,15 @@ Build the Code Base
  Next, you can build trunk.  This will recursively the entire tree.  If it's the first time you're running this, then it'll take some time downloading prerequisites... 
  a good time to go grab a coffee.
  
-+----------------------------------------------------+
-mvn clean install -P all
-+----------------------------------------------------+
++-------------------------------------------------------------------+
+mvn clean install -D modules=all
++-------------------------------------------------------------------+
 
   You can also build the site and documentation using:
   
-+----------------------------------------------------+
-mvn site-deploy -P deploy-local
-+----------------------------------------------------+
++-------------------------------------------------------------------+
+mvn site-deploy -D modules=standard -D site=full -D deploy=local
++-------------------------------------------------------------------+
 
   This will deploy the site to <<</tmp/m2-sites/isis>>>, where you can check it out.
   
