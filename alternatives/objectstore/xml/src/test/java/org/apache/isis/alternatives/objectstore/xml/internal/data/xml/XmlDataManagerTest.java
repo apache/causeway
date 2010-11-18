@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.xml.internal.data.xml;
 
 import java.io.File;
@@ -29,12 +28,12 @@ import org.apache.isis.alternatives.objectstore.xml.internal.data.ReferenceVecto
 import org.apache.isis.alternatives.objectstore.xml.internal.data.Role;
 import org.apache.isis.alternatives.objectstore.xml.internal.data.Team;
 import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
+import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
-
 
 public class XmlDataManagerTest extends ProxyJunit3TestCase {
     protected XmlDataManager manager;
@@ -46,7 +45,8 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
         FileVersion.setClock(new DefaultClock());
 
         clearTestDirectory();
-        manager = new XmlDataManager(new XmlFile(system.getConfiguration(), "tmp/tests"));
+        String charset = XmlFileUtil.lookupCharset(system.getConfiguration());
+        manager = new XmlDataManager(new XmlFile(charset, "tmp/tests"));
     }
 
     @Override
@@ -57,6 +57,7 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
     protected static void clearTestDirectory() {
         final File directory = new File("tmp" + File.separator + "tests");
         final String[] files = directory.list(new FilenameFilter() {
+            @Override
             public boolean accept(final File arg0, final String name) {
                 return name.endsWith(".xml");
             }
@@ -142,8 +143,8 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
 
     /*
      * public void xxxtestInsertValues() throws ObjectStoreException { ObjectSpecification type =
-     * Isis.getSpecificationLoader().loadSpecification(ValueObjectExample.class.getName()); SerialOid
-     * oid = new SerialOid(99); ObjectData data = new ObjectData(type, oid);
+     * Isis.getSpecificationLoader().loadSpecification(ValueObjectExample.class.getName()); SerialOid oid = new
+     * SerialOid(99); ObjectData data = new ObjectData(type, oid);
      * 
      * 
      * Date date1 = new Date(); date1.add(1,2,3); data.saveValue("Date", date1);
@@ -159,8 +160,7 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
      * 
      * Option option1 = new Option(new String[] {"Fred", "Sam", "joe"}, 1); data.saveValue("Option", option1);
      * 
-     * Percentage percentage1 = new Percentage(); percentage1.setValue(95); data.saveValue("Percentage",
-     * percentage1);
+     * Percentage percentage1 = new Percentage(); percentage1.setValue(95); data.saveValue("Percentage", percentage1);
      * 
      * TextString textString1 = new TextString("Fred"); data.saveValue("Text String", textString1);
      * 
@@ -168,11 +168,9 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
      * 
      * Time time1 = new Time(); time1.add(1,30); data.saveValue("Time", time1);
      * 
-     * URLString urlString1 = new URLString("http://isis.apache.org/"); data.saveValue("Url String",
-     * urlString1);
+     * URLString urlString1 = new URLString("http://isis.apache.org/"); data.saveValue("Url String", urlString1);
      * 
-     * WholeNumber number1 = new WholeNumber(); number1.setValue(435422); data.saveValue("Whole Number",
-     * number1);
+     * WholeNumber number1 = new WholeNumber(); number1.setValue(435422); data.saveValue("Whole Number", number1);
      * 
      * 
      * manager.insert(data);
@@ -188,34 +186,33 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
      * 
      * Label label2 = new Label(); object.restoreValue("Label", label2); assertEquals(label1, label2);
      * 
-     * Logical logical2 = new Logical(); object.restoreValue("Logical", logical2); assertEquals(logical1,
-     * logical2);
+     * Logical logical2 = new Logical(); object.restoreValue("Logical", logical2); assertEquals(logical1, logical2);
      * 
      * Money money2 = new Money(); object.restoreValue("Money", money2); assertEquals(money1, money2);
      * 
-     * Option option2 = new Option(new String [] {"Fred", "Sam", "joe"}); object.restoreValue("Option",
-     * option2); assertEquals(option1, option2);
+     * Option option2 = new Option(new String [] {"Fred", "Sam", "joe"}); object.restoreValue("Option", option2);
+     * assertEquals(option1, option2);
      * 
      * Percentage percentage2 = new Percentage(); object.restoreValue("Percentage", percentage2);
      * assertEquals(percentage1, percentage2);
      * 
      * Time time2 = new Time(); object.restoreValue("Time", time2); assertEquals(time1, time2);
      * 
-     * DateTime timestamp2 = new DateTime(); object.restoreValue("Time Stamp", timestamp2);
-     * assertEquals(timestamp1, timestamp2);
+     * DateTime timestamp2 = new DateTime(); object.restoreValue("Time Stamp", timestamp2); assertEquals(timestamp1,
+     * timestamp2);
      * 
      * TextString textString2 = new TextString(); object.restoreValue("Text String", textString2);
      * assertEquals(textString1, textString2);
      * 
-     * URLString urlString2 = new URLString(); object.restoreValue("Url String", urlString2);
-     * assertEquals(urlString1, urlString2);
+     * URLString urlString2 = new URLString(); object.restoreValue("Url String", urlString2); assertEquals(urlString1,
+     * urlString2);
      * 
-     * WholeNumber number2 = new WholeNumber(); object.restoreValue("Whole Number", number2);
-     * assertEquals(number1, number2); }
+     * WholeNumber number2 = new WholeNumber(); object.restoreValue("Whole Number", number2); assertEquals(number1,
+     * number2); }
      * 
      * public void xxxtestSaveValues() throws ObjectStoreException { ObjectSpecification type =
-     * Isis.getSpecificationLoader().loadSpecification(ValueObjectExample.class.getName()); SerialOid
-     * oid = new SerialOid(99); ObjectData data = new ObjectData(type, oid);
+     * Isis.getSpecificationLoader().loadSpecification(ValueObjectExample.class.getName()); SerialOid oid = new
+     * SerialOid(99); ObjectData data = new ObjectData(type, oid);
      * 
      * manager.insert(data);
      * 
@@ -233,8 +230,7 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
      * 
      * Option option1 = new Option(new String[] {"Fred", "Sam", "joe"}, 1); data.saveValue("Option", option1);
      * 
-     * Percentage percentage1 = new Percentage(); percentage1.setValue(95); data.saveValue("Percentage",
-     * percentage1);
+     * Percentage percentage1 = new Percentage(); percentage1.setValue(95); data.saveValue("Percentage", percentage1);
      * 
      * TextString textString1 = new TextString("Fred"); data.saveValue("Text String", textString1);
      * 
@@ -242,11 +238,9 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
      * 
      * Time time1 = new Time(); time1.add(1,30); data.saveValue("Time", time1);
      * 
-     * URLString urlString1 = new URLString("http://isis.apache.org/"); data.saveValue("Url String",
-     * urlString1);
+     * URLString urlString1 = new URLString("http://isis.apache.org/"); data.saveValue("Url String", urlString1);
      * 
-     * WholeNumber number1 = new WholeNumber(); number1.setValue(435422); data.saveValue("Whole Number",
-     * number1);
+     * WholeNumber number1 = new WholeNumber(); number1.setValue(435422); data.saveValue("Whole Number", number1);
      * 
      * 
      * manager.save(data);
@@ -262,33 +256,31 @@ public class XmlDataManagerTest extends ProxyJunit3TestCase {
      * 
      * Label label2 = new Label(); object.restoreValue("Label", label2); assertEquals(label1, label2);
      * 
-     * Logical logical2 = new Logical(); object.restoreValue("Logical", logical2); assertEquals(logical1,
-     * logical2);
+     * Logical logical2 = new Logical(); object.restoreValue("Logical", logical2); assertEquals(logical1, logical2);
      * 
      * Money money2 = new Money(); object.restoreValue("Money", money2); assertEquals(money1, money2);
      * 
-     * Option option2 = new Option(new String [] {"Fred", "Sam", "joe"}); object.restoreValue("Option",
-     * option2); assertEquals(option1, option2);
+     * Option option2 = new Option(new String [] {"Fred", "Sam", "joe"}); object.restoreValue("Option", option2);
+     * assertEquals(option1, option2);
      * 
      * Percentage percentage2 = new Percentage(); object.restoreValue("Percentage", percentage2);
      * assertEquals(percentage1, percentage2);
      * 
      * Time time2 = new Time(); object.restoreValue("Time", time2); assertEquals(time1, time2);
      * 
-     * DateTime timestamp2 = new DateTime(); object.restoreValue("Time Stamp", timestamp2);
-     * assertEquals(timestamp1, timestamp2);
+     * DateTime timestamp2 = new DateTime(); object.restoreValue("Time Stamp", timestamp2); assertEquals(timestamp1,
+     * timestamp2);
      * 
      * TextString textString2 = new TextString(); object.restoreValue("Text String", textString2);
      * assertEquals(textString1, textString2);
      * 
-     * URLString urlString2 = new URLString(); object.restoreValue("Url String", urlString2);
-     * assertEquals(urlString1, urlString2);
+     * URLString urlString2 = new URLString(); object.restoreValue("Url String", urlString2); assertEquals(urlString1,
+     * urlString2);
      * 
-     * WholeNumber number2 = new WholeNumber(); object.restoreValue("Whole Number", number2);
-     * assertEquals(number1, number2);
+     * WholeNumber number2 = new WholeNumber(); object.restoreValue("Whole Number", number2); assertEquals(number1,
+     * number2);
      * 
-     *  }
-     * 
+     * }
      */
 
     private ObjectData createData(final Class<?> type, final long id, final FileVersion version) {

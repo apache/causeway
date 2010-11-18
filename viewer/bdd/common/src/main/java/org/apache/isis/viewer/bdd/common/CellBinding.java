@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.apache.isis.viewer.bdd.common.util.Strings;
 
-
 public abstract class CellBinding {
 
     private boolean found = false;
@@ -19,24 +18,94 @@ public abstract class CellBinding {
     private final boolean autoCreate;
     private final boolean ditto;
     private final boolean optional;
-	private boolean dittoed;
 
-    protected CellBinding(final String name, final boolean autoCreate,
-            final boolean ditto, final boolean optional,
-            final String[] headTexts) {
+    // ///////////////////////////////////////////////////////////////
+    // Constructor
+    // ///////////////////////////////////////////////////////////////
+
+    protected CellBinding(final String name, final boolean autoCreate, final boolean ditto, final boolean optional,
+        final String[] headTexts) {
         this.name = name;
         this.autoCreate = autoCreate;
         this.ditto = ditto;
         this.optional = optional;
         if (headTexts.length == 0) {
-            throw new IllegalArgumentException(
-                    "Require at least one heading text");
+            throw new IllegalArgumentException("Require at least one heading text");
         }
         final List<String> headTextList = new ArrayList<String>();
         for (final String headText : headTexts) {
             headTextList.add(Strings.camel(headText).toLowerCase());
         }
         this.headTexts = headTextList;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public boolean isAutoCreate() {
+        return autoCreate;
+    }
+
+    private void ditto(final StoryCell previousCell) {
+        copy(previousCell, getCurrentCell());
+    }
+
+    public List<String> getHeadTexts() {
+        return headTexts;
+    }
+
+    public boolean isDitto() {
+        return ditto;
+    }
+
+    // ///////////////////////////////////////////////////////////////
+    // matches (for searching head column)
+    // ///////////////////////////////////////////////////////////////
+
+    /**
+     * For the BDD framework integration to search whether this particular {@link CellBinding} corresponds to a
+     * particular head text.
+     */
+    public boolean matches(final String candidateText) {
+        final String candidateTextCamelLower = Strings.camel(candidateText).toLowerCase();
+        for (final String headText : getHeadTexts()) {
+            if (headText.equalsIgnoreCase(candidateTextCamelLower)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // ///////////////////////////////////////////////////////////////
+    // set Head Column
+    // ///////////////////////////////////////////////////////////////
+
+    /**
+     * For the BDD framework integration to indicate the head column, but without no {@link #getHeadCell() head cell}.
+     */
+    public void setHeadColumn(final int column) {
+        this.found = true;
+        setColumnAndHeadCell(column, null);
+    }
+
+    /**
+     * For the BDD framework integration to indicate that the head cell has been found.
+     */
+    public void setHeadColumn(final int column, final StoryCell headCell) {
+        this.found = true;
+        setColumnAndHeadCell(column, headCell);
+    }
+
+    /**
+     * For the BDD framework integration to indicate that the head cell was not found and has been created.
+     */
+    public void createHeadCell(final int column, final StoryCell headCell) {
+        setColumnAndHeadCell(column, headCell);
     }
 
     /**
@@ -60,44 +129,9 @@ public abstract class CellBinding {
         return headCell;
     }
 
-    /**
-     * Indicate that the head cell has been found.
-     */
-    public void foundHeadColumn(final int column, final StoryCell headCell) {
-        this.found = true;
-        set(column, headCell);
-    }
-
-    /**
-     * Indicate that the head column.
-     */
-    public void setHeadColumn(final int column) {
-        this.found = true;
-        set(column, null);
-    }
-
-
-    /**
-     * Indicate that the head cell was not found and has been created.
-     */
-    public void create(final int column, final StoryCell headCell) {
-        set(column, headCell);
-    }
-
-    private void set(final int column, final StoryCell headCell) {
+    private void setColumnAndHeadCell(final int column, final StoryCell headCell) {
         this.column = column;
         this.headCell = headCell;
-    }
-
-    public boolean matches(final String candidateText) {
-        final String candidateTextCamelLower = Strings.camel(candidateText)
-                .toLowerCase();
-        for (final String headText : getHeadTexts()) {
-            if (headText.equalsIgnoreCase(candidateTextCamelLower)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -114,78 +148,60 @@ public abstract class CellBinding {
         this.currentCell = cell;
     }
 
-    public boolean isOptional() {
-        return optional;
-    }
+    // ///////////////////////////////////////////////////////////////
+    // capture current value
+    // ///////////////////////////////////////////////////////////////
 
-    public String getName() {
-        return name;
-    }
+    private boolean dittoed;
 
-
-	/**
-	 * Captures the current, but checking that the column in which the
-	 * {@link StoryCell value} has been provided corresponds to the
-	 * {@link #getColumn() column} of this binding.
-	 * 
-	 * @see #captureCurrent(StoryCell)
-	 */
-	public void captureCurrent(final StoryCell cell, final int column) {
+    /**
+     * Captures the current value, but also checking that the column in which the {@link StoryCell value} has been
+     * provided corresponds to the {@link #getColumn() column} of this binding.
+     * 
+     * @see #captureCurrent(StoryCell)
+     */
+    public void captureCurrent(final StoryCell cell, final int column) {
         if (column != getColumn()) {
-        	return;
-		}
+            return;
+        }
         captureCurrent(cell);
     }
 
-	/**
-	 * Captures the current {@link StoryCell value} for this binding. 
-	 * 
-	 * <p>
-	 * For implementations where we already know that the value provided is for this
-	 * particular binding.
-	 */
-	public void captureCurrent(final StoryCell cell) {
+    /**
+     * Captures the current {@link StoryCell value} for this binding.
+     * 
+     * <p>
+     * For implementations where we already know that the value provided is for this particular binding.
+     */
+    public void captureCurrent(final StoryCell cell) {
         final StoryCell previousCell = getCurrentCell();
         setCurrentCell(cell);
-		boolean shouldDitto = Strings.emptyString(cell.getText());
-		boolean canDitto = isDitto() && previousCell != null;
-		if (shouldDitto && canDitto) {
-			ditto(previousCell);
-			dittoed = true;
+        boolean shouldDitto = Strings.emptyString(cell.getText());
+        boolean canDitto = isDitto() && previousCell != null;
+        if (shouldDitto && canDitto) {
+            ditto(previousCell);
+            dittoed = true;
         } else {
-        	dittoed = false;
+            dittoed = false;
         }
     }
-	
-	/**
-	 * Whether the most recent call to {@link #captureCurrent(StoryCell)} resulted in a ditto.
-	 */
-	public boolean isDittoed() {
-		return dittoed;
-	}
 
-	private void ditto(final StoryCell previousCell) {
-		copy(previousCell, getCurrentCell());
-	}
+    /**
+     * Whether the most recent call to {@link #captureCurrent(StoryCell)} resulted in a ditto.
+     */
+    public boolean isDittoed() {
+        return dittoed;
+    }
 
-	protected abstract void copy(final StoryCell from, StoryCell to);
+    protected abstract void copy(final StoryCell from, StoryCell to);
+
+    // ///////////////////////////////////////////////////////////////
+    // toString
+    // ///////////////////////////////////////////////////////////////
 
     @Override
     public String toString() {
-        return found ? ("found, current=" + getCurrentCell().getText())
-                : "not found";
+        return found ? ("found, current=" + getCurrentCell().getText()) : "not found";
     }
-
-	public boolean isAutoCreate() {
-		return autoCreate;
-	}
-
-	public List<String> getHeadTexts() {
-		return headTexts;
-	}
-
-	public boolean isDitto() {
-		return ditto;
-	}
 
 }

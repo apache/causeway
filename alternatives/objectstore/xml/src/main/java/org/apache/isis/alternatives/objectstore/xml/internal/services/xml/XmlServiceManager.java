@@ -25,10 +25,10 @@ import java.io.Writer;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import org.apache.isis.alternatives.objectstore.xml.internal.data.xml.ContentWriter;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.xml.XmlFile;
 import org.apache.isis.alternatives.objectstore.xml.internal.services.ServiceManager;
 import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.commons.xml.ContentWriter;
+import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.xml.sax.Attributes;

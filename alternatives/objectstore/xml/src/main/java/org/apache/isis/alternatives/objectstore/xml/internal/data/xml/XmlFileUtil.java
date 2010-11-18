@@ -17,15 +17,18 @@
  *  under the License.
  */
 
+package org.apache.isis.alternatives.objectstore.xml.internal.data.xml;
 
-package org.apache.isis.alternatives.profilestore.xml.internal;
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
 
-public class TestServiceObject1 {
-    public static final String ID = "test service";
+public class XmlFileUtil {
 
-    public String getId() {
-        return ID;
+    public static final String ENCODING_PROPERTY = ConfigurationConstants.ROOT + "xmlos.encoding";
+    public static final String DEFAULT_ENCODING = "ISO-8859-1";
+
+    public static String lookupCharset(final IsisConfiguration configuration) {
+        return configuration.getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
     }
+
 }
-
-

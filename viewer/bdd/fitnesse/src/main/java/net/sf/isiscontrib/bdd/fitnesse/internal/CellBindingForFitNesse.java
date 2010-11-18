@@ -69,7 +69,7 @@ public class CellBindingForFitNesse extends CellBinding {
             final int size = storyValuesMap.size();
             final Parse aliasCell = new Parse("td", Fixture.gray(getHeadTexts().get(0)), null, null);
             heads.last().more = aliasCell;
-            create(size, new StoryCellForFitNesse(aliasCell));
+            createHeadCell(size, new StoryCellForFitNesse(aliasCell));
         }
     }
 
@@ -89,7 +89,7 @@ public class CellBindingForFitNesse extends CellBinding {
             final String headText = storyValue.getText();
 
             if (matches(headText)) {
-                foundHeadColumn(colNum, storyValue);
+                setHeadColumn(colNum, storyValue);
                 break;
             }
         }

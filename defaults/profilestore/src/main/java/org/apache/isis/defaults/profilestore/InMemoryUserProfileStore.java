@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.runtime.userprofile.inmemory;
+package org.apache.isis.defaults.profilestore;
 
 import java.util.HashMap;
 import java.util.Map;

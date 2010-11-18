@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.testsystem;
 
 import java.util.Collections;
@@ -55,51 +54,47 @@ import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifierDefault;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoaderDefault;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoaderDefault.Mode;
-import org.apache.isis.core.runtime.userprofile.inmemory.InMemoryUserProfileStore;
-
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 //TODO replace with TestProxySystemII
 public class TestProxySystem {
-    
+
     private int nextId = 1;
     private final TestProxyConfiguration configuration;
     private IsisContext context;
-    
-    private UserProfileLoader userProfileLoader;
-    private UserProfileStore userprofileStore;
-    private TestProxyPersistenceSessionFactory persistenceSessionFactory;
-    
+
+    private final UserProfileLoader userProfileLoader;
+    private final UserProfileStore userprofileStore;
+    private final TestProxyPersistenceSessionFactory persistenceSessionFactory;
+
     private PersistenceSession persistenceSession;
     private final TestProxyReflector reflector;
     private final UpdateNotifierDefault updateNotifier;
     private final TemplateImageLoader noopTemplateImageLoader;
     protected AuthenticationManager authenticationManager;
     protected AuthorizationManager authorizationManager;
-	private List<Object> servicesList;
-
+    private final List<Object> servicesList;
 
     public TestProxySystem() {
         noopTemplateImageLoader = new TemplateImageLoaderNoop();
         reflector = new TestProxyReflector();
-        
+
         servicesList = Collections.emptyList();
 
         // all a bit hacky...
         persistenceSessionFactory = new TestProxyPersistenceSessionFactory();
-        userprofileStore = new InMemoryUserProfileStore();
+        userprofileStore = new TestUserProfileStore();
         userProfileLoader = new UserProfileLoaderDefault(userprofileStore, Mode.RELAXED);
         persistenceSession = new TestProxyPersistenceSession(persistenceSessionFactory);
         persistenceSessionFactory.setPersistenceSessionToCreate(persistenceSession);
-        
+
         configuration = new TestProxyConfiguration();
         configuration.add(ConfigurationConstants.ROOT + "locale", "en_GB");
         authenticationManager = new AuthenticationManagerNoop();
         authorizationManager = new AuthorizationManagerNoop();
         updateNotifier = new UpdateNotifierDefault();
     }
-    
 
     public TestProxyAdapter createAdapterForTransient(final Object associate) {
         final TestProxyAdapter testProxyObjectAdapter = new TestProxyAdapter();
@@ -111,26 +106,20 @@ public class TestProxySystem {
     }
 
     public void init() {
-    	reflector.setRuntimeContext(new RuntimeContextFromSession());
-    	
-        IsisSessionFactory sessionFactory = 
-            new IsisSessionFactoryDefault(
-                    DeploymentType.EXPLORATION, 
-                    configuration, 
-                    noopTemplateImageLoader, 
-                    reflector, 
-                    authenticationManager, 
-                    authorizationManager,
-                    userProfileLoader, 
-                    persistenceSessionFactory, servicesList);
-        
+        reflector.setRuntimeContext(new RuntimeContextFromSession());
+
+        IsisSessionFactory sessionFactory =
+            new IsisSessionFactoryDefault(DeploymentType.EXPLORATION, configuration, noopTemplateImageLoader,
+                reflector, authenticationManager, authorizationManager, userProfileLoader, persistenceSessionFactory,
+                servicesList);
+
         persistenceSession.setSpecificationLoader(reflector);
-        // this implementation of persistenceSession will automatically inject 
+        // this implementation of persistenceSession will automatically inject
         // its own transaction manager into itself.
-        
+
         sessionFactory.init();
         context = IsisContextStatic.createRelaxedInstance(sessionFactory);
-        
+
         // commented out cos think now redundant since calling openExecutionContext below
         // persistor.open();
 
@@ -153,13 +142,13 @@ public class TestProxySystem {
 
     public ObjectAdapter createPersistentTestObject(final Object domainObject) {
         final ObjectAdapter adapter = createTransientTestObject(domainObject);
-        
+
         // similar to object store implementation
         getAdapterManagerPersist().remapAsPersistent(adapter);
-        
+
         // would be done by the object store, we must do ourselves.
         adapter.setOptimisticLock(new TestProxyVersion(1));
-        
+
         return adapter;
     }
 
@@ -171,14 +160,14 @@ public class TestProxySystem {
     }
 
     // commented out since never used locally
-//    private void setUpSpecification(final TestPojo pojo, final TestProxyAdapter adapter) {
-//        adapter.setupSpecification(reflector.loadSpecification(pojo.getClass()));
-//    }
+    // private void setUpSpecification(final TestPojo pojo, final TestProxyAdapter adapter) {
+    // adapter.setupSpecification(reflector.loadSpecification(pojo.getClass()));
+    // }
 
     // commented out since never used locally
-//    private void addAdapterToIdentityMap(final Object domainObject, final ObjectAdapter adapter) {
-//        ((PersistenceSessionSpy) persistor).addAdapter(domainObject, adapter);
-//    }
+    // private void addAdapterToIdentityMap(final Object domainObject, final ObjectAdapter adapter) {
+    // ((PersistenceSessionSpy) persistor).addAdapter(domainObject, adapter);
+    // }
 
     public ObjectAdapter createTransientTestObject() {
         final TestPojo pojo = new TestPojo();
@@ -212,7 +201,8 @@ public class TestProxySystem {
         final TestProxySpecification specification = getSpecification(Vector.class);
         final TestProxySpecification elementSpecification = getSpecification(Object.class);
         specification.addFacet(new TestProxyCollectionFacet());
-        specification.addFacet(new TypeOfFacetDefaultToObject(elementSpecification, reflector) {});
+        specification.addFacet(new TypeOfFacetDefaultToObject(elementSpecification, reflector) {
+        });
         collection.setupSpecification(specification);
         return collection;
     }
@@ -240,7 +230,7 @@ public class TestProxySystem {
     public PersistenceSession getPersistenceSession() {
         return persistenceSession;
     }
-    
+
     public TestProxyConfiguration getConfiguration() {
         return configuration;
     }
@@ -249,9 +239,9 @@ public class TestProxySystem {
      * Created automatically by the persistor.
      */
     public AdapterFactory getAdapterFactory() {
-        return  persistenceSession.getAdapterFactory();
+        return persistenceSession.getAdapterFactory();
     }
-    
+
     /**
      * Created automatically by the persistor.
      */
@@ -267,15 +257,12 @@ public class TestProxySystem {
         return (AdapterManagerPersist) persistenceSession.getAdapterManager();
     }
 
-
     private IsisTransactionManager getTransactionManager() {
         return persistenceSession.getTransactionManager();
     }
 
-
     private OidGenerator getOidGenerator() {
         return persistenceSession.getOidGenerator();
     }
-
 
 }

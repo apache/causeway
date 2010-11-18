@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.profilestore.xml.internal;
 
 import java.io.ByteArrayOutputStream;
@@ -27,7 +26,7 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.isis.alternatives.objectstore.xml.internal.data.xml.ContentWriter;
+import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -37,7 +36,7 @@ import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 
-public class UserProfileContentWriter  implements ContentWriter {
+public class UserProfileContentWriter implements ContentWriter {
     private final UserProfile userProfile;
 
     public UserProfileContentWriter(UserProfile userProfile) {
@@ -47,48 +46,48 @@ public class UserProfileContentWriter  implements ContentWriter {
     public void write(Writer writer) throws IOException {
         final StringBuffer xml = new StringBuffer();
         xml.append("<profile>\n");
-        
+
         Options options = userProfile.getOptions();
         writeOptions(xml, options, null, 0);
-        
+
         xml.append("  <perspectives>\n");
         for (String perspectiveName : userProfile.list()) {
             PerspectiveEntry perspective = userProfile.getPerspective(perspectiveName);
-            
-            xml.append("    <perspective" + attribute("name", perspectiveName)+ ">\n");
+
+            xml.append("    <perspective" + attribute("name", perspectiveName) + ">\n");
             xml.append("      <services>\n");
             for (Object service : perspective.getServices()) {
-                xml.append("        <service " + attribute("id", ServiceUtil.id(service))+ "/>\n"); 
+                xml.append("        <service " + attribute("id", ServiceUtil.id(service)) + "/>\n");
             }
             xml.append("      </services>\n");
             xml.append("      <objects>\n");
-            for (Object object : perspective.getObjects()){
+            for (Object object : perspective.getObjects()) {
                 ObjectAdapter adapter = getPersistenceSession().getAdapterManager().adapterFor(object);
                 OutputStream out = new ByteArrayOutputStream();
-                DataOutputStreamExtended outputImpl   = new DataOutputStreamExtended(out);
+                DataOutputStreamExtended outputImpl = new DataOutputStreamExtended(out);
                 adapter.getOid().encode(outputImpl);
                 // FIX need to sort out encoding
-                //xml.append("      <object>" + out.toString() + "</object>\n");
+                // xml.append("      <object>" + out.toString() + "</object>\n");
                 xml.append("        <object>" + "not yet encoding properly" + "</object>\n");
             }
             xml.append("      </objects>\n");
             xml.append("    </perspective>\n");
         }
         xml.append("  </perspectives>\n");
-        
+
         xml.append("</profile>\n");
-        
+
         writer.write(xml.toString());
     }
 
     private void writeOptions(final StringBuffer xml, Options options, String name1, int level) {
         String spaces = StringUtils.repeat("  ", level);
-        
+
         Iterator<String> names = options.names();
         if (level == 0 || names.hasNext()) {
             xml.append(spaces + "  <options");
             if (name1 != null) {
-                xml.append(" id=\""+ name1 + "\"");
+                xml.append(" id=\"" + name1 + "\"");
             }
             xml.append(">\n");
             while (names.hasNext()) {
@@ -96,7 +95,8 @@ public class UserProfileContentWriter  implements ContentWriter {
                 if (options.isOptions(name)) {
                     writeOptions(xml, options.getOptions(name), name, level + 1);
                 } else {
-                    xml.append(spaces + "    <option" + attribute("id", name)+ ">"+ options.getString(name) + "</option>\n");
+                    xml.append(spaces + "    <option" + attribute("id", name) + ">" + options.getString(name)
+                        + "</option>\n");
                 }
             }
             xml.append(spaces + "  </options>\n");
@@ -107,16 +107,12 @@ public class UserProfileContentWriter  implements ContentWriter {
         return " " + name + "=\"" + value + "\"";
     }
 
-    /////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////
     // Dependencies (from context)
-    /////////////////////////////////////////////////////
-    
-    
+    // ///////////////////////////////////////////////////
+
     protected static PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
-    
 
 }
-
-

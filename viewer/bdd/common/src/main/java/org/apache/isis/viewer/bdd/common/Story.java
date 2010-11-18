@@ -27,7 +27,7 @@ import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
-import org.apache.isis.core.runtime.userprofile.inmemory.InMemoryUserProfileStoreInstaller;
+import org.apache.isis.defaults.profilestore.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.viewer.bdd.common.components.StoryAuthenticationManagerInstaller;
 import org.apache.isis.viewer.bdd.common.components.StoryInMemoryPersistenceMechanismInstaller;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;

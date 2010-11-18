@@ -19,7 +19,7 @@ public final class Aliases {
             final String headText = eachHead.body;
 
             if (aliasInfo.matches(headText)) {
-                aliasInfo.foundHeadColumn(i, new StoryCellForFitNesse(eachHead));
+                aliasInfo.setHeadColumn(i, new StoryCellForFitNesse(eachHead));
                 return aliasInfo;
             }
         }
@@ -29,7 +29,7 @@ public final class Aliases {
             final int size = heads.size();
             final Parse aliasCell = new Parse("td", Fixture.gray(Constants.ALIAS_RESULT_HEAD), null, null);
             heads.last().more = aliasCell;
-            aliasInfo.create(size, new StoryCellForFitNesse(aliasCell));
+            aliasInfo.createHeadCell(size, new StoryCellForFitNesse(aliasCell));
         }
         return aliasInfo;
     }

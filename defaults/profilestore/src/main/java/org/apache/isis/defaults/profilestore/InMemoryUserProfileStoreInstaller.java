@@ -18,8 +18,30 @@
  */
 
 
-package org.apache.isis.alternatives.objectstore.xml.internal.data;
+package org.apache.isis.defaults.profilestore;
 
-public class Team {
+import java.util.List;
 
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.runtime.userprofile.UserProfileStore;
+import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
+
+public class InMemoryUserProfileStoreInstaller extends InstallerAbstract implements
+		UserProfileStoreInstaller {
+
+	public InMemoryUserProfileStoreInstaller() {
+		super(UserProfileStoreInstaller.TYPE, "in-memory");
+	}
+	
+	public UserProfileStore createUserProfileStore(
+			IsisConfiguration objectConfiguration) {
+		return new InMemoryUserProfileStore();
+	}
+
+
+	@Override
+	public List<Class<?>> getTypes() {
+		return listOf(UserProfileStore.class);
+	}
 }

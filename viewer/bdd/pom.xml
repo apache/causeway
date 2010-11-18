@@ -115,5 +115,22 @@
 	    <module>fitnesse</module>
         -->
 	</modules>
+    
+    <profiles>
+        <profile>
+            <id>bdd-all</id>
+            <activation>
+                <property>
+                    <name>bdd</name>
+                    <value>all</value>
+                </property>
+            </activation>
+            <modules>
+                <module>common</module>
+                <module>concordion</module>
+                <module>fitnesse</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>

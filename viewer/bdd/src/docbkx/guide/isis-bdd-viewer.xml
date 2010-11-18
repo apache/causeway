@@ -148,23 +148,30 @@
           <acronym>BDD</acronym> frameworks (such as
           <emphasis>FitNesse</emphasis>) where the provided text from the
           story needs to be parsed in some way, matching up columns with the
-          fixture. Other <acronym>BDD</acronym> frameworks (eg
+          fixture. The relevant methods for framework integrations that must
+          match <classname>CellBinding</classname>s to header columns are
+          <methodname>#matches(...)</methodname>,
+          <methodname>#setHeadColumn(..)</methodname> and
+          <methodname>#createHeadColumn(..)</methodname>. Note though that
+          other <acronym>BDD</acronym> frameworks (eg
           <emphasis>Concordion</emphasis>) don't need this particular feature
           (the <emphasis>Concordion</emphasis> integration calls pre-canned
           methods so the matching is done simply by parameter position to
           these method).</para>
 
-          <para>***</para>
-
-          <para></para>
-
-          <para></para>
-
-          <para></para>
+          <para>The other main method provided by
+          <classname>CellBinding</classname> is
+          <methodname>#captureCurrent(..)</methodname>. This is used (by all
+          framework integrations) to capture the current value for the column
+          which this binding represents. For example, for a column
+          representing a property name, it might hold the value
+          "firstName".</para>
 
           <para>The library provides a default implementation of
           <classname>CellBinding</classname>, though subclasses can override
-          if required.</para>
+          if required. (For example, <emphasis>FitNesse</emphasis> does this
+          in order to map to underlying mutable data structures that represent
+          cells in the FIT tables).</para>
         </listitem>
       </itemizedlist>
 
@@ -2282,7 +2289,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <para>Typically used in the "Then", though can be helpful as a way of
         confirming/documenting a "Given".</para>
 
-        <para>See also AliasItemsInList (<xref
+        <para>See also <classname>AliasItemsInList</classname> (<xref
         linkend="sec.AliasItemsInList" />), which also performs an implicit
         check (will fail if the objects are not in the list) and aliases them
         for further use.</para>
@@ -2320,7 +2327,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <para>Allows an alias to be associated with items in a list. The list
         items are located by their title, and are presumed to exist. This
         fixture can therefore also be used as a way of checking for presence
-        of items in a list (similar to CheckList, <xref
+        of items in a list (similar to <classname>CheckList</classname>, <xref
         linkend="sec.CheckList" />).</para>
 
         <para>Typically used both in the "Given" (to simplify writing the rest

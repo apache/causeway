@@ -17,8 +17,7 @@
  *  under the License.
  */
 
-
-package org.apache.isis.alternatives.objectstore.xml.internal.data.xml;
+package org.apache.isis.core.commons.xml;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -30,8 +29,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -39,24 +36,21 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
 
-
 public class XmlFile {
-    private static final String ENCODING_PROPERTY = ConfigurationConstants.ROOT + "xmlos.encoding";
-    public static final String DEFAULT_ENCODING = "ISO-8859-1";
-    private static final String[] escapeString = { "&amp;", "&lt;", "&gt;", "&quot;", "&apos;" };
-    private static final String[] specialChars = { "&", "<", ">", "\"", "'" };
+    private static final String[] ESCAPE_STRING = { "&amp;", "&lt;", "&gt;", "&quot;", "&apos;" };
+    private static final String[] SPECIAL_CHARACTERS = { "&", "<", ">", "\"", "'" };
 
     public static String getValueWithSpecialsEscaped(final String s) {
         String result = s;
-        for (int i = 0; i < specialChars.length; i++) {
-            final String special = specialChars[i];
+        for (int i = 0; i < SPECIAL_CHARACTERS.length; i++) {
+            final String special = SPECIAL_CHARACTERS[i];
             int pos = -1;
             while (true) {
                 pos = result.indexOf(special, pos + 1);
                 if (pos < 0) {
                     break;
                 }
-                result = result.substring(0, pos) + escapeString[i] + result.substring(pos + special.length());
+                result = result.substring(0, pos) + ESCAPE_STRING[i] + result.substring(pos + special.length());
             }
         }
         return result;
@@ -64,21 +58,24 @@ public class XmlFile {
 
     private final String charset;
     private final File directory;
-    private final IsisConfiguration configuration;
 
-    public XmlFile(final IsisConfiguration configuration, final String directory) {
-        this.configuration = configuration;
+    public XmlFile(final String charset, final String directory) {
         this.directory = new File(directory);
-        if (!this.directory.exists()) {
-            this.directory.mkdirs();
+        createDirectoryIfRequired();
+        this.charset = charset;
+    }
+
+    private void createDirectoryIfRequired() {
+        if (this.directory.exists()) {
+            return;
         }
-        charset = this.configuration.getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
+        this.directory.mkdirs();
     }
 
     public File getDirectory() {
         return directory;
     }
-    
+
     private File file(final String fileName) {
         return new File(directory, fileName + ".xml");
     }
@@ -136,11 +133,11 @@ public class XmlFile {
     }
 
     /**
-     * The XML store is deemed to be initialised if the directory used to store the data has no xml files in
-     * it.
+     * The XML store is deemed to be initialised if the directory used to store the data has no xml files in it.
      */
     public boolean isFixturesInstalled() {
         final String[] list = directory.list(new FilenameFilter() {
+            @Override
             public boolean accept(File dir, String name) {
                 return name.toLowerCase().endsWith(".xml");
             }
@@ -148,4 +145,3 @@ public class XmlFile {
         return list.length > 0;
     }
 }
-

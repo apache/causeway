@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.installers.IsisSystemUsingInstallers;
-import org.apache.isis.core.runtime.userprofile.inmemory.InMemoryUserProfileStoreInstaller;
+import org.apache.isis.defaults.profilestore.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.defaults.security.authentication.NoopAuthenticationManagerInstaller;
 import org.apache.isis.defaults.security.authorization.NoopAuthorizationManagerInstaller;
 import org.junit.internal.runners.TestClass;

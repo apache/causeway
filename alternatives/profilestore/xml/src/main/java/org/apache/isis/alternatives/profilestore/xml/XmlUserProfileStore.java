@@ -17,19 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.profilestore.xml;
 
-import org.apache.isis.alternatives.objectstore.xml.internal.data.xml.XmlFile;
 import org.apache.isis.alternatives.profilestore.xml.internal.UserProfileContentWriter;
 import org.apache.isis.alternatives.profilestore.xml.internal.UserProfileDataHandler;
+import org.apache.isis.alternatives.profilestore.xml.internal.XmlFileUtil;
+import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
 import com.google.inject.Inject;
-
 
 public class XmlUserProfileStore implements UserProfileStore {
 
@@ -39,9 +38,10 @@ public class XmlUserProfileStore implements UserProfileStore {
     @Inject
     public XmlUserProfileStore(IsisConfiguration configuration) {
         String directory = configuration.getString(XML_DIR, "xml/profiles");
-        xmlFile = new XmlFile(configuration, directory);
+        xmlFile = new XmlFile(XmlFileUtil.lookupCharset(configuration), directory);
     }
 
+    @Override
     public UserProfile getUserProfile(String userName) {
         final UserProfileDataHandler handler = new UserProfileDataHandler();
         if (xmlFile.parse(handler, userName)) {
@@ -51,13 +51,14 @@ public class XmlUserProfileStore implements UserProfileStore {
         }
     }
 
+    @Override
     public boolean isFixturesInstalled() {
         return xmlFile.isFixturesInstalled();
     }
 
+    @Override
     public void save(final String userName, final UserProfile userProfile) {
         xmlFile.writeXml(userName, new UserProfileContentWriter(userProfile));
     }
 
 }
-

@@ -55,7 +55,7 @@ public class AliasItemsInListForConcordion extends
 		getPeer().getAliasBinding().setHeadColumn(1);
 
 		if (type != null) {
-			getPeer().getTypeBinding().foundHeadColumn(2,
+			getPeer().getTypeBinding().setHeadColumn(2,
 					new StoryCellDefault(type));
 		}
 		

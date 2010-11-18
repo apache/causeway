@@ -34,6 +34,8 @@ import org.apache.isis.alternatives.objectstore.xml.internal.data.ReferenceVecto
 import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.xml.ContentWriter;
+import org.apache.isis.core.commons.xml.XmlFile;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ObjectNotFoundException;

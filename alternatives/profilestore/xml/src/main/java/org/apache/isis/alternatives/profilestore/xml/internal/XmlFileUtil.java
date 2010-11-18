@@ -17,31 +17,18 @@
  *  under the License.
  */
 
+package org.apache.isis.alternatives.profilestore.xml.internal;
 
-package org.apache.isis.core.runtime.userprofile.inmemory;
-
-import java.util.List;
-
+import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.runtime.installers.InstallerAbstract;
-import org.apache.isis.core.runtime.userprofile.UserProfileStore;
-import org.apache.isis.core.runtime.userprofile.UserProfileStoreInstaller;
 
-public class InMemoryUserProfileStoreInstaller extends InstallerAbstract implements
-		UserProfileStoreInstaller {
+public class XmlFileUtil {
 
-	public InMemoryUserProfileStoreInstaller() {
-		super(UserProfileStoreInstaller.TYPE, "in-memory");
-	}
-	
-	public UserProfileStore createUserProfileStore(
-			IsisConfiguration objectConfiguration) {
-		return new InMemoryUserProfileStore();
-	}
+    public static final String ENCODING_PROPERTY = ConfigurationConstants.ROOT + "xmlos.encoding";
+    public static final String DEFAULT_ENCODING = "ISO-8859-1";
 
+    public static String lookupCharset(final IsisConfiguration configuration) {
+        return configuration.getString(ENCODING_PROPERTY, DEFAULT_ENCODING);
+    }
 
-	@Override
-	public List<Class<?>> getTypes() {
-		return listOf(UserProfileStore.class);
-	}
 }

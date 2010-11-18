@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.alternatives.objectstore.xml.internal.data.xml;
+package org.apache.isis.core.commons.xml;
 
 import java.io.IOException;
 import java.io.Writer;

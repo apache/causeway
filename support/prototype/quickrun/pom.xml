@@ -39,6 +39,10 @@
         </dependency>
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>profilestore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
             <artifactId>progmodel</artifactId>
         </dependency>
         <dependency>

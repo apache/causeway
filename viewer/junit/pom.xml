@@ -1,31 +1,31 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.apache.isis</groupId>
-		<artifactId>viewer</artifactId>
-		<version>0.1-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.apache.isis</groupId>
+        <artifactId>viewer</artifactId>
+        <version>0.1-SNAPSHOT</version>
+    </parent>
 
-	<groupId>org.apache.isis.viewer</groupId>
-	<artifactId>junit</artifactId>
+    <groupId>org.apache.isis.viewer</groupId>
+    <artifactId>junit</artifactId>
 
-	<name>JUnit Viewer</name>
+    <name>JUnit Viewer</name>
 
-	<properties>
+    <properties>
         <siteBaseDir>../..</siteBaseDir>
-		<relativeUrl>viewer/junit/</relativeUrl>
+        <relativeUrl>viewer/junit/</relativeUrl>
 
-        <core.version>0.1-SNAPSHOT</core.version>
-    	<wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
+        <wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
         <identity-bytecode.version>0.1-SNAPSHOT</identity-bytecode.version>
 
         <docbkxGuideTitle>Apache Isis JUnit Support</docbkxGuideTitle>
         <docbkxGuideSubTitle>Acceptance Testing using JUnit</docbkxGuideSubTitle>
         <docbkxGuideName>isis-junit-support</docbkxGuideName>
-	</properties>
+    </properties>
 
-	<url>http://incubator.apache.org/isis/${relativeUrl}</url>
+    <url>http://incubator.apache.org/isis/${relativeUrl}</url>
 
     <build>
         <plugins>
@@ -42,10 +42,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>${maven-project-info-reports-plugin}</version>
+                <version>${maven-project-info-reports-plugin}</version>
                 <inherited>false</inherited>
                 <configuration>
-                	<dependencyLocationsEnabled>false</dependencyLocationsEnabled>
+                    <dependencyLocationsEnabled>false</dependencyLocationsEnabled>
                 </configuration>
                 <reportSets>
                     <reportSet>
@@ -65,11 +65,6 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.apache.isis.defaults</groupId>
-                <artifactId>security</artifactId>
-                <version>${core.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.isis.alternatives.progmodel</groupId>
                 <artifactId>wrapper-metamodel</artifactId>
                 <version>${wrapper-progmodel.version}</version>
@@ -77,41 +72,47 @@
             <dependency>
                 <groupId>org.apache.isis.alternatives.bytecode</groupId>
                 <artifactId>identity</artifactId>
-                    <version>${identity-bytecode.version}</version>
+                <version>${identity-bytecode.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-	<dependencies>
-		<dependency>
-			<groupId>org.apache.isis.alternatives.progmodel</groupId>
-			<artifactId>wrapper-metamodel</artifactId>
-			<version>${wrapper-progmodel.version}</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.isis.alternatives.progmodel</groupId>
+            <artifactId>wrapper-metamodel</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
             <artifactId>security</artifactId>
-            <version>${core.version}</version>
         </dependency>
 
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>metamodel</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>profilestore</artifactId>
         </dependency>
 
-		<dependency>
-		    <groupId>org.apache.isis.core</groupId>
-		    <artifactId>runtime</artifactId>
-		    <type>test-jar</type>
-		    <scope>test</scope>
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>metamodel</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
 
-        <!--  Required for InMemoryObjectStore -->
+        <dependency>
+            <groupId>org.apache.isis.core</groupId>
+            <artifactId>runtime</artifactId>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
             <artifactId>objectstore</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>profilestore</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
@@ -123,20 +124,20 @@
             <artifactId>identity</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>asm</groupId>
-			<artifactId>asm</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>asm</groupId>
+            <artifactId>asm</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.objenesis</groupId>
+            <artifactId>objenesis</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>cglib</groupId>
-			<artifactId>cglib-nodep</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.jmock</groupId>
@@ -148,18 +149,19 @@
             <artifactId>jmock-junit4</artifactId>
         </dependency>
 
-		<dependency>
-			<groupId>org.jmock</groupId>
-			<artifactId>jmock-legacy</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.jmock</groupId>
+            <artifactId>jmock-legacy</artifactId>
+        </dependency>
 
-        <!-- hack: override to be compatible with org.jmock:jmock's dependency on junit:junit-dep -->
+        <!-- hack: override to be compatible with org.jmock:jmock's dependency 
+            on junit:junit-dep -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.4</version>
         </dependency>
 
-	</dependencies>
+    </dependencies>
 
 </project>
