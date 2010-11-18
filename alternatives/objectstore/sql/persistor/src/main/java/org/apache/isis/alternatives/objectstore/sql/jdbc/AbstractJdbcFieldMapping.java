@@ -52,8 +52,7 @@ public abstract class AbstractJdbcFieldMapping implements FieldMapping {
     public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         ObjectAdapter fieldValue = field.get(object);
         if (fieldValue == null) {
-            //KAM sql.append("NULL");
-        	sql.append(connector.addToQueryValues(null));
+            sql.append("NULL");
         } else {
         	sql.append(valueAsDBString(fieldValue, connector));
         }

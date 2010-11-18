@@ -116,8 +116,11 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             idMapping.appendColumnNames(sql);
             
             sql.append(", ");
-            sql.append(columnList());
-            sql.append(", ");
+            String columnList = columnList();
+            if (columnList.length() > 0){
+            	sql.append(columnList);
+            	sql.append(", ");
+            }
             sql.append(versionMapping.appendSelectColumns());
             sql.append(" from ");
             sql.append(table);

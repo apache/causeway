@@ -45,7 +45,11 @@ public class VersionMapping {
 	public String insertValues(DatabaseConnector connector,
 			SerialNumberVersion version) {
 		connector.addToQueryValues(version.getSequence());
-		connector.addToQueryValues(version.getUser());
+		String user = version.getUser();
+		if (user == ""){
+			user = "unknown";
+		}
+		connector.addToQueryValues(user);
 		connector.addToQueryValues(new Timestamp(new Date().getTime()));
 		return "?,?,?";
 	}

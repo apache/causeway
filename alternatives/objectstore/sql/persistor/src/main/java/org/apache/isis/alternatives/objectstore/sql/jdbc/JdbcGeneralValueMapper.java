@@ -23,6 +23,8 @@ import org.apache.isis.alternatives.objectstore.sql.DatabaseConnector;
 import org.apache.isis.alternatives.objectstore.sql.mapping.FieldMapping;
 import org.apache.isis.alternatives.objectstore.sql.mapping.FieldMappingFactory;
 import org.apache.isis.applib.value.Color;
+import org.apache.isis.applib.value.Money;
+import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -56,21 +58,32 @@ public class JdbcGeneralValueMapper extends AbstractJdbcFieldMapping {
 	public String valueAsDBString(final ObjectAdapter value,
 			DatabaseConnector connector) {
 		if (value == null) {
-			connector.addToQueryValues(null);
+			return "null";
 		} else {
 			Object o = value.getObject();
-			if (o instanceof Color) {
-				connector.addToQueryValues(((Color) o).intValue());
+			if (o == null){
+				return "null";
+			}
+			if (o instanceof Money) {
+				connector.addToQueryValues(((Money) o).floatValue());
 			} else if (o instanceof Percentage) {
 				connector.addToQueryValues(((Percentage) o).floatValue());
+			} else if (o instanceof Password) {
+				connector.addToQueryValues(((Password) o).getPassword());
+			} else if (o instanceof Color) {
+				connector.addToQueryValues(((Color) o).intValue());
+			} else if (o instanceof String) {
+				connector.addToQueryValues(o);
 			} else {
-
-				EncodableFacet facet = value.getSpecification().getFacet(
-						EncodableFacet.class);
-				String encodedString = facet.toEncodedString(value);
-				connector.addToQueryValues(encodedString);
+				if (columnType().contains("CHAR")){
+					EncodableFacet facet = value.getSpecification().getFacet(
+							EncodableFacet.class);
+					String encodedString = facet.toEncodedString(value);
+					connector.addToQueryValues(encodedString);
+				} else {
+					connector.addToQueryValues(o);
+				}
 			}
-
 			/*
 			 * EncodableFacet facet =
 			 * value.getSpecification().getFacet(EncodableFacet.class); String

@@ -284,7 +284,6 @@ public final class SqlObjectStore implements ObjectStore {
 		sql.append(" where ");
 		sql.append(Sql.identifier(ID_COLUMN));
 		sql.append(" = ?");
-		// sql.append(Sql.escapeAndQuoteValue(name));
 		connector.addToQueryValues(name);
 
 		Results results = connector.select(sql.toString());
@@ -346,7 +345,6 @@ public final class SqlObjectStore implements ObjectStore {
 	@Override
 	public void registerService(final String name, final Oid oid) {
 		DatabaseConnector connector = connectionPool.acquire();
-		// String soid = ((SqlOid) oid).getPrimaryKey().stringValue();
 
 		StringBuffer sql = new StringBuffer();
 		sql.append("insert into ");
@@ -356,10 +354,6 @@ public final class SqlObjectStore implements ObjectStore {
 		sql.append(", ");
 		sql.append(Sql.identifier(ID_COLUMN));
 		sql.append(") values (?,?)");
-		// sql.append(soid);
-		// sql.append(", ");
-		// sql.append(Sql.escapeAndQuoteValue(name));
-		// sql.append(")");
 
 		connector.addToQueryValues(((SqlOid) oid).getPrimaryKey()
 				.naturalValue());
@@ -408,8 +402,6 @@ public final class SqlObjectStore implements ObjectStore {
 	@Override
 	public void close() {
 		objectMappingLookup.shutdown();
-		// DatabaseConnector connection = connectionPool.acquire();
-		// connection.update("SHUTDOWN");
 		connectionPool.shutdown();
 	}
 

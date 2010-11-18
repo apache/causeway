@@ -206,8 +206,14 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 			throws SQLException {
 		if (queryValues.size() > 0) {
 			int i = 1;
-			for (Object value : queryValues) {
-				statement.setObject(i++, value);
+			try {
+				for (Object value : queryValues) {
+					statement.setObject(i, value);
+					i++;
+				}
+			} catch (SQLException e) {
+				LOG.error("Error adding prepared value "+ i +" of type " + queryValues.get(i-1).getClass().getSimpleName(), e);
+				throw e;
 			}
 		}
 	}
@@ -356,12 +362,16 @@ public class JdbcConnector extends AbstractDatabaseConnector {
 					metaData.storesUpperCaseIdentifiers());
 			debug.appendln("Upper case quoted",
 					metaData.storesUpperCaseQuotedIdentifiers());
+			debug.appendln("Max table name length",
+					metaData.getMaxTableNameLength() );
+			debug.appendln("Max column name length",
+					metaData.getMaxColumnNameLength());
+			
 		} catch (SQLException e) {
 			throw new SqlObjectStoreException("Metadata error", e);
 		}
 	}
 
-	// TODO:KAM All insert/update call must add their values via this
 	private final List<Object> queryValues = new ArrayList<Object>();
 
 	@Override

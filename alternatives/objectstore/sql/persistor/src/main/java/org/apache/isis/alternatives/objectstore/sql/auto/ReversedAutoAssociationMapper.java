@@ -154,8 +154,11 @@ public class ReversedAutoAssociationMapper extends AbstractAutoMapper implements
         sql.append("insert into " + table + " (");
         idMapping.appendColumnNames(sql);
         sql.append(", ");
-        sql.append(columnList());
-        sql.append(", ");
+        String columnList = columnList();
+        if (columnList.length() > 0){
+        	sql.append(columnList);
+        	sql.append(", ");
+        }
         sql.append(versionMapping.insertColumns());
         sql.append(") values (" );
         idMapping.appendInsertValues(connector, sql, parent);

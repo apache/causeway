@@ -66,7 +66,7 @@ public class IdMappingAbstract {
 	public void appendInsertValues(DatabaseConnector connector,
 			StringBuffer sql, ObjectAdapter object) {
 		if (object == null) {
-			sql.append(connector.addToQueryValues(null));
+			sql.append("NULL");
 		} else {
 			sql.append(connector.addToQueryValues(primaryKeyAsObject(object
 					.getOid())));

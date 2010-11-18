@@ -53,8 +53,7 @@ public class TitleMapping {
     //TODO:KAM:here 
     public void appendInsertValues(DatabaseConnector connector, StringBuffer sql, ObjectAdapter object) {
         if (object == null) {
-            //sql.append("NULL");
-        	connector.addToQueryValues(null);
+            sql.append("NULL");
         } else {
             //appendTitle(sql, object.titleString());
         	connector.addToQueryValues(object.titleString().toLowerCase());
