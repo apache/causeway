@@ -150,7 +150,7 @@
         <notifiers>
             <notifier>
                 <type>mail</type>
-                <address>builds@apache.org</address>
+                <address>isis-dev@incubator.apache.org</address>
                 <sendOnError />
                 <sendOnFailure />
                 <sendOnSuccess />
