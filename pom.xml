@@ -24,15 +24,18 @@
         (eg for testing and logging frameworks).
         </description>
 
-    <!-- See https://cwiki.apache.org/confluence/display/ISIS/MavenBuildProfiles for full info on different options -->
-    
-    <!-- 1. building code: (-o flag recommended once dependencies/plugins downloaded) -->
+    <!-- See https://cwiki.apache.org/confluence/display/ISIS/MavenBuildProfiles 
+        for full info on different options -->
 
-    <!-- mvn clean install                -o -->
+    <!-- 1. building code: (-o flag recommended once dependencies/plugins 
+        downloaded) -->
+
+    <!-- mvn clean install -o -->
     <!-- mvn clean install -D modules=all -o -->
 
 
-    <!-- 2. building site/docs: (-o flag recommended once dependencies/plugins downloaded) -->
+    <!-- 2. building site/docs: (-o flag recommended once dependencies/plugins 
+        downloaded) -->
 
     <!-- 2.1 prereqs -->
     <!-- mvn install:install-file -D groupId=com.java -D artifactId=jimi 
@@ -40,8 +43,9 @@
     <!-- mvn clean install -D modules=skin -o -->
 
     <!-- 2.2 site/docs -->
-    <!-- mvn site-deploy -D modules=standard -D deploy=local              -o -->
-    <!-- mvn site-deploy -D modules=standard -D deploy=local -D site=full -o -->
+    <!-- mvn site-deploy -D modules=standard -D deploy=local -o -->
+    <!-- mvn site-deploy -D modules=standard -D deploy=local -D site=full 
+        -o -->
 
     <inceptionYear>2010</inceptionYear>
 
@@ -52,7 +56,7 @@
     </scm>
 
     <!-- used in Site generation for relative references. -->
-	<url>http://incubator.apache.org/isis/</url>
+    <url>http://incubator.apache.org/isis/</url>
 
     <properties>
         <compileSource>1.6</compileSource>
@@ -80,9 +84,9 @@
         <pmd.ruleset>${trunkBaseDir}/src/site/resources/codequality/pmd.xml</pmd.ruleset>
 
         <projectUrl>${project.url}</projectUrl>
-		
-		<!-- plugin versions -->
-		<maven-project-info-reports-plugin>2.2</maven-project-info-reports-plugin>
+
+        <!-- plugin versions -->
+        <maven-project-info-reports-plugin>2.2</maven-project-info-reports-plugin>
     </properties>
 
 
@@ -140,13 +144,21 @@
         <url>https://issues.apache.org/jira/browse/ISIS</url>
     </issueManagement>
 
-    <!-- TODO: is there a CI server for ASF? I've asked on isis-dev. -->
-    <!-- <ciManagement> <system>Hudson</system> <url>http://isis.apache.org/hudson/</url> 
-        <notifiers> <notifier> <type>mail</type> <address>rmatthews@nakedobjects.org</address> 
-        <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration 
-        /> </notifier> <notifier> <type>mail</type> <address>dan@haywood-associates.co.uk</address> 
-        <sendOnError /> <sendOnFailure /> <sendOnSuccess /> <sendOnWarning /> <configuration 
-        /> </notifier> </notifiers> </ciManagement> -->
+    <ciManagement>
+        <system>Hudson</system>
+        <url>https://hudson.apache.org/hudson/job/Isis-trunk-windows</url>
+        <notifiers>
+            <notifier>
+                <type>mail</type>
+                <address>builds@apache.org</address>
+                <sendOnError />
+                <sendOnFailure />
+                <sendOnSuccess />
+                <sendOnWarning />
+                <configuration />
+            </notifier>
+        </notifiers>
+    </ciManagement>
 
     <pluginRepositories>
         <pluginRepository>
@@ -189,19 +201,21 @@
                     <configuration>
                         <rules>
                             <requireMavenVersion>
-                                <version>[2.2.1,)</version>
+                                <version>[2.2.1,3.0.0)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <version>[1.6.0-21,)</version>
+                                <version>[1.6.0-17,)</version>
                             </requireJavaVersion>
                             <requirePluginVersions>
-                                <message>All plugin versions must be defined!</message>
+                                <message>All plugin versions must be
+                                    defined!</message>
                                 <banLatest>true</banLatest>
                                 <banRelease>true</banRelease>
                             </requirePluginVersions>
                         </rules>
                     </configuration>
-                    <!-- goal:enforce supposedly binds to phase:validate, but explicit binding seems to be required -->
+                    <!-- goal:enforce supposedly binds to phase:validate, 
+                        but explicit binding seems to be required -->
                     <executions>
                         <execution>
                             <id>validate-enforce</id>
@@ -778,8 +792,8 @@
         </plugins>
     </build>
 
-	<reporting>
-		<excludeDefaults>true</excludeDefaults>
+    <reporting>
+        <excludeDefaults>true</excludeDefaults>
         <plugins>
             <!-- top-level pom (this pom) should have a reportSet with inherited=false, 
                 and: license, project-team, issue-tracking, scm, cim, mailing-list, dependency-management, 
@@ -794,25 +808,25 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-project-info-reports-plugin</artifactId>
-				<!-- TODO: for some reason the reportSets seems to be being
-					 ignored and generating a full set; not sure why -->
-				<inherited>false</inherited>
+                <!-- TODO: for some reason the reportSets seems to be being 
+                    ignored and generating a full set; not sure why -->
+                <inherited>false</inherited>
                 <reportSets>
-					<reportSet>
-						<reports>
+                    <reportSet>
+                        <reports>
                             <report>scm</report>
                             <report>license</report>
                             <report>project-team</report>
                             <report>issue-tracking</report>
                             <report>cim</report>
-							<report>mailing-list</report>
-							<report>dependency-management</report>
-							<report>plugin-management</report>
+                            <report>mailing-list</report>
+                            <report>dependency-management</report>
+                            <report>plugin-management</report>
                             <report>plugins</report>
-							<report>modules</report>
+                            <report>modules</report>
                             <!-- <report>dependencies</report> -->
                             <!-- <report>dependency-convergence</report> -->
-							<!-- <report>summary</report> -->
+                            <!-- <report>summary</report> -->
                         </reports>
                     </reportSet>
                 </reportSets>
@@ -1099,25 +1113,25 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-report-plugin</artifactId>
-	                    <version>2.5</version>
+                        <version>2.5</version>
                     </plugin>
-					
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-project-info-reports-plugin</artifactId>
-						<version>${maven-project-info-reports-plugin}</version>
-					</plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-project-info-reports-plugin</artifactId>
+                        <version>${maven-project-info-reports-plugin}</version>
+                    </plugin>
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>cobertura-maven-plugin</artifactId>
-	                    <version>2.4</version>
+                        <version>2.4</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-checkstyle-plugin</artifactId>
-	                    <version>2.6</version>
+                        <version>2.6</version>
                         <configuration>
                             <configLocation>${checkstyle.configLocation}</configLocation>
                         </configuration>
@@ -1126,7 +1140,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-pmd-plugin</artifactId>
-	                    <version>2.5</version>
+                        <version>2.5</version>
                         <configuration>
                             <sourceEncoding>${project.build.sourceEncoding}</sourceEncoding>
                             <minimumTokens>100</minimumTokens>
@@ -1150,25 +1164,25 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>findbugs-maven-plugin</artifactId>
-	                    <version>2.3.1</version>
+                        <version>2.3.1</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>javancss-maven-plugin</artifactId>
-	                    <version>2.0</version>
+                        <version>2.0</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>jdepend-maven-plugin</artifactId>
-	                    <version>2.0-beta-2</version>
+                        <version>2.0-beta-2</version>
                     </plugin>
 
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jxr-plugin</artifactId>
-	                    <version>2.2</version>
+                        <version>2.2</version>
                         <configuration>
                             <inputEncoding>${project.build.sourceEncoding}</inputEncoding>
                             <linkJavadoc>true</linkJavadoc>
@@ -1179,7 +1193,7 @@
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
                         <artifactId>taglist-maven-plugin</artifactId>
-	                    <version>2.4</version>
+                        <version>2.4</version>
                         <configuration>
                             <!-- causes out of memory <aggregate>true</aggregate> -->
                             <tagListOptions>
@@ -1213,13 +1227,15 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-javadoc-plugin</artifactId>
-	                    <version>2.7</version>
+                        <version>2.7</version>
                         <configuration>
                             <quiet>true</quiet>
                             <doctitle>${project.name} ${project.version}</doctitle>
                             <windowtitle>${project.name}${project.version}</windowtitle>
-                            <testDoctitle>${project.name}${project.version} (TEST API)</testDoctitle>
-                            <testWindowtitle>${project.name}${project.version} (TEST API)</testWindowtitle>
+                            <testDoctitle>${project.name}${project.version}
+                                (TEST API)</testDoctitle>
+                            <testWindowtitle>${project.name}${project.version}
+                                (TEST API)</testWindowtitle>
                             <splitindex>true</splitindex>
                             <encoding>${project.build.sourceEncoding}</encoding>
                             <links>
@@ -1278,8 +1294,10 @@
 
         <profile>
             <id>modules-standard</id>
-            <!-- The standard set for a smoke test; if this builds we're probably ok, since supports both build (clean install) and site (site-deploy)
-            If fact, these are also the modules that make up the site.  Note that 'examples' and 'release' are omitted -->
+            <!-- The standard set for a smoke test; if this builds we're 
+                probably ok, since supports both build (clean install) and site (site-deploy) 
+                If fact, these are also the modules that make up the site. Note that 'examples' 
+                and 'release' are omitted -->
             <activation>
                 <activeByDefault>true</activeByDefault>
                 <property>
@@ -1297,8 +1315,9 @@
         </profile>
         <profile>
             <id>modules-all</id>
-            <!-- This is every module that can be built (clean, install).  
-            Do not use with site-deploy, because includes 'release' and 'examples' that are not part of the site -->
+            <!-- This is every module that can be built (clean, install). 
+                Do not use with site-deploy, because includes 'release' and 'examples' that 
+                are not part of the site -->
             <activation>
                 <property>
                     <name>modules</name>
@@ -1330,7 +1349,7 @@
                 <module>site-skin</module>
             </modules>
         </profile>
-        
+
         <profile>
             <id>modules-applib</id>
             <!-- To quickly build -->

@@ -43,6 +43,7 @@
             <item name="Twitter (#ApacheIsis)" href="http://search.twitter.com/search?q=%23ApacheIsis" />
             <item name="Wiki" href="https://cwiki.apache.org/confluence/display/ISIS/Index" />
             <item name="JIRA" href="https://issues.apache.org/jira/browse/ISIS" />
+            <item name="Hudson CI" href="https://hudson.apache.org/hudson/job/Isis-trunk-windows" />
         </menu>
 
         <menu name="The Naked Objects Pattern">
