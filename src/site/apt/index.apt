@@ -39,8 +39,8 @@ Welcome to Apache Isis
 
   The diagram below shows the hexagonal architecture as it is implemented by
   <Apache Isis>.
-   
-[./images/HexagonalArchitectureOverview.png] Apache Isis viewers and object stores
+
+%{snippet|verbatim=false|file=src/site/resources/images/HexagonalArchitectureOverview.png.map}
 
  []
   
