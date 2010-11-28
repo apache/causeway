@@ -205,7 +205,7 @@
                                 <version>[2.2.1,3.0.0)</version>
                             </requireMavenVersion>
                             <requireJavaVersion>
-                                <version>[1.6.0-17,)</version>
+                                <version>[1.6.0-11,)</version>
                             </requireJavaVersion>
                             <requirePluginVersions>
                                 <message>All plugin versions must be
