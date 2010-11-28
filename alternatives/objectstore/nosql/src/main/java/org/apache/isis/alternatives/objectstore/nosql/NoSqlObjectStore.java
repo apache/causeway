@@ -101,10 +101,15 @@ public class NoSqlObjectStore implements ObjectStore {
     }
 
     public ObjectAdapter[] getInstances(PersistenceQuery persistenceQuery) {
-        String specificationName = persistenceQuery.getSpecification().getFullName();
-        Iterator<StateReader> instanceData = database.instancesOf(specificationName);
+        ObjectSpecification specification = persistenceQuery.getSpecification(); 
+        List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>(); 
+        instances(persistenceQuery, specification, instances); 
+        return instances.toArray(new ObjectAdapter[instances.size()]); 
+    } 
 
-        List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>();
+    private void instances(PersistenceQuery persistenceQuery, ObjectSpecification specification, List<ObjectAdapter> instances) { 
+        String specificationName = specification.getFullName(); 
+        Iterator<StateReader> instanceData = database.instancesOf(specificationName);
         while(instanceData.hasNext()) {
             StateReader reader = instanceData.next();
             ObjectAdapter instance = objectReader.load(reader, keyCreator, versionCreator);
@@ -116,7 +121,10 @@ public class NoSqlObjectStore implements ObjectStore {
             }
             instances.add(instance);
         }
-        return instances.toArray(new ObjectAdapter[instances.size()]);
+        for (ObjectSpecification spec : specification.subclasses()) { 
+            specificationName = spec.getFullName(); 
+            instances(persistenceQuery, spec, instances); 
+        } 
     }
 
     public ObjectAdapter getObject(Oid oid, ObjectSpecification hint) {

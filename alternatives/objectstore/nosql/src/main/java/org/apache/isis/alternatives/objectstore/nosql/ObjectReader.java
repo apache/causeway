@@ -132,12 +132,14 @@ class ObjectReader {
 
     private void readValue(StateReader reader, OneToOneAssociation association, ObjectAdapter object) {
         String fieldData = reader.readField(association.getId());
-        if (fieldData == null || fieldData.equals("null")) {
-            association.initAssociation(object, null);
-        } else {
-            EncodableFacet encodeableFacet = association.getSpecification().getFacet(EncodableFacet.class);
-            ObjectAdapter value = encodeableFacet.fromEncodedString(fieldData);
-            association.initAssociation(object, value);
+        if (fieldData != null) { 
+            if (fieldData.equals("null")) { 
+                association.initAssociation(object, null);
+            } else { 
+                EncodableFacet encodeableFacet = association.getSpecification().getFacet(EncodableFacet.class); 
+                ObjectAdapter value = encodeableFacet.fromEncodedString(fieldData); 
+                association.initAssociation(object, value); 
+            } 
         }
     }
 
