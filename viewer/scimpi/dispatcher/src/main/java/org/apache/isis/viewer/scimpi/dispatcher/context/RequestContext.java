@@ -80,6 +80,7 @@ public abstract class RequestContext {
     public static final String ERROR = "_error";
     public static final String BACK_TO = "_back_to";
     private static final Map<String, Object> globalVariables = new HashMap<String, Object>();
+    private static final Scope[] SCOPES = new Scope[] { Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL }; 
 
     private ObjectMapping objectMapping;
     private VersionMapping versionMapping;
@@ -221,7 +222,7 @@ public abstract class RequestContext {
         Map<String, Object> map = variables.get(scope);
         Iterator<String> keys = new TreeSet(map.keySet()).iterator();
         if (keys.hasNext()) {
-            view.divider(scope + " variables");
+            view.divider(scope + " scoped variables");
             while (keys.hasNext()) {
                 String key = keys.next();
                 Object object = map.get(key);
@@ -285,9 +286,8 @@ public abstract class RequestContext {
     }
 
     public void changeScope(String name, Scope newScope) {
-        Scope[] oldScope = new Scope[] { Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
-        for (int i = 0; i < oldScope.length; i++) {
-            Map<String, Object> map = variables.get(oldScope[i]);
+        for (int i = 0; i < SCOPES.length; i++) { 
+            Map<String, Object> map = variables.get(SCOPES[i]); 
             Object object = map.get(name);
             if (object != null) {
                 map.remove(name);
@@ -308,9 +308,21 @@ public abstract class RequestContext {
 
     public void addVariable(String name, Object value, Scope scope) {
         name = name != null ? name : RESULT;
+        removeExistingVariable(name);
         variables.get(scope).put(name, value);
     }
 
+    private void removeExistingVariable(String name) { 
+        for (int i = 0; i < SCOPES.length; i++) { 
+            Map<String, Object> map = variables.get(SCOPES[i]); 
+            Object object = map.get(name); 
+            if (object != null) { 
+                map.remove(name); 
+                break; 
+            } 
+        } 
+    } 
+    
     public String getStringVariable(String name) {
         String value = (String) getVariable(name);
         if (value == null) {
@@ -321,9 +333,8 @@ public abstract class RequestContext {
     }
 
     public Object getVariable(String name) {
-        Scope[] scope = new Scope[] { Scope.REQUEST, Scope.INTERACTION, Scope.SESSION, Scope.GLOBAL };
-        for (int i = 0; i < scope.length; i++) {
-            Map<String, Object> map = variables.get(scope[i]);
+        for (int i = 0; i < SCOPES.length; i++) { 
+            Map<String, Object> map = variables.get(SCOPES[i]); 
             Object object = map.get(name);
             if (object != null) {
                 return object;
@@ -647,4 +658,7 @@ public abstract class RequestContext {
 
     public void setContentType(String string) {}
 
+    public boolean isDebug() { 
+        return getDebug() == Debug.ON; 
+    } 
 }

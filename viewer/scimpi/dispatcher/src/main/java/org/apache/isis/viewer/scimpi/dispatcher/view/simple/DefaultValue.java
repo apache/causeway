@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -26,33 +25,23 @@ import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
-public class Variable extends AbstractElementProcessor {
+public class DefaultValue extends AbstractElementProcessor {
 
     public void process(Request request) {
-        String name = request.getOptionalProperty(NAME);
+        // String sourceObjectId = objectOrResult(request);
+        String variableName = request.getRequiredProperty(NAME);
+        String defaultValue = request.getOptionalProperty(VALUE);
         String scopeName = request.getOptionalProperty(SCOPE);
-        boolean isClear = request.getOptionalProperty("action", "set").equals("clear");
-        Scope scope = RequestContext.scope(scopeName, isClear ? Scope.SESSION : Scope.REQUEST);
-        process(request, name, isClear, scope);
-    }
+        Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
 
-    protected void process(Request request, String name, boolean isClear, Scope scope) {
-        request.pushNewBuffer();
-        request.processUtilCloseTag();
-        String source = request.popBuffer();
-        if (isClear) {
-            request.getContext().clearVariable(name, scope);
-        } else {
-            if (source.length() == 0) { 
-                source = (String) request.getContext().getVariable(RequestContext.RESULT); 
-            } 
-            request.getContext().addVariable(name, source, scope);
+        RequestContext context = request.getContext();
+        if (context.getVariable(variableName) == null) {
+            context.addVariable(variableName, defaultValue, scope);
         }
     }
 
     public String getName() {
-        return "variable";
+        return "default";
     }
 
 }
-

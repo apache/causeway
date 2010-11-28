@@ -31,18 +31,43 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class InitializeFromResult extends AbstractElementProcessor {
 
     public void process(Request request) {
-        String name = request.getRequiredProperty(NAME);
-        String defaultId = request.getOptionalProperty(DEFAULT);
-        String objectId = request.getOptionalProperty(OBJECT);
+        disallowSourceAndDefault(request); 
+        String sourceObjectId = objectOrResult(request); 
+        Class<?> cls = forClass(request); 
+        String variableName = request.getRequiredProperty(NAME); 
+        //        String defaultObjectId = request.getOptionalProperty(DEFAULT);         
         String scopeName = request.getOptionalProperty(SCOPE);
         Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
 
-        if (defaultId != null && objectId != null) {
-            throw new ScimpiException("Cannot specify both " + OBJECT + " and " + DEFAULT + " for the " + getName() + " element");
-        }
+        RequestContext context = request.getContext(); 
+        ObjectAdapter sourceObject = context.getMappedObject(sourceObjectId); 
+        boolean isSourceSet = sourceObject != null; 
+        boolean isSourceAssignable = isSourceSet && (cls == null || cls.isAssignableFrom(sourceObject.getObject().getClass())); 
+        if (isSourceAssignable) { 
+            context.addVariable(variableName, sourceObjectId, scope); 
+        } else { 
+            /* 
+            if (defaultObjectId != null) { 
+            context.addVariable(variableName, defaultObjectId, scope); 
+            } else { 
+             */ 
+            context.changeScope(variableName, scope); 
+            //            } 
+        } 
+    } 
+    
+    private String objectOrResult(Request request) { 
+        String sourceObjectId = request.getOptionalProperty(OBJECT); 
+        if (sourceObjectId == null) { 
+            return (String) request.getContext().getVariable(RequestContext.RESULT); 
+        } else { 
+            return sourceObjectId; 
+        } 
+    } 
 
+    private Class<?> forClass(Request request) { 
+        Class<?> cls = null; 
         String className = request.getOptionalProperty(TYPE);
-        Class<?> cls = null;
         if (className != null) {
             try {
                 cls = Class.forName(className);
@@ -50,34 +75,15 @@ public class InitializeFromResult extends AbstractElementProcessor {
                 throw new ScimpiException("No class for " + className, e);
             }
         }
-
-        if (objectId == null) {
-            objectId = (String) request.getContext().getVariable(RequestContext.RESULT);
-        }
-
-        initialize(request, name, objectId, defaultId, cls, scope);
+        return cls;
     }
 
-    protected void initialize(Request request, String variableName, String objectId, String defaultId, Class<?> cls, Scope scope) {
-        RequestContext context = request.getContext();
-        if (defaultId != null) {
-                String variable = (String) request.getContext().getVariable(variableName);
-                if (variable == null) {
-                    context.addVariable(variableName, defaultId, scope);
-                }
-            
-        } else {
-            ObjectAdapter variable = context.getMappedObject(objectId);
-            if (variable != null && (cls == null || cls.isAssignableFrom(variable.getObject().getClass()))) {
-                context.addVariable(variableName, objectId, scope);
-            } else {
-                Object id2 = context.getVariable(variableName);
-                // TODO should remove the variable from other scope
-                context.addVariable(variableName, id2, scope);
-            }
+    private void disallowSourceAndDefault(Request request) { 
+        if (request.getOptionalProperty(DEFAULT) != null && request.getOptionalProperty(OBJECT) != null) { 
+            throw new ScimpiException("Cannot specify both " + OBJECT + " and " + DEFAULT + " for the " + getName() + " element");     
         }
     }
-
+    
     public String getName() {
         return "initialize";
     }

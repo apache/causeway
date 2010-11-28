@@ -68,9 +68,9 @@ public class FieldValue extends AbstractElementProcessor {
 
         ObjectAdapter fieldReference = field.get(object);
 
-        String classSection = "class=\"" + (className == null ? "field" : className)  + "\"";
-        request.appendHtml("<span " + classSection + ">");
         if (fieldReference != null) {
+            String classSection = "class=\"" + (className == null ? "field" : className)  + "\""; 
+            request.appendHtml("<span " + classSection + ">"); 
             if (field.isOneToOneAssociation()) {
                 IsisContext.getPersistenceSession().resolveImmediately((ObjectAdapter) fieldReference);
             }

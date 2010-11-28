@@ -98,10 +98,12 @@ public class ActionAction implements Action {
 
                 int questionMark = view == null ? -1 : view.indexOf("?");
                 if (questionMark > -1) {
-                    String params = view.substring(questionMark + 1);
-                    int equals = params.indexOf("=");
-                    context.addVariable(params.substring(0, equals), params.substring(equals + 1), Scope.REQUEST);
-                    view = view.substring(0, questionMark);
+                    String params[] = view.substring(questionMark + 1).split("&"); 
+                    for (String param : params) { 
+                        int equals = param.indexOf("="); 
+                        context.addVariable(param.substring(0, equals), param.substring(equals + 1), Scope.REQUEST); 
+                        view = view.substring(0, questionMark); 
+                    }
                 }
                 context.setRequestPath(view);
                 if (override != null) {
@@ -208,6 +210,10 @@ public class ActionAction implements Action {
             } else  if (parameters2[i].getSpecification().getFacet(ParseableFacet.class) != null) {
                 try {
                     ParseableFacet facet = (ParseableFacet) parameters2[i].getSpecification().getFacet(ParseableFacet.class);
+                    String message = parameters2[i].isValid(object, newEntry); 
+                    if (message != null) { 
+                        consent = new Veto(message); 
+                    } 
                     ObjectAdapter entry = facet.parseTextEntry(null, newEntry);
                     fieldState.setValue(entry);
                 } catch (TextEntryParseException e) {

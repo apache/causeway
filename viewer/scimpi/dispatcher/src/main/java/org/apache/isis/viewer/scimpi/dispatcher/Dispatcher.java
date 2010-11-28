@@ -32,11 +32,6 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.TreeSet;
 
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -61,6 +56,11 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.ProcessorLookup;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 
 public class Dispatcher {
@@ -131,6 +131,9 @@ public class Dispatcher {
                 }
                 
   //          }
+            if (context.isDebug()) { 
+                context.getWriter().println("<!--" +  context + "-->"); 
+            }
             processView(context);
             IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
         } catch (Throwable e) {

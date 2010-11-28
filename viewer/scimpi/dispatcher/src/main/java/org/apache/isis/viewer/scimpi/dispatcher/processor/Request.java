@@ -22,16 +22,15 @@ package org.apache.isis.viewer.scimpi.dispatcher.processor;
 
 import java.util.Stack;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.viewer.scimpi.dispatcher.BlockContent;
 import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.action.Attributes;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.view.HtmlSnippet;
 import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
 import org.apache.isis.viewer.scimpi.dispatcher.view.SwfTag;
+import org.apache.log4j.Logger;
 
 
 public class Request implements PageWriter {
@@ -81,6 +80,9 @@ public class Request implements PageWriter {
                 SwfTag tag = (SwfTag) snippet;
                 String name = tag.getName();
                 ElementProcessor processor = processors.getFor(name);
+                if (context.isDebug()) { 
+                    context.getWriter().println("<!-- " +  "process " + tag + " -->"); 
+                } 
                 process(tag, processor);
             }
         }

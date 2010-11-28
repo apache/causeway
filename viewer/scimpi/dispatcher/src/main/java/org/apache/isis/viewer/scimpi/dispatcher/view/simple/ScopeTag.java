@@ -32,14 +32,16 @@ public class ScopeTag extends AbstractElementProcessor {
         String name = request.getRequiredProperty(NAME);
         String scopeName = request.getRequiredProperty(SCOPE);
         Scope scope = RequestContext.scope(scopeName);
+        request.processUtilCloseTag(); 
         changeScope(request, name, scope);
     }
 
-    protected void changeScope(Request request, String name, Scope scope) {
-        request.processUtilCloseTag();
+    protected static void changeScope(Request request, String name, Scope scope) { 
         request.getContext().changeScope(name, scope);
         Object value = request.getContext().getVariable(name);
-        request.getContext().addVariable(name, value, scope);
+        if (value != null) { 
+            request.getContext().addVariable(name, value, scope); 
+        } 
     }
 
     public String getName() {

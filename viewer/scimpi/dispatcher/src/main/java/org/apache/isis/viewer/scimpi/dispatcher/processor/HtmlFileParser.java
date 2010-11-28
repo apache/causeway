@@ -97,6 +97,9 @@ public class HtmlFileParser {
                             throw new ScimpiException("Import tag must be empty");
                         }
                         String importFile = tagNode.getAttribute("file");
+                        if (context.isDebug()) { 
+                            context.getWriter().println("<!-- " +  "import file " + importFile + " -->"); 
+                        } 
                         importFile = context.replaceVariables(importFile, true);
                         parseHtmlFile(loadPath, importFile, context, tags, tagsForPreviousTemplate);
                         continue;
@@ -111,6 +114,9 @@ public class HtmlFileParser {
                         }
                         template = tagNode.getAttribute("file");
                         template = context.replaceVariables(template, true);
+                        if (context.isDebug()) { 
+                            context.getWriter().println("<!-- " +  "apply template " + template + " -->"); 
+                        } 
                         tags =  new Stack<Snippet>();
                         continue;
                     }
@@ -119,6 +125,9 @@ public class HtmlFileParser {
                         if (!tagNode.isEmptyXmlTag()) {
                             throw new ScimpiException("Content tag must be empty");
                         }
+                        if (context.isDebug()) { 
+                            context.getWriter().println("<!-- " +  "insert content into template -->"); 
+                        } 
                         tags.addAll(tagsForPreviousTemplate);
                         continue;
                     }

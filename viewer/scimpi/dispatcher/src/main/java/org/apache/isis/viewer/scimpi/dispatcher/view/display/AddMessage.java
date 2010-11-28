@@ -18,41 +18,27 @@
  */
 
 
-package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
+package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
-public class Variable extends AbstractElementProcessor {
+public class AddMessage extends AbstractElementProcessor {
 
     public void process(Request request) {
-        String name = request.getOptionalProperty(NAME);
-        String scopeName = request.getOptionalProperty(SCOPE);
-        boolean isClear = request.getOptionalProperty("action", "set").equals("clear");
-        Scope scope = RequestContext.scope(scopeName, isClear ? Scope.SESSION : Scope.REQUEST);
-        process(request, name, isClear, scope);
-    }
-
-    protected void process(Request request, String name, boolean isClear, Scope scope) {
         request.pushNewBuffer();
         request.processUtilCloseTag();
-        String source = request.popBuffer();
-        if (isClear) {
-            request.getContext().clearVariable(name, scope);
-        } else {
-            if (source.length() == 0) { 
-                source = (String) request.getContext().getVariable(RequestContext.RESULT); 
-            } 
-            request.getContext().addVariable(name, source, scope);
-        }
+        String content = request.popBuffer();
+
+        MessageBroker messageBroker = IsisContext.getMessageBroker();
+        messageBroker.addMessage(content);
     }
 
     public String getName() {
-        return "variable";
+        return "add-message";
     }
 
 }
-
