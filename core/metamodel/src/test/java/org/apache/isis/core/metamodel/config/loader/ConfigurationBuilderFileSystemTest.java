@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.config.NotFoundPolicy;
 
 
-public class ConfigurationLoaderFileSystemTest extends TestCase {
+public class ConfigurationBuilderFileSystemTest extends TestCase {
     ConfigurationBuilderFileSystem loader;
 
     @Override

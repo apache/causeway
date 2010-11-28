@@ -21,6 +21,10 @@ Building Isis
 
  Isis is built using Maven; generally we develop with Eclipse with the m2eclipse plugin.
  
+  NOTE: some of this material is also on the wiki, in better detail.
+
+  NOTE: plan is to move this content into the DocBook "contributors' guide"
+ 
 Prerequisites
 
  Install {{{http://maven.apache.org}Maven}} 2.2.1 (we believe 3.0.0 also works).

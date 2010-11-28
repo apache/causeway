@@ -1,0 +1,612 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+-->
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd">
+<book>
+  <bookinfo>
+    <title><?eval ${docbkxGuideTitle}?></title>
+
+    <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
+    <releaseinfo><?eval ${project.version}?></releaseinfo>
+
+    <authorgroup>
+      <author>
+        <firstname>Dan</firstname>
+
+        <surname>Haywood</surname>
+      </author>
+    </authorgroup>
+
+    <legalnotice>
+      <para>Permission is granted to make and distribute verbatim copies of
+      this manual provided that the copyright notice and this permission
+      notice are preserved on all copies.</para>
+    </legalnotice>
+  </bookinfo>
+
+  <!-- front matter -->
+
+  <toc></toc>
+
+  <preface id="preface">
+    <title>Preface</title>
+
+    <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
+    rapidly develop domain-driven applications following the <ulink
+    url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
+    pattern. It is made up of a core framework plus a number of alternate
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para>This guide is ...</para>
+  </preface>
+
+  <!-- main content -->
+
+  <part>
+    <title>Building</title>
+
+    <partintro>
+      <para>*** partintro</para>
+
+      <para></para>
+    </partintro>
+
+    <chapter id="chp.SetUpDevelopmentEnvironment">
+      <title>Set Up Development Environment</title>
+
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
+
+      <sect1>
+        <title>***</title>
+
+        <para><emphasis>*** yada yada</emphasis></para>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.BuildingIsisFromSource">
+      <title>Building Isis from Source</title>
+
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
+
+      <sect1>
+        <title>***</title>
+
+        <para><emphasis>*** yada yada</emphasis></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.SmokeTest">
+      <title>Smoke Test</title>
+
+      <abstract>
+        <para>*** yada yada</para>
+      </abstract>
+
+      <sect1>
+        <title>***</title>
+
+        <para><emphasis>*** yada yada</emphasis></para>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.BuildingSiteAndDocs">
+      <title>Building Site and Documentation</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para>JIMI prereqs:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>From the <ulink url="http://java.sun.com/products/jimi/">Jimi
+          page</ulink>, download the <filename>jimi1_0.zip</filename> file,
+          and unzip.</para>
+        </listitem>
+
+        <listitem>
+          <para>The JAR you need is actually called
+          <filename>JimiProClasses.zip</filename> . Install into your local
+          Maven repository using:</para>
+        </listitem>
+
+        <listitem>
+          <screen>mvn install:install-file –D groupId=com.java –D artifactId=jimi –D version=1.0 –D packaging=jar –D file=/path/to/JimiProClasses.zip</screen>
+        </listitem>
+      </itemizedlist>
+
+      <para></para>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Contributing</title>
+
+    <partintro>
+      <para>*** partintro</para>
+
+      <para></para>
+    </partintro>
+
+    <chapter>
+      <title>Coding Standards</title>
+
+      <abstract>
+        <para>This chapter the principles of the main coding standards adopted
+        within the Isis codebase. The enforcement of these coding standards is
+        through plugins to both the IDE and Maven</para>
+      </abstract>
+
+      <para>The style of framework code has developed over the lifetime of the
+      project. This style should be adhere to in every class to provide
+      consistency across the code base.</para>
+
+      <para></para>
+
+      <sect1>
+        <title>Code formatting</title>
+
+        <para>A code formatter specification is available for use within
+        Eclipse. Every class should be formatted using this formatter before
+        the code is checked back into the repository. The specification can be
+        found in the root of source tree in the file <filename
+        class="directory" moreinfo="none">java-format.xml</filename>. This can
+        be summarised as follows:</para>
+
+        <formalpara>
+          <title>File footer</title>
+
+          <para>Each code file should end with a copyright statement exactly
+          as follows, starting in the first column<programlisting>// Copyright (c) [[NAME]] Group Ltd.</programlisting></para>
+        </formalpara>
+
+        <itemizedlist>
+          <listitem>
+            <para>Indentation is achieved using spaces, not tabs; there should
+            be no tabs, except where needed in quoted strings</para>
+          </listitem>
+
+          <listitem>
+            <para>Each level of indentation is 4 characters</para>
+          </listitem>
+
+          <listitem>
+            <para>Code lines are wrapped at 130 characters, with a two space
+            indentation for wrapped lines</para>
+          </listitem>
+
+          <listitem>
+            <para>Comment lines are wrapped at 110 characters, with a two
+            space indentation for wrapped lines</para>
+          </listitem>
+
+          <listitem>
+            <para>Statements should only be wrapped when too long for the
+            line</para>
+          </listitem>
+
+          <listitem>
+            <para>Block braces ({}) start on the same line as their
+            controlling statement and end, indented to the same level as the
+            starting line, on a new line</para>
+          </listitem>
+
+          <listitem>
+            <para>No comments or blank lines should be placed before the
+            package statement</para>
+          </listitem>
+
+          <listitem>
+            <para>One blank line between package statement and imports</para>
+          </listitem>
+
+          <listitem>
+            <para>Imports should be grouped by major type
+            (<package>java</package>, <package>com</package>,
+            <package>org</package> etc), with a blank line</para>
+          </listitem>
+
+          <listitem>
+            <para>Two blank lines between imports and class/interface
+            declaration</para>
+          </listitem>
+
+          <listitem>
+            <para>A single blank line between each method declaration, and
+            blocks of field etc</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To set up code formatting use the Java/Code Style/Formatter
+        section in the preferences to load in the format file, using the
+        <emphasis>Import</emphasis> button, from the checked out
+        source.</para>
+
+        <para>To set up the correct import order use the <emphasis>Java/Code
+        Style/Organize Imports</emphasis> section in the preferences to load
+        in the order file, <filename class="directory"
+        moreinfo="none">nof.importorder</filename>, from the checked out
+        source.</para>
+
+        <sect2>
+          <title>Naming</title>
+
+          <para>All names should be written in English and be full
+          words.</para>
+
+          <para>Abbreviation should be avoided unless they are very well known
+          and unambiguous. For example use <emphasis>international</emphasis>
+          not <emphasis>i18n</emphasis>, and <emphasis>position</emphasis> not
+          <emphasis>pos</emphasis>.</para>
+
+          <para>Abbreviations and acronyms should not be uppercase when used
+          as name, and should only be used when it is common, such as XML,
+          SQL, POP etc. Using all uppercase for the base name conflicts with
+          the naming conventions below and reduces readability.</para>
+
+          <programlisting>XmlObjectStore(); // NOT: XMLObjectstore</programlisting>
+
+          <para>Where there are complementary concepts, then complementary
+          names should be used, such as: start/stop; next/previous; begin/end,
+          open/close, show/hide. This helps to indicate that things are
+          related.</para>
+
+          <formalpara>
+            <title>Package naming</title>
+
+            <para>All package names should be in lower case.</para>
+          </formalpara>
+
+          <programlisting>org.apache.isis.application</programlisting>
+
+          <formalpara>
+            <title>Class naming</title>
+
+            <para>All class names should be nouns and written in camel case.
+            Interfaces should <emphasis role="strong">not</emphasis> have an
+            'I' placed in front of it.</para>
+          </formalpara>
+
+          <programlisting>ObjectAdapter, Configuration</programlisting>
+
+          <formalpara>
+            <title>Method naming</title>
+
+            <para>Method names should be verbs and written in mixed case
+            starting with lower case.</para>
+          </formalpara>
+
+          <programlisting>isActionStatic(), prepare()</programlisting>
+
+          <formalpara>
+            <title>Variable naming</title>
+
+            <para>Variable names must be in mixed case starting with lower
+            case (never an underscore). Variables should have full sensible
+            name, reflecting their purpose.</para>
+          </formalpara>
+
+          <programlisting>count, target, previousOid</programlisting>
+
+          <para>Short variable names should only be used within small blocks
+          of codes or short method, but never for parameter names.</para>
+
+          <formalpara>
+            <title>Constant naming</title>
+
+            <para>Constants' names should be all uppercase with an underscore
+            between words.</para>
+          </formalpara>
+
+          <programlisting>isActionStatic(), prepare()</programlisting>
+
+          <formalpara>
+            <title>Property naming</title>
+
+            <para>Accessor and mutator method names should be prefixed with
+            <emphasis>get</emphasis> and <emphasis>set</emphasis>.</para>
+          </formalpara>
+
+          <programlisting>getActionName(), setDelay(int time)</programlisting>
+
+          <formalpara>
+            <title>Boolean methods and variables</title>
+
+            <para>Boolean variable and accessor method names should be
+            prefixed with <emphasis>is</emphasis>, <emphasis>can</emphasis>,
+            <emphasis>has</emphasis> or <emphasis>should</emphasis>.</para>
+          </formalpara>
+
+          <programlisting>isDirty(), canSave(ObjectAdapter object)</programlisting>
+
+          <para>Mutator methods for boolean variables should use a
+          <emphasis>set</emphasis> prefix.</para>
+
+          <programlisting>setDirty(), setInitialised(boolean initialised)</programlisting>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Constants</title>
+
+        <para>Use constants instead of fixed phrases, except for messages,
+        debug information and the like. For example:</para>
+
+        <programlisting>if (name.equals(OPENING_TAG)) // Not if (name.equals("&lt;"))</programlisting>
+
+        <para>Also use constants instead of magic numbers. For example:</para>
+
+        <programlisting>if (line &gt; MAXIMUM_LINES) // Not if (line &gt; 5)</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>Code conventions</title>
+
+        <itemizedlist>
+          <listitem>
+            <para>Classes, not packages, should be imported - no * - use
+            the<emphasis> organise imports</emphasis> option to set up
+            imports</para>
+          </listitem>
+
+          <listitem>
+            <para>Unless there is a clash of class names, fully qualified
+            names should not be used in the code</para>
+          </listitem>
+
+          <listitem>
+            <para>No uneeded imports should be left in the code - this can be
+            ensured via the <emphasis>organise imports</emphasis>
+            option</para>
+          </listitem>
+
+          <listitem>
+            <para>Comments should not contain any JavaDoc tags that are not
+            complete, including <emphasis>@param</emphasis> markers that
+            simply echo the name of the parameter - these are often left in by
+            the code templates</para>
+          </listitem>
+
+          <listitem>
+            <para>The end of each file should end with <emphasis>// Copyright
+            (c) [[NAME]] Group Ltd.\n</emphasis> on a line by itself</para>
+          </listitem>
+
+          <listitem>
+            <para>Where possible use final variables</para>
+          </listitem>
+
+          <listitem>
+            <para>All parameters should be marked as final</para>
+          </listitem>
+
+          <listitem>
+            <para>Do not check in commented-out code, use the repository to
+            revert to previous versions</para>
+          </listitem>
+
+          <listitem>
+            <para>Add TODO, REVIEW, FIXME tasks to code wherever work is to be
+            done on the code that you are not going to do now</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>A code template is also provided with the NOF code to provide
+        consistent formatting and the exclusion of unwanted comments that are
+        normally added by the IDE. This is set up in the <emphasis>Java/Code
+        Style/Code Templates</emphasis> section of the preferences by loading
+        in the file <filename class="directory"
+        moreinfo="none">codetemplates.xml</filename> file from the root of the
+        source tree.</para>
+      </sect1>
+
+      <sect1>
+        <title>Code order</title>
+
+        <para>Declarations within each class should follow the standard order,
+        with each set ordered alphabetically. To avoid problems with static
+        initialization set up dependent static variables within a static
+        block. This order can be specified in the preferences under
+        <emphasis>Java/Appearance/Members Sort Order</emphasis>, and the code
+        can be ordered using the <emphasis>Source/Sort Members</emphasis>
+        options.</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Typed (inner classes etc)</para>
+          </listitem>
+
+          <listitem>
+            <para>Static field</para>
+          </listitem>
+
+          <listitem>
+            <para>Static initializers</para>
+          </listitem>
+
+          <listitem>
+            <para>Static methods</para>
+          </listitem>
+
+          <listitem>
+            <para>Initializers</para>
+          </listitem>
+
+          <listitem>
+            <para>Fields</para>
+          </listitem>
+
+          <listitem>
+            <para>Constructors</para>
+          </listitem>
+
+          <listitem>
+            <para>Methods</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>This order can be set up in the <emphasis>Java/Appearance/Member
+        Sort Order</emphasis> section of the preferences. There is no import
+        facility so it needs to be set up by hand as shown below.</para>
+      </sect1>
+
+      <sect1>
+        <title>Package naming</title>
+
+        <para>The NOF is released under the domain
+        <emphasis>isis.apache.org</emphasis>, so all packages start with
+        <package>org.apache.isis</package>. The main groupings are
+        then:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>noa - the NO architecture</para>
+          </listitem>
+
+          <listitem>
+            <para>applib - the application library for building independent
+            domain models</para>
+          </listitem>
+
+          <listitem>
+            <para>nof - the core framework</para>
+          </listitem>
+
+          <listitem>
+            <para>nos - the components for building NO systems</para>
+          </listitem>
+
+          <listitem>
+            <para>example - example DOMs</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Within the components (nos) there are currently the following
+        subgoupings:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>client - users of the framework, such as viewers and the
+            testing framework</para>
+          </listitem>
+
+          <listitem>
+            <para>store - object store implementations</para>
+          </listitem>
+
+          <listitem>
+            <para>remote - remoting code for distributed processing</para>
+          </listitem>
+        </itemizedlist>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Configuration of Checkstyle et al.</title>
+
+      <abstract>
+        <para>Checkstyle, PMD and FindBugs are all used to help enforce the
+        coding standards. This chapter describes the configurations that have
+        been applied for these tools.</para>
+      </abstract>
+
+      <para></para>
+
+      <para>*** integrated both into the "site-docs" build</para>
+
+      <para></para>
+
+      <sect1>
+        <title>CheckStyle</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>PMD</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>FindBugs</title>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Configuring the Development Environment</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Continuous Integration and Release Management</title>
+
+    <chapter>
+      <title>CI Configuration</title>
+
+      <abstract>
+        <para>Hudson is used for CI</para>
+      </abstract>
+
+      <para></para>
+    </chapter>
+
+    <chapter>
+      <title>Release Management</title>
+
+      <abstract>
+        <para>In ASF, releases must be voted on, and so the release management
+        process is mostly manual.</para>
+      </abstract>
+
+      <para></para>
+    </chapter>
+  </part>
+</book>

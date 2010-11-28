@@ -20,6 +20,8 @@
 Deploying Apache Isis
 
   These notes are for Apache Isis contributors with responsibility for deploying [[NAME]] (either the code artifact via <<<mvn deploy>>> or the site via <<<mvn site-deploy>>>).
+  
+  NOTE: plan is to move this content into the DocBook "contributors' guide"
 
 Software
 

@@ -22,12 +22,15 @@
 <book>
   <bookinfo>
     <title><?eval ${docbkxGuideTitle}?></title>
+
     <subtitle><?eval ${docbkxGuideSubTitle}?></subtitle>
+
     <releaseinfo><?eval ${project.version}?></releaseinfo>
 
     <authorgroup>
       <author>
         <firstname>Robert</firstname>
+
         <surname>Matthews</surname>
       </author>
     </authorgroup>
@@ -50,17 +53,15 @@
     rapidly develop domain-driven applications following the <ulink
     url="http://en.wikipedia.org/wiki/Naked_Objects">Naked Objects</ulink>
     pattern. It is made up of a core framework plus a number of alternate
-    implementations, and supports various viewers and object stores.  Apache 
-    Isis is hosted at the 
-    <ulink url="http://incubator.apache.org/isis">Apache Foundation</ulink>,
-    and is licensed under <ulink
+    implementations, and supports various viewers and object stores. Apache
+    Isis is hosted at the <ulink url="http://incubator.apache.org/isis">Apache
+    Foundation</ulink>, and is licensed under <ulink
     url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
     License v2</ulink>.</para>
 
-
-    <para>This guide is written for programmers looking to customize, configure
-    and deploy <emphasis>Apache Isis</emphasis> applications using the 
-    <emphasis>HTML viewer</emphasis> as the primary user interface.</para>
+    <para>This guide is written for programmers looking to customize,
+    configure and deploy <emphasis>Apache Isis</emphasis> applications using
+    the <emphasis>HTML viewer</emphasis> as the primary user interface.</para>
   </preface>
 
   <!-- main content -->
@@ -90,6 +91,50 @@
       <title>***</title>
 
       <para><emphasis>*** yada yada</emphasis></para>
+
+      <sect2>
+        <title>Properties</title>
+
+        <para>The html viewer has only two properties</para>
+
+        <programlisting format="linespecific">isis.viewer.html.debug=true</programlisting>
+
+        <para>Which enables debugging on the web controller.</para>
+
+        <programlisting format="linespecific">isis.viewer.html.encoding=UTF-8</programlisting>
+
+        <para>Which enables the character set encoding used by the
+        HTTPServletRequest. This is ISO-8859-1 by default.</para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Debugging</title>
+
+        <para>To turn on debuging use the debugon command, e.g.,</para>
+
+        <programlisting>http://localhost:8080/debugon.app</programlisting>
+
+        <para>A control bar appears a the bottom of the page allowing you to
+        display the object graph, specification, connection details and so on.
+        To turn it off use the debugoff command:</para>
+
+        <programlisting>http://localhost:8080/debugoff.app</programlisting>
+
+        <para>The debug pages can be displayed directly by providing the
+        commands: debug; spec and dump - along with a object id if necessary.
+        For example to view the details about the specification for object 28
+        use:</para>
+
+        <programlisting>http://localhost:8080/spec.app?id=28</programlisting>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
     </sect1>
   </chapter>
 

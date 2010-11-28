@@ -19,6 +19,10 @@
 
 Setting up the Development Environment
 
+  NOTE: some of this material is also on the wiki, in better detail.
+
+  NOTE: plan is to move this content into the DocBook "contributors' guide"
+  
 * Eclipse
 
   If you use Eclipse (most of the Isis committers do), then we recommend the following plugins:

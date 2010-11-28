@@ -113,7 +113,12 @@
             <item name="Writing Docs" href="contributors-writing-docs.html" />
 			<item name="Deploying" href="contributors-deploying.html" />
 			<item name="Jottings" href="jottings.html" />
+            <item name="${docbkxGuideTitle}">
+                <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
+                <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
+            </item>
 		</menu>
+
 
 	</body>
 </project>
