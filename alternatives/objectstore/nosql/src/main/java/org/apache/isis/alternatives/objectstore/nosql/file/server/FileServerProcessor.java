@@ -351,7 +351,8 @@ public class FileServerProcessor {
 
     private void hasInstances(ServerConnection connection) throws IOException {
         String type = connection.getRequest();
-        boolean hasInstances = listFiles(type).length > 0;
+        File[] listFiles = listFiles(type); 
+        boolean hasInstances = listFiles != null && listFiles.length > 0; 
         connection.response(hasInstances);
     }
 

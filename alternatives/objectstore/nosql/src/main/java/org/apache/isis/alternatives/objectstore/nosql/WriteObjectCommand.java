@@ -142,7 +142,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
             List<StateWriter> elements = new ArrayList<StateWriter>();
             for (ObjectAdapter element : collectionFacet.iterable(collection)) {
                StateWriter elementWriter = writer.createElementWriter();
-               writeFields(elementWriter, association.getSpecification().getFullName(), element);
+               writeFields(elementWriter, element.getSpecification().getFullName(), element);
                elements.add(elementWriter);
             }
             writer.writeCollection(association.getId(), elements);
