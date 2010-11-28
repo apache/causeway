@@ -25,5 +25,3 @@ public class IsisSystemUsingInstallersWithinStory extends IsisSystemUsingInstall
     }
 
 }
-
-// Copyright (c) Naked Objects Group Ltd.

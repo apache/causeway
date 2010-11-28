@@ -44,5 +44,3 @@ public class ServicesResourceImpl extends ResourceAbstract implements ServicesRe
     }
 
 }
-
-// Copyright (c) Naked Objects Group Ltd.

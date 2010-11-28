@@ -30,5 +30,3 @@ public class StoryInMemoryPersistenceMechanismInstaller extends
     }
 
 }
-
-// Copyright (c) Naked Objects Group Ltd.

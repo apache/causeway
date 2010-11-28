@@ -434,5 +434,3 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     }
 
 }
-
-// Copyright (c) Naked Objects Group Ltd.

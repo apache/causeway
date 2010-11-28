@@ -60,15 +60,15 @@ public class IsisSessionFilter implements Filter {
     }
 
     /**
-     * Locates the {@link Session Naked Objects session} from the {@link HttpSession}, if available, and
+     * Locates the {@link Session Isis session} from the {@link HttpSession}, if available, and
      * ensures is {@link AuthenticationManager#isSessionValid(Session) still valid}.
      * 
      * <p>
-     * Any bound {@link Session Naked Objects session} is bound onto the {@link HttpSession} for further
+     * Any bound {@link Session Isis session} is bound onto the {@link HttpSession} for further
      * requests.
      * 
      * <p>
-     * If no valid {@link Session Naked Objects session} exists, then attempts to create one using
+     * If no valid {@link Session Isis session} exists, then attempts to create one using
      * <tt>user</tt> and <tt>password</tt> parameters.
      * 
      * <p>

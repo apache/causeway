@@ -24,5 +24,3 @@ public class HomePageResourceImpl extends ResourceAbstract implements HomePageRe
     }
 
 }
-
-// Copyright (c) Naked Objects Group Ltd.

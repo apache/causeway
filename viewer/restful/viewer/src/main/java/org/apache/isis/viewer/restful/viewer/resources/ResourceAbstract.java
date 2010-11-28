@@ -99,7 +99,7 @@ public abstract class ResourceAbstract {
 	}
 
     ////////////////////////////////////////////////////////////////
-    // Naked Objects integration
+    // Isis integration
     ////////////////////////////////////////////////////////////////
 
     protected static ObjectSpecification getSpecification(final String specFullName) {

@@ -40,5 +40,3 @@ public class UserResourceImpl extends ResourceAbstract implements UserResource {
         return xhtml.toXML();
     }
 }
-
-// Copyright (c) Naked Objects Group Ltd.

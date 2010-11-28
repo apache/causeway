@@ -150,7 +150,7 @@ public class Story implements AliasRegistryHolder {
     /**
      * Logon, specifying no roles.
      * <p>
-     * Unlike the {@link LogonFixture} on regular Naked Objects fixtures, the logonAs is not automatically remembered
+     * Unlike the {@link LogonFixture} on regular fixtures, the logonAs is not automatically remembered
      * until the end of the setup. It should therefore be invoked at the end of setup explicitly.
      */
     public void logonAsOrSwitchUserTo(final String userName) {

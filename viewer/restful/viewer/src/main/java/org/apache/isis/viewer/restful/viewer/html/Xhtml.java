@@ -7,5 +7,3 @@ public final class Xhtml {
     private Xhtml() {}
 
 }
-
-// Copyright (c) Naked Objects Group Ltd.
