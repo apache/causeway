@@ -93,6 +93,7 @@ public class RemoveElement extends AbstractElementProcessor {
             }
             request.appendHtml("<input type=\"hidden\" name=\"" + VIEW + "\" value=\"" + view + "\" />");
             request.appendHtml("<input type=\"hidden\" name=\"" + ERRORS + "\" value=\"" + error + "\" />");
+            request.appendHtml(request.getContext().interactionFields());
             request.appendHtml("<input class=\"button\" type=\"submit\" value=\"" + title + "\" />");
             request.appendHtml("</form>");
         } 
