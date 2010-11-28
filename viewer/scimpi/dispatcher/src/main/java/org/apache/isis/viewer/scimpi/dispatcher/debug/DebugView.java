@@ -87,7 +87,11 @@ public class DebugView {
     }
 
     public void appendRow(Object object) {
-        writer.println("<tr><td<td colspan=\"2\">" + object.toString() + "<td></tr>");
+        writer.println("<tr><td colspan=\"2\">" + object.toString() + "<td></tr>"); 
+    } 
+
+    public void appendDebugTrace(String text) { 
+        writer.println("<tr><td colspan=\"2\"><pre>" + text + "</pre><td></tr>"); 
     }
 
     public void appendln(Object object) {

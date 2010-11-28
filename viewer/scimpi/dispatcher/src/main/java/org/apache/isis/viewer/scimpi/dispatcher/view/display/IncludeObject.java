@@ -20,6 +20,13 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -27,7 +34,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
-import org.apache.isis.viewer.scimpi.dispatcher.view.simple.Import;
 
 /**
  * Element to include another file that will display an object.
@@ -51,10 +57,31 @@ public class IncludeObject extends AbstractElementProcessor {
         if (object != null) {
             IsisContext.getPersistenceSession().resolveImmediately(object);
             request.getContext().addVariable("_object", id, Scope.REQUEST);
-            Import.importFile(request, path);
+            importFile(request, path); 
         }
         request.closeEmpty();
     }
+    
+    private static void importFile(Request request, String path) { 
+    // TODO load in file via HtmlFileParser 
+        File file = new File(path); 
+        try { 
+            if (file.exists()) { 
+                BufferedReader reader; 
+                reader = new BufferedReader(new InputStreamReader(new FileInputStream(file))); 
+                String line; 
+                while ((line = reader.readLine()) != null) { 
+                    request.appendHtml(line); 
+                } 
+            } else { 
+                request.appendHtml("<P classs=\"error\">File " + path + " not found to import</P>"); 
+            } 
+        } catch (FileNotFoundException e) { 
+            throw new RuntimeException(e); 
+        } catch (IOException e) { 
+            throw new RuntimeException(e); 
+        } 
+    } 
     
     public String getName() {
         return "include-object";

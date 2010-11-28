@@ -29,6 +29,7 @@ public class When extends AbstractConditionalBlock {
         if (isSet) {
             request.processUtilCloseTag();
         } else {
+            request.appendDebug("    skipping segment"); 
             request.skipUntilClose();
         }
     }

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -26,6 +25,7 @@ import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+
 
 /**
  * 
@@ -36,8 +36,9 @@ public class TitleString extends AbstractElementProcessor {
         String id = request.getOptionalProperty(OBJECT);
         String fieldName = request.getOptionalProperty(FIELD);
         ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        String titleString;
         if (fieldName == null) {
-            request.appendHtml(object.titleString());
+            titleString = object.titleString();
         } else {
             ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
@@ -45,14 +46,17 @@ public class TitleString extends AbstractElementProcessor {
             }
             ObjectAdapter fieldReference = field.get(object);
             if (fieldReference != null) {
-                request.appendHtml(fieldReference.titleString());
+                titleString = fieldReference.titleString();
+            } else {
+                titleString = "";
             }
         }
+        request.appendDebug("    " + titleString); 
+        request.appendHtml(titleString); 
     }
-    
+
     public String getName() {
         return "title-string";
     }
 
 }
-

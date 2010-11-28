@@ -91,7 +91,21 @@ public class HtmlFileParser {
                     TagNode tagNode = (TagNode) node;
                     String tagName = tagNode.getTagName().toUpperCase();
                     LOG.debug(tagName);
-                    
+                   
+                    // TODO remove context & request from Attributes -- the tags will be re-used across 
+                    // requests 
+                    Attributes attributes = new Attributes(tagNode, context); 
+                    int type = 0; 
+                    if (tagNode.isEndTag()) { 
+                        type = SwfTag.END; 
+                    } else { 
+                        type = tagNode.isEmptyXmlTag() ? SwfTag.EMPTY : SwfTag.START; 
+                    } 
+                    testForProcessorForTag(lexer, tagName); 
+                    lineNumbers = lineNumbering(node); 
+                    SwfTag tag = new SwfTag(tagName, attributes, type, lineNumbers, loadFile.getCanonicalPath()); 
+                    tags.push(tag); 
+
                     if (tagName.equals("SWF:IMPORT")) {
                         if (!tagNode.isEmptyXmlTag()) {
                             throw new ScimpiException("Import tag must be empty");
@@ -102,7 +116,6 @@ public class HtmlFileParser {
                         } 
                         importFile = context.replaceVariables(importFile, true);
                         parseHtmlFile(loadPath, importFile, context, tags, tagsForPreviousTemplate);
-                        continue;
                     }
 
                     if (tagName.equals("SWF:TEMPLATE")) {
@@ -118,7 +131,6 @@ public class HtmlFileParser {
                             context.getWriter().println("<!-- " +  "apply template " + template + " -->"); 
                         } 
                         tags =  new Stack<Snippet>();
-                        continue;
                     }
 
                     if (tagName.equals("SWF:CONTENT")) {
@@ -129,22 +141,7 @@ public class HtmlFileParser {
                             context.getWriter().println("<!-- " +  "insert content into template -->"); 
                         } 
                         tags.addAll(tagsForPreviousTemplate);
-                        continue;
                     }
-
-                    // TODO remove context & request from Attributes -- the tags will be re-used across
-                    // requests
-                    Attributes attributes = new Attributes(tagNode, context);
-                    int type = 0;
-                    if (tagNode.isEndTag()) {
-                        type = SwfTag.END;
-                    } else {
-                        type = tagNode.isEmptyXmlTag() ? SwfTag.EMPTY : SwfTag.START;
-                    }
-                    testForProcessorForTag(lexer, tagName);
-                    lineNumbers = lineNumbering(node);
-                    SwfTag tag = new SwfTag(tagName, attributes, type, lineNumbers, filePath);
-                    tags.push(tag);
                 } else {
                     Snippet snippet = tags.size() == 0 ? null : tags.peek();
                     if (snippet instanceof HtmlSnippet) {

@@ -93,6 +93,10 @@ public class Attributes {
         return array;
     }
 
+    public String toString() { 
+        return tagNode.toHtml(); //getAttributesEx().toString(); 
+    } 
+    
     public boolean isRequested(String name) {
         return isRequested(name, false);
     }

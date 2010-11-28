@@ -80,9 +80,6 @@ public class Request implements PageWriter {
                 SwfTag tag = (SwfTag) snippet;
                 String name = tag.getName();
                 ElementProcessor processor = processors.getFor(name);
-                if (context.isDebug()) { 
-                    context.getWriter().println("<!-- " +  "process " + tag + " -->"); 
-                } 
                 process(tag, processor);
             }
         }
@@ -110,11 +107,15 @@ public class Request implements PageWriter {
     private void process(SwfTag tag, ElementProcessor processor) {
         try {
             LOG.debug("processing " + processor.getName() + " " + tag);
+            appendDebug("\n" + tag.debug()); 
+            if (tag.getType() == SwfTag.END) { 
+                throw new TagProcessingException(tag.errorAt() + " - end tag mistaken for a start tag"); 
+            } 
             processor.process(this);
         } catch (TagProcessingException e) {
             throw e;
         } catch (RuntimeException e) {
-            throw new TagProcessingException(tag.errorAt(), e);
+            throw new TagProcessingException( "Error while processing " + tag.getName().toLowerCase() + " element at " + tag.errorAt(), e); 
         }
     }
 
@@ -136,6 +137,9 @@ public class Request implements PageWriter {
                     }
                 }
                 String name = nextTag.getName();
+                if (nextTag.getType() == SwfTag.END && !tag.getName().equals(name)) { 
+                    throw new TagProcessingException("Expected " + nextTag.getName().toLowerCase() + " tag but found " + tag.getName().toLowerCase() + " tag at " + nextTag.errorAt()); 
+                } 
                 ElementProcessor processor = processors.getFor(name);
                 process(nextTag, processor);
             }
@@ -145,6 +149,9 @@ public class Request implements PageWriter {
     public void skipUntilClose() {
         SwfTag tag = getTag();
         if (tag.getType() == SwfTag.EMPTY) {
+            if (context.isDebug()) { 
+                appendHtml("<!-- " +  "skipped " + tag + " -->"); 
+            } 
             return;
         }
         int depth = 1;
@@ -274,5 +281,9 @@ public class Request implements PageWriter {
     public RepeatMarker createMarker() {
         return new RepeatMarker(index);
     }
+    
+    public void appendDebug(String line) { 
+        context.appendDebugTrace(line); 
+    } 
 }
 

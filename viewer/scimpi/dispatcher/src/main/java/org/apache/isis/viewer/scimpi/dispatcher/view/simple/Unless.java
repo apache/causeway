@@ -28,7 +28,8 @@ public class Unless extends AbstractConditionalBlock {
     protected void processTags(boolean isSet, Request request) {
         if (isSet) {
             request.skipUntilClose();
-        } else {
+            request.appendDebug("    skipping segment"); 
+          } else {
             request.processUtilCloseTag();
         }
     }
@@ -38,4 +39,3 @@ public class Unless extends AbstractConditionalBlock {
     }
 
 }
-

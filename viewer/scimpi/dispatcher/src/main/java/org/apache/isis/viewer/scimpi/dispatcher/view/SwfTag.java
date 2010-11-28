@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.viewer.scimpi.dispatcher.view;
 
 import org.apache.isis.viewer.scimpi.dispatcher.action.Attributes;
@@ -40,8 +39,8 @@ public class SwfTag implements Snippet {
         this.type = type;
         this.lineNumbers = lineNumbers;
         this.path = path;
-       }
-    
+    }
+
     public String getHtml() {
         return tagName;
     }
@@ -59,9 +58,13 @@ public class SwfTag implements Snippet {
     }
 
     public String errorAt() {
-        return "Error while processing " + tagName.toLowerCase() + " element at " + path + ":" + lineNumbers;
+        return path + ":" + lineNumbers;
     }
-    
+
+    public String debug() {
+        return path + ":" + lineNumbers + " - " + getAttributes();
+    }
+        
     public String toString() {
         String t = null;
         switch (type) {
@@ -75,8 +78,7 @@ public class SwfTag implements Snippet {
             t = "end";
             break;
         }
-        return "SwfTag[name=" + tagName + ",line=" + lineNumbers + ",type="+ t + "]";
+        return "SwfTag[name=" + tagName + ",path=" + path + ",line=" + lineNumbers + ",type=" + t + "]";
     }
-    
-}
 
+}

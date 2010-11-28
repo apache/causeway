@@ -43,16 +43,12 @@ public class InitializeFromResult extends AbstractElementProcessor {
         ObjectAdapter sourceObject = context.getMappedObject(sourceObjectId); 
         boolean isSourceSet = sourceObject != null; 
         boolean isSourceAssignable = isSourceSet && (cls == null || cls.isAssignableFrom(sourceObject.getObject().getClass())); 
-        if (isSourceAssignable) { 
+        if (isSourceAssignable) {
+            request.appendDebug("     " + variableName + " set to " + sourceObjectId + " (" + scope + ")"); 
             context.addVariable(variableName, sourceObjectId, scope); 
         } else { 
-            /* 
-            if (defaultObjectId != null) { 
-            context.addVariable(variableName, defaultObjectId, scope); 
-            } else { 
-             */ 
+            request.appendDebug("     " + variableName + " set to " + sourceObjectId + " (" + scope + ")"); 
             context.changeScope(variableName, scope); 
-            //            } 
         } 
     } 
     

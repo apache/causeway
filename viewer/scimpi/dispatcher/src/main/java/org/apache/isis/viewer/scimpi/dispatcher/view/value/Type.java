@@ -42,6 +42,7 @@ public class Type extends AbstractElementProcessor {
             ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             object =  objectField.get(object);
         }
+        request.appendDebug(" for " + object); 
         
         ObjectSpecification specification = object.getSpecification();
         String name = showPlural != null ? specification.getPluralName() : specification.getSingularName();

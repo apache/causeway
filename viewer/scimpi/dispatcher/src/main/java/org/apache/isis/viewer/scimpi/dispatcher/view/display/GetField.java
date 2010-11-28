@@ -74,9 +74,11 @@ public class GetField extends AbstractElementProcessor {
             DateValueFacet facet = fieldReference.getSpecification().getFacet(DateValueFacet.class);
             Date date = facet.dateValue(fieldReference);
             String value = format.format(date);
+            request.appendDebug("    " + object + " -> " + value); 
             request.getContext().addVariable(name, value, scope);
         } else {
             String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, scope);
+            request.appendDebug("    " + object + " -> " + source); 
             request.getContext().addVariable(name, source, scope);
         }
     }

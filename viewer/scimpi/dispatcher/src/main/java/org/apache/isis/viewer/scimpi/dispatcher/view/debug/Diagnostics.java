@@ -38,6 +38,8 @@ public class Diagnostics extends AbstractElementProcessor {
             request.appendHtml("File: " + context.fullFilePath(context.getResourceFile()));
             request.appendHtml("\n\n");
             context.append(request, "variables");
+            request.appendHtml("\n\n"); 
+            request.appendHtml(request.getContext().getDebugTrace());      
             request.appendHtml("</pre>");
             request.appendHtml("</div>");
         }

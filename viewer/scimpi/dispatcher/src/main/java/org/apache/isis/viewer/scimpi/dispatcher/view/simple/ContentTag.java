@@ -16,24 +16,20 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-
-
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
-import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.ElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
-public class Import extends AbstractElementProcessor {
+public class ContentTag implements ElementProcessor {
+
+    public String getName() {
+        return "content";
+    }
 
     public void process(Request request) {
-        request.appendHtml("<!-- " +  " import " + request.getOptionalProperty("file") + " -->"); 
-    }
-    
-    public String getName() {
-        return "import";
+        request.appendHtml("<!--  apply content  -->");
     }
 
 }
-
-

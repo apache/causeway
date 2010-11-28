@@ -131,9 +131,6 @@ public class Dispatcher {
                 }
                 
   //          }
-            if (context.isDebug()) { 
-                context.getWriter().println("<!--" +  context + "-->"); 
-            }
             processView(context);
             IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
         } catch (Throwable e) {
@@ -199,6 +196,7 @@ public class Dispatcher {
         context.addVariable("title", "Untitled Page", Scope.REQUEST);
         Stack<Snippet> tags = loadPageTemplate(context, fullPath);
         Request request = new Request(file, context, tags, processors);
+        request.appendDebug("processing " + fullPath); 
         try {
             request.processNextTag();
             List<String> messages = IsisContext.getMessageBroker().getMessages();
@@ -216,7 +214,6 @@ public class Dispatcher {
             IsisContext.getMessageBroker().getMessages();
             IsisContext.getMessageBroker().getWarnings();
             IsisContext.getUpdateNotifier().clear();
-
             throw e;
         }
         String page = request.popBuffer();
@@ -331,6 +328,8 @@ public class Dispatcher {
         } catch (RuntimeException e) {
             errorView.exception(e);
         }
+        errorView.divider("Processing"); 
+        errorView.appendDebugTrace(requestContext.getDebugTrace()); 
         errorView.endTable();
         errorView.footer();
         writer.close();

@@ -35,9 +35,13 @@ public class DefaultValue extends AbstractElementProcessor {
         Scope scope = RequestContext.scope(scopeName, Scope.REQUEST);
 
         RequestContext context = request.getContext();
-        if (context.getVariable(variableName) == null) {
-            context.addVariable(variableName, defaultValue, scope);
-        }
+        Object currentValue = context.getVariable(variableName); 
+        if (currentValue == null) { 
+            request.appendDebug("     " + variableName + " set to " + defaultValue + " (" + scope + ")"); 
+            context.addVariable(variableName, defaultValue, scope); 
+        } else { 
+            request.appendDebug("     " + variableName + " alreadt set to " + currentValue); 
+        } 
     }
 
     public String getName() {

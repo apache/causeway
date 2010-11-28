@@ -85,7 +85,8 @@ public abstract class RequestContext {
     private ObjectMapping objectMapping;
     private VersionMapping versionMapping;
     private final Map<Scope, Map<String, Object>> variables;
-
+    private final StringBuffer debugTrace = new StringBuffer(); 
+    
     private String forwardTo;
     private String requestedFile;
     private String requestedParentPath;
@@ -429,14 +430,12 @@ public abstract class RequestContext {
     public void endRequest() throws IOException {
         getWriter().close();
         objectMapping.clear(Scope.REQUEST);
-//        mapping.clear(Scope.INTERACTION);
         variables.get(Scope.REQUEST).clear();
         variables.get(Scope.INTERACTION).clear();
-  //      IsisContext.getPersistenceSession().close();
-     //   IsisContext.getObjectPersistor().reset();
     }
 
     public void startRequest() {
+        debugTrace.setLength(0); 
         objectMapping.reloadIdentityMap();
         String debugParameter = getParameter("debug");
         if (debugParameter != null) {
@@ -660,5 +659,13 @@ public abstract class RequestContext {
 
     public boolean isDebug() { 
         return getDebug() == Debug.ON; 
+    }
+    
+    public String getDebugTrace() { 
+        return debugTrace.toString().replace('<', '[').replace('>', ']'); 
+    } 
+
+    public void appendDebugTrace(String line) { 
+        debugTrace.append(line); 
     } 
 }
