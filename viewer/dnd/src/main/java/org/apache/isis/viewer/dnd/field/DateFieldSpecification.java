@@ -47,7 +47,7 @@ public class DateFieldSpecification extends AbstractFieldSpecification {
         return new OpenDropDownBorder(field) {
             @Override
             protected View createDropDownView() {
-                return new DatePicker(content);
+                return DatePickerControl.getPicker(content);
             }
 
             @Override

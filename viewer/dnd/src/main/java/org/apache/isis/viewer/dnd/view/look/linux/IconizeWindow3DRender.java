@@ -16,15 +16,22 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
-package org.apache.isis.viewer.dnd.field;
+package org.apache.isis.viewer.dnd.view.look.linux;
 
 import org.apache.isis.viewer.dnd.drawing.Canvas;
-import org.apache.isis.viewer.dnd.drawing.Size;
+import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
+import org.apache.isis.viewer.dnd.view.Toolkit;
+import org.apache.isis.viewer.dnd.view.window.IconizeWindowRender;
 
-public interface DatePicker {
 
-    public abstract Size getRequiredSize(Size availableSpace);
+public class IconizeWindow3DRender implements IconizeWindowRender {
 
-    public abstract void draw(final Canvas canvas);
+    public void draw(Canvas canvas, int width, int height, boolean isDisabled, boolean isOver, boolean isPressed) {
+        final int x = 0;
+        final int y = 0;
 
+        canvas.drawRectangle(x-1, y, width+2, height+1, Toolkit.getColor(ColorsAndFonts.COLOR_WHITE));
+        canvas.drawRectangle(x-1, y-1, width+1, height+1, Toolkit.getColor(ColorsAndFonts.COLOR_SECONDARY1));
+	    canvas.drawSolidRectangle(x+3, y+8, x+8, 3, Toolkit.getColor(ColorsAndFonts.COLOR_BLACK));
+    }
 }

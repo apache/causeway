@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.isis.viewer.dnd.util.Properties;
 import org.apache.isis.viewer.dnd.view.Look;
 import org.apache.isis.viewer.dnd.view.look.line.LineLook;
+import org.apache.isis.viewer.dnd.view.look.linux.LinuxLook;
 import org.apache.isis.viewer.dnd.view.look.simple.SimpleLook;
 import org.apache.isis.viewer.dnd.view.look.swing.SwingLook;
 
@@ -34,6 +35,7 @@ public class LookFactory {
     private static final Look SIMPLE_LOOK = new SimpleLook();
     private static final LineLook LINE_LOOK = new LineLook();
     private static final Look SWING_LOOK = new SwingLook();
+    private static final Look LINUX_LOOK = new LinuxLook(); 
     private static final Look defaultLook = SIMPLE_LOOK;
     private static List<Look> looks = new ArrayList<Look>();
     private static Look installedLook;
@@ -42,6 +44,7 @@ public class LookFactory {
         looks.add(SIMPLE_LOOK);
         looks.add(LINE_LOOK);
         looks.add(SWING_LOOK);
+        looks.add(LINUX_LOOK); 
         
         String className = Properties.getString("look");
         if (className != null) {
