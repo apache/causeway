@@ -335,7 +335,7 @@ public class InstallerLookupDefault implements InstallerLookup {
         }
         T installer = getInstaller(requiredType, reqImpl);
         if (installer == null) {
-            throw new InstanceCreationException("Failed to load installer class '" + reqImpl + "' (of type "
+            throw new InstanceCreationException("Failed to load installer; named/class:'" + reqImpl + "' (of type "
                     + requiredType.getName() + ")");
         }
         return installer;

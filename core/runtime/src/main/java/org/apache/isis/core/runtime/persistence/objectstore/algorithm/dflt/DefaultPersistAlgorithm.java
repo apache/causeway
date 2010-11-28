@@ -72,7 +72,8 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             LOG.info("make persistent " + object);
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
-
+            object.changeState(ResolveState.SERIALIZING_RESOLVED); 
+            
             for (int i = 0; i < fields.length; i++) {
                 final ObjectAssociation field = fields[i];
                 if (field.isNotPersisted()) {
@@ -96,6 +97,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             }
             toPersistObjectSet.addPersistedObject(object);
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
+            object.changeState(ResolveState.SERIALIZING_RESOLVED.getEndState()); 
         }
         
     }
