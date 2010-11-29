@@ -185,6 +185,12 @@
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
             <artifactId>objectstore</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>objectstore</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>

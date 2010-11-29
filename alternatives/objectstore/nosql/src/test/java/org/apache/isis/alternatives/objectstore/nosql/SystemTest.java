@@ -20,20 +20,22 @@
 
 package org.apache.isis.alternatives.objectstore.nosql;
 
-import org.junit.Before;
-import org.junit.Test;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.core.runtime.util.Dump;
 import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.junit.Before;
+import org.junit.Test;
 
 
 public class SystemTest {
 
     @Before
     public void setup() {
+        Logger.getRootLogger().setLevel(Level.OFF);
         TestProxySystemII system = new TestProxySystemII();
         system.init();
         

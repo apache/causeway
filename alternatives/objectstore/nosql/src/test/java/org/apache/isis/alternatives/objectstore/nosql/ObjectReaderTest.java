@@ -22,24 +22,22 @@ package org.apache.isis.alternatives.objectstore.nosql;
 
 import java.util.List;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.apache.isis.alternatives.objectstore.nosql.KeyCreator;
-import org.apache.isis.alternatives.objectstore.nosql.ObjectReader;
-import org.apache.isis.alternatives.objectstore.nosql.StateReader;
-import org.apache.isis.alternatives.objectstore.nosql.VersionCreator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.hamcrest.CoreMatchers;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class ObjectReaderTest {
 
@@ -138,7 +136,7 @@ public class ObjectReaderTest {
         
         ExampleReferencePojo pojo = (ExampleReferencePojo) readObject.getObject();
         assertEquals(null, pojo.getReference2());
-        assertEquals(ExampleValuePojo.class, pojo.getReference1().getClass());
+        assertThat(pojo.getReference1(), CoreMatchers.instanceOf(ExampleValuePojo.class));
 
         context.assertIsSatisfied();
     }
@@ -189,8 +187,8 @@ public class ObjectReaderTest {
         List<ExampleValuePojo> collection2 = pojo.getHomogenousCollection();
         assertEquals(2, collection2.size());
      
-        assertEquals(ExampleValuePojo.class, collection2.get(0).getClass());
-        assertEquals(ExampleValuePojo.class, collection2.get(1).getClass());
+        assertThat(collection2.get(0), CoreMatchers.instanceOf(ExampleValuePojo.class));
+        assertThat(collection2.get(1), CoreMatchers.instanceOf(ExampleValuePojo.class));
 
         context.assertIsSatisfied();
     }

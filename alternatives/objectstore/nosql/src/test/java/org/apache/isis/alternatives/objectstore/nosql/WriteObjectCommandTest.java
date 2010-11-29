@@ -36,6 +36,7 @@ import org.apache.isis.core.metamodel.adapter.version.SerialNumberVersion;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import org.apache.isis.defaults.objectstore.testsystem.TestProxySystemII;
 
 
 public class WriteObjectCommandTest {
@@ -54,6 +55,9 @@ public class WriteObjectCommandTest {
     @Before
     public void setup() {
         Logger.getRootLogger().setLevel(Level.OFF);
+        TestProxySystemII system = new TestProxySystemII();
+        system.init();
+
         testObjects = new TrialObjects();
         
         ExampleValuePojo pojo1 = new ExampleValuePojo();
