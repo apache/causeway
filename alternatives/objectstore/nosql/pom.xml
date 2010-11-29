@@ -137,15 +137,12 @@
     </dependencyManagement>
 
     <dependencies>
+    
+        <!--  compile dependencies -->
+        
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>runtime</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.isis.defaults</groupId>
-            <artifactId>progmodel</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -163,12 +160,28 @@
             <artifactId>commons-configuration</artifactId>
         </dependency>
 
+
+        <!--  test dependencies -->
+
         <dependency>
             <groupId>org.apache.isis.core</groupId>
             <artifactId>runtime</artifactId>
             <type>test-jar</type>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>progmodel</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.isis.defaults</groupId>
+            <artifactId>bytecode</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.isis.defaults</groupId>
             <artifactId>objectstore</artifactId>
