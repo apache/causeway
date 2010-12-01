@@ -30,6 +30,7 @@ import java.io.UnsupportedEncodingException;
 import org.apache.isis.alternatives.objectstore.nosql.file.server.FileServerProcessor;
 import org.apache.isis.alternatives.objectstore.nosql.file.server.ServerConnection;
 import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -68,7 +69,11 @@ public class FileServerTest {
         server.startup();
 
         out = new ByteArrayOutputStream();
+    }
 
+    @After
+    public void shutdown() {
+        server.shutdown();
     }
 
     @Test
