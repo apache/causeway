@@ -21,7 +21,7 @@
 package org.apache.isis.core.metamodel.consent;
 
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.matchers.NofMatchers.nonEmptyString;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.nonEmptyString;
 
 import org.apache.isis.core.metamodel.facets.Facet;
 

@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
-import static org.apache.isis.core.commons.matchers.NofMatchers.anInstanceOf;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
 
 
 

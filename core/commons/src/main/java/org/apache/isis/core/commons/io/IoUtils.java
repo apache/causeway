@@ -21,9 +21,11 @@
 package org.apache.isis.core.commons.io;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 
 
 public final class IoUtils {
@@ -82,6 +84,12 @@ public final class IoUtils {
             } catch (final IOException ignore) {}
         }
 	}
+
+    public static InputStream asInputStream(String string) throws UnsupportedEncodingException {
+        byte[] data = string.getBytes("utf-8");
+        InputStream in = new ByteArrayInputStream(data);
+        return in;
+    }
 
 }
 

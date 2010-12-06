@@ -165,4 +165,45 @@ public final class StringUtils {
 	    return buf.toString();
 	}
 
+	
+    private static final char CARRIAGE_RETURN = '\n';
+    private static final char LINE_FEED = '\r';
+
+
+    /**
+     * Converts any <tt>\n</tt> to <tt>line.separator</tt>
+     * @param string
+     * @return
+     */
+    public static String lineSeparated(String string) {
+        StringBuilder buf = new StringBuilder();
+        String lineSeparator = System.getProperty("line.separator");
+        boolean lastWasLineFeed = false;
+        for(char c: string.toCharArray()) {
+            boolean isLineFeed = c == LINE_FEED;
+            boolean isCarriageReturn = c == CARRIAGE_RETURN;
+            if (isCarriageReturn) {
+                buf.append(lineSeparator);
+                lastWasLineFeed = false;
+            } else {
+                if(lastWasLineFeed) {
+                    buf.append(LINE_FEED);
+                }
+                if(isLineFeed) {
+                    lastWasLineFeed = true;
+                } else {
+                    buf.append(c);
+                    lastWasLineFeed = false;    
+                }
+            }
+        }
+        if(lastWasLineFeed) {
+            buf.append(LINE_FEED);
+        }
+        return buf.toString();
+    }
+
+
+
+
 }

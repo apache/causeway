@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.persistence.oidgenerator.simple;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.matchers.NofMatchers.greaterThan;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;

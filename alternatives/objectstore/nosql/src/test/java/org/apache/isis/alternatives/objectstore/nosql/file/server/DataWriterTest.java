@@ -28,40 +28,58 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import org.apache.isis.alternatives.objectstore.nosql.file.server.DataWriter;
-import org.apache.isis.alternatives.objectstore.nosql.file.server.FileContent;
-import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 public class DataWriterTest {
 
+    private static final String TARGET_DIRECTORY = "target/test/";
+    private static final String FULLY_QUALIFIED_CLASSNAME = "org.domain.Class";
+    private static final String FULLY_QUALIFIED_CLASSNAME_2 = "org.domain.Class2";
+    private DataWriter writer;
+
+
     @Before
     public void setUp() throws Exception {
-        Util.setDirectory("target/test", "services", "logs");
+        Util.setDirectory(TARGET_DIRECTORY, "services", "logs");
         Util.ensureDirectoryExists();
     }
 
+    @After
+    public void tearDown() throws Exception {
+        if (writer != null) {
+            writer.close();
+        }
+    }
+    
     @Test
     public void testWriteData() throws Exception {
-        File file = new File("target/test/org.domain.Class/1030.data");
+        File file = new File(TARGET_DIRECTORY +
+        		FULLY_QUALIFIED_CLASSNAME +
+        		"/1030.data");
         file.mkdirs();
         file.createNewFile();
         Assert.assertTrue(file.exists());
         
         List<FileContent> files = new ArrayList<FileContent>();
-        files.add(new FileContent('I', "1023", "1", "2",  "org.domain.Class", "{data1}"));
-        files.add(new FileContent('U', "1024", "21", "22", "org.domain.Class", "{data2}"));
-        files.add(new FileContent('D', "1030", "66", "", "org.domain.Class", ""));
+        files.add(new FileContent('I', "1023", "1", "2",  FULLY_QUALIFIED_CLASSNAME, "{data1}"));
+        files.add(new FileContent('U', "1024", "21", "22", FULLY_QUALIFIED_CLASSNAME, "{data2}"));
+        files.add(new FileContent('D', "1030", "66", "", FULLY_QUALIFIED_CLASSNAME, ""));
         DataWriter writer = new DataWriter(files);
         writer.writeData();
         
-        BufferedReader reader = new BufferedReader(new FileReader("target/test/org.domain.Class/1023.data"));
+        BufferedReader reader = new BufferedReader(new FileReader(TARGET_DIRECTORY +
+        		FULLY_QUALIFIED_CLASSNAME +
+        		"/1023.data"));
         Assert.assertEquals("org.domain.Class 1023 2", reader.readLine());
         Assert.assertEquals("{data1}", reader.readLine());
 
-        reader = new BufferedReader(new FileReader("target/test/org.domain.Class/1024.data"));
-        Assert.assertEquals("org.domain.Class 1024 22", reader.readLine());
+        reader = new BufferedReader(new FileReader(TARGET_DIRECTORY +
+        		FULLY_QUALIFIED_CLASSNAME +
+        		"/1024.data"));
+        Assert.assertEquals(FULLY_QUALIFIED_CLASSNAME +
+        		" 1024 22", reader.readLine());
         Assert.assertEquals("{data2}", reader.readLine());
         
         Assert.assertFalse("file still exists", file.exists());
@@ -70,20 +88,30 @@ public class DataWriterTest {
 
     @Test
     public void createsTypeDirectory() throws Exception {
-        File file = new File("target/test/org.domain.Class");
-        for( File f: file.listFiles()) {
-            f.delete();
-        }
-        file.delete();
+        String dir = TARGET_DIRECTORY +
+        		FULLY_QUALIFIED_CLASSNAME_2;
+        File file = deleteDirectory(dir);
         Assert.assertFalse(file.exists());
         
 
         List<FileContent> files = new ArrayList<FileContent>();
-        files.add(new FileContent('I', "1023", "1", "2",  "org.domain.Class", "{data1}"));
-        DataWriter writer = new DataWriter(files);
+        files.add(new FileContent('I', "1023", "1", "2",  FULLY_QUALIFIED_CLASSNAME_2, "{data1}"));
+        writer = new DataWriter(files);
         writer.writeData();
         
         Assert.assertTrue(file.exists());
+    }
+
+    protected File deleteDirectory(String dir) {
+        File file = new File(dir);
+        if(file.exists()) {
+            for( File f: file.listFiles()) {
+                f.delete();
+            }
+            file.delete();
+            
+        }
+        return file;
     }
 
 }

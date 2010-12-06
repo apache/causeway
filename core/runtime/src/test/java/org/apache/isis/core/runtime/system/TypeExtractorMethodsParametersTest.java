@@ -28,7 +28,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.junit.Test;
-import org.apache.isis.core.commons.matchers.NofMatchers;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.specloader.internal.TypeExtractorMethodParameters;
 
 public class TypeExtractorMethodsParametersTest {
@@ -49,8 +49,8 @@ public class TypeExtractorMethodsParametersTest {
         TypeExtractorMethodParameters extractor = new TypeExtractorMethodParameters(method);
 
         assertThat(extractor.getClasses().size(), is(2));
-        assertThat(extractor.getClasses(), NofMatchers.containsElementThat(equalTo(java.util.List.class)));
-        assertThat(extractor.getClasses(), NofMatchers.containsElementThat(equalTo(Customer.class)));
+        assertThat(extractor.getClasses(), IsisMatchers.containsElementThat(equalTo(java.util.List.class)));
+        assertThat(extractor.getClasses(), IsisMatchers.containsElementThat(equalTo(Customer.class)));
     }
 
 

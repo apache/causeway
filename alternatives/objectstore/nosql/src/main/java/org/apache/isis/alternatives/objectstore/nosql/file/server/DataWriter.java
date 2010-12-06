@@ -28,8 +28,11 @@ import java.util.List;
 
 public class DataWriter {
 
- //   private static final Logger LOG = Logger.getLogger(DataWriter.class);
-    private List<FileContent> files;
+    //   private static final Logger LOG = Logger.getLogger(DataWriter.class);
+    
+    private static final String ENCODING = "utf-8";
+ 
+    private final List<FileContent> files;
 
     public DataWriter(List<FileContent> files) {
         this.files = files;
@@ -55,22 +58,32 @@ public class DataWriter {
         }
         try {
             output = new FileOutputStream(file);
-            output.write(content.type.getBytes("utf-8"));
+            output.write(content.type.getBytes(ENCODING));
             output.write(' ');
-            output.write(content.id.getBytes("utf-8"));
+            output.write(content.id.getBytes(ENCODING));
             output.write(' ');
-            output.write(content.newVersion.getBytes("utf-8"));
+            output.write(content.newVersion.getBytes(ENCODING));
             output.write('\n');
-            output.write(content.data.getBytes("utf-8"));
+            output.write(content.data.getBytes(ENCODING));
         } finally {
-            if (output != null) {
-                try {
-                    output.close();
-                } catch (IOException e) {
-                    // throw new ObjectAdapterRuntimeException(e);
-                }
+            closeSafely(output);
+        }
+    }
+
+    private static void closeSafely(FileOutputStream output) {
+        if (output != null) {
+            try {
+                output.flush();
+                output.close();
+            } catch (IOException e) {
+                // throw new ObjectAdapterRuntimeException(e);
             }
         }
+    }
+
+    public void close() {
+        // TODO Auto-generated method stub
+        
     }
 
 }

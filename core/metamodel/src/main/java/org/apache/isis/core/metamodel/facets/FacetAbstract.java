@@ -26,7 +26,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.commons.matchers.NofMatchers;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
@@ -86,7 +86,7 @@ public abstract class FacetAbstract implements Facet {
 		return underlyingFacet;
 	}
 	public void setUnderlyingFacet(Facet underlyingFacet) {
-		Ensure.ensureThatArg(underlyingFacet.facetType(), NofMatchers.classEqualTo(facetType));
+		Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
 		this.underlyingFacet = underlyingFacet;
 	}
 

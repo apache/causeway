@@ -26,16 +26,16 @@ import static org.junit.Assert.assertThat;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.core.commons.matchers.NofMatchers;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 
 
-public class NofMatcher_EqualToStripNewLinesTest {
+public class IsisMatchers_StartsWithStripNewLinesTest {
 
     private Matcher<String> fooMatcher;
 
     @Before
     public void setUp() {
-        fooMatcher = NofMatchers.equalToStripNewLines("foo");
+        fooMatcher = IsisMatchers.startsWithStripNewLines("foo");
     }
 
     @Test
@@ -44,18 +44,18 @@ public class NofMatcher_EqualToStripNewLinesTest {
     }
 
     @Test
-    public void shouldNotMatchIfStartsWithAnything() {
-        assertThat(fooMatcher.matches("afoo"), is(false));
+    public void shouldMatchIfStartsWithAndStringNoNewLines() {
+        assertThat(fooMatcher.matches("foodef"), is(true));
     }
 
     @Test
-    public void shouldNotMatchIfEndsWithAnything() {
-        assertThat(fooMatcher.matches("fooz"), is(false));
+    public void shouldMatchIfStartsWithStringHasNewLinesAfter() {
+        assertThat(fooMatcher.matches("food\ne\rfan\rg"), is(true));
     }
 
     @Test
-    public void shouldMatchIfEqualToStringHasNewLinesWithin() {
-        assertThat(fooMatcher.matches("f\ro\no"), is(true));
+    public void shouldMatchIfStartsWithStringHasNewLinesWithin() {
+        assertThat(fooMatcher.matches("f\ro\nodef"), is(true));
     }
 
     @Test

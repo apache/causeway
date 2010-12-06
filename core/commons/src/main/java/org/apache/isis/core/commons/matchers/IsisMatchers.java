@@ -22,6 +22,7 @@ package org.apache.isis.core.commons.matchers;
 
 import static org.hamcrest.CoreMatchers.nullValue;
 
+import java.io.File;
 import java.util.List;
 
 import org.hamcrest.CoreMatchers;
@@ -41,9 +42,9 @@ import org.apache.isis.core.commons.lang.StringUtils;
  * Hamcrest {@link Matcher} implementations.
  * 
  */
-public final class NofMatchers {
+public final class IsisMatchers {
 
-    private NofMatchers() {}
+    private IsisMatchers() {}
 
     @Factory
     public static Matcher<String> containsStripNewLines(final String expected) {
@@ -189,6 +190,22 @@ public final class NofMatchers {
         }
 
         return new ClassEqualsMatcher(operand);
+    }
+
+    public static Matcher<File> existsAndNotEmpty() {
+        
+        return new TypeSafeMatcher<File>() {
+    
+            @Override
+            public void describeTo(Description arg0) {
+                arg0.appendText("exists and is not empty");
+            }
+    
+            @Override
+            public boolean matchesSafely(File f) {
+                return f.exists() && f.length() > 0;
+            }
+        };
     }
     
 }

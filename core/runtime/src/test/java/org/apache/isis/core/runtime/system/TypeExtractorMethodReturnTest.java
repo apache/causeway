@@ -23,7 +23,7 @@ package org.apache.isis.core.runtime.system;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.apache.isis.core.commons.matchers.NofMatchers.containsElementThat;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.containsElementThat;
 
 import java.lang.reflect.Method;
 import java.util.List;

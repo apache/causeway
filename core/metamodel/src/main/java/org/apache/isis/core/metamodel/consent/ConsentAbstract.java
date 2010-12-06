@@ -21,7 +21,7 @@
 package org.apache.isis.core.metamodel.consent;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.apache.isis.core.commons.matchers.NofMatchers.nonEmptyStringOrNull;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.nonEmptyStringOrNull;
 
 import java.io.Serializable;
 

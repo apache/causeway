@@ -26,16 +26,16 @@ import static org.junit.Assert.assertThat;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.core.commons.matchers.NofMatchers;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 
 
-public class NofMatcher_NonEmptyStringTest {
+public class IsisMatchers_NonEmptyStringOrNullTest {
 
     private Matcher<String> fooMatcher;
 
     @Before
     public void setUp() {
-        fooMatcher = NofMatchers.nonEmptyString();
+        fooMatcher = IsisMatchers.nonEmptyStringOrNull();
     }
 
     @Test
@@ -49,8 +49,8 @@ public class NofMatcher_NonEmptyStringTest {
     }
 
     @Test
-    public void shouldNotMatchNullString() {
-        assertThat(fooMatcher.matches(null), is(false));
+    public void shouldMatchNullString() {
+        assertThat(fooMatcher.matches(null), is(true));
     }
 
 }

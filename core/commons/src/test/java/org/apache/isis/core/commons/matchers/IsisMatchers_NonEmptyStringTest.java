@@ -26,41 +26,31 @@ import static org.junit.Assert.assertThat;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.core.commons.matchers.NofMatchers;
+import org.apache.isis.core.commons.matchers.IsisMatchers;
 
 
-public class NofMatcher_EndsWithStripNewLinesTest {
+public class IsisMatchers_NonEmptyStringTest {
 
     private Matcher<String> fooMatcher;
 
     @Before
     public void setUp() {
-        fooMatcher = NofMatchers.endsWithStripNewLines("foo");
+        fooMatcher = IsisMatchers.nonEmptyString();
     }
 
     @Test
-    public void shouldMatchExactString() {
+    public void shouldMatchNonEmptyString() {
         assertThat(fooMatcher.matches("foo"), is(true));
     }
 
     @Test
-    public void shouldMatchIfEndsWithAndStringNoNewLines() {
-        assertThat(fooMatcher.matches("abcfoo"), is(true));
+    public void shouldNotMatchEmptyString() {
+        assertThat(fooMatcher.matches(""), is(false));
     }
 
     @Test
-    public void shouldMatchIfEndsWithStringHasNewLinesAfter() {
-        assertThat(fooMatcher.matches("a\nb\rc\r\nfoo"), is(true));
-    }
-
-    @Test
-    public void shouldMatchIfEndsWithStringHasNewLinesWithin() {
-        assertThat(fooMatcher.matches("abcf\ro\no"), is(true));
-    }
-
-    @Test
-    public void shouldNotMatchIfDoesNotEndsWithString() {
-        assertThat(fooMatcher.matches("fob"), is(false));
+    public void shouldNotMatchNullString() {
+        assertThat(fooMatcher.matches(null), is(false));
     }
 
 }

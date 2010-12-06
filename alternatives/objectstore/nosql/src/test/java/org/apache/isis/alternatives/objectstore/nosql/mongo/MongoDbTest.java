@@ -20,27 +20,28 @@
 
 package org.apache.isis.alternatives.objectstore.nosql.mongo;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeThat;
+
+import org.apache.isis.alternatives.objectstore.nosql.ExampleValuePojo;
+import org.apache.isis.alternatives.objectstore.nosql.SerialKeyCreator;
+import org.apache.isis.alternatives.objectstore.nosql.TrialObjects;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.alternatives.objectstore.nosql.ExampleValuePojo;
-import org.apache.isis.alternatives.objectstore.nosql.SerialKeyCreator;
-import org.apache.isis.alternatives.objectstore.nosql.TrialObjects;
-import org.apache.isis.alternatives.objectstore.nosql.mongo.MongoDb;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 
 public class MongoDbTest {
@@ -56,10 +57,14 @@ public class MongoDbTest {
         Logger.getRootLogger().setLevel(Level.OFF);
         testObjects = new TrialObjects();
         
-
-        Mongo m = new Mongo();
-        m.dropDatabase("testdb");
-        testDb = m.getDB("testdb");
+        try {
+            Mongo m = new Mongo();
+            m.dropDatabase("testdb");
+            testDb = m.getDB("testdb");
+        } catch (Exception e) {
+            assumeThat(true, is(false)); // ignore if no MongoDB instance to connect to
+            return;
+        }
         
         db = new MongoDb("localhost", 0, "testdb", new SerialKeyCreator());
         db.open();

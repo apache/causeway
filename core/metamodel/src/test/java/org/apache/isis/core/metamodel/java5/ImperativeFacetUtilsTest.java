@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.java5;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
-import static org.apache.isis.core.commons.matchers.NofMatchers.*;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.*;
 
 import java.lang.reflect.Method;
 

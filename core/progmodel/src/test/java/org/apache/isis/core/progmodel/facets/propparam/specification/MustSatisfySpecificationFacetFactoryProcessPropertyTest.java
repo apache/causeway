@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
-import static org.apache.isis.core.commons.matchers.NofMatchers.anInstanceOf;
+import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
 
 import java.lang.reflect.Method;
 

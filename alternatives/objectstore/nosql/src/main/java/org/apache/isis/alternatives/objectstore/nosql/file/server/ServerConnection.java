@@ -110,13 +110,13 @@ public class ServerConnection {
     }
 
     public void error(String message) {
-        String result = "error\n" + message;
-        write(result);
+        writer.println("error");
+        writer.println(message);
+        writer.flush();
     }
 
     public void error(String message, Exception exception) {
-        String result = "error\n" + message;
-        writer.println(result);
+        error(message);
         exception.printStackTrace(writer);
         writer.println();
         writer.println();
