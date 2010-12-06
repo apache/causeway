@@ -17,8 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.nosql.file.server;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.startsWith;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -27,21 +35,10 @@ import java.io.FileWriter;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.isis.alternatives.objectstore.nosql.file.server.FileServerProcessor;
-import org.apache.isis.alternatives.objectstore.nosql.file.server.ServerConnection;
-import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.startsWith;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-
 
 public class FileServerTest {
     private FileServerProcessor server;
@@ -59,7 +56,8 @@ public class FileServerTest {
     @Before
     public void startup() {
         logFile1 = new File("target/test/logs", "recovery0.log");
-        logFile1.delete();
+        String absolutePath = logFile1.getAbsolutePath();
+        boolean delete = logFile1.delete();
         assertFalse(logFile1.exists());
         logFile2 = new File("target/test/logs", "recovery1.log");
         logFile2.delete();
@@ -72,8 +70,9 @@ public class FileServerTest {
     }
 
     @After
-    public void shutdown() {
-        server.shutdown();
+    public void tearDown() throws Exception {
+        if (server != null)
+            server.shutdown();
     }
 
     @Test
@@ -96,7 +95,8 @@ public class FileServerTest {
         assertFalse(file1.exists());
         assertFalse(file2.exists());
 
-        InputStream in = inputStream("W\nIorg.domain.Class 1025 null 1  \n{data1}\n\nIorg.domain.Class 1026 null 1\n{data2}\n");
+        InputStream in =
+            inputStream("W\nIorg.domain.Class 1025 null 1  \n{data1}\n\nIorg.domain.Class 1026 null 1\n{data2}\n");
         ServerConnection connection = new ServerConnection(in, out);
         server.process(connection);
         assertEquals("ok\n", out.toString());
@@ -118,7 +118,8 @@ public class FileServerTest {
         fileWriter.write(originalData);
         fileWriter.close();
 
-        ServerConnection connection = new ServerConnection(inputStream("W\nUorg.domain.Class 1026 21 22 \n{data2}\n"), out);
+        ServerConnection connection =
+            new ServerConnection(inputStream("W\nUorg.domain.Class 1026 21 22 \n{data2}\n"), out);
         server.process(connection);
         assertEquals("ok\n", out.toString());
         assertTrue(file2.length() > originalData.length());
@@ -132,14 +133,16 @@ public class FileServerTest {
         fileWriter.write(originalData);
         fileWriter.close();
 
-        ServerConnection connection = new ServerConnection(inputStream("W\nUorg.domain.Class 1026 19 21 \n{data2}\n"), out);
+        ServerConnection connection =
+            new ServerConnection(inputStream("W\nUorg.domain.Class 1026 19 21 \n{data2}\n"), out);
         server.process(connection);
         assertEquals("error\n{datax}\n", out.toString());
     }
 
     @Test
     public void writeCreatesLogFile() throws Exception {
-        ServerConnection connection = new ServerConnection(inputStream("W\nIorg.domain.Class 1025 6 7\n{data1}\n"), out);
+        ServerConnection connection =
+            new ServerConnection(inputStream("W\nIorg.domain.Class 1025 6 7\n{data1}\n"), out);
         server.process(connection);
 
         assertEquals("ok\n", out.toString());
@@ -151,11 +154,11 @@ public class FileServerTest {
     public void readNonExistingFileThrowsException() throws Exception {
         File file1 = new File("target/test/org.domain.Class", "2020.data");
         file1.delete();
-            ServerConnection connection = new ServerConnection(inputStream("Rorg.domain.Class 2020"), out);
-            server.process(connection);
-            
-            assertThat(out.toString(), startsWith("error\n"));
-            assertThat(out.toString(), containsString("File not found for org.domain.Class & 2020"));
+        ServerConnection connection = new ServerConnection(inputStream("Rorg.domain.Class 2020"), out);
+        server.process(connection);
+
+        assertThat(out.toString(), startsWith("error\n"));
+        assertThat(out.toString(), containsString("File not found for org.domain.Class & 2020"));
     }
 
     @Test
@@ -167,8 +170,7 @@ public class FileServerTest {
 
         ServerConnection connection = new ServerConnection(inputStream("Rorg.domain.Class 2025"), out);
         server.process(connection);
-        assertEquals("ok\n{data1}\n", out.toString());
+        assertThat("ok\n{data1}\n".toCharArray(), is(equalTo(new String(out.toString()).toCharArray())));
     }
 
 }
-

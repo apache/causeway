@@ -17,8 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.nosql.file.server;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,18 +28,11 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.alternatives.objectstore.nosql.file.server.DataWriter;
-import org.apache.isis.alternatives.objectstore.nosql.file.server.FileContent;
-import org.apache.isis.alternatives.objectstore.nosql.file.server.LogWriter;
-import org.apache.isis.alternatives.objectstore.nosql.file.server.Util;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 
 public class LogWriterTest {
 
@@ -66,7 +61,13 @@ public class LogWriterTest {
 
         items = new ArrayList<FileContent>();
         items.add(new FileContent('U', "20", "6", "7", "type", "{data}"));
-       new DataWriter(items);
+        new DataWriter(items);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        if (logger != null)
+            logger.shutdown();
     }
 
     @Test
@@ -78,12 +79,12 @@ public class LogWriterTest {
     @Test
     public void logsData() throws Exception {
         logger.log(items);
-        
+
         BufferedReader reader = new BufferedReader(new FileReader(logFile1));
         String line = reader.readLine();
         line = reader.readLine();
         reader.close();
-        
+
         Assert.assertEquals("Utype 20 6 {data}", line);
     }
 
@@ -102,4 +103,3 @@ public class LogWriterTest {
         assertTrue(logFile2.exists() && logFile1.length() > 0);
     }
 }
-

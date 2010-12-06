@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.nosql.file.server;
 
 import java.io.BufferedReader;
@@ -28,10 +27,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlStoreException;
 import org.apache.isis.alternatives.objectstore.nosql.file.RemotingException;
-
+import org.apache.log4j.Logger;
 
 public class ServerConnection {
 
@@ -39,8 +37,8 @@ public class ServerConnection {
 
     private final BufferedReader reader;
     private final PrintWriter writer;
-    private OutputStream outputStream;
-    private InputStream inputStream;
+    private final OutputStream outputStream;
+    private final InputStream inputStream;
     private int header;
     private String[] headers;
     private char command;
@@ -175,4 +173,3 @@ public class ServerConnection {
     }
 
 }
-
