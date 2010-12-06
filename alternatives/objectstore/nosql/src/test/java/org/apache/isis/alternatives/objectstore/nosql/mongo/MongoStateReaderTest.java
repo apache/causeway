@@ -17,10 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.alternatives.objectstore.nosql.mongo;
 
-import org.apache.isis.alternatives.objectstore.nosql.mongo.MongoStateReader;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assume.assumeThat;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.junit.Before;
@@ -30,9 +34,6 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.Mongo;
-
-import static org.junit.Assert.assertEquals;
-
 
 public class MongoStateReaderTest {
 
@@ -45,9 +46,15 @@ public class MongoStateReaderTest {
         Logger.getRootLogger().setLevel(Level.OFF);
 
         Mongo m = new Mongo();
-        m.dropDatabase("mydb");
+        try {
+            m.dropDatabase("mydb");
+        } catch (Exception e) {
+            assumeThat(true, is(false));// ie ignore test because we've had an exception
+            return;
+        }
+
         testDb = m.getDB("mydb");
-        
+
         BasicDBObject object = new BasicDBObject();
         object.put("_id", "1023");
         object.put("_type", "org.xxx.Class");
@@ -64,48 +71,47 @@ public class MongoStateReaderTest {
 
     @Test
     public void readNonexistantFieldAsNull() throws Exception {
+        assumeThat(reader, is(not(nullValue())));
         assertEquals(null, reader.readField("unknown"));
     }
-    
+
     @Test
     public void readStringField() throws Exception {
         assertEquals("Fred Smith", reader.readField("name"));
     }
-    
+
     @Test
     public void readStringFieldAsNull() throws Exception {
         assertEquals(null, reader.readField("null name"));
     }
-    
+
     @Test
     public void readNullFieldAsNull() throws Exception {
         assertEquals(null, reader.readField("null name 2"));
     }
-    
+
     @Test
     public void readType() throws Exception {
         assertEquals("org.xxx.Class", reader.readObjectType());
     }
-    
+
     @Test
     public void readNumberField() throws Exception {
         assertEquals(102L, reader.readLongField("number"));
     }
-    
+
     @Test
     public void readNumberFieldAsNull() throws Exception {
         assertEquals(0L, reader.readLongField("null number"));
     }
-    
+
     @Test
     public void readNonexistingNumberFieldAsZero() throws Exception {
         assertEquals(0L, reader.readLongField("unknown"));
     }
-    
+
     @Test
     public void readId() throws Exception {
         assertEquals("1023", reader.readId());
     }
 }
-
-
