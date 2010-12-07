@@ -1,13 +1,13 @@
 package org.apache.isis.viewer.bdd.concordion.internal.concordion;
 
+import org.concordion.api.CommandCall;
 import org.concordion.api.Evaluator;
 import org.concordion.api.ResultRecorder;
-import org.concordion.internal.CommandCall;
 import org.concordion.internal.Row;
 import org.concordion.internal.TableSupport;
 import org.concordion.internal.command.ExecuteCommand;
 
-public class ExecuteCommandWithHeader extends ExecuteCommand {
+public class IsisExecuteCommandWithHeader extends ExecuteCommand {
 
 	public static enum Context {
 		TABLE, INLINE
@@ -40,8 +40,9 @@ public class ExecuteCommandWithHeader extends ExecuteCommand {
 		}
 	};
 
+	
 	@Override
-	public void execute(CommandCall commandCall, Evaluator evaluator,
+	public void execute(org.concordion.api.CommandCall commandCall, Evaluator evaluator,
 			ResultRecorder resultRecorder) {
 		// we're gonna handle tables slightly differently from Concordion's
 		// usual strategy

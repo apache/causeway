@@ -30,6 +30,7 @@ import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.defaults.profilestore.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.viewer.bdd.common.components.StoryAuthenticationManagerInstaller;
 import org.apache.isis.viewer.bdd.common.components.StoryInMemoryPersistenceMechanismInstaller;
+import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownNakedObjects;
@@ -61,6 +62,8 @@ public class Story implements AliasRegistryHolder {
     private IsisSystem isisSystem;
 
     private InstallerLookupDefault installerLookup;
+
+    private final DateParser dateParser = new DateParser();
 
     // /////////////////////////////////////////////////////////////
     // bootstrap / shutdown
@@ -215,6 +218,18 @@ public class Story implements AliasRegistryHolder {
     }
 
     // /////////////////////////////////////////////////////////
+    // date parser
+    // /////////////////////////////////////////////////////////
+
+    public void usingDateFormat(String dateFormatStr) {
+        dateParser.setDateFormat(dateFormatStr);
+    }
+
+    public DateParser getDateParser() {
+        return dateParser;
+    }
+
+    // /////////////////////////////////////////////////////////
     // run viewer
     // /////////////////////////////////////////////////////////
 
@@ -246,5 +261,7 @@ public class Story implements AliasRegistryHolder {
     public IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
     }
+
+
 
 }

@@ -11,8 +11,13 @@
 <ul>
 	<li>
 	<p>bootstrapped in <a concordion:run="concordion"
-		href="../common/BootstrapInExplorationMode.html">exploration</a> mode.</p>
+		href="../common/BootstrapInExplorationMode.html">exploration</a> mode</p>
 	</li>
+    <li>
+    <p concordion:execute="#result=usingDateFormat(#format)"><span
+        concordion:assertTrue="#result">using a date format</span> of <span
+        concordion:set="#format">dd-MMM-yyyy</span>, and</p>
+    </li>
 	<li>
 	<p concordion:execute="#result=timeIs(#dateTime)"><span
 		concordion:assertTrue="#result">date/time</span> being <span

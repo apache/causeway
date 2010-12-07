@@ -12,6 +12,7 @@ import org.apache.isis.viewer.bdd.common.Constants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
 import org.apache.isis.viewer.bdd.common.StoryCellDefault;
+import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 
@@ -24,8 +25,8 @@ public class UsingIsisViewerForConcordion extends
 
 	public UsingIsisViewerForConcordion(
 			final AliasRegistry aliasesRegistry,
-			final Perform.Mode mode) {
-		this(aliasesRegistry, mode, 
+			final DateParser dateParser, final Perform.Mode mode) {
+		this(aliasesRegistry, dateParser, mode, 
 				CellBindingDefault.builder(
 						Constants.ON_OBJECT_NAME, Constants.ON_OBJECT_HEAD_SET)
 						.ditto().build(),
@@ -48,13 +49,14 @@ public class UsingIsisViewerForConcordion extends
 
 	private UsingIsisViewerForConcordion(
 			final AliasRegistry aliasesRegistry,
+			final DateParser dateParser, 
 			final Perform.Mode mode,
 			final CellBinding onObjectBinding,
 			final CellBinding aliasResultAsBinding,
 			final CellBinding performBinding,
 			final CellBinding onMemberBinding, final CellBinding thatItBinding,
 			final CellBinding arg0Binding) {
-		super(new UsingIsisViewerPeer(aliasesRegistry, mode,
+		super(new UsingIsisViewerPeer(aliasesRegistry, dateParser, mode,
 				onObjectBinding, aliasResultAsBinding, performBinding,
 				onMemberBinding, thatItBinding, arg0Binding));
 	}

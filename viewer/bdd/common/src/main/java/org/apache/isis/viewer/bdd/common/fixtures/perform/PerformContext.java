@@ -9,6 +9,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 
 /**
@@ -85,4 +86,8 @@ public class PerformContext {
 	protected AuthenticationSession getAuthenticationSession() {
 		return getPeer().getAuthenticationSession();
 	}
+
+    public DateParser getDateParser() {
+        return peer.getDateParser();
+    }
 }

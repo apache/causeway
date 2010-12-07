@@ -187,7 +187,7 @@ public class StoryFixture extends DoFixture {
     }
 
     private Fixture usingIsisViewer(final Perform.Mode mode) {
-        return new UsingIsisViewerForFitNesse(getStory().getAliasRegistry(), mode);
+        return new UsingIsisViewerForFitNesse(getStory().getAliasRegistry(), getStory().getDateParser(), mode);
     }
 
     // ////////////////////////////////////////////////////////////

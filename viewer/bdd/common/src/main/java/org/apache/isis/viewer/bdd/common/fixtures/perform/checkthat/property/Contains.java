@@ -1,10 +1,14 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.property;
 
+import java.util.Date;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
 import org.apache.isis.viewer.bdd.common.util.Strings;
@@ -15,6 +19,7 @@ public class Contains extends ThatSubcommandAbstract {
         super("contains", "is", "does contain");
     }
 
+    @Override
     public ObjectAdapter that(final PerformContext performContext) throws StoryBoundValueException {
 
         final OneToOneAssociation otoa = (OneToOneAssociation) performContext
@@ -51,6 +56,23 @@ public class Contains extends ThatSubcommandAbstract {
                 throw StoryBoundValueException.current(arg0Binding, resultTitle);
             }
 
+            // otherwise, see if date and if so compare as such
+            DateValueFacet dateValueFacet = resultAdapter.getSpecification().getFacet(DateValueFacet.class);
+            if(dateValueFacet != null) {
+                Date resultDate = dateValueFacet.dateValue(resultAdapter);
+                
+                DateParser dateParser = performContext.getDateParser();
+                Date expectedDate = dateParser.parse(expected);
+                if (expectedDate != null) {
+                    if(expectedDate.compareTo(resultDate) == 0) {
+                        return resultAdapter; // ok
+                    } 
+                }
+                String format = dateParser.format(resultDate);
+                throw StoryBoundValueException.current(arg0Binding, format);
+            }
+
+            
             // otherwise, compare title
             if (!Strings.nullSafeEquals(resultTitle, expected)) {
             	throw StoryBoundValueException.current(arg0Binding, resultTitle);

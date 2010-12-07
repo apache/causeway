@@ -85,9 +85,12 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     private final CellBinding thatItBinding;
     private final CellBinding arg0Binding;
 
+    private DateParser dateParser;
+
+
     private final Map<String, Perform> commandByKey = new HashMap<String, Perform>();
 
-    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, final Perform.Mode mode,
+    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, DateParser dateParser, final Perform.Mode mode,
         final CellBinding onObjectBinding, final CellBinding aliasResultAsBinding, final CellBinding performBinding,
         final CellBinding onMemberBinding, final CellBinding thatItBinding, final CellBinding arg0Binding) {
         super(aliasesRegistry, onObjectBinding, aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding,
@@ -99,6 +102,8 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         this.onMemberBinding = onMemberBinding;
         this.thatItBinding = thatItBinding;
         this.arg0Binding = arg0Binding;
+        
+        this.dateParser = dateParser;
 
         final List<Perform> performCommands = performCommands(mode);
         for (final Perform command : performCommands) {
@@ -147,6 +152,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         return false;
     }
 
+    
     // //////////////////////////////////////////////////////////////////
     // validate API
     // //////////////////////////////////////////////////////////////////
@@ -347,5 +353,10 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         }
         return getAdapterManager().adapterFor(choiceList);
     }
+
+    public DateParser getDateParser() {
+        return dateParser;
+    }
+
 
 }

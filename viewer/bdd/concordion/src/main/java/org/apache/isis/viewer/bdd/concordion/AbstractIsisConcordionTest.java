@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,7 +19,7 @@ import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.Mode;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 import org.apache.isis.viewer.bdd.common.util.Strings;
-import org.apache.isis.viewer.bdd.concordion.internal.concordion.ExecuteCommandWithHeader;
+import org.apache.isis.viewer.bdd.concordion.internal.concordion.IsisExecuteCommandWithHeader;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.AliasItemsInListForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.SetUpObjectsForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.UsingIsisViewerForConcordion;
@@ -28,14 +29,16 @@ import org.concordion.internal.ConcordionBuilder;
 import org.concordion.internal.FileTarget;
 import org.junit.Test;
 
-public class AbstractIsisConcordionTest {
+public abstract class AbstractIsisConcordionTest {
 
+    private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("dd MMM yyyy hh:mm");
     public static final String DEFAULT_CONCORDION_CSS = "concordion.css";
     public static final String DEFAULT_TARGET_DIR = "/tmp/concordion";
 
     private final static String NS_URI = "http://isis.apache.org/2010/concordion";
     private static final String CMD_EXECUTE = "execute";
-    private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd MMM yyyy hh:mm");
+    
+    private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
 
     private static ThreadLocal<Story> storyThreadLocal = new ThreadLocal<Story>() {
         @Override
@@ -44,7 +47,7 @@ public class AbstractIsisConcordionTest {
         }
     };
 
-    protected static Story getStory() {
+    public static Story getStory() {
         return storyThreadLocal.get();
     }
 
@@ -147,8 +150,9 @@ public class AbstractIsisConcordionTest {
             throw new IllegalStateException("targetDir() cannot be null");
         }
         ConcordionBuilder builder =
-            new ConcordionBuilder().withTarget(new FileTarget(new File(targetDir()))).withCommand(NS_URI, CMD_EXECUTE,
-                new ExecuteCommandWithHeader());
+            new ConcordionBuilder().withTarget(
+                new FileTarget(new File(targetDir())))
+                .withCommand(NS_URI, CMD_EXECUTE, new IsisExecuteCommandWithHeader());
         return builder.build();
     }
 
@@ -207,6 +211,12 @@ public class AbstractIsisConcordionTest {
     // date is / time is
     // ////////////////////////////////////////////////////////////////////////
 
+    public boolean usingDateFormat(String dateFormatStr)  {
+        getStory().usingDateFormat(dateFormatStr);
+        return true;
+    }
+
+
     public boolean dateIs(String dateAndTimeStr) throws StoryValueException {
         return dateAndTimeIs(dateAndTimeStr);
     }
@@ -222,7 +232,7 @@ public class AbstractIsisConcordionTest {
 
     private Date asDateAndTime(String dateAndTimeStr) throws StoryValueException {
         try {
-            Date dateAndTime = DATE_FORMAT.parse(dateAndTimeStr);
+            Date dateAndTime = dateFormat.parse(dateAndTimeStr);
             return dateAndTime;
         } catch (ParseException e) {
             throw new StoryValueException(e);
@@ -393,13 +403,13 @@ public class AbstractIsisConcordionTest {
     protected String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
         String usingMember, String thatIt, String arg0, String... remainingArgs) {
         if (executingInline()) {
-            usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), Perform.Mode.TEST);
+            usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), getStory().getDateParser(), Perform.Mode.TEST);
             usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, remainingArgs);
             return usingIsisViewer.executeRow(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                 remainingArgs);
         } else {
             if (executingTableHeader()) {
-                usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), Perform.Mode.TEST);
+                usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), getStory().getDateParser(), Perform.Mode.TEST);
                 return usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                     remainingArgs);
             } else {
@@ -425,12 +435,12 @@ public class AbstractIsisConcordionTest {
     }
 
     private boolean executingTableHeader() {
-        return executingTable() && ExecuteCommandWithHeader.tableRow.get() == ExecuteCommandWithHeader.TableRow.HEADER;
+        return executingTable() && IsisExecuteCommandWithHeader.tableRow.get() == IsisExecuteCommandWithHeader.TableRow.HEADER;
     }
 
     private boolean executingTable() {
-        ExecuteCommandWithHeader.Context context = ExecuteCommandWithHeader.context.get();
-        return context == ExecuteCommandWithHeader.Context.TABLE;
+        IsisExecuteCommandWithHeader.Context context = IsisExecuteCommandWithHeader.context.get();
+        return context == IsisExecuteCommandWithHeader.Context.TABLE;
     }
 
     private boolean executingInline() {
