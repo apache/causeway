@@ -75,6 +75,10 @@
             <groupId>org.apache.isis.alternatives.objectstore</groupId>
             <artifactId>xml</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.isis.alternatives.profilestore</groupId>
+            <artifactId>xml</artifactId>
+        </dependency>
         
         <!-- to run using WebServer -->
         <dependency>
