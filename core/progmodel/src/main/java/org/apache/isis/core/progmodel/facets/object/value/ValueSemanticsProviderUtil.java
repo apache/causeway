@@ -37,7 +37,7 @@ public final class ValueSemanticsProviderUtil {
     static String semanticsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
         final String semanticsProviderName = configuration.getString(key);
-        return !StringUtils.isEmpty(semanticsProviderName) ? semanticsProviderName : null;
+        return !StringUtils.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;
     }
 
     @SuppressWarnings("unchecked")

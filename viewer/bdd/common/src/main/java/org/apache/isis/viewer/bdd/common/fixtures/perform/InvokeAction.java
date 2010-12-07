@@ -22,16 +22,18 @@ public class InvokeAction extends PerformAbstractTypeParams {
 	public void doHandle(final PerformContext performContext)
 			throws StoryBoundValueException {
 
-		final ObjectAdapter onAdapter = performContext.getOnAdapter();
-		final ObjectMember nakedObjectMember = performContext
+	    final ObjectAdapter onAdapter = performContext.getOnAdapter();
+		final ObjectMember objectMember = performContext
 				.getObjectMember();
 		final CellBinding onMemberBinding = performContext.getPeer()
 				.getOnMemberBinding();
 		final List<StoryCell> argumentCells = performContext.getArgumentCells();
 
-		final ObjectAction nakedObjectAction = (ObjectAction) nakedObjectMember;
-		final int parameterCount = nakedObjectAction.getParameterCount();
-		final boolean isContributedOneArgAction = nakedObjectAction
+		final ObjectAction objectAction = (ObjectAction) objectMember;
+		
+
+		final int parameterCount = objectAction.getParameterCount();
+		final boolean isContributedOneArgAction = objectAction
 				.isContributed()
 				&& parameterCount == 1;
 
@@ -40,10 +42,10 @@ public class InvokeAction extends PerformAbstractTypeParams {
 
 			// lookup arguments
 			proposedArguments = performContext.getPeer().getAdapters(onAdapter,
-					nakedObjectAction, onMemberBinding, argumentCells);
+					objectAction, onMemberBinding, argumentCells);
 
 			// validate arguments
-			final Consent argSetValid = nakedObjectAction
+			final Consent argSetValid = objectAction
 					.isProposedArgumentSetValid(onAdapter, proposedArguments);
 			if (argSetValid.isVetoed()) {
 				throw StoryBoundValueException.current(onMemberBinding, argSetValid
@@ -54,12 +56,13 @@ public class InvokeAction extends PerformAbstractTypeParams {
 		}
 
 		// execute
-		result = nakedObjectAction.execute(onAdapter, proposedArguments);
+		result = objectAction.execute(onAdapter, proposedArguments);
 
 		// all OK.
 	}
 
-	public ObjectAdapter getResult() {
+	@Override
+    public ObjectAdapter getResult() {
 		return result;
 	}
 

@@ -1,6 +1,5 @@
 package net.sf.isiscontrib.bdd.fitnesse;
 
-import java.util.Date;
 import java.util.List;
 
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.AliasItemsInListForFitNesse;
@@ -73,24 +72,24 @@ public class StoryFixture extends DoFixture {
     // Date/Time
     // ////////////////////////////////////////////////////////////
 
-    public void dateIsNow(final Date dateAndTime) {
-        dateAndTimeIs(dateAndTime);
+    public void dateIsNow(final String dateStr) {
+        dateAndTimeIs(dateStr);
     }
 
-    public void dateIs(final Date dateAndTime) {
-        dateAndTimeIs(dateAndTime);
+    public void dateIs(final String dateStr) {
+        dateAndTimeIs(dateStr);
     }
 
-    public void timeIsNow(final Date dateAndTime) {
-        dateAndTimeIs(dateAndTime);
+    public void timeIsNow(final String timeStr) {
+        dateAndTimeIs(timeStr);
     }
 
-    public void timeIs(final Date dateAndTime) {
-        dateAndTimeIs(dateAndTime);
+    public void timeIs(final String timeStr) {
+        dateAndTimeIs(timeStr);
     }
 
-    private void dateAndTimeIs(final Date dateAndTime) {
-        getStory().dateAndTimeIs(dateAndTime);
+    private void dateAndTimeIs(final String dateAndOrTimeStr) {
+        getStory().dateAndTimeIs(dateAndOrTimeStr);
     }
 
     // ////////////////////////////////////////////////////////////
@@ -187,7 +186,7 @@ public class StoryFixture extends DoFixture {
     }
 
     private Fixture usingIsisViewer(final Perform.Mode mode) {
-        return new UsingIsisViewerForFitNesse(getStory().getAliasRegistry(), getStory().getDateParser(), mode);
+        return new UsingIsisViewerForFitNesse(getStory().getAliasRegistry(), getStory().getDeploymentType(), getStory().getDateParser(), mode);
     }
 
     // ////////////////////////////////////////////////////////////

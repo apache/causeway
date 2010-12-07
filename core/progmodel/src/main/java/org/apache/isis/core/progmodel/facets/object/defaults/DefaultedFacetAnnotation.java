@@ -32,7 +32,7 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
     private static String providerName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Defaulted annotation = (Defaulted) annotatedClass.getAnnotation(Defaulted.class);
         final String providerName = annotation.defaultsProviderName();
-        if (!StringUtils.isEmpty(providerName)) {
+        if (!StringUtils.isNullOrEmpty(providerName)) {
             return providerName;
         }
         return DefaultsProviderUtil.defaultsProviderNameFromConfiguration(annotatedClass, configuration);

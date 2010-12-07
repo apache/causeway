@@ -1,9 +1,9 @@
 package org.apache.isis.support.prototype.common;
 
-import org.apache.isis.viewer.bdd.concordion.AbstractIsisConcordionTest;
+import org.apache.isis.viewer.bdd.concordion.AbstractIsisConcordionStory;
 
 
-public class BootstrapInExplorationMode extends AbstractIsisConcordionTest {
+public class BootstrapInExplorationMode extends AbstractIsisConcordionStory {
 
 
 }

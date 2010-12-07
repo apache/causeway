@@ -61,7 +61,7 @@ public class ParseableFacetFactory extends AnnotationBasedFacetFactoryAbstract i
 
         // otherwise, try to create from configuration, if present
         final String parserName = ParserUtil.parserNameFromConfiguration(cls, getIsisConfiguration());
-        if (!StringUtils.isEmpty(parserName)) {
+        if (!StringUtils.isNullOrEmpty(parserName)) {
             final ParseableFacetFromConfiguration facet = new ParseableFacetFromConfiguration(parserName, holder, getRuntimeContext());
             if (facet.isValid()) {
                 return facet;

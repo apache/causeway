@@ -98,7 +98,7 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
         // otherwise, try to create from configuration, if present
         final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls,
                 configuration);
-        if (!StringUtils.isEmpty(semanticsProviderName)) {
+        if (!StringUtils.isNullOrEmpty(semanticsProviderName)) {
             final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getIsisConfiguration(), getSpecificationLoader(), getRuntimeContext());
             if (facet.isValid()) {
                 return facet;

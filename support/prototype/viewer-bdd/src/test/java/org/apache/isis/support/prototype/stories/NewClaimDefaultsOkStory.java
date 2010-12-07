@@ -1,13 +1,8 @@
 package org.apache.isis.support.prototype.stories;
 
-import org.apache.isis.support.prototype.CustomCssPackage;
-import org.apache.isis.viewer.bdd.concordion.AbstractIsisConcordionTest;
+import org.apache.isis.support.prototype.AbstractApplicationStory;
 
-public class NewClaimDefaultsOkStory extends AbstractIsisConcordionTest {
+public class NewClaimDefaultsOkStory extends AbstractApplicationStory {
 
-    @Override
-    protected Class<?> customCssPackage() {
-        return CustomCssPackage.class;
-    }
 
 }

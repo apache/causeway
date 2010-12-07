@@ -74,7 +74,8 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
 		this.numParameters = numParameters;
 	}
 
-	public boolean requiresMember() {
+	@Override
+    public boolean requiresMember() {
 		return type.representsMember();
 	}
 
@@ -84,7 +85,8 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
 	 * {@link NumParameters#ONE one} parameter, that the correct number of
 	 * actual arguments match.
 	 */
-	public void perform(final PerformContext performContext)
+	@Override
+    public void perform(final PerformContext performContext)
 			throws StoryBoundValueException {
 
 		CellBinding onMemberBinding = performContext.getPeer()
@@ -101,6 +103,9 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
 		if (type.representsMember()) {
 
 			if (getMode() == Perform.Mode.TEST) {
+		        
+		        performContext.ensureAvailableForDeploymentType(onMemberBinding, onMemberCell);
+
 				performContext.ensureVisible(onMemberBinding, onMemberCell);
 				performContext.ensureUsable(onMemberBinding, onMemberCell);
 			}

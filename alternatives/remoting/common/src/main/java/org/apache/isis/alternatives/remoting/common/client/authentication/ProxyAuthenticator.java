@@ -75,7 +75,7 @@ public final class ProxyAuthenticator extends PasswordRequestAuthenticatorAbstra
 			String code) {
         final AuthenticationRequestPassword passwordRequest = (AuthenticationRequestPassword) authRequest;
         final String username = passwordRequest.getName();
-        if (StringUtils.isEmpty(username)) {
+        if (StringUtils.isNullOrEmpty(username)) {
             return null;
         }
         final String password = passwordRequest.getPassword();

@@ -37,7 +37,7 @@ public final class EncoderDecoderUtil {
     static String encoderDecoderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = ENCODER_DECODER_NAME_KEY_PREFIX + type.getCanonicalName() + ENCODER_DECODER_NAME_KEY_SUFFIX;
         final String encoderDecoderName = configuration.getString(key);
-        return !StringUtils.isEmpty(encoderDecoderName) ? encoderDecoderName : null;
+        return !StringUtils.isNullOrEmpty(encoderDecoderName) ? encoderDecoderName : null;
     }
 
     public static Class<?> encoderDecoderOrNull(final Class<?> candidateClass, final String classCandidateName) {

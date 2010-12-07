@@ -5,7 +5,10 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
@@ -82,6 +85,21 @@ public class PerformContext {
 			throw StoryBoundValueException.current(onMemberBinding, "(not usable)");
 		}
 	}
+	
+    public void ensureAvailableForDeploymentType(CellBinding onMemberBinding, StoryCell onMemberCell) throws StoryBoundValueException {
+        DeploymentType deploymentType = this.peer.getDeploymentType();
+        
+        boolean isExploration = objectMember.getFacet(ExplorationFacet.class) != null;
+        if(isExploration && !deploymentType.isExploring() ) {
+            throw StoryBoundValueException.current(onMemberBinding, "(not running in exploration mode)");
+        }
+        
+        boolean isPrototype = objectMember.getFacet(PrototypeFacet.class) != null;
+        if(isPrototype && !deploymentType.isPrototyping()) {
+            throw StoryBoundValueException.current(onMemberBinding, "(not running in prototype mode)");
+        }
+    }
+
 
 	protected AuthenticationSession getAuthenticationSession() {
 		return getPeer().getAuthenticationSession();
@@ -90,4 +108,5 @@ public class PerformContext {
     public DateParser getDateParser() {
         return peer.getDateParser();
     }
+
 }

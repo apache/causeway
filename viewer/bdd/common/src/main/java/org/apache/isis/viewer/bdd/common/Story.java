@@ -146,8 +146,14 @@ public class Story implements AliasRegistryHolder {
     // date+time / logon+switch user
     // /////////////////////////////////////////////////////////////
 
-    public void dateAndTimeIs(final Date dateAndTime) {
-        new SetClock(this).setClock(dateAndTime);
+    public boolean dateAndTimeIs(final String dateAndTimeStr) {
+        Date date = dateParser.parse(dateAndTimeStr);
+        if(date != null) {
+            new SetClock(this).setClock(date);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -223,6 +229,10 @@ public class Story implements AliasRegistryHolder {
 
     public void usingDateFormat(String dateFormatStr) {
         dateParser.setDateFormat(dateFormatStr);
+    }
+
+    public void usingTimeFormat(String timeFormatStr) {
+        dateParser.setTimeFormat(timeFormatStr);
     }
 
     public DateParser getDateParser() {

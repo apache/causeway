@@ -32,7 +32,7 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
     private static String encoderDecoderName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Encodable annotation = (Encodable) annotatedClass.getAnnotation(Encodable.class);
         final String encoderDecoderName = annotation.encoderDecoderName();
-        if (!StringUtils.isEmpty(encoderDecoderName)) {
+        if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
             return encoderDecoderName;
         }
         return EncoderDecoderUtil.encoderDecoderNameFromConfiguration(annotatedClass, configuration);

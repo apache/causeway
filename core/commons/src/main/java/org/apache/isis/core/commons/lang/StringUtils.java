@@ -78,25 +78,25 @@ public final class StringUtils {
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
 
-    public static boolean isEmpty(final String str) {
+    public static boolean isNullOrEmpty(final String str) {
         return str == null || str.length() == 0;
     }
 
     /**
-     * Reciprocal of {@link #isEmpty(String)}.
+     * Reciprocal of {@link #isNullOrEmpty(String)}.
      */
     public static boolean isNotEmpty(final String str) {
-        return !isEmpty(str);
+        return !isNullOrEmpty(str);
     }
 
-    public static String lowerFirst(final String argsPhrase) {
-        if (argsPhrase == null || argsPhrase.length() == 0) {
-            return argsPhrase;
+    public static String lowerFirst(final String str) {
+        if (str == null || str.length() == 0) {
+            return str;
         }
-        if (argsPhrase.length() == 1) {
-            return argsPhrase.toLowerCase();
+        if (str.length() == 1) {
+            return str.toLowerCase();
         }
-        return argsPhrase.substring(0, 1).toLowerCase() + argsPhrase.substring(1);
+        return str.substring(0, 1).toLowerCase() + str.substring(1);
     }
 
     public static boolean in(final String str, final String[] strings) {
@@ -110,9 +110,9 @@ public final class StringUtils {
 
     public static String commaSeparatedClassNames(final List<Object> objects) {
         final StringBuilder buf = new StringBuilder();
-        final int i = 0;
+        int i = 0;
         for (final Object object : objects) {
-            if (i > 0) {
+            if (i++ > 0) {
                 buf.append(',');
             }
             buf.append(object.getClass().getName());

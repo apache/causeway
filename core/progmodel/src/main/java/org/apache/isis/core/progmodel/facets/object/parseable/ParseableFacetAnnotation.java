@@ -32,7 +32,7 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
     private static String parserName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Parseable annotation = (Parseable) annotatedClass.getAnnotation(Parseable.class);
         final String parserName = annotation.parserName();
-        if (!StringUtils.isEmpty(parserName)) {
+        if (!StringUtils.isNullOrEmpty(parserName)) {
             return parserName;
         }
         return ParserUtil.parserNameFromConfiguration(annotatedClass, configuration);

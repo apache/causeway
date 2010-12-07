@@ -66,7 +66,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
         // otherwise, try to create from configuration, if present
         final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls,
                 getIsisConfiguration());
-        if (!StringUtils.isEmpty(providerName)) {
+        if (!StringUtils.isNullOrEmpty(providerName)) {
             final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, runtimeContext);
             if (facet.isValid()) {
                 return facet;

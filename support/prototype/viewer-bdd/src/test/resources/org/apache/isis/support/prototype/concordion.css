@@ -13,7 +13,8 @@ pre, pre *, code, code *, kbd {
   font-size: 10pt;
 }
 h1, h1 * {
-  font-size: 24pt;	
+  font-size: 24pt;
+  font-family: Courier New;	
 }
 p, td, th, li, .breadcrumbs {
   font-size: 10pt;

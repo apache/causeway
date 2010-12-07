@@ -65,7 +65,7 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
         // otherwise, try to create from configuration, if present
         final String encoderDecoderName = EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls,
                 getIsisConfiguration());
-        if (!StringUtils.isEmpty(encoderDecoderName)) {
+        if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
             final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, getRuntimeContext());
             if (facet.isValid()) {
                 return facet;

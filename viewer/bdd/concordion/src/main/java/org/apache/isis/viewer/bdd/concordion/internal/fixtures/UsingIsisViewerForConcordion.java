@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.CellBindingDefault;
@@ -25,8 +26,9 @@ public class UsingIsisViewerForConcordion extends
 
 	public UsingIsisViewerForConcordion(
 			final AliasRegistry aliasesRegistry,
+			final DeploymentType deploymentType,
 			final DateParser dateParser, final Perform.Mode mode) {
-		this(aliasesRegistry, dateParser, mode, 
+		this(aliasesRegistry, deploymentType, dateParser, mode, 
 				CellBindingDefault.builder(
 						Constants.ON_OBJECT_NAME, Constants.ON_OBJECT_HEAD_SET)
 						.ditto().build(),
@@ -49,6 +51,7 @@ public class UsingIsisViewerForConcordion extends
 
 	private UsingIsisViewerForConcordion(
 			final AliasRegistry aliasesRegistry,
+			final DeploymentType deploymentType,
 			final DateParser dateParser, 
 			final Perform.Mode mode,
 			final CellBinding onObjectBinding,
@@ -56,7 +59,7 @@ public class UsingIsisViewerForConcordion extends
 			final CellBinding performBinding,
 			final CellBinding onMemberBinding, final CellBinding thatItBinding,
 			final CellBinding arg0Binding) {
-		super(new UsingIsisViewerPeer(aliasesRegistry, dateParser, mode,
+		super(new UsingIsisViewerPeer(aliasesRegistry, deploymentType, dateParser, mode,
 				onObjectBinding, aliasResultAsBinding, performBinding,
 				onMemberBinding, thatItBinding, arg0Binding));
 	}

@@ -14,6 +14,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
@@ -85,12 +86,13 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     private final CellBinding thatItBinding;
     private final CellBinding arg0Binding;
 
-    private DateParser dateParser;
+    private final DeploymentType deploymentType;
+    private final DateParser dateParser;
 
 
     private final Map<String, Perform> commandByKey = new HashMap<String, Perform>();
 
-    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, DateParser dateParser, final Perform.Mode mode,
+    public UsingIsisViewerPeer(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode,
         final CellBinding onObjectBinding, final CellBinding aliasResultAsBinding, final CellBinding performBinding,
         final CellBinding onMemberBinding, final CellBinding thatItBinding, final CellBinding arg0Binding) {
         super(aliasesRegistry, onObjectBinding, aliasResultAsBinding, performBinding, onMemberBinding, thatItBinding,
@@ -103,12 +105,21 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         this.thatItBinding = thatItBinding;
         this.arg0Binding = arg0Binding;
         
+        this.deploymentType = deploymentType;
         this.dateParser = dateParser;
 
         final List<Perform> performCommands = performCommands(mode);
         for (final Perform command : performCommands) {
             commandByKey.put(command.getKey(), command);
         }
+    }
+
+    public DeploymentType getDeploymentType() {
+        return deploymentType;
+    }
+    
+    public DateParser getDateParser() {
+        return dateParser;
     }
 
     public CellBinding getOnObjectBinding() {
@@ -352,10 +363,6 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
             }
         }
         return getAdapterManager().adapterFor(choiceList);
-    }
-
-    public DateParser getDateParser() {
-        return dateParser;
     }
 
 

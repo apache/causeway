@@ -17,14 +17,11 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>concordion.output.dir</name>
-                            <value>target/concordion</value>
-                        </property>
-                    </systemProperties>
+                    <systemPropertyVariables>
+                        <concordion.output.dir>${project.build.directory}/concordion</concordion.output.dir>
+                    </systemPropertyVariables>
                     <includes>
-                         <include>**/*.java</include>
+                         <include>**/*Story.java</include>
                     </includes>
                     <excludes>
                          <exclude>**/CustomCssPackage.java</exclude>

@@ -10,6 +10,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
+import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.Constants;
@@ -28,8 +29,8 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
 
     private final List<Parse> argumentCells = new ArrayList<Parse>();
 
-    public UsingIsisViewerForFitNesse(final AliasRegistry aliasesRegistry, final DateParser dateParser, final Perform.Mode mode) {
-        this(aliasesRegistry, dateParser, mode, CellBindingForFitNesse
+    public UsingIsisViewerForFitNesse(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode) {
+        this(aliasesRegistry, deploymentType, dateParser, mode, CellBindingForFitNesse
             .builder(Constants.ON_OBJECT_NAME, Constants.ON_OBJECT_HEAD_SET).ditto().build(), CellBindingForFitNesse
             .builder(Constants.ALIAS_RESULT_NAME, Constants.ALIAS_RESULT_HEAD_SET).optional().build(),
             CellBindingForFitNesse.builder(Constants.PERFORM_NAME, Constants.PERFORM_HEAD_SET).ditto().build(),
@@ -39,10 +40,10 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
                 .builder(Constants.WITH_ARGUMENTS_NAME, Constants.WITH_ARGUMENTS_HEAD_SET).optional().build());
     }
 
-    private UsingIsisViewerForFitNesse(final AliasRegistry aliasesRegistry, final DateParser dateParser, final Perform.Mode mode,
+    private UsingIsisViewerForFitNesse(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode,
         final CellBinding onObjectBinding, final CellBinding aliasResultAsBinding, final CellBinding performBinding,
         final CellBinding onMemberBinding, final CellBinding thatItBinding, final CellBinding arg0Binding) {
-        super(new UsingIsisViewerPeer(aliasesRegistry, dateParser, mode, onObjectBinding, aliasResultAsBinding, performBinding,
+        super(new UsingIsisViewerPeer(aliasesRegistry, deploymentType, dateParser, mode, onObjectBinding, aliasResultAsBinding, performBinding,
             onMemberBinding, thatItBinding, arg0Binding));
     }
 

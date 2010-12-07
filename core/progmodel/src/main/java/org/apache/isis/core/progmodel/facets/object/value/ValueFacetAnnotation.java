@@ -33,7 +33,7 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     private static String semanticsProviderName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
         final Value annotation = (Value) annotatedClass.getAnnotation(Value.class);
         final String semanticsProviderName = annotation.semanticsProviderName();
-        if (!StringUtils.isEmpty(semanticsProviderName)) {
+        if (!StringUtils.isNullOrEmpty(semanticsProviderName)) {
             return semanticsProviderName;
         }
         return ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(annotatedClass, configuration);

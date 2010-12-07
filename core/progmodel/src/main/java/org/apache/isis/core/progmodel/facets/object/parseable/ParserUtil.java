@@ -37,7 +37,7 @@ public final class ParserUtil {
     static String parserNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = PARSER_NAME_KEY_PREFIX + type.getCanonicalName() + PARSER_NAME_KEY_SUFFIX;
         final String parserName = configuration.getString(key);
-        return !StringUtils.isEmpty(parserName) ? parserName : null;
+        return !StringUtils.isNullOrEmpty(parserName) ? parserName : null;
     }
 
     @SuppressWarnings("unchecked")

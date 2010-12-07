@@ -334,15 +334,89 @@
         the following namespace declaration:</para>
 
         <programlisting>&lt;html 
-   xmlns:concordion="http://www.concordion.org/2007/concordion" 
-   xmlns:isis="http://isis.apache.org/2010/concordion"&gt;
-   ...
+    xmlns:concordion="http://www.concordion.org/2007/concordion" 
+    xmlns:isis="http://isis.apache.org/2010/concordion"&gt;
+    ...
 &lt;/html&gt;</programlisting>
 
         <para>The "concordion" namespace is the usual namespace required by
         <emphasis>Concordion</emphasis>. The "isis" namespace is to allow
         certain commands to be invoked using special commands provided by the
         Isis/Concordion integration.</para>
+      </sect2>
+
+      <sect2>
+        <title>Specifying the Output Directory</title>
+
+        <para>The directory for the generated output can be specified
+        either:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>by overriding the <methodname>outputDir()</methodname>
+            method in <classname>AbstractIsisConcordionTest</classname>;
+            or</para>
+          </listitem>
+
+          <listitem>
+            <para>by setting the <varname>concordion.output.dir</varname>
+            system property</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If not specified, then the output directory defaults to
+        <filename>/tmp/concordion</filename>.</para>
+      </sect2>
+
+      <sect2>
+        <title>Providing a CSS File</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Configuring the Maven Surefire (test) plugin</title>
+
+        <para>The standard boilerplate to run Concordion under Maven is as
+        follows:</para>
+
+        <programlisting>&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.6&lt;/version&gt;
+        &lt;configuration&gt;
+            &lt;systemPropertyVariables&gt;
+                &lt;concordion.output.dir&gt;${project.build.directory}/concordion&lt;/concordion.output.dir&gt;
+            &lt;/systemPropertyVariables&gt;
+            &lt;includes&gt;
+                &lt;include&gt;**/*Story.java&lt;/include&gt;
+            &lt;/includes&gt;
+        &lt;/configuration&gt;
+    &lt;/plugin&gt;
+&lt;/plugins&gt;y</programlisting>
+
+        <para>A couple of points worth noting:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the <literal>systemPropertyVariables</literal> element can
+            be used to define the <varname>concordion.output.dir</varname>
+            system property, thereby specifying the directory for the
+            generated output</para>
+          </listitem>
+
+          <listitem>
+            <para>the <literal>includes</literal> element can be used to only
+            run classes with a suffix "Story".</para>
+          </listitem>
+        </itemizedlist>
+
+        <para></para>
       </sect2>
     </sect1>
 

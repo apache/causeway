@@ -6,13 +6,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.isis.core.commons.io.IoUtils;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
@@ -29,16 +26,26 @@ import org.concordion.internal.ConcordionBuilder;
 import org.concordion.internal.FileTarget;
 import org.junit.Test;
 
-public abstract class AbstractIsisConcordionTest {
+public abstract class AbstractIsisConcordionStory {
 
-    private static final SimpleDateFormat DEFAULT_DATE_FORMAT = new SimpleDateFormat("dd MMM yyyy hh:mm");
     public static final String DEFAULT_CONCORDION_CSS = "concordion.css";
-    public static final String DEFAULT_TARGET_DIR = "/tmp/concordion";
+    
+    /**
+     * The system property that is searched for to use as the {@link #outputDir() target directory}.
+     */
+    public static final String DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY = "concordion.output.dir";
+    
+    /**
+     * The directory used by default if the {@link #DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY default property}
+     * for the {@link #outputDir() target directory} is not specified (and the {@link #outputDir()} method
+     * has not been overridden). 
+     */
+    public static final String DEFAULT_OUTPUT_DIR = "/tmp/concordion";
 
-    private final static String NS_URI = "http://isis.apache.org/2010/concordion";
+    public static final String NS_URI = "http://isis.apache.org/2010/concordion";
     private static final String CMD_EXECUTE = "execute";
     
-    private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
+    //private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
 
     private static ThreadLocal<Story> storyThreadLocal = new ThreadLocal<Story>() {
         @Override
@@ -57,11 +64,14 @@ public abstract class AbstractIsisConcordionTest {
 
     @Test
     public void runStory() throws Throwable {
-        Concordion concordion = createConcordion();
-        ResultSummary resultSummary = concordion.process(this);
-        resultSummary.print(System.out, this);
-        resultSummary.assertIsSatisfied(this);
-        copyCustomCssIfDefined();
+        try {
+            Concordion concordion = createConcordion();
+            ResultSummary resultSummary = concordion.process(this);
+            resultSummary.print(System.out, this);
+            resultSummary.assertIsSatisfied(this);
+        } finally {
+            copyCustomCssIfDefined();
+        }
     }
 
     private void copyCustomCssIfDefined() {
@@ -73,7 +83,7 @@ public abstract class AbstractIsisConcordionTest {
         InputStream cssInputFile = cssClass.getResourceAsStream(customCss);
         String cssPackageName = cssClass.getPackage().getName();
         String cssPackagePath = asPath(cssPackageName);
-        String cssOutputFileName = combine(targetDir(), cssPackagePath, customCss);
+        String cssOutputFileName = combine(outputDir(), cssPackagePath, customCss);
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             IoUtils.copy(cssInputFile, baos);
@@ -98,13 +108,21 @@ public abstract class AbstractIsisConcordionTest {
     // ////////////////////////////////////////////////////////////////////////
 
     /**
-     * Optional hook method to specify the directory to which the processed HTML should be copied.
+     * The directory to which the processed HTML should be copied.
      * 
      * <p>
-     * Defaults to {@value #DEFAULT_TARGET_DIR}.
+     * Defaults to the value of the {@value #DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY} system property,
+     * or {@value #DEFAULT_OUTPUT_DIR} if that property is not specified.
+     * 
+     * <p>
+     * Can either be overridden if wish to specify some other mechanism for determining where
+     * the output is generated.
      */
-    protected String targetDir() {
-        return DEFAULT_TARGET_DIR;
+    protected String outputDir() {
+        String concordionOutputDir = System
+                .getProperty(DEFAULT_CONCORDION_OUTPUT_DIR_PROPERTY);
+        return StringUtils.isNullOrEmpty(concordionOutputDir)  ? DEFAULT_OUTPUT_DIR
+                : concordionOutputDir;
     }
 
     /**
@@ -146,12 +164,13 @@ public abstract class AbstractIsisConcordionTest {
     }
 
     private Concordion createConcordion() {
-        if (targetDir() == null) {
+        String targetDir = outputDir();
+        if (targetDir == null) {
             throw new IllegalStateException("targetDir() cannot be null");
         }
         ConcordionBuilder builder =
             new ConcordionBuilder().withTarget(
-                new FileTarget(new File(targetDir())))
+                new FileTarget(new File(targetDir)))
                 .withCommand(NS_URI, CMD_EXECUTE, new IsisExecuteCommandWithHeader());
         return builder.build();
     }
@@ -216,6 +235,10 @@ public abstract class AbstractIsisConcordionTest {
         return true;
     }
 
+    public boolean usingTimeFormat(String timeFormatStr)  {
+        getStory().usingTimeFormat(timeFormatStr);
+        return true;
+    }
 
     public boolean dateIs(String dateAndTimeStr) throws StoryValueException {
         return dateAndTimeIs(dateAndTimeStr);
@@ -226,17 +249,7 @@ public abstract class AbstractIsisConcordionTest {
     }
 
     private boolean dateAndTimeIs(String dateAndTimeStr) throws StoryValueException {
-        getStory().dateAndTimeIs(asDateAndTime(dateAndTimeStr));
-        return true;
-    }
-
-    private Date asDateAndTime(String dateAndTimeStr) throws StoryValueException {
-        try {
-            Date dateAndTime = dateFormat.parse(dateAndTimeStr);
-            return dateAndTime;
-        } catch (ParseException e) {
-            throw new StoryValueException(e);
-        }
+        return getStory().dateAndTimeIs(dateAndTimeStr);
     }
 
     // ////////////////////////////////////////////////////////////////////////
@@ -403,13 +416,13 @@ public abstract class AbstractIsisConcordionTest {
     protected String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
         String usingMember, String thatIt, String arg0, String... remainingArgs) {
         if (executingInline()) {
-            usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), getStory().getDateParser(), Perform.Mode.TEST);
+            usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), getStory().getDeploymentType(), getStory().getDateParser(), Perform.Mode.TEST);
             usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, remainingArgs);
             return usingIsisViewer.executeRow(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                 remainingArgs);
         } else {
             if (executingTableHeader()) {
-                usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), getStory().getDateParser(), Perform.Mode.TEST);
+                usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), getStory().getDeploymentType(), getStory().getDateParser(), Perform.Mode.TEST);
                 return usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0,
                     remainingArgs);
             } else {

@@ -24,6 +24,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.applib.annotation.NotInRepositoryMenu;
+import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.applib.value.Date;
 
 @Named("Claims")
@@ -38,6 +39,7 @@ public interface ClaimRepository {
     @NotInRepositoryMenu
     public List<Claim> claimsSince(Claimant claimant, Date since);
 
+    @Prototype
     public Claim newClaim(Claimant claimant);
 
     @Named("New Claim")
