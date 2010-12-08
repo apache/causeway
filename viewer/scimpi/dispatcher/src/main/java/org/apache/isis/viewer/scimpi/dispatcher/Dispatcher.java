@@ -333,6 +333,8 @@ public class Dispatcher {
         errorView.endTable();
         errorView.footer();
         writer.close();
+        
+        requestContext.clearTransientVariables();
     }
 
     public void init(String dir) {

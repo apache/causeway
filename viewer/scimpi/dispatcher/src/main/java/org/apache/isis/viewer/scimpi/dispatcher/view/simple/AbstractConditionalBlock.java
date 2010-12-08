@@ -140,13 +140,22 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
             return;
         }
 
+
         String persistent = request.getOptionalProperty("persistent");
         if (persistent != null) {
             ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(persistent);
             processTags(object.isPersistent(), request);
             return;
         }
-        
+
+        String type = request.getOptionalProperty(TYPE);
+        if (type != null) {
+            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            Class<?> cls = forClass(request);
+            boolean hasType = cls == null || cls.isAssignableFrom(object.getObject().getClass()); 
+            processTags(hasType, request);
+            return;
+        }
         
         if (request.isPropertySpecified("empty")) {
             if (request.isPropertySet("empty")) {

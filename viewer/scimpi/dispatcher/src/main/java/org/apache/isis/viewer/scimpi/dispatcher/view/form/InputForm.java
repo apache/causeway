@@ -159,7 +159,7 @@ public class InputForm {
         String[] ids = field.getOptionValues();
         int length = options.length;
         for (int i = 0; i < length; i++) {
-            String selectedSegment = ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
+            String selectedSegment = field.getValue() == null || ids[i].equals(field.getValue()) ? " selected=\"selected\"" : "";
             str.append("    <option value=\"" + ids[i] + "\"" + selectedSegment + ">" + options[i] + "</option>\n");
         }
         if (field.getType()  == InputField.TEXT) {

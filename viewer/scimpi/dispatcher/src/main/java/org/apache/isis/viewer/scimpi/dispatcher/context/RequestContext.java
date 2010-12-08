@@ -667,5 +667,9 @@ public abstract class RequestContext {
 
     public void appendDebugTrace(String line) { 
         debugTrace.append(line); 
+    }
+
+    public void clearTransientVariables() {
+        objectMapping.endSession();
     } 
 }

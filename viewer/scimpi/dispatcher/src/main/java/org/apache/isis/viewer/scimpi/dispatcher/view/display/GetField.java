@@ -43,6 +43,9 @@ public class GetField extends AbstractElementProcessor {
         String id = request.getOptionalProperty(OBJECT);
         String fieldName = request.getRequiredProperty(FIELD);
         ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        if (object == null) {
+            throw new ScimpiException("No object to get field for: " + fieldName + " - " + id);
+        }
         ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
             throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullName());

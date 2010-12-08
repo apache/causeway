@@ -61,19 +61,6 @@ public class InitializeFromResult extends AbstractElementProcessor {
         } 
     } 
 
-    private Class<?> forClass(Request request) { 
-        Class<?> cls = null; 
-        String className = request.getOptionalProperty(TYPE);
-        if (className != null) {
-            try {
-                cls = Class.forName(className);
-            } catch (ClassNotFoundException e) {
-                throw new ScimpiException("No class for " + className, e);
-            }
-        }
-        return cls;
-    }
-
     private void disallowSourceAndDefault(Request request) { 
         if (request.getOptionalProperty(DEFAULT) != null && request.getOptionalProperty(OBJECT) != null) { 
             throw new ScimpiException("Cannot specify both " + OBJECT + " and " + DEFAULT + " for the " + getName() + " element");     
