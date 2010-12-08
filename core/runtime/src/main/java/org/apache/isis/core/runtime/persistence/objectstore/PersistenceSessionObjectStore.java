@@ -64,6 +64,7 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObje
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
+import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 import org.apache.isis.core.runtime.transaction.TransactionalClosureAbstract;
 import org.apache.isis.core.runtime.transaction.TransactionalClosureWithReturnAbstract;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
@@ -426,6 +427,9 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
 
             @Override
             public void execute() {
+                if (adapter.getVersion() == null) {
+                    throw new ObjectPersistenceException("Object to be deleted does not have a version (maybe it should be reolved first): " + adapter);
+                }
                 final DestroyObjectCommand command = objectStore.createDestroyObjectCommand(adapter);
                 getTransactionManager().addCommand(command);
             }
