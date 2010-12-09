@@ -441,7 +441,7 @@
             <para>second, the <literal>includes</literal> element can be used
             to only run classes with either a prefix or suffix
             "<literal>Story</literal>". This allows common fixtures that have
-            been factored out to be ignored. </para>
+            been factored out to be ignored.</para>
 
             <para>An alternative approach is to have a top-level "suite" page
             that references all stories underneath (possibly broken up into
@@ -2674,8 +2674,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       acceptance criteria. These can be created as children of the story page
       as placeholders, so that the story page becomes a suite. The child
       scenario tests can be fleshed out as required with plain text during the
-      estimation meeting, and with actual tests once the iteration starts.
-      </para>
+      estimation meeting, and with actual tests once the iteration
+      starts.</para>
 
       <para></para>
 
@@ -2832,4 +2832,24 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       business analysts.</para>
     </sect1>
   </chapter>
+
+  <appendix id="apx.UsingXmlMind">
+    <title>Using XmlMind</title>
+
+    <abstract>
+      <para>***</para>
+    </abstract>
+
+    <para></para>
+
+    <para>xhtml.css C:\Program Files
+    (x86)\XMLmind_XML_Editor\addon\config\xhtml\css</para>
+
+    <para>xhtml1-strict.dtd copy into C:\Program Files
+    (x86)\XMLmind_XML_Editor\addon\config\xhtml\dtd\1.0</para>
+
+    <para></para>
+
+    <para></para>
+  </appendix>
 </book>
