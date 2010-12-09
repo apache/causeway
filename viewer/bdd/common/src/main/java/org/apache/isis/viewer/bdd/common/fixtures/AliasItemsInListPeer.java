@@ -1,18 +1,15 @@
 package org.apache.isis.viewer.bdd.common.fixtures;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
-import org.apache.isis.viewer.bdd.common.StoryValueException;
-import org.apache.isis.viewer.bdd.common.util.Strings;
 
-public class AliasItemsInListPeer extends AbstractFixturePeer {
+public class AliasItemsInListPeer extends AbstractListFixturePeer {
 
-	private final String listAlias;
     private final CellBinding titleBinding;
     private final CellBinding typeBinding;
     private final CellBinding aliasBinding;
@@ -22,26 +19,12 @@ public class AliasItemsInListPeer extends AbstractFixturePeer {
             final String listAlias, 
             final CellBinding titleBinding,
             final CellBinding typeBinding, final CellBinding aliasBinding) {
-    	super(aliasesRegistry, titleBinding, typeBinding, aliasBinding);
+    	super(aliasesRegistry, listAlias, titleBinding, typeBinding, aliasBinding);
 
     	this.titleBinding = titleBinding;
         this.typeBinding = typeBinding;
         this.aliasBinding = aliasBinding;
-        this.listAlias = listAlias;
     }
-
-	public void assertIsList() throws StoryValueException {
-		if (!isAliasedAdapter()) {
-			throw new StoryValueException("no such alias");
-		}
-		if (!isList()) {
-			throw new StoryValueException("not a list");
-		}
-	}
-
-	public boolean isList() {
-		return getCollectionFacet() != null;
-	}
 
 	public CellBinding getTitleBinding() {
 		return titleBinding;
@@ -68,7 +51,7 @@ public class AliasItemsInListPeer extends AbstractFixturePeer {
 	}
 
 	private ObjectAdapter findAdapter() {
-        for (final ObjectAdapter adapter : getCollectionFacet().iterable(getListAdapter())) {
+        for (final ObjectAdapter adapter : collectionAdapters()) {
         	
             if (!titleMatches(adapter)) {
                 continue; // keep looking
@@ -85,7 +68,7 @@ public class AliasItemsInListPeer extends AbstractFixturePeer {
     private boolean titleMatches(final ObjectAdapter adapter) {
         final String adapterTitle = adapter.titleString();
         final String requiredTitle = titleBinding.getCurrentCell().getText();
-        return Strings.nullSafeEquals(adapterTitle, requiredTitle);
+        return StringUtils.nullSafeEquals(adapterTitle, requiredTitle);
     }
 
     private boolean typeMatches(final ObjectAdapter adapter) {
@@ -100,24 +83,10 @@ public class AliasItemsInListPeer extends AbstractFixturePeer {
             return true;
         }
 
-        final String simpleSpecName = Strings.simpleName(specFullName);
-        final String simpleRequiredType = Strings
+        final String simpleSpecName = StringUtils.simpleName(specFullName);
+        final String simpleRequiredType = StringUtils
                 .simpleName(requiredTypeName);
         return simpleSpecName.equalsIgnoreCase(simpleRequiredType);
     }
-
-	private boolean isAliasedAdapter() {
-		return getListAdapter() != null;
-	}
-
-    private ObjectAdapter getListAdapter() {
-		return getAliasRegistry().getAliased(listAlias);
-	}
-
-	private CollectionFacet getCollectionFacet() {
-        return getListAdapter() != null ? getListAdapter()
-                .getSpecification().getFacet(CollectionFacet.class) : null;
-	}
-
 
 }

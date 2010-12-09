@@ -3,7 +3,7 @@ package org.apache.isis.viewer.bdd.common;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.viewer.bdd.common.util.Strings;
+import org.apache.isis.core.commons.lang.StringUtils;
 
 public abstract class CellBinding {
 
@@ -34,7 +34,7 @@ public abstract class CellBinding {
         }
         final List<String> headTextList = new ArrayList<String>();
         for (final String headText : headTexts) {
-            headTextList.add(Strings.camel(headText).toLowerCase());
+            headTextList.add(StringUtils.camel(headText).toLowerCase());
         }
         this.headTexts = headTextList;
     }
@@ -72,7 +72,7 @@ public abstract class CellBinding {
      * particular head text.
      */
     public boolean matches(final String candidateText) {
-        final String candidateTextCamelLower = Strings.camel(candidateText).toLowerCase();
+        final String candidateTextCamelLower = StringUtils.camel(candidateText).toLowerCase();
         for (final String headText : getHeadTexts()) {
             if (headText.equalsIgnoreCase(candidateTextCamelLower)) {
                 return true;
@@ -176,7 +176,7 @@ public abstract class CellBinding {
     public void captureCurrent(final StoryCell cell) {
         final StoryCell previousCell = getCurrentCell();
         setCurrentCell(cell);
-        boolean shouldDitto = Strings.emptyString(cell.getText());
+        boolean shouldDitto = StringUtils.emptyString(cell.getText());
         boolean canDitto = isDitto() && previousCell != null;
         if (shouldDitto && canDitto) {
             ditto(previousCell);

@@ -16,22 +16,22 @@ import org.apache.isis.viewer.bdd.common.CellBinding;
 
 public abstract class AbstractFixturePeer {
 
-	private final AliasRegistry storyRegistries;
+	private final AliasRegistry aliasRegistry;
     private final List<CellBinding> cellBindings;
 
-    public AbstractFixturePeer(AliasRegistry storyRegistries,
+    public AbstractFixturePeer(AliasRegistry aliasRegistry,
     		CellBinding... cellBindings) {
-    	this(storyRegistries, Arrays.asList(cellBindings));
+    	this(aliasRegistry, Arrays.asList(cellBindings));
     }
 
     public AbstractFixturePeer(AliasRegistry storyRegistries,
     		List<CellBinding> cellBindings) {
-    	this.storyRegistries = storyRegistries;
+    	this.aliasRegistry = storyRegistries;
     	this.cellBindings = cellBindings;
     }
-
-	public AliasRegistry getAliasRegistry() {
-        return storyRegistries;
+    
+    public AliasRegistry getAliasRegistry() {
+        return aliasRegistry;
 	}
 
 	public List<CellBinding> getCellBindings() {
@@ -66,6 +66,10 @@ public abstract class AbstractFixturePeer {
 
     protected IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
+    }
+
+    public boolean isValidAlias(String alias) {
+        return getAliasRegistry().getAliased(alias) != null;
     }
 
 	

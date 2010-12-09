@@ -6,18 +6,26 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.io.IoUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.Mode;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
-import org.apache.isis.viewer.bdd.common.util.Strings;
 import org.apache.isis.viewer.bdd.concordion.internal.concordion.IsisExecuteCommandWithHeader;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.AliasItemsInListForConcordion;
+import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListContainsForConcordion;
+import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListDoesNotContainForConcordion;
+import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListForConcordion;
+import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListIsEmptyForConcordion;
+import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListIsNotEmptyForConcordion;
+import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListSizeForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.SetUpObjectsForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.UsingIsisViewerForConcordion;
 import org.concordion.Concordion;
@@ -25,6 +33,9 @@ import org.concordion.api.ResultSummary;
 import org.concordion.internal.ConcordionBuilder;
 import org.concordion.internal.FileTarget;
 import org.junit.Test;
+
+import com.google.common.base.Function;
+import com.google.common.collect.Iterables;
 
 public abstract class AbstractIsisConcordionStory {
 
@@ -45,8 +56,6 @@ public abstract class AbstractIsisConcordionStory {
     public static final String NS_URI = "http://isis.apache.org/2010/concordion";
     private static final String CMD_EXECUTE = "execute";
     
-    //private DateFormat dateFormat = DEFAULT_DATE_FORMAT;
-
     private static ThreadLocal<Story> storyThreadLocal = new ThreadLocal<Story>() {
         @Override
         protected Story initialValue() {
@@ -83,7 +92,7 @@ public abstract class AbstractIsisConcordionStory {
         InputStream cssInputFile = cssClass.getResourceAsStream(customCss);
         String cssPackageName = cssClass.getPackage().getName();
         String cssPackagePath = asPath(cssPackageName);
-        String cssOutputFileName = combine(outputDir(), cssPackagePath, customCss);
+        String cssOutputFileName = StringUtils.combinePaths(outputDir(), cssPackagePath, customCss);
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             IoUtils.copy(cssInputFile, baos);
@@ -152,24 +161,14 @@ public abstract class AbstractIsisConcordionStory {
         return DEFAULT_CONCORDION_CSS;
     }
 
-    private String combine(String tmpDir, String... paths) {
-        StringBuilder buf = new StringBuilder(tmpDir);
-        for (String path : paths) {
-            if (buf.charAt(buf.length() - 1) != File.separatorChar) {
-                buf.append(File.separatorChar);
-            }
-            buf.append(path);
-        }
-        return buf.toString();
-    }
-
     private Concordion createConcordion() {
         String targetDir = outputDir();
         if (targetDir == null) {
             throw new IllegalStateException("targetDir() cannot be null");
         }
         ConcordionBuilder builder =
-            new ConcordionBuilder().withTarget(
+            new ConcordionBuilder(){
+        }.withTarget(
                 new FileTarget(new File(targetDir)))
                 .withCommand(NS_URI, CMD_EXECUTE, new IsisExecuteCommandWithHeader());
         return builder.build();
@@ -185,7 +184,7 @@ public abstract class AbstractIsisConcordionStory {
      * @see {@link #bootstrapIsis(String, String)}
      */
     public void bootstrapIsis(String configDirectory, DeploymentType deploymentType) {
-        getStory().bootstrapIsis(configDirectory, deploymentType);
+        getStory().bootstrapIsis(StringUtils.normalized(configDirectory), deploymentType);
     }
 
     /**
@@ -195,7 +194,7 @@ public abstract class AbstractIsisConcordionStory {
      * @return <tt>boolean</tt> so that XHTML can assert on it.
      */
     public boolean bootstrapIsis(String configDirectory, String deploymentTypeStr) {
-        bootstrapIsis(configDirectory, DeploymentType.lookup(deploymentTypeStr));
+        bootstrapIsis(configDirectory, DeploymentType.lookup(StringUtils.normalized(deploymentTypeStr)));
         return true; // any runtime exception will propagate
     }
 
@@ -208,12 +207,12 @@ public abstract class AbstractIsisConcordionStory {
     // ////////////////////////////////////////////////////////////////////////
 
     public boolean logonAs(String userName) {
-        getStory().logonAsOrSwitchUserTo(userName);
+        getStory().logonAsOrSwitchUserTo(StringUtils.normalized(userName));
         return true;
     }
 
     public boolean logonAsWithRoles(String userName, String roleListStr) {
-        List<String> roleList = Strings.splitOnCommas(roleListStr);
+        List<String> roleList = StringUtils.splitOnCommas(StringUtils.normalized(roleListStr));
         getStory().logonAsOrSwitchUserTo(userName, roleList);
         return true;
     }
@@ -258,7 +257,7 @@ public abstract class AbstractIsisConcordionStory {
 
     public boolean aliasService(String aliasAs, String className) {
         try {
-            getStory().getAliasRegistry().aliasService(aliasAs, className);
+            getStory().getAliasRegistry().aliasService(StringUtils.normalized(aliasAs), StringUtils.normalized(className));
             return true;
         } catch (StoryValueException e) {
             return false;
@@ -321,6 +320,10 @@ public abstract class AbstractIsisConcordionStory {
      * Workaround for OGNL defect.
      */
     protected String setUpObjectsVarargs(String className, String alias, String... propertyValues) {
+        return setUpObjectsVarargsNormalized(StringUtils.normalized(className), StringUtils.normalized(alias), StringUtils.normalized(propertyValues));
+    }
+
+    private String setUpObjectsVarargsNormalized(String className, String alias, String... propertyValues) {
         if (executingInline()) {
             setUpObjects = new SetUpObjectsForConcordion(getStory().getAliasRegistry(), className, Mode.PERSIST);
             setUpObjects.executeHeader(alias, propertyValues);
@@ -415,6 +418,12 @@ public abstract class AbstractIsisConcordionStory {
      */
     protected String usingIsisViewerThatArgsVarargs(String onObject, String aliasResultAs, String perform,
         String usingMember, String thatIt, String arg0, String... remainingArgs) {
+        return usingIsisViewerThatArgsVarargsNormalized(StringUtils.normalized(onObject), StringUtils.normalized(aliasResultAs), StringUtils.normalized(perform), StringUtils.normalized(usingMember), StringUtils.normalized(thatIt), StringUtils.normalized(arg0),
+            StringUtils.normalized(remainingArgs));
+    }
+
+    private String usingIsisViewerThatArgsVarargsNormalized(String onObject, String aliasResultAs, String perform,
+        String usingMember, String thatIt, String arg0, String... remainingArgs) {
         if (executingInline()) {
             usingIsisViewer = new UsingIsisViewerForConcordion(getStory().getAliasRegistry(), getStory().getDeploymentType(), getStory().getDateParser(), Perform.Mode.TEST);
             usingIsisViewer.executeHeader(onObject, aliasResultAs, perform, usingMember, thatIt, arg0, remainingArgs);
@@ -433,6 +442,75 @@ public abstract class AbstractIsisConcordionStory {
     }
 
     // ////////////////////////////////////////////////////////////////////////
+    // check list
+    // ////////////////////////////////////////////////////////////////////////
+
+
+    public String checkListIsEmpty(String listAlias) {
+        CheckListIsEmptyForConcordion checkListIsEmpty = new CheckListIsEmptyForConcordion(getStory().getAliasRegistry(), StringUtils.normalized(listAlias));
+        return checkListIsEmpty.execute();
+    }
+
+    public String checkListIsNotEmpty(String listAlias) {
+        return new CheckListIsNotEmptyForConcordion(getStory().getAliasRegistry(), StringUtils.normalized(listAlias)).execute();
+    }
+    
+    public String checkListSize(String listAlias, int size) {
+        return new CheckListSizeForConcordion(getStory().getAliasRegistry(), StringUtils.normalized(listAlias)).execute(size);
+    }
+    
+    public String checkListContains(String listAlias, String alias) {
+        return new CheckListContainsForConcordion(getStory().getAliasRegistry(), StringUtils.normalized(listAlias)).execute(StringUtils.normalized(alias));
+    }
+    
+    public String checkListDoesNotContain(String listAlias, String alias) {
+        return new CheckListDoesNotContainForConcordion(getStory().getAliasRegistry(), StringUtils.normalized(listAlias)).execute(StringUtils.normalized(alias));
+    }
+    
+    
+
+    private CheckListForConcordion checkList;
+    
+    public String checkList(String listAlias, String title) {
+        if(executingTable()) {
+            if(executingTableHeader()) {
+                checkList = new CheckListForConcordion(getStory().getAliasRegistry(), listAlias);
+                return checkList.executeHeader(title);
+            } else {
+                return checkList.executeRow(title);
+            }
+        } else {
+            checkList = new CheckListForConcordion(getStory().getAliasRegistry(), listAlias);
+            checkList.executeHeader(title);
+            return checkList.executeRow(title);
+        }
+    }
+
+
+    // ////////////////////////////////////////////////////////////////////////
+    // getListContents() (for verifyRow)
+    // ////////////////////////////////////////////////////////////////////////
+    
+    public Iterable<Object> getListContents(String listAlias) {
+        ObjectAdapter listAdapter = getStory().getAliasRegistry().getAliased(StringUtils.normalized(listAlias));
+        if(listAdapter == null) {
+            return Collections.emptyList();
+        }
+        CollectionFacet facet = listAdapter.getSpecification().getFacet(CollectionFacet.class);
+        if(facet==null){
+            return Collections.emptyList();
+        }
+        Iterable<ObjectAdapter> objectAdapters = facet.iterable(listAdapter);
+        return Iterables.transform(objectAdapters, new Function<ObjectAdapter, Object>(){
+
+            @Override
+            public Object apply(ObjectAdapter from) {
+                return from.getObject();
+            }});
+    }
+
+
+    // ////////////////////////////////////////////////////////////////////////
     // alias items in list
     // ////////////////////////////////////////////////////////////////////////
 
@@ -443,8 +521,8 @@ public abstract class AbstractIsisConcordionStory {
     }
 
     public String aliasItemsInList(String listAlias, String title, String type, String aliasAs) {
-        aliasItemsInList = new AliasItemsInListForConcordion(getStory().getAliasRegistry(), listAlias);
-        return aliasItemsInList.execute(aliasAs, title, type);
+        aliasItemsInList = new AliasItemsInListForConcordion(getStory().getAliasRegistry(), StringUtils.normalized(listAlias));
+        return aliasItemsInList.execute(StringUtils.normalized(aliasAs), StringUtils.normalized(title), StringUtils.normalized(type));
     }
 
     private boolean executingTableHeader() {

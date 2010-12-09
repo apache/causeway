@@ -22,4 +22,6 @@ public interface AliasRegistry extends Iterable<Map.Entry<String, ObjectAdapter>
 
     void aliasService(final String aliasAs, final String className) throws StoryValueException;
 
+    public void clear();
+
 }

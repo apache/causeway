@@ -1,5 +1,6 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.property;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
@@ -7,7 +8,6 @@ import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
-import org.apache.isis.viewer.bdd.common.util.Strings;
 
 public class DoesNotContain extends ThatSubcommandAbstract {
 
@@ -37,7 +37,7 @@ public class DoesNotContain extends ThatSubcommandAbstract {
 
         final String resultTitle = resultAdapter.titleString();
 
-        if (!Strings.emptyString(expected)) {
+        if (!StringUtils.emptyString(expected)) {
 
             // see if expected matches an alias
             final ObjectAdapter expectedAdapter = performContext.getPeer().getAliasRegistry().getAliased(expected);
@@ -50,7 +50,7 @@ public class DoesNotContain extends ThatSubcommandAbstract {
             }
 
             // otherwise, compare title
-            if (Strings.nullSafeEquals(resultTitle, expected)) {
+            if (StringUtils.nullSafeEquals(resultTitle, expected)) {
             	throw StoryBoundValueException.current(arg0Binding, "(does contain)");
             }
         }

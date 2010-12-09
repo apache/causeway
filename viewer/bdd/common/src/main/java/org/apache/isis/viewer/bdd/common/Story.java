@@ -97,6 +97,8 @@ public class Story implements AliasRegistryHolder {
         configurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY, deploymentType.name());
         defaultStoryComponentsInto(configurationBuilder);
 
+        getAliasRegistry().clear();
+        
         try {
             // create system...
             isisSystem = createSystem(deploymentType, configurationBuilder);

@@ -13,7 +13,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
 import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
@@ -30,14 +30,16 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
     private final List<Parse> argumentCells = new ArrayList<Parse>();
 
     public UsingIsisViewerForFitNesse(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode) {
-        this(aliasesRegistry, deploymentType, dateParser, mode, CellBindingForFitNesse
-            .builder(Constants.ON_OBJECT_NAME, Constants.ON_OBJECT_HEAD_SET).ditto().build(), CellBindingForFitNesse
-            .builder(Constants.ALIAS_RESULT_NAME, Constants.ALIAS_RESULT_HEAD_SET).optional().build(),
-            CellBindingForFitNesse.builder(Constants.PERFORM_NAME, Constants.PERFORM_HEAD_SET).ditto().build(),
-            CellBindingForFitNesse.builder(Constants.ON_MEMBER_NAME, Constants.ON_MEMBER_HEAD_SET).optional().build(),
-            CellBindingForFitNesse.builder(Constants.THAT_IT_NAME, Constants.THAT_IT_HEAD_SET).ditto().optional()
+        this(aliasesRegistry, deploymentType, dateParser, mode, 
+            CellBindingForFitNesse
+            .builder(IsisViewerConstants.ON_OBJECT_NAME, 
+                IsisViewerConstants.ON_OBJECT_HEAD_SET).ditto().build(), CellBindingForFitNesse
+            .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).optional().build(),
+            CellBindingForFitNesse.builder(IsisViewerConstants.PERFORM_NAME, IsisViewerConstants.PERFORM_HEAD_SET).ditto().build(),
+            CellBindingForFitNesse.builder(IsisViewerConstants.ON_MEMBER_NAME, IsisViewerConstants.ON_MEMBER_HEAD_SET).optional().build(),
+            CellBindingForFitNesse.builder(IsisViewerConstants.THAT_IT_NAME, IsisViewerConstants.THAT_IT_HEAD_SET).ditto().optional()
                 .build(), CellBindingForFitNesse
-                .builder(Constants.WITH_ARGUMENTS_NAME, Constants.WITH_ARGUMENTS_HEAD_SET).optional().build());
+                .builder(IsisViewerConstants.WITH_ARGUMENTS_NAME, IsisViewerConstants.WITH_ARGUMENTS_HEAD_SET).optional().build());
     }
 
     private UsingIsisViewerForFitNesse(final AliasRegistry aliasesRegistry, final DeploymentType deploymentType, final DateParser dateParser, final Perform.Mode mode,

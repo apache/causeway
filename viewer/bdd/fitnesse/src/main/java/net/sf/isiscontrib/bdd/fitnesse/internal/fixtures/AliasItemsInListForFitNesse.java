@@ -6,7 +6,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
 
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
@@ -17,9 +17,9 @@ import fit.Parse;
 public class AliasItemsInListForFitNesse extends AbstractFixture<AliasItemsInListPeer> {
 
     public AliasItemsInListForFitNesse(final AliasRegistry aliasesRegistry, final String listAlias) {
-        this(aliasesRegistry, listAlias, CellBindingForFitNesse.builder(Constants.TITLE_NAME, Constants.TITLE_HEAD)
-            .build(), CellBindingForFitNesse.builder(Constants.TYPE_NAME, Constants.TYPE_HEAD).optional().build(),
-            CellBindingForFitNesse.builder(Constants.ALIAS_RESULT_NAME, Constants.ALIAS_RESULT_HEAD_SET).autoCreate()
+        this(aliasesRegistry, listAlias, CellBindingForFitNesse.builder(IsisViewerConstants.TITLE_NAME, IsisViewerConstants.TITLE_HEAD)
+            .build(), CellBindingForFitNesse.builder(IsisViewerConstants.TYPE_NAME, IsisViewerConstants.TYPE_HEAD).optional().build(),
+            CellBindingForFitNesse.builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate()
                 .build());
     }
 

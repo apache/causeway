@@ -12,6 +12,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.DebugServicesForFitNess
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.SetUpObjectsForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.UsingIsisViewerForFitNesse;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.Story;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
@@ -19,7 +20,6 @@ import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 import org.apache.isis.viewer.bdd.common.parsers.JavaUtilDateParser;
-import org.apache.isis.viewer.bdd.common.util.Strings;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
@@ -101,7 +101,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public void logonAsWithRoles(final String userName, final String roleListStr) {
-        List<String> roleList = Strings.splitOnCommas(roleListStr);
+        List<String> roleList = StringUtils.splitOnCommas(roleListStr);
         getStory().logonAsOrSwitchUserTo(userName, roleList);
     }
 

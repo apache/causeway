@@ -4,16 +4,16 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.AbstractFixture;
 import net.sf.isiscontrib.bdd.fitnesse.internal.CellBindingForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
 
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.AssociationVisitor;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.PropertyResult;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.SetUpObjectResult;
-import org.apache.isis.viewer.bdd.common.util.Strings;
 
 import fit.Fixture;
 import fit.Parse;
@@ -23,7 +23,7 @@ public class SetUpObjectsForFitNesse extends AbstractFixture<SetUpObjectsPeer> {
     public SetUpObjectsForFitNesse(final AliasRegistry aliasesRegistry, final String className,
         final SetUpObjectsPeer.Mode mode) {
         this(aliasesRegistry, className, mode, CellBindingForFitNesse
-            .builder(Constants.ALIAS_RESULT_NAME, Constants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
+            .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
     }
 
     private SetUpObjectsForFitNesse(final AliasRegistry aliasesRegistry, final String className,
@@ -147,7 +147,7 @@ public class SetUpObjectsForFitNesse extends AbstractFixture<SetUpObjectsPeer> {
             final Parse aliasCell = FitnesseUtil.cell(row, aliasColumn);
             if (aliasCell != null) {
                 String alias = aliasCell.text();
-                if (Strings.emptyString(alias)) {
+                if (StringUtils.emptyString(alias)) {
                     alias = getPeer().aliasFor(adapter);
                     FitnesseUtil.setBody(aliasCell, Fixture.gray(alias));
                 } else {

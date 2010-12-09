@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
@@ -41,7 +42,6 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.RemoveFromCollection;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.SaveObject;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.SetProperty;
-import org.apache.isis.viewer.bdd.common.util.Strings;
 
 public class UsingIsisViewerPeer extends AbstractFixturePeer {
 
@@ -208,7 +208,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         final StoryCell onMemberCell = onMemberBinding.getCurrentCell();
         final String onMember = onMemberCell.getText();
 
-        if (Strings.emptyString(onMember)) {
+        if (StringUtils.emptyString(onMember)) {
             throw StoryBoundValueException.current(onMemberBinding, "(required)");
         }
 
@@ -217,7 +217,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         }
 
         // see if property, collection or action.
-        final String memberId = Strings.memberIdFor(onMember);
+        final String memberId = StringUtils.memberIdFor(onMember);
         final ObjectSpecification spec = onAdapter.getSpecification();
         final List<ObjectMember> objectMembers = new ArrayList<ObjectMember>();
 
@@ -276,7 +276,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     }
 
     private void aliasResultFromPerformCommand(Perform performCommand, String aliasAs) throws StoryBoundValueException {
-        if (Strings.emptyString(aliasAs)) {
+        if (StringUtils.emptyString(aliasAs)) {
             return;
         }
         final ObjectAdapter resultAdapter = performCommand.getResult();
@@ -314,14 +314,14 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
             try {
                 return parseableFacet.parseTextEntry(contextAdapter, cellText);
             } catch (final IllegalArgumentException ex) {
-                throw StoryBoundValueException.arg(contextBinding, paramCell, "(cannot parse)");
+                throw StoryBoundValueException.arg(contextBinding, paramCell, "(cannot parse '"+cellText+"')");
             }
         }
 
         // otherwise, handle as reference to known object
         final ObjectAdapter adapter = getAliasRegistry().getAliased(cellText);
         if (adapter == null) {
-            throw StoryBoundValueException.arg(contextBinding, paramCell, "(unknown reference)");
+            throw StoryBoundValueException.arg(contextBinding, paramCell, "(unknown reference'"+cellText+"')");
         }
 
         return adapter;

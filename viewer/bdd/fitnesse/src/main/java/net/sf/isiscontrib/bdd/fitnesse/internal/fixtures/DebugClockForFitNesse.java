@@ -5,7 +5,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.CellBindingForFitNesse;
 
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.StoryCell;
 import org.apache.isis.viewer.bdd.common.fixtures.DebugClockPeer;
 
@@ -15,7 +15,7 @@ import fit.Parse;
 public class DebugClockForFitNesse extends AbstractFixture<DebugClockPeer> {
 
     public DebugClockForFitNesse(final AliasRegistry aliasesRegistry) {
-        this(aliasesRegistry, CellBindingForFitNesse.builder(Constants.VALUE_NAME, Constants.VALUE_HEAD).build());
+        this(aliasesRegistry, CellBindingForFitNesse.builder(IsisViewerConstants.VALUE_NAME, IsisViewerConstants.VALUE_HEAD).build());
     }
 
     private DebugClockForFitNesse(final AliasRegistry aliasesRegistry, final CellBinding valueBinding) {

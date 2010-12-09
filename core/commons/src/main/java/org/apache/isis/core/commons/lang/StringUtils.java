@@ -20,12 +20,21 @@
 
 package org.apache.isis.core.commons.lang;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 
 public final class StringUtils {
     private StringUtils() {}
 
+    //////////////////////////////////////////////////////////////
+    // naturalName, naturalize, simpleName, camel, memberIdFor
+    //////////////////////////////////////////////////////////////
+    
     public static String naturalName(final String name) {
 
         int pos = 0;
@@ -68,6 +77,40 @@ public final class StringUtils {
         return Character.isUpperCase(c) || Character.isDigit(c) && !Character.isDigit(previousChar);
     }
 
+
+    public static String simpleName(final String str) {
+        final int lastDot = str.lastIndexOf('.');
+        if (lastDot == -1) {
+            return str;
+        }
+        if (lastDot == str.length() - 1) {
+            throw new IllegalArgumentException("Name cannot end in '.'");
+        }
+        return str.substring(lastDot + 1);
+    }
+
+    public static String camel(String name) {
+        StringBuffer b = new StringBuffer(name.length());
+        StringTokenizer t = new StringTokenizer(name);
+        b.append(t.nextToken());
+        while (t.hasMoreTokens()) {
+            String token = t.nextToken();
+            b.append(token.substring(0, 1).toUpperCase()); // replace spaces with
+            // camelCase
+            b.append(token.substring(1));
+        }
+        return b.toString();
+    }
+
+    public static String memberIdFor(final String member) {
+        return lowerLeading(camel(member));
+    }
+
+
+    //////////////////////////////////////////////////////////////
+    // capitalize, lowerFirst, firstWord
+    //////////////////////////////////////////////////////////////
+
     public static String capitalize(final String str) {
         if (str == null || str.length() == 0) {
             return str;
@@ -78,6 +121,38 @@ public final class StringUtils {
         return Character.toUpperCase(str.charAt(0)) + str.substring(1);
     }
 
+    
+    /**
+     * Simply forces first char to be lower case.
+     */
+    public static String lowerFirst(final String str) {
+        if (emptyString(str)) {
+            return str;
+        }
+        if (str.length() == 1) {
+            return str.toLowerCase();
+        }
+        return str.substring(0, 1).toLowerCase() + str.substring(1);
+    }
+
+    public static String lowerLeading(final String str) {
+        return lowerFirst(str);
+    }
+
+    public static String firstWord(String line) {
+        String[] split = line.split(" ");
+        return split[0];
+    }
+
+
+    //////////////////////////////////////////////////////////////
+    // isNullOrEmpty, isNotEmpty, emptyString, nullSafeEquals
+    //////////////////////////////////////////////////////////////
+
+    public static boolean emptyString(final String str) {
+        return str == null || str.length() == 0;
+    }
+    
     public static boolean isNullOrEmpty(final String str) {
         return str == null || str.length() == 0;
     }
@@ -89,15 +164,19 @@ public final class StringUtils {
         return !isNullOrEmpty(str);
     }
 
-    public static String lowerFirst(final String str) {
-        if (str == null || str.length() == 0) {
-            return str;
+
+    public static boolean nullSafeEquals(final String str1, final String str2) {
+        if (str1 == null || str2 == null) {
+            return false;
         }
-        if (str.length() == 1) {
-            return str.toLowerCase();
-        }
-        return str.substring(0, 1).toLowerCase() + str.substring(1);
+        return str1.equals(str2);
     }
+
+
+
+    //////////////////////////////////////////////////////////////
+    // in, combine, combinePaths, splitOnCommas 
+    //////////////////////////////////////////////////////////////
 
     public static boolean in(final String str, final String[] strings) {
         for (final String strCandidate : strings) {
@@ -106,22 +185,6 @@ public final class StringUtils {
             }
         }
         return false;
-    }
-
-    public static String commaSeparatedClassNames(final List<Object> objects) {
-        final StringBuilder buf = new StringBuilder();
-        int i = 0;
-        for (final Object object : objects) {
-            if (i++ > 0) {
-                buf.append(',');
-            }
-            buf.append(object.getClass().getName());
-        }
-        return buf.toString();
-    }
-
-    public static String stripNewLines(final String str) {
-        return str.replaceAll("[\r\n]", "");
     }
 
     public static String combine(List<String> list) {
@@ -135,36 +198,47 @@ public final class StringUtils {
         return buf.toString();
     }
 
-    public static String firstWord(String line) {
-        String[] split = line.split(" ");
-        return split[0];
+    public static String combinePaths(String path, String... furtherPaths) {
+        StringBuilder buf = new StringBuilder(path);
+        for (String furtherPath : furtherPaths) {
+            if (buf.charAt(buf.length() - 1) != File.separatorChar) {
+                buf.append(File.separatorChar);
+            }
+            buf.append(furtherPath);
+        }
+        return buf.toString();
     }
 
-	public static String stripLeadingSlash(String path) {
-	    if (!path.startsWith("/")) {
-	        return path;
-	    }
-	    if (path.length() < 2) {
-	        return "";
-	    }
-	    return path.substring(1);
-	}
+    public static List<String> splitOnCommas(final String commaSeparatedList) {
+        if (commaSeparatedList == null) {
+            return null;
+        }
+        final String removeLeadingWhiteSpace = removeLeadingWhiteSpace(commaSeparatedList);
+        // special handling
+        if (removeLeadingWhiteSpace.length() == 0) {
+            return Collections.emptyList();
+        }
+        String[] splitAsArray = removeLeadingWhiteSpace.split("\\W*,\\W*");
+        return Arrays.asList(splitAsArray);
+    }
+    
+    //////////////////////////////////////////////////////////////
+    // commaSeparatedClassNames
+    //////////////////////////////////////////////////////////////
 
-	public static String removeTabs(final String text) {
-	    // quick return - jvm java should always return here
-	    if (text.indexOf('\t') == -1) {
-	        return text;
-	    }
-	    final StringBuffer buf = new StringBuffer();
-	    for (int i = 0; i < text.length(); i++) {
-	        // a bit clunky to stay with j# api
-	        if (text.charAt(i) != '\t') {
-	            buf.append(text.charAt(i));
-	        }
-	    }
-	    return buf.toString();
-	}
+    public static String commaSeparatedClassNames(final List<Object> objects) {
+        final StringBuilder buf = new StringBuilder();
+        int i = 0;
+        for (final Object object : objects) {
+            if (i++ > 0) {
+                buf.append(',');
+            }
+            buf.append(object.getClass().getName());
+        }
+        return buf.toString();
+    }
 
+    
 	
     private static final char CARRIAGE_RETURN = '\n';
     private static final char LINE_FEED = '\r';
@@ -203,6 +277,68 @@ public final class StringUtils {
         return buf.toString();
     }
 
+
+
+    //////////////////////////////////////////////////////////////
+    // removeTabs, removeLeadingWhiteSpace, stripLeadingSlash, stripNewLines, normalize
+    //////////////////////////////////////////////////////////////
+
+    public static String removeTabs(final String text) {
+        // quick return - jvm java should always return here
+        if (text.indexOf('\t') == -1) {
+            return text;
+        }
+        final StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < text.length(); i++) {
+            // a bit clunky to stay with j# api
+            if (text.charAt(i) != '\t') {
+                buf.append(text.charAt(i));
+            }
+        }
+        return buf.toString();
+    }
+
+    public static String removeLeadingWhiteSpace(final String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.replaceAll("^\\W*", "");
+    }
+
+
+    public static String stripNewLines(final String str) {
+        return str.replaceAll("[\r\n]", "");
+    }
+
+    public static String stripLeadingSlash(String path) {
+        if (!path.startsWith("/")) {
+            return path;
+        }
+        if (path.length() < 2) {
+            return "";
+        }
+        return path.substring(1);
+    }
+
+
+    /**
+     * Condenses any whitespace to a single character
+     * @param str
+     * @return
+     */
+    public static String normalized(String str) {
+        if(str==null) 
+            return null;
+        return str.replaceAll("\\s+", " ");
+    }
+
+    public static String[] normalized(String... strings) {
+        ArrayList<String> stringList = new ArrayList<String>();
+        for (String string : strings) {
+            stringList.add(normalized(string));
+        }
+        return stringList.toArray(new String[]{});
+    }
 
 
 

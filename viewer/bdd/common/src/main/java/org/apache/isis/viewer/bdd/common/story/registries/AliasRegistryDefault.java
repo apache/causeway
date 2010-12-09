@@ -80,4 +80,11 @@ public class AliasRegistryDefault implements AliasRegistry {
         return IsisContext.getPersistenceSession();
     }
 
+    @Override
+    public void clear() {
+        this.adaptersByAlias.clear();
+        this.aliasesByAdapter.clear();
+        this.aliasCountsByPrefix.clear();
+    }
+
 }

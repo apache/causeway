@@ -9,7 +9,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.StoryValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
@@ -20,8 +20,8 @@ import fit.Parse;
 public class CheckListForFitNesse extends AbstractFixture<CheckListPeer> {
 
     public CheckListForFitNesse(final AliasRegistry aliasesRegistry, final String listAlias, final CheckMode checkMode) {
-        this(aliasesRegistry, listAlias, checkMode, CellBindingForFitNesse.builder(Constants.TITLE_NAME,
-            Constants.TITLE_HEAD).build(), CellBindingForFitNesse.builder(Constants.TYPE_NAME, Constants.TYPE_HEAD)
+        this(aliasesRegistry, listAlias, checkMode, CellBindingForFitNesse.builder(IsisViewerConstants.TITLE_NAME,
+            IsisViewerConstants.TITLE_HEAD).build(), CellBindingForFitNesse.builder(IsisViewerConstants.TYPE_NAME, IsisViewerConstants.TYPE_HEAD)
             .optional().build());
     }
 

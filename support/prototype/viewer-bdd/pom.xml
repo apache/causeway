@@ -21,11 +21,8 @@
                         <concordion.output.dir>${project.build.directory}/concordion</concordion.output.dir>
                     </systemPropertyVariables>
                     <includes>
-                         <include>**/*Story.java</include>
+                         <include>**/StorySuite.java</include>
                     </includes>
-                    <excludes>
-                         <exclude>**/CustomCssPackage.java</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
 		</plugins>

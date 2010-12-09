@@ -7,6 +7,14 @@ import org.concordion.internal.Row;
 import org.concordion.internal.TableSupport;
 import org.concordion.internal.command.ExecuteCommand;
 
+/**
+ * Handles tables slightly differently from Concordion's usual strategy.
+ * 
+ * <p>
+ * Specifically, it will call execute for the header row as well as for the
+ * body rows.  This is required in order to set up the bindings of the
+ * column names to the positions.
+ */
 public class IsisExecuteCommandWithHeader extends ExecuteCommand {
 
 	public static enum Context {
@@ -44,9 +52,8 @@ public class IsisExecuteCommandWithHeader extends ExecuteCommand {
 	@Override
 	public void execute(org.concordion.api.CommandCall commandCall, Evaluator evaluator,
 			ResultRecorder resultRecorder) {
-		// we're gonna handle tables slightly differently from Concordion's
-		// usual strategy
 		if (commandCall.getElement().isNamed("table")) {
+		    // special handling for tables
 			Context contextIfAny = context.get();
 			boolean setContext = contextIfAny == null; 
 			if (setContext) {
@@ -57,6 +64,7 @@ public class IsisExecuteCommandWithHeader extends ExecuteCommand {
 				context.set(null);
 			}
 		} else {
+		    // basically the same as Concordion's original ExecuteCommand 
 			Context contextIfAny = context.get();
 			boolean setContext = contextIfAny == null;
 			if (setContext) {
@@ -73,7 +81,7 @@ public class IsisExecuteCommandWithHeader extends ExecuteCommand {
 			ResultRecorder resultRecorder) {
 		TableSupport tableSupport = new TableSupport(commandCall);
 
-		// also execute on the header
+		// this is the bit that's different: also execute on the header
 		tableRow.set(TableRow.HEADER);
 		Row headerRow = tableSupport.getLastHeaderRow();
 		commandCall.setElement(headerRow.getElement());

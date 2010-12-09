@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
@@ -14,7 +15,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.util.Strings;
 
 public class SetUpObjectsPeer extends AbstractFixturePeer {
 
@@ -122,7 +122,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
 
             ObjectAssociation association = null;
             try {
-                final String memberName = Strings.memberIdFor(heading);
+                final String memberName = StringUtils.memberIdFor(heading);
                 association = spec.getAssociation(memberName);
             } catch (final Exception ex) {
                 return PropertyResult.NO_SUCH_PROPERTY;
@@ -259,7 +259,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         if (alias != null) {
             return alias;
         } else {
-            String specShortName = Strings.lowerLeading(spec.getShortName());
+            String specShortName = StringUtils.lowerLeading(spec.getShortName());
             return getAliasRegistry().aliasPrefixedAs(specShortName, adapter);
         }
     }

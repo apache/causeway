@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
@@ -34,30 +34,33 @@ public abstract class PerformCheckThatAbstract extends PerformAbstract {
 		}
 	}
 
-	public void perform(final PerformContext performContext)
+	@Override
+    public void perform(final PerformContext performContext)
 			throws StoryBoundValueException {
 		CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
 		if (!thatItBinding.isFound()) {
 			CellBinding performBinding = performContext.getPeer()
 					.getPerformBinding();
 			throw StoryBoundValueException.current(performBinding, 
-					"(require " + Constants.THAT_IT_NAME + "' column)");
+					"(require " + IsisViewerConstants.THAT_IT_NAME + "' column)");
 		}
 		StoryCell thatItCell = thatItBinding.getCurrentCell();
 		final String thatIt = thatItCell.getText();
 		final ThatSubcommand thatSubcommand = subcommandByKey.get(thatIt);
 		if (thatSubcommand == null) {
 			throw StoryBoundValueException.current(thatItBinding, 
-					"(unknown '" + Constants.THAT_IT_NAME + "' verb)");
+					"(unknown '" + IsisViewerConstants.THAT_IT_NAME + "' verb)");
 		}
 		result = thatSubcommand.that(performContext);
 	}
 
-	public ObjectAdapter getResult() {
+	@Override
+    public ObjectAdapter getResult() {
 		return result;
 	}
 
-	public boolean requiresMember() {
+	@Override
+    public boolean requiresMember() {
 		return requiresMember;
 	}
 }

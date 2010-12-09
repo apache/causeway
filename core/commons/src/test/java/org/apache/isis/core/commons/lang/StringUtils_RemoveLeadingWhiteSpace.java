@@ -1,33 +1,33 @@
-package org.apache.isis.viewer.bdd.common.util;
+package org.apache.isis.core.commons.lang;
 
-import org.apache.isis.viewer.bdd.common.util.Strings;
+import org.apache.isis.core.commons.lang.StringUtils;
 import org.hamcrest.CoreMatchers;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class Strings_RemoveLeadingWhiteSpace {
+public class StringUtils_RemoveLeadingWhiteSpace {
 
     @Test
     public void whenHasLeadingWhiteSpace() {
-        final String removed = Strings.removeLeadingWhiteSpace(" 	 foo");
+        final String removed = StringUtils.removeLeadingWhiteSpace(" 	 foo");
         Assert.assertThat(removed, CoreMatchers.is("foo"));
     }
 
     @Test
     public void whenNoLeadingWhiteSpace() {
-        final String removed = Strings.removeLeadingWhiteSpace("foo");
+        final String removed = StringUtils.removeLeadingWhiteSpace("foo");
         Assert.assertThat(removed, CoreMatchers.is("foo"));
     }
 
     @Test
     public void empty() {
-        final String removed = Strings.removeLeadingWhiteSpace("");
+        final String removed = StringUtils.removeLeadingWhiteSpace("");
         Assert.assertThat(removed, CoreMatchers.is(""));
     }
 
     @Test
     public void whenNull() {
-        final String removed = Strings.removeLeadingWhiteSpace(null);
+        final String removed = StringUtils.removeLeadingWhiteSpace(null);
         Assert.assertThat(removed, CoreMatchers.is(CoreMatchers.nullValue()));
     }
 

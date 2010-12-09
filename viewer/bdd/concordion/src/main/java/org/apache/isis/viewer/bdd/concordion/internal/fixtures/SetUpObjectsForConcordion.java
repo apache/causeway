@@ -3,7 +3,7 @@ package org.apache.isis.viewer.bdd.concordion.internal.fixtures;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.CellBindingDefault;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 
@@ -12,7 +12,7 @@ public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer>
     public SetUpObjectsForConcordion(final AliasRegistry aliasesRegistry, final String className,
         final SetUpObjectsPeer.Mode mode) {
         this(aliasesRegistry, className, mode, CellBindingDefault
-            .builder(Constants.ALIAS_RESULT_NAME, Constants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
+            .builder(IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET).autoCreate().build());
     }
 
     private SetUpObjectsForConcordion(final AliasRegistry storyFixture, final String className,

@@ -9,7 +9,7 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.CellBindingDefault;
-import org.apache.isis.viewer.bdd.common.Constants;
+import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
 import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
 import org.apache.isis.viewer.bdd.common.StoryCell;
 import org.apache.isis.viewer.bdd.common.StoryCellDefault;
@@ -22,7 +22,6 @@ import com.google.common.collect.Lists;
 public class UsingIsisViewerForConcordion extends
 		AbstractFixture<UsingIsisViewerPeer> {
 
-	private final List<String> argumentCells = new ArrayList<String>();
 
 	public UsingIsisViewerForConcordion(
 			final AliasRegistry aliasesRegistry,
@@ -30,22 +29,22 @@ public class UsingIsisViewerForConcordion extends
 			final DateParser dateParser, final Perform.Mode mode) {
 		this(aliasesRegistry, deploymentType, dateParser, mode, 
 				CellBindingDefault.builder(
-						Constants.ON_OBJECT_NAME, Constants.ON_OBJECT_HEAD_SET)
+				        IsisViewerConstants.ON_OBJECT_NAME, IsisViewerConstants.ON_OBJECT_HEAD_SET)
 						.ditto().build(),
 				CellBindingDefault.builder(
-						Constants.ALIAS_RESULT_NAME, Constants.ALIAS_RESULT_HEAD_SET)
+				        IsisViewerConstants.ALIAS_RESULT_NAME, IsisViewerConstants.ALIAS_RESULT_HEAD_SET)
 						.optional().build(), 
 				CellBindingDefault.builder(
-						Constants.PERFORM_NAME, Constants.PERFORM_HEAD_SET)
+				        IsisViewerConstants.PERFORM_NAME, IsisViewerConstants.PERFORM_HEAD_SET)
 						.ditto().build(), 
 				CellBindingDefault.builder(
-						Constants.ON_MEMBER_NAME, Constants.ON_MEMBER_HEAD_SET)
+				        IsisViewerConstants.ON_MEMBER_NAME, IsisViewerConstants.ON_MEMBER_HEAD_SET)
 						.optional().build(),
 				CellBindingDefault.builder(
-						Constants.THAT_IT_NAME, Constants.THAT_IT_HEAD_SET)
+						IsisViewerConstants.THAT_IT_NAME, IsisViewerConstants.THAT_IT_HEAD_SET)
 						.ditto().optional().build(), 
 				CellBindingDefault.builder(
-						Constants.WITH_ARGUMENTS_NAME, Constants.WITH_ARGUMENTS_HEAD_SET)
+				        IsisViewerConstants.WITH_ARGUMENTS_NAME, IsisViewerConstants.WITH_ARGUMENTS_HEAD_SET)
 						.optional().build());
 	}
 
@@ -94,6 +93,8 @@ public class UsingIsisViewerForConcordion extends
 		setupHeader(onObject, aliasResultAs, perform, usingMember,
 				thatIt, arg0);
 
+	    final List<String> argumentCells = new ArrayList<String>();
+
 		// capture current
 		getPeer().getOnObjectBinding().captureCurrent(new StoryCellDefault(onObject));
 		getPeer().getAliasResultAsBinding().captureCurrent(new StoryCellDefault(aliasResultAs));
@@ -112,7 +113,7 @@ public class UsingIsisViewerForConcordion extends
 		
 		// execute
 		try {
-			execute();
+			execute(argumentCells);
 		} catch (StoryBoundValueException ex) {
 			return ex.getMessage();
 		}
@@ -120,7 +121,7 @@ public class UsingIsisViewerForConcordion extends
 		return "ok";
 	}
 
-	private void execute() throws StoryBoundValueException {
+	private void execute(final List<String> argumentCells) throws StoryBoundValueException {
 
 		ObjectAdapter onAdapter = getPeer().validateOnObject();
 		String aliasAs = getPeer().validateAliasAs();

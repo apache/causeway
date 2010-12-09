@@ -211,13 +211,13 @@
         file with a corresponding JUnit4 test run set up to run using
         <emphasis>Concordion</emphasis>'s
         <classname>ConcordionRunner</classname>, The developer then annotates
-        the <acronym>XHTML</acronym> using special (Concordion-namespaced)
-        attributes in order identify the inputs to and expected results of the
-        test. This is used by the <classname>ConcordionRunner</classname> to
-        call into corresponding methods in the test.</para>
+        the <acronym>XHTML</acronym> using special (namespaced) attributes in
+        order identify the inputs to and expected results of the test. This is
+        used by the <classname>ConcordionRunner</classname> to call into
+        corresponding methods in the test.</para>
 
         <para>For example, suppose the analyst writes a scenario test called
-        <filename>CustomerPlacesOrder.xhtml</filename>. In the
+        <filename>CustomerPlacesOrderStory.xhtml</filename>. In the
         <acronym>XHTML</acronym> the analyst has identified the details of the
         customer doing the ordering (customer ref 4321, say), the product
         being ordered (product code 1234), the fact that the customer
@@ -237,15 +237,15 @@
 
         <para>Then, the developer writes a JUnit4 test alongside the
         <acronym>XHTML</acronym>; in this example it would be called
-        <filename>CustomerPlacesOrderTest.java</filename>.
+        <filename>CustomerPlacesOrderStory.java</filename>.
         <emphasis>Concordion</emphasis> calls into this JUnit4 test as it
         comes across the annotations in the <acronym>XHTML</acronym>, and the
         JUnit4 test mediates with the system under test.</para>
 
         <para>When the test runs, <emphasis>Concordion</emphasis> generates a
-        copy of the <acronym>XHTML</acronym> in a output directory (by default
-        specified by a system property) which can then made available for
-        inspection by the business analyst (eg published on a website).</para>
+        copy of the <acronym>XHTML</acronym> in an output directory which can
+        then made available for inspection by the business analyst (eg
+        published on a website).</para>
 
         <para>The <emphasis>Concordion</emphasis> website has a good <ulink
         url="http://concordion.org/Tutorial.html">tutorial</ulink> that
@@ -266,34 +266,38 @@
         <para>The <emphasis>BDD viewer</emphasis> integration provided by
         <emphasis>Apache Isis</emphasis> works by providing a superclass for
         the JUnit4 test, called
-        <classname>AbstractIsisConcordionTest</classname>. This does several
-        things:</para>
+        <classname>AbstractIsisConcordionStory</classname>. This exposes
+        methods to perform all the tasks necessary for exercising an
+        application. Specifically, it can be used to:</para>
 
         <itemizedlist>
           <listitem>
-            <para>it bootstraps an instance of <emphasis>Apache
-            Isis</emphasis> system using the in-memory object store;</para>
+            <para>it bootstrap an instance of <emphasis>Apache Isis</emphasis>
+            system using the in-memory object store;</para>
           </listitem>
 
           <listitem>
-            <para>the system is initialized with a set of services, picked up
-            from the <filename>isis.properties</filename> configuration
-            file</para>
+            <para>specify the date/time format;</para>
           </listitem>
 
           <listitem>
-            <para>it provides methods to allow fixtures (domain objects) to be
-            installed into the object store</para>
+            <para>initialize the system with a set of services, picked up from
+            the <filename>isis.properties</filename> configuration file</para>
           </listitem>
 
           <listitem>
-            <para>it provides methods to allow a user to be logged in, and the
-            date to be specified</para>
+            <para>allow fixtures (domain objects) to be installed into the
+            object store</para>
           </listitem>
 
           <listitem>
-            <para>it provides methods to allow the user to interact with
-            services and domain objects:</para>
+            <para>allow a user to be logged in, and the date to be
+            specified</para>
+          </listitem>
+
+          <listitem>
+            <para>allow the user to interact with services and domain
+            objects:</para>
 
             <itemizedlist>
               <listitem>
@@ -320,7 +324,7 @@
 
         <para>For each <acronym>XHTML</acronym> scenario test, the developer
         writes subclasses the
-        <classname>AbstractIsisConcordionTest</classname>, creating a name
+        <classname>AbstractIsisConcordionStory</classname>, creating a name
         matching the scenario test (ie as per regular
         <emphasis>Concordion</emphasis>). He then annotates the original
         <acronym>XHTML</acronym>, either calling directly into the inherited
@@ -343,6 +347,15 @@
         <emphasis>Concordion</emphasis>. The "isis" namespace is to allow
         certain commands to be invoked using special commands provided by the
         Isis/Concordion integration.</para>
+
+        <para></para>
+
+        <para>*** somewhere, should explain why isis:execute is required (for
+        tables?) rather than concordion:execute... the point being that there
+        is a single instance of the corresponding peer object, with the first
+        header row used to set up the bindings.</para>
+
+        <para></para>
       </sect2>
 
       <sect2>
@@ -354,7 +367,7 @@
         <itemizedlist>
           <listitem>
             <para>by overriding the <methodname>outputDir()</methodname>
-            method in <classname>AbstractIsisConcordionTest</classname>;
+            method in <classname>AbstractIsisConcordionStory</classname>;
             or</para>
           </listitem>
 
@@ -371,11 +384,24 @@
       <sect2>
         <title>Providing a CSS File</title>
 
-        <para></para>
+        <para>By default, Concordion will copy over the
+        <acronym>HTML</acronym> for every story into the output directory, but
+        it won't copy over any <acronym>CSS</acronym> resources. If you want
+        any <acronym>CSS</acronym> to be copied over, then:</para>
 
-        <para></para>
+        <itemizedlist>
+          <listitem>
+            <para>override the <methodname>customCssPackage()</methodname>
+            method in <classname>AbstractIsisConcordionStory</classname> to
+            return any class in the package that holds the CSS file.</para>
+          </listitem>
 
-        <para></para>
+          <listitem>
+            <para>override the <methodname>customCss()</methodname> method to
+            specify the name of the <acronym>CSS</acronym> file to copy over.
+            If none is specified, then concordion.css is used.</para>
+          </listitem>
+        </itemizedlist>
       </sect2>
 
       <sect2>
@@ -395,24 +421,33 @@
             &lt;/systemPropertyVariables&gt;
             &lt;includes&gt;
                 &lt;include&gt;**/*Story.java&lt;/include&gt;
+                &lt;include&gt;**/Story*.java&lt;/include&gt;
             &lt;/includes&gt;
         &lt;/configuration&gt;
     &lt;/plugin&gt;
 &lt;/plugins&gt;y</programlisting>
 
-        <para>A couple of points worth noting:</para>
+        <para>There are a couple of points worth noting here.</para>
 
         <itemizedlist>
           <listitem>
-            <para>the <literal>systemPropertyVariables</literal> element can
-            be used to define the <varname>concordion.output.dir</varname>
-            system property, thereby specifying the directory for the
-            generated output</para>
+            <para>first, the <literal>systemPropertyVariables</literal>
+            element can be used to define the
+            <varname>concordion.output.dir</varname> system property, thereby
+            specifying the directory for the generated output</para>
           </listitem>
 
           <listitem>
-            <para>the <literal>includes</literal> element can be used to only
-            run classes with a suffix "Story".</para>
+            <para>second, the <literal>includes</literal> element can be used
+            to only run classes with either a prefix or suffix
+            "<literal>Story</literal>". This allows common fixtures that have
+            been factored out to be ignored. </para>
+
+            <para>An alternative approach is to have a top-level "suite" page
+            that references all stories underneath (possibly broken up into
+            subsuites). In this case the only test class that would be run
+            included is the top-level suite page. See <xref
+            linkend="sec.TopLevelSuitePage" /> for further discussion.</para>
           </listitem>
         </itemizedlist>
 
@@ -483,12 +518,13 @@
         <sect3>
           <title>Concordion</title>
 
-          <para>The <classname>AbstractIsisConcordionTest</classname>
+          <para>The <classname>AbstractIsisConcordionStory</classname>
           instantiates the <classname>Story</classname> object (from the
           common library) automatically and binding it to a threadlocal. In
-          addition, <classname>AbstractIsisConcordionTest</classname> provides
-          methods that can be invoked from within <acronym>XHTML</acronym> (ie
-          taking <classname>String</classname>s).</para>
+          addition, <classname>AbstractIsisConcordionStory</classname>
+          provides methods that can be invoked from within
+          <acronym>XHTML</acronym> (ie taking
+          <classname>String</classname>s).</para>
 
           <para>Test cases should inherit from this abstract class, with the
           <acronym>XHTML</acronym> typically calling to the inherited methods
@@ -567,7 +603,7 @@
         <sect3>
           <title>Concordion</title>
 
-          <para>The <classname>AbstractIsisConcordionTest</classname> class
+          <para>The <classname>AbstractIsisConcordionStory</classname> class
           provides two overloaded versions of
           <methodname>bootstrapIsis(...)</methodname> method:</para>
 
@@ -1158,7 +1194,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
           <para>Note that this method should be called from the
           <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>,
-          not with concordion:execute. See <xref
+          not with <emphasis>concordion:execute</emphasis>. See <xref
           linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
           details.</para>
 
@@ -1974,7 +2010,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
                   <entry><emphasis>action name</emphasis></entry>
 
                   <entry nameend="_6" namest="_5"><classname>is
-                  visble</classname><emphasis> </emphasis></entry>
+                  visible</classname><emphasis> </emphasis></entry>
                 </row>
 
                 <row>
@@ -2153,7 +2189,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
           <para>The <emphasis>Concordion</emphasis> framework integration
           provides a set of overloaded methods in
-          <classname>AbstractIsisConcordionTest</classname> which call into
+          <classname>AbstractIsisConcordionStory</classname> which call into
           the <classname>UsingIsisViewerPeer</classname>:</para>
 
           <itemizedlist>
@@ -2638,14 +2674,37 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       acceptance criteria. These can be created as children of the story page
       as placeholders, so that the story page becomes a suite. The child
       scenario tests can be fleshed out as required with plain text during the
-      estimation meeting, and with actual FitNesse tests once the iteration
-      starts. The FitNesse <ulink
-      url="http://fitnesse.org/FitNesse.UserGuide.MarkupContents">!contents</ulink>
-      instruction will then list all the acceptance criteria for the
-      story.</para>
+      estimation meeting, and with actual tests once the iteration starts.
+      </para>
+
+      <para></para>
 
       <para>For the story page itself, the "as a ... I want ... so that... "
       template is a good way to summarize the intent of the story.</para>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para>Use the &lt;a href="ScenarioStory.html"
+        concordion:run="concordion"&gt;some sub story&lt;/a&gt;</para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para>The FitNesse <ulink
+        url="http://fitnesse.org/FitNesse.UserGuide.MarkupContents">!contents</ulink>
+        instruction will then list all the acceptance criteria for the
+        story.</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.TopLevelSuitePage">
+      <title>Use a Top-Level Suite Page to Collect a Set of Stories</title>
+
+      <para></para>
     </sect1>
 
     <sect1>
@@ -2749,11 +2808,17 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       "when"s and the "then"s, use a declarative style for the pages. The page
       should describe what it does, not how it does it.</para>
 
-      <para>For example, a good page would be "SetUpCountries". It's clear
-      that this will set up all <classname>Country</classname> reference data
-      classes. This could be included into a "SetUpReferenceData" page. For
-      transaction data, we could have a page "JoeBloggsCustomer"; another one
-      again could be "JoeBloggsFiveOrders".</para>
+      <para>For example, a good page name would be "SetUpCountries". It's
+      clear that this will set up all <classname>Country</classname> reference
+      data classes. Perhaps even better would be to name the page
+      "AllCountries", because this has a declarative form (explains what is
+      the outcome of the referencing page) rather than imperative (telling the
+      system to set up some <classname>Country</classname>s).</para>
+
+      <para>Such pages can be nested. For example, AllCountries page could be
+      included into an "AllReferenceData" page. For transaction data, we could
+      have a page "JoeBloggsCustomer"; another one again could be
+      "JoeBloggsFiveOrders".</para>
     </sect1>
 
     <sect1 id="sec.SettingUpContinuousIntegration">
