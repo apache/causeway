@@ -2834,22 +2834,549 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
   </chapter>
 
   <appendix id="apx.UsingXmlMind">
-    <title>Using XmlMind</title>
+    <title>Using XmlMind with Concordion</title>
 
     <abstract>
-      <para>***</para>
+      <para>How to use XmlMind to write tests for the Isis/Concordion
+      integration.</para>
     </abstract>
 
-    <para></para>
+    <para>XmlMind is an editor for writing structured <acronym>XML</acronym>
+    documents, including <acronym>XHTML</acronym> documents as used by
+    Concordion. XmlMind is designed to be used by non-technical as well as
+    developers, and provides a WordProcessor-like interface. That said, like
+    any tool it has learning curve. This document describes the most
+    commonly-used features.</para>
 
-    <para>xhtml.css C:\Program Files
-    (x86)\XMLmind_XML_Editor\addon\config\xhtml\css</para>
+    <para>XmlMind is a Java application, so runs on Windows as well as a
+    number of other operating systems. It can be downloaded from <ulink
+    url="http://xmlmind.com">http://xmlmind.com</ulink>. There are two
+    editions, professional and personal. All the features described in this
+    appendix here are available in the personal edition.</para>
 
-    <para>xhtml1-strict.dtd copy into C:\Program Files
-    (x86)\XMLmind_XML_Editor\addon\config\xhtml\dtd\1.0</para>
+    <sect1 id="sec.XmlMindCustomization">
+      <title>Customization to support Concordion</title>
 
-    <para></para>
+      <para>XmlMind ships with the <acronym>DTD</acronym> for
+      <acronym>XHTML</acronym>, along with a corresponding
+      <acronym>CSS</acronym> file which is used for the look-n-feel when
+      editing. In order to make XmlMind support Concordion namespaces, we
+      customize both its XHTML DTD and CSS file.Cr</para>
 
-    <para></para>
+      <itemizedlist>
+        <listitem>
+          <para>Download <ulink
+          url="http://incubator.apache.org/isis/viewer/bdd/xmlmind/xhtml1-strict.dtd">xhtml1-strict.dtd</ulink>
+          and copy into <filename>addon/config/xhtml/dtd/1.0</filename>
+          (relative to the XmlMind installation directory).</para>
+
+          <para>This updated version of the <acronym>DTD</acronym> defines the
+          <literal>concordion</literal> and <literal>isis</literal> namespaces
+          and specifies additional attributes for certain elements</para>
+        </listitem>
+
+        <listitem>
+          <para>Download <ulink
+          url="http://incubator.apache.org/isis/viewer/bdd/xmlmind/xhtml.css">xtml.css</ulink>
+          and copy into <classname>addon/config/xhtml/css</classname> (again,
+          relative to the XmlMind installation directory).</para>
+
+          <para>This updated version of the <acronym>CSS</acronym> highlights
+          those elements on the page that have been annotated using the
+          <literal>concordion</literal> or <literal>isis</literal>
+          attributes.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <acronym>DTD</acronym> customization specifies the following
+      valid concordion attributes:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>on any <acronym>HTML</acronym> element</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>concordion:assertEquals</literal></para>
+            </listitem>
+
+            <listitem>
+              <para><literal>concordion:set</literal></para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;span&gt;</literal></para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>concordion:assertTrue</literal></para>
+            </listitem>
+
+            <listitem>
+              <para><literal>concordion:assertFalse</literal></para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;table&gt;</literal></para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>isis:execute</literal></para>
+
+              <para>Use instead of
+              <literal>concordion:execute</literal></para>
+            </listitem>
+
+            <listitem>
+              <para><literal>concordion:verifyRows</literal></para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para><literal>&lt;a&gt;</literal></para>
+
+          <itemizedlist>
+            <listitem>
+              <para><literal>concordion:run</literal></para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>These can be specified in the same way as any other
+      attribute.</para>
+    </sect1>
+
+    <sect1>
+      <title>Creating a Document</title>
+
+      <para>Both Concordion and XmlMind require that the test file is
+      <acronym>XHTML</acronym>, meaning that the <acronym>XML</acronym> pragma
+      is required. XmlMind also requires that the file specifies the
+      <acronym>XHTML</acronym> doctype, and Concordion also requires its
+      namespace to be declared.</para>
+
+      <para>Use <emphasis>File &gt; New Document</emphasis> to create an
+      <emphasis>XHTML Strict</emphasis> document; this will set up the
+      <acronym>DTD</acronym> and namespaces required. Save the file as
+      <filename>.xhtml</filename>; if running on Windows you can then setup
+      XmlMind is a registered editor for this suffix.</para>
+
+      <para>Once the file has been created, we recommend that you change the
+      <literal>DOCTYPE</literal> entry to reference <acronym>DTD</acronym>s
+      stored locally. This will substantially speed up the execution time for
+      Concordion, and also allow tests to be run offline (ie not connected to
+      the internet). So, instead of:</para>
+
+      <para><programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html 
+   PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+   ...
+&lt;/html</programlisting>edit it to read:</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE html 
+   PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" 
+   "file:src/test/resources/dtd/xhtml1-strict.dtd"&gt;
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+   ...
+&lt;/html</programlisting>
+
+      <para>where <filename>src/test/resources/dtd</filename> is the location
+      of the <acronym>DTD</acronym>s. Note that XmlMind doesn't actually read
+      the location of the <acronym>DTD</acronym> because it uses the one in
+      its configuration directory (see <xref
+      linkend="sec.XmlMindCustomization" />). So the location should be
+      relative to the base directory of the project (ie the directory where
+      the <filename>pom.xml</filename> resides).</para>
+    </sect1>
+
+    <sect1>
+      <title>Loading a Document</title>
+
+      <para>To load an existing <acronym>XHTML</acronym> document, use
+      <emphasis>File&gt;Open</emphasis>. This will display the
+      <acronym>XHTML</acronym> styled using the <acronym>CSS</acronym>.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-opendoc.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+    </sect1>
+
+    <sect1>
+      <title>Navigating the Document</title>
+
+      <para>Use up arrow, down arrow, pg up, pg down to move around.</para>
+
+      <para>It is also possible to navigate by opening up an alternative view
+      to inspect the raw XHTML, using <emphasis>View &gt; Add</emphasis> to
+      bring up a dialog:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-viewraw.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The new view is shown in the location specified in the
+      dialog:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-viewleft.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para>This can then be used to navigate, collapsing sections if
+      needed.</para>
+    </sect1>
+
+    <sect1>
+      <title>Knowing where you are</title>
+
+      <para>The position within the document is shown as a XPath like
+      expression. If the unstyled view is open, then the current position is
+      highlighted (even if the section is collapsed). In the styled view the
+      current cursor position is shown just as in a regular word
+      processor.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-knowingwhereyouare.png"
+                     scale="40" />
+        </imageobject>
+      </mediaobject>
+    </sect1>
+
+    <sect1>
+      <title>Selecting Content (eg to delete/move, or prior to adding new
+      content)</title>
+
+      <para>The XMLMind editor understands the structure of
+      <acronym>XHTML</acronym> documents, and will only let you enter content
+      where it is valid to do so. What you can do (in terms of edits)
+      therefore depends on where you are in the document. </para>
+
+      <para>Use <emphasis>Select &gt; Select Parent</emphasis>
+      (<command>ctrl+up</command>) to successively select larger segments of
+      the document; and <emphasis>Select &gt; Select Child</emphasis>
+      (<command>ctrl+down</command>) to selects smaller segments.</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-selectingcontent-1.png"
+                     scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-selectingcontent-2.png"
+                     scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para></para>
+    </sect1>
+
+    <sect1>
+      <title>Writing Content</title>
+
+      <sect2>
+        <title>Adding New Paragraphs</title>
+
+        <para>To modify the content in a paragraph, just start writing!
+        Hitting enter will start a new paragraph; delete will join two
+        paragraphs together. Behind the scenes the &lt;p&gt; elements are
+        added.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-newparas.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </sect2>
+
+      <sect2>
+        <title>Adding a new heading (H1, H2) section etc</title>
+
+        <para>In general, use <emphasis>Edit &gt; Insert After</emphasis>
+        (<command>ctrl+J</command>) after to add new content after the current
+        location, and <emphasis>Edit &gt; Insert Before</emphasis>
+        (<command>ctrl+H</command>) to insert before. This will bring up a
+        list of valid elements in the top right:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-insert.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>New sections <literal>&lt;h1&gt;</literal>,
+        <literal>&lt;h2&gt;</literal> are valid after any other heading or
+        indeed after a paragraph: <literal>&lt;p&gt;</literal>. Note that
+        <acronym>XHTML</acronym> does not require proper nesting of sections
+        (though it's probably advisable to do so):</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-insert-heading.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </sect2>
+
+      <sect2>
+        <title>Adding lists</title>
+
+        <para>Adding lists are added as for any element: use
+        <command>ctrl+J</command> and then select
+        <literal>&lt;ul&gt;</literal> (unordered list) or
+        <literal>&lt;ol&gt;</literal> (ordered lists). You’ll get the first
+        <literal>&lt;li&gt;</literal> for free. Create new list items by
+        selecting the current list item (<command>ctrl+up</command> as far as
+        required) then use <command>ctrl+J</command>.</para>
+
+        <para>If you want to terminate the list, then select the current list
+        (<command>ctrl+up</command>), then <command>ctrl+J</command> and
+        select <literal>&lt;p&gt;</literal> for next paragraph.</para>
+      </sect2>
+
+      <sect2>
+        <title>Adding and Altering Tables</title>
+
+        <para>Use <emphasis>Edit &gt; Insert After</emphasis> (or
+        <emphasis>Edit &gt; Insert Before</emphasis>), and then select one of
+        the table elements:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>table</literal></para>
+          </listitem>
+
+          <listitem>
+            <para><literal>table (head_column)</literal> </para>
+
+            <para>to include a header column (on the left hand side)</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>table (head_row)</literal> </para>
+
+            <para>to include a header row</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>table (head_row_column)</literal> </para>
+
+            <para>to include a header row and column</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For example, <literal>head_row</literal>:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-headrow.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>This will generate an initial table:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-emptytable.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Then use the XHTML menu to add columns/rows as required:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-xhtmlmenu.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Inserting Content to existing Paragraphs</title>
+
+      <sect2>
+        <title>Formatting Existing Paragraphs</title>
+
+        <para>In contrast, <emphasis>Edit &gt; Insert</emphasis>
+        (<command>ctrl+I</command>) within a paragraph will only bring up
+        elements that are valid within that paragraph, such as
+        <literal>&lt;b&gt;</literal> or <literal>&lt;em&gt;</literal>:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-editinsert.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>That said, for adding tags within a paragraph (such as
+        emboldening or emphasis), it is generally easier to write the words
+        and then use <emphasis>Edit &gt; Convert (wrap)</emphasis>. First,
+        highlight the words by holding shift and then navigating as usual (eg
+        <command>shift+left</command>, <command>shift+right</command>). Then,
+        use <emphasis>Edit&gt;Convert(wrap)</emphasis> to add the emphasis,
+        embolden etc:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-editwrap.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>resulting in something like:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-editwrap-result.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </sect2>
+
+      <sect2>
+        <title>Adding Images (and Attributes)</title>
+
+        <para>To add an image, use <emphasis>Edit &gt; Insert</emphasis> and
+        enter an <literal>&lt;img&gt;</literal> element, resulting in:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-image-1.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>With the <literal>&lt;img&gt;</literal> element now selected,
+        use the attribute view (<emphasis>Tools&gt;Edit Attribute</emphasis>,
+        or <code>ctrl+E</code>) to enter the most important attributes for an
+        <literal>&lt;img&gt;</literal>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><literal>src</literal> attribute</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>alt</literal> attribute</para>
+          </listitem>
+
+          <listitem>
+            <para><literal>width</literal> attribute</para>
+
+            <para>optional, but recommended</para>
+          </listitem>
+        </itemizedlist>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/xmlmind-image-2.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+      </sect2>
+    </sect1>
+
+    <sect1>
+      <title>Deleting Content</title>
+
+      <para>To delete content, select the content first
+      (<command>ctrl+up</command> / <command>ctrl+down</command>), then
+      <emphasis>Edit &gt; Delete</emphasis>
+      (<command>ctrl+K</command>):</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-delete.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+
+      <para>In general you shouldn’t need to use the <emphasis>Edit &gt; Force
+      Deletion</emphasis>; instead try adjusting the range being selected if
+      <emphasis>Edit &gt; Delete</emphasis> isn’t enabled.</para>
+    </sect1>
+
+    <sect1>
+      <title>Moving Content</title>
+
+      <para>Select the content you want using <command>ctrl+up</command>. If
+      necessary extend the selection using <emphasis>Select &gt; Extend
+      Selection to Following Sibling</emphasis> or <emphasis>Select &gt;
+      Extend Selection to Preceding Sibling</emphasis>.</para>
+
+      <para>Use <emphasis>Edit &gt; Cut</emphasis> to cut, and then
+      <emphasis>Edit &gt; Paste After</emphasis> or <emphasis>Edit &gt; Paste
+      Before</emphasis> to paste wherever. If these are greyed out, bear in
+      mind that XmlMind won’t let you paste in content where it would be
+      invalid. If necessary, adjust the selection until they become
+      enabled.</para>
+    </sect1>
+
+    <sect1>
+      <title>Adding <literal>concordion:</literal> and
+      <literal>isis:</literal> attributes</title>
+
+      <para>The customization (described in <xref
+      linkend="sec.XmlMindCustomization" />) makes it easy to enter the
+      <literal>concordion:</literal> and <literal>isis:</literal> namespaced
+      attributes.</para>
+
+      <para>For example, to use a <literal>&lt;span
+      concordion:set="#someVar"&gt;</literal> to set the value of a
+      <varname>#someVar</varname> variable around, use the following set of
+      steps:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>select the text to be the value of the variable</para>
+        </listitem>
+
+        <listitem>
+          <para>use <emphasis>Edit&gt;Convert[wrap]</emphasis> and wrap in a
+          <literal>&lt;span&gt;</literal></para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/xmlmind-concordion-attributes-1.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </listitem>
+
+        <listitem>
+          <para>use <emphasis>Tools&gt;Edit Attribute</emphasis> and select
+          <literal>concordion:set</literal> attribute</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/xmlmind-concordion-attributes-2.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+        </listitem>
+      </itemizedlist>
+
+      <para>The custom <acronym>CSS</acronym> will also highlight those
+      elements that have <literal>concordion:</literal> or
+      <literal>isis:</literal> attributes:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/xmlmind-css.png" scale="40" />
+        </imageobject>
+      </mediaobject>
+    </sect1>
   </appendix>
 </book>
