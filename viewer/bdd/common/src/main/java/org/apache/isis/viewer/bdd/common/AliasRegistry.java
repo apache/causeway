@@ -20,7 +20,7 @@ public interface AliasRegistry extends Iterable<Map.Entry<String, ObjectAdapter>
      */
     public void aliasAs(final String alias, final ObjectAdapter adapter);
 
-    void aliasService(final String aliasAs, final String className) throws StoryValueException;
+    void aliasService(final String aliasAs, final String className) throws ScenarioValueException;
 
     public void clear();
 

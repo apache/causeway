@@ -14,10 +14,10 @@ public class IsisSystemUsingInstallersWithinStory extends IsisSystemUsingInstall
         final InstallerLookup installerLookup) {
         super(deploymentType, installerLookup);
 
-        final AuthenticationManagerInstaller authManagerInstaller = new StoryAuthenticationManagerInstaller();
+        final AuthenticationManagerInstaller authManagerInstaller = new BddAuthenticationManagerInstaller();
         setAuthenticationInstaller(getInstallerLookup().injectDependenciesInto(authManagerInstaller));
 
-        final PersistenceMechanismInstaller persistorInstaller = new StoryInMemoryPersistenceMechanismInstaller();
+        final PersistenceMechanismInstaller persistorInstaller = new BddInMemoryPersistenceMechanismInstaller();
         setPersistenceMechanismInstaller(getInstallerLookup().injectDependenciesInto(persistorInstaller));
 
         final UserProfileStoreInstaller userProfileStoreInstaller = new InMemoryUserProfileStoreInstaller();

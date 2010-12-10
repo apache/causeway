@@ -3,7 +3,7 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.property;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
 
@@ -14,7 +14,7 @@ public class NotEmpty extends ThatSubcommandAbstract {
 	}
 
 	public ObjectAdapter that(final PerformContext performContext)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 
 		final OneToOneAssociation otoa = (OneToOneAssociation) performContext
 				.getObjectMember();
@@ -26,7 +26,7 @@ public class NotEmpty extends ThatSubcommandAbstract {
 		if (resultAdapter == null) {
 			CellBinding thatItBinding = performContext.getPeer()
 					.getThatItBinding();
-			throw StoryBoundValueException.current(thatItBinding, 
+			throw ScenarioBoundValueException.current(thatItBinding, 
 					"(empty)");
 		}
 

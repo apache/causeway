@@ -6,7 +6,7 @@ import java.util.Calendar;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 public class DebugClockPeer extends AbstractFixturePeer {
 
@@ -19,7 +19,7 @@ public class DebugClockPeer extends AbstractFixturePeer {
 		this.cellBinding = cellBinding;
 	}
 
-	public StoryCell getCurrentCell() {
+	public ScenarioCell getCurrentCell() {
 		return cellBinding.getCurrentCell();
 	}
 

@@ -10,7 +10,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
 
@@ -36,7 +36,7 @@ public class CheckListForFitNesse extends AbstractFixture<CheckListPeer> {
 
         try {
             getPeer().assertIsList();
-        } catch (StoryValueException e) {
+        } catch (ScenarioValueException e) {
             FitnesseUtil.exception(this, listAliasCell, e.getMessage());
             return;
         }

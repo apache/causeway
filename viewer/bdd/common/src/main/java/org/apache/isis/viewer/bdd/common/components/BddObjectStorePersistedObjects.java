@@ -22,7 +22,7 @@ import com.google.common.collect.Iterables;
  * {@link #clear()}ed down. Those that are operational go in a regular instance
  * cache and can be {@link #clear()}ed.
  */
-public class StoryObjectStorePersistedObjects implements
+public class BddObjectStorePersistedObjects implements
         ObjectStorePersistedObjects {
 
     private static final Map<ObjectSpecification, ObjectStoreInstances> cachedInstancesBySpecMap =
@@ -33,7 +33,7 @@ public class StoryObjectStorePersistedObjects implements
     private final Map<String, Oid> serviceOidByIdMap;
     private Memento oidGeneratorMemento;
 
-    public StoryObjectStorePersistedObjects() {
+    public BddObjectStorePersistedObjects() {
         operationalInstancesBySpecMap = new HashMap<ObjectSpecification, ObjectStoreInstances>();
         serviceOidByIdMap = new HashMap<String, Oid>();
     }
@@ -66,13 +66,13 @@ public class StoryObjectStorePersistedObjects implements
 
     public Iterable<ObjectSpecification> specifications() {
         return Iterables.concat(
-                StoryObjectStorePersistedObjects.cachedInstancesBySpecMap
+                BddObjectStorePersistedObjects.cachedInstancesBySpecMap
                 .keySet(), operationalInstancesBySpecMap.keySet());
     }
 
     public Iterable<ObjectStoreInstances> instances() {
         return Iterables.concat(
-                StoryObjectStorePersistedObjects.cachedInstancesBySpecMap
+                BddObjectStorePersistedObjects.cachedInstancesBySpecMap
                 .values(), operationalInstancesBySpecMap.values());
     }
 
@@ -80,7 +80,7 @@ public class StoryObjectStorePersistedObjects implements
         if (isCached(spec)) {
             return getFromMap(
                     spec,
-                    StoryObjectStorePersistedObjects.cachedInstancesBySpecMap);
+                    BddObjectStorePersistedObjects.cachedInstancesBySpecMap);
         } else {
             return getFromMap(spec, operationalInstancesBySpecMap);
         }

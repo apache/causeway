@@ -68,6 +68,10 @@
   <chapter>
     <title>Introduction</title>
 
+    <abstract>
+      <para>***</para>
+    </abstract>
+
     <sect1>
       <title>Behaviour-driven Development</title>
 
@@ -85,21 +89,22 @@
       acceptance test criteria in a single form, through scenarios. As before,
       these requirements are in a form that a non-technical domain expert from
       the business can understand. What differs though is that these scenarios
-      can be used directly exercise the system, and so also represent the
-      acceptance tests for the scenario. Moreover, the results of these tests
-      are rendered in such a way that the business can understand, and thus
-      can help determine if the code is at fault or the test. Once
-      implemented, the acceptance tests also act as a regression suite for the
-      system.</para>
+      can be used to directly exercise the system, and so also represent the
+      acceptance tests for the correct implementation of the requirement.
+      Moreover, the results of these tests are rendered in such a way that the
+      business can understand, and thus can help determine if the code is at
+      fault or the test. Once implemented, the acceptance tests also act as a
+      regression suite for the system.</para>
 
       <para>Scenario tests tend to act against a complete system, or sometimes
-      at a subsystem-level. At any rate at a granularity that makes sense to a
-      non-technical businesss person. Compare this to unit testing which
-      exercises the behaviour / method of a single class.</para>
+      at a subsystem-level. At any rate the tests must be at a granularity
+      that still makes sense to a non-technical businesss person. Compare this
+      to unit testing which exercises the behaviour / method of a single
+      class.</para>
 
       <para>Another commonly-used name for scenario testing is "agile
-      acceptance testing". We've used "scenario testing" throughout (it's a
-      somewhat less clumsy term).</para>
+      acceptance testing". We've chosen to use the term "scenario testing"
+      though; it's a somewhat less clumsy term.</para>
     </sect1>
 
     <sect1 id="sec.CommonLibrary">
@@ -111,7 +116,7 @@
 
       <itemizedlist>
         <listitem>
-          <para>the <classname>Story</classname> class, which provides the
+          <para>the <classname>Scenario</classname> class, which provides the
           context for a single scenario of a story</para>
         </listitem>
 
@@ -126,8 +131,11 @@
           abstraction over a single element of data</para>
 
           <para>The default implementation just wraps a
-          <classname>java.lang.String</classname>, but some frameworks (eg
-          <emphasis>FitNesse</emphasis>) have other means of</para>
+          <classname>java.lang.String</classname>, but some frameworks might
+          provide alternative implementations. For example,
+          <emphasis>FitNesse</emphasis> has an implementation that maps to its
+          internal representation of a cell (<classname>fit.Parse</classname>
+          class).</para>
         </listitem>
 
         <listitem>
@@ -136,9 +144,9 @@
 
           <para>Many of the <acronym>BDD</acronym> frameworks (eg
           <emphasis>Concordion</emphasis>, <emphasis>FitNesse</emphasis>)
-          encourage the use of tables as a means of succinctly capturing story
-          actions. This is reflected in the design of several of the classes
-          provided by the common library. The
+          encourage the use of tables as a means of succinctly capturing
+          scenario actions. This is reflected in the design of several of the
+          classes provided by the common library. The
           <classname>CellBinding</classname> interface is used to wire the
           values in the rows of the table to the properties specified in the
           header.</para>
@@ -147,17 +155,16 @@
           object") and some alternative names (eg "using"). This is useful for
           <acronym>BDD</acronym> frameworks (such as
           <emphasis>FitNesse</emphasis>) where the provided text from the
-          story needs to be parsed in some way, matching up columns with the
-          fixture. The relevant methods for framework integrations that must
-          match <classname>CellBinding</classname>s to header columns are
+          scenario needs to be parsed in some way, matching up headings of
+          columns within a tabular structure. The relevant methods for
+          <acronym>BDD</acronym> framework integrations that must do this are
           <methodname>#matches(...)</methodname>,
           <methodname>#setHeadColumn(..)</methodname> and
-          <methodname>#createHeadColumn(..)</methodname>. Note though that
-          other <acronym>BDD</acronym> frameworks (eg
-          <emphasis>Concordion</emphasis>) don't need this particular feature
-          (the <emphasis>Concordion</emphasis> integration calls pre-canned
-          methods so the matching is done simply by parameter position to
-          these method).</para>
+          <methodname>#createHeadColumn(..)</methodname>. Note though that not
+          every <acronym>BDD</acronym> framework integration needs this
+          particular feature; the <emphasis>Concordion</emphasis> integration
+          for example calls pre-canned methods so the matching is done simply
+          by parameter position to these method.</para>
 
           <para>The other main method provided by
           <classname>CellBinding</classname> is
@@ -169,15 +176,21 @@
 
           <para>The library provides a default implementation of
           <classname>CellBinding</classname>, though subclasses can override
-          if required. (For example, <emphasis>FitNesse</emphasis> does this
-          in order to map to underlying mutable data structures that represent
-          cells in the FIT tables).</para>
+          if required. (For example, the <emphasis>FitNesse</emphasis>
+          integration has its own implementation to map to its data structures
+          representing cells in the FIT tables).</para>
         </listitem>
       </itemizedlist>
 
+      <para>One way of thinking of all these framework integrations is as a
+      replacement presentation layer, hitting the underlying domain model in
+      the same way that the regular <acronym>UI</acronym> would. (This is why
+      we call this module is called the <acronym>BDD</acronym><emphasis>
+      viewer</emphasis>).</para>
+
       <para>In the following chapter (<xref
-      linkend="chp.UsingTheFramework" />), details are provided of how the
-      services of the common library are used by each of the supported
+      linkend="chp.IntroducingTheFramework" />), details are provided of how
+      the services of the common library are used by each of the supported
       <acronym>BDD</acronym> framework integrations.</para>
     </sect1>
 
@@ -192,19 +205,12 @@
         url="http://junit.org">JUnit4</ulink> test runner, with the test form
         being written in <acronym>XHTML</acronym>. The domain expert /
         business analyst authors new stories using an <acronym>XML</acronym>
-        editor (<ulink url="http://xmlmind.net">XmlMind</ulink> is one
-        commercial editor that we recommend); once executed as tests, the
-        results are shown as the same XHTML document, annotated to indicate
-        which assertions have succeeded, and which have failed. It also
-        creates an efficient feedback loop; a Concordion test will "keep on
-        going" even if it hits a failure. Thus the developer can identify
-        several issues and fix them in a single pass.</para>
-
-        <para>Another way to think of <emphasis>Concordion</emphasis> is as a
-        replacement presentation layer, hitting the underlying domain model in
-        the same way that the regular <acronym>UI</acronym> would. (This is
-        why we call this module is called the <acronym>BDD
-        </acronym><emphasis>viewer</emphasis>).</para>
+        editor; once executed as tests, the results are shown as the same
+        <acronym>XHTML</acronym> document, annotated to indicate which
+        assertions have succeeded, and which have failed. It also creates an
+        efficient feedback loop; a <emphasis>Concordion</emphasis> test will
+        "keep on going" even if it hits a failure. Thus the developer can
+        identify several issues and fix them in a single pass.</para>
 
         <para><emphasis>Concordion</emphasis> works using a "convention over
         configuration" approach, matching the <acronym>XHTML</acronym> text
@@ -216,41 +222,61 @@
         used by the <classname>ConcordionRunner</classname> to call into
         corresponding methods in the test.</para>
 
-        <para>For example, suppose the analyst writes a scenario test called
-        <filename>CustomerPlacesOrderStory.xhtml</filename>. In the
-        <acronym>XHTML</acronym> the analyst has identified the details of the
-        customer doing the ordering (customer ref 4321, say), the product
-        being ordered (product code 1234), the fact that the customer
-        initially has no orders, and that the customer has no invoices
-        outstanding. The test concludes with an assertion that there is now an
-        unfulfilled order for the customer, and that the customer now has an
-        invoice to be paid.</para>
+        <para>For example:</para>
 
-        <para>The developer in turn edits the <acronym>XHTML</acronym>,
-        identifying the customer and the product. He then further edits the
-        <acronym>XHTML</acronym> to call a method in the JUnit4 test
-        representing the placing of an order:
-        <methodname>placeOrder()</methodname>, say. And he finishes by
-        annotating the <acronym>XHTML</acronym> to make assertions about the
-        post conditions (unfulfilled order, new invoice to be paid
-        etc).</para>
+        <itemizedlist>
+          <listitem>
+            <para>Suppose the analyst writes a scenario test called
+            <filename>CustomerPlacesOrderScenario.xhtml</filename>.</para>
 
-        <para>Then, the developer writes a JUnit4 test alongside the
-        <acronym>XHTML</acronym>; in this example it would be called
-        <filename>CustomerPlacesOrderStory.java</filename>.
-        <emphasis>Concordion</emphasis> calls into this JUnit4 test as it
-        comes across the annotations in the <acronym>XHTML</acronym>, and the
-        JUnit4 test mediates with the system under test.</para>
+            <para>In the <acronym>XHTML</acronym> the analyst has identified
+            the details of the customer doing the ordering (customer ref 4321,
+            say), the product being ordered (product code 1234), the fact that
+            the customer initially has no orders, and that the customer has no
+            invoices outstanding. The test concludes with an assertion that
+            there is now an unfulfilled order for the customer, and that the
+            customer now has an invoice to be paid.</para>
+          </listitem>
 
-        <para>When the test runs, <emphasis>Concordion</emphasis> generates a
-        copy of the <acronym>XHTML</acronym> in an output directory which can
-        then made available for inspection by the business analyst (eg
-        published on a website).</para>
+          <listitem>
+            <para>The developer in turn edits the <acronym>XHTML</acronym>,
+            identifying the customer and the product.</para>
+
+            <para>He then further edits the <acronym>XHTML</acronym> to call a
+            method in the JUnit4 test representing the placing of an order:
+            <methodname>placeOrder()</methodname>, say. And he finishes by
+            annotating the <acronym>XHTML</acronym> to make assertions about
+            the post conditions (unfulfilled order, new invoice to be paid
+            etc).</para>
+          </listitem>
+
+          <listitem>
+            <para>Then, the developer writes a JUnit4 test alongside the
+            <acronym>XHTML</acronym>; in this example it would be called
+            <filename>CustomerPlacesOrderScenario.java</filename>.
+            <emphasis>Concordion</emphasis> calls into this JUnit4 test as it
+            comes across the annotations in the <acronym>XHTML</acronym>, and
+            the JUnit4 test mediates with the system under test.</para>
+          </listitem>
+
+          <listitem>
+            <para>When the test runs, <emphasis>Concordion</emphasis>
+            generates a copy of the <acronym>XHTML</acronym> in an output
+            directory which can then made available for inspection by the
+            business analyst (eg published on a website).</para>
+          </listitem>
+        </itemizedlist>
 
         <para>The <emphasis>Concordion</emphasis> website has a good <ulink
         url="http://concordion.org/Tutorial.html">tutorial</ulink> that
         demonstrates all the above, and can be completed in 20~30
         minutes.</para>
+
+        <para>One slight downside of using <emphasis>Concordion</emphasis> is
+        in having to write tests in <acronym>XHTML</acronym>. One editor that
+        we recommend (commercial, but also with a free version for personal
+        use) is <ulink url="http://xmlmind.net">XmlMind</ulink>. More detailed
+        guidance is provided in <xref linkend="apx.UsingXmlMind" />.</para>
       </sect2>
 
       <sect2 id="sec.HowTheIsisConcordionIntegrationWorks">
@@ -260,71 +286,21 @@
         application using vanilla <emphasis>Concordion</emphasis>, this would
         entail you having to write all the glue code yourself to interact with
         the domain objects. You would also need to encode the rules that are
-        normally implemented by the viewer, eg so that a hidden action cannot
-        be invoked, and an invalid value for a property cannot be set.</para>
+        normally implemented by an <emphasis>Isis</emphasis> viewer, eg so
+        that a hidden action cannot be invoked, and an invalid value for a
+        property cannot be set.</para>
 
         <para>The <emphasis>BDD viewer</emphasis> integration provided by
         <emphasis>Apache Isis</emphasis> works by providing a superclass for
         the JUnit4 test, called
-        <classname>AbstractIsisConcordionStory</classname>. This exposes
+        <classname>AbstractIsisConcordionScenario</classname>. This exposes
         methods to perform all the tasks necessary for exercising an
-        application. Specifically, it can be used to:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>it bootstrap an instance of <emphasis>Apache Isis</emphasis>
-            system using the in-memory object store;</para>
-          </listitem>
-
-          <listitem>
-            <para>specify the date/time format;</para>
-          </listitem>
-
-          <listitem>
-            <para>initialize the system with a set of services, picked up from
-            the <filename>isis.properties</filename> configuration file</para>
-          </listitem>
-
-          <listitem>
-            <para>allow fixtures (domain objects) to be installed into the
-            object store</para>
-          </listitem>
-
-          <listitem>
-            <para>allow a user to be logged in, and the date to be
-            specified</para>
-          </listitem>
-
-          <listitem>
-            <para>allow the user to interact with services and domain
-            objects:</para>
-
-            <itemizedlist>
-              <listitem>
-                <para>asserting on the value of properties and the contents of
-                collections</para>
-              </listitem>
-
-              <listitem>
-                <para>setting the value of a property (if valid) and adding
-                to/removing from a collection (if valid)</para>
-              </listitem>
-
-              <listitem>
-                <para>invoking actions</para>
-              </listitem>
-
-              <listitem>
-                <para>asserting on the state of a class member (hidden,
-                disabled or enabled)</para>
-              </listitem>
-            </itemizedlist>
-          </listitem>
-        </itemizedlist>
+        application. The precise features are outlined in <xref
+        linkend="chp.IntroducingTheFramework" />.</para>
 
         <para>For each <acronym>XHTML</acronym> scenario test, the developer
         writes subclasses the
-        <classname>AbstractIsisConcordionStory</classname>, creating a name
+        <classname>AbstractIsisConcordionScenario</classname>, creating a name
         matching the scenario test (ie as per regular
         <emphasis>Concordion</emphasis>). He then annotates the original
         <acronym>XHTML</acronym>, either calling directly into the inherited
@@ -343,19 +319,12 @@
     ...
 &lt;/html&gt;</programlisting>
 
-        <para>The "concordion" namespace is the usual namespace required by
-        <emphasis>Concordion</emphasis>. The "isis" namespace is to allow
-        certain commands to be invoked using special commands provided by the
-        Isis/Concordion integration.</para>
-
-        <para></para>
-
-        <para>*** somewhere, should explain why isis:execute is required (for
-        tables?) rather than concordion:execute... the point being that there
-        is a single instance of the corresponding peer object, with the first
-        header row used to set up the bindings.</para>
-
-        <para></para>
+        <para>The <literal>concordion</literal> namespace is the usual
+        namespace required by <emphasis>Concordion</emphasis>. The
+        <literal>isis</literal> namespace is defined for a similar reason: to
+        allow certain commands provided by the Isis/Concordion integration to
+        be invoked. More on this in <xref
+        linkend="chp.UserInteraction" />.</para>
       </sect2>
 
       <sect2>
@@ -367,7 +336,7 @@
         <itemizedlist>
           <listitem>
             <para>by overriding the <methodname>outputDir()</methodname>
-            method in <classname>AbstractIsisConcordionStory</classname>;
+            method in <classname>AbstractIsisConcordionScenario</classname>;
             or</para>
           </listitem>
 
@@ -385,14 +354,14 @@
         <title>Providing a CSS File</title>
 
         <para>By default, Concordion will copy over the
-        <acronym>HTML</acronym> for every story into the output directory, but
-        it won't copy over any <acronym>CSS</acronym> resources. If you want
-        any <acronym>CSS</acronym> to be copied over, then:</para>
+        <acronym>HTML</acronym> for every scenario into the output directory,
+        but it won't copy over any <acronym>CSS</acronym> resources. If you
+        want any <acronym>CSS</acronym> to be copied over, then:</para>
 
         <itemizedlist>
           <listitem>
             <para>override the <methodname>customCssPackage()</methodname>
-            method in <classname>AbstractIsisConcordionStory</classname> to
+            method in <classname>AbstractIsisConcordionScenario</classname> to
             return any class in the package that holds the CSS file.</para>
           </listitem>
 
@@ -407,8 +376,8 @@
       <sect2>
         <title>Configuring the Maven Surefire (test) plugin</title>
 
-        <para>The standard boilerplate to run Concordion under Maven is as
-        follows:</para>
+        <para>The standard boilerplate to run <emphasis>Concordion</emphasis>
+        under <emphasis>Maven</emphasis> is as follows:</para>
 
         <programlisting>&lt;plugins&gt;
     &lt;plugin&gt;
@@ -417,11 +386,13 @@
         &lt;version&gt;2.6&lt;/version&gt;
         &lt;configuration&gt;
             &lt;systemPropertyVariables&gt;
-                &lt;concordion.output.dir&gt;${project.build.directory}/concordion&lt;/concordion.output.dir&gt;
+                &lt;concordion.output.dir&gt;
+                    ${project.build.directory}/concordion
+                &lt;/concordion.output.dir&gt;
             &lt;/systemPropertyVariables&gt;
             &lt;includes&gt;
-                &lt;include&gt;**/*Story.java&lt;/include&gt;
-                &lt;include&gt;**/Story*.java&lt;/include&gt;
+                &lt;include&gt;**/*Scenario.java&lt;/include&gt;
+                &lt;include&gt;**/Scenario*.java&lt;/include&gt;
             &lt;/includes&gt;
         &lt;/configuration&gt;
     &lt;/plugin&gt;
@@ -440,18 +411,16 @@
           <listitem>
             <para>second, the <literal>includes</literal> element can be used
             to only run classes with either a prefix or suffix
-            "<literal>Story</literal>". This allows common fixtures that have
-            been factored out to be ignored.</para>
+            "<literal>Scenario</literal>". This allows common fixtures that
+            have been factored out to be ignored.</para>
 
             <para>An alternative approach is to have a top-level "suite" page
-            that references all stories underneath (possibly broken up into
-            subsuites). In this case the only test class that would be run
+            that references all scenarios underneath (probably grouped into
+            stories). In this case the only test class that would be run
             included is the top-level suite page. See <xref
             linkend="sec.TopLevelSuitePage" /> for further discussion.</para>
           </listitem>
         </itemizedlist>
-
-        <para></para>
       </sect2>
     </sect1>
 
@@ -474,532 +443,809 @@
     </sect1>
   </chapter>
 
-  <chapter id="chp.UsingTheFramework">
-    <title>Using the Framework</title>
+  <chapter id="chp.IntroducingTheFramework">
+    <title>Introducing the Framework</title>
 
-    <para>This chapter shows the features of the common library, and how they
-    are used by the framework-specific integrations.</para>
+    <abstract>
+      <para>An introduction to the features provided by the framework. The
+      subsequent chapters provide more detailed coverage.</para>
+    </abstract>
+
+    <para>This chapter outlines the main features of the common library and
+    their support by the framework-specific integrations. The subsequent
+    chapters provide more detailed coverage.</para>
 
     <para>Note that due to licensing restrictions the
     <emphasis>FitNesse</emphasis> integration is not part of <emphasis>Apache
-    Isis</emphasis>. See <xref linkend="sec.FitNesseIntegration" /> for
-    further details.</para>
+    Isis</emphasis>. Nevertheless, an outline of the
+    <emphasis>FitNesse</emphasis> integration is provided here, if only to
+    help compare and contrast the means by which two different frameworks
+    integrate with the common library. We hope that this will make it easier
+    to integrate other <acronym>BDD</acronym> frameworks in the future.</para>
 
     <sect1>
-      <title>Bootstrapping</title>
+      <title>Introduction</title>
 
-      <para>In order to test an <emphasis>Apache Isis</emphasis> domain
-      application, a running instance of an <classname>IsisSystem</classname>
-      must be bootstrapped, with the appropriate configuration.</para>
+      <para>Broadly speaking, the framework provides the ability to bootstrap
+      and initialize an <emphasis>Isis</emphasis> application and allow the
+      domain services and objects within that application to be exercised in
+      the same way that a user would interact with the system through a
+      viewer.</para>
+
+      <para>The common library defines these abilities in terms of "fixture"
+      classes, each of which performs a single function. For example, there is
+      a fixture class to bootstrap <emphasis>Isis</emphasis>, another to setup
+      objects, and another to describe the actual interactions by the user
+      (check a property, invoke an action etc).</para>
+
+      <para>The fixture classes in the common library are oriented around a
+      tabular approach to specifying behaviour, making it easy to integrate
+      frameworks such as <emphasis>FitNesse</emphasis> that adopt a
+      table-oriented approach. Such an approach equally supports frameworks
+      such as <emphasis>Concordion</emphasis> that allow specifications to be
+      written both as tables and in free-form text. Admittedly, this does make
+      the implementation of framework integrations a little more complex than
+      it might otherwise have been ... but this is only a problem for the
+      framework integrator, not the business analyst actually writing the
+      scenarios.</para>
+    </sect1>
+
+    <sect1>
+      <title>Fixtures</title>
+
+      <para>The following chapters describe the fixtures available in detail.
+      In summary, they are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>it bootstrap an instance of <emphasis>Apache Isis</emphasis>
+          system using the in-memory object store (see <xref
+          linkend="chp.BootstrapAndTeardown" />);</para>
+        </listitem>
+
+        <listitem>
+          <para>setting up the system state ready for the scenario (see <xref
+          linkend="chp.SetUp" />):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>specify the date/time format</para>
+            </listitem>
+
+            <listitem>
+              <para>initialize the system with a set of services, picked up
+              from the <filename>isis.properties</filename> configuration
+              file</para>
+            </listitem>
+
+            <listitem>
+              <para>allow fixtures (domain objects) to be installed into the
+              object store</para>
+            </listitem>
+
+            <listitem>
+              <para>login a specific user</para>
+            </listitem>
+
+            <listitem>
+              <para>specify the date</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>allow the user to interact with services and domain objects
+          (see <xref linkend="chp.UserInteraction" />):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>asserting on the value of properties and the contents of
+              collections</para>
+            </listitem>
+
+            <listitem>
+              <para>setting the value of a property (if valid) and adding
+              to/removing from a collection (if valid)</para>
+            </listitem>
+
+            <listitem>
+              <para>invoking actions</para>
+            </listitem>
+
+            <listitem>
+              <para>asserting on the state of a class member (hidden, disabled
+              or enabled)</para>
+            </listitem>
+
+            <listitem>
+              <para>assert on the state of properties</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>assert on the state of collections, either of an object, or
+          returned from an action (see <xref
+          linkend="chp.AssertingOnCollections" />);</para>
+        </listitem>
+
+        <listitem>
+          <para>tearing down the system at the end of the test (see <xref
+          linkend="chp.BootstrapAndTeardown" />)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>There are also fixtures to help with debugging (see <xref
+      linkend="chp.Debugging" />).</para>
+
+      <para>For each fixture, you'll find there's a discussion about the
+      capabilities provided by the common fixture, and then details as to the
+      support for that fixture by each of the <acronym>BDD</acronym> framework
+      integrations (<emphasis>Concordion</emphasis> and
+      <emphasis>FitNesse</emphasis>).</para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.BootstrapAndTeardown">
+    <title>Bootstrapping &amp; Teardown</title>
+
+    <abstract>
+      <para>The fixtures provided for bootstrapping at the start of a
+      scenario, and tearing down at the end</para>
+    </abstract>
+
+    <para>In order to test an <emphasis>Apache Isis</emphasis> domain
+    application, a running instance of an <classname>IsisSystem</classname>
+    must be bootstrapped, with the appropriate configuration.</para>
+
+    <sect1>
+      <title>Scenario Context</title>
+
+      <para>The common library provides a context object which holds a
+      reference to a running <classname>IsisSystem</classname>. Moreover, it
+      tracks such things as the date/time that the scenario is running as, the
+      user that is logged-in, and managing the aliases of objects so that they
+      can be interacted with.</para>
 
       <sect2>
-        <title>Story Context</title>
+        <title>Common</title>
 
-        <para>The common library provides a context object which holds a
-        reference to a running <classname>IsisSystem</classname>. Moreover, it
-        tracks such things as the date/time that the story is running as, the
-        user that is logged-in, and managing the aliases of objects so that
-        they can be interacted with.</para>
+        <para>An instance of the <classname>Scenario</classname> class
+        provides a context for the scenario. Framework integrations are
+        expected to instantiate this class, and then use it as the primary
+        means to interact with the system.</para>
 
-        <sect3>
-          <title>Common</title>
-
-          <para>An instance of the <classname>Story</classname> class provides
-          a context for the story. Framework integrations are expected to
-          instantiate this class, and then use it as the primary means to
-          interact with the system.</para>
-
-          <para>The <classname>Story</classname> class has a public no-arg
-          constructor. Instantiating the Story does not do anything; it must
-          also be bootstrapped (see <xref
-          linkend="sec.BootstrappingIsis" />).</para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para>The <classname>AbstractIsisConcordionStory</classname>
-          instantiates the <classname>Story</classname> object (from the
-          common library) automatically and binding it to a threadlocal. In
-          addition, <classname>AbstractIsisConcordionStory</classname>
-          provides methods that can be invoked from within
-          <acronym>XHTML</acronym> (ie taking
-          <classname>String</classname>s).</para>
-
-          <para>Test cases should inherit from this abstract class, with the
-          <acronym>XHTML</acronym> typically calling to the inherited methods
-          directly. The developer may optionally add small helper methods to
-          be called from the <acronym>XHTML</acronym> instead; these can
-          factor out any boilerplate in the script.</para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para>Every FitNesse story must reference the
-          <classname>StoryFixture</classname> fixture which provides the
-          overall context for the framework. This instantiates a
-          <classname>Story</classname> object from the common library and
-          binding it to a thread-local.</para>
-
-          <para>Whereas other <emphasis>FitNesse</emphasis> fixtures are
-          instantiated once per table, the <classname>StoryFixture</classname>
-          is a <acronym>FIT</acronym> <classname>DoFixture</classname> that
-          exists for the duration of the test page. It should typically be
-          referenced in the test suite's setup page, and should appear first
-          within this setup:</para>
-
-          <informaltable>
-            <tgroup cols="1">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Story Fixture</classname></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-        </sect3>
+        <para>The <classname>Scenario</classname> class has a public no-arg
+        constructor. Instantiating the <classname>Scenario</classname> does
+        not do anything; it must also be bootstrapped (see <xref
+        linkend="sec.BootstrappingIsis" />).</para>
       </sect2>
 
-      <sect2 id="sec.BootstrappingIsis">
-        <title>Bootstrapping Isis</title>
+      <sect2>
+        <title>Concordion</title>
 
-        <para>An <emphasis>Isis</emphasis> runtime can be bootstrapped with a
-        single call. This installs no-op implementations of some of the main
-        components, along with an in-memory object store.</para>
+        <para>The <classname>AbstractIsisConcordionScenario</classname>
+        instantiates the <classname>Scenario</classname> object (from the
+        common library) automatically and binding it to a threadlocal. In
+        addition, <classname>AbstractIsisConcordionScenario</classname>
+        provides methods that can be invoked from within
+        <acronym>XHTML</acronym> (ie taking
+        <classname>String</classname>s).</para>
 
-        <sect3>
-          <title>Common</title>
+        <para>Test cases should inherit from this abstract class, with the
+        <acronym>XHTML</acronym> typically calling to the inherited methods
+        directly. The developer may optionally add small helper methods to be
+        called from the <acronym>XHTML</acronym> instead; these can factor out
+        any boilerplate in the script.</para>
+      </sect2>
 
-          <para>The <methodname>Story#bootstrapIsis(String configDirectory,
-          DeploymentType deploymentType)</methodname> is used to bootstrap the
-          Isis runtime:</para>
+      <sect2>
+        <title>FitNesse</title>
 
-          <itemizedlist>
-            <listitem>
-              <para>The specified config directory contains
-              <filename>isis.properties</filename> config file, from which the
-              services are registered. Any fixtures in that properties file
-              are ignored (the <acronym>BDD</acronym> integration requires
-              that any objects are created through the test scripts, see <xref
-              linkend="sec.SetUpObjects" /> and <xref
-              linkend="sec.UsingIsisViewer" />).</para>
-            </listitem>
+        <para>Every <emphasis>FitNesse</emphasis> scenario must reference the
+        <classname>ScenarioFixture</classname> fixture which provides the
+        overall context for the framework. This instantiates a
+        <classname>Scenario</classname> object from the common library and
+        binding it to a thread-local.</para>
 
-            <listitem>
-              <para>The deployment type must be either EXPLORATION (meaning
-              exploration actions are enabled) or PROTOTYPE; no other values
-              are valid).</para>
-            </listitem>
-          </itemizedlist>
+        <para>Whereas other <emphasis>FitNesse</emphasis> fixtures are
+        instantiated once per table, the
+        <classname>ScenarioFixture</classname> is a <acronym>FIT</acronym>
+        <classname>DoFixture</classname> that exists for the duration of the
+        test page. It should typically be referenced in the test suite's setup
+        page, and should appear first within this setup:</para>
 
-          <para>Even if running in exploration mode, you must still logon (see
-          <xref linkend="sec.LogonAsSwitchUserTo" />) in order to indicate
-          which user account to run the story as.</para>
-        </sect3>
+        <informaltable>
+          <tgroup cols="1">
+            <colspec />
 
-        <sect3>
-          <title>Concordion</title>
+            <tbody>
+              <row>
+                <entry><classname>Scenario Fixture</classname></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+      </sect2>
+    </sect1>
 
-          <para>The <classname>AbstractIsisConcordionStory</classname> class
-          provides two overloaded versions of
-          <methodname>bootstrapIsis(...)</methodname> method:</para>
+    <sect1 id="sec.BootstrappingIsis">
+      <title>Bootstrapping Isis</title>
 
-          <itemizedlist>
-            <listitem>
-              <para><methodname>#bootstrapIsis(String configDirectory,
-              DeploymentType deploymentType)</methodname></para>
+      <para>An <emphasis>Isis</emphasis> runtime can be bootstrapped with a
+      single call. This installs no-op implementations of some of the main
+      components, along with an in-memory object store.</para>
 
-              <para>Intended to be called from within an <methodname>@Before
-              setUp()</methodname> method, when there's no particular need to
-              document the bootstrapping process within the story</para>
-            </listitem>
-          </itemizedlist>
+      <sect2>
+        <title>Common</title>
 
-          <itemizedlist>
-            <listitem>
-              <para><methodname>#bootstrapIsis(String configDirectory, String
-              deploymentType):boolean</methodname></para>
+        <para>The <methodname>Scenario#bootstrapIsis(String configDirectory,
+        DeploymentType deploymentType)</methodname> is used to bootstrap the
+        <emphasis>Isis</emphasis> runtime:</para>
 
-              <para>Intended to be called from the <acronym>XHTML</acronym>
-              page, allowing the story document the bootstrapping process. For
-              example, to bootstrap in exploration mode, use:</para>
+        <itemizedlist>
+          <listitem>
+            <para>The specified config directory contains
+            <filename>isis.properties</filename> config file, from which the
+            services are registered. Any fixtures in that properties file are
+            ignored (the <acronym>BDD</acronym> integration requires that any
+            objects are created through the test scripts, see <xref
+            linkend="sec.SetUpObjects" /> and <xref
+            linkend="sec.UsingIsisViewer" />).</para>
+          </listitem>
 
-              <programlisting>&lt;p concordion:execute="#result=bootstrapIsis(#configDir,#deploymentType)"&gt;
+          <listitem>
+            <para>The deployment type must be either EXPLORATION (meaning
+            exploration actions are enabled) or PROTOTYPE; no other values are
+            valid).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Even if running in exploration mode, you must still logon (see
+        <xref linkend="sec.LogonAsSwitchUserTo" />) in order to indicate which
+        user account to run the scenario as.</para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para>The <classname>AbstractIsisConcordionScenario</classname> class
+        provides two overloaded versions of
+        <methodname>bootstrapIsis(...)</methodname> method:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#bootstrapIsis(String configDirectory,
+            DeploymentType deploymentType)</methodname></para>
+
+            <para>Intended to be called from within an <methodname>@Before
+            setUp()</methodname> method, when there's no particular need to
+            document the bootstrapping process within the scenario;</para>
+          </listitem>
+        </itemizedlist>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#bootstrapIsis(String configDirectory, String
+            deploymentType):boolean</methodname></para>
+
+            <para>Intended to be called from the <acronym>XHTML</acronym>
+            page, allowing the scenario document the bootstrapping process.
+            For example, to bootstrap in exploration mode, use:</para>
+
+            <programlisting>&lt;p concordion:execute="#result=bootstrapIsis(#configDir,#deploymentType)"&gt;
 Isis system &lt;span concordion:assertTrue="#result"&gt;bootstrapped&lt;/span&gt; 
 from config directory &lt;span concordion:set="#configDir"&gt;../quickrun/config&lt;/span&gt;
 and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span&gt; mode.
 &lt;/p&gt;</programlisting>
 
-              <para>The method always returns <literal>true</literal>, but any
-              runtime exception will propagate to the generated page.</para>
-            </listitem>
-          </itemizedlist>
+            <para>The method always returns <literal>true</literal>, but any
+            runtime exception will propagate to the generated page.</para>
+          </listitem>
+        </itemizedlist>
 
-          <para>Whichever method is used, they both delegate to the common
-          <methodname>Story#bootstrapIsis(...)</methodname> method.</para>
-        </sect3>
+        <para>Whichever method is used, they both delegate to the common
+        <methodname>Scenario#bootstrapIsis(...)</methodname> method.</para>
+      </sect2>
 
-        <sect3>
-          <title>FitNesse</title>
+      <sect2>
+        <title>FitNesse</title>
 
-          <para>The <classname>BootstrapIsisConfiguredFromInMode</classname>
-          fixture is used to bootstrap <emphasis>Isis</emphasis>. It takes the
-          form:</para>
+        <para>The <classname>BootstrapIsisConfiguredFromInMode</classname>
+        fixture is used to bootstrap <emphasis>Isis</emphasis>. It takes the
+        form:</para>
 
-          <informaltable>
-            <tgroup cols="4">
-              <colspec colwidth="3*" />
+        <informaltable>
+          <tgroup cols="4">
+            <colspec colwidth="3*" />
 
-              <tbody>
-                <row>
-                  <entry><classname>Bootstrap Isis Configured
-                  From</classname></entry>
+            <tbody>
+              <row>
+                <entry><classname>Bootstrap Isis Configured
+                From</classname></entry>
 
-                  <entry><emphasis>config Directory</emphasis></entry>
+                <entry><emphasis>config Directory</emphasis></entry>
 
-                  <entry><methodname>In Mode</methodname></entry>
+                <entry><methodname>In Mode</methodname></entry>
 
-                  <entry><emphasis>deployment Type</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
+                <entry><emphasis>deployment Type</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
 
-          <para>This delegates to the common
-          <methodname>Story#bootstrapIsis(...)</methodname> method.</para>
-        </sect3>
+        <para>This delegates to the common
+        <methodname>Scenario#bootstrapIsis(...)</methodname> method.</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.ShutdownIsis">
+      <title>Shutdown Isis</title>
+
+      <para>This fixture shuts down the <emphasis>Isis</emphasis> runtime,
+      releasing memory and so on. A good place to put this is in the test's
+      teardown.</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para>The <methodname>Scenario#shutdownIsis()</methodname> method is
+        used to shutdown <emphasis>Isis</emphasis> runtime.</para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para>To shutdown <emphasis>Isis</emphasis> from within
+        <emphasis>Concordion</emphasis>, use the
+        <methodname>AbstractIsisConcordionScenario#shutdownIsis()</methodname>
+        method. This just delegates to the common library's
+        <classname>Scenario#shutdownIsis()</classname> method.</para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para>To shutdown Isis from FitNesse, use the
+        <classname>ShutdownIsis</classname> fixture:</para>
+
+        <informaltable>
+          <tgroup cols="1">
+            <colspec colwidth="3*" />
+
+            <tbody>
+              <row>
+                <entry><classname>Shutdown Isis</classname></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>This just delegates to the common library's
+        <methodname>Scenario#shutdownIsis()</methodname> method.</para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.SetUp">
+    <title>Scenario Set Up</title>
+
+    <abstract>
+      <para>Once <emphasis>Isis</emphasis> has been bootstrapped, the
+      application state must be setup.</para>
+    </abstract>
+
+    <para>The setup fixtures are used to specify the initial state of the
+    running application for a particular scenario's. Specifically, this means
+    setting up the services that define the application, the effective date
+    and the effective user. It also allows the setup of arbitrary objects
+    (typically reference/static data objects; for transactional objects see
+    <xref linkend="chp.UserInteraction" />).</para>
+
+    <sect1 id="sec.LogonAsSwitchUserTo">
+      <title>Logging On / Switching User</title>
+
+      <para>Used to specify the currently logged-on user. Should always be
+      called near the top of the scenario, as part of the "given". Can also be
+      used for switching the current user later on in the scenario, eg to
+      check a workflow between different users.</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para>The common library provides two overloaded methods, depending on
+        whether the roles for the user need to be specified or not:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>Scenario#logonAsOrSwitchUserTo(String
+            userName)</methodname></para>
+
+            <para>Logs on / switch user to as a specific user.</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>Scenario#logonAsOrSwitchUserTo(String userName,
+            List&lt;String&gt; roleNames)</methodname></para>
+
+            <para>Logs on to a specific user, with specified roles. Part of
+            the initialization for a particular scenario's setup, and
+            typically referenced in the test suite or scenario's own setup
+            page.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The username and roles are not validated against.</para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para>The <emphasis>Concordion</emphasis> integration provides two
+        sets of overloaded methods in
+        <classname>AbstractIsisConcordionScenario</classname>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#logonAs(String userName)</methodname> and
+            <methodname>#logonAs(String userName, String
+            roleListStr)</methodname></para>
+
+            <para>Intended to be called in the initial setup, as part of the
+            scenario's "given".</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>#switchUserTo(String userName)</methodname> and
+            <methodname>#switchUserTo(String userName, String
+            roleListStr)</methodname></para>
+
+            <para>(Optional); intended to be called later on in the scenario,
+            eg, to test workflow.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Each of these is intended to be called from the
+        <acronym>XHTML</acronym>. For example:</para>
+
+        <programlisting>&lt;p concordion:execute="#result=logonAs(#userName)"&gt;&lt;span concordion:assertTrue="#result"&gt;logged on&lt;/span&gt; as &lt;span concordion:set="#userName"&gt;fsmith&lt;/span&gt;&lt;/p&gt;</programlisting>
+
+        <para>The role list, if specified, should be comma-separated (any
+        white space will be ignored).</para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para>The FitNesse integration provides two sets of overloaded
+        fixtures:</para>
+
+        <informaltable>
+          <tgroup cols="2">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Logon As</classname></entry>
+
+                <entry><emphasis>user name</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <informaltable>
+          <tgroup cols="4">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Logon As</classname></entry>
+
+                <entry><emphasis>user name</emphasis></entry>
+
+                <entry><classname>With Roles</classname></entry>
+
+                <entry><emphasis>role list</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>Intended to be called in the initial setup, as part of the
+        scenario's "given".</para>
+
+        <informaltable>
+          <tgroup cols="2">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Switch User To</classname></entry>
+
+                <entry><emphasis>user name</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <informaltable>
+          <tgroup cols="4">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Switch User To</classname></entry>
+
+                <entry><emphasis>user name</emphasis></entry>
+
+                <entry><classname>With Roles</classname></entry>
+
+                <entry><emphasis>role list</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>Optional; intended to be called later on in the scenario, eg, to
+        test workflow.</para>
+
+        <para>The role list, if specified, should be comma-separated (any
+        white space will be ignored).</para>
       </sect2>
     </sect1>
 
     <sect1>
-      <title>SetUp</title>
+      <title>Date and Time Format</title>
 
-      <para>The setup fixtures are used to specify the running application for
-      a particular story's setup. Specifically, this means setting up the
-      services that define the application, the effective date and the
-      effective user. It also allows the setup of arbitrary objects (typically
-      reference/static data objects; for transactional objects see <xref
-      linkend="sec.UserInteraction" />).</para>
+      <para><acronym>BDD</acronym> tests often rely on an exact date and time,
+      and the date/time that a scenario is being run upon can be specified
+      using fixtures (see <xref linkend="sec.SettingDateAndTime" />).</para>
 
-      <sect2 id="sec.LogonAsSwitchUserTo">
-        <title>Logging On / Switching User</title>
+      <para>However, this date will be specified in text form, as will any
+      assertions on objects that relate to date (eg dispatch date of an order
+      within 28 days of it being placed). In order that tests do not fail when
+      run with different locales, the common library allows a date/time format
+      to be specified.</para>
 
-        <para>Used to specify the currently logged-on user. Should always be
-        called near the top of the story, as part of the "given". Can also be
-        used for switching the current user later on in the story, eg to check
-        a workflow between different users.</para>
+      <sect2>
+        <title>Common</title>
 
-        <sect3>
-          <title>Common</title>
+        <para>The <classname>Scenario</classname> class provides two methods
+        to specify date and time formats:</para>
 
-          <para>The common library provides two overloaded methods, depending
-          on whether the roles for the user need to be specified or
-          not:</para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#usingDateFormat(String)</methodname> is used to
+            specify the date format. </para>
 
-          <itemizedlist>
-            <listitem>
-              <para><methodname>Story#logonAsOrSwitchUserTo(String
-              userName)</methodname></para>
+            <para>If not called, the format defaults to "dd-MMM-yyyy", eg
+            02-Aug-2010.</para>
+          </listitem>
 
-              <para>Logs on / switch user to as a specific user.</para>
-            </listitem>
+          <listitem>
+            <para><methodname>#usingTimeFormat(String)</methodname> is used to
+            specify the time format.</para>
 
-            <listitem>
-              <para><methodname>Story#logonAsOrSwitchUserTo(String userName,
-              List&lt;String&gt; roleNames)</methodname></para>
+            <para>If not called, the time format defaults to "hh:mm" (a 24
+            hour clock, eg 14:45 for 2.45pm)</para>
+          </listitem>
+        </itemizedlist>
 
-              <para>Logs on to a specific user, with specified roles. Part of
-              the initialization for a particular story's setup, and typically
-              referenced in the test suite or story's own setup page.</para>
-            </listitem>
-          </itemizedlist>
+        <para>Typically the scenario will have both date and also time
+        specified (in <xref linkend="sec.SettingDateAndTime" />), but
+        assertions against domain objects will often care only about date, or
+        may occasionally care only about time. Therefore, whenever text
+        representing a date must be parsed, the following is used:</para>
 
-          <para>The username and roles are not validated against.</para>
-        </sect3>
+        <itemizedlist>
+          <listitem>
+            <para>parse against date+time (eg "dd-MMM-yyyy hh:mm")</para>
+          </listitem>
 
-        <sect3>
-          <title>Concordion</title>
+          <listitem>
+            <para>if that fails, parse against just date (eg
+            "dd-MMM-yyyy")</para>
+          </listitem>
 
-          <para>The Concordion integration provides two sets of overloaded
-          methods:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><methodname>#logonAs(String userName)</methodname> and
-              <methodname>#logonAs(String userName, String
-              roleListStr)</methodname></para>
-
-              <para>Intended to be called in the initial setup, as part of the
-              story's "given".</para>
-            </listitem>
-
-            <listitem>
-              <para><methodname>#switchUserTo(String userName)</methodname>
-              and <methodname>#switchUserTo(String userName, String
-              roleListStr)</methodname></para>
-
-              <para>(Optional); intended to be called later on in the story,
-              eg, to test workflow.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>Each of these is intended to be called from the
-          <acronym>XHTML</acronym>. For example:</para>
-
-          <programlisting>&lt;p concordion:execute="#result=logonAs(#userName)"&gt;&lt;span concordion:assertTrue="#result"&gt;logged on&lt;/span&gt; as &lt;span concordion:set="#userName"&gt;fsmith&lt;/span&gt;&lt;/p&gt;</programlisting>
-
-          <para>The role list, if specified, should be comma-separated (any
-          white space will be ignored).</para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para>The FitNesse integration provides two sets of overloaded
-          fixtures:</para>
-
-          <informaltable>
-            <tgroup cols="2">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Logon As</classname></entry>
-
-                  <entry><emphasis>user name</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <informaltable>
-            <tgroup cols="4">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Logon As</classname></entry>
-
-                  <entry><emphasis>user name</emphasis></entry>
-
-                  <entry><classname>With Roles</classname></entry>
-
-                  <entry><emphasis>role list</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <para>Intended to be called in the initial setup, as part of the
-          story's "given".</para>
-
-          <informaltable>
-            <tgroup cols="2">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Switch User To</classname></entry>
-
-                  <entry><emphasis>user name</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <informaltable>
-            <tgroup cols="4">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Switch User To</classname></entry>
-
-                  <entry><emphasis>user name</emphasis></entry>
-
-                  <entry><classname>With Roles</classname></entry>
-
-                  <entry><emphasis>role list</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <para>Optional; intended to be called later on in the story, eg, to
-          test workflow.</para>
-
-          <para>The role list, if specified, should be comma-separated (any
-          white space will be ignored).</para>
-        </sect3>
+          <listitem>
+            <para>if that fails, parse against just time (eg "hh:mm")</para>
+          </listitem>
+        </itemizedlist>
       </sect2>
 
       <sect2>
-        <title>Setting Date and Time</title>
+        <title>Concordion</title>
 
-        <para>Sets the story's clock to a specific date and time. Stories that
-        deal with domain objects that use the clock (eg for the defaulting of
-        a date/time property) will typically need to call this fixture.</para>
+        <para>The <classname>AbstractIsisConcordionScenario</classname>
+        provides two corresponding methods:</para>
 
-        <para>Typically called within the "given", though may be called many
-        times throughout the story.</para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#usingDateFormat(String)</methodname></para>
+          </listitem>
 
-        <sect3>
-          <title>Common</title>
+          <listitem>
+            <para><methodname>#usingTimeFormat(String)</methodname></para>
+          </listitem>
+        </itemizedlist>
 
-          <para><methodname>Story#dateAndTimeIs(java.util.Date)</methodname></para>
-
-          <para>This fixture installs the <classname>FixtureClock</classname>
-          as the implementation of the <classname>Clock</classname> singleton
-          (in the applib). Every call to the <classname>Clock</classname> will
-          return the same date/time until the method is called again.</para>
-
-          <para>If this fixture is not called, then the default system clock
-          is used, which gets the time from the host computer. The
-          <methodname>Story#debugClock()</methodname> method (<xref
-          linkend="sec.DebugClock" />) can be used to verify the clock
-          state.</para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para>The Concordion integration provides a number of overloaded
-          methods, all designed to be called from the
-          <acronym>XHTML</acronym>:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><methodname>#dateIs(String
-              dateAndTimeStr)</methodname></para>
-            </listitem>
-
-            <listitem>
-              <para><methodname>#timeIs(String
-              dateAndTimeStr)</methodname></para>
-            </listitem>
-          </itemizedlist>
-
-          <para>For example:</para>
-
-          <programlisting>&lt;p concordion:execute="#result=timeIs(#dateTime)"&gt;The &lt;span concordion:assertTrue="#result"&gt;date/time&lt;/span&gt; is &lt;span concordion:set="#dateTime"&gt;2 mar 2007 09:20&lt;/span&gt;.&lt;/p&gt; </programlisting>
-
-          <para>The overloaded forms are just for convenience; sometimes the
-          story will want to emphasis the date, other times the time. In all
-          case the date/time provided is parsed against the format 'dd MMM
-          yyyy hh:mm'</para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para>The <emphasis>FitNesse</emphasis> integration provides four
-          versions (overloaded only so reads well in the page):</para>
-
-          <informaltable>
-            <tgroup cols="2">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Date Is</classname></entry>
-
-                  <entry><emphasis>date and time</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <informaltable>
-            <tgroup cols="2">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Date Is Now</classname></entry>
-
-                  <entry><emphasis>date and time</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <informaltable>
-            <tgroup cols="2">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Time Is</classname></entry>
-
-                  <entry><emphasis>date and time</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <informaltable>
-            <tgroup cols="2">
-              <colspec />
-
-              <tbody>
-                <row>
-                  <entry><classname>Time Is Now</classname></entry>
-
-                  <entry><emphasis>date and time</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <para>In each case the date/time provided is parsed against the
-          format 'dd MMM yyyy hh:mm'</para>
-        </sect3>
+        <para>These just delegate to the corresponding methods in the
+        <classname>Scenario</classname> class.</para>
       </sect2>
 
-      <sect2 id="sec.AliasServices">
-        <title>Aliasing Services</title>
+      <sect2>
+        <title>FitNesse</title>
 
-        <para>Specifies an alias to a service in order to invoke actions upon
-        it. Typically this will be done for most if not all of the registered
-        repositories. The class name (as defined in
-        <filename>isis.properties</filename>) is used as the key; the alias
-        defines a simple handle.</para>
+        <para>Not implemented at this time.</para>
+      </sect2>
+    </sect1>
 
-        <para>For example, a service
-        <classname>com.mycompany.customers.defaults.CustomerRepositoryDefault</classname>
-        can be mapped to "customers".</para>
+    <sect1 id="sec.SettingDateAndTime">
+      <title>Setting Date and Time</title>
 
-        <sect3>
-          <title>Common</title>
+      <para>Sets the scenario's clock to a specific date and time. Scenarios
+      that deal with domain objects that use the clock (eg for the defaulting
+      of a date/time property) will typically need to call this
+      fixture.</para>
 
-          <para>The common library provides two methods:<itemizedlist>
-              <listitem>
-                <para><methodname>Story#getAliasRegistry()</methodname></para>
-              </listitem>
+      <para>Typically called within the "given", though may be called many
+      times throughout the scenario.</para>
 
-              <listitem>
-                <para><methodname>AliasRegistry#aliasService(String aliasAs,
-                String serviceClassName)</methodname></para>
-              </listitem>
-            </itemizedlist></para>
+      <sect2>
+        <title>Common</title>
 
-          <para>The <acronym>BDD</acronym> framework integration is expected
-          to obtain the <classname>AliasRegistry</classname> from the
-          <classname>Story</classname>, and then use the
-          <classname>AliasRegisty</classname> to register the alias.</para>
-        </sect3>
+        <para><methodname>Scenario#dateAndTimeIs(java.util.Date)</methodname></para>
 
-        <sect3>
-          <title>Concordion</title>
+        <para>This fixture installs the <classname>FixtureClock</classname> as
+        the implementation of the <classname>Clock</classname> singleton (in
+        the applib). Every call to the <classname>Clock</classname> will
+        return the same date/time until the method is called again.</para>
 
-          <para>The Concordion integration provides a corresponding method,
-          <methodname>#aliasService(aliasAs, String
-          serviceClassName)</methodname>. This returns <literal>true</literal>
-          if the service was found, false otherwise. Call within a table to
-          alias multiple services, for example:<programlisting>&lt;table concordion:execute="#result=aliasService(#aliasAs, #className)"&gt;
+        <para>If this fixture is not called, then the default system clock is
+        used, which gets the time from the host computer. The
+        <methodname>Scenario#debugClock()</methodname> method (<xref
+        linkend="sec.DebugClock" />) can be used to verify the clock
+        state.</para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para>The Concordion integration provides a number of overloaded
+        methods, all designed to be called from the
+        <acronym>XHTML</acronym>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#dateIs(String
+            dateAndTimeStr)</methodname></para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>#timeIs(String
+            dateAndTimeStr)</methodname></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For example:</para>
+
+        <programlisting>&lt;p concordion:execute="#result=timeIs(#dateTime)"&gt;The &lt;span concordion:assertTrue="#result"&gt;date/time&lt;/span&gt; is &lt;span concordion:set="#dateTime"&gt;2 mar 2007 09:20&lt;/span&gt;.&lt;/p&gt; </programlisting>
+
+        <para>The overloaded forms are just for convenience; sometimes the
+        scenario will want to emphasis the date, other times the time. In all
+        case the date/time provided is parsed against the format 'dd MMM yyyy
+        hh:mm'</para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para>The <emphasis>FitNesse</emphasis> integration provides four
+        versions (overloaded only so reads well in the page):</para>
+
+        <informaltable>
+          <tgroup cols="2">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Date Is</classname></entry>
+
+                <entry><emphasis>date and time</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <informaltable>
+          <tgroup cols="2">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Date Is Now</classname></entry>
+
+                <entry><emphasis>date and time</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <informaltable>
+          <tgroup cols="2">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Time Is</classname></entry>
+
+                <entry><emphasis>date and time</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <informaltable>
+          <tgroup cols="2">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Time Is Now</classname></entry>
+
+                <entry><emphasis>date and time</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para>In each case the date/time provided is parsed against the format
+        'dd MMM yyyy hh:mm'</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.AliasServices">
+      <title>Aliasing Services</title>
+
+      <para>Specifies an alias to a service in order to invoke actions upon
+      it. Typically this will be done for most if not all of the registered
+      repositories. The class name (as defined in
+      <filename>isis.properties</filename>) is used as the key; the alias
+      defines a simple handle.</para>
+
+      <para>For example, a service
+      <classname>com.mycompany.customers.defaults.CustomerRepositoryDefault</classname>
+      can be mapped to "customers".</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para>The common library provides two methods:<itemizedlist>
+            <listitem>
+              <para><methodname>Scenario#getAliasRegistry()</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>AliasRegistry#aliasService(String aliasAs,
+              String serviceClassName)</methodname></para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para>The <acronym>BDD</acronym> framework integration is expected to
+        obtain the <classname>AliasRegistry</classname> from the
+        <classname>Scenario</classname>, and then use the
+        <classname>AliasRegisty</classname> to register the alias.</para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para>The Concordion integration provides a corresponding method,
+        <methodname>#aliasService(aliasAs, String
+        serviceClassName)</methodname>. This returns <literal>true</literal>
+        if the service was found, false otherwise. Call within a table to
+        alias multiple services, for example:<programlisting>&lt;table concordion:execute="#result=aliasService(#aliasAs, #className)"&gt;
   &lt;tr&gt;
     &lt;th concordion:set="#className"&gt;Class Name&lt;/th&gt;
     &lt;th concordion:set="#aliasAs"&gt;aliasAs&lt;/th&gt;
@@ -1016,189 +1262,186 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     &lt;td&gt;ok&lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;</programlisting></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para>The FitNesse integration provides an implementation of a
-          <classname>ColumnFixture</classname>, which is used as
-          follows:</para>
-
-          <para><informaltable>
-              <tgroup cols="2">
-                <colspec colname="_1" />
-
-                <colspec colname="_2" />
-
-                <tbody>
-                  <row>
-                    <entry nameend="_2" namest="_1"><classname>Alias
-                    Services</classname></entry>
-                  </row>
-
-                  <row>
-                    <entry><classname>class name</classname></entry>
-
-                    <entry><classname>alias=</classname></entry>
-                  </row>
-
-                  <row>
-                    <entry><emphasis>com.mycompany.myapp.objstore.dflt.claim.ClaimRepositoryDefault</emphasis></entry>
-
-                    <entry><emphasis>claims</emphasis></entry>
-                  </row>
-                </tbody>
-              </tgroup>
-            </informaltable></para>
-        </sect3>
       </sect2>
 
-      <sect2 id="sec.SetUpObjects">
-        <title>Setting Up Objects</title>
+      <sect2>
+        <title>FitNesse</title>
 
-        <para>Creates objects, and persists them to the object store. .
-        Typically used for immutable reference/standing data objects). Can
-        also be to setup used for transaction/operational data objects (though
-        <classname>UsingIsisViewerForSetup</classname>, <xref
-        linkend="sec.UsingIsisViewer" />, is preferable). The DebugObjectStore
-        fixture (<xref linkend="sec.DebugObjectStore" />) can be used to check
-        the state of objects created.</para>
+        <para>The FitNesse integration provides an implementation of a
+        <classname>ColumnFixture</classname>, which is used as follows:</para>
 
-        <sect3>
-          <title>Common</title>
+        <para><informaltable>
+            <tgroup cols="2">
+              <colspec colname="_1" />
 
-          <para>The common library support for setting up objects using the
-          <classname>SetUpObjectsPeer</classname> class. This represents the
-          context for creating a set of objects all of the same type, and is
-          usually called multiple times (eg corresponding to a table structure
-          in the story text itself).</para>
+              <colspec colname="_2" />
 
-          <para>The constructor for this class takes the following
-          arguments:</para>
+              <tbody>
+                <row>
+                  <entry nameend="_2" namest="_1"><classname>Alias
+                  Services</classname></entry>
+                </row>
 
-          <itemizedlist>
+                <row>
+                  <entry><classname>class name</classname></entry>
+
+                  <entry><classname>alias=</classname></entry>
+                </row>
+
+                <row>
+                  <entry><emphasis>com.mycompany.myapp.objstore.dflt.claim.ClaimRepositoryDefault</emphasis></entry>
+
+                  <entry><emphasis>claims</emphasis></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </informaltable></para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.SetUpObjects">
+      <title>Setting Up Objects</title>
+
+      <para>Creates objects, and persists them to the object store. .
+      Typically used for immutable reference/standing data objects). Can also
+      be to setup used for transaction/operational data objects (though
+      <classname>UsingIsisViewerForSetup</classname>, <xref
+      linkend="sec.UsingIsisViewer" />, is preferable). The DebugObjectStore
+      fixture (<xref linkend="sec.DebugObjectStore" />) can be used to check
+      the state of objects created.</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para>The common library support for setting up objects using the
+        <classname>SetUpObjectsPeer</classname> class. This represents the
+        context for creating a set of objects all of the same type, and is
+        usually called multiple times (eg corresponding to a table structure
+        in the scenario text itself).</para>
+
+        <para>The constructor for this class takes the following
+        arguments:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><classname>AliasRegistry</classname>
+            <varname>aliasRegistry</varname></para>
+
+            <para>the alias registry which is used to lookup aliases to
+            existing objects, and is populated with aliases for the new
+            created objects (if an alias binding is specified; see
+            below).</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>String</classname>
+            <varname>className</varname></para>
+
+            <para>This is the fully qualified class name of the object to be
+            instantiated</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>SetUpObjectsPeer.Mode</classname>
+            <varname>mode</varname></para>
+
+            <para>This is whether the object is to be persisted or not</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CellBinding</classname>
+            <varname>aliasBinding</varname></para>
+
+            <para>This object represents a binding to a cell that will hold
+            the reference to each newly created object. It can be left
+            <literal>null</literal> if required.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Different methods are available for <acronym>BDD</acronym>
+        framework integrations to call. Typically the BDD framework is
+        expected to setup header information (the names of the properties),
+        and then process each row.</para>
+
+        <para>On the header of the table, the main method to call
+        is:<itemizedlist>
             <listitem>
-              <para><classname>AliasRegistry</classname>
-              <varname>aliasRegistry</varname></para>
+              <para><methodname>SetUpObjectsPeer#definePropertyOrAlias(String
+              propertyNameOrAlias, int colNum)</methodname></para>
 
-              <para>the alias registry which is used to lookup aliases to
-              existing objects, and is populated with aliases for the new
-              created objects (if an alias binding is specified; see
-              below).</para>
+              <para>This associates each column with a property of the class,
+              or an alias for the object overall</para>
             </listitem>
+          </itemizedlist></para>
 
-            <listitem>
-              <para><classname>String</classname>
-              <varname>className</varname></para>
+        <para>When processing each row, typically the main methods to call
+        are:</para>
 
-              <para>This is the fully qualified class name of the object to be
-              instantiated</para>
-            </listitem>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>SetUpObjectsPeer#addPropertyValueOrAlias(String
+            propertyOrAliasValue)</methodname></para>
 
-            <listitem>
-              <para><classname>SetUpObjectsPeer.Mode</classname>
-              <varname>mode</varname></para>
+            <para>This provides the value of each property of the object to be
+            created, or the alias to know the object by once created. The
+            property value can either be an existing alias, else must be
+            parseable (nb: Isis' own value types itself perform the parsing,
+            so there's no additional work to be done here)</para>
+          </listitem>
 
-              <para>This is whether the object is to be persisted or
-              not</para>
-            </listitem>
+          <listitem>
+            <para><methodname>SetUpObjectsPeer#createObject()</methodname></para>
 
-            <listitem>
-              <para><classname>CellBinding</classname>
-              <varname>aliasBinding</varname></para>
+            <para>This actually instantiates the object, either persistent or
+            non-persistent as specified in the constructor, and assigns it an
+            alias</para>
+          </listitem>
+        </itemizedlist>
 
-              <para>This object represents a binding to a cell that will hold
-              the reference to each newly created object. It can be left
-              <literal>null</literal> if required.</para>
-            </listitem>
-          </itemizedlist>
+        <para>That said, there are some other public methods that are
+        available for more complex integrations (notably: FitNesse).</para>
+      </sect2>
 
-          <para>Different methods are available for <acronym>BDD</acronym>
-          framework integrations to call. Typically the BDD framework is
-          expected to setup header information (the names of the properties),
-          and then process each row.</para>
+      <sect2>
+        <title>Concordion</title>
 
-          <para>On the header of the table, the main method to call
-          is:<itemizedlist>
-              <listitem>
-                <para><methodname>SetUpObjectsPeer#definePropertyOrAlias(String
-                propertyNameOrAlias, int colNum)</methodname></para>
+        <para>The Concordion framework integration provides:</para>
 
-                <para>This associates each column with a property of the
-                class, or an alias for the object overall</para>
-              </listitem>
-            </itemizedlist></para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#setUpObject(String className, String aliasAs,
+            String propertyName1, String propertyName2,
+            ...)</methodname></para>
 
-          <para>When processing each row, typically the main methods to call
-          are:</para>
+            <para>There are 10 overloaded versions of this method, to account
+            for setting up different types of objects that have up to 10
+            properties.</para>
 
-          <itemizedlist>
-            <listitem>
-              <para><methodname>SetUpObjectsPeer#addPropertyValueOrAlias(String
-              propertyOrAliasValue)</methodname></para>
+            <para>The method returns a string "ok" if has worked, otherwise it
+            returns exception text. This might seem a little odd, but allows a
+            meaningful message to be shown in the
+            <acronym>XHTML</acronym>.</para>
+          </listitem>
 
-              <para>This provides the value of each property of the object to
-              be created, or the alias to know the object by once created. The
-              property value can either be an existing alias, else must be
-              parseable (nb: Isis' own value types itself perform the parsing,
-              so there's no additional work to be done here)</para>
-            </listitem>
+          <listitem>
+            <para><methodname>#setUpObjectVarArgs(String className, String
+            aliasAs, ...)</methodname></para>
 
-            <listitem>
-              <para><methodname>SetUpObjectsPeer#createObject()</methodname></para>
+            <para>This (protected, not public) method is to cater for setting
+            up objects that require more than 10 properties to be setup. In
+            these cases, the developer should write their own method and call
+            into the <methodname>#setUpObjectsVarargs(...)</methodname> as
+            required.</para>
+          </listitem>
+        </itemizedlist>
 
-              <para>This actually instantiates the object, either persistent
-              or non-persistent as specified in the constructor, and assigns
-              it an alias</para>
-            </listitem>
-          </itemizedlist>
+        <para>Note that this method should be called from the
+        <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>, not
+        with <emphasis>concordion:execute</emphasis>. See <xref
+        linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
+        details.</para>
 
-          <para>That said, there are some other public methods that are
-          available for more complex integrations (notably: FitNesse).</para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para>The Concordion framework integration provides:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><methodname>#setUpObject(String className, String aliasAs,
-              String propertyName1, String propertyName2,
-              ...)</methodname></para>
-
-              <para>There are 10 overloaded versions of this method, to
-              account for setting up different types of objects that have up
-              to 10 properties.</para>
-
-              <para>The method returns a string "ok" if has worked, otherwise
-              it returns exception text. This might seem a little odd, but
-              allows a meaningful message to be shown in the
-              <acronym>XHTML</acronym>.</para>
-            </listitem>
-
-            <listitem>
-              <para><methodname>#setUpObjectVarArgs(String className, String
-              aliasAs, ...)</methodname></para>
-
-              <para>This (protected, not public) method is to cater for
-              setting up objects that require more than 10 properties to be
-              setup. In these cases, the developer should write their own
-              method and call into the
-              <methodname>#setUpObjectsVarargs(...)</methodname> as
-              required.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>Note that this method should be called from the
-          <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>,
-          not with <emphasis>concordion:execute</emphasis>. See <xref
-          linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
-          details.</para>
-
-          <programlisting>&lt;p&gt;With Employees (&lt;span concordion:set="#className"&gt;com.mycompany.myapp.dom.employee.Employee&lt;/span&gt;):
+        <programlisting>&lt;p&gt;With Employees (&lt;span concordion:set="#className"&gt;com.mycompany.myapp.dom.employee.Employee&lt;/span&gt;):
 &lt;/p&gt;
 &lt;table isis:execute="#result=setUpObject(#className, #aliasAs, #name, #approver)"&gt;
   &lt;tr&gt;
@@ -1226,1040 +1469,1036 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     &lt;td&gt;ok&lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;</programlisting>
-        </sect3>
+      </sect2>
 
-        <sect3>
-          <title>FitNesse</title>
+      <sect2>
+        <title>FitNesse</title>
 
-          <para>The FitNesse integration uses the "Set Up Objects" table,
-          called like so:</para>
+        <para>The FitNesse integration uses the "Set Up Objects" table, called
+        like so:</para>
 
-          <informaltable>
-            <tgroup cols="3">
-              <colspec colname="_1" />
+        <informaltable>
+          <tgroup cols="3">
+            <colspec colname="_1" />
 
-              <colspec colname="_2" />
+            <colspec colname="_2" />
 
-              <colspec colname="_3" />
+            <colspec colname="_3" />
 
-              <tbody>
-                <row>
-                  <entry><classname>Set Up Objects</classname></entry>
+            <tbody>
+              <row>
+                <entry><classname>Set Up Objects</classname></entry>
 
-                  <entry nameend="_3"
-                  namest="_2"><emphasis>com.mycompany.myapp.dom.employee.Employee</emphasis></entry>
-                </row>
+                <entry nameend="_3"
+                namest="_2"><emphasis>com.mycompany.myapp.dom.employee.Employee</emphasis></entry>
+              </row>
 
-                <row>
-                  <entry><classname>Name</classname></entry>
+              <row>
+                <entry><classname>Name</classname></entry>
 
-                  <entry><classname>Approver</classname></entry>
+                <entry><classname>Approver</classname></entry>
 
-                  <entry><classname>alias as</classname></entry>
-                </row>
+                <entry><classname>alias as</classname></entry>
+              </row>
 
-                <row>
-                  <entry><emphasis>Fred Smith</emphasis></entry>
+              <row>
+                <entry><emphasis>Fred Smith</emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
-                </row>
+                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+              </row>
 
-                <row>
-                  <entry><emphasis>Tom Brown</emphasis></entry>
+              <row>
+                <entry><emphasis>Tom Brown</emphasis></entry>
 
-                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
 
-                  <entry><emphasis>Employee:Tom Brown</emphasis></entry>
-                </row>
+                <entry><emphasis>Employee:Tom Brown</emphasis></entry>
+              </row>
 
-                <row>
-                  <entry><emphasis>Sam Jones</emphasis></entry>
+              <row>
+                <entry><emphasis>Sam Jones</emphasis></entry>
 
-                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
 
-                  <entry><emphasis>Employee:Sam Jones</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-        </sect3>
+                <entry><emphasis>Employee:Sam Jones</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
       </sect2>
     </sect1>
+  </chapter>
+
+  <chapter id="chp.UserInteraction">
+    <title>User Interaction</title>
+
+    <abstract>
+      <para>***</para>
+    </abstract>
+
+    <para>User interaction fixtures appear predominantly in the main body of
+    the test, either to simulating user interactions or to assert on the
+    results of those actions.</para>
+
+    <sect1 id="sec.UsingIsisViewer">
+      <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
+
+      <para>The centrepiece of the <acronym>BDD</acronym> framework, simulates
+      interacting with domain objects as if through a viewer. Using this
+      feature, the scenario can interact with objects, check their state,
+      alias referenced or returned objects.</para>
+
+      <para>The "For Setup" version disables checks for visibility and
+      usability, making it easier to reuse functionality for setting up
+      objects prior to a test scenario (the "given"). The
+      <classname>DebugObjectStore</classname> fixture (<xref
+      linkend="sec.DebugObjectStore" />) can be used to check the state of
+      objects created.</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para>The common library provides the
+        <classname>UsingIsisViewerPeer</classname> class as a means by which
+        the BDD framework integration can interact with Apache Isis
+        runtime.</para>
+
+        <para>The <classname>UsingIsisViewerPeer</classname> class is
+        generally called from within a table format, with each row
+        representing a specific interaction with the domain object. For
+        example, a row might invoke an action, or could check that a class
+        member is unavailable.</para>
+
+        <para>Some interactions can be used to create or assign aliases to
+        domain objects. For example, invoking a non-void action will return a
+        result. If the result is a domain object, then the alias can be used
+        directly subsequently in the scenario. If the result is a collection,
+        then typically it is the scenario will make an assertion on that
+        collection using "Check List" (see <xref linkend="sec.CheckList" />)
+        or alias an object out of that list using "Alias Items In List" (see
+        <xref linkend="sec.AliasItemsInList" />).</para>
+
+        <para>Because <classname>UsingIsisViewerPeer</classname> is
+        table-oriented, it uses <classname>CellBinding</classname>s (see <xref
+        linkend="sec.CommonLibrary" />) to bind table headers to rows. The
+        constructor takes the following parameters:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><classname>AliasRegistry</classname></para>
+
+            <para>Used to access aliases for existing domain objects, and to
+            register aliases for newly created/found objects.</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>Perform.Mode</classname></para>
+
+            <para>Whether to actually perform the interactions or not</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CellBinding</classname>s for each of the standard
+            columns of the table</para>
+
+            <para>These are discussed below.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The <classname>CellBinding</classname>s passed into the
+        constructor correspond to the standard columns of the table. Although
+        all must be passed in, not all are needed for every interaction; in
+        these cases the value can be left blank. The
+        <classname>CellBinding</classname>s correspond to the following column
+        names:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the "on object" column (can also use 'object', or 'on' if
+            parsing column name provided by scenario text)</para>
+
+            <para>The (alias of) the object to interact with. A value must
+            always be provided.</para>
+          </listitem>
+
+          <listitem>
+            <para>the "alias result as" column (can also use "result=",
+            "alias=", "alias as")</para>
+
+            <para>The alias to assign the result of any interaction.</para>
+          </listitem>
 
-    <sect1 id="sec.UserInteraction">
-      <title>User Interaction</title>
-
-      <para>User interaction fixtures appear predominantly in the main body of
-      the test, either to simulating user interactions or to assert on the
-      results of those actions.</para>
-
-      <sect2 id="sec.UsingIsisViewer">
-        <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
-
-        <para>The centrepiece of the <acronym>BDD</acronym> framework,
-        simulates interacting with domain objects as if through a viewer.
-        Using this feature, the story can interact with objects, check their
-        state, alias referenced or returned objects.</para>
-
-        <para>The "For Setup" version disables checks for visibility and
-        usability, making it easier to reuse functionality for setting up
-        objects prior to a test scenario (the "given"). The
-        <classname>DebugObjectStore</classname> fixture (<xref
-        linkend="sec.DebugObjectStore" />) can be used to check the state of
-        objects created.</para>
-
-        <sect3>
-          <title>Common</title>
-
-          <para>The common library provides the
-          <classname>UsingIsisViewerPeer</classname> class as a means by which
-          the BDD framework integration can interact with Apache Isis
-          runtime.</para>
-
-          <para>The <classname>UsingIsisViewerPeer</classname> class is
-          generally called from within a table format, with each row
-          representing a specific interaction with the domain object. For
-          example, a row might invoke an action, or could check that a class
-          member is unavailable.</para>
-
-          <para>Some interactions can be used to create or assign aliases to
-          domain objects. For example, invoking a non-void action will return
-          a result. If the result is a domain object, then the alias can be
-          used directly subsequently in the story. If the result is a
-          collection, then typically it is the story will make an assertion on
-          that collection using "Check List" (see <xref
-          linkend="sec.CheckList" />) or alias an object out of that list
-          using "Alias Items In List" (see <xref
-          linkend="sec.AliasItemsInList" />).</para>
-
-          <para>Because <classname>UsingIsisViewerPeer</classname> is
-          table-oriented, it uses <classname>CellBinding</classname>s (see
-          <xref linkend="sec.CommonLibrary" />) to bind table headers to rows.
-          The constructor takes the following parameters:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para><classname>AliasRegistry</classname></para>
-
-              <para>Used to access aliases for existing domain objects, and to
-              register aliases for newly created/found objects.</para>
-            </listitem>
-
-            <listitem>
-              <para><classname>Perform.Mode</classname></para>
-
-              <para>Whether to actually perform the interactions or not</para>
-            </listitem>
-
-            <listitem>
-              <para><classname>CellBinding</classname>s for each of the
-              standard columns of the table</para>
-
-              <para>These are discussed below.</para>
-            </listitem>
-          </itemizedlist>
-
-          <para>The <classname>CellBinding</classname>s passed into the
-          constructor correspond to the standard columns of the table.
-          Although all must be passed in, not all are needed for every
-          interaction; in these cases the value can be left blank. The
-          <classname>CellBinding</classname>s correspond to the following
-          column names:</para>
-
-          <itemizedlist>
-            <listitem>
-              <para>the "on object" column (can also use 'object', or 'on' if
-              parsing column name provided by story text)</para>
-
-              <para>The (alias of) the object to interact with. A value must
-              always be provided.</para>
-            </listitem>
-
-            <listitem>
-              <para>the "alias result as" column (can also use "result=",
-              "alias=", "alias as")</para>
-
-              <para>The alias to assign the result of any interaction.</para>
-            </listitem>
+          <listitem>
+            <para>the "perform" column (can also use "do", "interaction",
+            "interaction type")</para>
 
-            <listitem>
-              <para>the "perform" column (can also use "do", "interaction",
-              "interaction type")</para>
+            <para>the interaction to perform; discussed further below</para>
+          </listitem>
 
-              <para>the interaction to perform; discussed further below</para>
-            </listitem>
+          <listitem>
+            <para>the "on member" column (can also use "member", "using
+            member", using")</para>
 
-            <listitem>
-              <para>the "on member" column (can also use "member", "using
-              member", using")</para>
+            <para>the property, collection or action to use</para>
+          </listitem>
 
-              <para>the property, collection or action to use</para>
-            </listitem>
+          <listitem>
+            <para>the "that it" column (can also use "that", "verb")</para>
 
-            <listitem>
-              <para>the "that it" column (can also use "that", "verb")</para>
+            <para>optional qualifier for interactions that make checks;
+            discussed below</para>
+          </listitem>
 
-              <para>optional qualifier for interactions that make checks;
-              discussed below</para>
-            </listitem>
+          <listitem>
+            <para>the "with arguments" (can also "arguments", "parameters",
+            "with parameters", "for", "value", "for parameters", "value",
+            "reference")</para>
 
-            <listitem>
-              <para>the "with arguments" (can also "arguments", "parameters",
-              "with parameters", "for", "value", "for parameters", "value",
-              "reference")</para>
+            <para>the first argument, to the interaction, if any. It is
+            possible to perform interactions with multiple arguments (for
+            example, invoking an action); but the UsingIsisViewerPeer needs to
+            have a binding for the first argument so that it can knows to
+            interpret any following columns as further arguments.</para>
+          </listitem>
+        </itemizedlist>
 
-              <para>the first argument, to the interaction, if any. It is
-              possible to perform interactions with multiple arguments (for
-              example, invoking an action); but the UsingIsisViewerPeer needs
-              to have a binding for the first argument so that it can knows to
-              interpret any following columns as further arguments.</para>
-            </listitem>
-          </itemizedlist>
+        <para>The valid values that can be provided for the "perform" binding
+        are:</para>
 
-          <para>The valid values that can be provided for the "perform"
-          binding are:</para>
+        <itemizedlist>
+          <listitem>
+            <para>check property / check collection / check add to collection
+            / check remove from collection / check action</para>
 
-          <itemizedlist>
-            <listitem>
-              <para>check property / check collection / check add to
-              collection / check remove from collection / check action</para>
+            <para>These are combined with a value in the "that it" binding;
+            for example "check property XXX is hidden", or "check action XXX
+            is valid for (<emphasis>some argument list</emphasis>)"</para>
+          </listitem>
 
-              <para>These are combined with a value in the "that it" binding;
-              for example "check property XXX is hidden", or "check action XXX
-              is valid for (<emphasis>some argument list</emphasis>)"</para>
-            </listitem>
+          <listitem>
+            <para>get property / set property / clear property</para>
 
-            <listitem>
-              <para>get property / set property / clear property</para>
+            <para>Read from or write to a collection. If setting, a single
+            argument is required</para>
+          </listitem>
 
-              <para>Read from or write to a collection. If setting, a single
-              argument is required</para>
-            </listitem>
+          <listitem>
+            <para>get collection / add to collection / remove from
+            collection</para>
 
-            <listitem>
-              <para>get collection / add to collection / remove from
-              collection</para>
+            <para>Read or write from a collection. If writing, a single
+            argument is required</para>
+          </listitem>
 
-              <para>Read or write from a collection. If writing, a single
-              argument is required</para>
-            </listitem>
+          <listitem>
+            <para>invoke action</para>
 
-            <listitem>
-              <para>invoke action</para>
+            <para>Invoke action, with 0 to many arguments</para>
+          </listitem>
 
-              <para>Invoke action, with 0 to many arguments</para>
-            </listitem>
+          <listitem>
+            <para>get property default / get property choices / get action
+            parameter default / get action choices</para>
 
-            <listitem>
-              <para>get property default / get property choices / get action
-              parameter default / get action choices</para>
+            <para>To enable the testing of the choicesXxx() and defaultXxx()
+            supporting methods</para>
+          </listitem>
+        </itemizedlist>
 
-              <para>To enable the testing of the choicesXxx() and defaultXxx()
-              supporting methods</para>
-            </listitem>
-          </itemizedlist>
+        <para>The tables below summarizes the full of interactions that are
+        supported for properties:</para>
 
-          <para>The tables below summarizes the full of interactions that are
-          supported for properties:</para>
+        <table>
+          <title>Supported Interactions for Properties</title>
 
-          <table>
-            <title>Supported Interactions for Properties</title>
+          <tgroup cols="6">
+            <colspec colname="_4" colnum="4" />
 
-            <tgroup cols="6">
-              <colspec colname="_4" colnum="4" />
+            <colspec colname="_5" />
 
-              <colspec colname="_5" />
+            <colspec colname="_6" />
 
-              <colspec colname="_6" />
+            <thead>
+              <row>
+                <entry align="center">on object</entry>
 
-              <thead>
-                <row>
-                  <entry align="center">on object</entry>
+                <entry align="center">alias as</entry>
 
-                  <entry align="center">alias as</entry>
+                <entry align="center">perform</entry>
 
-                  <entry align="center">perform</entry>
+                <entry align="center">using member</entry>
 
-                  <entry align="center">using member</entry>
+                <entry align="center">that it</entry>
 
-                  <entry align="center">that it</entry>
+                <entry align="center">value</entry>
+              </row>
+            </thead>
 
-                  <entry align="center">value</entry>
-                </row>
-              </thead>
+            <tbody>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-              <tbody>
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                hidden</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  hidden</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                visible</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  visible</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                disabled</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  disabled</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                enabled</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  enabled</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                empty</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  empty</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is not
+                empty</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is not
-                  empty</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry><classname>contains</classname></entry>
 
-                  <entry><classname>contains</classname></entry>
+                <entry><emphasis>value or object alias</emphasis></entry>
+              </row>
 
-                  <entry><emphasis>value or object alias</emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check property</classname></entry>
 
-                  <entry><classname>check property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry><classname>does not contain</classname></entry>
 
-                  <entry><classname>does not contain</classname></entry>
+                <entry><emphasis>value or object alias</emphasis></entry>
+              </row>
 
-                  <entry><emphasis>value or object alias</emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check set property</classname></entry>
 
-                  <entry><classname>check set property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry><classname>is valid for</classname></entry>
 
-                  <entry><classname>is valid for</classname></entry>
+                <entry><emphasis>value or object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>value or object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check set property</classname></entry>
 
-                  <entry><classname>check set property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry><classname>is not valid for</classname></entry>
 
-                  <entry><classname>is not valid for</classname></entry>
+                <entry><emphasis> value or object alias</emphasis></entry>
+              </row>
 
-                  <entry><emphasis> value or object alias</emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check clear property</classname></entry>
 
-                  <entry><classname>check clear property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                valid</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  valid</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check clear property</classname></entry>
 
-                  <entry><classname>check clear property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is not
+                valid</classname></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is not
-                  valid</classname></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>set property</classname></entry>
 
-                  <entry><classname>set property</classname></entry>
+                <entry><emphasis>property name</emphasis></entry>
 
-                  <entry><emphasis>property name</emphasis></entry>
+                <entry><classname> </classname></entry>
 
-                  <entry><classname> </classname></entry>
+                <entry><emphasis>value or object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>value or object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>clear property</classname></entry>
 
-                  <entry><classname>clear property</classname></entry>
+                <entry nameend="_6" namest="_4"><emphasis>property
+                name</emphasis><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_4"><emphasis>property
-                  name</emphasis><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis>alias for referenced object
+                </emphasis></entry>
 
-                  <entry><emphasis>alias for referenced object
-                  </emphasis></entry>
+                <entry><classname>get property</classname></entry>
 
-                  <entry><classname>get property</classname></entry>
+                <entry nameend="_6" namest="_4"><emphasis>property
+                name</emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_4"><emphasis>property
-                  name</emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis>alias for default object </emphasis></entry>
 
-                  <entry><emphasis>alias for default object
-                  </emphasis></entry>
+                <entry><classname>get property default</classname></entry>
 
-                  <entry><classname>get property default</classname></entry>
+                <entry nameend="_6" namest="_4"><emphasis>property
+                name</emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_4"><emphasis>property
-                  name</emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis>alias for list of choices</emphasis></entry>
 
-                  <entry><emphasis>alias for list of
-                  choices</emphasis></entry>
+                <entry><classname>get property choices</classname></entry>
 
-                  <entry><classname>get property choices</classname></entry>
+                <entry nameend="_6" namest="_4"><emphasis>property
+                name</emphasis><emphasis> </emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
 
-                  <entry nameend="_6" namest="_4"><emphasis>property
-                  name</emphasis><emphasis> </emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
+        <para>Obtaining a alias for the (value of) a property only makes sense
+        if the property is a reference type, not value type.</para>
 
-          <para>Obtaining a alias for the (value of) a property only makes
-          sense if the property is a reference type, not value type.</para>
+        <para>We likewise have a table for collections:</para>
 
-          <para>We likewise have a table for collections:</para>
+        <table>
+          <title>Supported Interactions for Collections</title>
 
-          <table>
-            <title>Supported Interactions for Collections</title>
+          <tgroup cols="6">
+            <colspec colname="_4" colnum="4" />
 
-            <tgroup cols="6">
-              <colspec colname="_4" colnum="4" />
+            <colspec colname="_5" />
 
-              <colspec colname="_5" />
+            <colspec colname="_6" />
 
-              <colspec colname="_6" />
+            <thead>
+              <row>
+                <entry align="center">on object</entry>
 
-              <thead>
-                <row>
-                  <entry align="center">on object</entry>
+                <entry align="center">alias as</entry>
 
-                  <entry align="center">alias as</entry>
+                <entry align="center">perform</entry>
 
-                  <entry align="center">perform</entry>
+                <entry align="center">using member</entry>
 
-                  <entry align="center">using member</entry>
+                <entry align="center">that it</entry>
 
-                  <entry align="center">that it</entry>
+                <entry align="center">reference</entry>
+              </row>
+            </thead>
 
-                  <entry align="center">reference</entry>
-                </row>
-              </thead>
+            <tbody>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-              <tbody>
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                hidden</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  hidden</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                visible</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  visible</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                disabled</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  disabled</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                enabled</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  enabled</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                empty</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  empty</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is not
+                empty</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is not
-                  empty</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis>alias for collection </emphasis></entry>
 
-                  <entry><emphasis>alias for collection </emphasis></entry>
+                <entry><classname>get collection</classname></entry>
 
-                  <entry><classname>get collection</classname></entry>
+                <entry nameend="_6" namest="_4"><emphasis>collection
+                name</emphasis><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_4"><emphasis>collection
-                  name</emphasis><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname>contains</classname></entry>
 
-                  <entry><classname>contains</classname></entry>
+                <entry><emphasis>object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check collection</classname></entry>
 
-                  <entry><classname>check collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname>does not contain</classname></entry>
 
-                  <entry><classname>does not contain</classname></entry>
+                <entry><emphasis>object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check add to collection</classname></entry>
 
-                  <entry><classname>check add to
-                  collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname>is valid for</classname></entry>
 
-                  <entry><classname>is valid for</classname></entry>
+                <entry><emphasis>object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check add to collection</classname></entry>
 
-                  <entry><classname>check add to
-                  collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname>is not valid for</classname></entry>
 
-                  <entry><classname>is not valid for</classname></entry>
+                <entry><emphasis>object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check remove from
+                collection</classname></entry>
 
-                  <entry><classname>check remove from
-                  collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname>is valid for</classname></entry>
 
-                  <entry><classname>is valid for</classname></entry>
+                <entry><emphasis>object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check remove from
+                collection</classname></entry>
 
-                  <entry><classname>check remove from
-                  collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname>is not valid for</classname></entry>
 
-                  <entry><classname>is not valid for</classname></entry>
+                <entry><emphasis>object alias</emphasis></entry>
+              </row>
 
-                  <entry><emphasis>object alias</emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>add to collection</classname></entry>
 
-                  <entry><classname>add to collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname> </classname></entry>
 
-                  <entry><classname> </classname></entry>
+                <entry><emphasis>object alias </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>object alias </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>remove from collection</classname></entry>
 
-                  <entry><classname>remove from collection</classname></entry>
+                <entry><emphasis>collection name</emphasis></entry>
 
-                  <entry><emphasis>collection name</emphasis></entry>
+                <entry><classname> </classname></entry>
 
-                  <entry><classname> </classname></entry>
+                <entry><emphasis> object alias</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
 
-                  <entry><emphasis> object alias</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
+        <para>Obtaining a reference to a collection allows objects to be
+        aliased from within it, using <xref
+        linkend="sec.AliasItemsInList" />.</para>
 
-          <para>Obtaining a reference to a collection allows objects to be
-          aliased from within it, using <xref
-          linkend="sec.AliasItemsInList" />.</para>
+        <para>Finally, we have a table for actions:</para>
 
-          <para>Finally, we have a table for actions:</para>
+        <table>
+          <title>Supported Interactions for Actions</title>
 
-          <table>
-            <title>Supported Interactions for Actions</title>
+          <tgroup cols="6">
+            <colspec colname="_5" colnum="5" />
 
-            <tgroup cols="6">
-              <colspec colname="_5" colnum="5" />
+            <colspec colname="_6" />
 
-              <colspec colname="_6" />
+            <thead>
+              <row>
+                <entry align="center">on object</entry>
 
-              <thead>
-                <row>
-                  <entry align="center">on object</entry>
+                <entry align="center">alias as</entry>
 
-                  <entry align="center">alias as</entry>
+                <entry align="center">perform</entry>
 
-                  <entry align="center">perform</entry>
+                <entry align="center">using member</entry>
 
-                  <entry align="center">using member</entry>
+                <entry align="center">that it</entry>
 
-                  <entry align="center">that it</entry>
+                <entry align="center">with arguments (one or more
+                cols)</entry>
+              </row>
+            </thead>
 
-                  <entry align="center">with arguments (one or more
-                  cols)</entry>
-                </row>
-              </thead>
+            <tbody>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-              <tbody>
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check action</classname></entry>
 
-                  <entry><classname>check action</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                hidden</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  hidden</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check action</classname></entry>
 
-                  <entry><classname>check action</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                visible</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  visible</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check action</classname></entry>
 
-                  <entry><classname>check action</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                disabled</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  disabled</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check action</classname></entry>
 
-                  <entry><classname>check action</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry nameend="_6" namest="_5"><classname>is
+                enabled</classname><emphasis> </emphasis></entry>
+              </row>
 
-                  <entry nameend="_6" namest="_5"><classname>is
-                  enabled</classname><emphasis> </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check action</classname></entry>
 
-                  <entry><classname>check action</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry><classname>is valid for</classname></entry>
 
-                  <entry><classname>is valid for</classname></entry>
+                <entry><emphasis>argument list </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>argument list </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis> </emphasis></entry>
 
-                  <entry><emphasis> </emphasis></entry>
+                <entry><classname>check action</classname></entry>
 
-                  <entry><classname>check action</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry><classname>is not valid for</classname></entry>
 
-                  <entry><classname>is not valid for</classname></entry>
+                <entry><emphasis>argument list </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>argument list </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis>alias for returned object </emphasis></entry>
 
-                  <entry><emphasis>alias for returned object
-                  </emphasis></entry>
+                <entry><classname>invoke action</classname></entry>
 
-                  <entry><classname>invoke action</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry><classname> </classname></entry>
 
-                  <entry><classname> </classname></entry>
+                <entry><emphasis>argument list </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>argument list </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis>alias for parameter defaut
+                </emphasis></entry>
 
-                  <entry><emphasis>alias for parameter defaut
-                  </emphasis></entry>
+                <entry><classname>get action default
+                parameter</classname></entry>
 
-                  <entry><classname>get action default
-                  parameter</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry><classname> </classname></entry>
 
-                  <entry><classname> </classname></entry>
+                <entry><emphasis>param number (0-based) </emphasis></entry>
+              </row>
 
-                  <entry><emphasis>param number (0-based) </emphasis></entry>
-                </row>
+              <row>
+                <entry><emphasis>object alias</emphasis></entry>
 
-                <row>
-                  <entry><emphasis>object alias</emphasis></entry>
+                <entry><emphasis>alias for list of parameter
+                choices</emphasis></entry>
 
-                  <entry><emphasis>alias for list of parameter
-                  choices</emphasis></entry>
+                <entry><classname>get action parameter
+                choices</classname></entry>
 
-                  <entry><classname>get action parameter
-                  choices</classname></entry>
+                <entry><emphasis>action name</emphasis></entry>
 
-                  <entry><emphasis>action name</emphasis></entry>
+                <entry><classname> </classname></entry>
 
-                  <entry><classname> </classname></entry>
+                <entry><emphasis>param number (0-based) </emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
 
-                  <entry><emphasis>param number (0-based) </emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </table>
+        <para>Note:</para>
 
-          <para>Note:</para>
+        <itemizedlist>
+          <listitem>
+            <para>the <acronym>API</acronym> provided by the common library is
+            not type-safe; the values (as provided in
+            <classname>ScenarioCell</classname>) must match the values given
+            here. While it is tempting to refactor the common library to use
+            type safe enums, this would move the need to translate scenario
+            text into each and every <acronym>BDD</acronym> framework
+            integration. The <acronym>API</acronym> is probably correct as it
+            is, even though it is reliant on the exact string phrases that
+            appear in the tables above.</para>
+          </listitem>
+        </itemizedlist>
 
-          <itemizedlist>
-            <listitem>
-              <para>the <acronym>API</acronym> provided by the common library
-              is not type-safe; the values (as provided in
-              <classname>StoryCell</classname>) must match the values given
-              here. While it is tempting to refactor the common library to use
-              type safe enums, this would move the need to translate story
-              text into each and every <acronym>BDD</acronym> framework
-              integration. The <acronym>API</acronym> is probably correct as
-              it is, even though it is reliant on the exact string phrases
-              that appear in the tables above.</para>
-            </listitem>
-          </itemizedlist>
+        <para>To actually perform, these interaction, the set</para>
 
-          <para>To actually perform, these interaction, the set</para>
+        <para></para>
 
-          <para></para>
+        <para>*** discuss captureCurrent()</para>
 
-          <para>*** discuss captureCurrent()</para>
+        <para></para>
 
-          <para></para>
+        <para>the <classname>UsingIsisViewerPeer</classname> provides the
+        following methods:</para>
 
-          <para>the <classname>UsingIsisViewerPeer</classname> provides the
-          following methods:</para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#validateOnObject():
+            ObjectAdapter</methodname></para>
 
-          <itemizedlist>
-            <listitem>
-              <para><methodname>#validateOnObject():
-              ObjectAdapter</methodname></para>
+            <para></para>
+          </listitem>
 
-              <para></para>
-            </listitem>
+          <listitem>
+            <para><methodname>#validateAliasAs(): String</methodname></para>
 
-            <listitem>
-              <para><methodname>#validateAliasAs(): String</methodname></para>
+            <para></para>
+          </listitem>
 
-              <para></para>
-            </listitem>
+          <listitem>
+            <para><methodname>#validateOnMember():
+            ObjectMember</methodname></para>
 
-            <listitem>
-              <para><methodname>#validateOnMember():
-              ObjectMember</methodname></para>
+            <para></para>
+          </listitem>
 
-              <para></para>
-            </listitem>
+          <listitem>
+            <para><methodname>#validatePerform(): Perform</methodname></para>
 
-            <listitem>
-              <para><methodname>#validatePerform():
-              Perform</methodname></para>
+            <para></para>
+          </listitem>
 
-              <para></para>
-            </listitem>
+          <listitem>
+            <para><methodname>#performCommand(ObjectAdapter onObject, String
+            aliasAs, ObjectMember onMember, Perform perform,
+            List&lt;ScenarioCell&gt; args)</methodname></para>
 
-            <listitem>
-              <para><methodname>#performCommand(ObjectAdapter onObject, String
-              aliasAs, ObjectMember onMember, Perform perform,
-              List&lt;StoryCell&gt; args)</methodname></para>
+            <para></para>
+          </listitem>
+        </itemizedlist>
 
-              <para></para>
-            </listitem>
-          </itemizedlist>
+        <para></para>
+      </sect2>
 
-          <para></para>
-        </sect3>
+      <sect2>
+        <title>Concordion</title>
 
-        <sect3>
-          <title>Concordion</title>
+        <para>The <emphasis>Concordion</emphasis> framework integration
+        provides a set of overloaded methods in
+        <classname>AbstractIsisConcordionScenario</classname> which call into
+        the <classname>UsingIsisViewerPeer</classname>:</para>
 
-          <para>The <emphasis>Concordion</emphasis> framework integration
-          provides a set of overloaded methods in
-          <classname>AbstractIsisConcordionStory</classname> which call into
-          the <classname>UsingIsisViewerPeer</classname>:</para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#usingIsisViewer(String onObject, String
+            aliasResultAs, String perform, String usingMember)
+            </methodname></para>
 
-          <itemizedlist>
-            <listitem>
-              <para><methodname>#usingIsisViewer(String onObject, String
-              aliasResultAs, String perform, String usingMember)
-              </methodname></para>
+            <para>For interactions that have no "that it" or arguments (eg
+            "get collectoin recentlyPlacedOrders")</para>
+          </listitem>
 
-              <para>For interactions that have no "that it" or arguments (eg
-              "get collectoin recentlyPlacedOrders")</para>
-            </listitem>
+          <listitem>
+            <para><methodname>#usingIsisViewerThat(String onObject, String
+            aliasResultAs, String perform, String usingMember, String
+            thatIt)</methodname></para>
 
-            <listitem>
-              <para><methodname>#usingIsisViewerThat(String onObject, String
-              aliasResultAs, String perform, String usingMember, String
-              thatIt)</methodname></para>
+            <para>For interactions that require a "that it" but no arguments
+            (eg, "check property firstName that it is hidden")</para>
+          </listitem>
 
-              <para>For interactions that require a "that it" but no arguments
-              (eg, "check property firstName that it is hidden")</para>
-            </listitem>
+          <listitem>
+            <para><methodname>#usingIsisViewerArgs(String onObject, String
+            aliasResultAs, String perform, String usingMember, String arg0,
+            String arg1, ...</methodname>)</para>
 
-            <listitem>
-              <para><methodname>#usingIsisViewerArgs(String onObject, String
-              aliasResultAs, String perform, String usingMember, String arg0,
-              String arg1, ...</methodname>)</para>
+            <para>For interactions that require arguments, but no "that it"
+            (eg "invoke action placeOrder with arguments arg1, arg2,
+            arg3").</para>
 
-              <para>For interactions that require arguments, but no "that it"
-              (eg "invoke action placeOrder with arguments arg1, arg2,
-              arg3").</para>
+            <para>There are multiple overloaded versions of this method taking
+            from 1 to 5 arguments.</para>
+          </listitem>
 
-              <para>There are multiple overloaded versions of this method
-              taking from 1 to 5 arguments.</para>
-            </listitem>
+          <listitem>
+            <para><methodname>#usingIsisViewerThatArgs(String onObject, String
+            aliasResultAs, String perform, String usingMember, String arg0,
+            String arg1, ...)</methodname></para>
 
-            <listitem>
-              <para><methodname>#usingIsisViewerThatArgs(String onObject,
-              String aliasResultAs, String perform, String usingMember, String
-              arg0, String arg1, ...)</methodname></para>
+            <para>For interactions that require a "that it" and also an
+            argumetn or arguments (eg "check action placeOrder is not valid
+            for arg1, arg2, arg3)</para>
 
-              <para>For interactions that require a "that it" and also an
-              argumetn or arguments (eg "check action placeOrder is not valid
-              for arg1, arg2, arg3)</para>
+            <para>There are multiple overloaded versions of this method taking
+            from 1 to 5 arguments.</para>
+          </listitem>
+        </itemizedlist>
 
-              <para>There are multiple overloaded versions of this method
-              taking from 1 to 5 arguments.</para>
-            </listitem>
-          </itemizedlist>
+        <para>If there is a requirement for more than 5 arguments, then you
+        can write your own method and delegate to the (protected visibility)
+        <methodname>#usingIsisViewerThatArgsVarargs(...)</methodname>
+        method.</para>
 
-          <para>If there is a requirement for more than 5 arguments, then you
-          can write your own method and delegate to the (protected visibility)
-          <methodname>#usingIsisViewerThatArgsVarargs(...)</methodname>
-          method.</para>
+        <para>In all cases these methods return the string "ok", or return the
+        text of an exception otherwise. This makes them easy to embed</para>
 
-          <para>In all cases these methods return the string "ok", or return
-          the text of an exception otherwise. This makes them easy to
-          embed</para>
+        <para>Returns ok</para>
 
-          <para>Returns ok</para>
+        <para></para>
 
-          <para></para>
+        <para>Note that this method should be called from the
+        <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>, not
+        with concordion:execute. See <xref
+        linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
+        details.</para>
 
-          <para>Note that this method should be called from the
-          <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>,
-          not with concordion:execute. See <xref
-          linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
-          details.</para>
+        <para>For example, calling inline:</para>
 
-          <para>For example, calling inline:</para>
-
-          <programlisting>&lt;p
+        <programlisting>&lt;p
   isis:execute="#result=usingIsisViewer(#onObject,#aliasResultAs, #perform, #usingMember)"&gt;
   With the &lt;span concordion:set="#onObject"&gt;employees&lt;/span&gt; service, &lt;span
   concordion:set="#perform"&gt;invoke action&lt;/span&gt; &lt;span
@@ -2268,11 +2507,11 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
   concordion:assertEquals="#result"&gt;ok&lt;/span&gt;
 &lt;/p&gt;</programlisting>
 
-          <para></para>
+        <para></para>
 
-          <para>The method can also be called within a table:</para>
+        <para>The method can also be called within a table:</para>
 
-          <programlisting>&lt;table
+        <programlisting>&lt;table
  isis:execute="#result=usingIsisViewerThatArgs(#onObject, #aliasResultAs, #perform, #onMember, #thatIt, #value)"&gt;
   &lt;tr&gt;
     &lt;th concordion:set="#onObject"&gt;on object&lt;/th&gt;
@@ -2294,350 +2533,417 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
   &lt;/tr&gt;
 &lt;/table&gt;</programlisting>
 
-          <para></para>
+        <para></para>
 
-          <para></para>
+        <para></para>
 
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-
-          <para></para>
-
-          <informaltable>
-            <tgroup cols="5">
-              <colspec colname="_1" />
-
-              <colspec colname="_2" />
-
-              <colspec />
-
-              <colspec />
-
-              <colspec colname="_3" />
-
-              <tbody>
-                <row>
-                  <entry><classname>Using Isis Viewer</classname></entry>
-
-                  <entry></entry>
-
-                  <entry></entry>
-
-                  <entry></entry>
-
-                  <entry nameend="_3"
-                  namest="_2"><emphasis></emphasis></entry>
-                </row>
-
-                <row>
-                  <entry><classname>On Object</classname></entry>
-
-                  <entry><classname>Alias Result As</classname></entry>
-
-                  <entry>Perform</entry>
-
-                  <entry></entry>
-
-                  <entry><classname>alias as</classname></entry>
-                </row>
-
-                <row>
-                  <entry><emphasis>Fred Smith</emphasis></entry>
-
-                  <entry><emphasis> </emphasis></entry>
-
-                  <entry></entry>
-
-                  <entry></entry>
-
-                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
-                </row>
-
-                <row>
-                  <entry><emphasis>Tom Brown</emphasis></entry>
-
-                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
-
-                  <entry></entry>
-
-                  <entry></entry>
-
-                  <entry><emphasis>Employee:Tom Brown</emphasis></entry>
-                </row>
-
-                <row>
-                  <entry><emphasis>Sam Jones</emphasis></entry>
-
-                  <entry><emphasis>Employee:Fred Smith</emphasis></entry>
-
-                  <entry></entry>
-
-                  <entry></entry>
-
-                  <entry><emphasis>Employee:Sam Jones</emphasis></entry>
-                </row>
-              </tbody>
-            </tgroup>
-          </informaltable>
-
-          <para></para>
-        </sect3>
+        <para></para>
       </sect2>
 
-      <sect2 id="sec.CheckList">
-        <title>Check List</title>
-
-        <para>Check items in list, either precisely or just for presence,
-        using their title. Lists are either aliased results of actions, or
-        aliased collections within objects.</para>
-
-        <para>Typically used in the "Then", though can be helpful as a way of
-        confirming/documenting a "Given".</para>
-
-        <para>See also <classname>AliasItemsInList</classname> (<xref
-        linkend="sec.AliasItemsInList" />), which also performs an implicit
-        check (will fail if the objects are not in the list) and aliases them
-        for further use.</para>
+      <sect2>
+        <title>FitNesse</title>
 
         <para></para>
 
-        <sect3>
-          <title>Common</title>
+        <para></para>
 
-          <para></para>
+        <informaltable>
+          <tgroup cols="5">
+            <colspec colname="_1" />
 
-          <para></para>
-        </sect3>
+            <colspec colname="_2" />
 
-        <sect3>
-          <title>Concordion</title>
+            <colspec />
 
-          <para></para>
+            <colspec />
 
-          <para></para>
-        </sect3>
+            <colspec colname="_3" />
 
-        <sect3>
-          <title>FitNesse</title>
+            <tbody>
+              <row>
+                <entry><classname>Using Isis Viewer</classname></entry>
 
-          <para></para>
+                <entry></entry>
 
-          <para></para>
-        </sect3>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_3" namest="_2"><emphasis></emphasis></entry>
+              </row>
+
+              <row>
+                <entry><classname>On Object</classname></entry>
+
+                <entry><classname>Alias Result As</classname></entry>
+
+                <entry>Perform</entry>
+
+                <entry></entry>
+
+                <entry><classname>alias as</classname></entry>
+              </row>
+
+              <row>
+                <entry><emphasis>Fred Smith</emphasis></entry>
+
+                <entry><emphasis> </emphasis></entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+              </row>
+
+              <row>
+                <entry><emphasis>Tom Brown</emphasis></entry>
+
+                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry><emphasis>Employee:Tom Brown</emphasis></entry>
+              </row>
+
+              <row>
+                <entry><emphasis>Sam Jones</emphasis></entry>
+
+                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry><emphasis>Employee:Sam Jones</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+
+        <para></para>
+      </sect2>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.AssertingOnCollections">
+    <title>Asserting on Collections</title>
+
+    <abstract>
+      <para>***</para>
+    </abstract>
+
+    <para></para>
+
+    <sect1 id="sec.CheckListIsEmpty">
+      <title>Check List Is Empty / Check List Is Not Empty</title>
+
+      <para></para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+
+        <para></para>
       </sect2>
 
-      <sect2 id="sec.AliasItemsInList">
-        <title>Alias Items In List</title>
-
-        <para>Allows an alias to be associated with items in a list. The list
-        items are located by their title, and are presumed to exist. This
-        fixture can therefore also be used as a way of checking for presence
-        of items in a list (similar to <classname>CheckList</classname>, <xref
-        linkend="sec.CheckList" />).</para>
-
-        <para>Typically used both in the "Given" (to simplify writing the rest
-        of a test).</para>
+      <sect2>
+        <title>Concordion</title>
 
         <para></para>
 
         <para></para>
+      </sect2>
 
-        <sect3>
-          <title>Common</title>
+      <sect2>
+        <title>FitNesse</title>
 
-          <para></para>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-
-          <para></para>
-        </sect3>
+        <para>Not yet implemented.</para>
       </sect2>
     </sect1>
 
-    <sect1 id="sec.Debugging">
-      <title>Debugging</title>
+    <sect1 id="sec.CheckListContains">
+      <title>Check List Contains / Check List Does Not Contain</title>
 
-      <para>Debugging and diagnostics. Useful for checking setup, for
-      example.</para>
+      <para></para>
 
-      <sect2 id="sec.DebugServices">
-        <title>Debugging Services</title>
+      <sect2>
+        <title>Common</title>
 
-        <para>Lists service class names, as picked up from configuration.
-        Useful with AliasServices (see <xref
-        linkend="sec.AliasServices" />).</para>
+        <para></para>
 
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-        </sect3>
+        <para></para>
       </sect2>
 
-      <sect2 id="sec.DebugClock">
-        <title>Debugging the Clock</title>
+      <sect2>
+        <title>Concordion</title>
 
-        <para>Reads the current value of the clock. Useful for debugging and
-        diagnostics.</para>
+        <para></para>
 
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-        </sect3>
+        <para></para>
       </sect2>
 
-      <sect2 id="sec.DebugObjectStore">
-        <title>Debugging the Object Store</title>
+      <sect2>
+        <title>FitNesse</title>
 
-        <para>Dumps the contents of the object store. Useful for debugging
-        setup (through SetupObjects, <xref linkend="sec.SetUpObjects" />, and
-        UsingNakedObjectsViewerForSetup, <xref
-        linkend="sec.UsingIsisViewer" />).</para>
-
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-        </sect3>
-      </sect2>
-
-      <sect2 id="sec.CheckSpecificationsLoaded">
-        <title>Check Specifications Loaded</title>
-
-        <para>Verifies that listed <classname>ObjectSpecification</classname>s
-        have been loaded into the metamodel</para>
-
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-        </sect3>
-      </sect2>
-
-      <sect2 id="sec.RunViewer">
-        <title>Run Viewer</title>
-
-        <para>Runs up the DnD viewer with the current state of the objects.
-        This is a great way to inspect the state of the system, for example if
-        a test is failing and you can't see why.</para>
-
-        <sect3>
-          <title>Common</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>Concordion</title>
-
-          <para></para>
-        </sect3>
-
-        <sect3>
-          <title>FitNesse</title>
-
-          <para></para>
-        </sect3>
+        <para>Not yet implemented.</para>
       </sect2>
     </sect1>
 
-    <sect1>
-      <title>Tear Down</title>
+    <sect1 id="sec.CheckListSize">
+      <title>Check List Size</title>
 
-      <para>The opposite of setting up...</para>
+      <para></para>
 
-      <sect2 id="sec.ShutdownIsis">
-        <title>Shutdown Isis</title>
+      <sect2>
+        <title>Common</title>
 
-        <para>This fixture shuts down the Naked Objects runtime, releasing
-        memory and so on. A good place to put this is in the test's
-        teardown.</para>
+        <para></para>
 
-        <sect3>
-          <title>Common</title>
+        <para></para>
+      </sect2>
 
-          <para></para>
-        </sect3>
+      <sect2>
+        <title>Concordion</title>
 
-        <sect3>
-          <title>Concordion</title>
+        <para></para>
 
-          <para></para>
-        </sect3>
+        <para></para>
+      </sect2>
 
-        <sect3>
-          <title>FitNesse</title>
+      <sect2>
+        <title>FitNesse</title>
 
-          <para></para>
-        </sect3>
+        <para>Not yet implemented.</para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.CheckList">
+      <title>Check List</title>
+
+      <para>Check items in list, either precisely or just for presence, using
+      their title. Lists are either aliased results of actions, or aliased
+      collections within objects.</para>
+
+      <para>Typically used in the "Then", though can be helpful as a way of
+      confirming/documenting a "Given".</para>
+
+      <para>See also <classname>AliasItemsInList</classname> (<xref
+      linkend="sec.AliasItemsInList" />), which also performs an implicit
+      check (will fail if the objects are not in the list) and aliases them
+      for further use.</para>
+
+      <para></para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.AliasItemsInList">
+      <title>Alias Items In List</title>
+
+      <para>Allows an alias to be associated with items in a list. The list
+      items are located by their title, and are presumed to exist. This
+      fixture can therefore also be used as a way of checking for presence of
+      items in a list (similar to <classname>CheckList</classname>, <xref
+      linkend="sec.CheckList" />).</para>
+
+      <para>Typically used both in the "Given" (to simplify writing the rest
+      of a test).</para>
+
+      <para></para>
+
+      <para></para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para></para>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.VerifyRows">
+      <title>Concordion's VerifyRows (Concordion only)</title>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+  </chapter>
+
+  <chapter id="chp.Debugging">
+    <title>Debugging</title>
+
+    <para>Debugging and diagnostics. Useful for checking setup, for
+    example.</para>
+
+    <sect1 id="sec.DebugServices">
+      <title>Debugging Services</title>
+
+      <para>Lists service class names, as picked up from configuration. Useful
+      with AliasServices (see <xref linkend="sec.AliasServices" />).</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.DebugClock">
+      <title>Debugging the Clock</title>
+
+      <para>Reads the current value of the clock. Useful for debugging and
+      diagnostics.</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.DebugObjectStore">
+      <title>Debugging the Object Store</title>
+
+      <para>Dumps the contents of the object store. Useful for debugging setup
+      (through SetupObjects, <xref linkend="sec.SetUpObjects" />, and
+      UsingNakedObjectsViewerForSetup, <xref
+      linkend="sec.UsingIsisViewer" />).</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.CheckSpecificationsLoaded">
+      <title>Check Specifications Loaded</title>
+
+      <para>Verifies that listed <classname>ObjectSpecification</classname>s
+      have been loaded into the metamodel</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para></para>
+      </sect2>
+    </sect1>
+
+    <sect1 id="sec.RunViewer">
+      <title>Run Viewer</title>
+
+      <para>Runs up the DnD viewer with the current state of the objects. This
+      is a great way to inspect the state of the system, for example if a test
+      is failing and you can't see why.</para>
+
+      <sect2>
+        <title>Common</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>Concordion</title>
+
+        <para></para>
+      </sect2>
+
+      <sect2>
+        <title>FitNesse</title>
+
+        <para></para>
       </sect2>
     </sect1>
   </chapter>
@@ -2658,10 +2964,11 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <title>Separate In-Progress Stories from the Backlog</title>
 
       <para>If you are using an agile methodology then you will be
-      implementing a number of stories per iteration; the remainder will be in
-      a backlog. When you select a story for implementation, create a new page
-      for it in a "CurrentIteration" suite. The objective for the team is
-      therefore to get the entire CurrentIteration suite green.</para>
+      implementing the scenarios for a number of stories per iteration; the
+      remainder will be in a backlog. When you select a scenario for
+      implementation, create a new page for it in a "CurrentIteration" suite.
+      The objective for the team is therefore to get the entire
+      CurrentIteration suite green.</para>
 
       <para>Other stories that you may have identified but not selected for
       the iteration can remain in a Backlog suite.</para>
@@ -2671,11 +2978,11 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <title>Use a Story Page to Collect A Set of Scenario Tests</title>
 
       <para>Part of estimating the size of a story includes identifying the
-      acceptance criteria. These can be created as children of the story page
-      as placeholders, so that the story page becomes a suite. The child
-      scenario tests can be fleshed out as required with plain text during the
-      estimation meeting, and with actual tests once the iteration
-      starts.</para>
+      acceptance criteria for each of its scenarios. These can be created as
+      children of the story page as placeholders, so that the story page
+      becomes a suite. The child scenario tests can be fleshed out as required
+      with plain text during the estimation meeting, and with actual tests
+      once the iteration starts.</para>
 
       <para></para>
 
@@ -2685,8 +2992,11 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <sect2>
         <title>Concordion</title>
 
-        <para>Use the &lt;a href="ScenarioStory.html"
-        concordion:run="concordion"&gt;some sub story&lt;/a&gt;</para>
+        <para>Use the &lt;a href="ScenarioHappyCase.html"
+        concordion:run="concordion"&gt;happy case&lt;/a&gt;</para>
+
+        <para>Use the &lt;a href="ScenarioNoFundsAvailable.html"
+        concordion:run="concordion"&gt;no funds available&lt;/a&gt;</para>
 
         <para></para>
       </sect2>
@@ -2701,6 +3011,16 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       </sect2>
     </sect1>
 
+    <sect1>
+      <title>Factor our common fixtures</title>
+
+      <para>Fixtures.html (group of scenarios)</para>
+
+      <para></para>
+
+      <para></para>
+    </sect1>
+
     <sect1 id="sec.TopLevelSuitePage">
       <title>Use a Top-Level Suite Page to Collect a Set of Stories</title>
 
@@ -2710,13 +3030,13 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <sect1>
       <title>Organize Completed Stories by Component</title>
 
-      <para>Once you have completed an iteration and implements its stories,
-      move those stories out to the relevant component that the story relates
-      to. The scenario tests for stories ultimately <emphasis>are</emphasis>
-      the documentation of the behaviour of the system. A year on you won't
-      remember (and won't care) which iteration you implemented a story,
-      you'll be searching for it by the component whose behaviour you want to
-      understand.</para>
+      <para>Once you have completed an iteration and implements all the
+      scenarios of a particular story, move that story out to the relevant
+      component that the story relates to. The scenario tests for stories
+      ultimately <emphasis>are</emphasis> the documentation of the behaviour
+      of the system. A year on you won't remember (and won't care) which
+      iteration you implemented a scenario, you'll be searching for it by the
+      component whose behaviour you want to understand.</para>
     </sect1>
 
     <sect1>
@@ -3064,7 +3384,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <para>The XMLMind editor understands the structure of
       <acronym>XHTML</acronym> documents, and will only let you enter content
       where it is valid to do so. What you can do (in terms of edits)
-      therefore depends on where you are in the document. </para>
+      therefore depends on where you are in the document.</para>
 
       <para>Use <emphasis>Select &gt; Select Parent</emphasis>
       (<command>ctrl+up</command>) to successively select larger segments of
@@ -3163,19 +3483,19 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           </listitem>
 
           <listitem>
-            <para><literal>table (head_column)</literal> </para>
+            <para><literal>table (head_column)</literal></para>
 
             <para>to include a header column (on the left hand side)</para>
           </listitem>
 
           <listitem>
-            <para><literal>table (head_row)</literal> </para>
+            <para><literal>table (head_row)</literal></para>
 
             <para>to include a header row</para>
           </listitem>
 
           <listitem>
-            <para><literal>table (head_row_column)</literal> </para>
+            <para><literal>table (head_row_column)</literal></para>
 
             <para>to include a header row and column</para>
           </listitem>
@@ -3193,7 +3513,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/xmlmind-emptytable.png" scale="40" />
+            <imagedata fileref="images/xmlmind-emptytable.png" scale="70" />
           </imageobject>
         </mediaobject>
 
@@ -3201,7 +3521,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/xmlmind-xhtmlmenu.png" scale="40" />
+            <imagedata fileref="images/xmlmind-xhtmlmenu.png" scale="50" />
           </imageobject>
         </mediaobject>
       </sect2>
@@ -3243,7 +3563,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/xmlmind-editwrap-result.png"
-                       scale="40" />
+                       scale="100" />
           </imageobject>
         </mediaobject>
       </sect2>
@@ -3374,7 +3694,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
       <mediaobject>
         <imageobject>
-          <imagedata fileref="images/xmlmind-css.png" scale="40" />
+          <imagedata fileref="images/xmlmind-css.png" scale="80" />
         </imageobject>
       </mediaobject>
     </sect1>

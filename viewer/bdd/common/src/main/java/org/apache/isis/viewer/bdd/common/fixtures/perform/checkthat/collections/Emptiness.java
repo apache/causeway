@@ -2,7 +2,7 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.AssertsEmpty;
 
@@ -18,7 +18,7 @@ public class Emptiness extends ThatAbstract {
 	@Override
 	protected void doThat(final PerformContext performContext,
 			final Iterable<ObjectAdapter> collection)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 
 		boolean empty = true;
 		for (@SuppressWarnings("unused")
@@ -29,7 +29,7 @@ public class Emptiness extends ThatAbstract {
 		if (!assertion.isSatisfiedBy(empty)) {
 			CellBinding thatItBinding = performContext.getPeer()
 					.getThatItBinding();
-			throw StoryBoundValueException.current(thatItBinding, assertion
+			throw ScenarioBoundValueException.current(thatItBinding, assertion
 					.getErrorMsgIfNotSatisfied());
 		}
 	}

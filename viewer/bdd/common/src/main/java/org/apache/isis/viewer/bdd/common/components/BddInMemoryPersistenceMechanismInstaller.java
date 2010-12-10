@@ -4,10 +4,10 @@ import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller;
 
-public class StoryInMemoryPersistenceMechanismInstaller extends
+public class BddInMemoryPersistenceMechanismInstaller extends
         InMemoryPersistenceMechanismInstaller {
 
-    public StoryInMemoryPersistenceMechanismInstaller() {}
+    public BddInMemoryPersistenceMechanismInstaller() {}
 
     // ///////////////////////////////////////////////////////////////
     // Name
@@ -15,7 +15,7 @@ public class StoryInMemoryPersistenceMechanismInstaller extends
 
     @Override
     public String getName() {
-        return "story";
+        return "bdd";
     }
 
     // ///////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ public class StoryInMemoryPersistenceMechanismInstaller extends
     @Override
     public PersistenceSessionFactory createPersistenceSessionFactory(
             final DeploymentType deploymentType) {
-        return new StoryInMemoryPersistenceSessionFactory(deploymentType,
+        return new BddInMemoryPersistenceSessionFactory(deploymentType,
                 this);
     }
 

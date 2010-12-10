@@ -3,13 +3,13 @@ package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.viewer.IsisViewer;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
-import org.apache.isis.viewer.bdd.common.Story;
+import org.apache.isis.viewer.bdd.common.Scenario;
 
 public class StartClient extends AbstractHelper {
 
     private static final String DND_VIEWER_NAME = "dnd";
 
-    public StartClient(final Story story) {
+    public StartClient(final Scenario story) {
         super(story);
     }
 

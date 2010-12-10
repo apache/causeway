@@ -5,11 +5,11 @@ package org.apache.isis.viewer.bdd.common;
  * Simply holds the text.
  * 
  */
-public class StoryCellDefault implements StoryCell {
+public class ScenarioCellDefault implements ScenarioCell {
 
     private String source;
 
-    public StoryCellDefault(String source) {
+    public ScenarioCellDefault(String source) {
         this.source = source;
     }
 

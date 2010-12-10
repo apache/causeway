@@ -5,8 +5,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 public class AliasItemsInListPeer extends AbstractListFixturePeer {
 
@@ -38,13 +38,13 @@ public class AliasItemsInListPeer extends AbstractListFixturePeer {
 		return aliasBinding;
 	}
 
-	public StoryCell findAndAlias() throws StoryBoundValueException {
+	public ScenarioCell findAndAlias() throws ScenarioBoundValueException {
     	ObjectAdapter foundAdapter = findAdapter();
         if (foundAdapter == null) {
-        	throw StoryBoundValueException.current(titleBinding, "not found");
+        	throw ScenarioBoundValueException.current(titleBinding, "not found");
         }
         
-        StoryCell currentCell = aliasBinding.getCurrentCell();
+        ScenarioCell currentCell = aliasBinding.getCurrentCell();
 		String currentCellText = currentCell.getText();
 		getAliasRegistry().aliasAs(currentCellText, foundAdapter);
 		return currentCell;

@@ -2,7 +2,7 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.object;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
 
@@ -12,11 +12,11 @@ public class Valid extends ThatSubcommandAbstract {
         super("is valid", "valid");
     }
 
-    public ObjectAdapter that(final PerformContext performContext) throws StoryBoundValueException {
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         if (!performContext.validObjectConsent().isAllowed()) {
         	CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
-        	throw StoryBoundValueException.current(thatItBinding, "(not valid)");
+        	throw ScenarioBoundValueException.current(thatItBinding, "(not valid)");
         }
 
         return null;

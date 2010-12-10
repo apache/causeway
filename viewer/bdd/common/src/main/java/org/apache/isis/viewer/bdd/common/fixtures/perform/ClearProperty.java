@@ -6,7 +6,7 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFace
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 
 public class ClearProperty extends PerformAbstractTypeParams {
 
@@ -18,7 +18,7 @@ public class ClearProperty extends PerformAbstractTypeParams {
 
 	@Override
 	public void doHandle(final PerformContext performContext)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 
 		final ObjectAdapter onAdapter = performContext.getOnAdapter();
 		final ObjectMember nakedObjectMember = performContext
@@ -31,14 +31,14 @@ public class ClearProperty extends PerformAbstractTypeParams {
 				.getFacet(PropertyClearFacet.class);
 		CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
 		if (clearFacet == null) {
-			throw StoryBoundValueException
+			throw ScenarioBoundValueException
 					.current(thatItBinding, "(cannot clear)");
 		}
 
 		// validate setting to null
 		final Consent validConsent = otoa.isAssociationValid(onAdapter, null);
 		if (validConsent.isVetoed()) {
-			throw StoryBoundValueException.current(thatItBinding, validConsent
+			throw ScenarioBoundValueException.current(thatItBinding, validConsent
 					.getReason());
 		}
 

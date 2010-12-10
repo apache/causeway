@@ -10,8 +10,8 @@ public abstract class CellBinding {
     private boolean found = false;
     private int column = -1;
 
-    private StoryCell headCell = null;
-    private StoryCell currentCell;
+    private ScenarioCell headCell = null;
+    private ScenarioCell currentCell;
 
     private final String name;
     private final List<String> headTexts;
@@ -51,7 +51,7 @@ public abstract class CellBinding {
         return autoCreate;
     }
 
-    private void ditto(final StoryCell previousCell) {
+    private void ditto(final ScenarioCell previousCell) {
         copy(previousCell, getCurrentCell());
     }
 
@@ -96,7 +96,7 @@ public abstract class CellBinding {
     /**
      * For the BDD framework integration to indicate that the head cell has been found.
      */
-    public void setHeadColumn(final int column, final StoryCell headCell) {
+    public void setHeadColumn(final int column, final ScenarioCell headCell) {
         this.found = true;
         setColumnAndHeadCell(column, headCell);
     }
@@ -104,7 +104,7 @@ public abstract class CellBinding {
     /**
      * For the BDD framework integration to indicate that the head cell was not found and has been created.
      */
-    public void createHeadCell(final int column, final StoryCell headCell) {
+    public void createHeadCell(final int column, final ScenarioCell headCell) {
         setColumnAndHeadCell(column, headCell);
     }
 
@@ -125,11 +125,11 @@ public abstract class CellBinding {
     /**
      * The head cell with the text, if any.
      */
-    public StoryCell getHeadCell() {
+    public ScenarioCell getHeadCell() {
         return headCell;
     }
 
-    private void setColumnAndHeadCell(final int column, final StoryCell headCell) {
+    private void setColumnAndHeadCell(final int column, final ScenarioCell headCell) {
         this.column = column;
         this.headCell = headCell;
     }
@@ -137,14 +137,14 @@ public abstract class CellBinding {
     /**
      * Holds onto a current (body) cell.
      */
-    public StoryCell getCurrentCell() {
+    public ScenarioCell getCurrentCell() {
         return currentCell;
     }
 
     /**
      * @see #getCurrentCell()
      */
-    public void setCurrentCell(final StoryCell cell) {
+    public void setCurrentCell(final ScenarioCell cell) {
         this.currentCell = cell;
     }
 
@@ -155,12 +155,12 @@ public abstract class CellBinding {
     private boolean dittoed;
 
     /**
-     * Captures the current value, but also checking that the column in which the {@link StoryCell value} has been
+     * Captures the current value, but also checking that the column in which the {@link ScenarioCell value} has been
      * provided corresponds to the {@link #getColumn() column} of this binding.
      * 
-     * @see #captureCurrent(StoryCell)
+     * @see #captureCurrent(ScenarioCell)
      */
-    public void captureCurrent(final StoryCell cell, final int column) {
+    public void captureCurrent(final ScenarioCell cell, final int column) {
         if (column != getColumn()) {
             return;
         }
@@ -168,13 +168,13 @@ public abstract class CellBinding {
     }
 
     /**
-     * Captures the current {@link StoryCell value} for this binding.
+     * Captures the current {@link ScenarioCell value} for this binding.
      * 
      * <p>
      * For implementations where we already know that the value provided is for this particular binding.
      */
-    public void captureCurrent(final StoryCell cell) {
-        final StoryCell previousCell = getCurrentCell();
+    public void captureCurrent(final ScenarioCell cell) {
+        final ScenarioCell previousCell = getCurrentCell();
         setCurrentCell(cell);
         boolean shouldDitto = StringUtils.emptyString(cell.getText());
         boolean canDitto = isDitto() && previousCell != null;
@@ -187,13 +187,13 @@ public abstract class CellBinding {
     }
 
     /**
-     * Whether the most recent call to {@link #captureCurrent(StoryCell)} resulted in a ditto.
+     * Whether the most recent call to {@link #captureCurrent(ScenarioCell)} resulted in a ditto.
      */
     public boolean isDittoed() {
         return dittoed;
     }
 
-    protected abstract void copy(final StoryCell from, StoryCell to);
+    protected abstract void copy(final ScenarioCell from, ScenarioCell to);
 
     // ///////////////////////////////////////////////////////////////
     // toString

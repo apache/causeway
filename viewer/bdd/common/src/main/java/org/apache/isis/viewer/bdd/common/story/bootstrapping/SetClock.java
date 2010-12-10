@@ -4,11 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.isis.applib.fixtures.FixtureClock;
-import org.apache.isis.viewer.bdd.common.Story;
+import org.apache.isis.viewer.bdd.common.Scenario;
 
 public class SetClock extends AbstractHelper {
 
-    public SetClock(final Story story) {
+    public SetClock(final Scenario story) {
         super(story);
     }
 

@@ -3,11 +3,11 @@ package net.sf.isiscontrib.bdd.fitnesse.internal;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.StoryCellForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.ScenarioCellForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
 
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.AbstractFixturePeer;
 
 import fit.Fixture;
@@ -71,7 +71,7 @@ public abstract class AbstractFixture<T extends AbstractFixturePeer> extends Fix
     @Override
     public void doCell(final Parse cell, final int column) {
         for (final CellBinding binding : getPeer().getCellBindings()) {
-            binding.captureCurrent(new StoryCellForFitNesse(cell), column);
+            binding.captureCurrent(new ScenarioCellForFitNesse(cell), column);
         }
     }
 
@@ -105,7 +105,7 @@ public abstract class AbstractFixture<T extends AbstractFixturePeer> extends Fix
         rowToAdd.more = nextRow;
     }
 
-    protected void right(StoryCell storyValue) {
+    protected void right(ScenarioCell storyValue) {
         right(FitnesseUtil.asParse(storyValue));
     }
 

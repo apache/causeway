@@ -6,7 +6,7 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.CellBindingForFitNesse;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.DebugClockPeer;
 
 import fit.Fixture;
@@ -37,7 +37,7 @@ public class DebugClockForFitNesse extends AbstractFixture<DebugClockPeer> {
         return getPeer().getFormattedClockTime();
     }
 
-    private StoryCell getCurrentCell() {
+    private ScenarioCell getCurrentCell() {
         return getPeer().getCurrentCell();
     }
 

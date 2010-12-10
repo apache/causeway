@@ -10,9 +10,9 @@ import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.CellBindingDefault;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
-import org.apache.isis.viewer.bdd.common.StoryCellDefault;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
+import org.apache.isis.viewer.bdd.common.ScenarioCellDefault;
 import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
@@ -96,15 +96,15 @@ public class UsingIsisViewerForConcordion extends
 	    final List<String> argumentCells = new ArrayList<String>();
 
 		// capture current
-		getPeer().getOnObjectBinding().captureCurrent(new StoryCellDefault(onObject));
-		getPeer().getAliasResultAsBinding().captureCurrent(new StoryCellDefault(aliasResultAs));
-		getPeer().getPerformBinding().captureCurrent(new StoryCellDefault(perform));
-		getPeer().getOnMemberBinding().captureCurrent(new StoryCellDefault(usingMember));
+		getPeer().getOnObjectBinding().captureCurrent(new ScenarioCellDefault(onObject));
+		getPeer().getAliasResultAsBinding().captureCurrent(new ScenarioCellDefault(aliasResultAs));
+		getPeer().getPerformBinding().captureCurrent(new ScenarioCellDefault(perform));
+		getPeer().getOnMemberBinding().captureCurrent(new ScenarioCellDefault(usingMember));
 		if (getPeer().getThatItBinding().isFound()) {
-			getPeer().getThatItBinding().captureCurrent(new StoryCellDefault(thatIt));
+			getPeer().getThatItBinding().captureCurrent(new ScenarioCellDefault(thatIt));
 		}
 		if (getPeer().getArg0Binding().isFound()) {
-			getPeer().getArg0Binding().captureCurrent(new StoryCellDefault(arg0));
+			getPeer().getArg0Binding().captureCurrent(new ScenarioCellDefault(arg0));
 			argumentCells.add(arg0);
 		}
 		for (String arg: remainingArgs) {
@@ -114,14 +114,14 @@ public class UsingIsisViewerForConcordion extends
 		// execute
 		try {
 			execute(argumentCells);
-		} catch (StoryBoundValueException ex) {
+		} catch (ScenarioBoundValueException ex) {
 			return ex.getMessage();
 		}
 		
 		return "ok";
 	}
 
-	private void execute(final List<String> argumentCells) throws StoryBoundValueException {
+	private void execute(final List<String> argumentCells) throws ScenarioBoundValueException {
 
 		ObjectAdapter onAdapter = getPeer().validateOnObject();
 		String aliasAs = getPeer().validateAliasAs();
@@ -135,10 +135,10 @@ public class UsingIsisViewerForConcordion extends
 		getPeer().performCommand(onAdapter, aliasAs, objectMember, performCommand, asValues(argumentCells));
 	}
 
-	private static List<StoryCell> asValues(List<String> argumentCells) {
-		List<StoryCell> storyValues = Lists.newArrayList();
+	private static List<ScenarioCell> asValues(List<String> argumentCells) {
+		List<ScenarioCell> storyValues = Lists.newArrayList();
 		for (String arg : argumentCells) {
-			storyValues.add(new StoryCellDefault(arg));
+			storyValues.add(new ScenarioCellDefault(arg));
 		}
 		return storyValues;
 	}

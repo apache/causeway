@@ -7,8 +7,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
@@ -20,14 +20,14 @@ public class Contains extends ThatSubcommandAbstract {
     }
 
     @Override
-    public ObjectAdapter that(final PerformContext performContext) throws StoryBoundValueException {
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final OneToOneAssociation otoa = (OneToOneAssociation) performContext
                 .getObjectMember();
 
         // if we have an expected result
         CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-		final StoryCell arg0Cell = arg0Binding.getCurrentCell();
+		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
 		final String expected = arg0Cell.getText();
 
         // get
@@ -39,7 +39,7 @@ public class Contains extends ThatSubcommandAbstract {
             if (StringUtils.emptyString(expected)) {
                 return resultAdapter;
             }
-            throw StoryBoundValueException.current(arg0Binding, "(is null)");
+            throw ScenarioBoundValueException.current(arg0Binding, "(is null)");
         }
 
         final String resultTitle = resultAdapter.titleString();
@@ -53,7 +53,7 @@ public class Contains extends ThatSubcommandAbstract {
                 if (resultAdapter == expectedAdapter) {
                     return resultAdapter;
                 }
-                throw StoryBoundValueException.current(arg0Binding, resultTitle);
+                throw ScenarioBoundValueException.current(arg0Binding, resultTitle);
             }
 
             // otherwise, see if date and if so compare as such
@@ -69,13 +69,13 @@ public class Contains extends ThatSubcommandAbstract {
                     } 
                 }
                 String format = dateParser.format(resultDate);
-                throw StoryBoundValueException.current(arg0Binding, format);
+                throw ScenarioBoundValueException.current(arg0Binding, format);
             }
 
             
             // otherwise, compare title
             if (!StringUtils.nullSafeEquals(resultTitle, expected)) {
-            	throw StoryBoundValueException.current(arg0Binding, resultTitle);
+            	throw ScenarioBoundValueException.current(arg0Binding, resultTitle);
             }
         } else {
             // try to provide a default

@@ -2,8 +2,8 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 
 public class Size extends ThatAbstract {
@@ -14,28 +14,28 @@ public class Size extends ThatAbstract {
 
     @Override
     protected void doThat(final PerformContext performContext,
-            final Iterable<ObjectAdapter> collection) throws StoryBoundValueException {
+            final Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException {
 
         final CellBinding thatBinding = performContext.getPeer().getThatItBinding();
         final CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
 
         if (!arg0Binding.isFound()) {
-			throw StoryBoundValueException.current(thatBinding, 
+			throw ScenarioBoundValueException.current(thatBinding, 
                     "(requires argument)");
         }
 
-        final StoryCell arg0Cell = arg0Binding.getCurrentCell();
+        final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
 
         final String expectedSizeStr = arg0Cell.getText();
         final int expectedSize;
         try {
             expectedSize = Integer.parseInt(expectedSizeStr);
         } catch (final NumberFormatException ex) {
-            throw StoryBoundValueException.current(arg0Binding, "(not an integer)");
+            throw ScenarioBoundValueException.current(arg0Binding, "(not an integer)");
         }
 
         if (expectedSize <= 0) {
-            throw StoryBoundValueException.current(arg0Binding, "(not a positive integer)");
+            throw ScenarioBoundValueException.current(arg0Binding, "(not a positive integer)");
         }
 
         int actualSize = 0;
@@ -45,7 +45,7 @@ public class Size extends ThatAbstract {
         }
 
         if (expectedSize != actualSize) {
-        	throw StoryBoundValueException.current(arg0Binding, "" + actualSize);
+        	throw ScenarioBoundValueException.current(arg0Binding, "" + actualSize);
         }
 
     }

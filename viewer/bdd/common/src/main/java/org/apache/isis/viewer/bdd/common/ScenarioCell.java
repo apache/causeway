@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.bdd.common;
 
-public interface StoryCell {
+public interface ScenarioCell {
 
 	/**
 	 * The text represented by the source.

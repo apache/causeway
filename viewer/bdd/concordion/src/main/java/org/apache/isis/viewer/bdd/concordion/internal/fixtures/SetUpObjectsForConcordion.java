@@ -4,7 +4,7 @@ import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.CellBindingDefault;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 
 public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer> {
@@ -48,7 +48,7 @@ public class SetUpObjectsForConcordion extends AbstractFixture<SetUpObjectsPeer>
         try {
             getPeer().createObject();
             return "ok";
-        } catch (StoryBoundValueException ex) {
+        } catch (ScenarioBoundValueException ex) {
             return ex.toString();
         }
 

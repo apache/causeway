@@ -14,7 +14,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 
 public class SetUpObjectsPeer extends AbstractFixturePeer {
 
@@ -151,7 +151,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
      * <p>
      * FitNesse, on the other hand, uses a more fine-grained approach, calling the underlying methods.
      */
-    public void createObject() throws StoryBoundValueException {
+    public void createObject() throws ScenarioBoundValueException {
         ObjectAdapter adapter = createInstance();
 
         for (int colNum = 0; colNum < getProperties().size(); colNum++) {
@@ -159,7 +159,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
 
             if (!result.isHandled()) {
                 CellBinding cellBinding = getCellBindings().get(colNum);
-                throw StoryBoundValueException.current(cellBinding, result.getErrorMessage());
+                throw ScenarioBoundValueException.current(cellBinding, result.getErrorMessage());
             }
         }
 

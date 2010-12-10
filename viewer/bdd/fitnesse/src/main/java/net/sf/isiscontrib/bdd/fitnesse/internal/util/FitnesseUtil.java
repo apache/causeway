@@ -1,7 +1,7 @@
 package net.sf.isiscontrib.bdd.fitnesse.internal.util;
 
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 import fit.Fixture;
 import fit.Parse;
@@ -30,15 +30,15 @@ public final class FitnesseUtil {
         }
     }
 
-    public static void exception(Fixture fixture, StoryBoundValueException ex) {
+    public static void exception(Fixture fixture, ScenarioBoundValueException ex) {
         exception(fixture, ex.getStoryCell(), ex.getMessage());
     }
 
-    public static void exception(final Fixture fixture, final StoryCell storyCell, final String message) {
+    public static void exception(final Fixture fixture, final ScenarioCell storyCell, final String message) {
         exception(fixture, asParse(storyCell), message);
     }
 
-    public static Parse asParse(final StoryCell storyValue) {
+    public static Parse asParse(final ScenarioCell storyValue) {
         return (Parse) storyValue.getSource();
     }
 
@@ -46,7 +46,7 @@ public final class FitnesseUtil {
         fixture.exception(cell, new FitFailureException(message));
     }
 
-    public static void setText(StoryCell storyCell, String str) {
+    public static void setText(ScenarioCell storyCell, String str) {
         storyCell.setText(str);
     }
 

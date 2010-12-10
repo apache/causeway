@@ -46,7 +46,7 @@ public class CellBindingDefault extends CellBinding {
     }
 
 	@Override
-	protected void copy(StoryCell from, StoryCell to) {
+	protected void copy(ScenarioCell from, ScenarioCell to) {
 		to.setText(from.getText());
 	}
 

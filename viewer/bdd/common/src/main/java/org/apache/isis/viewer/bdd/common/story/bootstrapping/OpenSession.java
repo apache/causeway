@@ -7,14 +7,14 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
 import org.apache.isis.core.runtime.context.IsisContext;
-import org.apache.isis.viewer.bdd.common.Story;
+import org.apache.isis.viewer.bdd.common.Scenario;
 
 public class OpenSession {
 
     @SuppressWarnings("unused")
-    private final Story story;
+    private final Scenario story;
 
-    public OpenSession(final Story story) {
+    public OpenSession(final Scenario story) {
         this.story = story;
     }
 

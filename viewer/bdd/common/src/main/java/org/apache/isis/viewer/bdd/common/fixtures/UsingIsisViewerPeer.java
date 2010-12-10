@@ -18,8 +18,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.AddToCollection;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.CheckAction;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.CheckAddToCollection;
@@ -168,13 +168,13 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     // validate API
     // //////////////////////////////////////////////////////////////////
 
-    public ObjectAdapter validateOnObject() throws StoryBoundValueException {
+    public ObjectAdapter validateOnObject() throws ScenarioBoundValueException {
 
-        StoryCell onObjectCell = onObjectBinding.getCurrentCell();
+        ScenarioCell onObjectCell = onObjectBinding.getCurrentCell();
         String onObject = onObjectCell.getText();
         if (onObject == null) {
             if (previousOnObject == null) {
-                throw StoryBoundValueException.current(onObjectBinding, "(required)");
+                throw ScenarioBoundValueException.current(onObjectBinding, "(required)");
             }
             onObject = previousOnObject;
         } else {
@@ -182,34 +182,34 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         }
         final ObjectAdapter onAdapter = getAliasRegistry().getAliased(onObject);
         if (onAdapter == null) {
-            throw StoryBoundValueException.current(onMemberBinding, "(unknown object)");
+            throw ScenarioBoundValueException.current(onMemberBinding, "(unknown object)");
         }
         return onAdapter;
     }
 
-    public String validateAliasAs() throws StoryBoundValueException {
+    public String validateAliasAs() throws ScenarioBoundValueException {
         if (getAliasResultAsBinding() == null) {
             return null;
         }
-        final StoryCell aliasCell = aliasResultAsBinding.getCurrentCell();
+        final ScenarioCell aliasCell = aliasResultAsBinding.getCurrentCell();
         if (aliasCell == null) {
             return null;
         }
 
         String aliasAs = aliasCell.getText();
         if (getAliasRegistry().getAliased(aliasAs) != null) {
-            throw StoryBoundValueException.current(aliasResultAsBinding, "(already used)");
+            throw ScenarioBoundValueException.current(aliasResultAsBinding, "(already used)");
         }
         return aliasAs;
     }
 
-    public ObjectMember validateOnMember(ObjectAdapter onAdapter) throws StoryBoundValueException {
+    public ObjectMember validateOnMember(ObjectAdapter onAdapter) throws ScenarioBoundValueException {
 
-        final StoryCell onMemberCell = onMemberBinding.getCurrentCell();
+        final ScenarioCell onMemberCell = onMemberBinding.getCurrentCell();
         final String onMember = onMemberCell.getText();
 
         if (StringUtils.emptyString(onMember)) {
-            throw StoryBoundValueException.current(onMemberBinding, "(required)");
+            throw ScenarioBoundValueException.current(onMemberBinding, "(required)");
         }
 
         if (onAdapter == null) {
@@ -241,17 +241,17 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
                 }
             }
         }
-        throw StoryBoundValueException.current(onMemberBinding, "(unknown member)");
+        throw ScenarioBoundValueException.current(onMemberBinding, "(unknown member)");
     }
 
-    public Perform validatePerform() throws StoryBoundValueException {
+    public Perform validatePerform() throws ScenarioBoundValueException {
         final String perform = performBinding.getCurrentCell().getText();
         if (perform == null) {
-            throw StoryBoundValueException.current(performBinding, "(required)");
+            throw ScenarioBoundValueException.current(performBinding, "(required)");
         }
         final Perform performCommand = commandByKey.get(perform);
         if (performCommand == null) {
-            throw StoryBoundValueException.current(performBinding, "(unknown interaction)");
+            throw ScenarioBoundValueException.current(performBinding, "(unknown interaction)");
         }
         return performCommand;
     }
@@ -265,7 +265,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     // //////////////////////////////////////////////////////////////////
 
     public void performCommand(ObjectAdapter onAdapter, String aliasAs, ObjectMember objectMember,
-        Perform performCommand, List<StoryCell> argumentStoryCells) throws StoryBoundValueException {
+        Perform performCommand, List<ScenarioCell> argumentStoryCells) throws ScenarioBoundValueException {
         PerformContext performContext = new PerformContext(this, onAdapter, objectMember, argumentStoryCells);
         try {
             performCommand.perform(performContext);
@@ -275,13 +275,13 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         aliasResultFromPerformCommand(performCommand, aliasAs);
     }
 
-    private void aliasResultFromPerformCommand(Perform performCommand, String aliasAs) throws StoryBoundValueException {
+    private void aliasResultFromPerformCommand(Perform performCommand, String aliasAs) throws ScenarioBoundValueException {
         if (StringUtils.emptyString(aliasAs)) {
             return;
         }
         final ObjectAdapter resultAdapter = performCommand.getResult();
         if (resultAdapter == null) {
-            throw StoryBoundValueException.current(onMemberBinding, "(no result)");
+            throw ScenarioBoundValueException.current(onMemberBinding, "(no result)");
         }
         getAliasRegistry().aliasAs(aliasAs, resultAdapter);
     }
@@ -295,7 +295,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     /**
      * Not public API
      */
-    public void provideDefault(StoryCell storySource, String resultStr) {
+    public void provideDefault(ScenarioCell storySource, String resultStr) {
         // TODO Auto-generated method stub
         throw new NotYetImplementedException();
     }
@@ -304,7 +304,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
      * Not public API
      */
     public ObjectAdapter getAdapter(final ObjectAdapter contextAdapter, final ObjectSpecification noSpec,
-        final CellBinding contextBinding, final StoryCell paramCell) throws StoryBoundValueException {
+        final CellBinding contextBinding, final ScenarioCell paramCell) throws ScenarioBoundValueException {
 
         final String cellText = paramCell.getText();
 
@@ -314,14 +314,14 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
             try {
                 return parseableFacet.parseTextEntry(contextAdapter, cellText);
             } catch (final IllegalArgumentException ex) {
-                throw StoryBoundValueException.arg(contextBinding, paramCell, "(cannot parse '"+cellText+"')");
+                throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '"+cellText+"')");
             }
         }
 
         // otherwise, handle as reference to known object
         final ObjectAdapter adapter = getAliasRegistry().getAliased(cellText);
         if (adapter == null) {
-            throw StoryBoundValueException.arg(contextBinding, paramCell, "(unknown reference'"+cellText+"')");
+            throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(unknown reference'"+cellText+"')");
         }
 
         return adapter;
@@ -334,18 +334,18 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
      * Ensures that there are at least enough arguments for the number of parameters required.
      */
     public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter, final ObjectAction nakedObjectAction,
-        CellBinding onMemberBinding, final List<StoryCell> argumentCells) throws StoryBoundValueException {
+        CellBinding onMemberBinding, final List<ScenarioCell> argumentCells) throws ScenarioBoundValueException {
         final ObjectActionParameter[] parameters = nakedObjectAction.getParameters();
 
         int parameterCount = parameters.length;
         if (argumentCells.size() < parameterCount) {
-            throw StoryBoundValueException.current(onMemberBinding, "(action requires " + parameterCount
+            throw ScenarioBoundValueException.current(onMemberBinding, "(action requires " + parameterCount
                 + " arguments)");
         }
         final ObjectAdapter[] adapters = new ObjectAdapter[parameterCount];
 
         for (int i = 0; i < parameterCount; i++) {
-            final StoryCell paramCell = argumentCells.get(i);
+            final ScenarioCell paramCell = argumentCells.get(i);
             final ObjectActionParameter parameter = parameters[i];
             adapters[i] = getAdapter(null, parameter.getSpecification(), onMemberBinding, paramCell);
         }

@@ -28,12 +28,12 @@ import org.apache.isis.core.runtime.system.SystemConstants;
 import org.apache.isis.core.runtime.system.internal.InitialisationSession;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.defaults.profilestore.InMemoryUserProfileStoreInstaller;
-import org.apache.isis.viewer.bdd.common.components.StoryAuthenticationManagerInstaller;
-import org.apache.isis.viewer.bdd.common.components.StoryInMemoryPersistenceMechanismInstaller;
+import org.apache.isis.viewer.bdd.common.components.BddAuthenticationManagerInstaller;
+import org.apache.isis.viewer.bdd.common.components.BddInMemoryPersistenceMechanismInstaller;
 import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;
-import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownNakedObjects;
+import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownIsis;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.StartClient;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryHolder;
@@ -52,7 +52,7 @@ import com.google.inject.Injector;
  * {@link AliasRegistryDefault}. This is needed because the underlying {@link AliasRegistry} can change on
  * {@link #switchUserWithRoles(String, String)} (see {@link #reAdapt(AliasRegistrySpi)} method).
  */
-public class Story implements AliasRegistryHolder {
+public class Scenario implements AliasRegistryHolder {
 
     private AliasRegistry aliasRegistry = new AliasRegistryDefault();
 
@@ -125,9 +125,9 @@ public class Story implements AliasRegistryHolder {
 
     private void defaultStoryComponentsInto(ConfigurationBuilder configurationBuilder) {
         configurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY,
-            StoryAuthenticationManagerInstaller.class.getName());
+            BddAuthenticationManagerInstaller.class.getName());
         configurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY,
-            StoryInMemoryPersistenceMechanismInstaller.class.getName());
+            BddInMemoryPersistenceMechanismInstaller.class.getName());
         configurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY,
             InMemoryUserProfileStoreInstaller.class.getName());
         configurationBuilder.add(SystemConstants.FIXTURES_INSTALLER_KEY, FixturesInstallerNoop.class.getName());
@@ -141,7 +141,7 @@ public class Story implements AliasRegistryHolder {
     }
 
     public void shutdownIsis() {
-        new ShutdownNakedObjects(this).shutdown();
+        new ShutdownIsis(this).shutdown();
     }
 
     // /////////////////////////////////////////////////////////////

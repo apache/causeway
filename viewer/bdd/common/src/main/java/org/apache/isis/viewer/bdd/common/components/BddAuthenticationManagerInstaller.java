@@ -5,11 +5,11 @@ import org.apache.isis.core.runtime.authentication.standard.AuthenticationManage
 import org.apache.isis.core.runtime.authentication.standard.Authenticator;
 import org.apache.isis.defaults.security.authentication.AuthenticatorNoop;
 
-public class StoryAuthenticationManagerInstaller extends
+public class BddAuthenticationManagerInstaller extends
         AuthenticationManagerStandardInstallerAbstract {
 
-    public StoryAuthenticationManagerInstaller() {
-        super("story");
+    public BddAuthenticationManagerInstaller() {
+        super("bdd");
     }
 
     @Override

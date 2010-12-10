@@ -9,8 +9,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemove
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 public class RemoveFromCollection extends PerformAbstractTypeParams {
 
@@ -23,35 +23,35 @@ public class RemoveFromCollection extends PerformAbstractTypeParams {
 
 	@Override
 	public void doHandle(final PerformContext performContext)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 
 		final ObjectAdapter onAdapter = performContext.getOnAdapter();
 		final ObjectMember nakedObjectMember = performContext
 				.getObjectMember();
 		final CellBinding onMemberBinding = performContext.getPeer()
 				.getOnMemberBinding();
-		final StoryCell onMemberCell = onMemberBinding.getCurrentCell();
+		final ScenarioCell onMemberCell = onMemberBinding.getCurrentCell();
 
-		final List<StoryCell> argumentCells = performContext.getArgumentCells();
+		final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
 
 		final OneToManyAssociation otma = (OneToManyAssociation) nakedObjectMember;
 
 		// safe since guaranteed by superclass
 		CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-		final StoryCell arg0Cell = argumentCells.get(0);
+		final ScenarioCell arg0Cell = argumentCells.get(0);
 		final String toRemove = arg0Cell.getText();
 
 		final CollectionRemoveFromFacet removeFromFacet = nakedObjectMember
 				.getFacet(CollectionRemoveFromFacet.class);
 		if (removeFromFacet == null) {
-			throw StoryBoundValueException.current(onMemberBinding,
+			throw ScenarioBoundValueException.current(onMemberBinding,
 					"(cannot remove from collection)");
 		}
 
 		final ObjectAdapter toRemoveAdapter = performContext.getPeer()
 				.getAliasRegistry().getAliased(toRemove);
 		if (toRemoveAdapter == null) {
-			throw StoryBoundValueException.current(arg0Binding, "(unknown alias)");
+			throw ScenarioBoundValueException.current(arg0Binding, "(unknown alias)");
 		}
 
 		// validate argument
@@ -62,7 +62,7 @@ public class RemoveFromCollection extends PerformAbstractTypeParams {
 		final Consent validToRemove = otma.isValidToRemove(onAdapter,
 				toRemoveAdapter);
 		if (validToRemove.isVetoed()) {
-			throw StoryBoundValueException.current(onMemberBinding, validToRemove
+			throw ScenarioBoundValueException.current(onMemberBinding, validToRemove
 					.getReason());
 		}
 

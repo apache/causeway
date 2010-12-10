@@ -14,8 +14,8 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.UsingIsisViewerForFitNe
 
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.runtime.system.DeploymentType;
-import org.apache.isis.viewer.bdd.common.Story;
-import org.apache.isis.viewer.bdd.common.StoryValueException;
+import org.apache.isis.viewer.bdd.common.Scenario;
+import org.apache.isis.viewer.bdd.common.ScenarioValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
@@ -24,20 +24,20 @@ import org.apache.isis.viewer.bdd.common.parsers.JavaUtilDateParser;
 import fit.Fixture;
 import fitlibrary.DoFixture;
 
-public class StoryFixture extends DoFixture {
+public class ScenarioFixture extends DoFixture {
 
-    private static ThreadLocal<Story> storyThreadLocal = new ThreadLocal<Story>() {
+    private static ThreadLocal<Scenario> scenarioThreadLocal = new ThreadLocal<Scenario>() {
         @Override
-        protected Story initialValue() {
-            return new Story();
+        protected Scenario initialValue() {
+            return new Scenario();
         }
     };
 
-    public static Story getStory() {
-        return storyThreadLocal.get();
+    public static Scenario getScenario() {
+        return scenarioThreadLocal.get();
     }
 
-    public StoryFixture() {
+    public ScenarioFixture() {
         registerParseDelegate(java.util.Date.class, new JavaUtilDateParser());
     }
 
@@ -53,19 +53,19 @@ public class StoryFixture extends DoFixture {
      */
     public void bootstrapIsisConfiguredFromInMode(String configDirectory, String deploymentTypeStr) {
         DeploymentType deploymentType = DeploymentType.lookup(deploymentTypeStr);
-        getStory().bootstrapIsis(configDirectory, deploymentType);
+        getScenario().bootstrapIsis(configDirectory, deploymentType);
     }
 
     public String getConfigDirectory() {
-        return getStory().getConfigDirectory();
+        return getScenario().getConfigDirectory();
     }
 
     public DeploymentType getDeploymentType() {
-        return getStory().getDeploymentType();
+        return getScenario().getDeploymentType();
     }
 
     public void shutdownIsis() {
-        getStory().shutdownIsis();
+        getScenario().shutdownIsis();
     }
 
     // ////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ public class StoryFixture extends DoFixture {
     }
 
     private void dateAndTimeIs(final String dateAndOrTimeStr) {
-        getStory().dateAndTimeIs(dateAndOrTimeStr);
+        getScenario().dateAndTimeIs(dateAndOrTimeStr);
     }
 
     // ////////////////////////////////////////////////////////////
@@ -97,12 +97,12 @@ public class StoryFixture extends DoFixture {
     // ////////////////////////////////////////////////////////////
 
     public void logonAs(final String userName) {
-        getStory().logonAsOrSwitchUserTo(userName);
+        getScenario().logonAsOrSwitchUserTo(userName);
     }
 
     public void logonAsWithRoles(final String userName, final String roleListStr) {
         List<String> roleList = StringUtils.splitOnCommas(roleListStr);
-        getStory().logonAsOrSwitchUserTo(userName, roleList);
+        getScenario().logonAsOrSwitchUserTo(userName, roleList);
     }
 
     /**
@@ -124,14 +124,14 @@ public class StoryFixture extends DoFixture {
     // ////////////////////////////////////////////////////////////
 
     public Fixture aliasServices() {
-        return new AliasServicesForFitNesse(getStory().getAliasRegistry());
+        return new AliasServicesForFitNesse(getScenario().getAliasRegistry());
     }
 
     public void aliasServiceAs(final String alias, final String serviceClassName) {
         try {
-            getStory().getAliasRegistry().aliasService(alias, serviceClassName);
-        } catch (StoryValueException ex) {
-            throw new StoryFitNesseException(ex);
+            getScenario().getAliasRegistry().aliasService(alias, serviceClassName);
+        } catch (ScenarioValueException ex) {
+            throw new ScenarioFitNesseException(ex);
         }
     }
 
@@ -149,7 +149,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture setUpObjects(final String className) {
-        return new SetUpObjectsForFitNesse(getStory().getAliasRegistry(), className, SetUpObjectsPeer.Mode.PERSIST);
+        return new SetUpObjectsForFitNesse(getScenario().getAliasRegistry(), className, SetUpObjectsPeer.Mode.PERSIST);
     }
 
     /**
@@ -162,7 +162,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture setUpTransientObjects(final String className) {
-        return new SetUpObjectsForFitNesse(getStory().getAliasRegistry(), className,
+        return new SetUpObjectsForFitNesse(getScenario().getAliasRegistry(), className,
             SetUpObjectsPeer.Mode.DO_NOT_PERSIST);
     }
 
@@ -186,7 +186,7 @@ public class StoryFixture extends DoFixture {
     }
 
     private Fixture usingIsisViewer(final Perform.Mode mode) {
-        return new UsingIsisViewerForFitNesse(getStory().getAliasRegistry(), getStory().getDeploymentType(), getStory().getDateParser(), mode);
+        return new UsingIsisViewerForFitNesse(getScenario().getAliasRegistry(), getScenario().getDeploymentType(), getScenario().getDateParser(), mode);
     }
 
     // ////////////////////////////////////////////////////////////
@@ -194,11 +194,11 @@ public class StoryFixture extends DoFixture {
     // ////////////////////////////////////////////////////////////
 
     public Fixture checkListContains(final String listAlias) {
-        return new CheckListForFitNesse(getStory().getAliasRegistry(), listAlias, CheckMode.NOT_EXACT);
+        return new CheckListForFitNesse(getScenario().getAliasRegistry(), listAlias, CheckMode.NOT_EXACT);
     }
 
     public Fixture checkListPreciselyContains(final String listAlias) {
-        return new CheckListForFitNesse(getStory().getAliasRegistry(), listAlias, CheckMode.EXACT);
+        return new CheckListForFitNesse(getScenario().getAliasRegistry(), listAlias, CheckMode.EXACT);
     }
 
     /**
@@ -209,7 +209,7 @@ public class StoryFixture extends DoFixture {
     }
 
     public Fixture aliasItemsInList(final String listAlias) {
-        return new AliasItemsInListForFitNesse(getStory().getAliasRegistry(), listAlias);
+        return new AliasItemsInListForFitNesse(getScenario().getAliasRegistry(), listAlias);
     }
 
     // ///////////////////////////////////////////////////////
@@ -217,7 +217,7 @@ public class StoryFixture extends DoFixture {
     // ///////////////////////////////////////////////////////
 
     public void runViewer() {
-        getStory().runViewer();
+        getScenario().runViewer();
     }
 
     // ///////////////////////////////////////////////////////
@@ -225,19 +225,19 @@ public class StoryFixture extends DoFixture {
     // ///////////////////////////////////////////////////////
 
     public Fixture checkSpecificationsLoaded() {
-        return new CheckSpecificationsLoadedForFitNesse(getStory().getAliasRegistry());
+        return new CheckSpecificationsLoadedForFitNesse(getScenario().getAliasRegistry());
     }
 
     public Fixture debugServices() {
-        return new DebugServicesForFitNesse(getStory().getAliasRegistry());
+        return new DebugServicesForFitNesse(getScenario().getAliasRegistry());
     }
 
     public Fixture debugObjectStore() {
-        return new DebugObjectStoreForFitNesse(getStory().getAliasRegistry());
+        return new DebugObjectStoreForFitNesse(getScenario().getAliasRegistry());
     }
 
     public Fixture debugClock() {
-        return new DebugClockForFitNesse(getStory().getAliasRegistry());
+        return new DebugClockForFitNesse(getScenario().getAliasRegistry());
     }
 
 }

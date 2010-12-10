@@ -2,10 +2,10 @@ package net.sf.isiscontrib.bdd.fitnesse.internal;
 
 import java.util.Map;
 
-import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.StoryCellForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.ScenarioCellForFitNesse;
 
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Maps;
@@ -63,29 +63,29 @@ public class CellBindingForFitNesse extends CellBinding {
      * @param heads
      */
     public void find(final Parse heads) {
-        Map<Integer, StoryCell> storyValuesMap = toMap(heads);
+        Map<Integer, ScenarioCell> storyValuesMap = toMap(heads);
         if (!locate(heads) && isAutoCreate()) {
             // Append an alias cell to header
             final int size = storyValuesMap.size();
             final Parse aliasCell = new Parse("td", Fixture.gray(getHeadTexts().get(0)), null, null);
             heads.last().more = aliasCell;
-            createHeadCell(size, new StoryCellForFitNesse(aliasCell));
+            createHeadCell(size, new ScenarioCellForFitNesse(aliasCell));
         }
     }
 
     @Override
-    protected void copy(final StoryCell from, StoryCell to) {
+    protected void copy(final ScenarioCell from, ScenarioCell to) {
         to.setText(Fixture.gray(from.getText()));
     }
 
     private boolean locate(final Parse heads) {
-        Map<Integer, StoryCell> headStoryValuesMap = toMap(heads);
+        Map<Integer, ScenarioCell> headStoryValuesMap = toMap(heads);
         return locate(headStoryValuesMap);
     }
 
-    private boolean locate(Map<Integer, StoryCell> headStoryValuesMap) {
+    private boolean locate(Map<Integer, ScenarioCell> headStoryValuesMap) {
         for (Integer colNum : headStoryValuesMap.keySet()) {
-            StoryCell storyValue = headStoryValuesMap.get(colNum);
+            ScenarioCell storyValue = headStoryValuesMap.get(colNum);
             final String headText = storyValue.getText();
 
             if (matches(headText)) {
@@ -97,16 +97,16 @@ public class CellBindingForFitNesse extends CellBinding {
         return isFound();
     }
 
-    public static Map<Integer, StoryCell> toMap(final Parse firstParse) {
+    public static Map<Integer, ScenarioCell> toMap(final Parse firstParse) {
         Parse eachParse = firstParse;
         Map<Integer, Parse> parseMap = Maps.newLinkedHashMap();
         for (int i = 0; eachParse != null; i++, eachParse = eachParse.more) {
             parseMap.put(i, eachParse);
         }
-        Map<Integer, StoryCell> storyValuesMap = Maps.transformValues(parseMap, new Function<Parse, StoryCell>() {
+        Map<Integer, ScenarioCell> storyValuesMap = Maps.transformValues(parseMap, new Function<Parse, ScenarioCell>() {
             @Override
-            public StoryCell apply(Parse from) {
-                return new StoryCellForFitNesse(from);
+            public ScenarioCell apply(Parse from) {
+                return new ScenarioCellForFitNesse(from);
             }
         });
         return storyValuesMap;

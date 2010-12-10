@@ -9,15 +9,15 @@ import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects
 
 /**
  * As per {@link InMemoryPersistenceSessionFactory}, but uses the
- * {@link StoryObjectStorePersistedObjects} implementation which stores any
+ * {@link BddObjectStorePersistedObjects} implementation which stores any
  * {@link CachedFacet cached} {@link ObjectSpecification class}es
  * <tt>static</tt>ally (and thus persisted across multiple setups/teardowns of
  * the {@link NakedObjectsContext}.
  */
-public class StoryInMemoryPersistenceSessionFactory extends
+public class BddInMemoryPersistenceSessionFactory extends
         InMemoryPersistenceSessionFactory {
 
-    public StoryInMemoryPersistenceSessionFactory(
+    public BddInMemoryPersistenceSessionFactory(
             final DeploymentType deploymentType,
             final PersistenceSessionFactoryDelegate persistenceSessionFactoryDelegate) {
         super(deploymentType, persistenceSessionFactoryDelegate);
@@ -25,7 +25,7 @@ public class StoryInMemoryPersistenceSessionFactory extends
 
     @Override
     public ObjectStorePersistedObjects createPersistedObjects() {
-        return new StoryObjectStorePersistedObjects();
+        return new BddObjectStorePersistedObjects();
     }
 
 }

@@ -1,7 +1,7 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 
 public interface Perform {
 
@@ -11,7 +11,7 @@ public interface Perform {
 
 	String getKey();
 
-    void perform(PerformContext performContext) throws StoryBoundValueException;
+    void perform(PerformContext performContext) throws ScenarioBoundValueException;
 
     ObjectAdapter getResult();
 

@@ -7,8 +7,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 public class AddToCollection extends PerformAbstractTypeParams {
 
@@ -19,7 +19,7 @@ public class AddToCollection extends PerformAbstractTypeParams {
     }
 
     @Override
-    public void doHandle(final PerformContext performContext) throws StoryBoundValueException {
+    public void doHandle(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final ObjectMember nakedObjectMember = performContext
@@ -32,17 +32,17 @@ public class AddToCollection extends PerformAbstractTypeParams {
         final CollectionAddToFacet addToFacet = nakedObjectMember
                 .getFacet(CollectionAddToFacet.class);
         if (addToFacet == null) {
-            throw StoryBoundValueException.current(onMemberBinding, "(cannot add to collection)");
+            throw ScenarioBoundValueException.current(onMemberBinding, "(cannot add to collection)");
         }
         
         // safe since guaranteed by superclass
         CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-        final StoryCell arg0Cell = arg0Binding.getCurrentCell();
+        final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
         final String toAddAlias = arg0Cell.getText();
 
         final ObjectAdapter toAddAdapter = performContext.getPeer().getAliasRegistry().getAliased(toAddAlias);
         if (toAddAdapter == null) {
-			throw StoryBoundValueException.current(arg0Binding, "(unknown alias)");
+			throw ScenarioBoundValueException.current(arg0Binding, "(unknown alias)");
         }
 
         // validate argument
@@ -50,7 +50,7 @@ public class AddToCollection extends PerformAbstractTypeParams {
                 InteractionInvocationMethod.BY_USER, onAdapter, toAddAdapter);
         final Consent validToAdd = otma.isValidToAdd(onAdapter, toAddAdapter);
         if (validToAdd.isVetoed()) {
-        	 throw StoryBoundValueException.current(arg0Binding, validToAdd.getReason());
+        	 throw ScenarioBoundValueException.current(arg0Binding, validToAdd.getReason());
         }
 
         // add

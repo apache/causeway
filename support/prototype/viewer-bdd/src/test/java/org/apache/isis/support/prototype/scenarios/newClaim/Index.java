@@ -1,4 +1,4 @@
-package org.apache.isis.support.prototype.stories.newClaim;
+package org.apache.isis.support.prototype.scenarios.newClaim;
 
 import org.apache.isis.support.prototype.AbstractApplicationStory;
 

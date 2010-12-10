@@ -13,7 +13,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
-import org.apache.isis.viewer.bdd.common.StoryValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioValueException;
 
 public class AliasRegistryDefault implements AliasRegistry {
 
@@ -65,7 +65,7 @@ public class AliasRegistryDefault implements AliasRegistry {
     }
 
     @Override
-    public void aliasService(final String aliasAs, final String className) throws StoryValueException {
+    public void aliasService(final String aliasAs, final String className) throws ScenarioValueException {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
             if (serviceAdapter.getSpecification().getFullName().equals(className)) {
@@ -73,7 +73,7 @@ public class AliasRegistryDefault implements AliasRegistry {
                 return;
             }
         }
-        throw new StoryValueException("no such service");
+        throw new ScenarioValueException("no such service");
     }
 
     protected PersistenceSession getPersistenceSession() {

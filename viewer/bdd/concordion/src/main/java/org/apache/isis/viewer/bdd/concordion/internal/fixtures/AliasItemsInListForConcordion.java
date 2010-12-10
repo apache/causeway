@@ -4,9 +4,9 @@ import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.CellBindingDefault;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCellDefault;
-import org.apache.isis.viewer.bdd.common.StoryValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCellDefault;
+import org.apache.isis.viewer.bdd.common.ScenarioValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.AliasItemsInListPeer;
 
 public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInListPeer> {
@@ -43,7 +43,7 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
     private String executeHeader(String alias, String title, String type) {
         try {
             getPeer().assertIsList();
-        } catch (StoryValueException e) {
+        } catch (ScenarioValueException e) {
             return e.getMessage();
         }
 
@@ -52,7 +52,7 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
         getPeer().getAliasBinding().setHeadColumn(1);
 
         if (type != null) {
-            getPeer().getTypeBinding().setHeadColumn(2, new StoryCellDefault(type));
+            getPeer().getTypeBinding().setHeadColumn(2, new ScenarioCellDefault(type));
         }
 
         return null;
@@ -67,7 +67,7 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
 
         try {
             getPeer().findAndAlias();
-        } catch (StoryBoundValueException e) {
+        } catch (ScenarioBoundValueException e) {
             return e.getMessage();
         }
 
@@ -75,10 +75,10 @@ public class AliasItemsInListForConcordion extends AbstractFixture<AliasItemsInL
     }
 
     private void captureCurrent(String aliasAs, String title, String type) {
-        getPeer().getAliasBinding().captureCurrent(new StoryCellDefault(aliasAs));
-        getPeer().getTitleBinding().captureCurrent(new StoryCellDefault(title));
+        getPeer().getAliasBinding().captureCurrent(new ScenarioCellDefault(aliasAs));
+        getPeer().getTitleBinding().captureCurrent(new ScenarioCellDefault(title));
         if (type != null) {
-            getPeer().getTitleBinding().captureCurrent(new StoryCellDefault(type));
+            getPeer().getTitleBinding().captureCurrent(new ScenarioCellDefault(type));
         }
     }
 

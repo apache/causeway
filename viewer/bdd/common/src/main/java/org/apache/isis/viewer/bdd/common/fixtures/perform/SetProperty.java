@@ -8,8 +8,8 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFac
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 public class SetProperty extends PerformAbstractTypeParams {
 
@@ -21,12 +21,12 @@ public class SetProperty extends PerformAbstractTypeParams {
 
 	@Override
 	public void doHandle(final PerformContext performContext)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 
 		final ObjectAdapter onAdapter = performContext.getOnAdapter();
 		final ObjectMember nakedObjectMember = performContext
 				.getObjectMember();
-		final List<StoryCell> argumentCells = performContext.getArgumentCells();
+		final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
 
 		final OneToOneAssociation otoa = (OneToOneAssociation) nakedObjectMember;
 
@@ -36,13 +36,13 @@ public class SetProperty extends PerformAbstractTypeParams {
 		if (setterFacet == null) {
 			CellBinding onMemberBinding = performContext.getPeer()
 					.getOnMemberBinding();
-			throw StoryBoundValueException.current(onMemberBinding, 
+			throw ScenarioBoundValueException.current(onMemberBinding, 
 					"(cannot set)");
 		}
 
 		// safe to obtain since guaranteed by superclass
 		CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-		final StoryCell arg0Cell = argumentCells.get(0);
+		final ScenarioCell arg0Cell = argumentCells.get(0);
 
 		// obtain existing as 'context' (used if this is a parsed @Value)
 		final ObjectAdapter contextAdapter = otoa.get(onAdapter);
@@ -53,7 +53,7 @@ public class SetProperty extends PerformAbstractTypeParams {
 		final Consent validConsent = otoa.isAssociationValid(onAdapter,
 				toSetAdapter);
 		if (validConsent.isVetoed()) {
-			throw StoryBoundValueException.current(arg0Binding, validConsent
+			throw ScenarioBoundValueException.current(arg0Binding, validConsent
 					.getReason());
 		}
 

@@ -5,7 +5,7 @@ import java.util.List;
 
 import net.sf.isiscontrib.bdd.fitnesse.internal.AbstractFixture;
 import net.sf.isiscontrib.bdd.fitnesse.internal.CellBindingForFitNesse;
-import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.StoryCellForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.ScenarioCellForFitNesse;
 import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -14,8 +14,8 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
@@ -92,7 +92,7 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
         ObjectAdapter onAdapter = null;
         try {
             onAdapter = getPeer().validateOnObject();
-        } catch (StoryBoundValueException ex) {
+        } catch (ScenarioBoundValueException ex) {
             FitnesseUtil.exception(this, ex);
             return;
         }
@@ -100,7 +100,7 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
         String aliasAs = null;
         try {
             aliasAs = getPeer().validateAliasAs();
-        } catch (StoryBoundValueException ex) {
+        } catch (ScenarioBoundValueException ex) {
             FitnesseUtil.exception(this, ex);
             return;
         }
@@ -108,7 +108,7 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
         Perform performCommand = null;
         try {
             performCommand = getPeer().validatePerform();
-        } catch (StoryBoundValueException ex) {
+        } catch (ScenarioBoundValueException ex) {
             FitnesseUtil.exception(this, ex);
             return;
         }
@@ -117,16 +117,16 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
         if (performCommand.requiresMember()) {
             try {
                 objectMember = getPeer().validateOnMember(onAdapter);
-            } catch (StoryBoundValueException ex) {
+            } catch (ScenarioBoundValueException ex) {
                 FitnesseUtil.exception(this, ex);
                 return;
             }
         }
 
         try {
-            List<StoryCell> argumentStoryCells = asValues(argumentCells);
+            List<ScenarioCell> argumentStoryCells = asValues(argumentCells);
             getPeer().performCommand(onAdapter, aliasAs, objectMember, performCommand, argumentStoryCells);
-        } catch (StoryBoundValueException ex) {
+        } catch (ScenarioBoundValueException ex) {
             FitnesseUtil.exception(this, ex);
             return;
         }
@@ -134,17 +134,17 @@ public class UsingIsisViewerForFitNesse extends AbstractFixture<UsingIsisViewerP
         rightMemberElseOnObjectCell();
     }
 
-    private static List<StoryCell> asValues(List<Parse> argCells) {
-        List<StoryCell> storyValues = Lists.newArrayList();
+    private static List<ScenarioCell> asValues(List<Parse> argCells) {
+        List<ScenarioCell> storyValues = Lists.newArrayList();
         for (Parse parse : argCells) {
-            storyValues.add(new StoryCellForFitNesse(parse));
+            storyValues.add(new ScenarioCellForFitNesse(parse));
         }
         return storyValues;
     }
 
     private void rightMemberElseOnObjectCell() {
         UsingIsisViewerPeer peer = getPeer();
-        StoryCell storyCell =
+        ScenarioCell storyCell =
             coalesce(peer.getOnMemberBinding().getCurrentCell(), peer.getOnObjectBinding().getCurrentCell());
         right(storyCell);
     }

@@ -2,11 +2,11 @@ package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.system.IsisSystem;
-import org.apache.isis.viewer.bdd.common.Story;
+import org.apache.isis.viewer.bdd.common.Scenario;
 
-public class ShutdownNakedObjects extends AbstractHelper {
+public class ShutdownIsis extends AbstractHelper {
 
-    public ShutdownNakedObjects(final Story story) {
+    public ShutdownIsis(final Scenario story) {
         super(story);
     }
 

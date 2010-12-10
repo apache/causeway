@@ -5,8 +5,8 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 public abstract class PerformAbstractTypeParams extends PerformAbstract {
 
@@ -87,16 +87,16 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
 	 */
 	@Override
     public void perform(final PerformContext performContext)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 
 		CellBinding onMemberBinding = performContext.getPeer()
 				.getOnMemberBinding();
-		final StoryCell onMemberCell = onMemberBinding.getCurrentCell();
+		final ScenarioCell onMemberCell = onMemberBinding.getCurrentCell();
 
 		final String reason = type.ensureMemberIsOfType(performContext
 				.getObjectMember());
 		if (reason != null) {
-			throw StoryBoundValueException.current(onMemberBinding, 
+			throw ScenarioBoundValueException.current(onMemberBinding, 
 					reason);
 		}
 
@@ -126,7 +126,7 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
 
 			// okay to do this check, though
 			if (numParameters == NumParameters.ONE && numArgs < 1) {
-				throw StoryBoundValueException.current(onMemberBinding, 
+				throw ScenarioBoundValueException.current(onMemberBinding, 
 						"(need one argument)");
 			}
 		}
@@ -140,7 +140,7 @@ public abstract class PerformAbstractTypeParams extends PerformAbstract {
 	 * been.
 	 */
 	protected void doHandle(final PerformContext performContext)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 		// does nothing
 	}
 

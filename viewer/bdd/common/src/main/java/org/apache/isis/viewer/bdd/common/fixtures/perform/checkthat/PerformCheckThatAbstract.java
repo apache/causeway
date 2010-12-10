@@ -6,8 +6,8 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformAbstract;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
@@ -36,19 +36,19 @@ public abstract class PerformCheckThatAbstract extends PerformAbstract {
 
 	@Override
     public void perform(final PerformContext performContext)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 		CellBinding thatItBinding = performContext.getPeer().getThatItBinding();
 		if (!thatItBinding.isFound()) {
 			CellBinding performBinding = performContext.getPeer()
 					.getPerformBinding();
-			throw StoryBoundValueException.current(performBinding, 
+			throw ScenarioBoundValueException.current(performBinding, 
 					"(require " + IsisViewerConstants.THAT_IT_NAME + "' column)");
 		}
-		StoryCell thatItCell = thatItBinding.getCurrentCell();
+		ScenarioCell thatItCell = thatItBinding.getCurrentCell();
 		final String thatIt = thatItCell.getText();
 		final ThatSubcommand thatSubcommand = subcommandByKey.get(thatIt);
 		if (thatSubcommand == null) {
-			throw StoryBoundValueException.current(thatItBinding, 
+			throw ScenarioBoundValueException.current(thatItBinding, 
 					"(unknown '" + IsisViewerConstants.THAT_IT_NAME + "' verb)");
 		}
 		result = thatSubcommand.that(performContext);

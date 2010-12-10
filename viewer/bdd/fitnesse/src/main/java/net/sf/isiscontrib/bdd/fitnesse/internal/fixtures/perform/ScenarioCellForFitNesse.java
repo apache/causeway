@@ -1,14 +1,14 @@
 package net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform;
 
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 
 import fit.Parse;
 
-public class StoryCellForFitNesse implements StoryCell {
+public class ScenarioCellForFitNesse implements ScenarioCell {
 
     private final Parse source;
 
-    public StoryCellForFitNesse(Parse source) {
+    public ScenarioCellForFitNesse(Parse source) {
         this.source = source;
     }
 

@@ -10,8 +10,8 @@ import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
 
@@ -25,12 +25,12 @@ public class PerformContext {
 
 	private final ObjectAdapter onAdapter;
 	private final ObjectMember objectMember;
-	private final List<StoryCell> argumentCells;
+	private final List<ScenarioCell> argumentCells;
 
 	public PerformContext(final UsingIsisViewerPeer peer,
 			final ObjectAdapter onAdapter,
 			final ObjectMember objectMember,
-			final List<StoryCell> argumentCells) {
+			final List<ScenarioCell> argumentCells) {
 		this.onAdapter = onAdapter;
 		this.objectMember = objectMember;
 		this.peer = peer;
@@ -49,7 +49,7 @@ public class PerformContext {
 		return objectMember;
 	}
 
-	public List<StoryCell> getArgumentCells() {
+	public List<ScenarioCell> getArgumentCells() {
 		return argumentCells;
 	}
 
@@ -68,35 +68,35 @@ public class PerformContext {
 		return onAdapter.getSpecification().isValid(onAdapter);
 	}
 
-	public void ensureVisible(CellBinding onMemberBinding, final StoryCell onMemberCell)
-	throws StoryBoundValueException {
+	public void ensureVisible(CellBinding onMemberBinding, final ScenarioCell onMemberCell)
+	throws ScenarioBoundValueException {
 		final Consent visible = objectMember.isVisible(getAuthenticationSession(),
 				getOnAdapter());
 		if (visible.isVetoed()) {
-			throw StoryBoundValueException.current(onMemberBinding, "(not visible)");
+			throw ScenarioBoundValueException.current(onMemberBinding, "(not visible)");
 		}
 	}
 	
-	public void ensureUsable(CellBinding onMemberBinding, final StoryCell onMemberCell)
-			throws StoryBoundValueException {
+	public void ensureUsable(CellBinding onMemberBinding, final ScenarioCell onMemberCell)
+			throws ScenarioBoundValueException {
 		final Consent usable = objectMember.isUsable(getAuthenticationSession(),
 				getOnAdapter());
 		if (usable.isVetoed()) {
-			throw StoryBoundValueException.current(onMemberBinding, "(not usable)");
+			throw ScenarioBoundValueException.current(onMemberBinding, "(not usable)");
 		}
 	}
 	
-    public void ensureAvailableForDeploymentType(CellBinding onMemberBinding, StoryCell onMemberCell) throws StoryBoundValueException {
+    public void ensureAvailableForDeploymentType(CellBinding onMemberBinding, ScenarioCell onMemberCell) throws ScenarioBoundValueException {
         DeploymentType deploymentType = this.peer.getDeploymentType();
         
         boolean isExploration = objectMember.getFacet(ExplorationFacet.class) != null;
         if(isExploration && !deploymentType.isExploring() ) {
-            throw StoryBoundValueException.current(onMemberBinding, "(not running in exploration mode)");
+            throw ScenarioBoundValueException.current(onMemberBinding, "(not running in exploration mode)");
         }
         
         boolean isPrototype = objectMember.getFacet(PrototypeFacet.class) != null;
         if(isPrototype && !deploymentType.isPrototyping()) {
-            throw StoryBoundValueException.current(onMemberBinding, "(not running in prototype mode)");
+            throw ScenarioBoundValueException.current(onMemberBinding, "(not running in prototype mode)");
         }
     }
 

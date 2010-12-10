@@ -4,8 +4,8 @@ import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
 
@@ -15,14 +15,14 @@ public class DoesNotContain extends ThatSubcommandAbstract {
         super("does not contain", "is not");
     }
 
-    public ObjectAdapter that(final PerformContext performContext) throws StoryBoundValueException {
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final OneToOneAssociation otoa = (OneToOneAssociation) performContext
                 .getObjectMember();
 
         // if we have an expected result
         CellBinding arg0Binding = performContext.getPeer().getArg0Binding();
-		final StoryCell arg0Cell = arg0Binding.getCurrentCell();
+		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
         final String expected = arg0Cell.getText();
 
         // get
@@ -46,12 +46,12 @@ public class DoesNotContain extends ThatSubcommandAbstract {
                 if (resultAdapter != expectedAdapter) {
                     return resultAdapter;
                 }
-                throw StoryBoundValueException.current(arg0Binding, "(does contain)");
+                throw ScenarioBoundValueException.current(arg0Binding, "(does contain)");
             }
 
             // otherwise, compare title
             if (StringUtils.nullSafeEquals(resultTitle, expected)) {
-            	throw StoryBoundValueException.current(arg0Binding, "(does contain)");
+            	throw ScenarioBoundValueException.current(arg0Binding, "(does contain)");
             }
         }
 

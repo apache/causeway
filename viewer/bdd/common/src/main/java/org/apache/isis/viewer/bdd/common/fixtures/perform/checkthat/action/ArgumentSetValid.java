@@ -7,8 +7,8 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
 
@@ -19,14 +19,14 @@ public class ArgumentSetValid extends ThatSubcommandAbstract {
     }
 
     // TODO: a lot of duplication with InvokeAction; simplify somehow?
-    public ObjectAdapter that(final PerformContext performContext) throws StoryBoundValueException {
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final ObjectMember nakedObjectMember = performContext
                 .getObjectMember();
         final CellBinding onMemberBinding = performContext
         .getPeer().getOnMemberBinding();
-        final List<StoryCell> argumentCells = performContext.getArgumentCells();
+        final List<ScenarioCell> argumentCells = performContext.getArgumentCells();
 
         final ObjectAction nakedObjectAction = (ObjectAction) nakedObjectMember;
         final int parameterCount = nakedObjectAction.getParameterCount();
@@ -46,7 +46,7 @@ public class ArgumentSetValid extends ThatSubcommandAbstract {
         final Consent argSetValid = nakedObjectAction
                 .isProposedArgumentSetValid(onAdapter, proposedArguments);
         if (argSetValid.isVetoed()) {
-        	throw StoryBoundValueException.current(onMemberBinding, argSetValid.getReason());
+        	throw ScenarioBoundValueException.current(onMemberBinding, argSetValid.getReason());
         }
 
         // execute

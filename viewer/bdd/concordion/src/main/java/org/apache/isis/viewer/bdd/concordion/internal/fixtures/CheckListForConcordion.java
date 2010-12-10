@@ -2,8 +2,8 @@ package org.apache.isis.viewer.bdd.concordion.internal.fixtures;
 
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBindingDefault;
-import org.apache.isis.viewer.bdd.common.StoryCell;
-import org.apache.isis.viewer.bdd.common.StoryCellDefault;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
+import org.apache.isis.viewer.bdd.common.ScenarioCellDefault;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListConstants;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
@@ -34,7 +34,7 @@ public class CheckListForConcordion extends AbstractFixture<CheckListPeer> {
         setupHeader(title);
 
         // capture current
-        getPeer().getTitleBinding().captureCurrent(new StoryCellDefault(title));
+        getPeer().getTitleBinding().captureCurrent(new ScenarioCellDefault(title));
 
         // execute
         return checkExists();
@@ -47,7 +47,7 @@ public class CheckListForConcordion extends AbstractFixture<CheckListPeer> {
         return "ok";
     }
     private String getTitle() {
-        StoryCell currentCell = getPeer().getTitleBinding().getCurrentCell();
+        ScenarioCell currentCell = getPeer().getTitleBinding().getCurrentCell();
         return currentCell!=null?currentCell.getText():"(no title provided)";
     }
 

@@ -1,6 +1,6 @@
 package net.sf.isiscontrib.bdd.fitnesse.internal.util;
 
-import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.StoryCellForFitNesse;
+import net.sf.isiscontrib.bdd.fitnesse.internal.fixtures.perform.ScenarioCellForFitNesse;
 
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
@@ -19,7 +19,7 @@ public final class Aliases {
             final String headText = eachHead.body;
 
             if (aliasInfo.matches(headText)) {
-                aliasInfo.setHeadColumn(i, new StoryCellForFitNesse(eachHead));
+                aliasInfo.setHeadColumn(i, new ScenarioCellForFitNesse(eachHead));
                 return aliasInfo;
             }
         }
@@ -29,7 +29,7 @@ public final class Aliases {
             final int size = heads.size();
             final Parse aliasCell = new Parse("td", Fixture.gray(IsisViewerConstants.ALIAS_RESULT_HEAD), null, null);
             heads.last().more = aliasCell;
-            aliasInfo.createHeadCell(size, new StoryCellForFitNesse(aliasCell));
+            aliasInfo.createHeadCell(size, new ScenarioCellForFitNesse(aliasCell));
         }
         return aliasInfo;
     }

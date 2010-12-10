@@ -1,16 +1,16 @@
 package org.apache.isis.viewer.bdd.common.story.bootstrapping;
 
-import org.apache.isis.viewer.bdd.common.Story;
+import org.apache.isis.viewer.bdd.common.Scenario;
 
 public abstract class AbstractHelper {
 
-    private final Story story;
+    private final Scenario story;
 
-    public AbstractHelper(final Story story) {
+    public AbstractHelper(final Scenario story) {
         this.story = story;
     }
 
-    protected Story getStory() {
+    protected Scenario getStory() {
 		return story;
 	}
 

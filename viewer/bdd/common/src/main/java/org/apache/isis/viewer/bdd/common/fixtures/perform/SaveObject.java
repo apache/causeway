@@ -5,7 +5,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 
 public class SaveObject extends PerformAbstractTypeParams {
 
@@ -16,7 +16,7 @@ public class SaveObject extends PerformAbstractTypeParams {
     }
 
     @Override
-    public void doHandle(final PerformContext performContext) throws StoryBoundValueException {
+    public void doHandle(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
 
@@ -24,11 +24,11 @@ public class SaveObject extends PerformAbstractTypeParams {
 
         CellBinding performBinding = performContext.getPeer().getPerformBinding();
         if (valid.isVetoed()) {
-            throw StoryBoundValueException.current(performBinding, valid.getReason());
+            throw ScenarioBoundValueException.current(performBinding, valid.getReason());
         }
 
         if (onAdapter.isPersistent()) {
-            throw StoryBoundValueException.current(performBinding, "(already persistent)");
+            throw ScenarioBoundValueException.current(performBinding, "(already persistent)");
         }
 
         // persist

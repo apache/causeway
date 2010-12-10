@@ -3,8 +3,8 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.viewer.bdd.common.CellBinding;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.AssertsContainment;
 
@@ -20,7 +20,7 @@ public class Containment extends ThatAbstract {
 	@Override
 	protected void doThat(final PerformContext performContext,
 			final Iterable<ObjectAdapter> collection)
-			throws StoryBoundValueException {
+			throws ScenarioBoundValueException {
 
 		final ObjectMember nakedObjectMember = performContext
 				.getObjectMember();
@@ -30,11 +30,11 @@ public class Containment extends ThatAbstract {
 				.getArg0Binding();
 
 		if (!arg0Binding.isFound()) {
-			throw StoryBoundValueException.current(thatBinding,
+			throw ScenarioBoundValueException.current(thatBinding,
 					"(requires argument)");
 		}
 
-		final StoryCell arg0Cell = arg0Binding.getCurrentCell();
+		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
 
 		final ObjectAdapter containedAdapter = performContext.getPeer()
 				.getAdapter(null, nakedObjectMember.getSpecification(),
@@ -49,7 +49,7 @@ public class Containment extends ThatAbstract {
 		}
 
 		if (!assertion.isSatisfiedBy(contains)) {
-			throw StoryBoundValueException.current(arg0Binding, assertion
+			throw ScenarioBoundValueException.current(arg0Binding, assertion
 					.getErrorMsgIfNotSatisfied());
 		}
 

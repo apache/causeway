@@ -3,7 +3,7 @@ package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.collections
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
 
@@ -13,7 +13,7 @@ public abstract class ThatAbstract extends ThatSubcommandAbstract {
         super(key);
     }
 
-    public ObjectAdapter that(final PerformContext performContext) throws StoryBoundValueException {
+    public ObjectAdapter that(final PerformContext performContext) throws ScenarioBoundValueException {
 
         final ObjectAdapter onAdapter = performContext.getOnAdapter();
         final OneToManyAssociation otma = (OneToManyAssociation) performContext
@@ -31,6 +31,6 @@ public abstract class ThatAbstract extends ThatSubcommandAbstract {
     }
 
     protected abstract void doThat(PerformContext performContext,
-            Iterable<ObjectAdapter> collection) throws StoryBoundValueException;
+            Iterable<ObjectAdapter> collection) throws ScenarioBoundValueException;
 
 }

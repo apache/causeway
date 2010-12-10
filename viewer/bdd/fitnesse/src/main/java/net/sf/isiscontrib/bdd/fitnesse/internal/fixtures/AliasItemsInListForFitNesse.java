@@ -7,9 +7,9 @@ import net.sf.isiscontrib.bdd.fitnesse.internal.util.FitnesseUtil;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.IsisViewerConstants;
-import org.apache.isis.viewer.bdd.common.StoryBoundValueException;
-import org.apache.isis.viewer.bdd.common.StoryCell;
-import org.apache.isis.viewer.bdd.common.StoryValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
+import org.apache.isis.viewer.bdd.common.ScenarioCell;
+import org.apache.isis.viewer.bdd.common.ScenarioValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.AliasItemsInListPeer;
 
 import fit.Parse;
@@ -34,7 +34,7 @@ public class AliasItemsInListForFitNesse extends AbstractFixture<AliasItemsInLis
 
         try {
             getPeer().assertIsList();
-        } catch (StoryValueException e) {
+        } catch (ScenarioValueException e) {
             FitnesseUtil.exception(this, listAliasCell, e.getMessage());
         }
 
@@ -58,11 +58,11 @@ public class AliasItemsInListForFitNesse extends AbstractFixture<AliasItemsInLis
     }
 
     private void executeRow() {
-        StoryCell currentCell;
+        ScenarioCell currentCell;
         try {
             currentCell = getPeer().findAndAlias();
             right(FitnesseUtil.asParse(currentCell));
-        } catch (StoryBoundValueException ex) {
+        } catch (ScenarioBoundValueException ex) {
             FitnesseUtil.exception(this, ex);
         }
     }
