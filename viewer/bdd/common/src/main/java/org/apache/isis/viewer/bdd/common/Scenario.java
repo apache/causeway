@@ -34,7 +34,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownIsis;
-import org.apache.isis.viewer.bdd.common.story.bootstrapping.StartClient;
+import org.apache.isis.viewer.bdd.common.story.bootstrapping.RunViewer;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryHolder;
 
@@ -246,7 +246,7 @@ public class Scenario implements AliasRegistryHolder {
     // /////////////////////////////////////////////////////////
 
     public void runViewer() {
-        new StartClient(this).run();
+        new RunViewer(this).run();
     }
 
     // //////////////////////////////////////////////////////////////////

@@ -72,7 +72,7 @@ public class AliasItemsInListPeer extends AbstractListFixturePeer {
     }
 
     private boolean typeMatches(final ObjectAdapter adapter) {
-        if (!typeBinding.isFound()) {
+        if (typeBinding == null || !typeBinding.isFound()) {
             return true;
         }
 

@@ -691,7 +691,7 @@
             ignored (the <acronym>BDD</acronym> integration requires that any
             objects are created through the test scripts, see <xref
             linkend="sec.SetUpObjects" /> and <xref
-            linkend="sec.UsingIsisViewer" />).</para>
+            linkend="chp.UserInteraction" />).</para>
           </listitem>
 
           <listitem>
@@ -995,18 +995,15 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       </sect2>
     </sect1>
 
-    <sect1>
+    <sect1 id="sec.DateAndTimeFormat">
       <title>Date and Time Format</title>
 
-      <para><acronym>BDD</acronym> tests often rely on an exact date and time,
-      and the date/time that a scenario is being run upon can be specified
-      using fixtures (see <xref linkend="sec.SettingDateAndTime" />).</para>
+      <para><acronym>BDD</acronym> tests often rely on exact dates and/or time
+      to be specified, but any such date/time must be specified in text form.
+      In order that tests do not fail when run with different locales, the
+      common library allows a date/time format to be specified.</para>
 
-      <para>However, this date will be specified in text form, as will any
-      assertions on objects that relate to date (eg dispatch date of an order
-      within 28 days of it being placed). In order that tests do not fail when
-      run with different locales, the common library allows a date/time format
-      to be specified.</para>
+      <para>This fixture is typically called only once in the scenario.</para>
 
       <sect2>
         <title>Common</title>
@@ -1070,6 +1067,10 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           </listitem>
         </itemizedlist>
 
+        <para>For example:</para>
+
+        <programlisting>&lt;p concordion:execute="#result=timeIs(#dateTime)"&gt;The &lt;span concordion:assertTrue="#result"&gt;date/time&lt;/span&gt; is &lt;span concordion:set="#dateTime"&gt;2 mar 2007 09:20&lt;/span&gt;.&lt;/p&gt; </programlisting>
+
         <para>These just delegate to the corresponding methods in the
         <classname>Scenario</classname> class.</para>
       </sect2>
@@ -1084,20 +1085,31 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <sect1 id="sec.SettingDateAndTime">
       <title>Setting Date and Time</title>
 
-      <para>Sets the scenario's clock to a specific date and time. Scenarios
-      that deal with domain objects that use the clock (eg for the defaulting
-      of a date/time property) will typically need to call this
-      fixture.</para>
+      <para><acronym>BDD</acronym> scenarios often rely on an exact date and
+      time, and the date/time that a scenario is being run upon can be
+      specified using this fixture. For example, with the date/time set,
+      functionality that checks the a property is defaulted to "today" can
+      then be easily verified.</para>
 
-      <para>Typically called within the "given", though may be called many
-      times throughout the scenario.</para>
+      <para>This fixture will typically be called only once in a scenario.
+      However, more advanced scenarios might require the date/time to be
+      called different places. For example, a scenario might raise an
+      <classname>Invoice</classname>, then move the clock forward by 30 days
+      to test functionality relating to the handling of
+      <classname>Invoice</classname>s unpaid for more than 28 days.</para>
 
       <sect2>
         <title>Common</title>
 
-        <para><methodname>Scenario#dateAndTimeIs(java.util.Date)</methodname></para>
+        <para>The
+        <methodname>Scenario#dateAndTimeIs(String)</methodname>method allows
+        the scenario to specify the date and time. Note that a
+        <classname>String</classname> is passed in rather than a
+        <classname>java.util.Date</classname>, so that the scenario can parse
+        the date according to the date/time format (see <xref
+        linkend="sec.DateAndTimeFormat" />).</para>
 
-        <para>This fixture installs the <classname>FixtureClock</classname> as
+        <para>The fixture installs the <classname>FixtureClock</classname> as
         the implementation of the <classname>Clock</classname> singleton (in
         the applib). Every call to the <classname>Clock</classname> will
         return the same date/time until the method is called again.</para>
@@ -1112,8 +1124,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <sect2>
         <title>Concordion</title>
 
-        <para>The Concordion integration provides a number of overloaded
-        methods, all designed to be called from the
+        <para>The <emphasis>Concordion</emphasis> integration provides a
+        number of overloaded methods, all designed to be called from the
         <acronym>XHTML</acronym>:</para>
 
         <itemizedlist>
@@ -1130,12 +1142,13 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
         <para>For example:</para>
 
-        <programlisting>&lt;p concordion:execute="#result=timeIs(#dateTime)"&gt;The &lt;span concordion:assertTrue="#result"&gt;date/time&lt;/span&gt; is &lt;span concordion:set="#dateTime"&gt;2 mar 2007 09:20&lt;/span&gt;.&lt;/p&gt; </programlisting>
+        <programlisting>&lt;p concordion:execute="#result=timeIs(#dateTime)"&gt;
+  The &lt;span concordion:assertTrue="#result"&gt;date/time&lt;/span&gt; 
+  is &lt;span concordion:set="#dateTime"&gt;02-mar-2007 09:20&lt;/span&gt;.
+&lt;/p&gt; </programlisting>
 
         <para>The overloaded forms are just for convenience; sometimes the
-        scenario will want to emphasis the date, other times the time. In all
-        case the date/time provided is parsed against the format 'dd MMM yyyy
-        hh:mm'</para>
+        scenario will want to emphasis the date, other times the time.</para>
       </sect2>
 
       <sect2>
@@ -1241,8 +1254,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <sect2>
         <title>Concordion</title>
 
-        <para>The Concordion integration provides a corresponding method,
-        <methodname>#aliasService(aliasAs, String
+        <para>The <methodname>Concordion</methodname> integration provides a
+        corresponding method, <methodname>#aliasService(aliasAs, String
         serviceClassName)</methodname>. This returns <literal>true</literal>
         if the service was found, false otherwise. Call within a table to
         alias multiple services, for example:<programlisting>&lt;table concordion:execute="#result=aliasService(#aliasAs, #className)"&gt;
@@ -1267,8 +1280,9 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <sect2>
         <title>FitNesse</title>
 
-        <para>The FitNesse integration provides an implementation of a
-        <classname>ColumnFixture</classname>, which is used as follows:</para>
+        <para>The <emphasis>FitNesse</emphasis> integration provides an
+        implementation of a <classname>ColumnFixture</classname>, which is
+        used as follows:</para>
 
         <para><informaltable>
             <tgroup cols="2">
@@ -1302,13 +1316,25 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <sect1 id="sec.SetUpObjects">
       <title>Setting Up Objects</title>
 
-      <para>Creates objects, and persists them to the object store. .
-      Typically used for immutable reference/standing data objects). Can also
-      be to setup used for transaction/operational data objects (though
+      <para>Virtually every scenario will require some initial objects to work
+      on, be it a <classname>Customer</classname>, an
+      <classname>Order</classname> or just some reference data. However, by
+      design the <acronym>BDD</acronym> viewer runs against an in-memory
+      object store, meaning that the application having been bootstrapped has
+      nothing in its persistent object store.</para>
+
+      <para>This fixture, therefore, is used to create objects, and persists
+      them to the object store. It is typically used for immutable
+      reference/standing data objects. It can also be to setup used for
+      transaction/operational data objects, though
       <classname>UsingIsisViewerForSetup</classname>, <xref
-      linkend="sec.UsingIsisViewer" />, is preferable). The DebugObjectStore
-      fixture (<xref linkend="sec.DebugObjectStore" />) can be used to check
-      the state of objects created.</para>
+      linkend="chp.UserInteraction" />, is generallly to be preferred).</para>
+
+      <para>The <classname>DebugObjectStore</classname> fixture (<xref
+      linkend="sec.DebugObjectStore" />) can be used to check the state of
+      objects created. You can also use the RunViewer fixture (<xref
+      linkend="sec.RunViewer" />) to visually inspect the state of the system
+      using the DnD viewer.</para>
 
       <sect2>
         <title>Common</title>
@@ -1359,14 +1385,14 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         </itemizedlist>
 
         <para>Different methods are available for <acronym>BDD</acronym>
-        framework integrations to call. Typically the BDD framework is
-        expected to setup header information (the names of the properties),
-        and then process each row.</para>
+        framework integrations to call. Typically the <acronym>BDD</acronym>
+        framework is expected to setup header information (the names of the
+        properties), and then process each row.</para>
 
         <para>On the header of the table, the main method to call
         is:<itemizedlist>
             <listitem>
-              <para><methodname>SetUpObjectsPeer#definePropertyOrAlias(String
+              <para><methodname>#definePropertyOrAlias(String
               propertyNameOrAlias, int colNum)</methodname></para>
 
               <para>This associates each column with a property of the class,
@@ -1379,7 +1405,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
         <itemizedlist>
           <listitem>
-            <para><methodname>SetUpObjectsPeer#addPropertyValueOrAlias(String
+            <para><methodname>#addPropertyValueOrAlias(String
             propertyOrAliasValue)</methodname></para>
 
             <para>This provides the value of each property of the object to be
@@ -1390,7 +1416,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           </listitem>
 
           <listitem>
-            <para><methodname>SetUpObjectsPeer#createObject()</methodname></para>
+            <para><methodname>#createObject()</methodname></para>
 
             <para>This actually instantiates the object, either persistent or
             non-persistent as specified in the constructor, and assigns it an
@@ -1399,13 +1425,15 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         </itemizedlist>
 
         <para>That said, there are some other public methods that are
-        available for more complex integrations (notably: FitNesse).</para>
+        available for more complex integrations (notably:
+        <emphasis>FitNesse</emphasis>).</para>
       </sect2>
 
       <sect2>
         <title>Concordion</title>
 
-        <para>The Concordion framework integration provides:</para>
+        <para>The <emphasis>Concordion</emphasis> framework integration
+        provides:</para>
 
         <itemizedlist>
           <listitem>
@@ -1436,10 +1464,16 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         </itemizedlist>
 
         <para>Note that this method should be called from the
-        <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>, not
-        with <emphasis>concordion:execute</emphasis>. See <xref
-        linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
-        details.</para>
+        <acronym>XHTML</acronym> using <literal>isis:execute</literal>, not
+        with <literal>concordion:execute</literal>. The difference between the
+        two is that <literal>isis:execute</literal> is called on the header
+        row as well as each body row, whereas concordion:execute only calls
+        for each body row. The integration requires the header row to be
+        called in order to read the names of the properties to be used to
+        initialize the objects.</para>
+
+        <para>For example, here's how to setup a set of three
+        <classname>Employee</classname> objects:</para>
 
         <programlisting>&lt;p&gt;With Employees (&lt;span concordion:set="#className"&gt;com.mycompany.myapp.dom.employee.Employee&lt;/span&gt;):
 &lt;/p&gt;
@@ -1469,13 +1503,17 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     &lt;td&gt;ok&lt;/td&gt;
   &lt;/tr&gt;
 &lt;/table&gt;</programlisting>
+
+        <para>In this example, we've chosen the convention that the alias is
+        "Employee:<emphasis>FirstName LastName</emphasis>". This is though
+        just a convention; the alias could be anything you want.</para>
       </sect2>
 
       <sect2>
         <title>FitNesse</title>
 
-        <para>The FitNesse integration uses the "Set Up Objects" table, called
-        like so:</para>
+        <para>The <emphasis>FitNesse</emphasis> integration uses the "Set Up
+        Objects" table, called like so:</para>
 
         <informaltable>
           <tgroup cols="3">
@@ -1535,50 +1573,51 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <title>User Interaction</title>
 
     <abstract>
-      <para>***</para>
+      <para>Fixtures to describe interactions with the domain objects,
+      mimicking the way in which an end-user using an Isis viewer would
+      interact.</para>
     </abstract>
 
-    <para>User interaction fixtures appear predominantly in the main body of
-    the test, either to simulating user interactions or to assert on the
-    results of those actions.</para>
+    <para>The user interaction fixtures are the centrepiece of the
+    <acronym>BDD</acronym> framework, simulating the interaction with domain
+    objects as if through a viewer. Using this fixtures, the scenario can
+    interact with objects, check their state, and alias referenced or returned
+    objects for subsequent interactions</para>
 
-    <sect1 id="sec.UsingIsisViewer">
-      <title>Using Isis Viewer / Using Isis Viewer For Setup</title>
+    <para>There is basically just one fixture used to describe user
+    interactions, namely "Using Isis Viewer". There is also a "For Setup"
+    version (ie "Using Isis Viewer For Setup") that disables checks for
+    visibility and usability, making it easier to reuse functionality for
+    setting up objects prior to a test scenario (the "given").</para>
 
-      <para>The centrepiece of the <acronym>BDD</acronym> framework, simulates
-      interacting with domain objects as if through a viewer. Using this
-      feature, the scenario can interact with objects, check their state,
-      alias referenced or returned objects.</para>
+    <para>The <classname>DebugObjectStore</classname> fixture (<xref
+    linkend="sec.DebugObjectStore" />) can be used to check the state of
+    objects created.</para>
 
-      <para>The "For Setup" version disables checks for visibility and
-      usability, making it easier to reuse functionality for setting up
-      objects prior to a test scenario (the "given"). The
-      <classname>DebugObjectStore</classname> fixture (<xref
-      linkend="sec.DebugObjectStore" />) can be used to check the state of
-      objects created.</para>
+    <sect1>
+      <title>Common</title>
+
+      <para>The common library provides the
+      <classname>UsingIsisViewerPeer</classname> class as a means by which the
+      <acronym>BDD</acronym> framework integration can interact with
+      <emphasis>Apache Isis</emphasis> runtime.</para>
+
+      <para>The <classname>UsingIsisViewerPeer</classname> class is generally
+      called from within a table format, with each row representing a specific
+      interaction with the domain object. For example, a row might invoke an
+      action, or could check that a class member is unavailable.</para>
+
+      <para>Some interactions can be used to create or assign aliases to
+      domain objects. For example, invoking a non-void action will return a
+      result. If the result is a domain object, then the alias can be used
+      directly subsequently in the scenario. If the result is a collection,
+      then typically it is the scenario will make an assertion on that
+      collection using "Check List" (see <xref linkend="sec.CheckList" />) or
+      alias an object out of that list using "Alias Items In List" (see <xref
+      linkend="sec.AliasItemsInList" />).</para>
 
       <sect2>
-        <title>Common</title>
-
-        <para>The common library provides the
-        <classname>UsingIsisViewerPeer</classname> class as a means by which
-        the BDD framework integration can interact with Apache Isis
-        runtime.</para>
-
-        <para>The <classname>UsingIsisViewerPeer</classname> class is
-        generally called from within a table format, with each row
-        representing a specific interaction with the domain object. For
-        example, a row might invoke an action, or could check that a class
-        member is unavailable.</para>
-
-        <para>Some interactions can be used to create or assign aliases to
-        domain objects. For example, invoking a non-void action will return a
-        result. If the result is a domain object, then the alias can be used
-        directly subsequently in the scenario. If the result is a collection,
-        then typically it is the scenario will make an assertion on that
-        collection using "Check List" (see <xref linkend="sec.CheckList" />)
-        or alias an object out of that list using "Alias Items In List" (see
-        <xref linkend="sec.AliasItemsInList" />).</para>
+        <title>Constructor</title>
 
         <para>Because <classname>UsingIsisViewerPeer</classname> is
         table-oriented, it uses <classname>CellBinding</classname>s (see <xref
@@ -1600,115 +1639,243 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
           </listitem>
 
           <listitem>
-            <para><classname>CellBinding</classname>s for each of the standard
-            columns of the table</para>
+            <para><classname>CellBinding</classname>s for each of the columns
+            of the table.</para>
 
-            <para>These are discussed below.</para>
+            <para>Cell bindings are discussed immediately below.</para>
           </listitem>
         </itemizedlist>
 
-        <para>The <classname>CellBinding</classname>s passed into the
-        constructor correspond to the standard columns of the table. Although
-        all must be passed in, not all are needed for every interaction; in
-        these cases the value can be left blank. The
-        <classname>CellBinding</classname>s correspond to the following column
-        names:</para>
+        <para>Each of the framework integrations is expected to instantiate
+        the <classname>UsingIsisViewerPeer</classname> at the beginning of the
+        table, and then call into the same instance for each row in the
+        table.</para>
+
+        <sect3>
+          <title>Cell Bindings</title>
+
+          <para>The <classname>CellBinding</classname>s passed into the
+          constructor correspond to the standard columns of the table.
+          Although all must be passed in, not all are needed for every
+          interaction; in these cases the value can be left blank. The
+          <classname>CellBinding</classname>s correspond to the following
+          column names:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the "on object" column (can also use 'object', or 'on' if
+              parsing column name provided by scenario text)</para>
+
+              <para>The (alias of) the object to interact with. A value must
+              always be provided.</para>
+            </listitem>
+
+            <listitem>
+              <para>the "alias result as" column (can also use "result=",
+              "alias=", "alias as")</para>
+
+              <para>The alias to assign the result of any interaction.</para>
+            </listitem>
+
+            <listitem>
+              <para>the "perform" column (can also use "do", "interaction",
+              "interaction type")</para>
+
+              <para>the interaction to perform; discussed further below</para>
+            </listitem>
+
+            <listitem>
+              <para>the "on member" column (can also use "member", "using
+              member", using")</para>
+
+              <para>the property, collection or action to use</para>
+            </listitem>
+
+            <listitem>
+              <para>the "that it" column (can also use "that", "verb")</para>
+
+              <para>optional qualifier for interactions that make checks;
+              discussed below</para>
+            </listitem>
+
+            <listitem>
+              <para>the "with arguments" (can also "arguments", "parameters",
+              "with parameters", "for", "value", "for parameters", "value",
+              "reference")</para>
+
+              <para>the first argument, to the interaction, if any. It is
+              possible to perform interactions with multiple arguments (for
+              example, invoking an action); but the
+              <classname>UsingIsisViewerPeer</classname> needs to have a
+              binding for the first argument so that it can knows to interpret
+              any following columns as further arguments.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The actual values that go into each of these columns are
+          listed below (<xref linkend="sec.SupportedInteractions" />).</para>
+        </sect3>
+
+        <sect3>
+          <title>The "Perform" Binding</title>
+
+          <para>Of all of the bindings discussed above, the "perform" binding
+          is the most critical because it determines the actual type of
+          interaction to be performed. The valid values that can be provided
+          for the "perform" binding are:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>check property / check collection / check add to
+              collection / check remove from collection / check action</para>
+
+              <para>These are combined with a value in the "that it" binding;
+              for example "check property XXX is hidden", or "check action XXX
+              is valid for (<emphasis>some argument list</emphasis>)"</para>
+            </listitem>
+
+            <listitem>
+              <para>get property / set property / clear property</para>
+
+              <para>Read from or write to a collection. If setting, a single
+              argument is required</para>
+            </listitem>
+
+            <listitem>
+              <para>get collection / add to collection / remove from
+              collection</para>
+
+              <para>Read or write from a collection. If writing, a single
+              argument is required</para>
+            </listitem>
+
+            <listitem>
+              <para>invoke action</para>
+
+              <para>Invoke action, with 0 to many arguments</para>
+            </listitem>
+
+            <listitem>
+              <para>get property default / get property choices / get action
+              parameter default / get action choices</para>
+
+              <para>To enable the testing of the
+              <methodname>choicesXxx()</methodname> and
+              <methodname>defaultXxx()</methodname> supporting methods</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Again, see the sections below (<xref
+          linkend="sec.SupportedInteractions" />) for specifics..</para>
+        </sect3>
+      </sect2>
+
+      <sect2>
+        <title>Capture Current</title>
+
+        <para>Once the bindings have been setup, the fixture peer should be
+        called for each row in the table. The
+        <classname>CellBinding</classname> class provides the
+        <methodname>#captureCurrent(...)</methodname> method to capture the
+        relevant value for each row (with the
+        <classname>CellBinding</classname>s obtained directory from the
+        <classname>Scenario</classname> class, eg
+        <methodname>Scenario#getOnObjectBinding()</methodname>).</para>
+
+        <para>For some framework integrations (eg
+        <methodname>Concordion</methodname>) this design introduces a little
+        more complexity than strictly necessary, because the knowledge is
+        already known as to which value relates to which binding. But for
+        other frameworks (eg FitNesse), the <classname>CellBinding</classname>
+        provides a useful abstraction that makes it easy to associate values
+        with each column.</para>
+      </sect2>
+
+      <sect2>
+        <title>Validate</title>
+
+        <para>Once the values for the current row have been captured, they can
+        be validated. The <classname>UsingIsisViewerPeer</classname> class
+        provides the following methods for this:</para>
 
         <itemizedlist>
           <listitem>
-            <para>the "on object" column (can also use 'object', or 'on' if
-            parsing column name provided by scenario text)</para>
+            <para><methodname>#validateOnObject():
+            ObjectAdapter</methodname></para>
 
-            <para>The (alias of) the object to interact with. A value must
-            always be provided.</para>
+            <para>Verifies that the current value of the "on object" binding
+            corresponds to a known alias</para>
           </listitem>
 
           <listitem>
-            <para>the "alias result as" column (can also use "result=",
-            "alias=", "alias as")</para>
+            <para><methodname>#validateAliasAs(): String</methodname></para>
 
-            <para>The alias to assign the result of any interaction.</para>
+            <para>Verifies that the current value of the "alias as" binding is
+            not already in use</para>
           </listitem>
 
           <listitem>
-            <para>the "perform" column (can also use "do", "interaction",
-            "interaction type")</para>
+            <para><methodname>#validateOnMember():
+            ObjectMember</methodname></para>
 
-            <para>the interaction to perform; discussed further below</para>
+            <para>Verifies that the current value of the "on member" binding
+            corresponds to the name of a member (property name, collection
+            name or action name) of the type of the object being interacted
+            with (ie, as specified in the "on object" binding)</para>
           </listitem>
 
           <listitem>
-            <para>the "on member" column (can also use "member", "using
-            member", using")</para>
+            <para><methodname>#validatePerform(): Perform</methodname></para>
 
-            <para>the property, collection or action to use</para>
-          </listitem>
-
-          <listitem>
-            <para>the "that it" column (can also use "that", "verb")</para>
-
-            <para>optional qualifier for interactions that make checks;
-            discussed below</para>
-          </listitem>
-
-          <listitem>
-            <para>the "with arguments" (can also "arguments", "parameters",
-            "with parameters", "for", "value", "for parameters", "value",
-            "reference")</para>
-
-            <para>the first argument, to the interaction, if any. It is
-            possible to perform interactions with multiple arguments (for
-            example, invoking an action); but the UsingIsisViewerPeer needs to
-            have a binding for the first argument so that it can knows to
-            interpret any following columns as further arguments.</para>
+            <para>Verifies that the current value of the "perform" binding
+            corresponds to a known interaction type for the particular type of
+            member.</para>
           </listitem>
         </itemizedlist>
 
-        <para>The valid values that can be provided for the "perform" binding
-        are:</para>
+        <para>Again, see the sections below (<xref
+        linkend="sec.SupportedInteractions" />) for specifics.</para>
+      </sect2>
 
-        <itemizedlist>
-          <listitem>
-            <para>check property / check collection / check add to collection
-            / check remove from collection / check action</para>
+      <sect2>
+        <title>Perform Command</title>
 
-            <para>These are combined with a value in the "that it" binding;
-            for example "check property XXX is hidden", or "check action XXX
-            is valid for (<emphasis>some argument list</emphasis>)"</para>
-          </listitem>
+        <para>Once all the validation has been performed, the command can
+        actually be performed. This is done with the
+        <classname>UsingIsisViewerPeer</classname>'s
+        <methodname>#performCommand(ObjectAdapter onObject, String aliasAs,
+        ObjectMember onMember, Perform perform, List&lt;ScenarioCell&gt;
+        args)</methodname> method.</para>
+      </sect2>
+    </sect1>
 
-          <listitem>
-            <para>get property / set property / clear property</para>
+    <sect1 id="sec.SupportedInteractions">
+      <title>Supported Interactions</title>
 
-            <para>Read from or write to a collection. If setting, a single
-            argument is required</para>
-          </listitem>
+      <para>The valid values for the various bindings when interacting with a
+      class members are summarized in the following sections.</para>
 
-          <listitem>
-            <para>get collection / add to collection / remove from
-            collection</para>
+      <para>Note:</para>
 
-            <para>Read or write from a collection. If writing, a single
-            argument is required</para>
-          </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>the <acronym>API</acronym> provided by the common library is
+          not type-safe; the values (as provided in
+          <classname>ScenarioCell</classname>) must match the values given
+          here. While it is tempting to refactor the common library to use
+          type safe enums, this would move the need to translate scenario text
+          into each and every <acronym>BDD</acronym> framework integration.
+          The <acronym>API</acronym> is probably correct as it is, even though
+          it is reliant on the exact string phrases that appear in the tables
+          above.</para>
+        </listitem>
+      </itemizedlist>
 
-          <listitem>
-            <para>invoke action</para>
+      <sect2 id="sec.InteractingWithProperties">
+        <title>Interaction with Properties</title>
 
-            <para>Invoke action, with 0 to many arguments</para>
-          </listitem>
-
-          <listitem>
-            <para>get property default / get property choices / get action
-            parameter default / get action choices</para>
-
-            <para>To enable the testing of the choicesXxx() and defaultXxx()
-            supporting methods</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>The tables below summarizes the full of interactions that are
-        supported for properties:</para>
+        <para>The valid values for the various bindings when interacting with
+        a property are summarized below:</para>
 
         <table>
           <title>Supported Interactions for Properties</title>
@@ -1961,8 +2128,13 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
         <para>Obtaining a alias for the (value of) a property only makes sense
         if the property is a reference type, not value type.</para>
+      </sect2>
 
-        <para>We likewise have a table for collections:</para>
+      <sect2 id="sec.InteractingWithCollections">
+        <title>Interacting with Collections</title>
+
+        <para>The valid values for the various bindings when interacting with
+        a collection are summarized below:</para>
 
         <table>
           <title>Supported Interactions for Collections</title>
@@ -2200,8 +2372,13 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <para>Obtaining a reference to a collection allows objects to be
         aliased from within it, using <xref
         linkend="sec.AliasItemsInList" />.</para>
+      </sect2>
 
-        <para>Finally, we have a table for actions:</para>
+      <sect2 id="sec.InteractingWithActions">
+        <title>Interacting with Actions</title>
+
+        <para>The valid values for the various bindings when interacting with
+        an action are summarized below:</para>
 
         <table>
           <title>Supported Interactions for Actions</title>
@@ -2357,161 +2534,81 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
             </tbody>
           </tgroup>
         </table>
-
-        <para>Note:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>the <acronym>API</acronym> provided by the common library is
-            not type-safe; the values (as provided in
-            <classname>ScenarioCell</classname>) must match the values given
-            here. While it is tempting to refactor the common library to use
-            type safe enums, this would move the need to translate scenario
-            text into each and every <acronym>BDD</acronym> framework
-            integration. The <acronym>API</acronym> is probably correct as it
-            is, even though it is reliant on the exact string phrases that
-            appear in the tables above.</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>To actually perform, these interaction, the set</para>
-
-        <para></para>
-
-        <para>*** discuss captureCurrent()</para>
-
-        <para></para>
-
-        <para>the <classname>UsingIsisViewerPeer</classname> provides the
-        following methods:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><methodname>#validateOnObject():
-            ObjectAdapter</methodname></para>
-
-            <para></para>
-          </listitem>
-
-          <listitem>
-            <para><methodname>#validateAliasAs(): String</methodname></para>
-
-            <para></para>
-          </listitem>
-
-          <listitem>
-            <para><methodname>#validateOnMember():
-            ObjectMember</methodname></para>
-
-            <para></para>
-          </listitem>
-
-          <listitem>
-            <para><methodname>#validatePerform(): Perform</methodname></para>
-
-            <para></para>
-          </listitem>
-
-          <listitem>
-            <para><methodname>#performCommand(ObjectAdapter onObject, String
-            aliasAs, ObjectMember onMember, Perform perform,
-            List&lt;ScenarioCell&gt; args)</methodname></para>
-
-            <para></para>
-          </listitem>
-        </itemizedlist>
-
-        <para></para>
       </sect2>
+    </sect1>
 
-      <sect2>
-        <title>Concordion</title>
+    <sect1>
+      <title>Concordion Integration</title>
 
-        <para>The <emphasis>Concordion</emphasis> framework integration
-        provides a set of overloaded methods in
-        <classname>AbstractIsisConcordionScenario</classname> which call into
-        the <classname>UsingIsisViewerPeer</classname>:</para>
+      <para>The <emphasis>Concordion</emphasis> framework integration provides
+      a set of overloaded methods in
+      <classname>AbstractIsisConcordionScenario</classname> which call into
+      the <classname>UsingIsisViewerPeer</classname>:</para>
 
-        <itemizedlist>
-          <listitem>
-            <para><methodname>#usingIsisViewer(String onObject, String
-            aliasResultAs, String perform, String usingMember)
-            </methodname></para>
+      <itemizedlist>
+        <listitem>
+          <para><methodname>#usingIsisViewer(String onObject, String
+          aliasResultAs, String perform, String usingMember)
+          </methodname></para>
 
-            <para>For interactions that have no "that it" or arguments (eg
-            "get collectoin recentlyPlacedOrders")</para>
-          </listitem>
+          <para>For interactions that have no "that it" or arguments (eg "get
+          collectoin recentlyPlacedOrders")</para>
+        </listitem>
 
-          <listitem>
-            <para><methodname>#usingIsisViewerThat(String onObject, String
-            aliasResultAs, String perform, String usingMember, String
-            thatIt)</methodname></para>
+        <listitem>
+          <para><methodname>#usingIsisViewerThat(String onObject, String
+          aliasResultAs, String perform, String usingMember, String
+          thatIt)</methodname></para>
 
-            <para>For interactions that require a "that it" but no arguments
-            (eg, "check property firstName that it is hidden")</para>
-          </listitem>
+          <para>For interactions that require a "that it" but no arguments
+          (eg, "check property firstName that it is hidden")</para>
+        </listitem>
 
-          <listitem>
-            <para><methodname>#usingIsisViewerArgs(String onObject, String
-            aliasResultAs, String perform, String usingMember, String arg0,
-            String arg1, ...</methodname>)</para>
+        <listitem>
+          <para><methodname>#usingIsisViewerArgs(String onObject, String
+          aliasResultAs, String perform, String usingMember, String arg0,
+          String arg1, ...</methodname>)</para>
 
-            <para>For interactions that require arguments, but no "that it"
-            (eg "invoke action placeOrder with arguments arg1, arg2,
-            arg3").</para>
+          <para>For interactions that require arguments, but no "that it" (eg
+          "invoke action placeOrder with arguments arg1, arg2, arg3").</para>
 
-            <para>There are multiple overloaded versions of this method taking
-            from 1 to 5 arguments.</para>
-          </listitem>
+          <para>There are multiple overloaded versions of this method taking
+          from 1 to 5 arguments.</para>
+        </listitem>
 
-          <listitem>
-            <para><methodname>#usingIsisViewerThatArgs(String onObject, String
-            aliasResultAs, String perform, String usingMember, String arg0,
-            String arg1, ...)</methodname></para>
+        <listitem>
+          <para><methodname>#usingIsisViewerThatArgs(String onObject, String
+          aliasResultAs, String perform, String usingMember, String arg0,
+          String arg1, ...)</methodname></para>
 
-            <para>For interactions that require a "that it" and also an
-            argumetn or arguments (eg "check action placeOrder is not valid
-            for arg1, arg2, arg3)</para>
+          <para>For interactions that require a "that it" and also an argumetn
+          or arguments (eg "check action placeOrder is not valid for arg1,
+          arg2, arg3)</para>
 
-            <para>There are multiple overloaded versions of this method taking
-            from 1 to 5 arguments.</para>
-          </listitem>
-        </itemizedlist>
+          <para>There are multiple overloaded versions of this method taking
+          from 1 to 5 arguments.</para>
+        </listitem>
+      </itemizedlist>
 
-        <para>If there is a requirement for more than 5 arguments, then you
-        can write your own method and delegate to the (protected visibility)
-        <methodname>#usingIsisViewerThatArgsVarargs(...)</methodname>
-        method.</para>
+      <para>If there is a requirement for more than 5 arguments, then you can
+      write your own method and delegate to the (protected visibility)
+      <methodname>#usingIsisViewerThatArgsVarargs(...)</methodname>
+      method.</para>
 
-        <para>In all cases these methods return the string "ok", or return the
-        text of an exception otherwise. This makes them easy to embed</para>
+      <para>In all cases these methods return the string "ok", or return the
+      text of an exception otherwise. This makes them easy to embed</para>
 
-        <para>Returns ok</para>
+      <para>Do note that this method, if called from a table should be called
+      from the <acronym>XHTML</acronym> using <literal>isis:execute</literal>,
+      not with <literal>concordion:execute</literal>. This is because the
+      <methodname>Isis/Concordion</methodname> integration requires that the
+      first header row of the table also be processed (the
+      <literal>concordion:execute</literal> only processes every row of the
+      body but skips the table).</para>
 
-        <para></para>
+      <para>For example:</para>
 
-        <para>Note that this method should be called from the
-        <acronym>XHTML</acronym> using <emphasis>isis:execute</emphasis>, not
-        with concordion:execute. See <xref
-        linkend="sec.HowTheIsisConcordionIntegrationWorks" /> for
-        details.</para>
-
-        <para>For example, calling inline:</para>
-
-        <programlisting>&lt;p
-  isis:execute="#result=usingIsisViewer(#onObject,#aliasResultAs, #perform, #usingMember)"&gt;
-  With the &lt;span concordion:set="#onObject"&gt;employees&lt;/span&gt; service, &lt;span
-  concordion:set="#perform"&gt;invoke action&lt;/span&gt; &lt;span
-  concordion:set="#usingMember"&gt;All Employees&lt;/span&gt; and alias the resulting list as &lt;span
-  concordion:set="#aliasResultAs"&gt;list1&lt;/span&gt;; &lt;span
-  concordion:assertEquals="#result"&gt;ok&lt;/span&gt;
-&lt;/p&gt;</programlisting>
-
-        <para></para>
-
-        <para>The method can also be called within a table:</para>
-
-        <programlisting>&lt;table
+      <programlisting>&lt;table
  isis:execute="#result=usingIsisViewerThatArgs(#onObject, #aliasResultAs, #perform, #onMember, #thatIt, #value)"&gt;
   &lt;tr&gt;
     &lt;th concordion:set="#onObject"&gt;on object&lt;/th&gt;
@@ -2533,98 +2630,107 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
   &lt;/tr&gt;
 &lt;/table&gt;</programlisting>
 
-        <para></para>
+      <para>It is also valid to call inline, ie outside of a table. In this
+      case either <literal>isis:execute</literal> or
+      <literal>concordion:execute</literal> can be used; for simplicitly we
+      recommend only ever using <literal>isis:execute</literal>.</para>
 
-        <para></para>
+      <para>For example:</para>
 
-        <para></para>
-      </sect2>
+      <programlisting>&lt;p
+  isis:execute="#result=usingIsisViewer(#onObject,#aliasResultAs, #perform, #usingMember)"&gt;
+  With the &lt;span concordion:set="#onObject"&gt;employees&lt;/span&gt; service, 
+  &lt;span concordion:set="#perform"&gt;invoke action&lt;/span&gt; 
+  &lt;span concordion:set="#usingMember"&gt;All Employees&lt;/span&gt; and 
+  alias the resulting list as &lt;span concordion:set="#aliasResultAs"&gt;list1&lt;/span&gt;; 
+  &lt;span concordion:assertEquals="#result"&gt;ok&lt;/span&gt;
+&lt;/p&gt;</programlisting>
+    </sect1>
 
-      <sect2>
-        <title>FitNesse</title>
+    <sect1>
+      <title>FitNesse Integration</title>
 
-        <para></para>
+      <para>The <emphasis>FitNesse</emphasis> integration provides a
+      <classname>Using Isis Viewer</classname> (and also <classname>Using Isis
+      Viewer For Setup</classname>) fixture, to call in table format.</para>
 
-        <para></para>
+      <para>For example:</para>
 
-        <informaltable>
-          <tgroup cols="5">
-            <colspec colname="_1" />
+      <informaltable>
+        <tgroup cols="5">
+          <colspec colname="_1" />
 
-            <colspec colname="_2" />
+          <colspec colname="_2" />
 
-            <colspec />
+          <colspec />
 
-            <colspec />
+          <colspec />
 
-            <colspec colname="_3" />
+          <colspec colname="_3" />
 
-            <tbody>
-              <row>
-                <entry><classname>Using Isis Viewer</classname></entry>
+          <tbody>
+            <row>
+              <entry><classname>Using Isis Viewer</classname></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry nameend="_3" namest="_2"><emphasis></emphasis></entry>
-              </row>
+              <entry nameend="_3" namest="_2"><emphasis></emphasis></entry>
+            </row>
 
-              <row>
-                <entry><classname>On Object</classname></entry>
+            <row>
+              <entry><classname>On Object</classname></entry>
 
-                <entry><classname>Alias Result As</classname></entry>
+              <entry><classname>Alias Result As</classname></entry>
 
-                <entry>Perform</entry>
+              <entry>Perform</entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry><classname>alias as</classname></entry>
-              </row>
+              <entry><classname>alias as</classname></entry>
+            </row>
 
-              <row>
-                <entry><emphasis>Fred Smith</emphasis></entry>
+            <row>
+              <entry><emphasis>Fred Smith</emphasis></entry>
 
-                <entry><emphasis> </emphasis></entry>
+              <entry><emphasis> </emphasis></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
-              </row>
+              <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+            </row>
 
-              <row>
-                <entry><emphasis>Tom Brown</emphasis></entry>
+            <row>
+              <entry><emphasis>Tom Brown</emphasis></entry>
 
-                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+              <entry><emphasis>Employee:Fred Smith</emphasis></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry><emphasis>Employee:Tom Brown</emphasis></entry>
-              </row>
+              <entry><emphasis>Employee:Tom Brown</emphasis></entry>
+            </row>
 
-              <row>
-                <entry><emphasis>Sam Jones</emphasis></entry>
+            <row>
+              <entry><emphasis>Sam Jones</emphasis></entry>
 
-                <entry><emphasis>Employee:Fred Smith</emphasis></entry>
+              <entry><emphasis>Employee:Fred Smith</emphasis></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry></entry>
+              <entry></entry>
 
-                <entry><emphasis>Employee:Sam Jones</emphasis></entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
-
-        <para></para>
-      </sect2>
+              <entry><emphasis>Employee:Sam Jones</emphasis></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
     </sect1>
   </chapter>
 
@@ -2632,86 +2738,114 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <title>Asserting on Collections</title>
 
     <abstract>
-      <para>***</para>
+      <para>Fixtures to assert on the contents of a collection.</para>
     </abstract>
 
-    <para></para>
+    <para>Although the user interaction fixtures (in <xref
+    linkend="chp.UserInteraction" />) provide some capability to assert on
+    collections, those collections must belong to an object. It is therefore
+    not possible to use them to assert on the contents of a "free-standing"
+    collection, that is, one that was returned as the result of invoking an
+    action. Those fixtures also do not provide any ability to simply assert on
+    the contents of a collection (whether free-standing or owned by an
+    object).</para>
 
-    <sect1 id="sec.CheckListIsEmpty">
-      <title>Check List Is Empty / Check List Is Not Empty</title>
+    <para>The fixtures in this chapter make it easy to assert on the contents
+    of any collection. For owned collections, there is some duplication with
+    the user interactions fixtures; which you use is up to you.</para>
 
-      <para></para>
+    <sect1 id="sec.CheckCollectionContents">
+      <title>Check Collection Contents</title>
+
+      <para>These fixtures are used to assert various facts about the contents
+      of a collection. </para>
+
+      <para>They are typically used in the "Then", though can be helpful as a
+      way of confirming/documenting a "Given".</para>
 
       <sect2>
         <title>Common</title>
 
-        <para></para>
+        <para>The common library provides the
+        <classname>CheckCollectionContentsPeer</classname> that provides the
+        following methods:</para>
 
-        <para></para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#isEmpty()</methodname> returns true if the
+            specified list is empty</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>#isNotEmpty()</methodname> returns true if the
+            specified list is not empty</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>#contains(String)</methodname> returns true if
+            the specified alias is valid and refers to an object that is
+            contained within the collection</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>#doesNotContain(String)</methodname> returns
+            true if the specified alias is valid and refers to an object that
+            is not contained within the collection</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>#assertSize(int)</methodname> returns true if
+            the number of objects in the collection is as specified</para>
+          </listitem>
+        </itemizedlist>
       </sect2>
 
       <sect2>
         <title>Concordion</title>
 
-        <para></para>
+        <para>The <methodname>Concordion</methodname> integration provides
+        methods within
+        <classname>AbstractIsisConcordionScenario</classname>:</para>
 
-        <para></para>
-      </sect2>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#checkCollectionIsEmpty()</methodname> returns
+            true if the specified list is empty</para>
+          </listitem>
 
-      <sect2>
-        <title>FitNesse</title>
+          <listitem>
+            <para><methodname>#checkCollectionIsNotEmpty()</methodname>
+            returns true if the specified list is not empty</para>
+          </listitem>
 
-        <para>Not yet implemented.</para>
-      </sect2>
-    </sect1>
+          <listitem>
+            <para><methodname>#checkCollectionContains(String)</methodname>
+            returns true if the specified alias is valid and refers to an
+            object that is contained within the collection</para>
+          </listitem>
 
-    <sect1 id="sec.CheckListContains">
-      <title>Check List Contains / Check List Does Not Contain</title>
+          <listitem>
+            <para><methodname>#checkCollectionDoesNotContain(String)</methodname>
+            returns true if the specified alias is valid and refers to an
+            object that is not contained within the collection</para>
+          </listitem>
 
-      <para></para>
+          <listitem>
+            <para><methodname>#checkCollectionSize(int)</methodname> returns
+            true if the number of objects in the collection is as
+            specified</para>
+          </listitem>
+        </itemizedlist>
 
-      <sect2>
-        <title>Common</title>
+        <para>For example:</para>
 
-        <para></para>
+        <programlisting>&lt;p concordion:execute="#result=checkCollectionSize(#tomsClaimsAfterwards,#expectedSize)"&gt;
+  Confirm that tom has &lt;span concordion:set="#expectedSize"&gt;2&lt;/span&gt; claims;
+  &lt;span concordion:assertEquals="#result"&gt;ok&lt;/span&gt;.
+&lt;/p&gt;</programlisting>
 
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>Concordion</title>
-
-        <para></para>
-
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>FitNesse</title>
-
-        <para>Not yet implemented.</para>
-      </sect2>
-    </sect1>
-
-    <sect1 id="sec.CheckListSize">
-      <title>Check List Size</title>
-
-      <para></para>
-
-      <sect2>
-        <title>Common</title>
-
-        <para></para>
-
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>Concordion</title>
-
-        <para></para>
-
-        <para></para>
+        <para>Each of these simply calls into the corresponding method in the
+        common library.</para>
       </sect2>
 
       <sect2>
@@ -2726,7 +2860,9 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
       <para>Check items in list, either precisely or just for presence, using
       their title. Lists are either aliased results of actions, or aliased
-      collections within objects.</para>
+      collections within objects. Note that this ordering
+      <emphasis>does</emphasis> matter (hence CheckList rather than
+      CheckCollection).</para>
 
       <para>Typically used in the "Then", though can be helpful as a way of
       confirming/documenting a "Given".</para>
@@ -2736,111 +2872,358 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       check (will fail if the objects are not in the list) and aliases them
       for further use.</para>
 
-      <para></para>
-
       <sect2>
         <title>Common</title>
 
-        <para></para>
+        <para>The common library provides the
+        <classname>CheckListPeer</classname> which can be used to check the
+        contents of a table, by title and optionally by type. It is designed
+        to be called in a table format, and so has a constructor that accepts
+        <classname>CellBinding</classname>s to represent the title and type
+        columns. Specifically, the constructor takes the following
+        parameters:</para>
 
-        <para></para>
+        <itemizedlist>
+          <listitem>
+            <para><classname>AliasRegistry</classname></para>
+          </listitem>
+
+          <listitem>
+            <para>a <classname>String</classname> for the list alias</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CheckListPeer.CheckMode</classname></para>
+
+            <para>the check can be <varname>EXACT</varname> (the contents of
+            the collection must exactly match those provided in the table) or
+            <varname>NOT_EXACT</varname> (those objects specified must be
+            within the collection, but there may be additional objects
+            also)</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CellBinding</classname> for title</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CellBinding</classname> for type
+            (optional)</para>
+          </listitem>
+        </itemizedlist>
       </sect2>
 
       <sect2>
         <title>Concordion</title>
 
-        <para></para>
+        <para>The <emphasis>Concordion</emphasis> integration provides a
+        single method <methodname>#checkList(...)</methodname>:</para>
 
-        <para></para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#checkList(String listAlias, String
+            title)</methodname></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If the object is found then the method returns "ok".</para>
+
+        <para>Calling this method is an assertion that the specified list
+        contains an object with the specified title. It's possible to achieve
+        broadly the same effect using other fixtures (either <xref
+        linkend="sec.CheckCollectionContents" /> for both free-standing and
+        owned collections, or <xref
+        linkend="sec.InteractingWithCollections" /> for owned collections).
+        However, the tabular form afforded by
+        <methodname>#checkList(...)</methodname> may make it more appropriate
+        to use in some cases.</para>
+
+        <para>For example:</para>
+
+        <programlisting>&lt;table isis:execute="#result=checkList(#tomsClaimsAfterwards, #title)"&gt;
+  &lt;tr&gt;
+    &lt;th concordion:set="#title"&gt;title&lt;/th&gt;
+    &lt;th concordion:assertEquals="#result"/&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;New - 2007-2-18&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;New - 2007-2-14&lt;/td&gt;
+    &lt;td&gt;ok&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</programlisting>
+
+        <para>Note that the <emphasis>Concordion</emphasis> integration only
+        supports only <varname>NOT_EXACT</varname> mode. An alternative is to
+        use <emphasis>Concordion</emphasis>'s own
+        <methodname>verifyRows(...)</methodname> mechanism, as described in
+        <xref linkend="sec.VerifyRows" />.</para>
       </sect2>
 
       <sect2>
         <title>FitNesse</title>
 
-        <para></para>
+        <para>The <emphasis>FitNesse</emphasis> integration provides two
+        different table fixtures, <classname>Check List Contains</classname>
+        (corresponding to <varname>NOT_EXACT</varname> mode) and
+        <classname>Check List Precisely Contains</classname> (corresponding to
+        <varname>EXACT</varname> mode).</para>
 
-        <para></para>
+        <para>For example:</para>
+
+        <informaltable>
+          <tgroup cols="2">
+            <colspec colname="_1" />
+
+            <colspec colname="_2" />
+
+            <tbody>
+              <row>
+                <entry><classname>Check List Contains</classname></entry>
+
+                <entry>tomsClaimsAfterwards</entry>
+              </row>
+
+              <row>
+                <entry nameend="_2"
+                namest="_1"><classname>Title</classname></entry>
+              </row>
+
+              <row>
+                <entry nameend="_2" namest="_1"><emphasis>New -
+                2007-2-18</emphasis></entry>
+              </row>
+
+              <row>
+                <entry nameend="_2" namest="_1"><emphasis>New -
+                2007-2-14</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
       </sect2>
     </sect1>
 
     <sect1 id="sec.AliasItemsInList">
       <title>Alias Items In List</title>
 
-      <para>Allows an alias to be associated with items in a list. The list
-      items are located by their title, and are presumed to exist. This
-      fixture can therefore also be used as a way of checking for presence of
-      items in a list (similar to <classname>CheckList</classname>, <xref
-      linkend="sec.CheckList" />).</para>
-
-      <para>Typically used both in the "Given" (to simplify writing the rest
-      of a test).</para>
-
-      <para></para>
-
-      <para></para>
+      <para>Closely related to <classname>CheckList</classname> <xref
+      linkend="sec.CheckList" />, this fixture allows an alias to be
+      associated with items in a list. The list items are located by their
+      title, and are presumed to exist. This fixture can therefore also be
+      used as a way of checking for presence of items in a list.</para>
 
       <sect2>
         <title>Common</title>
 
-        <para></para>
+        <para>The common library provides the
+        <classname>AliasItemsInListPeer</classname> which can be used to check
+        the contents of a table, by title and optionally by type. It is
+        designed to be called in a table format, and so has a constructor that
+        accepts <classname>CellBinding</classname>s to represent the title,
+        the type and alias columns. Specifically, the constructor takes the
+        following parameters:</para>
 
-        <para></para>
+        <itemizedlist>
+          <listitem>
+            <para><classname>AliasRegistry</classname></para>
+          </listitem>
+
+          <listitem>
+            <para>a <classname>String</classname> for the list alias</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CellBinding</classname> for title</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CellBinding</classname> for type
+            (optional)</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>CellBinding</classname> for alias</para>
+          </listitem>
+        </itemizedlist>
       </sect2>
 
       <sect2>
         <title>Concordion</title>
 
-        <para></para>
+        <para>The <emphasis>Concordion</emphasis> integration provides
+        overloaded versions of
+        <methodname>#aliasItemsInList(...)</methodname>:</para>
 
-        <para></para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>#aliasItemsInList(String listAlias, String
+            title, String aliasAs)</methodname></para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>#aliasItemsInList(String listAlias, String
+            title, String type, String aliasAs)</methodname></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If successful, then the found object is aliased to the supplied
+        alias and the method returns "ok".</para>
+
+        <para>For example, here is how to call the method inline:</para>
+
+        <programlisting>&lt;p concordion:execute="#result=aliasItemsInList(#listAlias, #title, #aliasAs)"&gt;
+  Alias &lt;span concordion:set="#title"&gt;Tom Brown&lt;/span&gt; 
+  in &lt;span concordion:set="#listAlias"&gt;list1&lt;/span&gt; 
+  as &lt;span concordion:set="#aliasAs"&gt;tomEmployee&lt;/span&gt;; 
+  &lt;span concordion:assertEquals="#result"&gt;ok&lt;/span&gt;.
+&lt;/p&gt;</programlisting>
+
+        <para>It is also possible to called from within a table.</para>
       </sect2>
 
       <sect2>
         <title>FitNesse</title>
 
-        <para></para>
+        <para>The <emphasis>FitNesse</emphasis> integration provides the
+        <classname>Alias Items In List</classname> fixture:</para>
 
-        <para></para>
+        <informaltable>
+          <tgroup cols="2">
+            <colspec colname="_1" />
+
+            <colspec colname="_2" />
+
+            <tbody>
+              <row>
+                <entry><classname>Alias Items In List</classname></entry>
+
+                <entry>list1</entry>
+              </row>
+
+              <row>
+                <entry><classname>Title</classname></entry>
+
+                <entry><classname>Alias As</classname></entry>
+              </row>
+
+              <row>
+                <entry><emphasis>Tom Brown</emphasis></entry>
+
+                <entry><emphasis>tomEmployee</emphasis></entry>
+              </row>
+
+              <row>
+                <entry><emphasis>Sam Jones</emphasis></entry>
+
+                <entry><emphasis>fredEmployee</emphasis></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
       </sect2>
     </sect1>
 
     <sect1 id="sec.VerifyRows">
-      <title>Concordion's VerifyRows (Concordion only)</title>
+      <title>VerifyRows (Concordion only)</title>
 
-      <para></para>
+      <para><methodname>Concordion</methodname> provides its own mechanism for
+      asserting on the contents of a collection, namely
+      <literal>concordion:verifyRows</literal>. The
+      <classname>AbstractIsisConcordionScenario</classname> class therefore
+      provides the <methodname>#getListContents(String listAlias)</methodname>
+      method that returns the contents of the object (as pojos) as an
+      <classname>Iterable</classname>.</para>
 
-      <para></para>
+      <para>For example:</para>
+
+      <programlisting>&lt;table concordion:verifyRows="#claimPojo: getListContents(#tomsClaimsAfterwards)"&gt;
+  &lt;tr&gt;
+    &lt;th concordion:assertEquals="#claimPojo.description"&gt;Description&lt;/th&gt;
+    &lt;th concordion:assertEquals="#claimPojo.date"&gt;Date&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;claim 2&lt;/td&gt;
+    &lt;td&gt;2007-2-18&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;claim 1&lt;/td&gt;
+    &lt;td&gt;2007-2-14&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;</programlisting>
+
+      <para>Note that the value of properties can be asserted using this
+      syntax.</para>
     </sect1>
   </chapter>
 
   <chapter id="chp.Debugging">
     <title>Debugging</title>
 
-    <para>Debugging and diagnostics. Useful for checking setup, for
-    example.</para>
+    <abstract>
+      <para>Fixtures for debugging scenarios by inspecting the external or
+      internal state of the Isis system.</para>
+    </abstract>
 
-    <sect1 id="sec.DebugServices">
-      <title>Debugging Services</title>
+    <para>There are a number of fixtures available to help you debug your
+    <acronym>BDD</acronym> scenarios.</para>
 
-      <para>Lists service class names, as picked up from configuration. Useful
-      with AliasServices (see <xref linkend="sec.AliasServices" />).</para>
+    <para>Note: </para>
+
+    <itemizedlist>
+      <listitem>
+        <para>if using <emphasis>Concordio</emphasis>n, the only fixture
+        currently available is also the most useful, RunViewer (see <xref
+        linkend="sec.RunViewer" />).</para>
+      </listitem>
+    </itemizedlist>
+
+    <sect1 id="sec.RunViewer">
+      <title>Run Viewer</title>
+
+      <para>When encountered in the scenario text, this fixture runs the DnD
+      viewer. This is a great way to inspect the state of the system, for
+      example if a test is failing and you can't see why.</para>
 
       <sect2>
         <title>Common</title>
 
-        <para></para>
+        <para>This fixture is provided by the
+        <methodname>Scenario#runViewer()</methodname> method.</para>
       </sect2>
 
       <sect2>
         <title>Concordion</title>
 
-        <para></para>
+        <para>The <methodname>Concordion</methodname> integration provides
+        this fixture by the
+        <methodname>AbstractIsisConcordionScenario#runViewer()</methodname>
+        method. This simply delegates to the common library.</para>
+
+        <para>For example:</para>
+
+        <para><programlisting><methodname>&lt;p concordion:execute="runViewer()"&gt;run viewer&lt;/p&gt;</methodname></programlisting></para>
       </sect2>
 
       <sect2>
         <title>FitNesse</title>
 
-        <para></para>
+        <para>The FitNesse integration provides the <methodname>Run
+        Viewer</methodname> fixture, called as a simple 1-cell table:</para>
+
+        <informaltable>
+          <tgroup cols="1">
+            <colspec />
+
+            <tbody>
+              <row>
+                <entry><classname>Run Viewer</classname></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
       </sect2>
     </sect1>
 
@@ -2853,98 +3236,73 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <sect2>
         <title>Common</title>
 
-        <para></para>
+        <para>The common library provides the
+        <classname>DebugClockPeer</classname> class.</para>
       </sect2>
 
       <sect2>
         <title>Concordion</title>
 
-        <para></para>
+        <para>Not yet implemented.</para>
       </sect2>
 
       <sect2>
         <title>FitNesse</title>
 
-        <para></para>
+        <para>Provided by the <classname>Debug Clock</classname>
+        fixture.</para>
       </sect2>
     </sect1>
 
     <sect1 id="sec.DebugObjectStore">
       <title>Debugging the Object Store</title>
 
-      <para>Dumps the contents of the object store. Useful for debugging setup
-      (through SetupObjects, <xref linkend="sec.SetUpObjects" />, and
-      UsingNakedObjectsViewerForSetup, <xref
-      linkend="sec.UsingIsisViewer" />).</para>
+      <para>This fixture dumps the contents of the object store. Useful for
+      debugging setup (through <classname>SetupObjects</classname>, <xref
+      linkend="sec.SetUpObjects" />, and
+      <classname>UsingIsisViewerForSetup</classname>, <xref
+      linkend="chp.UserInteraction" />).</para>
 
       <sect2>
         <title>Common</title>
 
-        <para></para>
+        <para>The common library provides the
+        <classname>DebugObjectStorePeer</classname> class.</para>
       </sect2>
 
       <sect2>
         <title>Concordion</title>
 
-        <para></para>
+        <para>Not yet implemented.</para>
       </sect2>
 
       <sect2>
         <title>FitNesse</title>
 
-        <para></para>
+        <para>Provided by the <classname>Debug Object Store</classname>
+        fixture.</para>
       </sect2>
     </sect1>
 
     <sect1 id="sec.CheckSpecificationsLoaded">
-      <title>Check Specifications Loaded</title>
+      <title>Check Specifications Loaded (FitNesse only)</title>
 
-      <para>Verifies that listed <classname>ObjectSpecification</classname>s
-      have been loaded into the metamodel</para>
+      <para>Verifies that the listed
+      <classname>ObjectSpecification</classname>s have been loaded into the
+      metamodel.</para>
 
-      <sect2>
-        <title>Common</title>
-
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>Concordion</title>
-
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>FitNesse</title>
-
-        <para></para>
-      </sect2>
+      <para>Provided by the <classname>Check Specifications Loaded</classname>
+      fixture.</para>
     </sect1>
 
-    <sect1 id="sec.RunViewer">
-      <title>Run Viewer</title>
+    <sect1 id="sec.DebugServices">
+      <title>Debugging Services (FitNesse only)</title>
 
-      <para>Runs up the DnD viewer with the current state of the objects. This
-      is a great way to inspect the state of the system, for example if a test
-      is failing and you can't see why.</para>
+      <para>Lists service class names, as picked up from configuration. Useful
+      with AliasServices (see <xref linkend="sec.AliasServices" />).</para>
 
-      <sect2>
-        <title>Common</title>
-
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>Concordion</title>
-
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>FitNesse</title>
-
-        <para></para>
-      </sect2>
+      <para>Provided by the <classname>Debugging Services</classname>
+      fixture.</para>
     </sect1>
   </chapter>
 
@@ -2952,95 +3310,12 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <title>Hints and Tips</title>
 
     <abstract>
-      <para>This chapter contains a collection of hints, tips and suggestions
-      for writing your own tests.</para>
+      <para>Hints, tips and suggestions for writing your own stories and
+      scenarios.</para>
     </abstract>
 
-    <para>For further guidance, we recommend that you check out Gojko Adzic's
-    book, <ulink url="http://www.acceptancetesting.info/the-book/">Bridging
-    the Communication Gap</ulink>.</para>
-
     <sect1>
-      <title>Separate In-Progress Stories from the Backlog</title>
-
-      <para>If you are using an agile methodology then you will be
-      implementing the scenarios for a number of stories per iteration; the
-      remainder will be in a backlog. When you select a scenario for
-      implementation, create a new page for it in a "CurrentIteration" suite.
-      The objective for the team is therefore to get the entire
-      CurrentIteration suite green.</para>
-
-      <para>Other stories that you may have identified but not selected for
-      the iteration can remain in a Backlog suite.</para>
-    </sect1>
-
-    <sect1>
-      <title>Use a Story Page to Collect A Set of Scenario Tests</title>
-
-      <para>Part of estimating the size of a story includes identifying the
-      acceptance criteria for each of its scenarios. These can be created as
-      children of the story page as placeholders, so that the story page
-      becomes a suite. The child scenario tests can be fleshed out as required
-      with plain text during the estimation meeting, and with actual tests
-      once the iteration starts.</para>
-
-      <para></para>
-
-      <para>For the story page itself, the "as a ... I want ... so that... "
-      template is a good way to summarize the intent of the story.</para>
-
-      <sect2>
-        <title>Concordion</title>
-
-        <para>Use the &lt;a href="ScenarioHappyCase.html"
-        concordion:run="concordion"&gt;happy case&lt;/a&gt;</para>
-
-        <para>Use the &lt;a href="ScenarioNoFundsAvailable.html"
-        concordion:run="concordion"&gt;no funds available&lt;/a&gt;</para>
-
-        <para></para>
-      </sect2>
-
-      <sect2>
-        <title>FitNesse</title>
-
-        <para>The FitNesse <ulink
-        url="http://fitnesse.org/FitNesse.UserGuide.MarkupContents">!contents</ulink>
-        instruction will then list all the acceptance criteria for the
-        story.</para>
-      </sect2>
-    </sect1>
-
-    <sect1>
-      <title>Factor our common fixtures</title>
-
-      <para>Fixtures.html (group of scenarios)</para>
-
-      <para></para>
-
-      <para></para>
-    </sect1>
-
-    <sect1 id="sec.TopLevelSuitePage">
-      <title>Use a Top-Level Suite Page to Collect a Set of Stories</title>
-
-      <para></para>
-    </sect1>
-
-    <sect1>
-      <title>Organize Completed Stories by Component</title>
-
-      <para>Once you have completed an iteration and implements all the
-      scenarios of a particular story, move that story out to the relevant
-      component that the story relates to. The scenario tests for stories
-      ultimately <emphasis>are</emphasis> the documentation of the behaviour
-      of the system. A year on you won't remember (and won't care) which
-      iteration you implemented a scenario, you'll be searching for it by the
-      component whose behaviour you want to understand.</para>
-    </sect1>
-
-    <sect1>
-      <title>Structure your test using Given/When/Then</title>
+      <title>Structure your scenarios using Given/When/Then</title>
 
       <para>A standard template for organizing structuring tests is
       given/when/then<footnote>
@@ -3065,59 +3340,156 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
       <para>This structure is readily understood by non-technical business
       users, and helps them (and the team) focus on the point of the
-      test.</para>
-
-      <para>In terms of mechanics, one approach is to put the "given" into the
-      setup page for a test, with the "when" and the "then" in separate
-      pages.d</para>
-    </sect1>
-
-    <sect1 id="sec.UsingTheFixtureViewer">
-      <title>Using the RunViewer fixture</title>
-
-      <para>The "given" can often be the hardest part to get setup. To check
-      it, we can use the <classname>RunViewer</classname> fixture (see <xref
-      linkend="sec.RunViewer" />). This will run up the drag-n-drop viewer at
-      the specified point in the test; a visual equivalent of
-      <code>System.out.println()</code>, really. We can therefore take the
-      Given page and add a RunViewer fixture at the end.</para>
-
-      <para>Note that to do this you must temporarily mark the Given page as a
-      <ulink url="http://fitnesse.org/FitNesse.UserGuide.PageProperties">test
-      page</ulink>.</para>
-    </sect1>
-
-    <sect1 id="sec.FactorOutCommonGivens">
-      <title>Factor out common "Given"s</title>
-
-      <para>Just like code, tests need to be actively managed, because if the
-      tests become hard to maintain, they'll end up being deleted. In fact, we
-      probably should take even more care with the tests than the code if they
-      represent the primary documentation of the behaviour of the
-      system.</para>
-
-      <para>In terms of size, the "given" is far larger than either the "when"
-      or the "then", and therefore this is the area where tests can quickly
-      become unmaintainable. So instead, try to factor out your givens into
-      separate pages.</para>
+      scenario.</para>
 
       <para>For example:</para>
 
       <itemizedlist>
         <listitem>
-          <para>if using Concordion, you can use &lt;a href's&gt; with a
-          concordion:execute tag to include another page.</para>
+          <para>if using <emphasis>Concordion</emphasis>, use
+          <literal>&lt;h2&gt;</literal> headers to separate out the different
+          regions of the page.</para>
         </listitem>
 
         <listitem>
-          <para>if usingFitNesse, then use it's <ulink
+          <para>if using <emphasis>FitNesse</emphasis>, use its wiki syntax
+          (eg !1 and !2) to create headers for the different regions of the
+          page; see the <ulink
+          url="http://fitnesse.org/FitNesse.UserGuide.MarkupHeaders">FitNesse
+          user guide</ulink> for more details.</para>
+        </listitem>
+      </itemizedlist>
+    </sect1>
+
+    <sect1>
+      <title>Use a Story Page to collect together its set of Scenarios</title>
+
+      <para>Part of estimating the size of a story includes identifying the
+      acceptance criteria for each of its scenarios. These can be created as
+      children of the story page as placeholders, so that the story page
+      becomes a suite. The child scenarios can be fleshed out as required with
+      plain text during the estimation meeting, and with interactions and
+      assertions (ie actual data) once the iteration starts.</para>
+
+      <para>For the story page itself, the "as a ... I want ... so that... "
+      template is a good way to summarize the intent of the story.</para>
+
+      <para>For example:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>if using <emphasis>Concordion</emphasis>, then the story page
+          can easily reference each of the scenarios using
+          <emphasis>Concordion</emphasis>'s <literal>concordion:run</literal>
+          command. You might also want to have one directory per story, and
+          call this page <methodname>Index.html</methodname>.</para>
+
+          <para>For example:</para>
+
+          <programlisting>&lt;h1&gt;New Claim Stories&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;
+      &lt;a concordion:run="concordion" href="ScenarioDefaultsOk.html"&gt;
+        new claim defaults ok
+      &lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;
+      &lt;a concordion:run="concordion" href="ScenarioOnceCreatedShowsUpForClaimant.html"&gt;
+         new claim shows up for claimant
+      &lt;/a&gt;
+    &lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt; </programlisting>
+        </listitem>
+
+        <listitem>
+          <para>if using <emphasis>FitNesse</emphasis>:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the <ulink
+              url="http://fitnesse.org/FitNesse.UserGuide.MarkupPageInclude">!include</ulink>
+              instruction can be used to list include all referenced scenarios
+              for a story as a "subwiki".</para>
+            </listitem>
+
+            <listitem>
+              <para>the <ulink
+              url="http://fitnesse.org/FitNesse.UserGuide.MarkupContents">!contents</ulink>
+              instruction canbe used to create a table-of-contents for these
+              scenarios.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+    </sect1>
+
+    <sect1 id="sec.TopLevelSuitePage">
+      <title>Use a Top-Level Suite Page to Collect a Set of Stories</title>
+
+      <para>In the same way that a story can aggregate scenarios, so can a
+      top-level page aggregate all stories. This can act as a starting point
+      for a whole suite of tests, eg for a single iteration or a single
+      component (more discussion on this in <xref
+      linkend="sec.OrganizeStoriesByIteration" /> and <xref
+      linkend="sec.OrganizeStoriesByComponent" />).</para>
+
+      <para>For example, if using <emphasis>Concordion</emphasis> you could
+      adopt the convention that the top level suite page is called
+      "<methodname>AllStories.html</methodname>". If so, the Maven surefire
+      plugin could be configured to only run that page:</para>
+
+      <programlisting>&lt;plugin&gt;
+  &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
+  &lt;configuration&gt;
+    ...
+    &lt;includes&gt;
+      &lt;include&gt;**/AllStories.java&lt;/include&gt;
+    &lt;/includes&gt;
+  &lt;/configuration&gt;
+&lt;/plugin&gt;</programlisting>
+    </sect1>
+
+    <sect1 id="sec.FactorOutCommonGivens">
+      <title>Factor out common "Given"s</title>
+
+      <para>Just like code, scenarios need to be actively managed, because if
+      the scenarios become hard to maintain, they'll end up being deleted. In
+      fact, we probably should take even more care with the scenarios than the
+      code if they represent the primary documentation of the behaviour of the
+      system.</para>
+
+      <para>In terms of size, the "given" is far larger than either the "when"
+      or the "then", and therefore this is the area where scenario text can
+      quickly become unmaintainable. So instead, try to factor out your givens
+      into separate pages.</para>
+
+      <para>For example:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>if using <emphasis>Concordion</emphasis>, you can use
+          <code>&lt;a href&gt;</code>'s with a
+          <literal>concordion:run</literal> command to reference another
+          page.</para>
+        </listitem>
+
+        <listitem>
+          <para>if using <emphasis>FitNesse</emphasis>, then use it's <ulink
           url="http://fitnesse.org/FitNesse.UserGuide.MarkupPageInclude">!include</ulink>
           directive to assemble the pages you need</para>
         </listitem>
       </itemizedlist>
 
-      <para>The names of these pages should also follow a declarative style,
-      see <xref linkend="sec.UseADeclarativeStyle" />.</para>
+      <para>You can do this both within a single story and also across
+      stories; anywhere that there is some degree of commonality. All
+      scenarios require bootstrapping, and many scenarios won't care about the
+      current user or date/time. They may also use much of the same setup of
+      reference data objects. All these scenarios could therefore share a
+      common fixture for all of this setup.</para>
     </sect1>
 
     <sect1 id="sec.UseADeclarativeStyle">
@@ -3141,15 +3513,58 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       "JoeBloggsFiveOrders".</para>
     </sect1>
 
+    <sect1 id="sec.OrganizeStoriesByIteration">
+      <title>Separate In-Progress Stories from the Backlog</title>
+
+      <para>If you are using an agile methodology then you will be
+      implementing the scenarios for a number of stories per iteration; the
+      remainder will be in a backlog. When you select a scenario for
+      implementation, create a new page for it in a "CurrentIteration" suite.
+      The objective for the team is therefore to get the entire
+      CurrentIteration suite green.</para>
+
+      <para>Other stories that you may have identified but not selected for
+      the iteration can remain in a Backlog suite.</para>
+    </sect1>
+
+    <sect1 id="sec.OrganizeStoriesByComponent">
+      <title>Organize Completed Stories by Component</title>
+
+      <para>Once you have completed an iteration and implements all the
+      scenarios of a particular story, move that story out to the relevant
+      component that the story relates to. The scenario tests for stories
+      ultimately <emphasis>are</emphasis> the documentation of the behaviour
+      of the system. A year on you won't remember (and won't care) which
+      iteration you implemented a scenario, you'll be searching for it by the
+      component whose behaviour you want to understand.</para>
+    </sect1>
+
+    <sect1 id="sec.UsingTheFixtureViewer">
+      <title>Using the RunViewer fixture</title>
+
+      <para>The "given" can often be the hardest part to get setup. To check
+      it, we can use the <classname>RunViewer</classname> fixture (see <xref
+      linkend="sec.RunViewer" />). This will run up the drag-n-drop viewer at
+      the specified point in the test; a visual equivalent of
+      <code>System.out.println()</code>, really. We can therefore take the
+      Given page and add a RunViewer fixture at the end.</para>
+
+      <para>Note that to do this you must temporarily mark the Given page as a
+      <ulink url="http://fitnesse.org/FitNesse.UserGuide.PageProperties">test
+      page</ulink>.</para>
+    </sect1>
+
     <sect1 id="sec.SettingUpContinuousIntegration">
       <title>Set up Continuous Integration</title>
 
-      <para>Since Isis is a Maven application, it is easy enough to configure
-      it to run under a CI server, such as <ulink
-      url="http://hudson-ci.org/">Hudson</ulink>. If you google around you
-      should also be able find a way to make Hudson publish the test results
-      onto a website so that they can be inspected by your domain experts /
-      business analysts.</para>
+      <para>Since <emphasis>Isis</emphasis> is a Maven application, it is easy
+      enough to configure it to run under a CI server, such as <ulink
+      url="http://hudson-ci.org/">Hudson</ulink>. You could then use the
+      Hudson <ulink
+      url="http://wiki.hudson-ci.org/display/HUDSON/HTML+Publisher+Plugin">HTML
+      Publisher plugin</ulink> to publish the generated results onto a
+      website. This way they can be easily inspected at any time by your
+      domain experts / business analysts.</para>
     </sect1>
   </chapter>
 

@@ -20,12 +20,8 @@ import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer.Mode;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
 import org.apache.isis.viewer.bdd.concordion.internal.concordion.IsisExecuteCommandWithHeader;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.AliasItemsInListForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListContainsForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListDoesNotContainForConcordion;
+import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckCollectionContentsForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListIsEmptyForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListIsNotEmptyForConcordion;
-import org.apache.isis.viewer.bdd.concordion.internal.fixtures.CheckListSizeForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.SetUpObjectsForConcordion;
 import org.apache.isis.viewer.bdd.concordion.internal.fixtures.UsingIsisViewerForConcordion;
 import org.concordion.Concordion;
@@ -442,32 +438,35 @@ public abstract class AbstractIsisConcordionScenario {
     }
 
     // ////////////////////////////////////////////////////////////////////////
-    // check list
+    // check collection
     // ////////////////////////////////////////////////////////////////////////
 
 
-    public String checkListIsEmpty(String listAlias) {
-        CheckListIsEmptyForConcordion checkListIsEmpty = new CheckListIsEmptyForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias));
-        return checkListIsEmpty.execute();
+    public String checkCollectionIsEmpty(String listAlias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).isEmpty();
     }
 
-    public String checkListIsNotEmpty(String listAlias) {
-        return new CheckListIsNotEmptyForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).execute();
+    public String checkCollectionIsNotEmpty(String listAlias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).isNotEmpty();
     }
     
-    public String checkListSize(String listAlias, int size) {
-        return new CheckListSizeForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).execute(size);
+    public String checkCollectionContains(String listAlias, String alias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).contains(StringUtils.normalized(alias));
     }
     
-    public String checkListContains(String listAlias, String alias) {
-        return new CheckListContainsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).execute(StringUtils.normalized(alias));
+    public String checkCollectionDoesNotContain(String listAlias, String alias) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).doesNotContain(StringUtils.normalized(alias));
     }
     
-    public String checkListDoesNotContain(String listAlias, String alias) {
-        return new CheckListDoesNotContainForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).execute(StringUtils.normalized(alias));
+    public String checkCollectionSize(String listAlias, int size) {
+        return new CheckCollectionContentsForConcordion(getScenario().getAliasRegistry(), StringUtils.normalized(listAlias)).assertSize(size);
     }
     
     
+
+    // ////////////////////////////////////////////////////////////////////////
+    // check list
+    // ////////////////////////////////////////////////////////////////////////
 
     private CheckListForConcordion checkList;
     

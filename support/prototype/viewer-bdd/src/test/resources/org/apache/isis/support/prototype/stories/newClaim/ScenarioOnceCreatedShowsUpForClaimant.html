@@ -67,7 +67,7 @@
 
         <li>
           <p>Confirm that <span
-          concordion:execute="#result=checkListIsEmpty(#TEXT)"
+          concordion:execute="#result=checkCollectionIsEmpty(#TEXT)"
           xmlns:concordion="http://www.concordion.org/2007/concordion">tomsClaimsInitially</span>
           has no claims; <span concordion:assertEquals="#result"
           xmlns:concordion="http://www.concordion.org/2007/concordion">ok</span>.</p>
@@ -242,7 +242,7 @@
 
         <li>
           <p
-          concordion:execute="#result=checkListIsNotEmpty(#tomsClaimsAfterwards)"
+          concordion:execute="#result=checkCollectionIsNotEmpty(#tomsClaimsAfterwards)"
           xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
           that the tom's claims afterwards is not empty; <span
           concordion:assertEquals="#result">ok</span>.</p>
@@ -250,7 +250,7 @@
 
         <li>
           <p
-          concordion:execute="#result=checkListSize(#tomsClaimsAfterwards,#expectedSize)"
+          concordion:execute="#result=checkCollectionSize(#tomsClaimsAfterwards,#expectedSize)"
           xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
           that tom has <span concordion:set="#expectedSize">2</span> claims;
           <span concordion:assertEquals="#result">ok</span>.</p>
@@ -258,7 +258,7 @@
 
         <li>
           <p
-          concordion:execute="#result=checkListContains(#tomsClaimsAfterwards,#tomsClaim1)"
+          concordion:execute="#result=checkCollectionContains(#tomsClaimsAfterwards,#tomsClaim1)"
           xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
           that tom's set of claims contains <span
           concordion:set="#tomsClaim1">tomsClaim1</span>; <span
@@ -267,7 +267,7 @@
 
         <li>
           <p
-          concordion:execute="#result=checkListDoesNotContain(#tomsClaimsAfterwards,#tomEmployee)"
+          concordion:execute="#result=checkCollectionDoesNotContain(#tomsClaimsAfterwards,#tomEmployee)"
           xmlns:concordion="http://www.concordion.org/2007/concordion">Confirm
           that tom's set of claims does NOT contain <span
           concordion:set="#tomEmployee">tomEmployee</span>; himself (duh!);

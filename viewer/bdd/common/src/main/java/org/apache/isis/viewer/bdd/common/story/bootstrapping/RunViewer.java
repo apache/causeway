@@ -5,11 +5,11 @@ import org.apache.isis.core.runtime.viewer.IsisViewer;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
 import org.apache.isis.viewer.bdd.common.Scenario;
 
-public class StartClient extends AbstractHelper {
+public class RunViewer extends AbstractHelper {
 
     private static final String DND_VIEWER_NAME = "dnd";
 
-    public StartClient(final Scenario story) {
+    public RunViewer(final Scenario story) {
         super(story);
     }
 
