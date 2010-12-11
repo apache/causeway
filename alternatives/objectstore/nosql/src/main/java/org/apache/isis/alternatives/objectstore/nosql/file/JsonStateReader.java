@@ -39,7 +39,7 @@ public class JsonStateReader implements StateReader {
             JSONObject instance = new JSONObject(data);
             this.instance = instance;
         } catch (JSONException e) {
-            throw new NoSqlStoreException("failed initialise JSON object for text form", e);
+            throw new NoSqlStoreException("failed initialise JSON object for text form: " + data, e);
         }
     }
     
