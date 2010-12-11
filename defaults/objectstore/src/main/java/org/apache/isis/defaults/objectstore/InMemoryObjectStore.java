@@ -25,9 +25,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.Debug;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -58,10 +58,7 @@ import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects
 import org.apache.isis.defaults.objectstore.internal.commands.InMemoryCreateObjectCommand;
 import org.apache.isis.defaults.objectstore.internal.commands.InMemoryDestroyObjectCommand;
 import org.apache.isis.defaults.objectstore.internal.commands.InMemorySaveObjectCommand;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import org.apache.log4j.Logger;
 
 
 public class InMemoryObjectStore implements ObjectStore {
@@ -129,7 +126,9 @@ public class InMemoryObjectStore implements ObjectStore {
 		    }
 
 		    ObjectAdapter existingAdapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
-		    ensureThatState(existingAdapterLookedUpByOid, is(nullValue()), "Already have mapping for " + oid);
+		    if (existingAdapterLookedUpByOid != null) {
+		        throw new IsisException("A mapping already exists for " + oid  + ": " + existingAdapterLookedUpByOid);
+		    }
 
 		    ObjectAdapter recreatedAdapter = getHydrator().recreateAdapter(oid, pojo);
 		    
