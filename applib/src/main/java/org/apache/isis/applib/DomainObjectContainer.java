@@ -164,6 +164,13 @@ public interface DomainObjectContainer {
      * @param persistentDomainObject
      */
     void remove(Object persistentDomainObject);
+    
+    /**
+     * Removes (deletes) the domain object but only if is persistent.
+     * 
+     * @param domainObject
+     */
+    void removeIfNotAlready(Object domainObject);
 
     
 	//////////////////////////////////////////////////////////////////
