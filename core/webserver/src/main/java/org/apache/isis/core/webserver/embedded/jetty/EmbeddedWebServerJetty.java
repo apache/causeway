@@ -27,9 +27,11 @@ import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
 import org.mortbay.jetty.Handler;
+import org.mortbay.jetty.NCSARequestLog;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.handler.ContextHandler;
 import org.mortbay.jetty.handler.HandlerList;
+import org.mortbay.jetty.handler.RequestLogHandler;
 import org.mortbay.jetty.handler.ResourceHandler;
 import org.mortbay.jetty.servlet.FilterHolder;
 import org.mortbay.jetty.servlet.FilterMapping;
@@ -60,6 +62,10 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
 
         final ContextHandler contextHandler = createContextHandler(handlers);
 
+        
+
+        
+        
         startServer(contextHandler);
     }
 
@@ -77,6 +83,16 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
 
         // commenting out; this grabs '/' but we might want to use it ourselves, instead?
         // handlers.addHandler(new DefaultHandler());
+
+        // TODO use properties to set up
+        RequestLogHandler requestLogHandler = new RequestLogHandler();
+        handlers.addHandler(requestLogHandler);
+        NCSARequestLog requestLog = new NCSARequestLog("./logs/jetty-yyyy_mm_dd.request.log");
+        requestLog.setRetainDays(90);
+        requestLog.setAppend(true);
+        requestLog.setExtended(false);
+        requestLog.setLogTimeZone("GMT");
+        requestLogHandler.setRequestLog(requestLog);
 
         return handlers;
     }
