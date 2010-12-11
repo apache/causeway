@@ -55,6 +55,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
 	/**
      * @see #doCreateTransientInstance(ObjectSpecification)
      */
+    @Override
     @SuppressWarnings("unchecked")
     public <T> T newTransientInstance(final Class<T> ofClass) {
         final ObjectSpecification spec = getRuntimeContext().getSpecificationLoader().loadSpecification(ofClass);
@@ -65,6 +66,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     /**
      * Returns a new instance of the specified class that will have been persisted.
      */
+    @Override
     public <T> T newPersistentInstance(final Class<T> ofClass) {
         T newInstance = newTransientInstance(ofClass);
         persist(newInstance);
@@ -74,6 +76,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     /**
      * Returns a new instance of the specified class that has the sane persisted state as the specified object.
      */
+    @Override
     public <T> T newInstance(final Class<T> ofClass, final Object object) {
         if (isPersistent(object)) {
             return newPersistentInstance(ofClass);
@@ -89,6 +92,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     	return getRuntimeContext().createTransientInstance(spec);
     }
 
+    @Override
     public void remove(final Object persistentObject) {
         if (persistentObject == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
@@ -100,19 +104,31 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         
         getRuntimeContext().remove(adapter);
     }
+    
+    @Override
+    public void removeIfNotAlready(final Object object) {
+        if (!isPersistent(object)) {
+            return;
+        }
+        remove(object);
+    }
+
 
     ////////////////////////////////////////////////////////////////////
     // resolve, objectChanged
     ////////////////////////////////////////////////////////////////////
 
+    @Override
     public void resolve(final Object parent) {
     	runtimeContext.resolve(parent);
     }
 
+    @Override
     public void resolve(final Object parent, final Object field) {
     	runtimeContext.resolve(parent, field);
     }
 
+    @Override
     public void objectChanged(final Object object) {
     	runtimeContext.objectChanged(object);
     }
@@ -121,10 +137,12 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     // flush, commit
     ////////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean flush() {
     	return runtimeContext.flush();
     }
 
+    @Override
     public void commit() {
     	runtimeContext.commit();
     }
@@ -134,11 +152,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     ////////////////////////////////////////////////////////////////////
 
 
-	public boolean isValid(final Object domainObject) {
+	@Override
+    public boolean isValid(final Object domainObject) {
 		return validate(domainObject) == null;
 	}
 
-	public String validate(final Object domainObject) {
+	@Override
+    public String validate(final Object domainObject) {
 		final ObjectAdapter adapter = getRuntimeContext().adapterFor(domainObject);
 		InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
 		return validityResult.getReason();
@@ -149,11 +169,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     // persistence
     ////////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isPersistent(final Object domainObject) {
         final ObjectAdapter adapter = getRuntimeContext().adapterFor(domainObject);
         return adapter.isPersistent();
     }
 
+    @Override
     public void persist(final Object transientObject) {
         final ObjectAdapter adapter = getRuntimeContext().getAdapterFor(transientObject);
         if (isPersistent(transientObject)) {
@@ -162,16 +184,19 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         getRuntimeContext().makePersistent(adapter);
     }
     
+    @Override
     public void persistIfNotAlready(final Object object) {
-        if (!isPersistent(object)) {
-            persist(object);
+        if (isPersistent(object)) {
+            return;
         }
+        persist(object);
     }
 
     ////////////////////////////////////////////////////////////////////
     // security
     ////////////////////////////////////////////////////////////////////
 
+    @Override
     public UserMemento getUser() {
         final AuthenticationSession session = getRuntimeContext().getAuthenticationSession();
 
@@ -196,15 +221,18 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     // properties
     ////////////////////////////////////////////////////////////////////
 
+    @Override
     public String getProperty(String name) {
         return runtimeContext.getProperty(name) ;
     }
 
+    @Override
     public String getProperty(String name, String defaultValue) {
         String value = getProperty(name);
         return value == null ? defaultValue : value;
     }
     
+    @Override
     public List<String> getPropertyNames() {
         return runtimeContext.getPropertyNames() ;
     }
@@ -213,14 +241,17 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     // info, warn, error messages
     ////////////////////////////////////////////////////////////////////
 
+    @Override
     public void informUser(final String message) {
         getRuntimeContext().informUser(message);
     }
 
+    @Override
     public void raiseError(final String message) {
     	getRuntimeContext().raiseError(message);
     }
 
+    @Override
     public void warnUser(final String message) {
     	getRuntimeContext().warnUser(message);
     }
@@ -230,11 +261,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     // allInstances, allMatches
     ////////////////////////////////////////////////////////////////////
     
-	public <T> List<T> allInstances(final Class<T> type) {
+	@Override
+    public <T> List<T> allInstances(final Class<T> type) {
         return allMatches(new QueryFindAllInstances<T>(type));
     }
 
-	public <T> List<T> allMatches(final Class<T> cls, final Filter<T> filter) {
+	@Override
+    public <T> List<T> allMatches(final Class<T> cls, final Filter<T> filter) {
 		final List<T> allInstances = allInstances(cls);
 		final List<T> filtered = new ArrayList<T>();
 		for (T instance: allInstances) {
@@ -245,15 +278,18 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
 		return filtered;
 	}
 
-	public <T> List<T> allMatches(final Class<T> type, final T pattern) {
+	@Override
+    public <T> List<T> allMatches(final Class<T> type, final T pattern) {
         Assert.assertTrue("pattern not compatible with type", type.isAssignableFrom(pattern.getClass()));
         return allMatches(new QueryFindByPattern<T>(type, pattern));
     }
 
+    @Override
     public <T> List<T> allMatches(final Class<T> type, final String title) {
         return allMatches(new QueryFindByTitle<T>(type, title));
     }
 
+    @Override
     public <T> List<T> allMatches(final Query<T> query) {
         List<ObjectAdapter> allMatching = getRuntimeContext().allMatchingQuery(query);
 		return IsisUtils.unwrap(allMatching);
@@ -263,7 +299,8 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     // firstMatch
     ////////////////////////////////////////////////////////////////////
 
-	public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
+	@Override
+    public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
 		final List<T> allInstances = allInstances(cls);
 		for (T instance: allInstances) {
 			if (filter.accept(instance)) {
@@ -273,16 +310,19 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
 		return null;
 	}
     
+    @Override
     public <T> T firstMatch(final Class<T> type, final T pattern) {
         final List<T> instances = allMatches(type, pattern);
         return firstInstanceElseNull(instances);
     }
 
+    @Override
     public <T> T firstMatch(final Class<T> type, final String title) {
         final List<T> instances = allMatches(type, title);
         return firstInstanceElseNull(instances);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
 	public <T> T firstMatch(final Query<T> query) {
         ObjectAdapter firstMatching = getRuntimeContext().firstMatchingQuery(query);
@@ -293,7 +333,8 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     // uniqueMatch
     ////////////////////////////////////////////////////////////////////
 
-	public <T> T uniqueMatch(final Class<T> type, final Filter<T> filter) {
+	@Override
+    public <T> T uniqueMatch(final Class<T> type, final Filter<T> filter) {
 		final List<T> instances = allMatches(type, filter);
 		if (instances.size() > 1) {
 			throw new RepositoryException(
@@ -302,6 +343,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
 		return firstInstanceElseNull(instances);
 	}
 
+    @Override
     public <T> T uniqueMatch(final Class<T> type, final T pattern) {
         final List<T> instances = allMatches(type, pattern);
         if (instances.size() > 1) {
@@ -310,6 +352,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         return firstInstanceElseNull(instances);
     }
 
+    @Override
     public <T> T uniqueMatch(final Class<T> type, final String title) {
         final List<T> instances = allMatches(type, title);
         if (instances.size() > 1) {
@@ -318,6 +361,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         return firstInstanceElseNull(instances);
     }
 
+    @Override
     public <T> T uniqueMatch(final Query<T> query) {
         final List<T> instances = allMatches(query);
         if (instances.size() > 1) {
@@ -346,7 +390,8 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
 		return runtimeContext;
 	}
 
-	public void setRuntimeContext(RuntimeContext runtimeContext) {
+	@Override
+    public void setRuntimeContext(RuntimeContext runtimeContext) {
 		this.runtimeContext = runtimeContext;
 		runtimeContext.setContainer(this);
 	}

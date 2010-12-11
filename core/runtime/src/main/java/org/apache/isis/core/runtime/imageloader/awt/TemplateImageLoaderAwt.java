@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.runtime.imageloader.awt;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
+import static org.hamcrest.CoreMatchers.is;
 
 import java.awt.Canvas;
 import java.awt.Image;
@@ -36,12 +36,12 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.lang.Resources;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.imageloader.TemplateImage;
 import org.apache.isis.core.runtime.imageloader.TemplateImageImpl;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
+import org.apache.log4j.Logger;
 
 
 /**
@@ -50,9 +50,10 @@ import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
  */
 public class TemplateImageLoaderAwt implements TemplateImageLoader {
 
+    private final static Logger LOG = Logger.getLogger(TemplateImageLoaderAwt.class);
+    
     private static final String LOAD_IMAGES_FROM_FILES_KEY = ImageConstants.PROPERTY_BASE + "load-images-from-files";
     private static final String[] EXTENSIONS = { "png", "gif", "jpg", "jpeg", "svg" };
-    private final static Logger LOG = Logger.getLogger(TemplateImageLoaderAwt.class);
     private final static String IMAGE_DIRECTORY = "images";
     private final static String IMAGE_DIRECTORY_PARAM = ImageConstants.PROPERTY_BASE + "image-directory";
     private static final String SEPARATOR = "/";
@@ -83,6 +84,7 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
     // init, shutdown
     //////////////////////////////////////////////////////////////
 
+    @Override
     public void init() {
         ensureNotInitialized();
         LOG.info("images to be loaded from " + directory());
@@ -91,6 +93,7 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
     }
 
 
+    @Override
     public void shutdown() {}
 
     
@@ -121,6 +124,7 @@ public class TemplateImageLoaderAwt implements TemplateImageLoader {
      * 
      * @return returns a {@link TemplateImage} for the specified image file, or null if none found.
      */
+    @Override
     public TemplateImage getTemplateImage(final String name) {
         ensureInitialized();
         
