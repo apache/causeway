@@ -39,12 +39,6 @@
 
         <surname>Matthews</surname>
       </author>
-
-      <author>
-        <firstname>Kevin</firstname>
-
-        <surname>Meyer</surname>
-      </author>
     </authorgroup>
 
     <legalnotice>
@@ -81,24 +75,60 @@
 
   <!-- main content -->
 
-  <part>
-    <title>The Default Programming Model</title>
+  <chapter>
+    <title>Introduction</title>
 
-    <chapter>
-      <title>Developing domain objects - a how-to guide</title>
+    <abstract>
+      <para>What this guide contains, who it is for, and how the applib
+      relates to other parts of the framework.</para>
+    </abstract>
 
-      <para>This section defines a set of conventions for writing domain
-      objects, that are together known as the '[[NAME]] (Java) Programming
-      Model'.</para>
+    <sect1>
+      <title>What's in this Guide</title>
 
-      <para>Following these conventions does not tie your domain objects to
-      the [[NAME]] Framework or any other framework: the resulting domain
-      objects may be run within any framework or platform that supports POJOs
-      (Plain Old Java Objects). A few of the conventions do make use of
-      Interfaces or Annotations that are necessarily defined somewhere - in
-      this case they are in the [[NAME]] AppLib. However, the AppLib is not
-      itself dependent upon the [[NAME]] Framework (and in theory another
-      framework implementation could support the same applib).</para>
+      <para>This guide describes the set of conventions for writing domain
+      objects, that are together known as the <emphasis>Apache Isis</emphasis>
+      Programming Model. It's important reading for developers who are looking
+      to write domain-driven applications either for prototyping or deployment
+      on <emphasis>Apache Isis</emphasis>.</para>
+
+      <para>More correctly, this guide actually documents the
+      <emphasis>default</emphasis> programming model, targetted for the Java
+      programming language, and implemented by the
+      <classname>org.apache.isis.defaults:progmodel</classname> module.
+      <emphasis>Isis</emphasis> is in fact capable of supporting different
+      programming models, either for other JVM-based languages; for example
+      the Groovy language is supported in the
+      <classname>org.apache.isis.alternatives.progmodel:groovy</classname>
+      module.</para>
+    </sect1>
+
+    <sect1>
+      <title>This Guide vs the Core Documentation</title>
+
+      <para>This guide assumes that you have at least the outline of a running
+      <emphasis>Apache Isis</emphasis> application, for example having run the
+      quickstart archetype. If you haven't done this, then please consult the
+      core documentation to learn how.</para>
+
+      <para>You should also note that the core documentation also explains the
+      wider landscape of what makes up an <emphasis>Isis</emphasis>
+      application, dealing with such matters as running the app with different
+      components, eg viewers or object stores.</para>
+
+      <para>Indeed, it is also possible for developers to build their own
+      programming model, either as a subset of the default programming model
+      described here, and possibly with additional custom elements. See the
+      core documentation for details on how to write your own programming
+      model.</para>
+
+      <para>However, everything related to the specifics of writing a domain
+      object with the <emphasis>default</emphasis> programming model is
+      here.</para>
+    </sect1>
+
+    <sect1>
+      <title>Principles</title>
 
       <para>The conventions of the programming model are best described as
       'intentional' - they convey an intention as to how domain objects, their
@@ -118,8 +148,43 @@
       might not support drop-down-lists - but it might provide a capability to
       select from an <code>@Bounded</code> class by typing the initial letters
       of the desired instance.</para>
+    </sect1>
 
-      <sect1>
+    <sect1>
+      <title>Where Next?</title>
+
+      <para>This guide itself is in two parts. The first is a set of chapters
+      is written in the style of recipes/cookbooks, providing a "how-to" guide
+      on developing domain objects. This is good reading if you are just
+      starting out. The second part is a series of appendices that provide
+      details of the programming model in reference form. You should find this
+      more useful if you've used Isis for a while and just need to check on a
+      specific detail.</para>
+    </sect1>
+  </chapter>
+
+  <part>
+    <title>AppLib Recipes</title>
+
+    <partintro>
+      <para>This part of the guide is a set of chapters that provides recipes
+      / how-to's for the object, for services, for fixtures and
+      so-forth.</para>
+    </partintro>
+
+    <chapter>
+      <title>Object Recipes</title>
+
+      <abstract>
+        <para>How-to's relating to the object itself</para>
+      </abstract>
+
+      <para>This chapter contains how-to's for programming conventions that
+      apply to the object itself: object-level specifications (<xref
+      linkend="sec.ObjectLevelSpecifications" />) and the object lifecycle
+      (<xref linkend="sec.ObjectLifecycle" />).</para>
+
+      <sect1 id="sec.ObjectLevelSpecifications">
         <title>Object-level specifications</title>
 
         <para>The first set of conventions are concerned with the capabilities
@@ -273,7 +338,7 @@
         </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.ObjectLifecycle">
         <title>The object lifecycle</title>
 
         <para>These conventions are concerned with the creation, retrieval,
@@ -319,10 +384,11 @@
           <para><literal moreinfo="none">void remove(Object object)</literal>
           deletes a persistent object from the object store.</para>
 
-          <para>Any framework that recognises the [[NAME]] Programming Model
-          will provide an implementation of <code>DomainObjectContainer</code>
-          and will take responsibility to inject a reference to that Container
-          into any domain object that needs it.</para>
+          <para>Any framework that recognises the Apache Isis Programming
+          Model will provide an implementation of
+          <code>DomainObjectContainer</code> and will take responsibility to
+          inject a reference to that Container into any domain object that
+          needs it.</para>
 
           <para>A domain object specifies that it needs to have a reference to
           the Container injected into by including the following code:</para>
@@ -438,9 +504,42 @@
           compatibility <methodname>deleted()</methodname> is also
           supported).</para>
         </sect2>
-      </sect1>
 
-      <sect1>
+        <sect2 id="sec.ResolveAndObjectChanged">
+          <title>The resolve() and objectChanged() methods</title>
+
+          <para>In earlier versions of the framework it was necessary to call
+          the inherited <methodname>resolve()</methodname> method within every
+          property or collection's getter, and
+          <methodname>objectChanged()</methodname> within every property's
+          setter and every collection's addTo or removeFrom.</para>
+
+          <para>These methods still exist in
+          <classname>AbstractDomainObject</classname>, but no longer need to
+          be called explicitly. Instead Apache Isis uses bytecode enhancement
+          (using either cglib or javassist) to automatically call these
+          methods. This bytecode enhancement can be disabled in
+          <filename>isis.properties</filename> file; if it is then the methods
+          must be called manually.</para>
+        </sect2>
+      </sect1>
+    </chapter>
+
+    <chapter>
+      <title>Object Member Recipes</title>
+
+      <abstract>
+        <para>How-to's relating to an object's class members.</para>
+      </abstract>
+
+      <para>This chapter contains how-to's for programming conventions that
+      apply to an object's class members: properties (<xref
+      linkend="sec.Properties" />), collections (<xref
+      linkend="sec.Collections" />) and actions (<xref
+      linkend="sec.Actions" />). It also covers an alternative mechanism for
+      specifying business rules (<xref linkend="sec.MustSpecify" />).</para>
+
+      <sect1 id="sec.Properties">
         <title>Properties</title>
 
         <para>The following conventions are concerned with specifying the
@@ -845,7 +944,219 @@ public void modifyAmount(int amount) {
         </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.Collections">
+        <title>Collections</title>
+
+        <para>A collection is a list of references to several entity objects
+        that have a common type.</para>
+
+        <sect2>
+          <title>How to add a collection to an object</title>
+
+          <para>A collection is recognized via an accessor/mutator method pair
+          (<code>get</code> and set) for any type of collection provided by
+          the programming language. The syntax is:</para>
+
+          <para><programlisting>public &lt;collection type&gt; get&lt;CollectionName&gt;()
+
+private void set&lt;CollectionName&gt;(&lt;collection type&gt; param)</programlisting></para>
+
+          <para>It is recommended that the collections be specified using
+          generics (for example: <literal
+          moreinfo="none">List&lt;Customer&gt;</literal> ). That way the
+          framework will be able to display the collection based on that type
+          definition. (Generics are also required by some persistence
+          mechanisms). For example the viewer might display the collection as
+          a table, with the columns defined by the visible properties of that
+          type. The viewer will then automatically prevent the user from
+          adding objects not of that type. If generics are not used then the
+          type may be inferred from the <literal
+          moreinfo="none">addTo</literal> / <literal
+          moreinfo="none">removeFrom</literal> methods, if specified (see
+          below).</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Employee { ... }
+
+public class Department {
+    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
+    public List &lt;Employee&gt; getEmployees() {
+        return employees;
+    }
+    private void setEmployees(List&lt;Employee&gt; employees) { 
+        this.employees = employees;
+    }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>How to trigger other behaviour when an object is added or
+          removed</title>
+
+          <para>A collection may have a corresponding <literal
+          moreinfo="none">addTo</literal> and/or <literal
+          moreinfo="none">removeFrom</literal> method. This is equivalent to
+          the <literal moreinfo="none">modify</literal> and <literal
+          moreinfo="none">clear</literal> methods for properties. The syntax
+          is:</para>
+
+          <para><programlisting>public void addTo&lt;CollectionName&gt;(&lt;entity type&gt; param)
+
+public void removeFrom&lt;CollectionName&gt;(&lt;entity type&gt; param)</programlisting></para>
+
+          <para>where <literal moreinfo="none">&lt;entity type&gt;</literal>
+          is the same type as the generic collection type. For example:</para>
+
+          <programlisting format="linespecific">public class Employee { ... }
+
+public class Department {
+    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
+    public List &lt;Employee&gt; getEmployees() {
+        return employees;
+    }
+    private void setEmployees(List&lt;Employee&gt; employees) { 
+        this.employees = employees;
+    }
+    public void addToEmployees(Employee employee) {
+        employees.add(employee);
+    }
+    public void removeFromEmployees(Employee employee) {
+        employees.remove(employee);
+    }
+
+    ...
+}</programlisting>
+
+          <para>The addTo / removeFrom and modify / clear methods are
+          particularly useful in setting up bidirectional relationships using
+          the 'mutual registration pattern'; for a write-up of this pattern,
+          see <ulink
+          url="???">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.</para>
+        </sect2>
+
+        <sect2>
+          <title>How to prevent the user from modifying a collection</title>
+
+          <para>Preventing the user from adding to or removing from a
+          collection is known as 'disabling' the collection.</para>
+
+          <sect3>
+            <title>Disabling a collection permanently</title>
+
+            <para>Use the <literal moreinfo="none">@Disabled</literal>
+            annotation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Disabling a collection under certain conditions</title>
+
+            <para>A <literal moreinfo="none">disable</literal> method can be
+            used to disable a particular instance's collection under certain
+            conditions: The syntax is:</para>
+
+            <para><literal moreinfo="none">public String
+            disable&lt;CollectionName&gt;()</literal> For example:</para>
+
+            <programlisting format="linespecific">public class Department {
+    public List&lt;Employee&gt; getEmployees() { ... }
+    public void addToEmployees(Employee employee) { ... }
+    public void removeFromEmployees(Employee employee) { ... }
+    public void disableEmployees() {
+        return isClosed()? "This department is closed" : null;
+    }
+}</programlisting>
+          </sect3>
+
+          <sect3>
+            <title>Disabling a collection for specific users or roles</title>
+
+            <para>See Properties: Disabling a property for specific users or
+            roles'. The same technique can be applied to collections, with the
+            same caveats applying.</para>
+          </sect3>
+        </sect2>
+
+        <sect2>
+          <title>How to validate an object to be added or removed</title>
+
+          <para>A <literal moreinfo="none">validate</literal> method is used
+          to check that an object to be added or removed from a collection is
+          valid. A non-null return <code>String</code> indicates the reason
+          why the object cannot be added/removed, and the viewing mechanism
+          will display this to the user. The syntax is:</para>
+
+          <para><programlisting>public String validateAddTo&lt;CollectionName&gt;(&lt;property type&gt; param) 
+
+public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; param)</programlisting></para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Department {
+    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
+    public List&lt;Employee&gt; getEmployees() { ... }
+    private void setEmployees(List&lt;Employee&gt; employees) { ... }
+    public String validateAddToEmployee(Employee employee) {
+        return employee.isRetired()?
+            "Cannot add retired employees to department"
+            :null;
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>How to control the order in which collections are
+          displayed</title>
+
+          <para>Use the <literal moreinfo="none">@MemberOrder</literal>
+          annotation.</para>
+        </sect2>
+
+        <sect2>
+          <title>How to specify a name and/or description for a
+          collection</title>
+
+          <para>Use the <literal moreinfo="none">@Named</literal> and/or
+          <literal moreinfo="none">@DescribedAs</literal> annotations.</para>
+        </sect2>
+
+        <sect2>
+          <title>How to hide a collection</title>
+
+          <para>See 'Properties: How to hide a property'. The same approaches
+          work for collections.</para>
+        </sect2>
+
+        <sect2>
+          <title>How to create a derived collection</title>
+
+          <para>Collections can be derived, in the same way as properties.
+          These are not persisted, but are represented as read only
+          collections. For example:</para>
+
+          <programlisting format="linespecific">public class Department {
+    // Standard collection
+    List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
+    public List&lt;Employee&gt; getEmployees() { ... }
+    private void setEmployees(List&lt;Employee&gt;) { ... }
+    void addToEmployees(final Employee employee) { ... }
+    void removeFromEmployees(final Employee employee) { ... }
+
+    // Derived collection
+    public List&lt;Employee&gt; getTerminatedEmployees() {
+        List&lt;Employee&gt; terminatedEmployees = new ArrayListt&lt;Employee&gt;();
+        for(Employee e: employees) {
+            if (e.isTerminated()) {
+                addTo(terminatedEmployees, e);
+            }
+        }
+        return terminatedEmployees;
+    }
+}</programlisting>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.Actions">
         <title>Actions</title>
 
         <para>An 'action' is a method that we expect the user to be able to
@@ -1203,222 +1514,64 @@ void warnUser(String message)</programlisting></para>
         </sect2>
       </sect1>
 
-      <sect1>
-        <title>Collections</title>
+      <sect1 id="sec.MustSpecify">
+        <title>@MustSatisfy Specification</title>
 
-        <para>A collection is a list of references to several entity objects
-        that have a common type.</para>
+        <para>The <literal>@MustSatisfy</literal> annotation is an alternative
+        to using imperative validation, allowing validation rules to be
+        captured in an (implementation of a)
+        <classname>org.apache.isis.applib.spec.Specification</classname>.</para>
 
-        <sect2>
-          <title>How to add a collection to an object</title>
+        <para>For example:</para>
 
-          <para>A collection is recognized via an accessor/mutator method pair
-          (<code>get</code> and set) for any type of collection provided by
-          the programming language. The syntax is:</para>
+        <programlisting format="linespecific">public class DomainObjectWithMustSatisfyAnnotations extends AbstractDomainObject {
 
-          <para><programlisting>public &lt;collection type&gt; get&lt;CollectionName&gt;()
-
-private void set&lt;CollectionName&gt;(&lt;collection type&gt; param)</programlisting></para>
-
-          <para>It is recommended that the collections be specified using
-          generics (for example: <literal
-          moreinfo="none">List&lt;Customer&gt;</literal> ). That way the
-          framework will be able to display the collection based on that type
-          definition. (Generics are also required by some persistence
-          mechanisms). For example the viewer might display the collection as
-          a table, with the columns defined by the visible properties of that
-          type. The viewer will then automatically prevent the user from
-          adding objects not of that type. If generics are not used then the
-          type may be inferred from the <literal
-          moreinfo="none">addTo</literal> / <literal
-          moreinfo="none">removeFrom</literal> methods, if specified (see
-          below).</para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Employee { ... }
-
-public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List &lt;Employee&gt; getEmployees() {
-        return employees;
+    private String lastName;
+    @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
+    public String getLastName() {
+        resolve(lastName);
+        return lastName;
     }
-    private void setEmployees(List&lt;Employee&gt; employees) { 
-        this.employees = employees;
-    }
-    ...
-}</programlisting>
-        </sect2>
-
-        <sect2>
-          <title>How to trigger other behaviour when an object is added or
-          removed</title>
-
-          <para>A collection may have a corresponding <literal
-          moreinfo="none">addTo</literal> and/or <literal
-          moreinfo="none">removeFrom</literal> method. This is equivalent to
-          the <literal moreinfo="none">modify</literal> and <literal
-          moreinfo="none">clear</literal> methods for properties. The syntax
-          is:</para>
-
-          <para><programlisting>public void addTo&lt;CollectionName&gt;(&lt;entity type&gt; param)
-
-public void removeFrom&lt;CollectionName&gt;(&lt;entity type&gt; param)</programlisting></para>
-
-          <para>where <literal moreinfo="none">&lt;entity type&gt;</literal>
-          is the same type as the generic collection type. For example:</para>
-
-          <programlisting format="linespecific">public class Employee { ... }
-
-public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List &lt;Employee&gt; getEmployees() {
-        return employees;
-    }
-    private void setEmployees(List&lt;Employee&gt; employees) { 
-        this.employees = employees;
-    }
-    public void addToEmployees(Employee employee) {
-        employees.add(employee);
-    }
-    public void removeFromEmployees(Employee employee) {
-        employees.remove(employee);
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        objectChanged();
     }
 
-    ...
+    public void changeLastName(
+            @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
+            String lastName
+            ) {
+        setLastName(lastName);
+    }
+
 }</programlisting>
 
-          <para>The addTo / removeFrom and modify / clear methods are
-          particularly useful in setting up bidirectional relationships using
-          the 'mutual registration pattern'; for a write-up of this pattern,
-          see <ulink
-          url="???">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.</para>
-        </sect2>
-
-        <sect2>
-          <title>How to prevent the user from modifying a collection</title>
-
-          <para>Preventing the user from adding to or removing from a
-          collection is known as 'disabling' the collection.</para>
-
-          <sect3>
-            <title>Disabling a collection permanently</title>
-
-            <para>Use the <literal moreinfo="none">@Disabled</literal>
-            annotation.</para>
-          </sect3>
-
-          <sect3>
-            <title>Disabling a collection under certain conditions</title>
-
-            <para>A <literal moreinfo="none">disable</literal> method can be
-            used to disable a particular instance's collection under certain
-            conditions: The syntax is:</para>
-
-            <para><literal moreinfo="none">public String
-            disable&lt;CollectionName&gt;()</literal> For example:</para>
-
-            <programlisting format="linespecific">public class Department {
-    public List&lt;Employee&gt; getEmployees() { ... }
-    public void addToEmployees(Employee employee) { ... }
-    public void removeFromEmployees(Employee employee) { ... }
-    public void disableEmployees() {
-        return isClosed()? "This department is closed" : null;
-    }
-}</programlisting>
-          </sect3>
-
-          <sect3>
-            <title>Disabling a collection for specific users or roles</title>
-
-            <para>See Properties: Disabling a property for specific users or
-            roles'. The same technique can be applied to collections, with the
-            same caveats applying.</para>
-          </sect3>
-        </sect2>
-
-        <sect2>
-          <title>How to validate an object to be added or removed</title>
-
-          <para>A <literal moreinfo="none">validate</literal> method is used
-          to check that an object to be added or removed from a collection is
-          valid. A non-null return <code>String</code> indicates the reason
-          why the object cannot be added/removed, and the viewing mechanism
-          will display this to the user. The syntax is:</para>
-
-          <para><programlisting>public String validateAddTo&lt;CollectionName&gt;(&lt;property type&gt; param) 
-
-public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; param)</programlisting></para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List&lt;Employee&gt; getEmployees() { ... }
-    private void setEmployees(List&lt;Employee&gt; employees) { ... }
-    public String validateAddToEmployee(Employee employee) {
-        return employee.isRetired()?
-            "Cannot add retired employees to department"
-            :null;
-}</programlisting>
-        </sect2>
-
-        <sect2>
-          <title>How to control the order in which collections are
-          displayed</title>
-
-          <para>Use the <literal moreinfo="none">@MemberOrder</literal>
-          annotation.</para>
-        </sect2>
-
-        <sect2>
-          <title>How to specify a name and/or description for a
-          collection</title>
-
-          <para>Use the <literal moreinfo="none">@Named</literal> and/or
-          <literal moreinfo="none">@DescribedAs</literal> annotations.</para>
-        </sect2>
-
-        <sect2>
-          <title>How to hide a collection</title>
-
-          <para>See 'Properties: How to hide a property'. The same approaches
-          work for collections.</para>
-        </sect2>
-
-        <sect2>
-          <title>How to create a derived collection</title>
-
-          <para>Collections can be derived, in the same way as properties.
-          These are not persisted, but are represented as read only
-          collections. For example:</para>
-
-          <programlisting format="linespecific">public class Department {
-    // Standard collection
-    List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List&lt;Employee&gt; getEmployees() { ... }
-    private void setEmployees(List&lt;Employee&gt;) { ... }
-    void addToEmployees(final Employee employee) { ... }
-    void removeFromEmployees(final Employee employee) { ... }
-
-    // Derived collection
-    public List&lt;Employee&gt; getTerminatedEmployees() {
-        List&lt;Employee&gt; terminatedEmployees = new ArrayListt&lt;Employee&gt;();
-        for(Employee e: employees) {
-            if (e.isTerminated()) {
-                addTo(terminatedEmployees, e);
-            }
-        }
-        return terminatedEmployees;
-    }
-}</programlisting>
-        </sect2>
+        <para><remark>TODO: @MustSatisfy may not work for action parameters;
+        see <ulink
+        url="???">http://dev.isis.apache.org/trac/ticket/669</ulink>.</remark></para>
       </sect1>
+    </chapter>
 
-      <sect1>
+    <chapter>
+      <title>Repositories, Factories, Services and Values</title>
+
+      <abstract>
+        <para>How-to's relating to the everything else that goes into making
+        up an <emphasis>Isis</emphasis> application.</para>
+      </abstract>
+
+      <para>This chapter contains how-to's for programming conventions that
+      apply to everything that isn't a domain object (ie "everything else")
+      that also makes up an <emphasis>Apache Isis</emphasis> application.
+      Specifically, we're talking about repositories and factories (<xref
+      linkend="sec.RepositoriesAndFactories" />), services (<xref
+      linkend="sec.Services" />) and values (<xref
+      linkend="sec.ValueTypes" />).</para>
+
+      <sect1 id="sec.RepositoriesAndFactories">
         <title>Repositories and Factories</title>
 
-        <para>The [[NAME]] application library provides a class</para>
+        <para>The Apache Isis application library provides a class</para>
 
         <para><literal
         moreinfo="none">org.apache.isis.applib.AbstractFactoryAndRepository</literal></para>
@@ -1475,7 +1628,7 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
         </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.Services">
         <title>Registering services</title>
 
         <sect2>
@@ -1510,44 +1663,7 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
         </sect2>
       </sect1>
 
-      <sect1>
-        <title>@MustSatisfy specification</title>
-
-        <para>The <literal>@MustSatisfy</literal> annotation is an alternative
-        to using imperative validation, allowing validation rules to be
-        captured in an (implementation of a)
-        <classname>org.apache.isis.applib.spec.Specification</classname>.</para>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class DomainObjectWithMustSatisfyAnnotations extends AbstractDomainObject {
-
-    private String lastName;
-    @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
-    public String getLastName() {
-        resolve(lastName);
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-        objectChanged();
-    }
-
-    public void changeLastName(
-            @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
-            String lastName
-            ) {
-        setLastName(lastName);
-    }
-
-}</programlisting>
-
-        <para><remark>TODO: @MustSatisfy may not work for action parameters;
-        see <ulink
-        url="???">http://dev.isis.apache.org/trac/ticket/669</ulink>.</remark></para>
-      </sect1>
-
-      <sect1>
+      <sect1 id="sec.ValueTypes">
         <title>Value Types</title>
 
         <para>In addition to the built-in value types it is also possible to
@@ -1585,38 +1701,20 @@ public class Money extends Magnitude {
         than the @Value annotation; this is particularly useful for
         third-party value types.</remark></para>
       </sect1>
-
-      <sect1>
-        <title>Resolve and ObjectChanged</title>
-
-        <para>In previous versions of the framework it was necessary to call
-        the inherited <methodname>resolve()</methodname> method within every
-        property or collection's getter, and
-        <methodname>objectChanged()</methodname> within every property's
-        setter and every collection's addTo or removeFrom.</para>
-
-        <para>These methods still exist in
-        <classname>AbstractDomainObject</classname>, but no longer need to be
-        called explicitly. Instead [[NAME]] 4.0 uses bytecode enhancement
-        (using either cglib or javassist) to automatically call these methods.
-        This bytecode enhancement can be disabled in
-        <filename>isis.properties</filename> file; if it is then the methods
-        must be called manually as they were in [[NAME]] 3.0.</para>
-      </sect1>
     </chapter>
   </part>
 
   <part>
-    <title>Reference</title>
+    <title>Reference Appendices</title>
 
-    <chapter id="sec.RecognisedTypes">
+    <appendix id="sec.RecognisedTypes">
       <title>Recognised Types</title>
 
       <abstract>
         <para>*** yada yada</para>
       </abstract>
 
-      <para>[[NAME]] creates an adapter for every domain object. There are
+      <para>Apache Isis creates an adapter for every domain object. There are
       three categories of objects that are recognised: value, reference and
       collection. Value and collection objects are dealt with on a class by
       class basis, while all reference objects are dealt with in the same way
@@ -1821,9 +1919,9 @@ public class Money extends Magnitude {
           </listitem>
         </itemizedlist>
       </sect1>
-    </chapter>
+    </appendix>
 
-    <chapter>
+    <appendix>
       <title>Recognized Methods and Method Prefixes</title>
 
       <abstract>
@@ -2036,8 +2134,8 @@ public String disable&lt;actionName&gt;([&lt;parameter type&gt; param]...)</prog
         <para>A standard JavaBean accessor/mutator pair will be recognised as
         a field for a value or reference. Values include Java primitives,
         <classname>String</classname>s and <classname>Date</classname>s, and
-        also the value types provided by the [[NAME]] application library (see
-        the section on <xref linkend="sec.RecognisedTypes" />).</para>
+        also the value types provided by the Apache Isis application library
+        (see the section on <xref linkend="sec.RecognisedTypes" />).</para>
 
         <para>If there is no mutator method then the field is flagged as being
         derived and will not be persisted or editable.</para>
@@ -2441,9 +2539,9 @@ public String validateRemoveFrom&lt;PropertyName&gt;(&lt;property type&gt; param
           <code>validate</code> method.</para>
         </warning>
       </sect1>
-    </chapter>
+    </appendix>
 
-    <chapter>
+    <appendix>
       <title>Recognized Annotations</title>
 
       <abstract>
@@ -2457,7 +2555,7 @@ public String validateRemoveFrom&lt;PropertyName&gt;(&lt;property type&gt; param
       <para></para>
 
       <para>This section defines the set of annotations that are recognised by
-      the [[NAME]] Java Programming Model.</para>
+      the Apache Isis Java Programming Model.</para>
 
       <sect1>
         <title>@ActionOrder</title>
@@ -3195,9 +3293,9 @@ public class InputForm {
       <sect1>
         <title>@Plural</title>
 
-        <para>Where [[NAME]] displays a collection of several objects it may
-        use the plural form of the object type in the title. By default the
-        plural name will be created by adding an 's' to the end of the
+        <para>Where Apache Isis displays a collection of several objects it
+        may use the plural form of the object type in the title. By default
+        the plural name will be created by adding an 's' to the end of the
         singular name (whether that is the class name or another name
         specified using <literal moreinfo="none">@Named</literal>). Where the
         single name ends in 'y' then the default plural name will end in 'ies'
@@ -3309,20 +3407,20 @@ public class ComplexNumber {
         framework to interact with the value, parsing strings and displaying
         as text, and encoding/decoding (for serialization).</para>
       </sect1>
-    </chapter>
+    </appendix>
 
-    <chapter>
+    <appendix>
       <title>DomainObjectContainer</title>
 
       <para></para>
 
       <para>*** there was only ever a placeholder in the original NOF doc for
-      a chapter on this topic.</para>
+      a appendix on this topic.</para>
 
       <para></para>
-    </chapter>
+    </appendix>
 
-    <chapter>
+    <appendix>
       <title>Supporting Classes</title>
 
       <para></para>
@@ -3368,9 +3466,9 @@ public class ComplexNumber {
           <para>***</para>
         </sect2>
       </sect1>
-    </chapter>
+    </appendix>
 
-    <chapter>
+    <appendix>
       <title>Configuring via Properties</title>
 
       <para></para>
@@ -3610,6 +3708,6 @@ public class ComplexNumber {
           </sect3>
         </sect2>
       </sect1>
-    </chapter>
+    </appendix>
   </part>
 </book>
