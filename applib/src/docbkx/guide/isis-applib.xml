@@ -682,14 +682,14 @@ persist(newCust);</programlisting>
     </chapter>
 
     <chapter id="chp.Properties">
-      <title>Object Property Recipes</title>
+      <title>Property Recipes</title>
 
       <abstract>
         <para>How-to's relating to an object's properties.</para>
       </abstract>
 
       <para>The following conventions are concerned with specifying the
-      properties of an object, and the way in which users can interact with
+      properties of an object, and the means by which a user can interact with
       those properties.</para>
 
       <sect1>
@@ -744,6 +744,67 @@ public void setPropertyName(PropertyType param)</programlisting></para>
       </sect1>
 
       <sect1>
+        <title>How to specify a name and/or description for a property</title>
+
+        <sect2>
+          <title>Specifying the name for a property</title>
+
+          <para>By default the framework will use the property name itself to
+          label the property on the user interface. If you wish to override
+          this, use the <literal moreinfo="none">@Named </literal>annotation
+          on the property.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer() {
+    @Named("Given Name")
+    public String getFirstName() { ... }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Specifying a description for a property</title>
+
+          <para>An additional description can be provided on a property using
+          the <literal moreinfo="none">@DescribedAs</literal> annotation. The
+          framework will take responsibility to make this description
+          available to the user, for example in the form of a tooltip.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer() {
+    @DescribedAs("The given name by which this customer is known")
+    public String getFirstName() { ... }
+    ...
+}</programlisting>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.MemberOrderForProperties">
+        <title>How to specify the order in which properties are
+        displayed</title>
+
+        <para>The <literal moreinfo="none">@MemberOrder</literal> annotation
+        provides a hint to the viewer as to the order in which the properties
+        (and also collections, see <xref
+        linkend="sec.MemberOrderForCollections" />) should appear in the
+        <acronym>GUI</acronym>.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Customer() {
+    @MemberOrder("1")
+    public String getFirstName() { ... }
+    ...
+
+    @MemberOrder("2")
+    public String getLastName() { ... }
+    ...
+}</programlisting>
+      </sect1>
+
+      <sect1>
         <title>How to make a property optional (when saving an object)</title>
 
         <para>By default, when a new transient (unsaved) object is presented
@@ -788,79 +849,22 @@ public void setPropertyName(PropertyType param)</programlisting></para>
 }</programlisting>
       </sect1>
 
-      <sect1>
-        <title>How to specify a name and/or description for a property</title>
-
-        <sect2>
-          <title>Specifying the name for a property</title>
-
-          <para>By default the framework will use the property name itself to
-          label the property on the user interface. If you wish to override
-          this, use the <literal moreinfo="none">@Named </literal>annotation
-          on the property.</para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Customer() {
-    @Named("Given Name")
-    public String getFirstName() { ... }
-    ...
-}</programlisting>
-        </sect2>
-
-        <sect2>
-          <title>Specifying a description for a property</title>
-
-          <para>An additional description can be provided on a property using
-          the <literal moreinfo="none">@DescribedAs</literal> annotation. The
-          framework will take responsibility to make this description
-          available to the user, for example in the form of a tooltip.</para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Customer() {
-    @DescribedAs("The given name by which this customer is known")
-    public String getFirstName() { ... }
-    ...
-}</programlisting>
-        </sect2>
-      </sect1>
-
-      <sect1 id="sec.MemberOrderForProperties">
-        <title>How to control the order in which properties are
-        displayed</title>
-
-        <para>The <literal moreinfo="none">@MemberOrder</literal> annotation
-        provides a hint to the viewer as to the order in which the properties
-        (and also collections, see <xref
-        linkend="sec.MemberOrderForCollections" />).</para>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Customer() {
-    @MemberOrder("1")
-    public String getFirstName() { ... }
-    ...
-
-    @MemberOrder("2")
-    public String getLastName() { ... }
-    ...
-}</programlisting>
-      </sect1>
-
       <sect1 id="sec.DerivedProperty">
-        <title>How to make a property non-persisted (lazily derived)</title>
+        <title>How to make a derived property</title>
 
-        <para>Omitting the mutator (<code>setXxx()</code>) method for a
-        property indicates both that the field is will not be persisted, and
-        it will <emphasis>also</emphasis> be unmodifiable. This is the
-        standard approach to derive a property from other information
-        available to the object. It also happens to be compatible with Java
-        Persistence Api (JPA) semantics.</para>
+        <sect2>
+          <title>Lazily derived</title>
 
-        <para>For example:</para>
+          <para>Omitting the mutator (<code>setXxx()</code>) method for a
+          property indicates both that the field is will not be persisted, and
+          it will <emphasis>also</emphasis> be unmodifiable. This is the
+          standard approach to derive a property from other information
+          available to the object. It also happens to be compatible with Java
+          Persistence Api (JPA) semantics.</para>
 
-        <programlisting format="linespecific">public class Employee {
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Employee {
     public Department getDepartment() { ... }
     ...
 
@@ -871,24 +875,23 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     }
     ...
 }</programlisting>
-      </sect1>
+        </sect2>
 
-      <sect1>
-        <title>How to make a property non-persisted (eagerly derived)</title>
+        <sect2>
+          <title>Eagerly derived</title>
 
-        <para>One way to mark a property as non-persisted is to omit the
-        mutator (see <xref linkend="sec.DerivedProperty" />). The second way
-        to mark a property is to keep the mutator, but to annotate the
-        property with <classname>@NotPersisted</classname>.</para>
+          <para>An alternative to omitting the mutator is to mark a property
+          is to keep the mutator, but to annotate the property with
+          <classname>@NotPersisted</classname>.</para>
 
-        <para>Because the data is non-persisted, some other mechanism must be
-        used to initialize the property. Typically this will be a lifecycle
-        method (see <xref linkend="sec.LifecycleMethods" />), which eagerly
-        derive the value of the property. </para>
+          <para>Because the data is non-persisted, some other mechanism must
+          be used to initialize the property. Typically this will be a
+          lifecycle method (see <xref linkend="sec.LifecycleMethods" />),
+          which eagerly derive the value of the property.</para>
 
-        <para>For example:</para>
+          <para>For example:</para>
 
-        <programlisting format="linespecific">public class Employee {
+          <programlisting format="linespecific">public class Employee {
     public void loaded() {
         if (getDepartment() != null) { 
             setManager(getDepartment().getManager());
@@ -903,6 +906,11 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     private void setManager(Employee manager) { ... }
     ...
 }</programlisting>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>How to make an (eagerly-) derived property</title>
 
         <note>
           <para>Using eager derivation can be problematic, because a change in
@@ -970,7 +978,7 @@ public void setPropertyName(PropertyType param)</programlisting></para>
       </sect1>
 
       <sect1>
-        <title>How to prevent a Property from being Modified</title>
+        <title>How to prevent a property from being modified</title>
 
         <para>Preventing the user from modifying a property value is known as
         'disabling' the property. Note that this doesn't prevent the property
@@ -1044,28 +1052,56 @@ public void setPropertyName(PropertyType param)</programlisting></para>
       </sect1>
 
       <sect1>
-        <title>How to validate user input to a property</title>
+        <title>How to validate user input for a property</title>
 
-        <para>A supporting <literal moreinfo="none">validateXxx()</literal>
-        method is used to check that a new value for a property is valid.
-        </para>
+        <sect2>
+          <title>Declarative validation</title>
 
-        <para>If the proffered value is deemed to be invalid then the property
-        will not be changed. A non-null return <code>String</code> indicates
-        the reason why the member cannot be modified/action be invoked; the
-        framework is responsible for providing this feedback to the
-        user.</para>
+          <para>For properties that accept a text input string, such as
+          <code>String</code> and <code>Date</code>, there are convenient
+          mechanisms to validate and/or normalise the values typed in:</para>
 
-        <para>The syntax is:</para>
+          <itemizedlist>
+            <listitem>
+              <para>For <literal moreinfo="none">Date</literal> and number
+              values the <literal moreinfo="none">@Mask</literal> annotation
+              may be used.</para>
+            </listitem>
 
-        <para><programlisting>public String validatePropertyName(PropertyType param)</programlisting></para>
+            <listitem>
+              <para>For <literal moreinfo="none">String</literal> properties
+              the <literal moreinfo="none">@RegEx</literal> annotation may be
+              used.</para>
+            </listitem>
+          </itemizedlist>
 
-        <para>where <literal moreinfo="none">PropertyType</literal> is the
-        same type as that of the property itself.</para>
+          <para>More complex validation can also be performed imperatively
+          (below).</para>
+        </sect2>
 
-        <para>For example:</para>
+        <sect2>
+          <title>Imperative validation</title>
 
-        <programlisting format="linespecific">public class Exam {
+          <para>A supporting <literal moreinfo="none">validateXxx()</literal>
+          method is used to check that a new value for a property is
+          valid.</para>
+
+          <para>If the proffered value is deemed to be invalid then the
+          property will not be changed. A non-null return <code>String</code>
+          indicates the reason why the member cannot be modified/action be
+          invoked; the framework is responsible for providing this feedback to
+          the user.</para>
+
+          <para>The syntax is:</para>
+
+          <para><programlisting>public String validatePropertyName(PropertyType param)</programlisting></para>
+
+          <para>where <literal moreinfo="none">PropertyType</literal> is the
+          same type as that of the property itself.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Exam {
     public int getMark() { ... }
     public void setMark(int mark) { ... }
     public validateMark(int mark) {
@@ -1073,21 +1109,6 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     }
     private boolean withinRange(int mark) { return mark &gt;= 0 &amp;&amp; mark &lt;= 30; }
 }</programlisting>
-
-        <sect2>
-          <title>Format validation</title>
-
-          <para>For properties that accept a text input string, such as
-          <code>String</code> and <code>Date</code>, there are convenient
-          mechanisms to validate and/or normalise the values typed in.</para>
-
-          <para>For <literal moreinfo="none">Date</literal> and number values
-          the <literal moreinfo="none">@Mask</literal> annotation may be
-          used.</para>
-
-          <para>For <literal moreinfo="none">String</literal> properties the
-          <literal moreinfo="none">@RegEx</literal> annotation may be
-          used.</para>
         </sect2>
       </sect1>
 
@@ -1255,38 +1276,57 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     </chapter>
 
     <chapter id="chp.Collections">
-      <title>Collections</title>
+      <title>Collection Recipes</title>
 
       <abstract>
-        <para>***</para>
+        <para>How-to's relating to an object's collections.</para>
       </abstract>
 
-      <para>*** A collection is a list of references to several entity objects
-      that have a common type.</para>
+      <para>A collection is a list of references to several entity objects
+      that have a common type. The following conventions are concerned with
+      specifying the collections of an object, and the means by which a user
+      can interact with those collections.</para>
 
       <sect1>
         <title>How to add a collection to an object</title>
 
         <para>A collection is recognized via an accessor/mutator method pair
         (<code>get</code> and set) for any type of collection provided by the
-        programming language. The syntax is:</para>
+        programming language.</para>
 
-        <para><programlisting>public &lt;collection type&gt; get&lt;CollectionName&gt;()
+        <para>The syntax is either:</para>
 
-private void set&lt;CollectionName&gt;(&lt;collection type&gt; param)</programlisting></para>
+        <para><programlisting>public Collection&lt;ReferencedType&gt; getCollectionName()
+private void setCollectionName(Collection&lt;ReferencedType&gt; param)</programlisting></para>
+
+        <para>or:</para>
+
+        <para><programlisting>public List&lt;ReferencedType&gt; getCollectionName()
+private void setCollectionName(List&lt;ReferencedType&gt; param)</programlisting></para>
+
+        <para>or:</para>
+
+        <para><programlisting>public Set&lt;ReferencedType&gt; getCollectionName()
+private void setCollectionName(Set&lt;ReferencedType&gt; param)</programlisting></para>
+
+        <para>Note:</para>
+
+        <note>
+          <para><classname>Map</classname>s cannot be used for
+          collections.</para>
+        </note>
 
         <para>It is recommended that the collections be specified using
         generics (for example: <literal
         moreinfo="none">List&lt;Customer&gt;</literal> ). That way the
         framework will be able to display the collection based on that type
-        definition. (Generics are also required by some persistence
-        mechanisms). For example the viewer might display the collection as a
-        table, with the columns defined by the visible properties of that
-        type. The viewer will then automatically prevent the user from adding
-        objects not of that type. If generics are not used then the type may
-        be inferred from the <literal moreinfo="none">addTo</literal> /
-        <literal moreinfo="none">removeFrom</literal> methods, if specified
-        (see below).</para>
+        definition. If a raw type is used then the framework will attempt to
+        infer the type from the addToXxx() / removeFromXxx() supporting
+        methods, if specified (see <xref linkend="sec.AddToRemoveFrom" />). If
+        the framework is unable to determine the type of the collection, it
+        will mean that some viewers will represent the collection is a less
+        sophisticated manner (eg a simple list of titles rather than a
+        table).</para>
 
         <para>For example:</para>
 
@@ -1305,6 +1345,234 @@ public class Department {
       </sect1>
 
       <sect1>
+        <title>How to specify a name and/or description for a
+        collection</title>
+
+        <sect2>
+          <title>Specifying the name for a collection</title>
+
+          <para>By default the framework will use the collection name itself
+          to label the property on the user interface. If you wish to override
+          this, use the <literal moreinfo="none">@Named</literal> annotation
+          on the collection.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer() {
+    @Named("Placed Orders")
+    public List&lt;Order&gt; getOrders() { ... }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Specifying a description for a collection</title>
+
+          <para>An additional description can be provided on a collection
+          using the <literal moreinfo="none">@DescribedAs</literal>
+          annotation. The framework will take responsibility to make this
+          description available to the user, for example in the form of a
+          tooltip.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer() {
+    @DescribedAs("Those orders that have been placed (and possibly shipped) " + 
+                 "by this customer given name by which this customer is known")
+    public List&lt;Order&gt; getOrders() { ... }
+    ...
+}</programlisting>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.MemberOrderForCollections">
+        <title>How to specify the order in which collections are
+        displayed</title>
+
+        <para>The <literal moreinfo="none">@MemberOrder</literal> annotation
+        provides a hint to the viewer as to the order in which the collections
+        (and also properties, see <xref
+        linkend="sec.MemberOrderForProperties" />) should appear in the
+        <acronym>GUI</acronym>.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Customer {
+    @MemberOrder("3")
+    public Collection&lt;Order&gt; getRecentOrders() { ... }
+    ...
+
+    @MemberOrder("4")
+    public Collection&lt;Order&gt; getOrders() { ... }
+    ...
+}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>How to make a derived collection</title>
+
+        <para>Collections can be derived by omitting the mutator (the same way
+        as properties, see <xref linkend="sec.DerivedProperty" />). Derived
+        collections are not persisted, and are represented as read only
+        collections.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Department {
+    // Standard collection
+    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
+    public List&lt;Employee&gt; getEmployees() { ... }
+    private void setEmployees(List&lt;Employee&gt;) { ... }
+
+    // Derived collection
+    public List&lt;Employee&gt; getTerminatedEmployees() {
+        List&lt;Employee&gt; terminatedEmployees = new ArrayListt&lt;Employee&gt;();
+        for(Employee e: employees) {
+            if (e.isTerminated()) {
+                addTo(terminatedEmployees, e);
+            }
+        }
+        return terminatedEmployees;
+    }
+    ...
+}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>How to hide a collection</title>
+
+        <sect2>
+          <title>Hiding a collection always</title>
+
+          <para>To prevent a user from viewing a collection at all, use the
+          <literal moreinfo="none">@Hidden</literal> annotation.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Order {
+    private List&lt;Order&gt; cancelledOrders = new ArrayList&lt;Order&gt;();
+    @Hidden
+    public List&lt;Order&gt; getCancelledOrders() { ... }
+    private void setCancelledOrders(List&lt;Order&gt; cancelledOrders) { ... }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Hiding a collection under certain conditions</title>
+
+          <para></para>
+
+          <para>*** up to here ***</para>
+
+          <para></para>
+
+          <para>A <literal moreinfo="none">hideXxx()</literal> method can be
+          used to indicate that a particular instance's member should be
+          hidden (rendered invisible to the user) under certain conditions.
+          The syntax is:</para>
+
+          <programlisting><literal moreinfo="none">public boolean hidePropertyName()</literal> </programlisting>
+
+          <para>Returning a value of <code>true</code> indicates that the
+          property should be hidden.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Order {
+    public String getShippingInstructions() { ... }
+    public void setShippingInstructions(String shippingInstructions) { ... }
+    public boolean hideShippingInstructions() {
+        return hasShipped();
+    }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Hiding a property for specific users or roles</title>
+
+          <para>It is possible to hide properties for certain users/roles by
+          calling the <methodname>DomainObjectContainer#getUser()</methodname>
+          method. See <xref
+          linkend="sec.BusinessRulesForCertainUsersOrRoles" />for further
+          discussion.</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>How to prevent a collection from being modified</title>
+
+        <para>Preventing the user from adding to or removing from a collection
+        is known as 'disabling' the collection.</para>
+
+        <sect2>
+          <title>Disabling a collection permanently</title>
+
+          <para>Use the <literal moreinfo="none">@Disabled</literal>
+          annotation.</para>
+        </sect2>
+
+        <sect2>
+          <title>Disabling a collection under certain conditions</title>
+
+          <para>A <literal moreinfo="none">disable</literal> method can be
+          used to disable a particular instance's collection under certain
+          conditions: The syntax is:</para>
+
+          <para><literal moreinfo="none">public String
+          disable&lt;CollectionName&gt;()</literal> For example:</para>
+
+          <programlisting format="linespecific">public class Department {
+    public List&lt;Employee&gt; getEmployees() { ... }
+    public void addToEmployees(Employee employee) { ... }
+    public void removeFromEmployees(Employee employee) { ... }
+    public void disableEmployees() {
+        return isClosed()? "This department is closed" : null;
+    }
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Disabling a collection for specific users or roles</title>
+
+          <para>***</para>
+
+          <para></para>
+
+          <para>See Properties: Disabling a property for specific users or
+          roles'. The same technique can be applied to collections, with the
+          same caveats applying.</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>How to validate an object being added or removed</title>
+
+        <para>A <literal moreinfo="none">validate</literal> method is used to
+        check that an object to be added or removed from a collection is
+        valid. A non-null return <code>String</code> indicates the reason why
+        the object cannot be added/removed, and the viewing mechanism will
+        display this to the user. The syntax is:</para>
+
+        <para><programlisting>public String validateAddTo&lt;CollectionName&gt;(&lt;property type&gt; param) 
+
+public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; param)</programlisting></para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Department {
+    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
+    public List&lt;Employee&gt; getEmployees() { ... }
+    private void setEmployees(List&lt;Employee&gt; employees) { ... }
+    public String validateAddToEmployee(Employee employee) {
+        return employee.isRetired()?
+            "Cannot add retired employees to department"
+            :null;
+}</programlisting>
+      </sect1>
+
+      <sect1 id="sec.AddToRemoveFrom">
         <title>How to trigger other behaviour when an object is added or
         removed</title>
 
@@ -1385,152 +1653,20 @@ public class Department {
 
         <para></para>
       </sect1>
-
-      <sect1>
-        <title>How to prevent the user from modifying a collection</title>
-
-        <para>Preventing the user from adding to or removing from a collection
-        is known as 'disabling' the collection.</para>
-
-        <sect2>
-          <title>Disabling a collection permanently</title>
-
-          <para>Use the <literal moreinfo="none">@Disabled</literal>
-          annotation.</para>
-        </sect2>
-
-        <sect2>
-          <title>Disabling a collection under certain conditions</title>
-
-          <para>A <literal moreinfo="none">disable</literal> method can be
-          used to disable a particular instance's collection under certain
-          conditions: The syntax is:</para>
-
-          <para><literal moreinfo="none">public String
-          disable&lt;CollectionName&gt;()</literal> For example:</para>
-
-          <programlisting format="linespecific">public class Department {
-    public List&lt;Employee&gt; getEmployees() { ... }
-    public void addToEmployees(Employee employee) { ... }
-    public void removeFromEmployees(Employee employee) { ... }
-    public void disableEmployees() {
-        return isClosed()? "This department is closed" : null;
-    }
-}</programlisting>
-        </sect2>
-
-        <sect2>
-          <title>Disabling a collection for specific users or roles</title>
-
-          <para>See Properties: Disabling a property for specific users or
-          roles'. The same technique can be applied to collections, with the
-          same caveats applying.</para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>How to validate an object to be added or removed</title>
-
-        <para>A <literal moreinfo="none">validate</literal> method is used to
-        check that an object to be added or removed from a collection is
-        valid. A non-null return <code>String</code> indicates the reason why
-        the object cannot be added/removed, and the viewing mechanism will
-        display this to the user. The syntax is:</para>
-
-        <para><programlisting>public String validateAddTo&lt;CollectionName&gt;(&lt;property type&gt; param) 
-
-public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; param)</programlisting></para>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List&lt;Employee&gt; getEmployees() { ... }
-    private void setEmployees(List&lt;Employee&gt; employees) { ... }
-    public String validateAddToEmployee(Employee employee) {
-        return employee.isRetired()?
-            "Cannot add retired employees to department"
-            :null;
-}</programlisting>
-      </sect1>
-
-      <sect1 id="sec.MemberOrderForCollections">
-        <title>How to control the order in which collections are
-        displayed</title>
-
-        <para>The <literal moreinfo="none">@MemberOrder</literal> annotation
-        provides a hint to the viewer as to the order in which the collections
-        (and also properties, see <xref
-        linkend="sec.MemberOrderForProperties" />).</para>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Customer() {
-    @MemberOrder("3")
-    public Collection&lt;Order&gt; getRecentOrders() { ... }
-    ...
-
-    @MemberOrder("4")
-    public Collection&lt;Order&gt; getOrders() { ... }
-    ...
-}</programlisting>
-      </sect1>
-
-      <sect1>
-        <title>How to specify a name and/or description for a
-        collection</title>
-
-        <para>Use the <literal moreinfo="none">@Named</literal> and/or
-        <literal moreinfo="none">@DescribedAs</literal> annotations.</para>
-      </sect1>
-
-      <sect1>
-        <title>How to hide a collection</title>
-
-        <para>See 'Properties: How to hide a property'. The same approaches
-        work for collections.</para>
-      </sect1>
-
-      <sect1>
-        <title>How to create a derived collection</title>
-
-        <para>Collections can be derived, in the same way as properties. These
-        are not persisted, but are represented as read only collections. For
-        example:</para>
-
-        <programlisting format="linespecific">public class Department {
-    // Standard collection
-    List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
-    public List&lt;Employee&gt; getEmployees() { ... }
-    private void setEmployees(List&lt;Employee&gt;) { ... }
-    void addToEmployees(final Employee employee) { ... }
-    void removeFromEmployees(final Employee employee) { ... }
-
-    // Derived collection
-    public List&lt;Employee&gt; getTerminatedEmployees() {
-        List&lt;Employee&gt; terminatedEmployees = new ArrayListt&lt;Employee&gt;();
-        for(Employee e: employees) {
-            if (e.isTerminated()) {
-                addTo(terminatedEmployees, e);
-            }
-        }
-        return terminatedEmployees;
-    }
-}</programlisting>
-      </sect1>
     </chapter>
 
     <chapter id="sec.Actions">
-      <title>Actions</title>
+      <title>Action (and Action Parameter) Recipes</title>
 
       <abstract>
-        <para>***</para>
+        <para>How-to's relating to an object's actions.</para>
       </abstract>
 
       <para>An 'action' is a method that we expect the user to be able to
       invoke via the user interface, though it may also be invoked
       programmatically within the object model. The following conventions are
       used to determine when and how methods are made available to the user as
+      actions, and the means by which a user can interact with those
       actions.</para>
 
       <sect1>
@@ -1539,27 +1675,42 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
         <para>By default, any <literal moreinfo="none">public</literal>
         instance method that you add to a class will be treated as a user
         action, unless it represents a property, collection, or another
-        reserved method defined in this manual.</para>
+        reserved method defined in this guide.</para>
 
         <para>If you have a method that you don't want to be made available as
-        a user-action you should either make it <literal
-        moreinfo="none">protected</literal> or <literal
-        moreinfo="none">private</literal> or use the <literal
-        moreinfo="none">@Hidden</literal> annotation. Note also that <literal
-        moreinfo="none">static</literal> methods are ignored: such
-        functionality should reside in a service, such as a Repository or
-        Factory.</para>
+        a user-action you can either:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>make it non-<literal>public</literal> (eg <literal
+            moreinfo="none">protected</literal> or <literal
+            moreinfo="none">private</literal>)</para>
+          </listitem>
+
+          <listitem>
+            <para>annotate it with <classname>@Ignore</classname></para>
+          </listitem>
+
+          <listitem>
+            <para>annotate it with <classname>@Hidden</classname> (discussed
+            further in <xref linkend="sec.HiddenActions" />)</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Note also that <literal moreinfo="none">static</literal> methods
+        are ignored: such functionality should reside in a service, such as a
+        Repository or Factory.</para>
 
         <para>We refer to all methods that are intended to be invoked by users
         as 'action methods'.</para>
 
         <para>The syntax is:</para>
 
-        <para><programlisting>public void &lt;actionName&gt;([&lt;value or entity type&gt; param]...)</programlisting></para>
+        <para><programlisting>public void actionName([ValueOrEntityType param] ...)</programlisting></para>
 
         <para>or</para>
 
-        <para><programlisting>public &lt;return type&gt; &lt;actionName&gt;([&lt;value or entity type&gt; param]...)</programlisting></para>
+        <para><programlisting>public ReturnType actionName([ValueOrEntityType param] ...)</programlisting></para>
 
         <para>When a method returns a reference the viewer will attempt to
         display that object. If the return value is <code>null</code> then
@@ -1567,203 +1718,81 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
       </sect1>
 
       <sect1>
-        <title>How to specify parameters for an action</title>
+        <title>How to specify names and/or description for an action</title>
 
-        <para>If an action method takes parameters, the viewing mechanism will
-        automatically require the user to specify these parameters (for
-        example, in the form of a dialog box) - and ensure that they are of
-        the correct type.</para>
+        <para></para>
+      </sect1>
 
-        <sect2>
-          <title>Specifying parameter names and/or descriptions</title>
+      <sect1>
+        <title>How to specify the order in which actions appear on the
+        menu</title>
 
-          <para>Unlike with properties, the framework cannot pick up the names
-          of parameters that you use within the domain code. By default
-          parameters will be labelled only with the type of the object
-          required (e.g. 'String:' or 'Customer:) If you want a parameter to
-          have a different name (such as 'First Name', 'Last Name') then that
-          parameter should be marked up with an <literal
-          moreinfo="none">@Named</literal> annotation - very often taking the
-          same form as the parameter name used in the code. (This is one of
-          the few forms of duplication that we cannot eliminate; the parameter
-          name is not available in the class' bytecode and so cannot be
-          inferred automatically. Alternatively though, you could create a
-          user-defined value type, using <literal>@Value</literal>).</para>
+        <para>Use the <literal moreinfo="none">@MemberOrder</literal>
+        annotation.</para>
 
-          <para>Similarly, any parameter may be given a short user-description
-          using the <literal moreinfo="none">@DescribedAs</literal>
-          annotation. The framework takes responsibility to make this
-          available to the user.</para>
-        </sect2>
+        <para>The <literal moreinfo="none">@MemberOrder</literal> annotation
+        provides a hint to the viewer as to the order in which the actions
+        should be displayed, eg in a menu.</para>
 
-        <sect2>
-          <title>How to make a parameter optional</title>
+        <para>For example:</para>
 
-          <para>By default, the framework assumes that when an action method
-          is to be invoked, all the parameters are mandatory. You may
-          over-ride this behaviour by marking up one or more of the paramaters
-          with the <literal moreinfo="none">@Optional</literal>
-          annotation.</para>
-        </sect2>
+        <programlisting format="linespecific">public class Customer {
+    @MemberOrder("3")
+    public void placeOrder(Product p) { ... }
+    ...
 
-        <sect2>
-          <title>How to specify default values for parameters</title>
-
-          <para>When an action is about to be invoked, then default values can
-          be provided for any or all of its parameters.</para>
-
-          <para>There are two different ways to specify parameters; either per
-          parameter, or for all parameters. The per-parameter form is simpler
-          and probably preferred; the syntax is:</para>
-
-          <programlisting>public &lt;parameter type&gt; defaultN&lt;ActionName&gt;()</programlisting>
-
-          <para>where N indicates the 0-based parameter number. For
-          example:</para>
-
-          <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {
-        ...
-    }
-    public Product default0PlaceOrder() {
-        return productMostRecentlyOrderedBy(this.getCustomer());
-    }
+    @MemberOrder("4")
+    public void blackList() { ... }
+    ...
 }</programlisting>
+      </sect1>
 
-          <para>The syntax for specifying all the parameter default values in
-          one go is:</para>
+      <sect1 id="sec.HiddenActions">
+        <title>How to hide an action</title>
 
-          <para><programlisting>public Object[] default&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
+        <sect2>
+          <title>Hiding an action always</title>
 
-          <para>returning an array (which must have one element per parameter
-          in the action method signature) of corresponding default values. For
-          example:</para>
-
-          <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {y
-        ...
-    }
-    public Object[] defaultPlaceOrder(
-                      Product product,
-                      int quantity) {
-        return new Object[] {productMostRecentlyOrderedBy(this.getCustomer()), 1};
-    }
-}</programlisting>
+          <para>Use the <literal moreinfo="none">@Hidden</literal> annotation.
+          (This is generally used where a <literal
+          moreinfo="none">public</literal> method on an object is not intended
+          to be a user action).</para>
         </sect2>
 
         <sect2>
-          <title>How to specify a set of choices for parameter values</title>
+          <title>Hiding an action under certain conditions</title>
 
-          <para>The programmer may provide a set of choices for the value of
-          any or all of the parameters of an action. These will be made
-          available to the user - for example as a drop-down list.</para>
+          <para>A <literal moreinfo="none">hide</literal> method can be used
+          to indicate that an action should be hidden under certain
+          conditions. The syntax is:</para>
 
-          <para>As for defaults, there are two different ways to specify
-          parameters; either per parameter, or for all parameters. The
-          per-parameter form is simpler and probably preferred; the syntax
-          is:</para>
+          <para><programlisting>public boolean hide&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
 
-          <programlisting>public List&lt;parameter type&gt; choicesN&lt;ActionName&gt;()</programlisting>
-
-          <para>where N indicates the 0-based parameter number. For
-          example:</para>
+          <para>A <literal moreinfo="none">true</literal> return value
+          indicates that the action should not be shown. For example:</para>
 
           <programlisting format="linespecific">public class Order {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {
-        ...
-    }
-
-    public List&lt;Product&gt; choices0PlaceOrder() {
-        return lastFiveProductsOrderedBy(this.getCustomer());
+    
+    public void applyDiscount(int percentage) { ... }
+    
+    public boolean hideApplyDiscount() {
+        return isWholesaleOrder();
     }
 }</programlisting>
-
-          <para>The alternative mechanism is to supply all the parameter
-          choices in one go:</para>
-
-          <para><programlisting>public Object[] choices&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
-
-          <para>returning an array, which must have one element per parameter
-          in the method signature. Each element of the array should itself
-          either be an array or a list, containing the set of values
-          representing the choices for that parameter, or <literal
-          moreinfo="none">null</literal> if there are no choices to be
-          specified for that parameter.</para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Order {
-    public Order placeOrder(
-                      Product product,
-                      @Named("Quantity") 
-                      int quantity) {
-        ...
-    }
-
-    public Object[] choicesPlaceOrder(
-                      Product product,
-                      int quantity) {
-        return new Object[] {lastFiveProductsOrderedBy(this.getCustomer()).toArray(), null};
-    }
-}</programlisting>
-
-          <para>(Note that if the type of the property is annotated with
-          <literal moreinfo="none">@Bounded</literal>, then it is not
-          necessary to specify the choices for that parameter, as the user
-          will automatically be offered the full set to choose from.)</para>
-        </sect2>
-
-        <sect2>
-          <title>How to specify the length or format for text-input
-          parameters</title>
-
-          <para>Use the <literal moreinfo="none">@MaxLength</literal>,
-          <literal moreinfo="none">@TypicalLength</literal>, <literal
-          moreinfo="none">@MultiLine</literal>, <literal
-          moreinfo="none">@Mask</literal> or <literal
-          moreinfo="none">@RegEx</literal> annotations.</para>
-        </sect2>
-
-        <sect2>
-          <title>How to validate parameter values</title>
-
-          <para>A <literal moreinfo="none">validate</literal> method is used
-          to check that the set of arguments used by an action method is
-          valid. If the arguments are invalid then the framework will not
-          invoke the action. A non-null return String indicates the reason why
-          the member cannot be modified/action be invoked, and the viewing
-          mechanism will display this feedback to the user.</para>
-
-          <para>The syntax is:</para>
-
-          <para><programlisting>public String validate&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">public class Customer {
-    public Order placeOrder(Product p, int quantity) { ... }
-    public String validatePlaceOrder(Product p, int quantity) {
-        if (p.isOutOfStock()) { return "Product is out of stock"; }
-        if (quantity &lt;= 0) { return "Quantity must be a positive value"; }
-        return null;
-    }</programlisting>
         </sect2>
       </sect1>
 
       <sect1>
-        <title>How to specify conditions for invoking an action</title>
+        <title>How to prevent an action from being invoked</title>
 
         <sect2>
-          <title>Disabling an action based on the state of the object</title>
+          <title>*** Always</title>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Based on the state of the object</title>
 
           <para>There may be circumstances in which we do not want the user to
           be able to initiate the action at all - for example because that
@@ -1797,52 +1826,210 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
         <sect2>
           <title>Disabling an action for certain users or roles</title>
 
-          <para>See 'Properties: Disabling a property for specific users or
-          roles'. The same technique can be applied to actions. However, the
-          caveats apply.</para>
+          <para>*** See 'Properties: Disabling a property for specific users
+          or roles'. The same technique can be applied to actions. However,
+          the caveats apply.</para>
         </sect2>
       </sect1>
 
       <sect1>
-        <title>How to control the order in which actions appear on the
-        menu</title>
+        <title>How to specify names and/or descriptions for an action
+        parameter</title>
 
-        <para>Use the <literal moreinfo="none">@MemberOrder</literal>
-        annotation.</para>
+        <para>Unlike with properties, the framework cannot pick up the names
+        of parameters that you use within the domain code. By default
+        parameters will be labelled only with the type of the object required
+        (e.g. 'String:' or 'Customer:) If you want a parameter to have a
+        different name (such as 'First Name', 'Last Name') then that parameter
+        should be marked up with an <literal moreinfo="none">@Named</literal>
+        annotation - very often taking the same form as the parameter name
+        used in the code. (This is one of the few forms of duplication that we
+        cannot eliminate; the parameter name is not available in the class'
+        bytecode and so cannot be inferred automatically. Alternatively
+        though, you could create a user-defined value type, using
+        <literal>@Value</literal>).</para>
+
+        <para>Similarly, any parameter may be given a short user-description
+        using the <literal moreinfo="none">@DescribedAs</literal> annotation.
+        The framework takes responsibility to make this available to the
+        user.</para>
       </sect1>
 
       <sect1>
-        <title>How to hide actions</title>
+        <title>How to specify the size of <classname>String</classname> action
+        parameters</title>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>How to make an action parameter optional</title>
+
+        <para>By default, the framework assumes that when an action method is
+        to be invoked, all the parameters are mandatory. You may over-ride
+        this behaviour by marking up one or more of the paramaters with the
+        <literal moreinfo="none">@Optional</literal> annotation.</para>
+      </sect1>
+
+      <sect1>
+        <title>How to validate an action parameter argument</title>
+
+        <para>Use the <literal moreinfo="none">@MaxLength</literal>, <literal
+        moreinfo="none">@TypicalLength</literal>, <literal
+        moreinfo="none">@MultiLine</literal>, <literal
+        moreinfo="none">@Mask</literal> or <literal
+        moreinfo="none">@RegEx</literal> annotations.</para>
 
         <sect2>
-          <title>Hiding an action always</title>
+          <title>Declarative validation</title>
 
-          <para>Use the <literal moreinfo="none">@Hidden</literal> annotation.
-          (This is generally used where a <literal
-          moreinfo="none">public</literal> method on an object is not intended
-          to be a user action).</para>
+          <para></para>
         </sect2>
 
         <sect2>
-          <title>Hiding an action under certain conditions</title>
+          <title>Imperative validation</title>
 
-          <para>A <literal moreinfo="none">hide</literal> method can be used
-          to indicate that an action should be hidden under certain
-          conditions. The syntax is:</para>
+          <para></para>
+        </sect2>
+      </sect1>
 
-          <para><programlisting>public boolean hide&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
+      <sect1>
+        <title>How to specify default values for an action parameter</title>
 
-          <para>A <literal moreinfo="none">true</literal> return value
-          indicates that the action should not be shown. For example:</para>
+        <para>When an action is about to be invoked, then default values can
+        be provided for any or all of its parameters.</para>
 
-          <programlisting format="linespecific">public class Order {
-    
-    public void applyDiscount(int percentage) { ... }
-    
-    public boolean hideApplyDiscount() {
-        return isWholesaleOrder();
+        <para>There are two different ways to specify parameters; either per
+        parameter, or for all parameters. The per-parameter form is simpler
+        and probably preferred; the syntax is:</para>
+
+        <programlisting>public &lt;parameter type&gt; defaultN&lt;ActionName&gt;()</programlisting>
+
+        <para>where N indicates the 0-based parameter number. For
+        example:</para>
+
+        <programlisting format="linespecific">public class Customer {
+    public Order placeOrder(
+                      Product product,
+                      @Named("Quantity") 
+                      int quantity) {
+        ...
+    }
+    public Product default0PlaceOrder() {
+        return productMostRecentlyOrderedBy(this.getCustomer());
     }
 }</programlisting>
+
+        <para>The syntax for specifying all the parameter default values in
+        one go is:</para>
+
+        <para><programlisting>public Object[] default&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
+
+        <para>returning an array (which must have one element per parameter in
+        the action method signature) of corresponding default values. For
+        example:</para>
+
+        <programlisting format="linespecific">public class Customer {
+    public Order placeOrder(
+                      Product product,
+                      @Named("Quantity") 
+                      int quantity) {y
+        ...
+    }
+    public Object[] defaultPlaceOrder(
+                      Product product,
+                      int quantity) {
+        return new Object[] {productMostRecentlyOrderedBy(this.getCustomer()), 1};
+    }
+}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>How to specify a set of choices for an action parameter</title>
+
+        <para>The programmer may provide a set of choices for the value of any
+        or all of the parameters of an action. These will be made available to
+        the user - for example as a drop-down list.</para>
+
+        <para>As for defaults, there are two different ways to specify
+        parameters; either per parameter, or for all parameters. The
+        per-parameter form is simpler and probably preferred; the syntax
+        is:</para>
+
+        <programlisting>public List&lt;parameter type&gt; choicesN&lt;ActionName&gt;()</programlisting>
+
+        <para>where N indicates the 0-based parameter number. For
+        example:</para>
+
+        <programlisting format="linespecific">public class Order {
+    public Order placeOrder(
+                      Product product,
+                      @Named("Quantity") 
+                      int quantity) {
+        ...
+    }
+
+    public List&lt;Product&gt; choices0PlaceOrder() {
+        return lastFiveProductsOrderedBy(this.getCustomer());
+    }
+}</programlisting>
+
+        <para>The alternative mechanism is to supply all the parameter choices
+        in one go:</para>
+
+        <para><programlisting>public Object[] choices&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
+
+        <para>returning an array, which must have one element per parameter in
+        the method signature. Each element of the array should itself either
+        be an array or a list, containing the set of values representing the
+        choices for that parameter, or <literal moreinfo="none">null</literal>
+        if there are no choices to be specified for that parameter.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Order {
+    public Order placeOrder(
+                      Product product,
+                      @Named("Quantity") 
+                      int quantity) {
+        ...
+    }
+
+    public Object[] choicesPlaceOrder(
+                      Product product,
+                      int quantity) {
+        return new Object[] {lastFiveProductsOrderedBy(this.getCustomer()).toArray(), null};
+    }
+}</programlisting>
+
+        <para>(Note that if the type of the property is annotated with
+        <literal moreinfo="none">@Bounded</literal>, then it is not necessary
+        to specify the choices for that parameter, as the user will
+        automatically be offered the full set to choose from.)</para>
+
+        <sect2>
+          <title>How to validate parameter values</title>
+
+          <para>A <literal moreinfo="none">validate</literal> method is used
+          to check that the set of arguments used by an action method is
+          valid. If the arguments are invalid then the framework will not
+          invoke the action. A non-null return String indicates the reason why
+          the member cannot be modified/action be invoked, and the viewing
+          mechanism will display this feedback to the user.</para>
+
+          <para>The syntax is:</para>
+
+          <para><programlisting>public String validate&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer {
+    public Order placeOrder(Product p, int quantity) { ... }
+    public String validatePlaceOrder(Product p, int quantity) {
+        if (p.isOutOfStock()) { return "Product is out of stock"; }
+        if (quantity &lt;= 0) { return "Quantity must be a positive value"; }
+        return null;
+    }</programlisting>
         </sect2>
       </sect1>
     </chapter>
