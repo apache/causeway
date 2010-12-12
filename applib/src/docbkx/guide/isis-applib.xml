@@ -919,8 +919,12 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         </note>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.HiddenProperty">
         <title>How to hide a property from the user</title>
+
+        <para>The mechanism for hiding a property is broadly the same as for
+        hiding a collection (see <xref linkend="sec.HiddenCollection" />) or
+        an action (see <xref linkend="sec.HiddenActions" />).</para>
 
         <sect2>
           <title>Hiding a property always</title>
@@ -942,12 +946,35 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         </sect2>
 
         <sect2>
+          <title>Hiding a property based on the persistence state of the
+          object</title>
+
+          <para>As a refinement of the above, a property may be optionally
+          hidden using the <classname>@Hidden</classname> annotation based on
+          the persistence state of the object:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>to hide the property when the object is transient, use
+              <code>@Hidden(When.UNTIL_PERSISTED)</code></para>
+            </listitem>
+
+            <listitem>
+              <para>to hide the property when the object is persistent, use
+              <code>@Hidden(When.ONCE_PERSISTED)</code></para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
           <title>Hiding a property under certain conditions</title>
 
           <para>A <literal moreinfo="none">hideXxx()</literal> method can be
-          used to indicate that a particular instance's member should be
-          hidden (rendered invisible to the user) under certain conditions.
-          The syntax is:</para>
+          used to indicate that a particular object's property should be
+          hidden under certain conditions, typically relating to the state of
+          that instance.</para>
+
+          <para>The syntax is:</para>
 
           <programlisting><literal moreinfo="none">public boolean hidePropertyName()</literal> </programlisting>
 
@@ -985,7 +1012,7 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         from being modified programmatically.</para>
 
         <sect2>
-          <title>Disabling a property always</title>
+          <title>Disabling a property permanently</title>
 
           <para>To prevent a user from being able to modify the property at
           all, use the <literal moreinfo="none">@Disabled</literal>
@@ -1004,6 +1031,27 @@ public void setPropertyName(PropertyType param)</programlisting></para>
           <para>Note that a setter is still required; this is used by the
           framework to recreate the object when pulled back from the
           persistent object store.</para>
+        </sect2>
+
+        <sect2>
+          <title>Disabling a property based on the persistence state of the
+          object</title>
+
+          <para>As a refinement of the above, a property may be optionally
+          hidden using the <classname>@Disabled</classname> annotation based
+          on the persistence state of the object:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>to disable the property when the object is transient, use
+              <code>@Disabled(When.UNTIL_PERSISTED)</code></para>
+            </listitem>
+
+            <listitem>
+              <para>to disable the property when the object is persistent, use
+              <code>@Disabled(When.ONCE_PERSISTED)</code></para>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
@@ -1296,18 +1344,21 @@ public void setPropertyName(PropertyType param)</programlisting></para>
 
         <para>The syntax is either:</para>
 
-        <para><programlisting>public Collection&lt;ReferencedType&gt; getCollectionName()
-private void setCollectionName(Collection&lt;ReferencedType&gt; param)</programlisting></para>
+        <para><programlisting>public Collection&lt;EntityType&gt; getCollectionName()
+private void setCollectionName(Collection&lt;EntityType&gt; param)</programlisting></para>
 
         <para>or:</para>
 
-        <para><programlisting>public List&lt;ReferencedType&gt; getCollectionName()
-private void setCollectionName(List&lt;ReferencedType&gt; param)</programlisting></para>
+        <para><programlisting>public List&lt;EntityType&gt; getCollectionName()
+private void setCollectionName(List&lt;EntityType&gt; param)</programlisting></para>
 
         <para>or:</para>
 
-        <para><programlisting>public Set&lt;ReferencedType&gt; getCollectionName()
-private void setCollectionName(Set&lt;ReferencedType&gt; param)</programlisting></para>
+        <para><programlisting>public Set&lt;EntityType&gt; getCollectionName()
+private void setCollectionName(Set&lt;EntityType&gt; param)</programlisting></para>
+
+        <para>A mutator is required, but it need only have
+        <code>private</code> visibility.</para>
 
         <para>Note:</para>
 
@@ -1438,11 +1489,15 @@ public class Department {
 }</programlisting>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.HiddenCollection">
         <title>How to hide a collection</title>
 
+        <para>The mechanism for hiding a collection is broadly the same as for
+        hiding a property (see <xref linkend="sec.HiddenProperty" />) or an
+        action (see <xref linkend="sec.HiddenActions" />).</para>
+
         <sect2>
-          <title>Hiding a collection always</title>
+          <title>Hiding a collection permanently</title>
 
           <para>To prevent a user from viewing a collection at all, use the
           <literal moreinfo="none">@Hidden</literal> annotation.</para>
@@ -1459,48 +1514,62 @@ public class Department {
         </sect2>
 
         <sect2>
+          <title>Hiding a collection based on the persistence state of the
+          object</title>
+
+          <para>As a refinement of the above, a collection may be optionally
+          hidden using the <classname>@Hidden</classname> annotation based on
+          the persistence state of the object:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>to hide the collection when the object is transient, use
+              <code>@Hidden(When.UNTIL_PERSISTED)</code></para>
+            </listitem>
+
+            <listitem>
+              <para>to hide the collection when the object is persistent, use
+              <code>@Hidden(When.ONCE_PERSISTED)</code></para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
           <title>Hiding a collection under certain conditions</title>
 
-          <para></para>
-
-          <para>*** up to here ***</para>
-
-          <para></para>
-
           <para>A <literal moreinfo="none">hideXxx()</literal> method can be
-          used to indicate that a particular instance's member should be
-          hidden (rendered invisible to the user) under certain conditions.
-          The syntax is:</para>
+          used to indicate that a particular object's collection should be
+          hidden under certain conditions, typically relating to the state of
+          that instance.</para>
 
-          <programlisting><literal moreinfo="none">public boolean hidePropertyName()</literal> </programlisting>
+          <para>The syntax is:</para>
+
+          <programlisting><literal moreinfo="none">public boolean hideCollectionName()</literal> </programlisting>
 
           <para>Returning a value of <code>true</code> indicates that the
-          property should be hidden.</para>
+          collection should be hidden.</para>
 
           <para>For example:</para>
 
           <programlisting format="linespecific">public class Order {
-    public String getShippingInstructions() { ... }
-    public void setShippingInstructions(String shippingInstructions) { ... }
-    public boolean hideShippingInstructions() {
-        return hasShipped();
-    }
+    @Hidden
+    public List&lt;Order&gt; getRushOrders() { ... }
     ...
 }</programlisting>
         </sect2>
 
         <sect2>
-          <title>Hiding a property for specific users or roles</title>
+          <title>Hiding a collection for specific users or roles</title>
 
-          <para>It is possible to hide properties for certain users/roles by
+          <para>It is possible to hide collections for certain users/roles by
           calling the <methodname>DomainObjectContainer#getUser()</methodname>
           method. See <xref
-          linkend="sec.BusinessRulesForCertainUsersOrRoles" />for further
+          linkend="sec.BusinessRulesForCertainUsersOrRoles" /> for further
           discussion.</para>
         </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.DisabledCollection">
         <title>How to prevent a collection from being modified</title>
 
         <para>Preventing the user from adding to or removing from a collection
@@ -1509,66 +1578,118 @@ public class Department {
         <sect2>
           <title>Disabling a collection permanently</title>
 
-          <para>Use the <literal moreinfo="none">@Disabled</literal>
-          annotation.</para>
+          <para>Some, though not all, viewers allow the user to directly
+          manipulate the contents of a collection. For example, the DnD viewer
+          will allow new objects to be "dropped" into a collection, and
+          existing objects removed from a collection.</para>
+
+          <para>Although it is possible to associate behaviour with such
+          actions (see <xref linkend="sec.AddToRemoveFrom" />), it may be
+          preferred to only allow modification through actions. Or, the
+          application may be deployed using a viewer that doesn't fully
+          support direct manipulation of collections.</para>
+
+          <para>In either case, annotate the collection using the <literal
+          moreinfo="none">@Disabled</literal> annotation.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Order {
+    private List&lt;Order&gt; cancelledOrders = new ArrayList&lt;Order&gt;();
+    @Disabled
+    public List&lt;Order&gt; getCancelledOrders() { ... }
+    private void setCancelledOrders(List&lt;Order&gt; cancelledOrders) { ... }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Disabling a collection based on the persistence state of the
+          object</title>
+
+          <para>As a refinement of the above, a collection may be optionally
+          hidden using the <classname>@Disabled</classname> annotation based
+          on the persistence state of the object:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>to disable the collection when the object is transient,
+              use <code>@Disabled(When.UNTIL_PERSISTED)</code></para>
+            </listitem>
+
+            <listitem>
+              <para>to disable the collection when the object is persistent,
+              use <code>@Disabled(When.ONCE_PERSISTED)</code></para>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
           <title>Disabling a collection under certain conditions</title>
 
-          <para>A <literal moreinfo="none">disable</literal> method can be
-          used to disable a particular instance's collection under certain
-          conditions: The syntax is:</para>
+          <para>A <literal moreinfo="none">disableXxx()</literal> method can
+          be used to disable a particular instance's collection under certain
+          conditions: </para>
 
-          <para><literal moreinfo="none">public String
-          disable&lt;CollectionName&gt;()</literal> For example:</para>
+          <para>The syntax is:</para>
+
+          <programlisting><literal moreinfo="none">public String disableCollectionName()</literal> </programlisting>
+
+          <para>For example:</para>
 
           <programlisting format="linespecific">public class Department {
     public List&lt;Employee&gt; getEmployees() { ... }
-    public void addToEmployees(Employee employee) { ... }
-    public void removeFromEmployees(Employee employee) { ... }
+    private void setEmployees(List&lt;Employee&gt; employees) { ... }
     public void disableEmployees() {
         return isClosed()? "This department is closed" : null;
     }
+    ...
 }</programlisting>
         </sect2>
 
         <sect2>
           <title>Disabling a collection for specific users or roles</title>
 
-          <para>***</para>
-
-          <para></para>
-
-          <para>See Properties: Disabling a property for specific users or
-          roles'. The same technique can be applied to collections, with the
-          same caveats applying.</para>
+          <para>It is possible to disable collections for certain users/roles
+          by calling the
+          <methodname>DoymainObjectContainer#getUser()</methodname> method.
+          See <xref linkend="sec.BusinessRulesForCertainUsersOrRoles" /> for
+          further discussion.</para>
         </sect2>
       </sect1>
 
       <sect1>
         <title>How to validate an object being added or removed</title>
 
-        <para>A <literal moreinfo="none">validate</literal> method is used to
-        check that an object to be added or removed from a collection is
-        valid. A non-null return <code>String</code> indicates the reason why
-        the object cannot be added/removed, and the viewing mechanism will
-        display this to the user. The syntax is:</para>
+        <para>A <literal moreinfo="none">validateAddToXxx()</literal> method
+        can be used to check that an object is valid to be added to a
+        collection. Conversely, the
+        <methodname>validateRemoveFromXxx()</methodname> method can be used to
+        check that it is valid to remove an object from a collection is
+        valid.</para>
 
-        <para><programlisting>public String validateAddTo&lt;CollectionName&gt;(&lt;property type&gt; param) 
+        <para>The syntax is:</para>
 
-public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; param)</programlisting></para>
+        <para><programlisting>public String validateAddToCollectionName(EntityType param)</programlisting></para>
+
+        <para>and</para>
+
+        <programlisting>public String validateRemoveFromCollectionName(EntityType param)</programlisting>
+
+        <para>A non-<code>null</code> return <code>String</code> indicates the
+        reason why the object cannot be added/removed, and the viewing
+        mechanism will display this to the user.</para>
 
         <para>For example:</para>
 
         <programlisting format="linespecific">public class Department {
-    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
     public List&lt;Employee&gt; getEmployees() { ... }
     private void setEmployees(List&lt;Employee&gt; employees) { ... }
     public String validateAddToEmployee(Employee employee) {
         return employee.isRetired()?
             "Cannot add retired employees to department"
             :null;
+    ...
 }</programlisting>
       </sect1>
 
@@ -1577,18 +1698,32 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
         removed</title>
 
         <para>A collection may have a corresponding <literal
-        moreinfo="none">addTo</literal> and/or <literal
-        moreinfo="none">removeFrom</literal> method. This is equivalent to the
-        <literal moreinfo="none">modify</literal> and <literal
-        moreinfo="none">clear</literal> methods for properties. The syntax
-        is:</para>
+        moreinfo="none">addToXxx()</literal> and/or <literal
+        moreinfo="none">removeFromXxx()</literal> method. If present, and
+        direct manipulation of the contents of the connection has not been
+        disabled (see <xref linkend="sec.DisabledCollection" />), then they
+        will be called (instead of adding/removing an object directly to the
+        collection returned by the accessor).</para>
 
-        <para><programlisting>public void addTo&lt;CollectionName&gt;(&lt;entity type&gt; param)
+        <para>The reason for this behaviour is to allow other behaviour to be
+        triggered when the contents of the collection is altered. That is, it
+        is directly equivalent to the supporting <literal
+        moreinfo="none">modifyXxx()</literal> and <literal
+        moreinfo="none">clearXxx()</literal> methods for properties (see <xref
+        linkend="sec.ModifyAndClear" />).</para>
 
-public void removeFrom&lt;CollectionName&gt;(&lt;entity type&gt; param)</programlisting></para>
+        <para>The syntax is:</para>
 
-        <para>where <literal moreinfo="none">&lt;entity type&gt;</literal> is
-        the same type as the generic collection type. For example:</para>
+        <para><programlisting>public void addTo&lt;CollectionName&gt;(EntityType param)</programlisting></para>
+
+        <para>and</para>
+
+        <programlisting>public void removeFromCollectionName(EntityType param)</programlisting>
+
+        <para>where <literal moreinfo="none">EntityType</literal> is the same
+        type as the generic collection type.</para>
+
+        <para>For example:</para>
 
         <programlisting format="linespecific">public class Employee { ... }
 
@@ -1601,57 +1736,77 @@ public class Department {
         this.employees = employees;
     }
     public void addToEmployees(Employee employee) {
+        numMaleEmployees += countOneMale(employee);
+        numFemaleEmployees += countOneFemale(employee);
         employees.add(employee);
     }
     public void removeFromEmployees(Employee employee) {
+        numMaleEmployees -= countOneMale(employee);
+        numFemaleEmployees -= countOneFemale(employee);
         employees.remove(employee);
     }
+    private int countOneMale(Employee employee) { return employee.isMale()?1:0; }
+    private int countOneFemale(Employee employee) { return employee.isFemale()?1:0; }
 
     ...
 }</programlisting>
-
-        <para></para>
-
-        <para></para>
       </sect1>
 
       <sect1 id="sec.MutualRegistrationPattern">
         <title>How to maintain bidirectional relationships</title>
 
-        <para></para>
+        <para>The recommended way of maintaining a bidirectional relationship
+        is to use the 'mutual registration pattern', a write-up of which can
+        be found at <ulink
+        url="???">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.
+        The general idea is that one side of the relationship is responsible
+        for maintaining the associations, while the other side simply
+        delegates.</para>
 
-        <para></para>
-
-        <para>The addTo / removeFrom and modify / clear methods are
-        particularly useful in setting up bidirectional relationships using
-        the 'mutual registration pattern'; for a write-up of this pattern, see
-        <ulink
-        url="???">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.</para>
-
-        <para></para>
-
-        <para></para>
+        <para>To implement this in <emphasis>Isis</emphasis> for a 1:m
+        relationship, use the <methodname>addToXxx()</methodname> /
+        <methodname>removeFromXxx()</methodname> and
+        <methodname>modifyXxx()</methodname> /
+        <methodname>clearXxx()</methodname> methods.</para>
 
         <para>For example:</para>
 
-        <programlisting format="linespecific">public class Employee {
-    private Department department;
-    public Department getDepartment() { ... }
-    public void setDepartment(Department department) { ... }
-    public void modifyDepartment(Department department) {
-        setDepartment(department);
-        department.addToStaff(this);
+        <programlisting>public class Department {
+    private List&lt;Employee&gt; employees = new ArrayList&lt;Employee&gt;();
+    public List&lt;Employee&gt; getEmployees() { ... }
+    private void setEmployees(List&lt;Employee&gt; employees) { ... }
+    public void addToEmployees(Employee e) {
+        if(e == null || employees.contains(e)) return;
+        e.setDepartment(this);
+        employees.add(e);
     }
-    public void clearDepartment(Department department) {
-        setDepartment(null);
-        department.removeFromStaff(this);
+    public void removeFromEmployees(Employee e) {
+        if(e == null || !employees.contains(e)) return;
+        e.setDepartment(null);
+        employees.remove(e);
     }
     ...
 }</programlisting>
 
-        <para></para>
+        <para>and</para>
 
-        <para></para>
+        <programlisting>public class Employee {
+    private Department department;
+    public Department getDepartment() { ... }
+    private void setDepartment(Department department) { ... }
+    public void modifyDepartment(Department d) {
+        if(d==null || department==d) return;
+        if(department != null) {
+            department.removeFromEmployees(this);
+        }
+        d.addToEmployees(this);
+    }
+    public void clearDepartment() {
+        if(department==null) return;
+        department.removeFromEmployees(this);
+    }
+    ...
+}</programlisting>
       </sect1>
     </chapter>
 
@@ -1750,35 +1905,91 @@ public class Department {
       <sect1 id="sec.HiddenActions">
         <title>How to hide an action</title>
 
-        <sect2>
-          <title>Hiding an action always</title>
+        <para>The mechanism for hiding a property is broadly the same as for
+        hiding a property (see <xref linkend="sec.HiddenProperty" />) or a
+        collection (see <xref linkend="sec.HiddenCollection" />).</para>
 
-          <para>Use the <literal moreinfo="none">@Hidden</literal> annotation.
-          (This is generally used where a <literal
-          moreinfo="none">public</literal> method on an object is not intended
-          to be a user action).</para>
+        <sect2>
+          <title>Hiding an action permanently</title>
+
+          <para>To prevent a user from viewing an action at all, use the
+          <literal moreinfo="none">@Hidden</literal> annotation. This is
+          generally used where a <literal moreinfo="none">public</literal>
+          method on an object is not intended to be a user action</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Order {
+    @Hidden
+    public void markAsCancelled() { ... }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Hiding an action based on the persistence state of the
+          object</title>
+
+          <para>As a refinement of the above, an action may be optionally
+          hidden using the <classname>@Hidden</classname> annotation based on
+          the persistence state of the object:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>to hide the action when the object is transient, use
+              <code>@Hidden(When.UNTIL_PERSISTED)</code></para>
+            </listitem>
+
+            <listitem>
+              <para>to hide the action when the object is persistent, use
+              <code>@Hidden(When.ONCE_PERSISTED)</code></para>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
           <title>Hiding an action under certain conditions</title>
 
-          <para>A <literal moreinfo="none">hide</literal> method can be used
-          to indicate that an action should be hidden under certain
-          conditions. The syntax is:</para>
+          <para>A <literal moreinfo="none">hideXxx()</literal> method can be
+          used to indicate that a particular object's action should be hidden
+          under certain conditions, typically relating to the state of that
+          instance.</para>
 
-          <para><programlisting>public boolean hide&lt;ActionName&gt;([&lt;parameter type&gt; param]...)</programlisting></para>
+          <para>The syntax is:</para>
 
-          <para>A <literal moreinfo="none">true</literal> return value
-          indicates that the action should not be shown. For example:</para>
+          <programlisting><literal moreinfo="none">public boolean hideActionName([ValueOrEntityType param] ...)</literal> </programlisting>
+
+          <para>where the parameter types should match the action itself
+          (allowing for overloading)</para>
+
+          <para>or</para>
+
+          <programlisting><literal moreinfo="none">public boolean hideActionName()</literal> </programlisting>
+
+          <para>which applies to (all overloaded versions of) the
+          action.</para>
+
+          <para>in both cases, returning a value of <code>true</code>
+          indicates that the action should be hidden.</para>
+
+          <para>For example:</para>
 
           <programlisting format="linespecific">public class Order {
-    
     public void applyDiscount(int percentage) { ... }
-    
     public boolean hideApplyDiscount() {
         return isWholesaleOrder();
     }
 }</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Hiding an action for specific users or roles</title>
+
+          <para>It is possible to hide actions for certain users/roles by
+          calling the <methodname>DomainObjectContainer#getUser()</methodname>
+          method. See <xref
+          linkend="sec.BusinessRulesForCertainUsersOrRoles" /> for further
+          discussion.</para>
         </sect2>
       </sect1>
 
@@ -1789,6 +2000,27 @@ public class Department {
           <title>*** Always</title>
 
           <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Disabling an action based on the persistence state of the
+          object</title>
+
+          <para>As a refinement of the above, an action may be optionally
+          hidden using the <classname>@Disabled</classname> annotation based
+          on the persistence state of the object:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>to disable the action when the object is transient, use
+              <code>@Disabled(When.UNTIL_PERSISTED)</code></para>
+            </listitem>
+
+            <listitem>
+              <para>to disable the action when the object is persistent, use
+              <code>@Disabled(When.ONCE_PERSISTED)</code></para>
+            </listitem>
+          </itemizedlist>
         </sect2>
 
         <sect2>
@@ -1826,9 +2058,11 @@ public class Department {
         <sect2>
           <title>Disabling an action for certain users or roles</title>
 
-          <para>*** See 'Properties: Disabling a property for specific users
-          or roles'. The same technique can be applied to actions. However,
-          the caveats apply.</para>
+          <para>It is possible to disable actions for certain users/roles by
+          calling the <methodname>DomainObjectContainer#getUser()</methodname>
+          method. See <xref
+          linkend="sec.BusinessRulesForCertainUsersOrRoles" /> for further
+          discussion.</para>
         </sect2>
       </sect1>
 
