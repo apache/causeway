@@ -338,7 +338,7 @@
         moreinfo="none">@Immutable</literal> annotation.</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.Bounded">
         <title>How to specify that a class of objects has a limited number of
         instances</title>
 
@@ -357,7 +357,7 @@
         the <classname>choicesXxx()</classname> supporting methods.</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.HowToCreateAnObject">
         <title>How to create or delete objects within your code</title>
 
         <para>When you create any domain object within your application code,
@@ -661,20 +661,25 @@ persist(newCust);</programlisting>
 
         <para>Properties are specified using the JavaBean conventions,
         recognizing a standard accessor/mutator pair (<code>get</code> and
-        <code>set</code>). The syntax is:</para>
+        <code>set</code>).</para>
 
-        <para><programlisting>public &lt;property type&gt; get&lt;PropertyName&gt;() 
+        <para>The syntax is:</para>
 
-public void set&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting></para>
+        <para><programlisting>public PropertyType getPropertyName() 
 
-        <para>where <literal moreinfo="none">&lt;property type&gt;</literal>
-        is a primitive, a value object or an entity object.</para>
+public void setPropertyName(PropertyType param)</programlisting></para>
 
-        <para>Properties may reference either a value or another domain
-        object. Values include Java primitives, and JDK classes with value
-        semantics (<literal moreinfo="none">java.lang.Strings</literal> and
-        <literal moreinfo="none">java.util.Dates</literal>). A property
-        referencing another domain object is sometimes called an
+        <para>where <literal moreinfo="none">PropertyType</literal> is a
+        primitive, a value object or an entity object.</para>
+
+        <para>Properties may either be for a value type or may reference
+        another entity. Values include Java primitives, and JDK classes with
+        value semantics (eg <literal
+        moreinfo="none">java.lang.Strings</literal> and <literal
+        moreinfo="none">java.util.Dates</literal>; see <xref
+        linkend="chp.ValueTypes" /> for the full list). It is also possible to
+        write your own value types (see <xref linkend="chp.ValueTypes" />). A
+        property referencing another domain object is sometimes called an
         association.</para>
 
         <para>For example, the following example contains both a value
@@ -703,70 +708,71 @@ public void set&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting
       </sect1>
 
       <sect1>
-        <title>How to prevent the user from modifying a property</title>
+        <title>How to prevent a Property from being Modified</title>
 
         <para>Preventing the user from modifying a property value is known as
-        'disabling' the property.</para>
+        'disabling' the property. Note that this doesn't prevent the property
+        from being modified programmatically.</para>
 
         <sect2>
           <title>Disabling a property always</title>
 
-          <para>Use the <literal moreinfo="none">@Disabled</literal>
+          <para>To prevent a user from being able to modify the property at
+          all, use the <literal moreinfo="none">@Disabled</literal>
           annotation.</para>
+
+          <programlisting format="linespecific">public class OrderLine {
+    private int quantity;
+    @Disabled
+    public String getQuantity() { ... }
+    public void setQuantity(int quantity) { ... }
+}</programlisting>
+
+          <para>Note that a setter is still required; this is used by the
+          framework to recreate the object when pulled back from the
+          persistent object store.</para>
         </sect2>
 
         <sect2>
           <title>Disabling a property under certain conditions</title>
 
-          <para>A <literal moreinfo="none">disable</literal> method can be
-          used to disable a particular instance's member under certain
-          conditions. The syntax is:</para>
+          <para>A supporting <literal moreinfo="none">disableXxx()</literal>
+          method can be used to disable a particular instance's member under
+          certain conditions</para>
 
-          <para><literal moreinfo="none">public String
-          disable&lt;PropertyName&gt;()</literal> A non-null return value
-          indicates the reason why the property cannot be modified. The
-          framework is responsible for providing this feedback to the user.
-          For example:</para>
+          <para>The syntax is:</para>
+
+          <programlisting><literal moreinfo="none">public String disablePropertyName()</literal></programlisting>
+
+          <para>A non-<code>null</code> return value indicates the reason why
+          the property cannot be modified. The framework is responsible for
+          providing this feedback to the user. </para>
+
+          <para>For example:</para>
 
           <programlisting format="linespecific">public class OrderLine {
     public String getQuantity() { ... }
     public void setQuantity(int quantity) { ... }
-
-    public String disableFirstName() { 
-        if (this.hasBeenSubmitted()) {
+    public String disableQuantity() { 
+        if (isSubmitted()) {
             return "Cannot alter any quantity after Order has been submitted"; 
         }
         return null;
     }
 }</programlisting>
+
+          <para>If there are multiple reasons to disable a property, take a
+          look at the
+          <classname>org.apache.isis.applib.util.ReasonBuffer</classname>
+          helper.</para>
         </sect2>
 
         <sect2>
-          <title>Disabling a property for specific users or roles</title>
+          <title>Disabling a property for certain users/roles</title>
 
-          <para>Generally it is not good practice to embed knowledge of roles
-          and/or users into the domain classes. This is the responsibility of
-          the framework or platform and should be specified and administered
-          externally to the domain model.</para>
-
-          <para>However, in rare circumstances it might be necessary or
-          pragmatic to implement access control within the domain model using
-          the inherited <methodname>getUser()</methodname> method:</para>
-
-          <para>For example:</para>
-
-          <programlisting format="linespecific">import org.apache.isis.applib.UserMemento;
-
-public class Employee {
-    public BigDecimal getSalary() { ... }
-    public void setSalary(BigDecimal salary) { ... }
-
-    public String validateSalary(BigDecimal salary) {
-        return salary.doubleValue() &gt;= 30000 &amp;&amp;
-              !getUser().hasRole("MODIFY_SALARY")?
-              "Need MODIFY_SALARY role to increase salary above 30000": null;
-    }
-}</programlisting>
+          <para>Use DomainObjectContainer#getUser() method; see <xref
+          linkend="sec.BusinessRulesForCertainUsersOrRoles" />for further
+          discussion.</para>
         </sect2>
       </sect1>
 
@@ -775,32 +781,64 @@ public class Employee {
 
         <para>By default, when a new transient (unsaved) object is presented
         to the user, values must be specified for all properties before the
-        object may be saved. To specify that a particular property is
-        optional, use the <literal moreinfo="none">@Optional</literal>
-        annotation.</para>
+        object may be saved.</para>
+
+        <para>To specify that a particular property is optional, use the
+        <literal moreinfo="none">@Optional</literal> annotation.</para>
       </sect1>
 
       <sect1>
         <title>How to specify the size of String properties</title>
 
-        <para>Use the <literal moreinfo="none">@MaxLength</literal>, <literal
-        moreinfo="none">@TypicalLength</literal> and <literal
-        moreinfo="none">@MultiLine</literal> annotations.</para>
+        <para>Use the <literal moreinfo="none">@MaxLength</literal> to specify
+        the maximum number of characters that may be stored within a
+        <classname>String</classname> property.</para>
+
+        <para>Use the <literal moreinfo="none">@TypicalLength</literal> to
+        specify the typical number of characters that are likely to be stored
+        within a <classname>String</classname> property. Viewers are expected
+        to use this as a hint as to the size of the field to render for the
+        property.</para>
+
+        <para>Use the <literal moreinfo="none">@MultiLine</literal> annotation
+        as a hint to indicate that the field should be displayed with multiple
+        lines (eg as a text area rather than a text field).</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Ticket {
+
+    @TypicalLength(50)
+    @MaxLength(255)
+    public String getDescription() { ... }
+    ...
+
+    @MaxLength(2048)
+    @MultiLine
+    public String getNotes() { ... }
+    ...
+}</programlisting>
       </sect1>
 
       <sect1>
         <title>How to validate user input to a property</title>
 
-        <para>A <literal moreinfo="none">validate</literal> method is used to
-        check that a new value for a property is valid. If the proffered value
-        is deemed to be invalid then the property will not be changed. A
-        non-null return <code>String</code> indicates the reason why the
-        member cannot be modified/action be invoked; the framework is
-        responsible for providing this feedback to the user.</para>
+        <para>A supporting <literal moreinfo="none">validateXxx()</literal>
+        method is used to check that a new value for a property is valid.
+        </para>
+
+        <para>If the proffered value is deemed to be invalid then the property
+        will not be changed. A non-null return <code>String</code> indicates
+        the reason why the member cannot be modified/action be invoked; the
+        framework is responsible for providing this feedback to the
+        user.</para>
 
         <para>The syntax is:</para>
 
-        <para><programlisting>public String validate&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting></para>
+        <para><programlisting>public String validatePropertyName(PropertyType param)</programlisting></para>
+
+        <para>where <literal moreinfo="none">PropertyType</literal> is the
+        same type as that of the property itself.</para>
 
         <para>For example:</para>
 
@@ -808,10 +846,9 @@ public class Employee {
     public int getMark() { ... }
     public void setMark(int mark) { ... }
     public validateMark(int mark) {
-        return !(mark &gt;= 0 &amp;&amp; mark &lt;= 30)?
-            "Mark must be in range 0 to 30"
-            :null;
+        return !withinRange(mark)? "Mark must be in range 0 to 30":null;
     }
+    private boolean withinRange(int mark) { return mark &gt;= 0 &amp;&amp; mark &lt;= 30; }
 }</programlisting>
 
         <sect2>
@@ -832,26 +869,32 @@ public class Employee {
       </sect1>
 
       <sect1>
-        <title>How to specify a set of choices and or a default value for a
-        property</title>
+        <title>How to set up the initial value of a property
+        programmatically</title>
 
-        <para>The simplest way to provide the user with a set of choices for a
-        property (possibly rendered as a drop-down list, for example) is to
-        ensure that the type used by the property is marked up as
-        <code>@Bounded</code>. However, this is not always appropriate. For
-        example you might wish to provide the user with the choice of all the
-        Addresses known for that Customer, with the most recently-used address
-        as the default.</para>
+        <para>*** up to here... rationalize with following section.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>Initial values for properties may be set up programmatically
+        within the <literal moreinfo="none">created()</literal> method on the
+        object; see <xref linkend="sec.HowToCreateAnObject" />.</para>
+      </sect1>
+
+      <sect1>
+        <title>How to specify a default value for a property</title>
+
+        <para>A default value for a property is applied after the object is
+        created (see <xref linkend="sec.HowToCreateAnObject" />).</para>
 
         <para>The syntax for specifying a default value is:</para>
 
-        <para><programlisting>public &lt;property type&gt; default&lt;PropertyName&gt;()</programlisting></para>
+        <para><programlisting>public PropertyType defaultPropertyName()</programlisting></para>
 
-        <para>And for specifying a list of choices is:</para>
-
-        <para><programlisting>public &lt;array or collection of property type&gt; choices&lt;PropertyName&gt;()</programlisting></para>
-
-        <para>The full code for our example above is:</para>
+        <para>where <literal moreinfo="none">PropertyType</literal> is the
+        same type as that of the property itself.</para>
 
         <programlisting format="linespecific">public class Order {
     public Address getShippingAddress() { ... }
@@ -859,19 +902,45 @@ public class Employee {
     public Address defaultShippingAddress() {
         return getCustomer().normalAddress();
     }
-    public List&lt;Address&gt; choicesShippingAddress() {
-        return getCustomer().allActiveAddresses();
-    }
+    ...
 }</programlisting>
       </sect1>
 
       <sect1>
-        <title>How to set up the initial value of a property
-        programmatically</title>
+        <title>How to specify a set of choices for a property</title>
 
-        <para>Initial values for properties may be set up programmatically
-        within the <literal moreinfo="none">created()</literal> method on the
-        object. (See Object: Life Cycle).</para>
+        <para>The simplest way to provide the user with a set of choices for a
+        property (possibly rendered as a drop-down list, for example) is to
+        ensure that the type used by the property is marked up as
+        <code>@Bounded</code> (see <xref linkend="sec.Bounded" />).</para>
+
+        <para>However, this is not always appropriate. For example you might
+        wish to provide the user with the choice of all the
+        <classname>Address</classname>es known for that
+        <classname>Customer</classname>, with the most recently-used address
+        as the default.</para>
+
+        <para>The syntax for specifying a list of choices is either:</para>
+
+        <para><programlisting>public Collection&lt;PropertyType&gt; choicesPropertyName()</programlisting></para>
+
+        <para>or alternatively</para>
+
+        <programlisting>public PropertyType[] choicesPropertyName()</programlisting>
+
+        <para>where <literal moreinfo="none">PropertyType</literal> is the
+        same type as that of the property itself.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Order {
+    public Address getShippingAddress() { ... }
+    public void setShippingAddress() { ... }
+    public List&lt;Address&gt; choicesShippingAddress() {
+        return getCustomer().allActiveAddresses();
+    }
+    ...
+}</programlisting>
       </sect1>
 
       <sect1>
@@ -879,10 +948,11 @@ public class Employee {
         changed</title>
 
         <para>If you want to invoke functionality whenever a property is
-        changed by the user, then you should create a <literal
-        moreinfo="none">modify</literal> <literal
-        moreinfo="none">&lt;propertyName&gt;</literal> and include the
-        functionality within that. For example:</para>
+        changed by the user, then you should create a supporting <literal
+        moreinfo="none">modifyXxx()</literal> method and include the
+        functionality within that. </para>
+
+        <para>For example:</para>
 
         <programlisting format="linespecific">public int getAmount() {}
 public void setAmount(int amount) {}
@@ -1046,43 +1116,6 @@ public void modifyAmount(int amount) {
         <literal moreinfo="none">set</literal> method for the property but do
         not wish to have that property persisted, use the <literal
         moreinfo="none">@NotPersisted</literal> annotation.</para>
-      </sect1>
-
-      <sect1 id="sec.MustSpecify">
-        <title>@MustSatisfy Specification</title>
-
-        <para>The <literal>@MustSatisfy</literal> annotation is an alternative
-        to using imperative validation, allowing validation rules to be
-        captured in an (implementation of a)
-        <classname>org.apache.isis.applib.spec.Specification</classname>.</para>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class DomainObjectWithMustSatisfyAnnotations extends AbstractDomainObject {
-
-    private String lastName;
-    @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
-    public String getLastName() {
-        resolve(lastName);
-        return lastName;
-    }
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-        objectChanged();
-    }
-
-    public void changeLastName(
-            @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
-            String lastName
-            ) {
-        setLastName(lastName);
-    }
-
-}</programlisting>
-
-        <para><remark>TODO: @MustSatisfy may not work for action parameters;
-        see <ulink
-        url="http://dev.nakedobjects.org/trac/ticket/669">http://dev.nakedobjects.org/trac/ticket/669</ulink>.</remark></para>
       </sect1>
     </chapter>
 
@@ -1625,14 +1658,94 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
     }
 }</programlisting>
         </sect2>
+      </sect1>
+    </chapter>
 
-        <sect2>
-          <title>Hiding an action for certain users or roles</title>
+    <chapter>
+      <title>Further Business Rule Recipes</title>
 
-          <para>See 'Properties: Hiding a property for specific users or
-          roles'. The same technique can be applied to actions. However, the
-          caveats apply.</para>
-        </sect2>
+      <abstract>
+        <para>Further validation recipes that apply across all class
+        members</para>
+      </abstract>
+
+      <para></para>
+
+      <sect1 id="sec.MustSpecify">
+        <title>@MustSatisfy Specification</title>
+
+        <para>The <literal>@MustSatisfy</literal> annotation is an alternative
+        to using imperative validation, allowing validation rules to be
+        captured in an (implementation of a)
+        <classname>org.apache.isis.applib.spec.Specification</classname>.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class DomainObjectWithMustSatisfyAnnotations extends AbstractDomainObject {
+
+    private String lastName;
+    @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
+    public String getLastName() {
+        resolve(lastName);
+        return lastName;
+    }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+        objectChanged();
+    }
+
+    public void changeLastName(
+            @MustSatisfy(SpecificationRequiresFirstLetterToBeUpperCase.class)
+            String lastName
+            ) {
+        setLastName(lastName);
+    }
+
+}</programlisting>
+
+        <para><remark>TODO: @MustSatisfy may not work for action parameters;
+        see <ulink
+        url="http://dev.nakedobjects.org/trac/ticket/669">http://dev.nakedobjects.org/trac/ticket/669</ulink>.</remark></para>
+      </sect1>
+
+      <sect1 id="sec.BusinessRulesForCertainUsersOrRoles">
+        <title>Hiding, disabling or validating for specific users or
+        roles</title>
+
+        <para>Generally it is not good practice to embed knowledge of roles
+        and/or users into the domain classes; instead, this should be the
+        responsibility of the framework or platform and should be specified
+        and administered externally to the domain model. However, in rare
+        circumstances it might be necessary or pragmatic to implement access
+        control within the domain model.</para>
+
+        <para>The current user can be obtained from
+        <classname>DomainObjectContainer</classname>, using its
+        <methodname>getUser()</methodname> method. Alternatively, if the
+        domain object inherits from
+        <classname>AbstractDomainObject</classname>, then
+        <methodname>getUser()</methodname> is also inherited. In either case
+        the method returns an object of type
+        <methodname>org.apache.isis.security.UserMemento</methodname>, which
+        holds both username and the set of roles for that user.</para>
+
+        <para>The mechanism to apply a business rule is just to return an
+        appropriate value from a supporting
+        <methodname>hideXxx()</methodname>,
+        <methodname>disableXxx()</methodname> or
+        <methodname>validateXxx()</methodname> method.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Employee extends AbstractDomainObject {
+    public BigDecimal getSalary() { ... }
+    public void setSalary(BigDecimal salary) { ... }
+    public String validateSalary() {
+        return salary.doubleValue() &gt;= 30000 &amp;&amp;
+              !getUser().hasRole("MODIFY_SALARY")?
+              "Need MODIFY_SALARY role to increase salary above 30000": null;
+    }
+}</programlisting>
       </sect1>
 
       <sect1>
@@ -1811,6 +1924,18 @@ public class Money extends Magnitude {
         than the @Value annotation; this is particularly useful for
         third-party value types.</remark></para>
       </sect1>
+    </chapter>
+
+    <chapter id="chp.ValueTypes">
+      <title>Value Types</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para>value semantics provider...</para>
+
+      <para></para>
     </chapter>
   </part>
 
