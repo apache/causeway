@@ -269,13 +269,19 @@
         <para>For example, an instance of <classname>Product</classname> could
         use a photograph of the product as an icon, using:</para>
 
-        <programlisting format="linespecific">public String iconName() {
-    return getProductName() + "-photograph";
+        <programlisting format="linespecific">public class Product {
+    public String iconName() {
+        return "Product-" + getPhotograph();
+    }
+    ...
 }</programlisting>
 
         <para>Alternatively, an <classname>Order</classname> might vary the
-        icon according to the status of the object:<programlisting>public String iconName() {
-    return "Order-" + getStatus();
+        icon according to the status of the object:<programlisting>public class Order {
+    public String iconName() {
+        return "Order-" + getStatus();
+    }
+    ...
 }</programlisting></para>
       </sect1>
 
@@ -288,23 +294,39 @@
         moreinfo="none">@Named</literal> annotation is included, then this
         will override the default name. This might be used to include
         punctuation or other characters that may not be used within a class
-        name.</para>
+        name, or when - for whatever reason - the name of the class includes
+        technical artifacts (for example project-defined prefixes or
+        suffices). It is also useful if the required name cannot be used
+        because it is a keyword in the language.</para>
 
         <para>By default the framework will create a plural version of the
         object name by adding an 's' to singular name, or a 'ies' to names
         ending 'y'. For irregular nouns or other special case, the
         <code>@Plural</code> annotation may be used to specify the plural form
-        of the name explicitly.</para>
-
-        <para>(Note that there is an entirely separate mechanism for dealing
-        with Internationalisation, which is described in the core
-        documentation).</para>
+        of the name explicitly.t</para>
 
         <para>The programmer may optionally also provide a <literal
         moreinfo="none">@DescribedAs</literal> annotations, containing a brief
         description of the object's purpose, from a user perspective. The
         framework will make this available to the user in a form appropriate
-        to the user interface style - for example as 'balloon' help.</para>
+        to the user interface style - for example as a tooltip.</para>
+
+        <para>For example:</para>
+
+        <programlisting>@Named("Customer")
+@Plural("Customers")
+@DescribedAs("Individuals or organizations that have either "+
+             "purchased from us in the past or "+
+             "are likely to in the future")
+public class CustomerImpl implements ICustomer {
+    ...y
+}</programlisting>
+
+        <note>
+          <para>There is an entirely separate mechanism for dealing with
+          Internationalisation, details of which can be found in the core
+          documentation.</para>
+        </note>
       </sect1>
 
       <sect1>
@@ -336,6 +358,13 @@
 
         <para>To indicate that an object cannot be modified, use the <literal
         moreinfo="none">@Immutable</literal> annotation.</para>
+
+        <para>For example:</para>
+
+        <programlisting>@Immutable
+public class ChasingLetter implements PaymentReclaimStrategy {
+    ...
+}</programlisting>
       </sect1>
 
       <sect1 id="sec.Bounded">
@@ -355,6 +384,13 @@
 
         <para>An alternative way to specify a selection of objects is using
         the <classname>choicesXxx()</classname> supporting methods.</para>
+
+        <para>For example:</para>
+
+        <programlisting>@Bounded
+public class PaymentMethod {
+    ...
+}</programlisting>
       </sect1>
 
       <sect1 id="sec.HowToCreateAnObject">
@@ -708,6 +744,232 @@ public void setPropertyName(PropertyType param)</programlisting></para>
       </sect1>
 
       <sect1>
+        <title>How to make a property optional (when saving an object)</title>
+
+        <para>By default, when a new transient (unsaved) object is presented
+        to the user, values must be specified for all properties before the
+        object may be saved.</para>
+
+        <para>To specify that a particular property is optional, use the
+        <literal moreinfo="none">@Optional</literal> annotation.</para>
+      </sect1>
+
+      <sect1>
+        <title>How to specify the size of <classname>String</classname>
+        properties</title>
+
+        <para>Use the <literal moreinfo="none">@MaxLength</literal> to specify
+        the maximum number of characters that may be stored within a
+        <classname>String</classname> property.</para>
+
+        <para>Use the <literal moreinfo="none">@TypicalLength</literal> to
+        specify the typical number of characters that are likely to be stored
+        within a <classname>String</classname> property. Viewers are expected
+        to use this as a hint as to the size of the field to render for the
+        property.</para>
+
+        <para>Use the <literal moreinfo="none">@MultiLine</literal> annotation
+        as a hint to indicate that the field should be displayed with multiple
+        lines (eg as a text area rather than a text field).</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Ticket {
+
+    @TypicalLength(50)
+    @MaxLength(255)
+    public String getDescription() { ... }
+    ...
+
+    @MaxLength(2048)
+    @MultiLine
+    public String getNotes() { ... }
+    ...
+}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>How to specify a name and/or description for a property</title>
+
+        <sect2>
+          <title>Specifying the name for a property</title>
+
+          <para>By default the framework will use the property name itself to
+          label the property on the user interface. If you wish to override
+          this, use the <literal moreinfo="none">@Named </literal>annotation
+          on the property.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer() {
+    @Named("Given Name")
+    public String getFirstName() { ... }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Specifying a description for a property</title>
+
+          <para>An additional description can be provided on a property using
+          the <literal moreinfo="none">@DescribedAs</literal> annotation. The
+          framework will take responsibility to make this description
+          available to the user, for example in the form of a tooltip.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer() {
+    @DescribedAs("The given name by which this customer is known")
+    public String getFirstName() { ... }
+    ...
+}</programlisting>
+        </sect2>
+      </sect1>
+
+      <sect1 id="sec.MemberOrderForProperties">
+        <title>How to control the order in which properties are
+        displayed</title>
+
+        <para>The <literal moreinfo="none">@MemberOrder</literal> annotation
+        provides a hint to the viewer as to the order in which the properties
+        (and also collections, see <xref
+        linkend="sec.MemberOrderForCollections" />).</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Customer() {
+    @MemberOrder("1")
+    public String getFirstName() { ... }
+    ...
+
+    @MemberOrder("2")
+    public String getLastName() { ... }
+    ...
+}</programlisting>
+      </sect1>
+
+      <sect1 id="sec.DerivedProperty">
+        <title>How to make a property non-persisted (lazily derived)</title>
+
+        <para>Omitting the mutator (<code>setXxx()</code>) method for a
+        property indicates both that the field is will not be persisted, and
+        it will <emphasis>also</emphasis> be unmodifiable. This is the
+        standard approach to derive a property from other information
+        available to the object. It also happens to be compatible with Java
+        Persistence Api (JPA) semantics.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Employee {
+    public Department getDepartment() { ... }
+    ...
+
+    // this is the derived property
+    public Employee getManager() {
+        if (getDepartment() == null) { return null; }
+        return getDepartment().getManager();
+    }
+    ...
+}</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>How to make a property non-persisted (eagerly derived)</title>
+
+        <para>One way to mark a property as non-persisted is to omit the
+        mutator (see <xref linkend="sec.DerivedProperty" />). The second way
+        to mark a property is to keep the mutator, but to annotate the
+        property with <classname>@NotPersisted</classname>.</para>
+
+        <para>Because the data is non-persisted, some other mechanism must be
+        used to initialize the property. Typically this will be a lifecycle
+        method (see <xref linkend="sec.LifecycleMethods" />), which eagerly
+        derive the value of the property. </para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Employee {
+    public void loaded() {
+        if (getDepartment() != null) { 
+            setManager(getDepartment().getManager());
+        }
+    }
+
+    public Department getDepartment() { ... }
+    ...
+
+    @NotPersisted
+    public Employee getManager() { ... }
+    private void setManager(Employee manager) { ... }
+    ...
+}</programlisting>
+
+        <note>
+          <para>Using eager derivation can be problematic, because a change in
+          an underlying value must be reflected wherever it is
+          required.</para>
+        </note>
+      </sect1>
+
+      <sect1>
+        <title>How to hide a property from the user</title>
+
+        <sect2>
+          <title>Hiding a property always</title>
+
+          <para>To prevent a user from viewing a property at all, use the
+          <literal moreinfo="none">@Hidden</literal> annotation. A common use
+          case is to hide an internal Id, eg perhaps as required by the object
+          store.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class OrderLine {
+    private Integer id;
+    @Hidden
+    public Integer getId() { ... }
+    public void setId(Integer id) { ... }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Hiding a property under certain conditions</title>
+
+          <para>A <literal moreinfo="none">hideXxx()</literal> method can be
+          used to indicate that a particular instance's member should be
+          hidden (rendered invisible to the user) under certain conditions.
+          The syntax is:</para>
+
+          <programlisting><literal moreinfo="none">public boolean hidePropertyName()</literal> </programlisting>
+
+          <para>Returning a value of <code>true</code> indicates that the
+          property should be hidden.</para>
+
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Order {
+    public String getShippingInstructions() { ... }
+    public void setShippingInstructions(String shippingInstructions) { ... }
+    public boolean hideShippingInstructions() {
+        return hasShipped();
+    }
+    ...
+}</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>Hiding a property for specific users or roles</title>
+
+          <para>It is possible to hide properties for certain users/roles by
+          calling the <methodname>DomainObjectContainer#getUser()</methodname>
+          method. See <xref
+          linkend="sec.BusinessRulesForCertainUsersOrRoles" />for further
+          discussion.</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
         <title>How to prevent a Property from being Modified</title>
 
         <para>Preventing the user from modifying a property value is known as
@@ -721,11 +983,14 @@ public void setPropertyName(PropertyType param)</programlisting></para>
           all, use the <literal moreinfo="none">@Disabled</literal>
           annotation.</para>
 
+          <para>For example:</para>
+
           <programlisting format="linespecific">public class OrderLine {
     private int quantity;
     @Disabled
     public String getQuantity() { ... }
     public void setQuantity(int quantity) { ... }
+    ...
 }</programlisting>
 
           <para>Note that a setter is still required; this is used by the
@@ -770,54 +1035,12 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         <sect2>
           <title>Disabling a property for certain users/roles</title>
 
-          <para>Use DomainObjectContainer#getUser() method; see <xref
-          linkend="sec.BusinessRulesForCertainUsersOrRoles" />for further
-          discussion.</para>
+          <para>It is possible to disable properties for certain users/roles
+          by calling the
+          <methodname>DomainObjectContainer#getUser()</methodname> method. See
+          <xref linkend="sec.BusinessRulesForCertainUsersOrRoles" />for
+          further discussion.</para>
         </sect2>
-      </sect1>
-
-      <sect1>
-        <title>How to make a property optional (when saving an object)</title>
-
-        <para>By default, when a new transient (unsaved) object is presented
-        to the user, values must be specified for all properties before the
-        object may be saved.</para>
-
-        <para>To specify that a particular property is optional, use the
-        <literal moreinfo="none">@Optional</literal> annotation.</para>
-      </sect1>
-
-      <sect1>
-        <title>How to specify the size of String properties</title>
-
-        <para>Use the <literal moreinfo="none">@MaxLength</literal> to specify
-        the maximum number of characters that may be stored within a
-        <classname>String</classname> property.</para>
-
-        <para>Use the <literal moreinfo="none">@TypicalLength</literal> to
-        specify the typical number of characters that are likely to be stored
-        within a <classname>String</classname> property. Viewers are expected
-        to use this as a hint as to the size of the field to render for the
-        property.</para>
-
-        <para>Use the <literal moreinfo="none">@MultiLine</literal> annotation
-        as a hint to indicate that the field should be displayed with multiple
-        lines (eg as a text area rather than a text field).</para>
-
-        <para>For example:</para>
-
-        <programlisting format="linespecific">public class Ticket {
-
-    @TypicalLength(50)
-    @MaxLength(255)
-    public String getDescription() { ... }
-    ...
-
-    @MaxLength(2048)
-    @MultiLine
-    public String getNotes() { ... }
-    ...
-}</programlisting>
       </sect1>
 
       <sect1>
@@ -875,8 +1098,6 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         <para>After an object has been created (see <xref
         linkend="sec.HowToCreateAnObject" />), there are several different
         ways to setup the initial values for an object's properties.</para>
-
-        <para></para>
 
         <sect2>
           <title>By each property's default values</title>
@@ -960,179 +1181,76 @@ public void setPropertyName(PropertyType param)</programlisting></para>
 }</programlisting>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.ModifyAndClear">
         <title>How to trigger other behaviour when a property is
         changed</title>
 
         <para>If you want to invoke functionality whenever a property is
         changed by the user, then you should create a supporting <literal
         moreinfo="none">modifyXxx()</literal> method and include the
-        functionality within that. </para>
+        functionality within that. The syntax is:</para>
+
+        <programlisting>public void modifyPropertyName(PropertyType param)</programlisting>
+
+        <para>Why not just put this functionality in the setter? Well, the
+        setter is used by the object store to recreate the state of an already
+        persisted object. Putting additional behaviour in the setter would
+        cause it to be triggered incorrectly.</para>
 
         <para>For example:</para>
 
-        <programlisting format="linespecific">public int getAmount() {}
-public void setAmount(int amount) {}
-
-public void modifyAmount(int amount) {
-     setAmount(amount);
-     addToTotal(amount);
+        <programlisting format="linespecific">public class Order() {
+    public Integer getAmount() { ... }
+    public void setAmount(Integer amount) { ... }
+    public void modifyAmount(Integer amount) {
+        setAmount(amount);
+        addToTotal(amount);
+    }
+    ...
 }</programlisting>
 
-        <para>The reason for the <literal
-        moreinfo="none">modifyAmount</literal> method is that it would not be
-        a good idea to include the <literal
-        moreinfo="none">addToTotal</literal> call within the <literal
-        moreinfo="none">setAmount</literal> method , because that method may
-        be called by the persistence mechanism when an object is retrieved
-        from storage.</para>
+        <para>Here the <literal moreinfo="none">modifyAmount()</literal>
+        method also calls the <literal moreinfo="none">addToTotal()</literal>
+        call as well as the <literal moreinfo="none">setAmount()</literal>
+        method. We don't want this <methodname>addToCall()</methodname> method
+        to be called when pulling the object back from the object store, so we
+        put it into the modify, not the setter.</para>
 
-        <para>You may optionally also specify a
-        <code>clear&lt;PropertyName&gt;</code> which works the same way as
-        modify <literal moreinfo="none">modify</literal> <literal
-        moreinfo="none">&lt;propertyName&gt;</literal> but is called when the
+        <para>You may optionally also specify a <code>clearXxx()</code> which
+        works the same way as modify <literal moreinfo="none">modify</literal>
+        <literal moreinfo="none">Xxx()</literal> but is called when the
         property is cleared by the user (i.e. the current value replaced by
-        nothing).</para>
+        nothing). The syntax is:</para>
 
-        <para>These methods may also be used for setting up bidirectional
-        relationships (using the 'mutual registration pattern'). For
-        example:</para>
+        <programlisting>public void clearPropertyName()</programlisting>
 
-        <programlisting format="linespecific">public class Employee {
-    private Department department;
-    public Department getDepartment() {
-        return department;
-    }
-    public void setDepartment(Department department) { 
-        this.department = department;
-    }
-    public void modifyDepartment(Department department) {
-        setDepartment(department);
-        department.addToStaff(this);
-    }
-    public void clearDepartment(Department department) {
-        setDepartment(null);
-        department.removeFromStaff(this);
-    }
+        <para>To extend the above example:</para>
 
+        <programlisting format="linespecific">public class Order() {
+    public Integer getAmount() { ... }
+    public void setAmount(Integer amount) { ... }
+    public void modifyAmount(Integer amount) { ... }
+    public void clearAmount() {
+        removeFromTotal(this.amount);
+        setAmount(null);
+    }
     ...
 }</programlisting>
       </sect1>
 
       <sect1>
-        <title>How to control the order in which properties are
-        displayed</title>
+        <title>How to setup a bidirectional relationship</title>
 
-        <para>Use the <literal moreinfo="none">@MemberOrder</literal>
-        annotation.</para>
-      </sect1>
+        <para>The <methodname>modifyXxx()</methodname> and
+        <methodname>clearXxx()</methodname> methods (see <xref
+        linkend="sec.ModifyAndClear" />) can be used to setup bidirectional
+        relationships. This is typically done with 1:m relationships, eg
+        between <classname>Order</classname> and
+        <classname>OrderLine</classname>, or <classname>Department</classname>
+        and <classname>Employee</classname>.</para>
 
-      <sect1>
-        <title>How to specify a name and/or description for a property</title>
-
-        <sect2>
-          <title>Specifying the name for a property</title>
-
-          <para>By default the framework will use the property name itself to
-          label the property on the user interface. If you wish to over-ride
-          this, use the <literal moreinfo="none">@Named </literal>annotation
-          on the property.</para>
-        </sect2>
-
-        <sect2>
-          <title>Specifying a description for a property</title>
-
-          <para>Use the <literal moreinfo="none">@DescribedAs</literal>
-          annotation on the property itself.</para>
-
-          <para>The framework will take responsibility to make this
-          description available to the user, for example in the form of a
-          'balloon help'.</para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>How to hide a property from the user</title>
-
-        <sect2>
-          <title>Hiding a property always</title>
-
-          <para>Use the <literal moreinfo="none">@Hidden</literal>
-          annotation.</para>
-        </sect2>
-
-        <sect2>
-          <title>Hiding a property under certain conditions</title>
-
-          <para>A <literal moreinfo="none">hide</literal> method can be used
-          to indicate that a particular instance's member should be hidden
-          (rendered invisible to the user) under certain conditions. The
-          syntax is:</para>
-
-          <para><literal moreinfo="none">public boolean
-          hide&lt;PropertyName&gt;()</literal> A true return value indicates
-          that the property is hidden. For example:</para>
-
-          <programlisting format="linespecific">public class Order {
-    public String getShippingInstructions() { ... }
-    public void setShippingInstructions(String shippingInstructions) { ... }
-    public boolean hideShippingInstructions() {
-        return hasShipped();
-    }
-}</programlisting>
-        </sect2>
-
-        <sect2>
-          <title>Hiding a property for specific users or roles</title>
-
-          <para><emphasis role="strong">Important</emphasis>: see the comments
-          under 'Disabling a property for specific users or roles'.</para>
-
-          <para>Session controls provide a way for the class to hide
-          properties from specific users, or users not in specific roles. The
-          syntax is: <literal moreinfo="none">public boolean
-          hide&lt;PropertyName&gt;(Session session)</literal> For
-          example:</para>
-
-          <programlisting format="linespecific">public class Employee {
-    public BigDecimal getSalary() { ... }
-    public void setSalary(BigDecimal salary) { ... }
-    public boolean hideSalary(UserMemento user, BigDecimal salary) {
-        return !user.hasRole("VIEW_SALARY");
-    }
-}</programlisting>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>How to make a property non-persisted</title>
-
-        <para>If there is no mutator (<code>set</code>) method then the field
-        is not only unmodifiable but will also <emphasis>not</emphasis> be
-        persisted. This approach is by design and also happens to be
-        compatible with Java Persistence Api (JPA) semantics. This may be used
-        to derive a property from other information available to the object,
-        for example:</para>
-
-        <programlisting format="linespecific">public class Employee {
-    public Department getDepartment() { ... }
-    public void setDepartment(Department department) { ... }
-    public void modifyDepartment(Department department) { ... }
-    public void clearDepartment(Department department) { ... }
-
-    // this is the derived property
-    public Employee getManager() {
-        if (getDepartment() == null) { return null; }
-        return getDepartment().getManager();
-    }
-
-    ...
-}</programlisting>
-
-        <para>If you need to have a <literal moreinfo="none">get</literal> and
-        <literal moreinfo="none">set</literal> method for the property but do
-        not wish to have that property persisted, use the <literal
-        moreinfo="none">@NotPersisted</literal> annotation.</para>
+        <para>For further discussion and a complete example, see <xref
+        linkend="sec.MutualRegistrationPattern" />.</para>
       </sect1>
     </chapter>
 
@@ -1224,11 +1342,48 @@ public class Department {
     ...
 }</programlisting>
 
+        <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1 id="sec.MutualRegistrationPattern">
+        <title>How to maintain bidirectional relationships</title>
+
+        <para></para>
+
+        <para></para>
+
         <para>The addTo / removeFrom and modify / clear methods are
         particularly useful in setting up bidirectional relationships using
         the 'mutual registration pattern'; for a write-up of this pattern, see
         <ulink
         url="???">http://www.two-sdg.demon.co.uk/curbralan/papers/MutualRegistration.pdf</ulink>.</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Employee {
+    private Department department;
+    public Department getDepartment() { ... }
+    public void setDepartment(Department department) { ... }
+    public void modifyDepartment(Department department) {
+        setDepartment(department);
+        department.addToStaff(this);
+    }
+    public void clearDepartment(Department department) {
+        setDepartment(null);
+        department.removeFromStaff(this);
+    }
+    ...
+}</programlisting>
+
+        <para></para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -1299,12 +1454,26 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
 }</programlisting>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.MemberOrderForCollections">
         <title>How to control the order in which collections are
         displayed</title>
 
-        <para>Use the <literal moreinfo="none">@MemberOrder</literal>
-        annotation.</para>
+        <para>The <literal moreinfo="none">@MemberOrder</literal> annotation
+        provides a hint to the viewer as to the order in which the collections
+        (and also properties, see <xref
+        linkend="sec.MemberOrderForProperties" />).</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Customer() {
+    @MemberOrder("3")
+    public Collection&lt;Order&gt; getRecentOrders() { ... }
+    ...
+
+    @MemberOrder("4")
+    public Collection&lt;Order&gt; getOrders() { ... }
+    ...
+}</programlisting>
       </sect1>
 
       <sect1>
@@ -1761,6 +1930,22 @@ public String validateRemoveFrom&lt;CollectionName&gt;(&lt;property type&gt; par
         return salary.doubleValue() &gt;= 30000 &amp;&amp;
               !getUser().hasRole("MODIFY_SALARY")?
               "Need MODIFY_SALARY role to increase salary above 30000": null;
+    }
+}</programlisting>
+
+        <para></para>
+
+        <para></para>
+
+        <para>*** similarly,</para>
+
+        <para></para>
+
+        <programlisting format="linespecific">public class Employee {
+    public BigDecimal getSalary() { ... }
+    public void setSalary(BigDecimal salary) { ... }
+    public boolean hideSalary(UserMemento user, BigDecimal salary) {
+        return !user.hasRole("VIEW_SALARY");
     }
 }</programlisting>
       </sect1>
