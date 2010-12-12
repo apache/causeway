@@ -501,7 +501,7 @@ persist(newCust);</programlisting>
         </warning>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.LifecycleMethods">
         <title>How to insert behaviour into the object life cycle</title>
 
         <para><emphasis>Apache Isis</emphasis> is responsible for managing the
@@ -872,31 +872,25 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         <title>How to set up the initial value of a property
         programmatically</title>
 
-        <para>*** up to here... rationalize with following section.</para>
+        <para>After an object has been created (see <xref
+        linkend="sec.HowToCreateAnObject" />), there are several different
+        ways to setup the initial values for an object's properties.</para>
 
         <para></para>
 
-        <para></para>
+        <sect2>
+          <title>By each property's default values</title>
 
-        <para>Initial values for properties may be set up programmatically
-        within the <literal moreinfo="none">created()</literal> method on the
-        object; see <xref linkend="sec.HowToCreateAnObject" />.</para>
-      </sect1>
+          <para>Firstly, the default value for a property can be supplied
+          using a supporting <methodname>defaultXxx()</methodname> method. The
+          syntax for specifying a default value is:</para>
 
-      <sect1>
-        <title>How to specify a default value for a property</title>
+          <para><programlisting>public PropertyType defaultPropertyName()</programlisting></para>
 
-        <para>A default value for a property is applied after the object is
-        created (see <xref linkend="sec.HowToCreateAnObject" />).</para>
+          <para>where <literal moreinfo="none">PropertyType</literal> is the
+          same type as that of the property itself.</para>
 
-        <para>The syntax for specifying a default value is:</para>
-
-        <para><programlisting>public PropertyType defaultPropertyName()</programlisting></para>
-
-        <para>where <literal moreinfo="none">PropertyType</literal> is the
-        same type as that of the property itself.</para>
-
-        <programlisting format="linespecific">public class Order {
+          <programlisting format="linespecific">public class Order {
     public Address getShippingAddress() { ... }
     public void setShippingAddress() { ... }
     public Address defaultShippingAddress() {
@@ -904,6 +898,29 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     }
     ...
 }</programlisting>
+        </sect2>
+
+        <sect2>
+          <title>By the <methodname>created()</methodname> lifecycle
+          method</title>
+
+          <para>Alternatively, the domain object may choose to initialize its
+          property values in the <literal moreinfo="none">created()</literal>
+          lifecycle method (see <xref linkend="sec.LifecycleMethods" />). This
+          is called after any <methodname>defaultXxx()</methodname> methods
+          are called.</para>
+        </sect2>
+
+        <sect2>
+          <title>Programmatically, by the creator</title>
+
+          <para>Third, and perhaps most obviously, the creator of the object
+          could initialize the properties of the object immediately after
+          calling <methodname>newTransientInstance(...)</methodname>. This
+          would be appropriate if the creator had reason to override any
+          values setup in the <methodname>defaultXxx()</methodname> or
+          <methodname>created()</methodname> methods discussed above.</para>
+        </sect2>
       </sect1>
 
       <sect1>
