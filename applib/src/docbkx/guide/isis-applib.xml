@@ -3198,18 +3198,13 @@ public class Money extends Magnitude {
       <title>Recognized Methods and Method Prefixes</title>
 
       <abstract>
-        <para>***</para>
+        <para>Methods and method prefixes recognized by <emphasis>Apache
+        Isis</emphasis> using the default programming model.</para>
       </abstract>
 
-      <para>***</para>
-
-      <para>The Java 1.5 reflector allows the domain modeller to define
-      behaviourally complete domain objects, provide maximum feedback to the
-      user, and control any interaction that may take place (rather than place
-      that code in each and every user interface and back-end). This sections
-      lists the explicit methods that are recognised by the standard
-      reflector. All methods must be <code>public</code> to be
-      recognised.</para>
+      <para>The following table lists all of the methods or method prefixes
+      that are recognized by <emphasis>Apache Isis</emphasis>' default
+      programming model:</para>
 
       <table>
         <title></title>
@@ -3631,54 +3626,39 @@ public class Money extends Magnitude {
 
       <para>(*) deprecated.</para>
 
-      <para>Methods that do not get matched with any of the listed rules are
-      deemed to be action methods that we expect the user to invoke via the
-      user interface. These are public methods, of the following format</para>
-
-      <programlisting format="linespecific">public void &lt;actionName&gt;([&lt;property type&gt; param]...)
-public &lt;type&gt; &lt;actionName&gt;([&lt;property type&gt; param]...)</programlisting>
-
-      <para>that are not used for fields, titles, or for controlling other
-      methods. Essentially they are the methods left over from generating all
-      other aspects of the class. When such a method returns a reference the
-      framework will attempt to display that object. If an action method
-      returns <literal moreinfo="none">null</literal> then nothing will be
-      displayed.</para>
+      <para>In order to be recognized, all methods must be
+      <code>public</code>. Any methods that do not match are deemed to be
+      action methods that the user can invoke from the user interface.</para>
     </appendix>
 
     <appendix>
       <title>Recognized Annotations</title>
 
       <abstract>
-        <para>***</para>
+        <para>All the annotations recognized in the <emphasis>Apache
+        Isis</emphasis> default programming model.</para>
       </abstract>
 
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para>This section defines the set of annotations that are recognised by
-      the Apache Isis Java Programming Model.</para>
+      <para>This chapter defines the set of annotations that are recognised by
+      the <emphasis>Apache Isis</emphasis> default programming model.</para>
 
       <sect1>
         <title>@ActionOrder</title>
 
-        <para>Note: The recommended mechanism for specifying the order in
-        which actions are listed to the user is <code>@MemberOrder</code> (see
-        below). <code>@ActionOrder</code> provides an alternative mechanism,
-        in which the order is specified in one place in the class, with the
-        added advantage (currently) that you can easily specify groupings
-        (which may be rendered by the viewer as sub-menus). However,
-        <code>@ActionOrder</code> is more 'brittle' to change: if you change
-        the name of an existing action you will need to ensure that the
-        corresponding name within the <code>@ActionOrder</code> annotation is
-        also changed.</para>
+        <para><emphasis>Note: The recommended mechanism for specifying the
+        order in which actions are listed to the user is
+        <code>@MemberOrder</code> (see <xref
+        linkend="sec.MemberOrderAnnotation" />).</emphasis></para>
 
-        <para>The syntax is: <literal moreinfo="none">@ActionOrder("&lt;comma
-        separated list of action names&gt;")</literal> (the action names are
-        not case sensitive).</para>
+        <para><code>@ActionOrder</code> provides a mechanism to specify the
+        order in which actions appear in the user interface, in which the
+        order is specified in one place in the class.</para>
+
+        <para>The syntax is:</para>
+
+        <programlisting><literal moreinfo="none">@ActionOrder("&lt;comma separated list of action names&gt;")</literal> </programlisting>
+
+        <para>The action names are not case sensitive.</para>
 
         <para>For example:</para>
 
@@ -3692,10 +3672,12 @@ public class Customer {
 ...
 }</programlisting>
 
-        <para>Actions can be grouped together by surrounding the group with
-        brackets, and prefixing the group with name and colon. This
-        information may be used by the viewing mechanism to render actions
-        into sub-menus. For example:</para>
+        <para>Compared to @MemberOrder, there is (currentlyon) one additional
+        advantage in that you can easily specify groupings (which may be
+        rendered by the viewer as sub-menus). This information may be used by
+        the viewing mechanism to render actions into sub-menus.</para>
+
+        <para>For example:</para>
 
         <programlisting format="linespecific"><emphasis role="strong">@ActionOrder("(Account Management: PlaceOrder, CheckCredit), (Personal Details: ChangeOfAddress, AddEmail)")</emphasis>
 public class Customer {
@@ -3710,6 +3692,21 @@ public class Customer {
 
     ...
 }</programlisting>
+
+        <para>However, <code>@ActionOrder</code> is more 'brittle' to change:
+        if you change the name of an existing action you will need to ensure
+        that the corresponding name within the <code>@ActionOrder</code>
+        annotation is also changed.</para>
+      </sect1>
+
+      <sect1>
+        <title>@Aggregated</title>
+
+        <para>***</para>
+
+        <para></para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -3717,7 +3714,9 @@ public class Customer {
 
         <para>For immutable objects where there is a bounded set of instances,
         the <literal moreinfo="none">@Bounded</literal> annotation can be
-        used. For example:</para>
+        used.</para>
+
+        <para>For example:</para>
 
         <programlisting format="linespecific"><emphasis role="strong">@Bounded</emphasis>
 public class County {
@@ -3727,10 +3726,14 @@ public class County {
         <para>The number of instances is expected to be small enough that all
         instance can be held in memory. The viewer will use this information
         to render all the instances of this class in a drop-down list or
-        equivalent. (Note: Although this is not enforced, <literal
-        moreinfo="none">@Bounded</literal> is intended for use on <literal
-        moreinfo="none">final</literal> classes. Its behaviour when used on
-        interfaces, or classes with sub-classes is not specified).</para>
+        equivalent.</para>
+
+        <note>
+          <para>Although this is not enforced, <literal
+          moreinfo="none">@Bounded</literal> is intended for use on <literal
+          moreinfo="none">final</literal> classes. Its behaviour when used on
+          interfaces, or classes with sub-classes is not specified</para>
+        </note>
       </sect1>
 
       <sect1>
@@ -3739,6 +3742,19 @@ public class County {
         <para>The <classname>@Debug </classname>annotation marks an action
         method as available in debug mode only, and so will not normally be
         displayed by the user interface.</para>
+
+        <para>The exact means to access <classname>@Debug</classname> actions
+        depends on the viewer.</para>
+      </sect1>
+
+      <sect1>
+        <title>@Defaulted</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -3748,45 +3764,58 @@ public class County {
         is used to provide a short description of something that features on
         the user interface. How this description is used will depend upon the
         viewing mechanism - but it may be thought of as being like a 'tool
-        tip'. Descriptions may be provided for objects, members (properties,
+        tip'.</para>
+
+        <para> Descriptions may be provided for objects, members (properties,
         collections and actions), and for individual parameters within an
         action method. <literal moreinfo="none">@DescribedAs</literal>
         therefore works in a very similar manner to <literal
-        moreinfo="none">@Named</literal>.</para>
+        moreinfo="none">@Named</literal> (see <xref
+        linkend="sec.NamedAnnotation" />).</para>
 
-        <bridgehead>Providing a description for an object</bridgehead>
+        <sect2>
+          <title>Providing a description for an object</title>
 
-        <para>To provide a description for an object, use the <literal
-        moreinfo="none">@DescribedAs</literal> annotation immediately before
-        the declaration of that object class. For example:</para>
+          <para>To provide a description for an object, use the <literal
+          moreinfo="none">@DescribedAs</literal> annotation immediately before
+          the declaration of that object class.</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@DescribedAs("A Customer who may have originally become known to us via " +
+          <para>For example:</para>
+
+          <programlisting format="linespecific"><emphasis role="strong">@DescribedAs("A Customer who may have originally become known to us via " +
              "the marketing system or who may have contacted us directly.")</emphasis>
 public class ProspectiveSale {
    ...
 }</programlisting>
+        </sect2>
 
-        <bridgehead>Providing a description for a member</bridgehead>
+        <sect2>
+          <title>Providing a description for an object member</title>
 
-        <para>Any member (property, collection or action) may provide a
-        description. To specify this description, use the <literal
-        moreinfo="none">@DescribedAs</literal> annotation immediately before
-        the declaration of that member. For example:</para>
+          <para>Any member (property, collection or action) may provide a
+          description. To specify this description, use the <literal
+          moreinfo="none">@DescribedAs</literal> annotation immediately before
+          the declaration of that member.</para>
 
-        <programlisting format="linespecific">public class Customer {
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer {
     <emphasis role="strong">@DescribedAs("The name that the customer has indicated that they wish to be " +
                  "addressed as (e.g. Johnny rather than Jonathan)")</emphasis>
     public String getFirstName() { ... }
 }</programlisting>
+        </sect2>
 
-        <bridgehead>Providing a description for an action
-        parameter</bridgehead>
+        <sect2>
+          <title>Providing a description for an action parameter</title>
 
-        <para>To provide a description for an individual action parameter, use
-        the <literal moreinfo="none">@DescribedAs</literal> annotation in-line
-        i.e. immediately before the parameter declaration. For example:</para>
+          <para>To provide a description for an individual action parameter,
+          use the <literal moreinfo="none">@DescribedAs</literal> annotation
+          in-line i.e. immediately before the parameter declaration.</para>
 
-        <programlisting format="linespecific">public class Customer {
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer {
     public Order placeOrder(
                       Product product,
                       @Named("Quantity")
@@ -3801,6 +3830,7 @@ public class ProspectiveSale {
     }
     ...
 }</programlisting>
+        </sect2>
       </sect1>
 
       <sect1>
@@ -3811,7 +3841,9 @@ public class ProspectiveSale {
         When applied to the property it means that the user may not modify the
         value of that property (though it may still be modified
         programmatically). When applied to an action method, it means that the
-        user cannot invoke that method. For example:</para>
+        user cannot invoke that method.</para>
+
+        <para>For example:</para>
 
         <programlisting format="linespecific">public class Customer {
     <emphasis role="strong">@Disabled</emphasis>
@@ -3824,11 +3856,12 @@ public class ProspectiveSale {
 
         <para>Note that if an action is marked as <literal
         moreinfo="none">@Disabled</literal>, it will be shown on the user
-        interface but cannot ever be invoked. One possible reason to do this
-        is during prototyping, to indicate an action that is still to be
-        developed. If a method is intended for programmatic use, but not
-        intended ever to be invoked directly by a user, then it should be
-        marked as <literal moreinfo="none">@Hidden</literal> instead.</para>
+        interface but cannot ever be invoked. The only possible reason we can
+        think to do this is during prototyping, to indicate an action that is
+        still to be developed. If a method is intended for programmatic use,
+        but not intended ever to be invoked directly by a user, then it should
+        be marked as <literal moreinfo="none">@Hidden</literal>
+        instead.</para>
 
         <para>This annotation can also take a single parameter indicating when
         it is to be hidden, for example the following code would disable the
@@ -3845,6 +3878,26 @@ public class ProspectiveSale {
         <code>When.UNTIL_PERSISTED</code>. By default the annotated property
         or action is always disabled i.e. it is implicitly
         <code>When.ALWAYS.</code></para>
+      </sect1>
+
+      <sect1>
+        <title>@Encodable</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>@EqualByContent</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -3877,6 +3930,16 @@ public class ProspectiveSale {
         <para>The <classname>@Exploration</classname> annotation marks an
         action method as available in exploration mode only, and therefore not
         intended for use in the production system</para>
+      </sect1>
+
+      <sect1>
+        <title>@Facets</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -3950,6 +4013,16 @@ public class Customer {
         <code>When.UNTIL_PERSISTED</code>. By default the annotated property
         or action is always hidden i.e. it is implicitly
         <code>When.ALWAYS.</code></para>
+      </sect1>
+
+      <sect1>
+        <title>@Ignore</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -4046,7 +4119,7 @@ public class Email {
         parameters.</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.MemberOrderAnnotation">
         <title>@MemberOrder</title>
 
         <para><code>@MemberOrder</code> is the recommended mechanism for
@@ -4200,7 +4273,7 @@ public class Email {
         validation, being passed the proposed value.</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.NamedAnnotation">
         <title>@Named</title>
 
         <para>The <literal moreinfo="none">@Named</literal> annotation is used
@@ -4282,6 +4355,26 @@ public class CustomerImpl implements Customer{
     }
     ...
 }</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>@NotContributed</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>@NotInRepositoryMenu</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
       </sect1>
 
       <sect1 id="not-persistable">
@@ -4396,6 +4489,16 @@ public class InputForm {
       </sect1>
 
       <sect1>
+        <title>@Parseable</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
         <title>@Plural</title>
 
         <para>Where Apache Isis displays a collection of several objects it
@@ -4413,6 +4516,16 @@ public class InputForm {
 public class Child {
     // members and actions here
 }</programlisting>
+      </sect1>
+
+      <sect1>
+        <title>@Prototype</title>
+
+        <para></para>
+
+        <para>***</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
@@ -4517,6 +4630,10 @@ public class ComplexNumber {
     <appendix>
       <title>Supporting Classes</title>
 
+      <abstract>
+        <para>***</para>
+      </abstract>
+
       <para></para>
 
       <para></para>
@@ -4525,12 +4642,46 @@ public class ComplexNumber {
         <title>Title creation</title>
 
         <para>asdfsd</para>
+
+        <para>The TitleBuffer helper class</para>
+
+        <para></para>
       </sect1>
 
       <sect1>
-        <title>Reason text creation</title>
+        <title>Reason text creation (for disable and validate methods)</title>
 
-        <para>asdd</para>
+        <para>There are two different classes provided to help build reasons
+        returned by <methodname>disableXxX()</methodname> and
+        <methodname>validateXxx()</methodname> methods:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the
+            <classname>org.apache.isis.applib.util.ReasonBuffer</classname>
+            helper class </para>
+          </listitem>
+
+          <listitem>
+            <para>the
+            <classname>org.apache.isis.applib.util.Reasons</classname> helper
+            class </para>
+          </listitem>
+        </itemizedlist>
+
+        <para>For example:</para>
+
+        <programlisting>public class Customer {
+    ...
+    public String validatePlaceOrder(Product p, int quantity) {
+        return Reasons.coalesce(
+            whetherCustomerBlacklisted(this),
+            whetherProductOutOfStock(p)
+        );
+    }
+}</programlisting>
+
+        <para>Which you use (if any) is up to you.</para>
       </sect1>
 
       <sect1>
@@ -4552,14 +4703,36 @@ public class ComplexNumber {
       </sect1>
 
       <sect1>
-        <title>Fixtures</title>
+        <title>Clock</title>
 
-        <sect2>
-          <title>Fixtures</title>
-
-          <para>***</para>
-        </sect2>
+        <para></para>
       </sect1>
+    </appendix>
+
+    <appendix>
+      <title>Fixtures</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+    </appendix>
+
+    <appendix>
+      <title>Adapter class hierarchy</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para>AbstractContainedObject --&gt; DomainObjectContainer</para>
+
+      <para>AbstractDomainObject : AbstractContainedObject</para>
+
+      <para>AbstractService : AbstractContainedObject</para>
+
+      <para>AbstractFactoryAndRepository : AbstractService</para>
     </appendix>
   </part>
 </book>
