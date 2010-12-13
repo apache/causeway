@@ -2838,100 +2838,299 @@ void warnUser(String message)</programlisting></para>
         treated as a value type.</para>
 
         <sect2>
-          <title>Primitive types</title>
+          <title>Supported Types</title>
 
-          <para>All the primitive types may be used as values:
-          <classname>byte</classname>, <classname>short</classname>,
-          <classname>int</classname>, <classname>long</classname>,
-          <classname>float</classname>, <classname>double</classname>,
-          <classname>char</classname>, and
-          <classname>boolean</classname>.</para>
+          <para></para>
+
+          <sect3>
+            <title>Primitive Types</title>
+
+            <para>All the primitive types may be used as values:
+            <classname>byte</classname>, <classname>short</classname>,
+            <classname>int</classname>, <classname>long</classname>,
+            <classname>float</classname>, <classname>double</classname>,
+            <classname>char</classname>, and
+            <classname>boolean</classname>.</para>
+          </sect3>
+
+          <sect3>
+            <title>Wrapper Types</title>
+
+            <para>The wrapper types for each of the primitives can also be
+            used as value types: <classname>java.lang.Byte</classname>,
+            <classname>java.lang.Short</classname>,
+            <classname>java.lang.Integer</classname>,
+            <classname>java.lang.Long</classname>,
+            <classname>java.lang.Float</classname>,
+            <classname>java.lang.Double</classname>,
+            <classname>java.lang.Character</classname>,
+            <classname>java.lang.Boolean</classname>.</para>
+          </sect3>
+
+          <sect3>
+            <title>Java Classes</title>
+
+            <para>The following java classes have value semantics and may be
+            used as value types:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><classname>java.lang.String</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>java.math.BigInteger</classname> and
+                <classname>java.math.BigDecimal</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>java.util.Date</classname> (date and time),
+                <classname>java.sql.Date</classname> (date only), and
+                <classname>java.sql.Time</classname> (time only)</para>
+              </listitem>
+
+              <listitem>
+                <para><classname>java.sql.Timestamp</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>java.awt.Image</classname></para>
+              </listitem>
+            </itemizedlist>
+          </sect3>
+
+          <sect3>
+            <title>Isis AppLib</title>
+
+            <para><emphasis>Isis</emphasis> itself also provides a number of
+            its own value types. These are all in the
+            <classname>org.apache.applib.value</classname> package:</para>
+
+            <itemizedlist>
+              <listitem>
+                <para><classname>Color</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>Date</classname> (date only),
+                <classname>DateTime</classname> (date and time) and
+                <classname>Time</classname> (time only)</para>
+              </listitem>
+
+              <listitem>
+                <para><classname>TimeStamp</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>Image</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>Money</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>Password</classname></para>
+              </listitem>
+
+              <listitem>
+                <para><classname>Percentage</classname></para>
+              </listitem>
+            </itemizedlist>
+          </sect3>
         </sect2>
 
         <sect2>
-          <title>Wrapper Types</title>
+          <title>Value formats</title>
 
-          <para>The wrapper types for each of the primitives can also be used
-          as value types: <classname>java.lang.Byte</classname>,
-          <classname>java.lang.Short</classname>,
-          <classname>java.lang.Integer</classname>,
-          <classname>java.lang.Long</classname>,
-          <classname>java.lang.Float</classname>,
-          <classname>java.lang.Double</classname>,
-          <classname>java.lang.Character</classname>,
-          <classname>java.lang.Boolean</classname>.</para>
-        </sect2>
+          <para>Isis provides default formats for the inbuilt value types,
+          according to type. These can be modified using
+          <filename>isis.properties</filename>.</para>
 
-        <sect2>
-          <title>Java Classes</title>
+          <para>These formats cut across the above categories; for example the
+          byte format relates to both <classname>byte</classname> (primitive)
+          and <classname>java.lang.Byte</classname> (wrapper). In all cases
+          this setting can be overriden for a specific field using the <link
+          linkend="mask-annotation"> <literal moreinfo="none">@Mask</literal>
+          annotation</link>.</para>
 
-          <para>The following java classes have value semantics and may be
-          used as value types:</para>
+          <sect3>
+            <title>Byte format</title>
 
-          <itemizedlist>
-            <listitem>
-              <para><classname>java.lang.String</classname></para>
-            </listitem>
+            <para>The format for all bytes can be set, replacing the default
+            format derived from the system, using the following property to
+            specify a mask:</para>
 
-            <listitem>
-              <para><classname>java.math.BigInteger</classname> and
-              <classname>java.math.BigDecimal</classname></para>
-            </listitem>
+            <programlisting format="linespecific">isis.value.format.byte=####</programlisting>
 
-            <listitem>
-              <para><classname>java.util.Date</classname> (date and time),
-              <classname>java.sql.Date</classname> (date only), and
-              <classname>java.sql.Time</classname> (time only)</para>
-            </listitem>
+            <para>The mask is used to set up a
+            <classname>java.text.DecimalFormat</classname> formatting object
+            so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
 
-            <listitem>
-              <para><classname>java.sql.Timestamp</classname></para>
-            </listitem>
+          <sect3>
+            <title>Date Format</title>
 
-            <listitem>
-              <para><classname>java.awt.Image</classname></para>
-            </listitem>
-          </itemizedlist>
-        </sect2>
+            <para>The format for all dates can be set, replacing the default
+            format derived from the system, using the following property to
+            specify one of <emphasis>long</emphasis>,
+            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
+            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
+            mask:</para>
 
-        <sect2>
-          <title>Application Library</title>
+            <programlisting format="linespecific">isis.value.format.date=dd/MM/yy</programlisting>
 
-          <para>Isis also provides a number of its own value types. These are
-          all in the <classname>org.apache.applib.value</classname>
-          package:</para>
+            <para>When a mask is specified it is used to set up a
+            <classname>java.text.SimpleDateFormat</classname> formatting
+            object so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
 
-          <itemizedlist>
-            <listitem>
-              <para><classname>Color</classname></para>
-            </listitem>
+          <sect3>
+            <title>Date/time Format</title>
 
-            <listitem>
-              <para><classname>Date</classname> (date only),
-              <classname>DateTime</classname> (date and time) and
-              <classname>Time</classname> (time only)</para>
-            </listitem>
+            <para>The format for all date/time values can be set, replacing
+            the default format derived from the system, using the following
+            property to specify one of <emphasis>long</emphasis>,
+            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
+            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
+            mask:</para>
 
-            <listitem>
-              <para><classname>TimeStamp</classname></para>
-            </listitem>
+            <programlisting format="linespecific">isis.value.format.datetime=dd/MM/yy</programlisting>
 
-            <listitem>
-              <para><classname>Image</classname></para>
-            </listitem>
+            <para>When a mask is specified it is used to set up a
+            <classname>java.text.SimpleDateFormat</classname> formatting
+            object so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
 
-            <listitem>
-              <para><classname>Money</classname></para>
-            </listitem>
+          <sect3>
+            <title>Decimal format</title>
 
-            <listitem>
-              <para><classname>Password</classname></para>
-            </listitem>
+            <para>The format for <classname>BigDecimal</classname> values can
+            be set, replacing the default format derived from the system,
+            using the following property to specify a mask:</para>
 
-            <listitem>
-              <para><classname>Percentage</classname></para>
-            </listitem>
-          </itemizedlist>
+            <programlisting format="linespecific">isis.value.format.decimal=####</programlisting>
+
+            <para>The mask is used to set up a
+            <classname>java.text.DecimalFormat</classname> formatting object
+            so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Double format</title>
+
+            <para>The format for all double values can be set, replacing the
+            default format derived from the system, using the following
+            property to specify a mask:</para>
+
+            <programlisting format="linespecific">isis.value.format.double=####</programlisting>
+
+            <para>The mask is used to set up a
+            <classname>java.text.DecimalFormat</classname> formatting object
+            so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Float format</title>
+
+            <para>The format for all float values can be set, replacing the
+            default format derived from the system, using the following
+            property to specify a mask:</para>
+
+            <programlisting format="linespecific">isis.value.format.float=####</programlisting>
+
+            <para>The mask is used to set up a
+            <classname>java.text.DecimalFormat</classname> formatting object
+            so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Integer format</title>
+
+            <para>The format for all integers (including
+            <classname>BigInteger</classname>) can be set, replacing the
+            default format derived from the system, using the following
+            property to specify a mask:</para>
+
+            <programlisting format="linespecific">isis.value.format.int=####</programlisting>
+
+            <para>The mask is used to set up a
+            <classname>java.text.DecimalFormat</classname> formatting object
+            so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Long format</title>
+
+            <para>The format for all long values can be set, replacing the
+            default format derived from the system, using the following
+            property to specify a mask:</para>
+
+            <programlisting format="linespecific">isis.value.format.long=####</programlisting>
+
+            <para>The mask is used to set up a
+            <classname>java.text.DecimalFormat</classname> formatting object
+            so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Short format</title>
+
+            <para>The format for all short values can be set, replacing the
+            default format derived from the system, using the following
+            property to specify a mask:</para>
+
+            <programlisting format="linespecific">isis.value.format.short=####</programlisting>
+
+            <para>The mask is used to set up a
+            <classname>java.text.DecimalFormat</classname> formatting object
+            so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Time Format</title>
+
+            <para>The format for all time values can be set, replacing the
+            default format derived from the system, using the following
+            property to specify one of <emphasis>long</emphasis>,
+            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
+            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
+            mask:</para>
+
+            <programlisting format="linespecific">isis.value.format.time=ddMMyyyy hhmm</programlisting>
+
+            <para>When a mask is specified it is used to set up a
+            <classname>java.text.SimpleDateFormat</classname> formatting
+            object so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
+
+          <sect3>
+            <title>Timestamp Format</title>
+
+            <para>The format for time stamp values can be set, replacing the
+            default format derived from the system, using the following
+            property to specify one of <emphasis>long</emphasis>,
+            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
+            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
+            mask:</para>
+
+            <programlisting format="linespecific">isis.value.format.timestamp=hh:mm</programlisting>
+
+            <para>When a mask is specified it is used to set up a
+            <classname>java.text.SimpleDateFormat</classname> formatting
+            object so details of the mask format can be found in the Java
+            documentation.</para>
+          </sect3>
         </sect2>
       </sect1>
 
@@ -4316,17 +4515,6 @@ public class ComplexNumber {
     </appendix>
 
     <appendix>
-      <title>DomainObjectContainer</title>
-
-      <para></para>
-
-      <para>*** there was only ever a placeholder in the original NOF doc for
-      a appendix on this topic.</para>
-
-      <para></para>
-    </appendix>
-
-    <appendix>
       <title>Supporting Classes</title>
 
       <para></para>
@@ -4370,248 +4558,6 @@ public class ComplexNumber {
           <title>Fixtures</title>
 
           <para>***</para>
-        </sect2>
-      </sect1>
-    </appendix>
-
-    <appendix>
-      <title>Configuring via Properties</title>
-
-      <para></para>
-
-      <para>*** will probably inline with other stuff.</para>
-
-      <para></para>
-
-      <sect1>
-        <title>Reflector Properties</title>
-
-        <para></para>
-
-        <sect2>
-          <title>Value formats</title>
-
-          <sect3>
-            <title>Byte format</title>
-
-            <para>The format for all bytes can be set, replacing the default
-            format derived from the system, using the following property to
-            specify a mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.byte=####</programlisting>
-
-            <para>The mask is used to set up a
-            <classname>java.text.DecimalFormat</classname> formatting object
-            so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Date Format</title>
-
-            <para>The format for all dates can be set, replacing the default
-            format derived from the system, using the following property to
-            specify one of <emphasis>long</emphasis>,
-            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
-            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
-            mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.date=dd/MM/yy</programlisting>
-
-            <para>When a mask is specified it is used to set up a
-            <classname>java.text.SimpleDateFormat</classname> formatting
-            object so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Date/time Format</title>
-
-            <para>The format for all date/time values can be set, replacing
-            the default format derived from the system, using the following
-            property to specify one of <emphasis>long</emphasis>,
-            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
-            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
-            mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.datetime=dd/MM/yy</programlisting>
-
-            <para>When a mask is specified it is used to set up a
-            <classname>java.text.SimpleDateFormat</classname> formatting
-            object so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Decimal format</title>
-
-            <para>The format for <classname>Bigdecimal</classname> values can
-            be set, replacing the default format derived from the system,
-            using the following property to specify a mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.decimal=####</programlisting>
-
-            <para>The mask is used to set up a
-            <classname>java.text.DecimalFormat</classname> formatting object
-            so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Double format</title>
-
-            <para>The format for all double values can be set, replacing the
-            default format derived from the system, using the following
-            property to specify a mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.double=####</programlisting>
-
-            <para>The mask is used to set up a
-            <classname>java.text.DecimalFormat</classname> formatting object
-            so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Float format</title>
-
-            <para>The format for all float values can be set, replacing the
-            default format derived from the system, using the following
-            property to specify a mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.float=####</programlisting>
-
-            <para>The mask is used to set up a
-            <classname>java.text.DecimalFormat</classname> formatting object
-            so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Integer format</title>
-
-            <para>The format for all integers (including
-            <classname>BigInteger</classname>) can be set, replacing the
-            default format derived from the system, using the following
-            property to specify a mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.int=####</programlisting>
-
-            <para>The mask is used to set up a
-            <classname>java.text.DecimalFormat</classname> formatting object
-            so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Long format</title>
-
-            <para>The format for all long values can be set, replacing the
-            default format derived from the system, using the following
-            property to specify a mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.long=####</programlisting>
-
-            <para>The mask is used to set up a
-            <classname>java.text.DecimalFormat</classname> formatting object
-            so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Short format</title>
-
-            <para>The format for all short values can be set, replacing the
-            default format derived from the system, using the following
-            property to specify a mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.short=####</programlisting>
-
-            <para>The mask is used to set up a
-            <classname>java.text.DecimalFormat</classname> formatting object
-            so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Time Format</title>
-
-            <para>The format for all time values can be set, replacing the
-            default format derived from the system, using the following
-            property to specify one of <emphasis>long</emphasis>,
-            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
-            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
-            mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.time=ddMMyyyy hhmm</programlisting>
-
-            <para>When a mask is specified it is used to set up a
-            <classname>java.text.SimpleDateFormat</classname> formatting
-            object so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
-
-          <sect3>
-            <title>Timestamp Format</title>
-
-            <para>The format for time stamp values can be set, replacing the
-            default format derived from the system, using the following
-            property to specify one of <emphasis>long</emphasis>,
-            <emphasis>medium</emphasis>, <emphasis>short</emphasis>,
-            <emphasis>isolong</emphasis>, <emphasis>isoshort</emphasis> or a
-            mask:</para>
-
-            <programlisting format="linespecific">isis.value.format.timestamp=hh:mm</programlisting>
-
-            <para>When a mask is specified it is used to set up a
-            <classname>java.text.SimpleDateFormat</classname> formatting
-            object so details of the mask format can be found in the Java
-            documentation.</para>
-
-            <para>This setting can be overriden for a specific field using the
-            <link linkend="mask-annotation"> <literal
-            moreinfo="none">@Mask</literal> annotation</link>.</para>
-          </sect3>
         </sect2>
       </sect1>
     </appendix>
