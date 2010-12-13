@@ -182,6 +182,12 @@
       <para>This chapter contains how-to's for programming conventions that
       apply to the object itself.</para>
 
+      <para></para>
+
+      <para>*** mention org.apache.isis.applib.AbstractDomainObject</para>
+
+      <para></para>
+
       <sect1>
         <title condition="java">How to specify a title for an object</title>
 
@@ -678,6 +684,59 @@ persist(newCust);</programlisting>
         recommended. If it is disabled then the
         <methodname>objectChanged()</methodname> method may need to be called
         manually.</para>
+      </sect1>
+
+      <sect1>
+        <title>How to ensure object is in valid state</title>
+
+        <para>A <methodname>validate()</methodname> method may be added to
+        provided validation at object level, prior to making an object
+        persistent.</para>
+
+        <para>The syntax is:</para>
+
+        <programlisting>public String validate()</programlisting>
+
+        <para>A non-<code>null</code> value is the taken to be the reason why
+        the object cannot be saved.</para>
+
+        <para>This is particularly useful for validating fields in relation to
+        each other.</para>
+
+        <para>For example:</para>
+
+        <programlisting>public class Booking {
+    private Date fromDate;
+    public Date getFromDate() {...}
+    public void setFromDate(Date d) {...}
+    
+    private Date toDate;
+    public Date getToDate() {...}
+    public void setToDate(Date d) {...}
+
+    public String validate() {
+        if (fromDate.getTicks() &gt; toDate.getTicks()) {
+            return "From Date cannot be after To Date";
+        }
+        return null;
+    }
+    ...
+}</programlisting>
+
+        <para>This will prevent the user from saving a transient
+        <code>Booking</code> where the From Date falls after the To Date. Note
+        that in this example, the two date properties could also have their
+        own individual validate methods - for example in order to test that
+        each date was after today.</para>
+
+        <warning>
+          <para>At the time of writing, the <code>validate</code> method is
+          called only when the object is first saved, not when it is
+          subsequently updated. For validation of subsequent updates, it is
+          necessary to build the validation logic into the individual property
+          validation methods, though these could delegate to a common
+          <code>validate</code> method.</para>
+        </warning>
       </sect1>
     </chapter>
 
@@ -2147,7 +2206,7 @@ public class Department {
         taking the same form as the parameter name used in the code.
         Alternatively though, you could create a user-defined value type,
         using <literal>@Value</literal> (see <xref
-        linkend="sec.ValueTypes" />).</para>
+        linkend="chp.ValueTypes" />).</para>
 
         <para>Similarly, any parameter may be given a short user-description
         using the <literal moreinfo="none">@DescribedAs</literal> annotation.
@@ -2452,6 +2511,8 @@ public class Department {
 
       <para></para>
 
+      <para></para>
+
       <sect1 id="sec.MustSpecify">
         <title>@MustSatisfy Specification</title>
 
@@ -2583,7 +2644,7 @@ void warnUser(String message)</programlisting></para>
       Specifically, we're talking about repositories and factories (<xref
       linkend="sec.RepositoriesAndFactories" />), services (<xref
       linkend="sec.Services" />) and values (<xref
-      linkend="sec.ValueTypes" />).</para>
+      linkend="chp.ValueTypes" />).</para>
 
       <sect1 id="sec.RepositoriesAndFactories">
         <title>Repositories and Factories</title>
@@ -2601,38 +2662,38 @@ void warnUser(String message)</programlisting></para>
         the most commonly-used methods:</para>
 
         <para><literal moreinfo="none">&lt;T&gt; T newTransientInstance(final
-        Class&lt;T&gt; ofClass)</literal> returns a new instance of the
-        specified class, that is transient (unsaved). This may subsequently be
-        saved either by the user invoking the Save action (that will
-        automatically be rendered on the object view) or programmatically by
-        calling . . .</para>
+        Class&lt;T&gt; ofClass)</literal> </para>
+
+        <para>returns a new instance of the specified class, that is transient
+        (unsaved). This may subsequently be saved either by the user invoking
+        the Save action (that will automatically be rendered on the object
+        view) or programmatically by calling . . .</para>
 
         <para><literal moreinfo="none">void makePersistent(Object
         transientObject)</literal></para>
 
         <para><literal moreinfo="none">&lt;T&gt; T newPersistentInstance(final
-        Class&lt;T&gt; ofClass)</literal> creates a new object already
-        persisted.</para>
+        Class&lt;T&gt; ofClass)</literal> </para>
+
+        <para>creates a new object already persisted.</para>
 
         <para><literal moreinfo="none">void disposeInstance(Object
         persistentObject)</literal></para>
 
         <para><literal moreinfo="none">&lt;T&gt; List&lt;T&gt;
         allInstances(final Class&lt;T&gt; cls, final boolean
-        includeSubclasses)</literal> these may be iterated through for a
-        specific match.</para>
+        includeSubclasses)</literal> </para>
+
+        <para>these may be iterated through for a specific match.</para>
 
         <para><literal moreinfo="none">&lt;T&gt; T firstMatch(final
         Class&lt;T&gt; cls, final String title, final boolean
-        includeSubclasses)</literal>looks for an object with the title
-        specified.</para>
+        includeSubclasses)</literal></para>
+
+        <para>looks for an object with the title specified.</para>
 
         <para>There are a number of useful matching and filtering methods in
         AbstractFactoryAndRepository.</para>
-
-        <para></para>
-
-        <para></para>
 
         <para></para>
       </sect1>
@@ -2644,542 +2705,18 @@ void warnUser(String message)</programlisting></para>
         including the fact that this works for both InMemory ...</remark>
 
         <para></para>
+
+        <para></para>
       </sect1>
 
       <sect1 id="sec.Services">
         <title>Registering services</title>
 
         <para>*** </para>
-      </sect1>
 
-      <sect1>
-        <title>System repositories</title>
+        <para></para>
 
-        <para>As well as services defined programmatically, it is possible to
-        use a repository provided by the framework that will, for a configured
-        object type, provide methods to:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para>Create a new transient instance</para>
-          </listitem>
-
-          <listitem>
-            <para>Create a new persisted instance</para>
-          </listitem>
-
-          <listitem>
-            <para>Find all persisted instances</para>
-          </listitem>
-
-          <listitem>
-            <para>Find instances with a specified title</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>To register such a service prefix the class name with
-        'repository#', for example:</para>
-
-        <programlisting format="linespecific">isis.services = repository#bom.Booking</programlisting>
-      </sect1>
-
-      <sect1 id="sec.ValueTypes">
-        <title>Value Types</title>
-
-        <para>In addition to the built-in value types it is also possible to
-        define user-defined value types. This is typically done using the
-        <classname>@Value</classname> annotation.</para>
-
-        <para>The <literal>@Value</literal> annotation is used to provide an
-        implementation of the <classname>ValueSemanticsProvider</classname>
-        interface. In turn this provides objects that allow the framework to
-        interact with the value, in particular for parsing (parsing strings
-        into values and display values as strings), and for encoding/decoding
-        (for serialization for client/server and used by some
-        persistors).</para>
-
-        <para>For more details, explore the built-in types within the applib,
-        for example
-        <classname>org.apache.isis.applib.value.Money</classname>.</para>
-
-        <programlisting format="linespecific">@Value(semanticsProviderName = "org.apache.isis.metamodel.value.MoneyValueSemanticsProvider")
-public class Money extends Magnitude {
-    ...
-}</programlisting>
-
-        <para>where <classname>MoneyValueSemanticsProvider</classname> is the
-        implementation of <classname>ValueSemanticsProvider</classname>
-        described above.</para>
-
-        <para>Using value types generally removes the need for using
-        <literal>@MustSatisfy</literal> annotation; the rules can instead move
-        down into a <methodname>validate</methodname> method on the value type
-        itself.</para>
-
-        <para><remark>TODO: need to beef up this discussion. Also, note that
-        it is possible to register value types using isis.properties rather
-        than the @Value annotation; this is particularly useful for
-        third-party value types.</remark></para>
-      </sect1>
-    </chapter>
-
-    <chapter id="chp.ValueTypes">
-      <title>Value Types</title>
-
-      <para></para>
-
-      <para></para>
-
-      <para>value semantics provider...</para>
-
-      <para></para>
-    </chapter>
-  </part>
-
-  <part>
-    <title>Reference Appendices</title>
-
-    <appendix id="sec.RecognisedTypes">
-      <title>Recognised Types</title>
-
-      <abstract>
-        <para>*** yada yada</para>
-      </abstract>
-
-      <para>Apache Isis creates an adapter for every domain object. There are
-      three categories of objects that are recognised: value, reference and
-      collection. Value and collection objects are dealt with on a class by
-      class basis, while all reference objects are dealt with in the same way
-      where the properties are seen as fields, and public methods as actions.
-      Listed below are all the recognised types.</para>
-
-      <sect1>
-        <title>Value objects</title>
-
-        <para>The following are built-in types. In addition to these any type
-        either annotated using <classname>@Value</classname>, or registered as
-        a value type using <filename>isis.properties</filename>, will also be
-        treated as a value type.</para>
-
-        <sect2>
-          <title>Primitive types</title>
-
-          <itemizedlist>
-            <listitem>
-              <para><literal moreinfo="none">boolean</literal></para>
-            </listitem>
-
-            <listitem>
-              <para><literal moreinfo="none">byte</literal></para>
-            </listitem>
-
-            <listitem>
-              <para><literal moreinfo="none">char</literal></para>
-            </listitem>
-
-            <listitem>
-              <para><literal moreinfo="none">double</literal></para>
-            </listitem>
-
-            <listitem>
-              <para><literal moreinfo="none">float</literal></para>
-            </listitem>
-
-            <listitem>
-              <para><literal moreinfo="none">int</literal></para>
-            </listitem>
-
-            <listitem>
-              <para><literal moreinfo="none">long</literal></para>
-            </listitem>
-
-            <listitem>
-              <para><literal moreinfo="none">short</literal></para>
-            </listitem>
-          </itemizedlist>
-        </sect2>
-
-        <sect2>
-          <title>Number classes</title>
-
-          <itemizedlist>
-            <listitem>
-              <para><classname>java.lang.Boolean</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.math.BigInteger</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.math.BigDecimal</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.lang.Byte</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.lang.Character</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.lang.Double</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.lang.Float</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.lang.Integer</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.lang.Long</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.lang.Short</classname></para>
-            </listitem>
-          </itemizedlist>
-        </sect2>
-
-        <sect2>
-          <title>Java Classes</title>
-
-          <itemizedlist>
-            <listitem>
-              <para><classname>java.lang.String</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.util.Date</classname> (date and
-              time)</para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.sql.Date</classname> (date only)</para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.sql.Time</classname> (time only)</para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.sql.Timestamp</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>java.awt.Image</classname></para>
-            </listitem>
-          </itemizedlist>
-        </sect2>
-
-        <sect2>
-          <title>Application Library</title>
-
-          <itemizedlist>
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.Color</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.Date</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.DateTime</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.Image</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.Money</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.Password</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.Percentage</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.Time</classname></para>
-            </listitem>
-
-            <listitem>
-              <para><classname>org.apache.isis.applib.value.TimeStamp</classname></para>
-            </listitem>
-          </itemizedlist>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Collection objects</title>
-
-        <itemizedlist>
-          <listitem>
-            <para><classname>java.util.Collection</classname> (usually
-            <classname>java.util.ArrayList</classname>,
-            <code>java.util.LinkedList</code>,
-            <classname>java.util.LinkedHashSet</classname> or
-            <classname>java.util.TreeSet</classname>)</para>
-          </listitem>
-
-          <listitem>
-            <para>arrays</para>
-          </listitem>
-        </itemizedlist>
-
-        <para>Note that <classname>java.util.Map</classname> is not supported
-        as a collection type.</para>
-      </sect1>
-
-      <sect1>
-        <title>Reference objects</title>
-
-        <itemizedlist>
-          <listitem>
-            <para>all other domain classes (not annotated with
-            <literal>@Value</literal> / registered as a value using
-            <filename>isis.properties</filename>).</para>
-          </listitem>
-        </itemizedlist>
-      </sect1>
-    </appendix>
-
-    <appendix>
-      <title>Recognized Methods and Method Prefixes</title>
-
-      <abstract>
-        <para>***</para>
-      </abstract>
-
-      <para>The Java 1.5 reflector allows the domain modeller to define
-      behaviourally complete domain objects, provide maximum feedback to the
-      user, and control any interaction that may take place (rather than place
-      that code in each and every user interface and back-end). This sections
-      lists the explicit methods that are recognised by the standard
-      reflector. All methods must be <code>public</code> to be
-      recognised.</para>
-
-      <para>Methods that do not get matched with any of the listed rules are
-      deemed to be action methods that we expect the user to invoke via the
-      user interface. These are public methods, of the following format</para>
-
-      <programlisting format="linespecific">public void &lt;actionName&gt;([&lt;property type&gt; param]...)
-public &lt;type&gt; &lt;actionName&gt;([&lt;property type&gt; param]...)</programlisting>
-
-      <para>that are not used for fields, titles, or for controlling other
-      methods. Essentially they are the methods left over from generating all
-      other aspects of the class.</para>
-
-      <para>When such a method returns a reference the framework will attempt
-      to display that object. If an action method returns <literal
-      moreinfo="none">null</literal> then nothing will be displayed.</para>
-
-      <sect1 id="addto-method">
-        <title>addTo</title>
-
-        <programlisting format="linespecific">public void addTo&lt;PropertyName&gt;(&lt;collection element type&gt; param)</programlisting>
-
-        <para>Used in conjunction with a collection, the <literal
-        moreinfo="none">addTo</literal> method is called by the framework when
-        the user adds an element to the collection. By providing this method
-        in conjunction with a non-generic collection it will be limited to a
-        specific type (rather than being used to store references of type
-        <classname>Object</classname>). This behaviour is similar to that of
-        the <methodname>modify</methodname> method for properties.</para>
-
-        <para>See also <xref linkend="modify-method" /> and <xref
-        linkend="removefrom-method" /></para>
-      </sect1>
-
-      <sect1>
-        <title>choices</title>
-
-        <bridgehead>On a property</bridgehead>
-
-        <programlisting format="linespecific">public &lt;property type&gt;[] choices&lt;PropertyName&gt;([&lt;property type&gt; param])
-
-public List&lt;property type&gt; choices&lt;PropertyName&gt;([&lt;property type&gt; param])</programlisting>
-
-        <para>Used in conjunction with a property, the
-        <methodname>choices</methodname> method provides the user with a set
-        of options for setting a property. This method is called when the user
-        interface makes the options available, hence its return value can be
-        based on the current state of the object. Note - this does not limit
-        the state of the field, see the <methodname>validate</methodname>
-        methods for a way to do that.</para>
-
-        <bridgehead>On parameters on an action</bridgehead>
-
-        <para>Either:</para>
-
-        <programlisting format="linespecific">public Object[] choicesN&lt;actionName&gt;()
-
-public List&lt;parameter type&gt; choicesN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
-
-        <para>where N is the 0-based parameter number.</para>
-
-        <para>Or:</para>
-
-        <programlisting format="linespecific">public Object[] choices&lt;actionName&gt;([&lt;parameter type&gt; param]...)
-
-public List&lt;parameter type&gt; choices&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
-
-        <para>Complements an action method, or a specific paramter within an
-        action.</para>
-
-        <para>The <methodname>choices</methodname> method provides a set of
-        options for the parameters of an action. This method is called when
-        the user interface prompts for the parameters from the user, so the
-        options cannot depend on the state of any of the other parameters.
-        Note - this does not limit the state of the parameter, see the
-        <methodname>validate</methodname> methods for a way to do that.</para>
-
-        <para>For each parameter the array should contain either <literal
-        moreinfo="none">null</literal>, an array, or a collection.</para>
-      </sect1>
-
-      <sect1>
-        <title id="clear-method">clear</title>
-
-        <programlisting format="linespecific">public void clear&lt;PropertyName&gt;()</programlisting>
-
-        <para>Used in conjunction with a property, the
-        <methodname>clear</methodname> method is called when the user (rather
-        than the framework) clears a reference field, or blanks (so there is
-        no entry) a value field.</para>
-
-        <para>See also <xref linkend="modify-method" /></para>
-      </sect1>
-
-      <sect1>
-        <title>created</title>
-
-        <programlisting format="linespecific">public void created()</programlisting>
-
-        <para>Life cycle method called by framework when an object is first
-        created. This is the instance's logical creation. This method will
-        <emphasis>not</emphasis> be called when the object is recreated during
-        persistence or remoting.</para>
-      </sect1>
-
-      <sect1>
-        <title>default</title>
-
-        <bridgehead>For a property</bridgehead>
-
-        <programlisting format="linespecific">public &lt;parameter type&gt; default&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-        <para>Complements a get/set method for a reference or value
-        property.</para>
-
-        <para>Provides the default reference or value for a property to be set
-        to when an object is first created, or the user asks for a property to
-        be reset.</para>
-
-        <bridgehead>For parameters on an action</bridgehead>
-
-        <para>Either:</para>
-
-        <programlisting format="linespecific">public Object[] defaultN&lt;actionName&gt;()
-
-public List&lt;parameter type&gt; defaultN&lt;parameterNumber&gt;&lt;actionName&gt;()</programlisting>
-
-        <para>where N is the 0-based parameter number.</para>
-
-        <para>Or:</para>
-
-        <programlisting format="linespecific">public Object[] default&lt;actionName&gt;([&lt;parameter type&gt; param]...)
-
-public List&lt;parameter type&gt; default&lt;parameterNumber&gt;&lt;actionName&gt;([&lt;parameter type&gt; param])</programlisting>
-
-        <para>Complements an action method, or a specific parameter on an
-        action method.</para>
-
-        <para>Provides the defaults that should be used for the parameters
-        expected by an action method. The values should be provided as an
-        array with the same number of elements as the number of parameters.
-        Any parameter that does not have a default should have its
-        corresponding element in the array set to null.</para>
-      </sect1>
-
-      <sect1>
-        <title>deleted</title>
-
-        <para>Deprecated but still supported; replaced by
-        <methodname>removed()</methodname></para>
-
-        <programlisting format="linespecific">public void deleted()</programlisting>
-
-        <para>Life cycle method called by framework when an object has just
-        been removed from the persistent store. At this point the object will
-        exist in memory, but no longer exist in the persistent store.</para>
-      </sect1>
-
-      <sect1>
-        <title>deleting</title>
-
-        <para>Deprecated but still supported; replaced by
-        <methodname>removing()</methodname></para>
-
-        <programlisting format="linespecific">public void deleting()</programlisting>
-
-        <para>Life cycle method called by framework when an object is just
-        about to be removed from the persistent store. At this point the
-        object still exists in the persistent store.</para>
-      </sect1>
-
-      <sect1>
-        <title>disable</title>
-
-        <programlisting format="linespecific">public String disable&lt;PropertyName&gt;([&lt;property type&gt; param])
-
-public String disable&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-        <para>Complements a get/set method for a field, or an action
-        method.</para>
-
-        <para>The <literal moreinfo="none">disable</literal> dynamically
-        controls whether a field is editable, or an action can be initiated.
-        If a <classname>String</classname> object is returned the field or
-        action is disabled and the string is made visible to user to inform
-        them why it is disabled. If the method returns <literal
-        moreinfo="none">null</literal> then field or action remains
-        enabled.</para>
-      </sect1>
-
-      <sect1>
-        <title>get</title>
-
-        <bridgehead>Value or reference property</bridgehead>
-
-        <programlisting format="linespecific">public &lt;property type&gt; get&lt;PropertyName&gt;()</programlisting>
-
-        <para>A standard JavaBean accessor/mutator pair will be recognised as
-        a field for a value or reference. Values include Java primitives,
-        <classname>String</classname>s and <classname>Date</classname>s, and
-        also the value types provided by the Apache Isis application library
-        (see the section on <xref linkend="sec.RecognisedTypes" />).</para>
-
-        <para>If there is no mutator method then the field is flagged as being
-        derived and will not be persisted or editable.</para>
-
-        <bridgehead>Collection property</bridgehead>
-
-        <para>A collection is picked up via an accessor method with the
-        following signature. Java arrays, <classname>Vector</classname>s and
-        <classname>List</classname>s (including generic lists) are the only
-        types that are recognised at the moment.</para>
-
-        <programlisting format="linespecific">public &lt;collection type&gt; get&lt;PropertyName&gt;()</programlisting>
+        <para></para>
       </sect1>
 
       <sect1>
@@ -3240,337 +2777,674 @@ public String disable&lt;actionName&gt;([&lt;parameter type&gt; param]...)</prog
       </sect1>
 
       <sect1>
-        <title>hide</title>
+        <title>System repositories</title>
 
-        <programlisting format="linespecific">public boolean hide&lt;PropertyName&gt;([&lt;property type&gt; param])
+        <para>As well as services defined programmatically, it is possible to
+        use a repository provided by the framework that will, for a configured
+        object type, provide methods to:</para>
 
-public boolean hide&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
+        <itemizedlist>
+          <listitem>
+            <para>Create a new transient instance</para>
+          </listitem>
 
-        <para>Complements a get/set method for a field, or an action
-        method.</para>
+          <listitem>
+            <para>Create a new persisted instance</para>
+          </listitem>
 
-        <para>The <literal moreinfo="none">hide</literal> method allows a
-        property or action to be dynamically hidden from the user. This is
-        typically used for security reasons, such as hiding a field once it is
-        set up. Returning <literal moreinfo="none">true</literal> makes the
-        property or action invisible.</para>
+          <listitem>
+            <para>Find all persisted instances</para>
+          </listitem>
+
+          <listitem>
+            <para>Find instances with a specified title</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>To register such a service prefix the class name with
+        'repository#', for example:</para>
+
+        <programlisting format="linespecific">isis.services = repository#bom.Booking</programlisting>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.ValueTypes">
+      <title>Value Types</title>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <para></para>
+
+      <sect1>
+        <title>Built-in Value Types</title>
+
+        <para>***</para>
+
+        <para></para>
+
+        <para>The following are built-in types. In addition to these any type
+        either annotated using <classname>@Value</classname>, or registered as
+        a value type using <filename>isis.properties</filename>, will also be
+        treated as a value type.</para>
+
+        <sect2>
+          <title>Primitive types</title>
+
+          <para>All the primitive types may be used as values:
+          <classname>byte</classname>, <classname>short</classname>,
+          <classname>int</classname>, <classname>long</classname>,
+          <classname>float</classname>, <classname>double</classname>,
+          <classname>char</classname>, and
+          <classname>boolean</classname>.</para>
+        </sect2>
+
+        <sect2>
+          <title>Wrapper Types</title>
+
+          <para>The wrapper types for each of the primitives can also be used
+          as value types: <classname>java.lang.Byte</classname>,
+          <classname>java.lang.Short</classname>,
+          <classname>java.lang.Integer</classname>,
+          <classname>java.lang.Long</classname>,
+          <classname>java.lang.Float</classname>,
+          <classname>java.lang.Double</classname>,
+          <classname>java.lang.Character</classname>,
+          <classname>java.lang.Boolean</classname>.</para>
+        </sect2>
+
+        <sect2>
+          <title>Java Classes</title>
+
+          <para>The following java classes have value semantics and may be
+          used as value types:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><classname>java.lang.String</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>java.math.BigInteger</classname> and
+              <classname>java.math.BigDecimal</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>java.util.Date</classname> (date and time),
+              <classname>java.sql.Date</classname> (date only), and
+              <classname>java.sql.Time</classname> (time only)</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>java.sql.Timestamp</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>java.awt.Image</classname></para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title>Application Library</title>
+
+          <para>Isis also provides a number of its own value types. These are
+          all in the <classname>org.apache.applib.value</classname>
+          package:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><classname>Color</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>Date</classname> (date only),
+              <classname>DateTime</classname> (date and time) and
+              <classname>Time</classname> (time only)</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>TimeStamp</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>Image</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>Money</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>Password</classname></para>
+            </listitem>
+
+            <listitem>
+              <para><classname>Percentage</classname></para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
       </sect1>
 
       <sect1>
-        <title>iconName</title>
+        <title>Custom Value Types</title>
 
-        <programlisting format="linespecific">public String iconName()</programlisting>
+        <para></para>
 
-        <para>The <literal moreinfo="none">iconName</literal> is used to
-        over-ride the framework's default mechanism for determining the icon
-        to display based on the class name. The name returned by this method
-        should be simply a name and not a filepath: it should not have an file
-        extension. The framework will look for an acceptable type of image
-        using this name, deriving possible filenames from it. Typically the
-        framework will load images from an <filename>images</filename>
-        directory, either from the filesystem or from the classpath. See the
-        core documentation for more information on image loading.</para>
-      </sect1>
+        <para></para>
 
-      <sect1>
-        <title>loaded</title>
+        <para>In addition to the built-in value types it is also possible to
+        define user-defined value types. This is typically done using the
+        <classname>@Value</classname> annotation.</para>
 
-        <programlisting format="linespecific">public void loaded()</programlisting>
+        <para>The <literal>@Value</literal> annotation is used to provide an
+        implementation of the <classname>ValueSemanticsProvider</classname>
+        interface. In turn this provides objects that allow the framework to
+        interact with the value, in particular for parsing (parsing strings
+        into values and display values as strings), and for encoding/decoding
+        (for serialization for client/server and used by some
+        persistors).</para>
 
-        <para>Life cycle method called by framework when an object has just
-        been loaded in from the persistent store. At this point the object has
-        it's correct persisted state.</para>
-      </sect1>
+        <para>For more details, explore the built-in types within the applib,
+        for example
+        <classname>org.apache.isis.applib.value.Money</classname>.</para>
 
-      <sect1>
-        <title>loading</title>
-
-        <programlisting format="linespecific">public void loading()</programlisting>
-
-        <para>Life cycle method called by framework when an object is just
-        about to be loaded from the persistent store. At this point the object
-        exists in memory but has not had its state restored.</para>
-      </sect1>
-
-      <sect1 id="modify-method">
-        <title>modify</title>
-
-        <programlisting format="linespecific">public void modify&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>Complements a property.</para>
-
-        <para>The <literal moreinfo="none">modify</literal> method is called
-        when the user (rather than the framework) sets a reference or value
-        field. This is typically used to initialise an association (where an
-        association is combination of references, such as a back link), or to
-        trigger other behaviours such as adding the new value to a
-        total.</para>
-
-        <para>See also <xref linkend="clear-method" />.</para>
-      </sect1>
-
-      <sect1>
-        <title>persisted</title>
-
-        <para>Replaces <methodname>saved()</methodname></para>
-
-        <programlisting format="linespecific">public void persisted()</programlisting>
-
-        <para>Life cycle method called by framework when a transient object
-        has just been added to the persistent store. At this point the object
-        exists in the persistent store.</para>
-      </sect1>
-
-      <sect1>
-        <title>persisting</title>
-
-        <para>Replaces <methodname>saving()</methodname></para>
-
-        <programlisting format="linespecific">public void persisting()</programlisting>
-
-        <para>Life cycle method called by framework when a transient object is
-        just about to be added to the persistent store. At this point the
-        object exists only in memory and not in the persistent store.</para>
-      </sect1>
-
-      <sect1>
-        <title>removed</title>
-
-        <para>Replaces <methodname>deleted()</methodname></para>
-
-        <programlisting format="linespecific">public void removed()</programlisting>
-
-        <para>Life cycle method called by framework when an object has just
-        been removed from the persistent store. At this point the object will
-        exist in memory, but no longer exist in the persistent store.</para>
-      </sect1>
-
-      <sect1>
-        <title>removing</title>
-
-        <para>Replaces <methodname>deleting()</methodname></para>
-
-        <programlisting format="linespecific">public void removing()</programlisting>
-
-        <para>Life cycle method called by framework when an object is just
-        about to be removed from the persistent store. At this point the
-        object still exists in the persistent store.</para>
-      </sect1>
-
-      <sect1 id="removefrom-method">
-        <title>removeFrom</title>
-
-        <programlisting format="linespecific">public void removeFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>Complements a collection.</para>
-
-        <para>The <literal moreinfo="none">removeFrom</literal> method is
-        called by the framework when the user removes an element from the
-        collection. By providing this method in conjunction with a non-generic
-        collection interactions with that collection become limited to a
-        specific type (rather than being used to store references of type
-        <classname>Object</classname>). This signature is similar to the
-        <literal moreinfo="none">clear</literal> method for properties.</para>
-
-        <para>See also <xref linkend="clear-method" /> and <xref
-        linkend="addto-method" />.</para>
-      </sect1>
-
-      <sect1>
-        <title>saved</title>
-
-        <para>Deprecated but still supported; replaced by
-        <methodname>persisted()</methodname></para>
-
-        <programlisting format="linespecific">public void saved()</programlisting>
-
-        <para>Life cycle method called by framework when a transient object
-        has just been added to the persistent store. At this point the object
-        exists in the persistent store..</para>
-      </sect1>
-
-      <sect1>
-        <title>saving</title>
-
-        <para>Deprecated but still supported; replaced by
-        <methodname>persisting()</methodname></para>
-
-        <programlisting format="linespecific">public void saving()</programlisting>
-
-        <para>Life cycle method called by framework when a transient object is
-        just about to be added to the persistent store. At this point the
-        object exists only in memory and not in the persistent store.</para>
-      </sect1>
-
-      <sect1>
-        <title>set</title>
-
-        <programlisting format="linespecific">public void set&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>Complements a <code>get</code> method.</para>
-
-        <para>The <literal moreinfo="none">set</literal> method is called when
-        the property is changed, either by the user or the framework. As the
-        framework calls the same method when recreating the object from
-        persistent data it is important to avoid doing any work in the
-        <code>set</code> method other than setting up the property variable. A
-        typical set method would be:</para>
-
-        <programlisting format="linespecific">private String name;
-
-public void setName(String name) {
-    this.name = name;
-}</programlisting>
-      </sect1>
-
-      <sect1>
-        <title>toString</title>
-
-        <programlisting format="linespecific">public String toString()</programlisting>
-
-        <para>The <methodname>toString</methodname> method is used to get a
-        title for the object. If the <code>toString</code> method cannot serve
-        as the title, because it is being used for alternative purposes (such
-        as debugging) then you may define a <code>title</code> method instead
-        (below).</para>
-      </sect1>
-
-      <sect1>
-        <title>title</title>
-
-        <programlisting format="linespecific">public String title()</programlisting>
-
-        <para>If a <methodname>title</methodname> method is defined then the
-        framework will use this in preference to the
-        <methodname>toString</methodname> method for displaying the object's
-        title.</para>
-      </sect1>
-
-      <sect1>
-        <title>updated</title>
-
-        <programlisting format="linespecific">public void updated()</programlisting>
-
-        <para>Life cycle method called by framework when a modified persistent
-        object has just been saved to the persistent store. At this point the
-        object's state in the persistent store will be in its new
-        state.</para>
-      </sect1>
-
-      <sect1>
-        <title>updating</title>
-
-        <programlisting format="linespecific">public void updating()</programlisting>
-
-        <para>Life cycle method called by framework when a persistent object
-        has just been modified and is about to be saved to the persistent
-        store. At this point the object's state in the persistent store will
-        still be in its pre-modified state.</para>
-      </sect1>
-
-      <sect1>
-        <title>validate</title>
-
-        <bridgehead>Ensure value or reference is valid</bridgehead>
-
-        <programlisting format="linespecific">public String validate&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>Complements a get/set method for a value or reference
-        property.</para>
-
-        <para>This <methodname>validate</methodname> method is used to check
-        the value/reference that is to be used to set a property. Using such a
-        mechanism the programmer can guarantee that a field never becomes
-        invalid. If a <classname>String</classname> object is returned the
-        value/reference is consider to be invalid and the field will not be
-        set. The string itself will then be made visible to the user to inform
-        them why it is invalid. If the method returns <literal
-        moreinfo="none">null</literal> then property will be set, that is, its
-        <methodname>set</methodname> or <methodname>modify</methodname> method
-        will be called with the same parameter.</para>
-
-        <bridgehead>Ensure collection can have an element added or
-        removed</bridgehead>
-
-        <programlisting format="linespecific">public String validateAddTo&lt;PropertyName&gt;(&lt;property type&gt; param)
-public String validateRemoveFrom&lt;PropertyName&gt;(&lt;property type&gt; param)</programlisting>
-
-        <para>Complements a get method for a collection property.</para>
-
-        <para>This <methodname>validate</methodname> method is used to check
-        that the specified object can be added to or removed from a
-        collection. Using such a mechanism the programmer can guarantee that
-        the collection never becomes invalid. If a
-        <classname>String</classname> object is returned then adding/removing
-        the specified object is not valid and the collection will not be
-        changed. The string itself will then be made visible to the user to
-        inform them why changing the collection with the object would be
-        invalid. If the method returns <literal moreinfo="none">null</literal>
-        then the object will be added to/removed from the collection, that is,
-        from the collection object directly if there is no
-        <methodname>addTo</methodname>/<methodname>removeFrom</methodname>
-        method, or via a call to the
-        <methodname>addTo</methodname>/<methodname>removeFrom</methodname>
-        method, with the same parameter, if they do exist.</para>
-
-        <bridgehead>Ensure it is valid to invoke an action</bridgehead>
-
-        <programlisting format="linespecific">public String validate&lt;actionName&gt;([&lt;parameter type&gt; param]...)</programlisting>
-
-        <para>Complements an action method.</para>
-
-        <para>This <methodname>validate</methodname> method is used to check
-        that the actions parameters are all valid and that the action method
-        can be safely invoked, that is, if it is invoked that it will not
-        fail. If a <classname>String</classname> object is returned then the
-        action should not be invoked. The string itself will then be made
-        visible to the user to inform them why the method cannot be invoked.
-        If the method returns <literal moreinfo="none">null</literal> then the
-        action method will be invoked with the same set of parameters.</para>
-
-        <bridgehead>Ensure object is in a valid state to be saved</bridgehead>
-
-        <para>A validate() method may be added to provided validation at
-        object level - prior to making an object persistent.</para>
-
-        <programlisting>public String validate()</programlisting>
-
-        <para>This is particularly useful for validating fields in relation to
-        each other, as in the following example:</para>
-
-        <programlisting>public class Booking {
-    private Date fromDate;
-    public Date getFromDate() {...}
-    public void setFromDate(Date d) {...}
-    
-    private Date toDate;
-    public Date getToDate() {...}
-    public void setToDate(Date d) {...}
-
-    public String validate() {
-        if (fromDate &gt; toDate) {
-            return "From Date cannot be after To Date";
-        }
-        return null;
-    }
+        <programlisting format="linespecific">@Value(semanticsProviderName = "org.apache.isis.metamodel.value.MoneyValueSemanticsProvider")
+public class Money extends Magnitude {
     ...
 }</programlisting>
 
-        <para>This will prevent the user from saving a transient
-        <code>Booking</code> where the From Date falls after the To Date. Note
-        that in this example, the two date properties could also have their
-        own individual validate methods - for example in order to test that
-        each date was after today.</para>
+        <para>where <classname>MoneyValueSemanticsProvider</classname> is the
+        implementation of <classname>ValueSemanticsProvider</classname>
+        described above.</para>
 
-        <warning>
-          <para>At the time of writing, the <code>validate</code> method is
-          called only when the object is first saved, not when it is
-          subsequently updated. For validation of subsequent updates, it is
-          necessary to build the validation logic into the individual property
-          validation methods, though these could delegate to a common
-          <code>validate</code> method.</para>
-        </warning>
+        <para>Using value types generally removes the need for using
+        <literal>@MustSatisfy</literal> annotation; the rules can instead move
+        down into a <methodname>validate</methodname> method on the value type
+        itself.</para>
+
+        <para></para>
       </sect1>
+
+      <sect1>
+        <title>Third-party Value Types</title>
+
+        <para></para>
+
+        <remark>TODO: need to beef up this discussion. Also, note that it is
+        possible to register value types using isis.properties rather than the
+        @Value annotation; this is particularly useful for third-party value
+        types.</remark>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Reference Appendices</title>
+
+    <appendix>
+      <title>Recognized Methods and Method Prefixes</title>
+
+      <abstract>
+        <para>***</para>
+      </abstract>
+
+      <para>***</para>
+
+      <para>The Java 1.5 reflector allows the domain modeller to define
+      behaviourally complete domain objects, provide maximum feedback to the
+      user, and control any interaction that may take place (rather than place
+      that code in each and every user interface and back-end). This sections
+      lists the explicit methods that are recognised by the standard
+      reflector. All methods must be <code>public</code> to be
+      recognised.</para>
+
+      <table>
+        <title></title>
+
+        <tgroup cols="6">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="center">Prefic</entry>
+
+              <entry align="center">object</entry>
+
+              <entry align="center">property</entry>
+
+              <entry align="center">collection</entry>
+
+              <entry align="center">action</entry>
+
+              <entry align="center">action param</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>addTo</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>Y (see also removeFrom)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>choices</entry>
+
+              <entry></entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>Y</entry>
+            </row>
+
+            <row>
+              <entry>clear</entry>
+
+              <entry></entry>
+
+              <entry>Y (see also modify)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>created</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>default</entry>
+
+              <entry></entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>Y</entry>
+            </row>
+
+            <row>
+              <entry>deleted (*)</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>deleting (*)</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>disable</entry>
+
+              <entry></entry>
+
+              <entry>Y</entry>
+
+              <entry>Y</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>get</entry>
+
+              <entry></entry>
+
+              <entry>Y (see also set)</entry>
+
+              <entry>Y (see also set)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>getId</entry>
+
+              <entry>Y (service only)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>hide</entry>
+
+              <entry></entry>
+
+              <entry>Y</entry>
+
+              <entry>Y</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>iconName</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>loaded</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>loading</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>modify</entry>
+
+              <entry></entry>
+
+              <entry>Y (see also clear)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>persisted</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>persisting</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>removing</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>removed</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>removeFrom</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry>Y (see also addTo)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>saved (*)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>saving (*)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>set</entry>
+
+              <entry></entry>
+
+              <entry>Y (see also get)</entry>
+
+              <entry>Y (see also get)</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>toString</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>title</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>updating</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>updated</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>validate</entry>
+
+              <entry>Y</entry>
+
+              <entry>Y</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry>Y</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>(*) deprecated.</para>
+
+      <para>Methods that do not get matched with any of the listed rules are
+      deemed to be action methods that we expect the user to invoke via the
+      user interface. These are public methods, of the following format</para>
+
+      <programlisting format="linespecific">public void &lt;actionName&gt;([&lt;property type&gt; param]...)
+public &lt;type&gt; &lt;actionName&gt;([&lt;property type&gt; param]...)</programlisting>
+
+      <para>that are not used for fields, titles, or for controlling other
+      methods. Essentially they are the methods left over from generating all
+      other aspects of the class. When such a method returns a reference the
+      framework will attempt to display that object. If an action method
+      returns <literal moreinfo="none">null</literal> then nothing will be
+      displayed.</para>
     </appendix>
 
     <appendix>
