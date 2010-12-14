@@ -245,6 +245,10 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     @Override
     protected String doEncode(final Object object) {
         final Date date = dateValue(object);
+        return encode(date);
+    }
+
+    private synchronized String encode(final Date date) {
         return encodingFormat.format(date);
     }
 
@@ -254,7 +258,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
         cal.setTimeZone(UTC_TIME_ZONE);
         
         try {
-            cal.setTime(encodingFormat.parse(data));
+            cal.setTime(parse(data));
             clearFields(cal);
             return setDate(cal.getTime());
         } catch (final ParseException e) {
@@ -267,6 +271,10 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
         		throw new EncodingException(e);
         	}
         }
+    }
+
+    private synchronized Date parse(final String data) throws ParseException {
+        return encodingFormat.parse(data);
     }
 
     // //////////////////////////////////////////////////////////////////
