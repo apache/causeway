@@ -4097,80 +4097,59 @@ isis.fixtures= ClaimsFixture,LogOnAsCliveFixture</programlisting>
         directly or using a builder.</para>
 
         <sect2>
-          <title>Standard Usage</title>
+          <title>Basic Usage</title>
 
           <para>The standard usage is to instantiate directly.</para>
 
           <programlisting>XmlSnapshot snapshot = new XmlSnapshot(customer);
 Element customerAsXml = snapshot.getXmlElement();</programlisting>
 
-          <para></para>
-
-          <para>returns customer's fields, titles of simple references, number
-          of items in collections</para>
-
-          <para></para>
+          <para>This will return the <classname>Customer</classname>'s fields,
+          titles of simple references, number of items in collections.</para>
 
           <para>In order to use the <classname>XmlSnapshot</classname>, the
           domain object must implement
           <classname>org.apache.isis.applib.snapshot.Snapshottable</classname>.
           This is just a marker interface.</para>
-
-          <para>Notes:</para>
-
-          <orderedlist>
-            <listitem>
-              <para>navigates to another domain object represented by simple
-              reference &amp;quot;placeOfBirth&amp;quot;</para>
-            </listitem>
-
-            <listitem>
-              <para>navigates to all <classname>Order</classname>s of
-              <classname>Customer</classname>, and from them for their
-              <classname>Product</classname>s</para>
-            </listitem>
-
-            <listitem>
-              <para></para>
-            </listitem>
-          </orderedlist>
         </sect2>
 
         <sect2>
-          <title>Including</title>
+          <title>Including other Elements</title>
 
-          <para></para>
+          <para>It's also possible to instruct the
+          <classname>XmlSnapshot</classname> to "walk" the object graph and
+          include other information within the generated
+          <acronym>XML</acronym>.</para>
 
-          <para>Note that XmlSnapshot is mutable; it's possible</para>
+          <para>For example:</para>
 
           <programlisting>XmlSnapshot snapshot = new XmlSnapshot(customer);
-snapshot.include("placeOfBirth"); // (1)
+snapshot.include("placeOfBirth");   // (1)
 snapshot.include("orders/product"); // (2)
-Element customerAsXml = snapshot.getXmlElement(); // (3)</programlisting>
-
-          <para></para>
-        </sect2>
-
-        <sect2>
-          <title>Fluent Usage</title>
-
-          <para>There is also an alternative "fluent" use:</para>
-
-          <programlisting>XmlSnapshot snapshot = 
-     XmlSnapshot.create(customer)
-                .includePath("placeOfBirth")
-                .include("orders/product")
-                .build();
 Element customerAsXml = snapshot.getXmlElement();</programlisting>
 
-          <para>Alternatively, the domain object can also implement</para>
+          <para>In (1), we indicate that we want to also navigate to another
+          domain object represented by simple reference "placeOfBirth"; in
+          (2), we indicate that we want to navigate the "orders" collection
+          (presumably of <classname>Order</classname>s) and for each
+          referenced <classname>Order</classname>, to navigate in turn its
+          "product" reference (presumably to a <classname>Product</classname>
+          class).</para>
+
+          <para>Note that <classname>XmlSnapshot</classname> is mutable, in
+          that calls to its <methodname>getXmlElement()</methodname> may
+          return different <acronym>XML</acronym> structures based on whether
+          additional paths have been <methodname>include()</methodname>'d, or
+          whether the state of the domain objects themselves have
+          changed.</para>
         </sect2>
       </sect1>
 
       <sect1>
-        <title>Fluent Usage</title>
+        <title>Using the Fluent API</title>
 
-        <para>There is also an alternative "fluent" use:</para>
+        <para>An <classname>XmlSnapshot</classname> can also be constructed
+        using an alternative "fluent" API:</para>
 
         <programlisting>XmlSnapshot snapshot = 
      XmlSnapshot.create(customer)
@@ -4178,17 +4157,63 @@ Element customerAsXml = snapshot.getXmlElement();</programlisting>
                 .include("orders/product")
                 .build();
 Element customerAsXml = snapshot.getXmlElement();</programlisting>
+      </sect1>
 
-        <para>In order to use the <classname>XmlSnapshot</classname>, the
-        domain object must implement
-        <classname>org.apache.isis.applib.snapshot.Snapshottable</classname>.
-        This is just a marker interface.</para>
+      <sect1>
+        <title>The <classname>SnapshottableWithInclusions</classname>
+        interface</title>
 
-        <para>Alternatively, the domain object can also implement</para>
+        <para>As already mentioned, in order to be snapshotted a domain object
+        must implement the <classname>Snapshot</classname> interface. This is
+        just a marker interface, so implementing it is trivial.</para>
 
-        <para></para>
+        <para>Alternatively, the domain object can choose to implement the
+        sub-interface, <classname>SnapshottableWithInclusions</classname>.
+        This moves the responsibility for determining what is included within
+        the snapshot from the caller to the snapshottable object
+        itself:</para>
 
-        <para></para>
+        <programlisting>public interface SnapshottableWithInclusions extends Snapshottable {
+    List&lt;String&gt; snapshotInclusions();
+}</programlisting>
+
+        <para>If necessary, both approaches can be combined.</para>
+      </sect1>
+
+      <sect1>
+        <title>Generating an XSD schema</title>
+
+        <para>As well as obtaining the XML snapshot, it is also possible to
+        obtain an XSD schema that the XML snapshot conforms to.</para>
+
+        <programlisting>XmlSnapshot snapshot = ...;
+Element customerAsXml = snapshot.getXmlElement();
+Element customerXsd = snapshot.getXsdElement();</programlisting>
+
+        <para>This can be useful for some tools. Note that for the
+        <acronym>XSD</acronym> to be correct, the object being snapshotted
+        must have non-null values for the paths that are
+        <methodname>include()</methodname>'d. If this isn't done then the XSD
+        will not be correct reflect for another snapshotted object that does
+        have non-null values.</para>
+      </sect1>
+
+      <sect1>
+        <title>Hints and Tips</title>
+
+        <para>As an alternative to using include(), you might consider
+        building a non-persisted domain object (a "view model") which can
+        reference only the relevant information required for the
+        snapshot.</para>
+
+        <para>For example, if only the 5 most recent
+        <classname>Order</classname>s for a <classname>Customer</classname>
+        were required, a <classname>CustomerAndRecentOrders</classname> view
+        model could hold a collection of just those 5
+        <classname>Order</classname>s.</para>
+
+        <para>Typically such view models would implement
+        <classname>SnapshottableWithInclusions</classname>.</para>
       </sect1>
     </chapter>
   </part>
