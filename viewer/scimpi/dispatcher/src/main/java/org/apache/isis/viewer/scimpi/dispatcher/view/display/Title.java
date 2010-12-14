@@ -26,6 +26,7 @@ import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ForbiddenException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 
 public class Title extends AbstractElementProcessor {
@@ -36,7 +37,7 @@ public class Title extends AbstractElementProcessor {
         boolean isIconShowing = request.isRequested(SHOW_ICON, true);
         String className = request.getOptionalProperty(CLASS);
         className = className == null ? "title-icon" : className;
-        ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
+        ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
         if (fieldName != null) {
             ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
             if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {

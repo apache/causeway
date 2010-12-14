@@ -23,6 +23,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
+import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 
@@ -33,21 +34,36 @@ public class User extends AbstractElementProcessor {
     private static final String DEFAULT_LOGOUT_VIEW = "logout." + Dispatcher.EXTENSION;
 
     public void process(Request request) {
-        boolean isLoggedIn = IsisContext.getSession() != null;
+        boolean isLoggedIn = !(IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession);
         request.appendHtml("<div class=\"user\">");
         if (isLoggedIn) {
-            String user = request.getOptionalProperty(NAME);
-            if (user == null) {
-                user = IsisContext.getAuthenticationSession().getUserName();
-            }
-            request.appendHtml("Welcome <span class=\"name\">" + user + "</span>, ");
-            String logoutView = request.getOptionalProperty(LOGOUT_VIEW, DEFAULT_LOGOUT_VIEW);
-            request.appendHtml("<a class=\"link\" href=\"logout.app?view=" + logoutView + "\">Log out</a>");
+            displayUserAndLogoutLink(request);
         } else {
-            String loginView = request.getOptionalProperty(LOGIN_VIEW, DEFAULT_LOGIN_VIEW);
-            request.appendHtml("<a div class=\"link\" href=\"" + loginView + "\">Log in</a>");
+            displayLoginForm(request);
         }
         request.appendHtml("</div>");
+    }
+
+    public void displayLoginForm(Request request) {
+        String loginView = request.getOptionalProperty(LOGIN_VIEW);
+        if (loginView == null) {
+            Logon.loginForm(request, ".");
+        } else {
+            if (loginView.trim().length() == 0) {
+                loginView = DEFAULT_LOGIN_VIEW;
+            }
+            request.appendHtml("<a div class=\"link\" href=\"" + loginView + "\">Log in</a>");
+        }
+    }
+
+    public void displayUserAndLogoutLink(Request request) {
+        String user = request.getOptionalProperty(NAME);
+        if (user == null) {
+            user = IsisContext.getAuthenticationSession().getUserName();
+        }
+        request.appendHtml("Welcome <span class=\"name\">" + user + "</span>, ");
+        String logoutView = request.getOptionalProperty(LOGOUT_VIEW, DEFAULT_LOGOUT_VIEW);
+        request.appendHtml("<a class=\"link\" href=\"logout.app?view=" + logoutView + "\">Log out</a>");
     }
 
     public String getName() {

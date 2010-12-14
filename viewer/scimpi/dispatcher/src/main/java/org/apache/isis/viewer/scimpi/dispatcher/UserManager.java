@@ -40,14 +40,17 @@ public class UserManager {
         return instance.authenticationManager;
     }
 
-    public static void startRequest(RequestContext context) {
+    public static AuthenticationSession startRequest(RequestContext context) {
         AuthenticationSession session = context.getSession();
         if (session == null) {
             session = new UserlessSession();
+            LOG.info("start anonymous request: " + session);
+        } else {
+            LOG.info("start request for: " + session.getUserName());
         }
-        LOG.info("start request: " + session);
         IsisContext.closeSession();
         IsisContext.openSession(session);
+        return session;
     }
 
     public static AuthenticationSession authenticate(AuthenticationRequestPassword passwordAuthenticationRequest) {
@@ -61,7 +64,11 @@ public class UserManager {
     }
 
     public static void endRequest(final AuthenticationSession session) {
-        LOG.info("end request: " + session);
+        if (session == null) {
+            LOG.info("end anonymous request");
+        } else {
+            LOG.info("end request for: " + session.getUserName());
+        }
         IsisContext.closeSession();
     }
 

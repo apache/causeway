@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -41,6 +42,8 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.viewer.scimpi.dispatcher.action.ActionAction;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Debug;
@@ -64,7 +67,6 @@ import org.dom4j.io.SAXReader;
 
 
 public class Dispatcher {
-    private static final String LOGIN = "login";
     public static final String ACTION = "_action";
     public static final String EDIT = "_edit";
     public static final String REMOVE = "_remove";
@@ -81,62 +83,52 @@ public class Dispatcher {
     public void process(RequestContext context, String servletPath) {
 
         try {
-        /*
-         *  This is commented out untill the comment above is dealt with.  Once that is done this can be deleted.           
-            if (session == null && IsisContext.getSession() == null && !servletPath.endsWith("logon.app")) {
-                String username = getParameter("username");
-                if (username == null) {
-                    UserManager.startRequest(session);
-                    context.setRequestPath("/" + LOGIN + "." + EXTENSION);
-                    String contextPath = context.getContextPath();
-                    String queryString = context.getQueryString();
-                    context.addVariable("login-path", contextPath + servletPath + (queryString == null ? "" : "?" + queryString),
-                            Scope.REQUEST);
-                } else {
-                    String password = getParameter("password");
-                    session = UserManager.authenticate(new AuthenticationRequestPassword(username, password));
-                    context.setSession(session);
-                    context.setRequestPath(servletPath);
-                    UserManager.startRequest(session);
-                    context.startRequest();
-                }
-            } else {
-                UserManager.startRequest(session);
-                context.startRequest();
-                context.setRequestPath(servletPath);
-                processActions(context, servletPath);
-            }
-            */
-            UserManager.startRequest(context);
-            AuthenticationSession session = context.getSession(); 
+            AuthenticationSession session = UserManager.startRequest(context);
+            LOG.debug("exsiting session: " + session);
+            LOG.info("processing request " + servletPath);
+
             IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
-            context.startRequest();
             context.setRequestPath(servletPath);
+            context.startRequest();
+            
             // TODO review how session should start 
-   //         if (!newSession || servletPath.endsWith(context.getContextPath() + "/logon.app")) {
-                // sessions should not start of with an action
-                processActions(context, servletPath);
-                boolean stillSameSession = context.getSession() == session;
-                List<String> copyMessages = IsisContext.getMessageBroker().getMessages();
-                List<String> copyWarnings = IsisContext.getMessageBroker().getWarnings();
-                if (stillSameSession) {
-                    IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
-                }
-                IsisContext.getPersistenceSession().getTransactionManager().startTransaction();
-                for (String message : copyMessages) {
-                    IsisContext.getMessageBroker().addMessage(message);
-                }
-                for (String warning : copyWarnings) {
-                    IsisContext.getMessageBroker().addWarning(warning);
-                }
-                
-  //          }
+            // if (!newSession || servletPath.endsWith(context.getContextPath() + "/logon.app")) {
+            // sessions should not start of with an action
+            
+            processActions(context, servletPath);
+            IsisTransactionManager transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+            if (transactionManager.getTransaction().getState().canFlush()) {
+                transactionManager.flushTransaction();
+            }
             processView(context);
-            IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
+            // Note - the session will have changed since the earlier call if a user has logged in or out in the action processing above.
+            transactionManager = IsisContext.getPersistenceSession().getTransactionManager();
+            if (transactionManager.getTransaction().getState().canCommit()) {
+                IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
+            }
         } catch (Throwable e) {
-            LOG.error("process failed", e);
-            generateErrorPage(e, context);
-            IsisContext.getPersistenceSession().getTransactionManager().abortTransaction();
+            DebugString error = new DebugString();
+            
+            List<String> messages =  IsisContext.getMessageBroker().getMessages();
+            for (String message : messages) {
+                context.getWriter().append("<div class=\"message\">message: " + message + "</div>");
+                error.appendln("message", message);
+            }
+            messages =  IsisContext.getMessageBroker().getWarnings();
+            for (String message : messages) {
+                context.getWriter().append("<div class=\"message\">warning: " + message + "</div>");
+                error.appendln("warning", message);
+            }
+
+            generateErrorPage(e, context, error);
+            PersistenceSession checkSession = IsisContext.getPersistenceSession();
+            IsisTransactionManager transactionManager = checkSession.getTransactionManager();
+            if (transactionManager.getTransaction().getState().canAbort()) {
+                transactionManager.abortTransaction();
+            }
+            
+            String message = "failed while processing " + servletPath;
+            LOG.error(message + "\n" + error + "\n" + message, e);
 
         } finally {
             try {
@@ -168,7 +160,7 @@ public class Dispatcher {
                 throw new ScimpiException("No logic for " + actionName);
             }
 
-            LOG.debug("processing " + action);
+            LOG.debug("processing action: " + action);
             action.process(context);
             String fowardTo = context.forwardTo();
             if (fowardTo != null) {
@@ -199,16 +191,7 @@ public class Dispatcher {
         request.appendDebug("processing " + fullPath); 
         try {
             request.processNextTag();
-            List<String> messages = IsisContext.getMessageBroker().getMessages();
-            if (messages.size() > 0) {
-                // TODO write out all messages
-                context.getWriter().println("Ignored messages");
-            }
-            List<String> warnings = IsisContext.getMessageBroker().getWarnings();
-            if (warnings.size() > 0) {
-                // TODO write out all warning
-                context.getWriter().println("Ignored warnings");
-            }
+            noteIfMessagesHaveNotBeenDisplay(context);
             IsisContext.getUpdateNotifier().clear();
         } catch (RuntimeException e) {
             IsisContext.getMessageBroker().getMessages();
@@ -219,10 +202,23 @@ public class Dispatcher {
         String page = request.popBuffer();
         context.getWriter().write(page);
         if (context.getDebug() == Debug.PAGE) {
-            DebugView view = new DebugView(context.getWriter());
+            DebugView view = new DebugView(context.getWriter(), new DebugString());
             view.startTable();
             context.append(view);
             view.endTable();
+        }
+    }
+
+    public void noteIfMessagesHaveNotBeenDisplay(RequestContext context) {
+        List<String> messages = IsisContext.getMessageBroker().getMessages();
+        if (messages.size() > 0) {
+            // TODO write out all messages
+            context.getWriter().println("Note - messages existed but where not displayed");
+        }
+        List<String> warnings = IsisContext.getMessageBroker().getWarnings();
+        if (warnings.size() > 0) {
+            // TODO write out all warning
+            context.getWriter().println("Note - warnings existed but where not displayed");
         }
     }
 
@@ -314,12 +310,12 @@ public class Dispatcher {
      */
     }
 
-    private void generateErrorPage(Throwable exception, RequestContext requestContext) {
+    private void generateErrorPage(Throwable exception, RequestContext requestContext, DebugString error) {
         requestContext.setStatus(500);
         requestContext.setContentType("text/html");
 
         PrintWriter writer = requestContext.getWriter();
-        DebugView errorView = new DebugView(writer);
+        DebugView errorView = new DebugView(writer, error);
         errorView.header();
         errorView.startTable();
         try {

@@ -33,6 +33,7 @@ import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 
 public abstract class AbstractConditionalBlock extends AbstractElementProcessor {
@@ -42,7 +43,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         
         String method = request.getOptionalProperty(METHOD + "-visible");
         if (method != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             // TODO needs to work irrespective of parameters 
             ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, new ObjectSpecification[0]);
             Consent visible = objectAction.isVisible(IsisContext.getAuthenticationSession(), object);
@@ -52,7 +53,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         method = request.getOptionalProperty(METHOD + "-usable");
         if (method != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             // TODO needs to work irrespective of parameters 
             ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, new ObjectSpecification[0]);
             Consent usable = objectAction.isUsable(IsisContext.getAuthenticationSession(), object);
@@ -62,7 +63,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         method = request.getOptionalProperty(METHOD + "-exists");
         if (method != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActionList(ObjectActionType.USER);
             boolean methodExists = false;
             for (ObjectAction objectAssociation : objectActions) {
@@ -77,7 +78,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         String field = request.getOptionalProperty(FIELD + "-visible");
         if (field != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             Consent visible = objectField.isVisible(IsisContext.getAuthenticationSession(), object);
             processTags(visible.isAllowed(), request);
@@ -86,7 +87,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         field = request.getOptionalProperty(FIELD + "-exists");
         if (field != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             List<? extends ObjectAssociation> objectFields = object.getSpecification().getAssociationList();
             boolean fieldExists = false;
             for (ObjectAssociation objectAssociation : objectFields) {
@@ -101,7 +102,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         field = request.getOptionalProperty(FIELD + "-editable");
         if (field != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             Consent usable = objectField.isUsable(IsisContext.getAuthenticationSession(), object);
             processTags(usable.isAllowed(), request);
@@ -110,7 +111,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         
         field = request.getOptionalProperty(FIELD + "-empty");
         if (field != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             IsisContext.getPersistenceSession().resolveField(object, objectField);
             ObjectAdapter fld = objectField.get(object);
@@ -127,7 +128,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         
         field = request.getOptionalProperty(FIELD + "-set");
         if (field != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             ObjectAssociation objectField = object.getSpecification().getAssociation(field);
             IsisContext.getPersistenceSession().resolveField(object, objectField);
             ObjectAdapter fld = objectField.get(object);
@@ -150,7 +151,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         String type = request.getOptionalProperty(TYPE);
         if (type != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(id);
+            ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             Class<?> cls = forClass(request);
             boolean hasType = cls == null || cls.isAssignableFrom(object.getObject().getClass()); 
             processTags(hasType, request);

@@ -41,6 +41,7 @@ public class ActionButton extends AbstractElementProcessor {
         String methodName = request.getRequiredProperty(METHOD);
         String forwardResultTo = request.getOptionalProperty(VIEW);
         String forwardVoidTo = request.getOptionalProperty(VOID);
+        String forwardErrorTo = request.getOptionalProperty(ERRORS);
         String variable = request.getOptionalProperty(RESULT_NAME);
         String scope = request.getOptionalProperty(SCOPE);
         String buttonTitle = request.getOptionalProperty(TITLE);
@@ -74,7 +75,7 @@ public class ActionButton extends AbstractElementProcessor {
         
         if (MethodsUtils.isVisibleAndUsable(object, action) && MethodsUtils.canRunMethod(object, action, objectParameters).isAllowed()) {
             // TODO use the form creation mechanism as used in ActionForm
-            write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, variable, scope, buttonTitle, resultOverride, idName, className);
+            write(request, object, action, parameters, objectId, version, forwardResultTo, forwardVoidTo, forwardErrorTo, variable, scope, buttonTitle, resultOverride, idName, className);
         }
         request.popBlockContent();
     }
@@ -88,6 +89,7 @@ public class ActionButton extends AbstractElementProcessor {
             String version,
             String forwardResultTo,
             String forwardVoidTo,
+            String forwardErrorTo,
             String variable,
             String scope,
             String buttonTitle, 
@@ -135,8 +137,13 @@ public class ActionButton extends AbstractElementProcessor {
             forwardResultTo = context.fullFilePath(forwardResultTo);
             request.appendHtml("  <input type=\"hidden\" name=\"" + VIEW + "\" value=\"" + forwardResultTo + "\" />\n");
         }
+        if (forwardErrorTo == null) {
+            forwardErrorTo = request.getContext().getResourceFile();
+        }
+        forwardErrorTo = context.fullFilePath(forwardErrorTo);
+        request.appendHtml("  <input type=\"hidden\" name=\"" + ERRORS + "\" value=\"" + forwardErrorTo + "\" />\n");
         if (forwardVoidTo == null) {
-           forwardVoidTo = request.getContext().getResourceFile();
+            forwardVoidTo = request.getContext().getResourceFile();
         }
         forwardVoidTo = context.fullFilePath(forwardVoidTo);
         request.appendHtml("  <input type=\"hidden\" name=\"" + VOID + "\" value=\"" + forwardVoidTo + "\" />\n");

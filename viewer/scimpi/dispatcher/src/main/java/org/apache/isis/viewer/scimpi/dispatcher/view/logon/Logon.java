@@ -23,7 +23,9 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.logon;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
+import org.apache.isis.viewer.scimpi.dispatcher.UserlessSession;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.HiddenInputField;
 import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputField;
@@ -38,23 +40,30 @@ public class Logon extends AbstractElementProcessor {
             view = (String) request.getContext().getVariable("login-path");
         }
 
+        boolean isNotLoggedIn = IsisContext.getSession().getAuthenticationSession() instanceof UserlessSession;
+        if (isNotLoggedIn) {
+            loginForm(request, view);
+        }
+    }
+
+    public static void loginForm(Request request, String view) {
         String error = request.getOptionalProperty(ERRORS, request.getContext().getRequestedFile());
         List<HiddenInputField> hiddenFields = new ArrayList<HiddenInputField>();
         hiddenFields.add(new HiddenInputField(ERRORS, error));
         if (view != null) {
             hiddenFields.add(new HiddenInputField(VIEW, view));
         }
-
+   
         InputField nameField = new InputField("username");
         nameField.setType(InputField.TEXT);
         nameField.setLabel("User Name");
-
+   
         InputField passwordField = new InputField("password");
         passwordField.setType(InputField.PASSWORD);
         passwordField.setLabel("Password");
-
+   
         InputField[] fields = new InputField[] { nameField, passwordField, };
-
+   
         String legend = request.getOptionalProperty(LEGEND);
         String loginButtonTitle = request.getOptionalProperty(TITLE, "Log in");
         String className = request.getOptionalProperty(CLASS, "login");

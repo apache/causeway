@@ -56,7 +56,7 @@ public class DebugAction implements Action {
     public void debug(DebugView view) {}
 
     public void process(RequestContext context) throws IOException {
-        DebugView view = new DebugView(context.getWriter());
+        DebugView view = new DebugView(context.getWriter(), new DebugString());
         view.header();
         view.appendln("<div class=\"links\">");
         view.appendln("<a href=\"debug.app?action=system\">System</a>");

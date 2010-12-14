@@ -22,12 +22,16 @@ package org.apache.isis.viewer.scimpi.dispatcher.debug;
 
 import java.io.PrintWriter;
 
+import org.apache.isis.core.commons.debug.DebugString;
+
 
 public class DebugView {
     private final PrintWriter writer;
+    private final DebugString debug;
 
-    public DebugView(PrintWriter writer) {
+    public DebugView(PrintWriter writer, DebugString debug) {
         this.writer = writer;
+        this.debug = debug;
     }
     
     public void header() {
@@ -58,6 +62,7 @@ public class DebugView {
         String message = e.getMessage();
         if (message != null) {
             writer.println("<tr><td class=\"error\" colspan=\"2\" >" + message + "<td></tr>");
+            debug.appendln(message);
         }
         causingException(e);
         writer.println("<tr><td class=\"code\" colspan=\"2\" >");
@@ -69,12 +74,14 @@ public class DebugView {
         Throwable cause = throwable.getCause();
         if (cause != null && cause != throwable) {
             writer.println("<tr><td colspan=\"2\" >" + cause.getMessage() + "<td></tr>");
+            debug.append(cause.getMessage());
             causingException(cause);
         }
     }
 
     public void divider(String title) {
         writer.println("<tr><th class=\"title\" colspan=\"2\" >" + title + "</th></tr>");
+        debug.appendTitle(title);
     }
 
     public void endTable() {
@@ -82,12 +89,14 @@ public class DebugView {
     }
 
     public void appendRow(String name, Object object) {
-        writer.println("<tr><td class=\"label\">" + name + "</td><td>"
-                + (object == null ? "null" : object.toString()) + "<td></tr>");
+        String value = object == null ? "null" : object.toString();
+        writer.println("<tr><td class=\"label\">" + name + "</td><td>" + value + "<td></tr>");
+        debug.appendln(name, value);
     }
 
     public void appendRow(Object object) {
         writer.println("<tr><td colspan=\"2\">" + object.toString() + "<td></tr>"); 
+        debug.appendln(object.toString());
     } 
 
     public void appendDebugTrace(String text) { 
