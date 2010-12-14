@@ -18,26 +18,27 @@
  */
 
 
-package org.apache.isis.applib.switchuser;
+package org.apache.isis.applib.annotation;
 
-import org.apache.isis.applib.fixtures.AbstractFixture;
-import org.apache.isis.applib.profiles.ProfileService;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 
 /**
- * Not intended to be used directly; decouples the {@link AbstractFixture}, which needs to
- * be able to switch users dynamically, from the rest of the framework's runtime.
+ * Indicates the a (service) action should be not be displayed in the service menu.
  * 
  * <p>
- * A suitable implementation is injected into {@link AbstractFixture} when installed.
+ * It may still be contributed (unless it has been annotated as {@link NotContributed}).
+ * If {@link Hidden}, then also implies that the menu should not appear in the service menu.
  * 
- * @see ProfileService
+ * <p>
+ * Has no meanings for actions on regular entities.
  */
-public interface SwitchUserService {
-
-    /**
-     * Switches the current user with the list of specified roles.
-     */
-    void switchUser(String username, String... roles);
-}
+@Inherited
+@Target( { ElementType.METHOD })
+@Retention(RetentionPolicy.RUNTIME)
+public @interface NotInServiceMenu {}
 

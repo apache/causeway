@@ -28,12 +28,11 @@ import org.apache.isis.applib.security.UserMemento;
 
 
 /**
- * Represents a container that the domain objects work within. It provides access to the persistence mechanism
- * and user interface.
+ * Represents a container that the domain objects work within. It provides access to the persistence mechanism and user interface.
  */
 public interface DomainObjectContainer {
 
-	//////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////
 	// resolve, objectChanged
 	//////////////////////////////////////////////////////////////////
 
@@ -188,7 +187,7 @@ public interface DomainObjectContainer {
 
     /**
      * Warn the user about a situation with the specified message. The container should guarantee to display
-     * this warning to the user.
+     * this warning to the user, and will typically require acknowledgement.
      * 
      * @see #raiseError(String)
      * @see #informUser(String)
@@ -197,7 +196,8 @@ public interface DomainObjectContainer {
 
     /**
      * Notify the user of an application error with the specified message. Note this will probably be
-     * displayed in an alarming fashion, so is only suitable for errors
+     * displayed in an alarming fashion, so is only suitable for errors.  The user will typically
+     * be required to perform additional steps after the error (eg to inform the helpdesk).
      * 
      * @see #warnUser(String)
      * @see #informUser(String)
@@ -228,8 +228,10 @@ public interface DomainObjectContainer {
     //////////////////////////////////////////////////////////////////
 
     /**
-     * Get the details about the current user.
-     */
+	 * Get the details about the current user.
+	 * @uml.property  name="user"
+	 * @uml.associationEnd  
+	 */
     UserMemento getUser();
 
     

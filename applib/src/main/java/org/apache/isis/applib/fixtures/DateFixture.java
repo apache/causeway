@@ -33,9 +33,10 @@ package org.apache.isis.applib.fixtures;
  * 
  * @see SwitchUserFixture
  */
-public class DateFixture extends AbstractFixture {
+public class DateFixture extends BaseFixture {
 
     public DateFixture(final int year, final int month, final int day, final int hour, final int minutes) {
+        super(FixtureType.OTHER);
         this.year = year;
         this.month = month;
         this.day = day;
@@ -46,6 +47,7 @@ public class DateFixture extends AbstractFixture {
     public DateFixture(final int year, final int month, final int day) {
         this(year, month, day, 0, 0);
     }
+
 
     private final int year;
 
@@ -73,6 +75,7 @@ public class DateFixture extends AbstractFixture {
         return minute;
     }
 
+    
     @Override
     public void install() {
         setDate(year, month, day);

@@ -20,6 +20,14 @@
 
 package org.apache.isis.applib.fixtures;
 
+import java.util.List;
+
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
+
 /**
  * Sole purpose is to switch the current user while object fixtures are being installed.
  * 
@@ -34,50 +42,38 @@ package org.apache.isis.applib.fixtures;
  * @see DateFixture
  * @see LogonFixture
  */
-public class SwitchUserFixture extends AbstractFixture {
+public class SwitchUserFixture extends BaseFixture implements SwitchUserServiceAware {
 
-    public SwitchUserFixture(final int year, final int month, final int day, final int hour, final int minutes) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
-        this.hour = hour;
-        this.minute = minutes;
+    private final String username;
+    private final List<String> roles;
+    private SwitchUserService switchUserService;
+
+    public SwitchUserFixture(final String username, final String... roles) {
+    	this(username, Lists.newArrayList(roles));
     }
 
-    public SwitchUserFixture(final int year, final int month, final int day) {
-        this(year, month, day, 0, 0);
+    public SwitchUserFixture(final String username, final List<String> roles) {
+        super(FixtureType.OTHER);
+        this.username = username;
+        this.roles = ImmutableList.copyOf(roles);
     }
 
-    private final int year;
-
-    public int getYear() {
-        return year;
+    public String getUsername() {
+        return username;
     }
-    private final int month;
-
-    public int getMonth() {
-        return month;
-    }
-    private final int day;
-
-    public int getDay() {
-        return day;
-    }
-    private final int hour;
-
-    public int getHour() {
-        return hour;
-    }
-    private final int minute;
-
-    public int getMinute() {
-        return minute;
+    
+    public List<String> getRoles() {
+        return roles;
     }
 
     @Override
     public void install() {
-        setDate(year, month, day);
-        setTime(hour, minute);
+        switchUserService.switchUser(username, roles.toArray(new String[]{}));
+    }
+
+    @Override
+    public void setService(SwitchUserService switchUserService) {
+        this.switchUserService = switchUserService;
     }
 
 }

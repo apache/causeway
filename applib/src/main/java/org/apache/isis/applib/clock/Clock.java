@@ -21,6 +21,7 @@
 package org.apache.isis.applib.clock;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.fixtures.FixtureClock;
@@ -69,12 +70,29 @@ public abstract class Clock {
 		return instance != null;
 	}
 
+	/**
+	 * The time as the number of millseconds since the epoch.
+	 * 
+	 * @see Date#getTime()
+	 */
     public static long getTime() {
         return getInstance().time();
     }
 
+    /**
+     * Convenience method returning the current {@link #getTime() time}
+     * according to this Clock as a mutable {@link Calendar}.
+     */
     public static Calendar getTimeAsCalendar() {
         return getInstance().timeAsCalendar();
+    }
+
+    /**
+     * Convenience method returning the current {@link #getTime() time}
+     * according to this Clock as a (nominally im)mutable {@link Date}.
+     */
+    public static Date getTimeAsDate() {
+        return new Date(getTime());
     }
 
 	private static void ensureReplaceable() {

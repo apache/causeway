@@ -153,40 +153,61 @@
     <sect1>
       <title>Where Next?</title>
 
-      <para>This guide itself is in two parts. The first is a set of chapters
-      is written in the style of recipes/cookbooks, providing a "how-to" guide
-      on developing domain objects. This is good reading if you are just
-      starting out. The second part is a series of appendices that provide
-      details of the programming model in reference form. You should find this
-      more useful if you've used Isis for a while and just need to check on a
+      <para>This guide itself is in several parts. The first part is a set of
+      chapters is written in the style of recipes/cookbooks, providing a
+      "how-to" guide on developing domain objects. This is good reading if you
+      are just starting out. The second part provides details on other
+      supporting features relevant to writing domain applications. The final
+      part is a series of appendices that provide details of the programming
+      model in reference form. You should find this more useful if you've used
+      <emphasis>Isis</emphasis> for a while and just need to check on a
       specific detail.</para>
     </sect1>
   </chapter>
 
   <part>
-    <title>Recipes</title>
+    <title>Writing Domain Objects</title>
 
     <partintro>
-      <para>This part of the guide is a set of chapters that provides recipes
-      / how-to's for the object, for services, for fixtures and
-      so-forth.</para>
+      <para>This part of the guide is a set of chapters that provides how-to's
+      for writing domain objects, by which we mean domain entities, value
+      types, services and repositories/factories.</para>
     </partintro>
 
     <chapter id="chp.Objects">
-      <title>Object Recipes</title>
+      <title>Domain Entities</title>
 
       <abstract>
         <para>How-to's relating to the object itself</para>
       </abstract>
 
       <para>This chapter contains how-to's for programming conventions that
-      apply to the object itself.</para>
+      apply to the domain objects, or more specifically domain entities.
+      Domain values conventions are covered in <xref
+      linkend="chp.ValueTypes" />.</para>
 
-      <para></para>
+      <sect1>
+        <title>How to not inherit from framework classes</title>
 
-      <para>*** mention org.apache.isis.applib.AbstractDomainObject</para>
+        <para>It isn't mandatory for domain entities to inherit from any
+        framework superclass; they can be plain-old pojos if required.
+        However, they do at a minimum need to have a
+        <classname>org.apache.isis.applib.DomainObjectContainer</classname>
+        injected into them (an interface), from which other framework services
+        can be accessed.</para>
 
-      <para></para>
+        <para>If you don't have a requirement to inherit from any other
+        superclass, then it usually makes sense to inherit from mention
+        <classname>org.apache.isis.applib.AbstractDomainObject</classname>,
+        which already supports the
+        <classname>DomainObjectContainer</classname> and has a number of
+        convenience helper methods.</para>
+
+        <para>There is further coverage on
+        <classname>DomainObjectContainer</classname> in <xref
+        linkend="sec.LifecycleMethods" /> and also in <xref
+        linkend="chp.DomainServices" />.</para>
+      </sect1>
 
       <sect1>
         <title condition="java">How to specify a title for an object</title>
@@ -214,7 +235,8 @@
 
         <para>The applib contains a class,
         <classname>org.apache.isis.applib.util.TitleBuffer</classname>, which
-        you can use to help create title strings if you so wish.</para>
+        you can use to help create title strings if you so wish. See <xref
+        linkend="apx.UtilityClasses" /> for more details.</para>
       </sect1>
 
       <sect1 id="sec.HowToSpecifyTheIconForAnObjectsClass">
@@ -237,7 +259,9 @@
         will work up the inheritance hierarchy to see if there is an icon
         matching the name of any of the super-classes, and use that instead.
         If no matching icon is found then the framework will look for an image
-        called <filename class="directory" moreinfo="none">default</filename>
+        called <filename class="directory"
+        moreinfo="none">default.png</filename>,
+        <filename>default.gif</filename> or <filename>default.jpg</filename>
         in the images directory, and if this has not been specified, then the
         framework will use its own default image for an icon.</para>
 
@@ -406,7 +430,7 @@ public class PaymentMethod {
         it is important that the framework is made aware of the existence of
         this new object - in order that it may be persisted to the object
         store, and in order that any services that the new object needs are
-        injected into it. </para>
+        injected into it.</para>
 
         <para>Just specifying <literal moreinfo="none">new
         Customer()</literal>, for example, will create a
@@ -415,7 +439,9 @@ public class PaymentMethod {
         do not want to tie our domain objects to a particular framework, we
         use the idea of a 'container' to mediate, specified by the <literal
         moreinfo="none">org.apache.isis.applib.DomainObjectContainer</literal>
-        interface.</para>
+        interface. See <xref linkend="apx.DomainObjectContainer" /> for the
+        full list of methods provided by
+        <classname>DomainObjectContainer</classname>.</para>
 
         <para>This interface defines the following methods for managing domain
         objects:</para>
@@ -423,8 +449,8 @@ public class PaymentMethod {
         <itemizedlist>
           <listitem>
             <para><literal moreinfo="none">&lt;T&gt; T
-            newTransientInstance(final Class&lt;T&gt; ofClass)</literal>
-            </para>
+            newTransientInstance(final Class&lt;T&gt;
+            ofClass)</literal></para>
 
             <para>Returns a new instance of the specified class, that is
             transient (unsaved). The object may subsequently be saved either
@@ -451,7 +477,7 @@ public class PaymentMethod {
 
           <listitem>
             <para><methodname>void persist(Object
-            transientObject)</methodname> </para>
+            transientObject)</methodname></para>
 
             <para>Persists a transient object (created using
             <methodname>newTransientInstance(...)</methodname>, see
@@ -502,7 +528,7 @@ public final void setContainer(final DomainObjectContainer container) {
         create a new <classname>Customer</classname> object within another
         method:</para>
 
-        <programlisting format="linespecific">Customer newCust = (Customer) getContainer().newTransientInstance(Customer.class);
+        <programlisting format="linespecific">Customer newCust = getContainer().newTransientInstance(Customer.class);
 newCust.setName("Charlie");
 getContainer().persist(newCust);</programlisting>
 
@@ -514,6 +540,18 @@ getContainer().persist(newCust);</programlisting>
         <programlisting format="linespecific">Customer newCust = newTransientInstance(Customer.class);
 newCust.setName("Charlie");
 persist(newCust);</programlisting>
+
+        <para>As an alternative to putting the creation logic within your
+        domain objects, you could alternatively delegate to an injected
+        factory (see <xref linkend="chp.DomainServices" />). Ultimately
+        factories just delegate back to
+        <classname>DomainObjectContainer</classname> in the same way, so from
+        a technical standpoint there is little difference. However it is
+        generally worth introducing a factory because it provides a place to
+        centralize any business logic. It also affords the opportunity to
+        introduce a domain term (eg <classname>ProductCatalog</classname> or
+        <classname>StudentRegister</classname>), thereby reinforcing the
+        "ubiquitous language".</para>
 
         <para>These methods are actually provided by the
         <classname>org.apache.isis.applib.AbstractContainedObject</classname>
@@ -602,7 +640,7 @@ persist(newCust);</programlisting>
                 <entry><methodname>persisting()</methodname> or
                 <methodname>saving()</methodname></entry>
 
-                <entry> just before a transient object is first
+                <entry>just before a transient object is first
                 persisted.</entry>
               </row>
 
@@ -730,26 +768,30 @@ persist(newCust);</programlisting>
         each date was after today.</para>
 
         <warning>
-          <para>At the time of writing, the <code>validate</code> method is
+          <para>At the time of writing, the <code>validate()</code> method is
           called only when the object is first saved, not when it is
-          subsequently updated. For validation of subsequent updates, it is
-          necessary to build the validation logic into the individual property
-          validation methods, though these could delegate to a common
-          <code>validate</code> method.</para>
+          subsequently updated. For validation of subsequent updates, the
+          workaround is necessary to build the validation logic into the
+          individual property validation methods (though these could delegate
+          to a common <code>validate()</code> method).</para>
+
+          <para>See <ulink
+          url="https://issues.apache.org/jira/browse/ISIS-18">ISIS-18</ulink>
+          for the status of this issue.</para>
         </warning>
       </sect1>
     </chapter>
 
     <chapter id="chp.Properties">
-      <title>Property Recipes</title>
+      <title>Domain Entity Properties</title>
 
       <abstract>
-        <para>How-to's relating to an object's properties.</para>
+        <para>How-to's relating to an domain entity's properties.</para>
       </abstract>
 
       <para>The following conventions are concerned with specifying the
-      properties of an object, and the means by which a user can interact with
-      those properties.</para>
+      properties of a domain entity, and the means by which a user can
+      interact with those properties.</para>
 
       <sect1>
         <title>How to add a property to an object</title>
@@ -1141,7 +1183,7 @@ public void setPropertyName(PropertyType param)</programlisting></para>
 
           <para>A non-<code>null</code> return value indicates the reason why
           the property cannot be modified. The framework is responsible for
-          providing this feedback to the user. </para>
+          providing this feedback to the user.</para>
 
           <para>For example:</para>
 
@@ -1234,7 +1276,7 @@ public void setPropertyName(PropertyType param)</programlisting></para>
         </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.DefaultPropertyValue">
         <title>How to set up the initial value of a property
         programmatically</title>
 
@@ -1398,16 +1440,16 @@ public void setPropertyName(PropertyType param)</programlisting></para>
     </chapter>
 
     <chapter id="chp.Collections">
-      <title>Collection Recipes</title>
+      <title>Domain Entity Collections</title>
 
       <abstract>
-        <para>How-to's relating to an object's collections.</para>
+        <para>How-to's relating to a domain entity's collections.</para>
       </abstract>
 
-      <para>A collection is a list of references to several entity objects
-      that have a common type. The following conventions are concerned with
-      specifying the collections of an object, and the means by which a user
-      can interact with those collections.</para>
+      <para>A collection is a list of references to several entity that have a
+      common type. The following conventions are concerned with specifying the
+      collections of an object, and the means by which a user can interact
+      with those collections.</para>
 
       <sect1>
         <title>How to add a collection to an object</title>
@@ -1707,7 +1749,7 @@ public class Department {
 
           <para>A <literal moreinfo="none">disableXxx()</literal> method can
           be used to disable a particular instance's collection under certain
-          conditions: </para>
+          conditions:</para>
 
           <para>The syntax is:</para>
 
@@ -1888,19 +1930,19 @@ public class Department {
       </sect1>
     </chapter>
 
-    <chapter id="sec.Actions">
-      <title>Action (and Action Parameter) Recipes</title>
+    <chapter id="chp.Actions">
+      <title>Domain Entity Actions</title>
 
       <abstract>
-        <para>How-to's relating to an object's actions.</para>
+        <para>How-to's relating to a domain entity's actions.</para>
       </abstract>
 
       <para>An 'action' is a method that we expect the user to be able to
-      invoke via the user interface, though it may also be invoked
-      programmatically within the object model. The following conventions are
-      used to determine when and how methods are made available to the user as
-      actions, and the means by which a user can interact with those
-      actions.</para>
+      invoke on a domain entity via the user interface, though it may also be
+      invoked programmatically within the object model. The following
+      conventions are used to determine when and how methods are made
+      available to the user as actions, and the means by which a user can
+      interact with those actions.</para>
 
       <sect1>
         <title>How to add an action to an object</title>
@@ -1948,7 +1990,7 @@ public class Department {
         <para>Note also that <literal moreinfo="none">static</literal> methods
         are ignored: such functionality should reside in a service, such as a
         repository or factory (see <xref
-        linkend="chp.RepositoriesAndFactories" />).</para>
+        linkend="chp.DomainServices" />).</para>
       </sect1>
 
       <sect1>
@@ -2164,8 +2206,8 @@ public class Department {
 
           <para>A non-<literal>null</literal> return <code>String</code>
           indicates the reason why the action may not be invoked. The
-          framework takes responsibility to provide this feedback to the user.
-          </para>
+          framework takes responsibility to provide this feedback to the
+          user.</para>
 
           <para>For example:</para>
 
@@ -2502,16 +2544,15 @@ public class Department {
     </chapter>
 
     <chapter>
-      <title>Further Business Rule Recipes</title>
+      <title>Further Business Rule How-Tos</title>
 
       <abstract>
-        <para>Further validation recipes that apply across all class
+        <para>Further validation how-to's that apply across all class
         members</para>
       </abstract>
 
-      <para></para>
-
-      <para></para>
+      <para>This chapter has some additional recipes/how-tos relating to
+      implementing business rules. They apply across all class members.</para>
 
       <sect1 id="sec.MustSpecify">
         <title>@MustSatisfy Specification</title>
@@ -2545,9 +2586,39 @@ public class Department {
 
 }</programlisting>
 
-        <para><remark>TODO: @MustSatisfy may not work for action parameters;
-        see <ulink
-        url="http://dev.nakedobjects.org/trac/ticket/669">http://dev.nakedobjects.org/trac/ticket/669</ulink>.</remark></para>
+        <para>To help you write your own
+        <classname>Specification</classname>s, there are some adapter classes
+        in <package>org.apache.isis.applib.specs</package>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><classname>AbstractSpecification</classname>, which
+            implements <classname>Specification</classname> and takes
+            inspiration from the <ulink
+            url="http://code.google.com/p/hamcrest/">Hamcrest</ulink>
+            library's <classname>TypeSafeMatcher</classname> class</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>SpecificationAnd</classname>, which allows a set
+            of <classname>Specification</classname>s to be grouped together
+            and require that <emphasis>all</emphasis> of them are
+            satisfied</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>SpecificationOr</classname>, which allows a set
+            of <classname>Specification</classname>s to be grouped together
+            and require that <emphasis>at least one</emphasis> of them is
+            satisfied</para>
+          </listitem>
+
+          <listitem>
+            <para><classname>SpecificationNot</classname>, which requires that
+            the provided <classname>Specification</classname> is
+            <emphasis>not</emphasis> satisfied</para>
+          </listitem>
+        </itemizedlist>
       </sect1>
 
       <sect1 id="sec.BusinessRulesForCertainUsersOrRoles">
@@ -2569,7 +2640,9 @@ public class Department {
         <methodname>getUser()</methodname> is also inherited. In either case
         the method returns an object of type
         <methodname>org.apache.isis.security.UserMemento</methodname>, which
-        holds both username and the set of roles for that user.</para>
+        holds both username and the set of roles for that user. The full
+        details of the security classes can be found in <xref
+        linkend="apx.SecurityClasses" />.</para>
 
         <para>The mechanism to apply a business rule is just to return an
         appropriate value from a supporting
@@ -2577,7 +2650,9 @@ public class Department {
         <methodname>disableXxx()</methodname> or
         <methodname>validateXxx()</methodname> method.</para>
 
-        <para>For example:</para>
+        <para>For example, the following requires that the MODIFY_SALARY role
+        is assigned to the current user in order to update a salary property
+        beyond a certain value:</para>
 
         <programlisting format="linespecific">public class Employee extends AbstractDomainObject {
     public BigDecimal getSalary() { ... }
@@ -2588,200 +2663,276 @@ public class Department {
               "Need MODIFY_SALARY role to increase salary above 30000": null;
     }
 }</programlisting>
-
-        <para></para>
-
-        <para></para>
-
-        <para>*** similarly,</para>
-
-        <para></para>
-
-        <programlisting format="linespecific">public class Employee {
-    public BigDecimal getSalary() { ... }
-    public void setSalary(BigDecimal salary) { ... }
-    public boolean hideSalary(UserMemento user, BigDecimal salary) {
-        return !user.hasRole("VIEW_SALARY");
-    }
-}</programlisting>
       </sect1>
 
       <sect1>
-        <title>How to pass a message back to the user</title>
+        <title>How to pass a messages and errors back to the user</title>
 
         <para>Sometimes, within an action it is necessary or desirable to pass
         a message to the user, for example to inform them of the results of
         their action ('5 payments have been issued') or that the action was
-        not successful ('No Customer found with name John Smith').
-        <code>DomainObjectContainer</code> defines two methods for this
-        purpose:</para>
+        not successful ('No Customer found with name John Smith').</para>
 
-        <para><programlisting>void informUser(String message)
+        <para><code>DomainObjectContainer</code> defines three methods for
+        this purpose:</para>
 
-void warnUser(String message)</programlisting></para>
+        <itemizedlist>
+          <listitem>
+            <para><methodname>informUser(String message)</methodname></para>
 
-        <para>These two methods provide different ways to send a message to
-        the user, representing increasing levels of severity. How each of
-        these messages is rendered visible to the user is determined by the
-        framework.</para>
+            <para>Inform the user of some event. The user should not be
+            expected to acknowledge the message; typically the viewer will
+            display the message for a period of time in a non-modal
+            notification window.</para>
+          </listitem>
 
-        <para>These two methods are also available on
-        <classname>AbstractDomainObject </classname>as a shortcut.</para>
+          <listitem>
+            <para><methodname>warnUser(String message)</methodname></para>
+
+            <para>Warn the user of some event. Because this is more serious,
+            the viewer should require the user to acknowledge the
+            message.</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>raiseError(String message)</methodname></para>
+
+            <para>Indicate that a serious application error has occurred. The
+            viewer should again require the user to acknowledge the message,
+            and quite possibly indicate further steps that the user should
+            perform (eg notify the help desk).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The precise mechanics of how each of these messages is rendered
+        visible to the user is determined by the viewer being used.</para>
       </sect1>
     </chapter>
 
-    <chapter id="chp.RepositoriesAndFactories">
-      <title>Repositories, Factories, Services and Values</title>
+    <chapter id="chp.DomainServices">
+      <title>Domain Services, Repositories and Factories</title>
 
       <abstract>
-        <para>How-to's relating to the everything else that goes into making
-        up an <emphasis>Isis</emphasis> application.</para>
+        <para>How-to's relating to writing services, repositories and
+        factories.</para>
       </abstract>
 
       <para>This chapter contains how-to's for programming conventions that
-      apply to everything that isn't a domain object (ie "everything else")
-      that also makes up an <emphasis>Apache Isis</emphasis> application.
-      Specifically, we're talking about repositories and factories (<xref
-      linkend="sec.RepositoriesAndFactories" />), services (<xref
-      linkend="sec.Services" />) and values (<xref
-      linkend="chp.ValueTypes" />).</para>
+      writing domain services (by which we also mean repositories and
+      factories); ie everything that isn't a domain object or a value
+      type.</para>
 
-      <sect1 id="sec.RepositoriesAndFactories">
-        <title>Repositories and Factories</title>
+      <para>Domain services are instantiated once and once only by the
+      framework, and are used to centralize any domain logic that does not
+      logically belong in a domain entity or value. <emphasis>Isis</emphasis>
+      will automatically inject services into every domain entity that
+      requests them, and into each other.</para>
 
-        <para>The Apache Isis application library provides a class</para>
+      <sect1 id="sec.AbstractService">
+        <title>How to not inherit from framework classes</title>
 
-        <para><literal
-        moreinfo="none">org.apache.isis.applib.AbstractFactoryAndRepository</literal></para>
+        <para>Like entities, it isn't mandatory for domain services to inherit
+        from any framework superclass; they can be plain-old pojos if
+        required. However, again, like entities, they do at a minimum need to
+        have a
+        <classname>org.apache.isis.applib.DomainObjectContainer</classname>
+        injected into them (an interface), from which other framework services
+        can be accessed.</para>
 
-        <para>that makes it easy to write a Repository and/or Factory to work
-        entirely in memory. This is very useful during prototyping, as you can
-        quickly get your system up and running without having to deal with a
-        database. Refer to the JavaDoc documentation for that class for a full
-        list of methods available. However, the following describes some of
-        the most commonly-used methods:</para>
+        <para>If you don't have a requirement to inherit from any other
+        superclass, then it usually makes sense to inherit from one of the
+        abstract classes in the applib, either
+        <classname>org.apache.isis.applib.AbstractService</classname> or
+        <classname>org.apache.isis.applib.AbstractRepositoryAndFactory</classname>.
+        These already supports the
+        <classname>DomainObjectContainer</classname> and have a number of
+        convenience helper methods.</para>
 
-        <para><literal moreinfo="none">&lt;T&gt; T newTransientInstance(final
-        Class&lt;T&gt; ofClass)</literal> </para>
+        <para>The <acronym>UML</acronym> class diagram below shows the
+        relationship between these types and the
+        <classname>DomainObjectContainer</classname>.</para>
 
-        <para>returns a new instance of the specified class, that is transient
-        (unsaved). This may subsequently be saved either by the user invoking
-        the Save action (that will automatically be rendered on the object
-        view) or programmatically by calling . . .</para>
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/AbstractContainedObject-hierarchy.png"
+                       scale="60" />
+          </imageobject>
+        </mediaobject>
 
-        <para><literal moreinfo="none">void makePersistent(Object
-        transientObject)</literal></para>
-
-        <para><literal moreinfo="none">&lt;T&gt; T newPersistentInstance(final
-        Class&lt;T&gt; ofClass)</literal> </para>
-
-        <para>creates a new object already persisted.</para>
-
-        <para><literal moreinfo="none">void disposeInstance(Object
-        persistentObject)</literal></para>
-
-        <para><literal moreinfo="none">&lt;T&gt; List&lt;T&gt;
-        allInstances(final Class&lt;T&gt; cls, final boolean
-        includeSubclasses)</literal> </para>
-
-        <para>these may be iterated through for a specific match.</para>
-
-        <para><literal moreinfo="none">&lt;T&gt; T firstMatch(final
-        Class&lt;T&gt; cls, final String title, final boolean
-        includeSubclasses)</literal></para>
-
-        <para>looks for an object with the title specified.</para>
-
-        <para>There are a number of useful matching and filtering methods in
-        AbstractFactoryAndRepository.</para>
-
-        <para></para>
-      </sect1>
-
-      <sect1>
-        <title>Finding by pattern</title>
-
-        <remark>TODO: Complete this section to cover pattern-based searching,
-        including the fact that this works for both InMemory ...</remark>
-
-        <para></para>
-
-        <para></para>
+        <para>What this means is that <emphasis>Apache Isis</emphasis> treats
+        factories and repositories as just another type of domain
+        service.</para>
       </sect1>
 
       <sect1 id="sec.Services">
-        <title>Registering services</title>
+        <title>How to register domain services, repositories and
+        factories</title>
 
-        <para>*** </para>
+        <para>All domain services (which includes repositories and factories)
+        should be registered in the isis.properties configuration file, under
+        the <varname>isis.services.prefix</varname> (a common package name)
+        and <varname>isis.services</varname> key (a comma-separated
+        list).</para>
 
-        <para></para>
+        <para>For example:</para>
 
-        <para></para>
+        <programlisting>isis.services.prefix = org.apache.isis.support.prototype.objstore.dflt
+isis.services = employee.EmployeeRepositoryDefault, claim.ClaimRepositoryDefault</programlisting>
+
+        <para>This will instantiate a single instance of each of the two
+        services listed.</para>
       </sect1>
 
       <sect1>
-        <title>getId (Services only)</title>
+        <title>How to inject services into entities</title>
 
-        <programlisting>public String getId()</programlisting>
+        <para>All that is required to inject a service into an entity (or
+        indeed into another service) is to provide an appropriately typed
+        setter. The name of the method does not matter, only that it is
+        prefixed "set", is public, and has a single parameter of the correct
+        type.</para>
 
-        <para>The <methodname>getId</methodname> method is used by service
-        objects to provide an identity for a particular service type. This
-        should be the same for all implementations of a specific service
-        allowing them to be swapped for one another.</para>
+        <para>For example:</para>
 
-        <para></para>
+        <programlisting>public class Customer {
+    private OrderRepository orderRepository;
+    public void setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+    ...
+}</programlisting>
 
-        <para>Services, which are automatically injected into any domain
-        object that needs them, are just ordinary domain objects but with an
-        <methodname>getId()</methodname> identity method. The method
-        recognised is:</para>
-
-        <programlisting format="linespecific">public String getId()</programlisting>
-
-        <para>This identity method is currently used only by perspectives,
-        when registering services. (Strictly speaking the
-        <methodname>getId()</methodname> method is optional; if not present
-        then the fully qualified class name is used as the Id).</para>
-
-        <para>All the other methods are processed as for domain objects, as
-        described in a previous section.</para>
-
-        <para>To simplify the process of writing service objects the following
-        abstract classes are available from within the application
-        library:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><classname>AbstractFactoryAndRepository</classname></para>
-          </listitem>
-
-          <listitem>
-            <para><classname>AbstractService</classname></para>
-          </listitem>
-        </itemizedlist>
-
-        <para>In addition there are classes within the framework that assist
-        building services that need to integrate with the framework.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><classname>RepositoryHelper</classname></para>
-          </listitem>
-
-          <listitem>
-            <para><classname>ServiceException</classname></para>
-          </listitem>
-        </itemizedlist>
-
-        <para></para>
+        <para>Note that we consider
+        <classname>DomainObjectContainer</classname> to be a service too;
+        hence it can be injected in exactly the same manner.</para>
       </sect1>
 
       <sect1>
-        <title>System repositories</title>
+        <title>How to write a typical domain service</title>
 
-        <para>As well as services defined programmatically, it is possible to
-        use a repository provided by the framework that will, for a configured
-        object type, provide methods to:</para>
+        <para>Services consist of a set of logically grouped actions, and as
+        such follow the same conventions as for entities (see <xref
+        linkend="chp.Actions" />). However, a service cannot have (persisted)
+        properties, nor can it have (persisted) collections.</para>
+
+        <para>For convenience you can inherit from
+        <classname>AbstractService</classname> or one of its subclasses (see
+        <xref linkend="sec.AbstractService" />), but this is not
+        mandatory.</para>
+
+        <sect2>
+          <title>The <methodname>getId()</methodname> method</title>
+
+          <para>Optionally, a service may provide a
+          <methodname>getId()</methodname> method:</para>
+
+          <programlisting>public String getId()</programlisting>
+
+          <para>This method returns a logical identifier for a service,
+          independent of its implementation. Currently it used only by
+          perspectives, providing a label by which to record the services that
+          are available for a current user's profile. See <xref
+          linkend="chp.UserProfiles" /> for more about profiles and
+          perspectives.</para>
+        </sect2>
+
+        <sect2>
+          <title>(Suppressing) contributed actions</title>
+
+          <para>Any n-parameter action provided by a service will
+          automatically be contributed to the list of actions for each of its
+          (entity) parameters. From the viewpoint of the entity the action is
+          called a contributed action.</para>
+
+          <para>For example, given a service:</para>
+
+          <programlisting>public interface Library {
+    public Loan borrow(Loanable l, Borrower b);
+}</programlisting>
+
+          <para>and the entities:</para>
+
+          <programlisting>public class Book implements Loanable { ... }y</programlisting>
+
+          <para>and</para>
+
+          <programlisting>public class LibraryMember implements Borrower { ... }</programlisting>
+
+          <para>then the <methodname>borrow(...)</methodname> action will be
+          contributed to both <classname>Book</classname> and to
+          <classname>LibraryMember</classname>.</para>
+
+          <para>This is an important capability because it helps to decouple
+          the concrete classes from the services.</para>
+
+          <para>If necessary, though, this behaviour can be suppressed by
+          annotating the service action with
+          <classname>@org.apache.isis.applib.annotations.NotContributed</classname>.</para>
+
+          <para>For example:</para>
+
+          <programlisting>public interface Library {
+    @NotContributed
+    public Loan borrow(Loanable l, Borrower b);
+}</programlisting>
+
+          <para>If annotated at the interface level, then the annotation will
+          be inherited by every concrete class. Alternatively the annotation
+          can be applied at the implementation class level and only apply to
+          that particular implementation.</para>
+
+          <para>Note that an action annotated as being
+          <classname>@NotContributed</classname> will still appear in the
+          service menu for the service. If an action should neither be
+          contributed nor appear in service menu items, then simply annotate
+          it as <classname>@Hidden</classname>.</para>
+        </sect2>
+
+        <sect2>
+          <title>(Suppressing) service menu items</title>
+
+          <para>By default every action of a service (by which we also mean
+          repositories and factories) will be rendered in the viewer, eg as a
+          menu item for that service menu. This behaviour can be suppressed by
+          annotating the action using
+          <classname>@org.apache.isis.applib.annotations.NotInServiceMenu</classname>.</para>
+
+          <para>For example:</para>
+
+          <programlisting>public interface Library {
+    @NotInServiceMenu
+    public Loan borrow(Loanable l, Borrower b);
+}</programlisting>
+
+          <para>Note that an action annotated as being
+          <classname>@NotInServiceMenu</classname> will still be contributed.
+          If an action should neither be contributed nor appear in service
+          menu items, then simply annotate it as
+          <classname>@Hidden</classname>.</para>
+        </sect2>
+
+        <sect2>
+          <title>(Suppressing) service menus</title>
+
+          <para>If none of the service menu items should appear, then the
+          service itself should be annotated as @Hidden.</para>
+
+          <para>For example:</para>
+
+          <programlisting>@Hidden
+public interface EmailService {
+    public void sendEmail(String to, String from, String subject, String body);
+    public void forwardEmail(String to, String from, String subject, String body);
+}</programlisting>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>How to use a generic repository</title>
+
+        <para>To speed up initial prototype the framework allows so-called
+        generic repositories to be defined, one per entity. Such a repository
+        will, for its specified type, provide methods to:</para>
 
         <itemizedlist>
           <listitem>
@@ -2801,46 +2952,384 @@ void warnUser(String message)</programlisting></para>
           </listitem>
         </itemizedlist>
 
-        <para>To register such a service prefix the class name with
-        'repository#', for example:</para>
+        <para>To register such a service prefix the class name with the prefix
+        <literal>repository#</literal>.</para>
 
-        <programlisting format="linespecific">isis.services = repository#bom.Booking</programlisting>
+        <para>For example:</para>
+
+        <programlisting format="linespecific">isis.services = repository#dom.Booking</programlisting>
+
+        <para>Over time, you should expect most if not all of these generic
+        repositories will be replaced with regular repository types (see <xref
+        linkend="sec.CustomRepository" />).</para>
+      </sect1>
+
+      <sect1 id="sec.CustomRepository">
+        <title>How to write a custom repository</title>
+
+        <para>Repositories are defined as interfaces within the domain, and
+        their implementation will vary by object store. During prototyping and
+        for much of development, you will probably find it easiest to use an
+        in-memory object store or perhaps the <acronym>XML</acronym> object
+        store, with only a small number of instances. The
+        <classname>DomainObjectContainer</classname> provides a set of methods
+        that make it easy to pull back all instances from the object store
+        which can then be filtered as required. Later on, you can replace the
+        implementation depending upon the specifics of the object store that
+        you'll be using for production.</para>
+
+        <para>If you inherit from the <literal
+        moreinfo="none">org.apache.isis.applib.AbstractFactoryAndRepository</literal>
+        adapter class then this will automatically have the
+        <classname>DomainObjectContainer</classname> injected, and provides
+        convenience methods that delegate to the container. Using this is not
+        mandatory, however.</para>
+
+        <para>The methods provided by the
+        <classname>DomainObjectContainer</classname> to support repositories
+        are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>allInstances(Class&lt;T&gt;
+            ofType)</methodname></para>
+
+            <para>Returns all instances of the specified type. Note that this
+            includes all instances of any subtypes.</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>allMatches(...)</methodname></para>
+
+            <para>Returns all instances matching the provided
+            arguments.</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>firstMatch(...)</methodname></para>
+
+            <para>Returns the first instance matching the provided
+            arguments.</para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>uniqueMatch(...)</methodname></para>
+
+            <para>Returns the one-and-only instance matching the provided
+            arguments (else is an exception).</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The last three methods, <methodname>*Match(...)</methodname> are
+        all overloaded in order to return a subset of object instances. Some
+        of these are "naive"; all instances are returned from the object
+        store, and the filtering is performed within the repository. Others
+        are designed to pass the query predicate back to the object store so
+        that only the matching rows are returned.</para>
+
+        <para>Each of these options are discussed in more detail below.</para>
+
+        <sect2>
+          <title>Finding by Title</title>
+
+          <para>The first version of finding instances is to specify the
+          required title for the matching objects:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>allMatches(Class&lt;T&gt; ofType, String
+              title)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>firstMatch(Class&lt;T&gt; ofType, String
+              title)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>uniqueMatch(Class&lt;T&gt; ofType, String
+              title)</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Although easy and intuitive, this isn't generally recommended
+          for production use because (a) the matching is performed within the
+          repository rather than the object store, and (b) the title string
+          can often change as business requirements are refined.</para>
+
+          <para>That said, it is possible to eliminate the first disadvantage
+          by using the <classname>Query</classname> API, discussed below; this
+          provides an implementation that is equivalent to find by
+          title.</para>
+        </sect2>
+
+        <sect2>
+          <title>Finding by Pattern</title>
+
+          <para>The next technique of finding instances is to specify pattern
+          object to match against (sometimes called "query-by-example", or
+          <acronym>QBE</acronym>):</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>allMatches(Class&lt;T&gt; ofType, Object
+              pattern)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>firstMatch(Class&lt;T&gt; ofType, Object
+              pattern)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>uniqueMatch(Class&lt;T&gt; ofType, Object
+              pattern)</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Any non-null value of the pattern object is used as the
+          predicate.</para>
+
+          <para>Although more robust that searching by title, this technique
+          is also not likely to be valid for production code because the
+          matching is still performed within the repository rather than within
+          the object store.</para>
+
+          <para>That said, it is possible to eliminate the first disadvantage
+          by using the <classname>Query</classname> API, discussed below; this
+          provides an implementation that is equivalent to find by
+          pattern.</para>
+
+          <note>
+            <para>If the pattern object is created using
+            <methodname>newTransientInstance(...)</methodname>, then any
+            default values for properties will automatically be set (see <xref
+            linkend="sec.DefaultPropertyValue" />). If this isn't required,
+            they will need to be manually cleared.</para>
+          </note>
+        </sect2>
+
+        <sect2>
+          <title>Finding using the <classname>Filter</classname> API</title>
+
+          <para>The third overloaded version of the matching methods to find
+          instances all take an
+          <classname>org.apache.isis.applib.Filter&lt;T&gt;</classname>
+          instance:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>allMatches(Class&lt;T&gt; ofType,
+              Filter&lt;T&gt; filter)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>firstMatch(Class&lt;T&gt; ofType,
+              Filter&lt;T&gt; filter)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>uniqueMatch(Class&lt;T&gt; ofType,
+              Filter&lt;T&gt; filter)</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>The <classname>Filter&lt;T&gt;</classname> interface is very
+          straightforward:</para>
+
+          <programlisting>public interface Filter&lt;T&gt; {
+    public boolean accept(T obj);
+}</programlisting>
+
+          <para>Every object of the given type (and subclasses) is passed into
+          the <classname>Filter</classname> instance; only those
+          <methodname>accept()</methodname>'ed are returned from the
+          <methodname>*Match()</methodname> method.</para>
+
+          <para>Although flexible, with this technique the matching is also
+          performed within the repository rather than the object store, and so
+          is also likely not to be suitable for production use where there are
+          many instances of the given type.</para>
+        </sect2>
+
+        <sect2>
+          <title>Finding using the <classname>Query</classname> API</title>
+
+          <para>The finaly overloaded version of the matching methods take an
+          instance of
+          <classname>org.apache.isis.applib.query.Query&lt;T&gt;</classname>
+          interface:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><methodname>allMatches(Query&lt;T&gt;
+              query)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>firstMatch(Query&lt;T&gt;
+              query)</methodname></para>
+            </listitem>
+
+            <listitem>
+              <para><methodname>uniqueMatch(Query&lt;T&gt;
+              query)</methodname></para>
+            </listitem>
+          </itemizedlist>
+
+          <para>Unlike all the other matching mechanisms, the point of the
+          <classname>Query</classname> interface is for it to be passed back
+          to the object store and evaluated there.</para>
+
+          <para>The applib provides several implementations that implement the
+          <classname>Query&lt;T&gt;</classname> interface. Probably the most
+          important of these is <classname>QueryDefault&lt;T&gt;</classname>,
+          which provides a set of factory methods for constructing
+          <classname>Query</classname> instances that represent a named query
+          with a map of parameter/argument pairs.</para>
+
+          <para>For example:</para>
+
+          <programlisting>public class CustomerRepositoryImpl implements CustomerRepository {
+    public List&lt;Customer&gt; findCustomers(
+            @Named("Last Name") String lastName,
+            @Named("Postcode")  String postCode
+        ) {
+        QueryDefault&lt;Customer&gt; query = 
+            QueryDefault.create(
+                Customer.class, 
+                "findCustomers", 
+                "lastName", lastName, 
+                "postCode", postCode);
+
+        return getContainer().allMatches(query);
+    }
+    ...
+}</programlisting>
+
+          <para>Above it was noted that the other overloaded versions of the
+          matching <acronym>API</acronym> have the disadvantage that the
+          matching is performed within the repository. As an alternative to
+          using "find by title" or "find by pattern", you may wish to use
+          QueryFindByTitle and QueryFind</para>
+
+          <itemizedlist>
+            <listitem>
+              <para><classname>QueryFindByTitle&lt;T&gt;</classname>, which
+              corresponds to the <methodname>allMatches(...)</methodname> for
+              searching by title</para>
+            </listitem>
+
+            <listitem>
+              <para><classname>QueryFindByPattern&lt;T&gt;</classname>, which
+              corresponds to the <methodname>allMatches(...)</methodname> for
+              searching by pattern</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>There is also a
+          <classname>QueryFindAllInstances&lt;T&gt;</classname>, which
+          corresponds to the <methodname>allInstances()</methodname>
+          method.</para>
+
+          <para>The interpretation of a <classname>Query</classname> instance
+          ultimately depends on the object store. All object stores will
+          support <classname>QueryFindAllInstances</classname>, and most will
+          provide a mechanism to support <classname>QueryDefault</classname>.
+          Check the object store documentation to determine whether they
+          support other <classname>Query</classname> implementations (ie,
+          <classname>QueryFindByTitle</classname> and
+          <classname>QueryFindByPattern</classname>).</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Factories</title>
+
+        <para>Like repositories, factories are defined by interface in the
+        domain, decoupling the domain objects from their actual
+        implementation. Unlike repositories, there is no particular need to
+        change the implementation when moving from one object store to
+        another, because in all cases the factory can simply delegate to its
+        injected <classname>DomainObjectContainer</classname>.</para>
+
+        <para>The methods for <classname>DomainObjectContainer</classname>
+        that are relevant for a factory are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><methodname>&lt;T&gt; T newTransientInstance(final
+            Class&lt;T&gt; ofClass)</methodname></para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>&lt;T&gt; T newPersistentInstance(final
+            Class&lt;T&gt; ofClass)</methodname></para>
+          </listitem>
+
+          <listitem>
+            <para><methodname>persist(Object)</methodname></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>These are discussed in more detail in <xref
+        linkend="sec.HowToCreateAnObject" />. See also <xref
+        linkend="apx.DomainObjectContainer" /> for full coverage of the
+        methods available in
+        <classname>DomainObjectContainer</classname>.</para>
       </sect1>
     </chapter>
 
     <chapter id="chp.ValueTypes">
       <title>Value Types</title>
 
-      <para></para>
+      <abstract>
+        <para>Built-in value types, writing your own value types, and
+        supporting third-party value types.</para>
+      </abstract>
 
-      <para></para>
+      <para>The state of any given entity is characterized by properties
+      (<xref linkend="chp.Properties" />) and collections (<xref
+      linkend="chp.Collections" />). A collections is a one-to-many reference
+      to another entities, while a property is either a one-to-one reference
+      to another entity, or it is a value.</para>
 
-      <para></para>
+      <para>But what's a value? Well, it's an atomic piece of state. A string
+      is a value, so is a number, so is a date. Values should be designed to
+      be immutable (though some system value types, such as
+      <classname>java.util.Date</classname>, famously are not).</para>
 
-      <para></para>
+      <para><emphasis>Isis</emphasis> supports all the standard JDK value
+      types, and defines a number of its own (eg
+      <classname>Percentage</classname> and <classname>Color</classname>). It
+      also allows you to define your own value types, such as
+      <classname>LastName</classname>, or <classname>Celsius</classname>, or
+      <classname>ComplexNumber</classname>.</para>
 
-      <para></para>
+      <para>Finally, it's also possible to make Isis integrate with
+      third-party value types, such as <ulink
+      url="http://joda-time.sourceforge.net/">JodaTime</ulink>.</para>
 
-      <para></para>
-
-      <para></para>
+      <para><note>
+          <para><emphasis>Isis</emphasis>' support for a particular value type
+          does not necessarily imply that there is a custom widget for that
+          type in a particular viewer. Rather, it means that the state of the
+          object can be serialized, is expected to have equal-by-content
+          semantics, and is expected to be immutable. It may also be parseable
+          from a string.</para>
+        </note></para>
 
       <sect1>
         <title>Built-in Value Types</title>
 
-        <para>***</para>
-
-        <para></para>
-
-        <para>The following are built-in types. In addition to these any type
-        either annotated using <classname>@Value</classname>, or registered as
-        a value type using <filename>isis.properties</filename>, will also be
-        treated as a value type.</para>
+        <para>The following are the value types supported by
+        <emphasis>Isis</emphasis> out-of-the-box.</para>
 
         <sect2>
-          <title>Supported Types</title>
+          <title>JDK Types</title>
 
-          <para></para>
+          <para>The following <acronym>JDK</acronym> types are supported by
+          <emphasis>Isis</emphasis>.</para>
 
           <sect3>
             <title>Primitive Types</title>
@@ -2943,8 +3432,8 @@ void warnUser(String message)</programlisting></para>
         <sect2>
           <title>Value formats</title>
 
-          <para>Isis provides default formats for the inbuilt value types,
-          according to type. These can be modified using
+          <para><emphasis>Isis</emphasis> provides default formats for the
+          inbuilt value types, according to type. These can be modified using
           <filename>isis.properties</filename>.</para>
 
           <para>These formats cut across the above categories; for example the
@@ -3137,27 +3626,60 @@ void warnUser(String message)</programlisting></para>
       <sect1>
         <title>Custom Value Types</title>
 
-        <para></para>
-
-        <para></para>
-
         <para>In addition to the built-in value types it is also possible to
         define user-defined value types. This is typically done using the
         <classname>@Value</classname> annotation.</para>
 
         <para>The <literal>@Value</literal> annotation is used to provide an
-        implementation of the <classname>ValueSemanticsProvider</classname>
+        implementation of the
+        <classname>org.apache.isis.applib.adapters.ValueSemanticsProvider</classname>
         interface. In turn this provides objects that allow the framework to
-        interact with the value, in particular for parsing (parsing strings
-        into values and display values as strings), and for encoding/decoding
-        (for serialization for client/server and used by some
-        persistors).</para>
+        interact with the value, specifically:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>the <classname>EncoderDecoder</classname> is used to convert
+            the value into and back out of serializable form</para>
+
+            <para>This is used by some object stores (eg the
+            <acronym>XML</acronym> Object Store), for remoting and also by the
+            XML Snapshot capability (see <xref
+            linkend="chp.XmlSnapshots" />);</para>
+          </listitem>
+
+          <listitem>
+            <para>the <classname>Parser</classname> is used to convert
+            <classname>String</classname>s into the value type</para>
+
+            <para>This is used as a fallback by viewers that do not have any
+            specific widgets to support the particular value type, and make do
+            with a simple text field instead.</para>
+
+            <para>An obvious example is to parse a date. But it could be used
+            to parse "TRUE" and "FALSE" into a boolean (as opposed to using a
+            checkbox).</para>
+          </listitem>
+
+          <listitem>
+            <para>the <classname>DefaultsProvider</classname> is used to
+            provide a meaningful default for the value</para>
+
+            <para>Not every value type will have a default, but some do (eg
+            false for a boolean, 0 for a number). This is used as the default
+            value for non-<classname>@Optional</classname> properties and
+            parameters.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Each of these interfaces also reside in
+        <classname>org.apache.isis.applib.adapters</classname>.</para>
 
         <para>For more details, explore the built-in types within the applib,
         for example
         <classname>org.apache.isis.applib.value.Money</classname>.</para>
 
-        <programlisting format="linespecific">@Value(semanticsProviderName = "org.apache.isis.metamodel.value.MoneyValueSemanticsProvider")
+        <programlisting format="linespecific">@Value(semanticsProviderName = 
+         "org.apache.isis.core.progmodel.facets.value.MoneyValueSemanticsProvider")
 public class Money extends Magnitude {
     ...
 }</programlisting>
@@ -3166,28 +3688,403 @@ public class Money extends Magnitude {
         implementation of <classname>ValueSemanticsProvider</classname>
         described above.</para>
 
-        <para>Using value types generally removes the need for using
-        <literal>@MustSatisfy</literal> annotation; the rules can instead move
-        down into a <methodname>validate</methodname> method on the value type
-        itself.</para>
-
-        <para></para>
+        <para><note>
+            <para>Using value types generally removes the need for using
+            <literal>@MustSatisfy</literal> annotation (see <xref
+            linkend="sec.MustSpecify" />); the rules can instead move down
+            into a <methodname>validate()</methodname> method on the value
+            type itself.</para>
+          </note></para>
       </sect1>
 
       <sect1>
         <title>Third-party Value Types</title>
 
-        <para></para>
+        <para>Third party value types, such as those in <ulink
+        url="http://joda-time.sourceforge.net/">JodaTime</ulink>, can also
+        supported, again through the use of a
+        <classname>ValueSemanticsProvider</classname>. However, since the
+        source code cannot be altered, the provider must be supplied using a
+        key value in <methodname>isis.properties</methodname> configuration
+        file.</para>
 
-        <remark>TODO: need to beef up this discussion. Also, note that it is
-        possible to register value types using isis.properties rather than the
-        @Value annotation; this is particularly useful for third-party value
-        types.</remark>
+        <para>For example, the following would register a semantics provider
+        for <classname>org.jodatime.time.DateTime</classname>:</para>
 
-        <para></para>
+        <programlisting>isis.core.progmodel.value.org.jodatime.time.DateTime.semanticsProviderName=\
+    com.mycompany.values.CalendarIntervalValueSemanticsProvider</programlisting>
 
-        <para></para>
+        <note>
+          <para>At the time of writing <emphasis>Apache Isis</emphasis> does
+          not currently ship with any
+          <classname>ValueSemanticsProvider</classname>s, though doing so is
+          on the roadmap.</para>
+        </note>
       </sect1>
+    </chapter>
+  </part>
+
+  <part>
+    <title>Supporting Features</title>
+
+    <chapter id="chp.Clock">
+      <title>Clock</title>
+
+      <abstract>
+        <para>The default Clock and alternative implementations.</para>
+      </abstract>
+
+      <para>Many if not all enterprise applications deal with dates and times
+      in one way or another. For example, if an Order is placed, then the
+      Customer may have 30 days to pay the Invoice, otherwise a penalty may be
+      levied. However, this can complicate automated testing: "today+30" will
+      be a different date every time the test is run.</para>
+
+      <para>A common solution is to require that domain objects do not go
+      directly to the system for the current date (ie don't simply instantiate
+      a new <classname>java.util.Date</classname> in order to get the current
+      time); instead they should call some sort of facade.</para>
+
+      <para>The <emphasis>Apache Isis</emphasis> framework provides such a
+      facade through the
+      <classname>org.apache.isis.applib.clock.Clock</classname> class. The
+      defaults for all values refer back to the <classname>Clock</classname>,
+      and - because the <classname>Clock</classname> is a singleton - it is
+      easy for any application code to obtain the current time also.</para>
+
+      <para>For example:</para>
+
+      <programlisting>public class Customer {
+     public Order placeOrder(Product p) {
+         Date now = Clock.getTimeAsDate();
+         ...
+     }
+     ...
+}</programlisting>
+
+      <sect1>
+        <title>Lazily Instantiated</title>
+
+        <para>The first call to <methodname>Clock.getTime()</methodname> will
+        lazily instantiate the singleton, with the default implementation
+        being one that simply delegates to the system's internal clock. To use
+        a different <classname>Clock</classname> implementation, eg one that
+        delegates to an NNTP server, all that is required is to instantiate it
+        any time prior to bootstrapping <emphasis>Isis</emphasis>
+        itself.</para>
+
+        <para>One notable implementation that notably takes advantage of this
+        is <classname>FixtureClock</classname>, used for testing. See <xref
+        linkend="chp.Fixtures" /> for more information.</para>
+      </sect1>
+
+      <sect1>
+        <title>Possibly Replaceable</title>
+
+        <para>Clock implementations can indicate whether they are replaceable
+        as the singleton, or not.</para>
+
+        <para>Most (all?) production implementations (eg the default system
+        clock) are <emphasis>not</emphasis> replaceable; once instantiated,
+        any attempt to instantiate another subclass will be rejected with an
+        exception.</para>
+
+        <para>However implementations to work with tests (such as
+        <classname>FixtureClock</classname>, already mentioned) are more
+        likely to be replaceable, so that they can be setup multiple times as
+        required.</para>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.UserProfiles">
+      <title>Profiles</title>
+
+      <abstract>
+        <para>Support for user profiles</para>
+      </abstract>
+
+      <para>As well as allowing domain entities to be persisted into object
+      stores, <emphasis>Apache Isis</emphasis> also allows user
+      <emphasis>profiles</emphasis> to be persisted into a profile
+      store.</para>
+
+      <para>Every user can have one profile associated with them, a profile
+      consisting of:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>a set of options or preferences</para>
+        </listitem>
+
+        <listitem>
+          <para>a set of perspectives</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A perspective is something akin to a layout or desktop,
+      representing a configuration of relevant objects as might be displayed
+      on the home page of the viewer. The elements that make up a perspective
+      are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>a set of services (identified by the string returned from each
+          service's <methodname>getId()</methodname> method, see <xref
+          linkend="chp.DomainServices" />)</para>
+
+          <para>These are the services (eg icons) that can be accessed from
+          that perspective</para>
+        </listitem>
+
+        <listitem>
+          <para>a set of objects</para>
+
+          <para>These might represent bookmarks to objects saved from a
+          previous session.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The applib contains types to define these two concepts;
+      specifically <classname>Profile</classname> and
+      <classname>Perspective</classname>. These are actually interfaces, the
+      implementation is provided by framework itself.</para>
+
+      <para>To use profiles in an application, the system should be run using
+      a persistent implementation of the <classname>profilestore</classname>
+      component (the default is the in-memory profilestore that does not
+      persist any information between sessions). Also, not every viewer
+      understands or uses perspectives; the most notable one that does support
+      the idea is the <acronym>DnD</acronym> viewer.</para>
+    </chapter>
+
+    <chapter id="chp.Fixtures">
+      <title>Fixtures and SwitchUser</title>
+
+      <abstract>
+        <para>Using fixtures to setup the system, generally for testing
+        purposes.</para>
+      </abstract>
+
+      <para>Fixtures are used to setup the framework into a known state. This
+      is predominantly done for testing, and in particular when running with
+      the in-memory object store. However, fixtures can also be used to
+      specify the user that has "logged on", and to set the clock.</para>
+
+      <para>Whether a fixture has any effect will depend on several
+      factors:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>the first is the <classname>DeploymentType</classname>;
+          specifying the logged on user will only be honoured if running in
+          exploration mode (or more precisely, where
+          <methodname>DeploymentType#isExploring()</methodname> returns
+          true);</para>
+        </listitem>
+
+        <listitem>
+          <para>the second is the object store; most persistent object stores
+          will either ignore fixtures, or only allow them to be installed once
+          or if run with an (object store-specific) flag set</para>
+        </listitem>
+      </itemizedlist>
+
+      <sect1 id="sec.HowToRegisterFixtures">
+        <title>How to register fixtures</title>
+
+        <para>All domain services (which includes repositories and factories)
+        should be registered in the <emphasis>isis.properties</emphasis>
+        configuration file, under the <varname>isis.fixtures.prefix</varname>
+        and <varname>isis.fixtures</varname> keys.</para>
+
+        <para>For example:</para>
+
+        <programlisting>isis.fixtures.prefix= org.apache.isis.support.prototype.fixture
+isis.fixtures= ClaimsFixture,LogOnAsCliveFixture</programlisting>
+
+        <para>It is also possible to specify fixtures from the command line,
+        using the --fixture flag.</para>
+      </sect1>
+
+      <sect1>
+        <title>How to write custom fixtures</title>
+
+        <para>The applib defines several interfaces and classes for writing
+        fixtures. The following UML diagram shows their relationships:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/Fixtures.png" scale="50" />
+          </imageobject>
+        </mediaobject>
+
+        <sect2>
+          <title><classname>InstallableFixture</classname> and
+          <classname>FixtureType</classname></title>
+
+          <para>The <classname>InstallableFixture</classname> interface
+          defines the general contract between a fixture and the framework:
+          the <classname>FixtureType</classname>, and an
+          <methodname>install()</methodname> method.</para>
+
+          <para>The <classname>FixtureType</classname> is used to characterize
+          whether the fixture:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>if <classname>FixtureType.DOMAIN_OBJECTS</classname> (the
+              default), then the fixture will be installed only so long as the
+              configured object store does not indicate that fixtures have
+              already been installed</para>
+            </listitem>
+
+            <listitem>
+              <para>if <classname>FixtureType.USER_PROFILES</classname>, then
+              the fixture will be installed only so long as the configured
+              profile store does not indicate that fixtures have already been
+              installed</para>
+            </listitem>
+
+            <listitem>
+              <para>if <classname>FixtureType.OTHER</classname>, then the
+              fixture will always be installed. This usually refers to setting
+              the clock or user.</para>
+            </listitem>
+          </itemizedlist>
+        </sect2>
+
+        <sect2>
+          <title><classname>BaseFixture</classname> and
+          <classname>AbstractFixture</classname></title>
+
+          <para>The <classname>BaseFixture</classname> class is not API, but
+          is responsible for instantiating
+          <classname>FixtureClock</classname>. This is an implementation of
+          <classname>Clock</classname> singleton, which (as described in <xref
+          linkend="chp.Clock" />), is used by the rest of the
+          <emphasis>Isis</emphasis> framework delegates to in order to obtain
+          the current time. The <classname>FixtureClock</classname>'s purpose
+          is to allow the current date/time to be set by other
+          fixtures.</para>
+
+          <para>The <classname>AbstractFixture</classname> class (inheriting
+          from <classname>BaseFixture</classname>) is an general-purpose
+          adapter for writing fixtures. It implements
+          <classname>CompositeFixture</classname> interface, meaning that
+          hierarchies of fixtures can be created following the composite
+          design pattern. It also provides a number of convenience
+          methods:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>the <methodname>setDate(...)</methodname> and
+              <methodname>setTime(...)</methodname> method allow the date/time
+              to be set.</para>
+
+              <para>This is done using by obtaining the
+              <classname>FixtureClock</classname> (from
+              <classname>BaseFixture</classname>). There are also some
+              convenience methods to move the date/time either earlier or
+              later.</para>
+            </listitem>
+
+            <listitem>
+              <para>the <methodname>switchUser(...)</methodname> method allow
+              the logged-on user to be changed</para>
+
+              <para>This changes the user logged-on while the fixtures are
+              being installed. This is to facilitate tests that have complex
+              setup requirements, eg verifying workflow between different user
+              roles.</para>
+            </listitem>
+          </itemizedlist>
+
+          <para>An alternative to using
+          <methodname>setDate(...)</methodname>/<methodname>setTime(...)</methodname>
+          is to use <classname>DateFixture</classname>, and an alternative to
+          using <methodname>switchUser(...)</methodname> is to use
+          <classname>SwitchUserFixture</classname>. Which you use is largely a
+          matter of personal preference.</para>
+        </sect2>
+
+        <sect2>
+          <title><methodname>DateFixture</methodname></title>
+
+          <para>The <classname>DateFixture</classname> provides an alternative
+          to <classname>AbstractFixture</classname>, just allowing the current
+          date/time to be set.</para>
+
+          <para>The main difference is one of style;
+          <classname>DateFixture</classname> can be used in a declarative way,
+          whereas <classname>AbstractFixture</classname> is more imperative.
+          For example:</para>
+
+          <programlisting>public class DateIs13Jan2007Fixture extends DateFixture {
+    public DateIs13Jan2007Fixture() {
+        super(2007,1,13);
+    }
+}</programlisting>
+
+          <para>A fixture in this style could then be used within a composite
+          fixture hierarchy.</para>
+        </sect2>
+
+        <sect2>
+          <title><methodname>SwitchUserFixture</methodname></title>
+
+          <para>The SwitchUserFixture provides an alternative to
+          <classname>AbstractFixture</classname>, just allowing the current
+          user to be switched.</para>
+
+          <para>The main difference is one of style;
+          <classname>SwitchUserFixture</classname> can be used in a
+          declarative way, whereas <classname>AbstractFixture</classname> is
+          more imperative. For example:</para>
+
+          <programlisting>public class SwitchToFrankSupervisorFixture extends SwitchUserFixture {
+    public SwitchToFrankSupervisorFixture() {
+        super("frank", "user", "supervisor");
+    }
+}</programlisting>
+
+          <para>A fixture in this style could then be used within a composite
+          fixture hierarchy.</para>
+        </sect2>
+
+        <sect2>
+          <title><classname>LogonFixture</classname></title>
+
+          <para>Unlike the very similar
+          <classname>SwitchUserFixture</classname>, this fixture does not
+          affect the currently logged on user while the fixtures are being
+          installed. Instead, it is used to specify the user to logon as once
+          all the fixtures have been installed.</para>
+
+          <para>If more than one <classname>LogonFixture</classname> is
+          specified, the last one encountered is used.</para>
+        </sect2>
+
+        <sect2>
+          <title><classname>UserProfileFixture</classname></title>
+
+          <para>The <classname>UserProfileFixture</classname> is used to
+          populate the configured profile store. See <xref
+          linkend="chp.UserProfiles" /> for more details on profiles and
+          perspectives.</para>
+        </sect2>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.XmlSnapshots">
+      <title>XML Snapshots</title>
+
+      <abstract>
+        <para>***</para>
+      </abstract>
+
+      <para></para>
+
+      <para></para>
     </chapter>
   </part>
 
@@ -3195,7 +4092,7 @@ public class Money extends Magnitude {
     <title>Reference Appendices</title>
 
     <appendix>
-      <title>Recognized Methods and Method Prefixes</title>
+      <title>Recognized Methods and Prefixes</title>
 
       <abstract>
         <para>Methods and method prefixes recognized by <emphasis>Apache
@@ -3207,14 +4104,14 @@ public class Money extends Magnitude {
       programming model:</para>
 
       <table>
-        <title></title>
+        <title>Recognized Method Prefixes</title>
 
         <tgroup cols="6">
           <colspec align="center" />
 
           <thead>
             <row>
-              <entry align="center">Prefic</entry>
+              <entry align="center">Prefix</entry>
 
               <entry align="center">object</entry>
 
@@ -3297,34 +4194,6 @@ public class Money extends Magnitude {
               <entry></entry>
 
               <entry>Y</entry>
-            </row>
-
-            <row>
-              <entry>deleted (*)</entry>
-
-              <entry>Y</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-
-            <row>
-              <entry>deleting (*)</entry>
-
-              <entry>Y</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
             </row>
 
             <row>
@@ -3442,7 +4311,7 @@ public class Money extends Magnitude {
             <row>
               <entry>persisted</entry>
 
-              <entry></entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
@@ -3456,7 +4325,7 @@ public class Money extends Magnitude {
             <row>
               <entry>persisting</entry>
 
-              <entry></entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
@@ -3470,7 +4339,7 @@ public class Money extends Magnitude {
             <row>
               <entry>removing</entry>
 
-              <entry></entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
@@ -3484,7 +4353,7 @@ public class Money extends Magnitude {
             <row>
               <entry>removed</entry>
 
-              <entry></entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
@@ -3503,34 +4372,6 @@ public class Money extends Magnitude {
               <entry></entry>
 
               <entry>Y (see also addTo)</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-
-            <row>
-              <entry>saved (*)</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
-            </row>
-
-            <row>
-              <entry>saving (*)</entry>
-
-              <entry></entry>
-
-              <entry></entry>
-
-              <entry></entry>
 
               <entry></entry>
 
@@ -3624,7 +4465,89 @@ public class Money extends Magnitude {
         </tgroup>
       </table>
 
-      <para>(*) deprecated.</para>
+      <para>There are also a number of deprecated methods:</para>
+
+      <table>
+        <title>Deprecated Method Prefixes</title>
+
+        <tgroup cols="6">
+          <colspec align="center" />
+
+          <thead>
+            <row>
+              <entry align="center">Prefix</entry>
+
+              <entry align="center">object</entry>
+
+              <entry align="center">property</entry>
+
+              <entry align="center">collection</entry>
+
+              <entry align="center">action</entry>
+
+              <entry align="center">action param</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry>deleted</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>deleting</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>saved</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+
+            <row>
+              <entry>saving</entry>
+
+              <entry>Y</entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+
+              <entry></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
       <para>In order to be recognized, all methods must be
       <code>public</code>. Any methods that do not match are deemed to be
@@ -3672,10 +4595,11 @@ public class Customer {
 ...
 }</programlisting>
 
-        <para>Compared to @MemberOrder, there is (currentlyon) one additional
-        advantage in that you can easily specify groupings (which may be
-        rendered by the viewer as sub-menus). This information may be used by
-        the viewing mechanism to render actions into sub-menus.</para>
+        <para>Compared to <classname>@MemberOrder</classname>, there is
+        (currentlyon) one additional advantage in that you can easily specify
+        groupings (which may be rendered by the viewer as sub-menus). This
+        information may be used by the viewing mechanism to render actions
+        into sub-menus.</para>
 
         <para>For example:</para>
 
@@ -3766,7 +4690,7 @@ public class County {
         viewing mechanism - but it may be thought of as being like a 'tool
         tip'.</para>
 
-        <para> Descriptions may be provided for objects, members (properties,
+        <para>Descriptions may be provided for objects, members (properties,
         collections and actions), and for individual parameters within an
         action method. <literal moreinfo="none">@DescribedAs</literal>
         therefore works in a very similar manner to <literal
@@ -4368,7 +5292,7 @@ public class CustomerImpl implements Customer{
       </sect1>
 
       <sect1>
-        <title>@NotInRepositoryMenu</title>
+        <title>@NotInServiceMenu</title>
 
         <para></para>
 
@@ -4624,11 +5548,291 @@ public class ComplexNumber {
         <para>The <classname>ValueSemanticsProvider</classname> allows the
         framework to interact with the value, parsing strings and displaying
         as text, and encoding/decoding (for serialization).</para>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para>AbstractValueSemanticsProvider</para>
+
+        <para></para>
+
+        <para>DefaultsProvider</para>
+
+        <para>EncoderDecoder</para>
+
+        <para>Parser</para>
+
+        <para></para>
       </sect1>
     </appendix>
 
-    <appendix>
-      <title>Supporting Classes</title>
+    <appendix id="apx.DomainObjectContainer">
+      <title><classname>DomainObjectContainer</classname> interface</title>
+
+      <abstract>
+        <para>Provides a single point of contact from domain objects into the
+        <emphasis>Apache Isis</emphasis> framework.</para>
+      </abstract>
+
+      <para>The <classname>DomainObjectContainer</classname> interface
+      provides a single point of contact from domain objects into the
+      <emphasis>Isis</emphasis> framework. It can also be used as a
+      lightweight general purpose repository during prototyping.</para>
+
+      <table>
+        <title>DomainObjectContainer methods</title>
+
+        <tgroup cols="3">
+          <thead>
+            <row>
+              <entry align="center">Category</entry>
+
+              <entry align="center">Method</entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry morerows="2">Object creation</entry>
+
+              <entry>newTransientInstance(Class&lt;T&gt;)</entry>
+
+              <entry>Creates new non-persisted object</entry>
+            </row>
+
+            <row>
+              <entry>newPersistentInstance(Class&lt;T&gt;)</entry>
+
+              <entry>Creates new object, will be persisted at end of
+              action</entry>
+            </row>
+
+            <row>
+              <entry>newInstance(Class&lt;T&gt;, Object)</entry>
+
+              <entry>Creates object in state persistence state as that
+              provided</entry>
+            </row>
+
+            <row>
+              <entry morerows="1">Validation</entry>
+
+              <entry>isValid(Object o)</entry>
+
+              <entry>whether object is valid</entry>
+            </row>
+
+            <row>
+              <entry>validate(Object o)</entry>
+
+              <entry>reason why object is invalid (if any)</entry>
+            </row>
+
+            <row>
+              <entry morerows="4">Object persistence</entry>
+
+              <entry>isPersistent(Object)</entry>
+
+              <entry>whether object is persistent</entry>
+            </row>
+
+            <row>
+              <entry>persist(Object)</entry>
+
+              <entry>persist the transient object</entry>
+            </row>
+
+            <row>
+              <entry>persistIfNotAlready(Object)</entry>
+
+              <entry>persist the object (provided is not already
+              persisted)</entry>
+            </row>
+
+            <row>
+              <entry>remove(Object)</entry>
+
+              <entry>remove the persisted object</entry>
+            </row>
+
+            <row>
+              <entry>removeIfNotAlready(Object)</entry>
+
+              <entry>remove the object (provided is not already
+              transient)</entry>
+            </row>
+
+            <row>
+              <entry morerows="6">Generic Repository</entry>
+
+              <entry>allInstances(Class&lt;T&gt;)</entry>
+
+              <entry>All persisted instances of specified type</entry>
+            </row>
+
+            <row>
+              <entry>allMatches(Class&lt;T&gt;, Filter&lt;T&gt;)</entry>
+
+              <entry>All persistenced instances of specified type matching
+              filter</entry>
+            </row>
+
+            <row>
+              <entry>allMatches(Class&lt;T&gt;, String)</entry>
+
+              <entry>All persisted instances with the specified string as
+              their title</entry>
+            </row>
+
+            <row>
+              <entry>allMatches(Class&lt;T&gt;, Object)</entry>
+
+              <entry>All persisted instances matching object
+              (query-by-example)</entry>
+            </row>
+
+            <row>
+              <entry>allMatches(Query&lt;T&gt;)</entry>
+
+              <entry>All instances satisfying the provided query</entry>
+            </row>
+
+            <row>
+              <entry>firstMatch(...)</entry>
+
+              <entry>As for allMatches, but returning first instance</entry>
+            </row>
+
+            <row>
+              <entry>uniqueMatch(...)</entry>
+
+              <entry>As for firstMatch(...), but requiring there to be only
+              one match</entry>
+            </row>
+
+            <row>
+              <entry morerows="2">Messages and warnings</entry>
+
+              <entry>informUser(String)</entry>
+
+              <entry>Inform the user</entry>
+            </row>
+
+            <row>
+              <entry>warnUser(String)</entry>
+
+              <entry>Warn the user about a situation, requiring
+              acknowledgement.</entry>
+            </row>
+
+            <row>
+              <entry>raiseError(String)</entry>
+
+              <entry>Notify user of a serious application error, typically
+              requiring further action on behalf of the user</entry>
+            </row>
+
+            <row>
+              <entry>Security</entry>
+
+              <entry>getUser()</entry>
+
+              <entry>The currently-logged on user</entry>
+            </row>
+
+            <row>
+              <entry morerows="1">Properties</entry>
+
+              <entry>getProperty(String)</entry>
+
+              <entry>Value of configuration property</entry>
+            </row>
+
+            <row>
+              <entry>getPropertyNames()</entry>
+
+              <entry>All configuration properties available</entry>
+            </row>
+
+            <row>
+              <entry morerows="1">Lazy loading, dirty object tracking
+              (*)</entry>
+
+              <entry>resolve(Object)</entry>
+
+              <entry>Lazy load object (overloaded to optionally load a
+              property of object)</entry>
+            </row>
+
+            <row>
+              <entry>objectChanged(Object)</entry>
+
+              <entry>Mark object as dirty</entry>
+            </row>
+
+            <row>
+              <entry morerows="1">Object store control (**)</entry>
+
+              <entry>flush()</entry>
+
+              <entry>Flush all pending changes to object store</entry>
+            </row>
+
+            <row>
+              <entry>commit()</entry>
+
+              <entry>Commit all pending changes to object store</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para><note>
+          <para>(*) generally not necessary to call - performed by bytecode
+          proxies</para>
+        </note><note>
+          <para>(**) the use of these methods is discouraged - they are
+          typically used only for tests</para>
+        </note></para>
+
+      <sect1>
+        <title>Lazy Loading, Dirty Object Tracking</title>
+
+        <para></para>
+      </sect1>
+    </appendix>
+
+    <appendix id="apx.SecurityClasses">
+      <title>Security Classes</title>
+
+      <para></para>
+
+      <sect1>
+        <title>User details</title>
+
+        <sect2>
+          <title>UserMemento</title>
+
+          <para>sdfsf</para>
+        </sect2>
+
+        <sect2>
+          <title>RoleMemento</title>
+
+          <para>asdad</para>
+
+          <para></para>
+        </sect2>
+      </sect1>
+    </appendix>
+
+    <appendix id="apx.UtilityClasses">
+      <title>Utility Classes</title>
 
       <abstract>
         <para>***</para>
@@ -4659,13 +5863,13 @@ public class ComplexNumber {
           <listitem>
             <para>the
             <classname>org.apache.isis.applib.util.ReasonBuffer</classname>
-            helper class </para>
+            helper class</para>
           </listitem>
 
           <listitem>
             <para>the
             <classname>org.apache.isis.applib.util.Reasons</classname> helper
-            class </para>
+            class</para>
           </listitem>
         </itemizedlist>
 
@@ -4683,56 +5887,20 @@ public class ComplexNumber {
 
         <para>Which you use (if any) is up to you.</para>
       </sect1>
-
-      <sect1>
-        <title>User details</title>
-
-        <sect2>
-          <title>UserMemento</title>
-
-          <para>sdfsf</para>
-        </sect2>
-
-        <sect2>
-          <title>RoleMemento</title>
-
-          <para>asdad</para>
-
-          <para></para>
-        </sect2>
-      </sect1>
-
-      <sect1>
-        <title>Clock</title>
-
-        <para></para>
-      </sect1>
     </appendix>
 
     <appendix>
-      <title>Fixtures</title>
+      <title>Events</title>
+
+      <para></para>
+
+      <para>org.apache.isis.applib.events.InteractionEvent</para>
 
       <para></para>
 
       <para></para>
 
       <para></para>
-    </appendix>
-
-    <appendix>
-      <title>Adapter class hierarchy</title>
-
-      <para></para>
-
-      <para></para>
-
-      <para>AbstractContainedObject --&gt; DomainObjectContainer</para>
-
-      <para>AbstractDomainObject : AbstractContainedObject</para>
-
-      <para>AbstractService : AbstractContainedObject</para>
-
-      <para>AbstractFactoryAndRepository : AbstractService</para>
     </appendix>
   </part>
 </book>

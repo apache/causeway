@@ -37,7 +37,7 @@ public enum FixtureType {
 	 * want data fixtures run (except possibly for the very first time booted to
 	 * initially seed them). 
 	 */
-	OBJECT_STORE,
+	DOMAIN_OBJECTS,
 	/**
 	 * Analogous to {@link FixtureType#DATA}, but for fixtures (in particular, the
 	 * {@link PerspectiveFixture}) that are used to setup {@link Profile}s and their
@@ -45,7 +45,7 @@ public enum FixtureType {
 	 * 
 	 * @see UserProfileService
 	 */
-	USER_PROFILE,
+	USER_PROFILES,
 	/**
 	 * A fixture that neither installs data into the object store nor perspectives
 	 * into the {@link UserProfileService}.

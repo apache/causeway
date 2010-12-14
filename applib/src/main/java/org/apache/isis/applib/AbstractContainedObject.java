@@ -260,19 +260,25 @@ public abstract class AbstractContainedObject {
     // }}
     
     // {{ Injected: Container
+    /**
+	 * @uml.property  name="container"
+	 * @uml.associationEnd  
+	 */
     private DomainObjectContainer container;
 
     /**
-     * This field is not persisted, nor displayed to the user.
-     */
+	 * This field is not persisted, nor displayed to the user.
+	 * @uml.property  name="container"
+	 */
     @Hidden
     protected DomainObjectContainer getContainer() {
         return this.container;
     }
 
     /**
-     * Injected by the application container itself.
-     */
+	 * Injected by the application container itself.
+	 * @uml.property  name="container"
+	 */
     public final void setContainer(final DomainObjectContainer container) {
         this.container = container;
     }

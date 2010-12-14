@@ -20,22 +20,24 @@
 
 package org.apache.isis.applib.fixtures;
 
+import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
+import org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware;
 import org.apache.isis.applib.profiles.Profile;
-import org.apache.isis.applib.profiles.ProfileService;
-import org.apache.isis.applib.profiles.ProfileServiceAware;
 
-public abstract class UserProfileFixture extends AbstractFixture implements ProfileServiceAware {
+public abstract class UserProfileFixture extends BaseFixture implements UserProfileServiceAware {
 	
-    private ProfileService profileService;
+    private UserProfileService profileService;
 
     public UserProfileFixture() {
-		super(FixtureType.USER_PROFILE);
+		super(FixtureType.USER_PROFILES);
 	}
     
-    public void setService(ProfileService profileService) {
+    @Override
+    public void setService(UserProfileService profileService) {
         this.profileService = profileService;
     }
 
+    @Override
     public final void install() {
         installProfiles();
     }

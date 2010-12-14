@@ -20,10 +20,10 @@
 
 package org.apache.isis.applib.fixtures;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 
 
 /**
@@ -44,21 +44,16 @@ import java.util.List;
 public class LogonFixture implements InstallableFixture {
 
 
-	@SuppressWarnings("unchecked")
-	private static List<String> asList(final String... roles) {
-		return roles != null ? Arrays.asList(roles) : Collections.EMPTY_LIST;
-	}
-
     private final String username;
-    private final List<String> roles = new ArrayList<String>();
+    private final List<String> roles;
     
     public LogonFixture(final String username, final String... roles) {
-        this(username, asList(roles));
+        this(username, Lists.newArrayList(roles));
     }
 
     public LogonFixture(final String username, final List<String> roles) {
         this.username = username;
-        this.roles.addAll(roles);
+        this.roles = ImmutableList.copyOf(roles);
     }
 
     public String getUsername() {
@@ -66,14 +61,16 @@ public class LogonFixture implements InstallableFixture {
     }
 
     public List<String> getRoles() {
-        return Collections.unmodifiableList(roles);
+        return roles;
     }
 
+    @Override
     public final void install() {
         // does nothing; see comments above.
     }
 
-	public FixtureType getType() {
+	@Override
+    public FixtureType getType() {
 		return FixtureType.OTHER;
 	}
 

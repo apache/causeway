@@ -24,10 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.AbstractContainedObject;
-import org.apache.isis.applib.clock.Clock;
-import org.apache.isis.applib.switchuser.SwitchUserService;
-import org.apache.isis.applib.switchuser.SwitchUserServiceAware;
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 
 
 /**
@@ -46,46 +44,41 @@ import org.apache.isis.applib.switchuser.SwitchUserServiceAware;
  * </ul>
  * 
  * <p>
- * To automatically logon for the demo/test, use 
+ * To automatically logon for the demo/test, use {@link LogonFixture}. 
  */
-public abstract class AbstractFixture extends AbstractContainedObject implements InstallableFixture, CompositeFixture, SwitchUserServiceAware {
+public abstract class AbstractFixture extends BaseFixture implements CompositeFixture, SwitchUserServiceAware {
 	
     private final List<Object> fixtures = new ArrayList<Object>();
-    
-    // is initialized in constructor
-	private FixtureClock clock = null;
-	private final FixtureType fixtureType;
+
+    /////////////////////////////////////////////////////////////////
+    // Constructor
+    /////////////////////////////////////////////////////////////////
 
 	/**
-	 * Assumed to be {@link FixtureType#OBJECT_STORE data} fixture.
+	 * Assumed to be {@link FixtureType#DOMAIN_OBJECTS data} fixture.
 	 */
     public AbstractFixture() {
-    	this(FixtureType.OBJECT_STORE);
+    	this(FixtureType.DOMAIN_OBJECTS);
     }
 
     public AbstractFixture(final FixtureType fixtureType) {
-    	this.fixtureType = fixtureType;
-    	try {
-    		clock = FixtureClock.initialize();
-    	} catch(IllegalStateException ex) {
-    		clock = null;
-    		System.err.println(ex.getMessage());
-    		System.err.println("calls to change date or time will be ignored");
-    	}
+    	super(fixtureType);
     }
 
-    /**
-     * As specified in constructor.
-     */
-    public FixtureType getType() {
-		return fixtureType;
-	}
-    
+    /////////////////////////////////////////////////////////////////
+    // install() hook (for non-composites)
+    /////////////////////////////////////////////////////////////////
+
     /**
      * Most subclasses will override this method, but composite fixtures
      * should instead call {@link #addFixture(Object)} in their constructor.
      */
+    @Override
     public void install() {}
+
+    /////////////////////////////////////////////////////////////////
+    // CompositeFixture impl
+    /////////////////////////////////////////////////////////////////
 
     /**
      * Allows the fixture to act as a composite (call within constructor).
@@ -97,28 +90,21 @@ public abstract class AbstractFixture extends AbstractContainedObject implements
     /**
      * Returns an array of any fixtures that have been {@link #addFixture(Object) added}.
      */
+    @Override
     public List<Object> getFixtures() {
         return Collections.unmodifiableList(fixtures);
     }
 
 
-
-    // {{ Clock
-    /**
-     * The {@link Clock} singleton, downcast to {@link FixtureClock}.
-     * 
-     * <p>
-     * Will return <tt>null</tt> if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
-     */
-    public FixtureClock getFixtureClock() {
-        return clock;
-    }
-
+    /////////////////////////////////////////////////////////////////
+    // Date and time
+    /////////////////////////////////////////////////////////////////
+    
     /**
      * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
      */
     public void earlierDate(final int years, final int months, final int days) {
-    	if (clockNotSetup("earlierDate")) return;
+    	if (shouldIgnoreCallBecauseNoClockSetup("earlierDate()")) return;
         clock.addDate(-years, -months, -days);
     }
 
@@ -126,7 +112,7 @@ public abstract class AbstractFixture extends AbstractContainedObject implements
      * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
      */
 	public void earlierTime(final int hours, final int minutes) {
-    	if (clockNotSetup("earlierDate")) return;
+    	if (shouldIgnoreCallBecauseNoClockSetup("earlierTime()")) return;
         clock.addTime(-hours, -minutes);
     }
 
@@ -134,7 +120,7 @@ public abstract class AbstractFixture extends AbstractContainedObject implements
      * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
      */
     public void laterDate(final int years, final int months, final int days) {
-    	if (clockNotSetup("laterDate")) return;
+    	if (shouldIgnoreCallBecauseNoClockSetup("laterDate()")) return;
         clock.addDate(years, months, days);
     }
 
@@ -142,44 +128,10 @@ public abstract class AbstractFixture extends AbstractContainedObject implements
      * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
      */
     public void laterTime(final int hours, final int minutes) {
-    	if (clockNotSetup("laterTime")) return;
+    	if (shouldIgnoreCallBecauseNoClockSetup("laterTime()")) return;
         clock.addTime(hours, minutes);
     }
 
-    /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
-     */
-    public void resetClock() {
-    	if (clockNotSetup("laterTime")) return;
-        clock.reset();
-    }
-
-    /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
-     */
-    public void setDate(final int year, final int month, final int day) {
-    	if (clockNotSetup("setDate")) return;
-        clock.setDate(year, month, day);
-    }
-
-    /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
-     */
-    public void setTime(final int hour, final int minute) {
-    	if (clockNotSetup("setTime")) return;
-        clock.setTime(hour, minute);
-    }
-
-    private boolean clockNotSetup(String methodName) {
-    	if (clock == null) {
-    		System.err.println("clock not set, call to " + methodName + " ignored");
-    		return true;
-    	}
-		return false;
-	}
-    // }}
-
-    
     // {{ User
     protected void switchUser(final String username, final String... roles) {
         switchUserService.switchUser(username, roles);
@@ -189,6 +141,7 @@ public abstract class AbstractFixture extends AbstractContainedObject implements
 
     // {{ Injected: SwitchUserService
 	private SwitchUserService switchUserService;
+    @Override
     public void setService(final SwitchUserService fixtureService) {
         this.switchUserService = fixtureService;
     }

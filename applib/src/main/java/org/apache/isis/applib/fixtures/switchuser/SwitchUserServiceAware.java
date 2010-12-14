@@ -18,27 +18,19 @@
  */
 
 
-package org.apache.isis.applib.annotation;
+package org.apache.isis.applib.fixtures.switchuser;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
+import org.apache.isis.applib.fixtures.AbstractFixture;
 
 /**
- * Indicates the a (repository) action should be not be displayed in the repository menu.
+ * Implement if require {@link SwitchUserService} to be injected into fixture.
  * 
  * <p>
- * It may still be contributed (unless it has been annotated as {@link NotContributed}).
- * If {@link Hidden}, then also implies that the menu should not appear in the repository menu.
- * 
- * <p>
- * Has no meanings for actions on regular entities.
+ * Most fixtures will subclass from {@link AbstractFixture} which does indeed
+ * implement this interface.
  */
-@Inherited
-@Target( { ElementType.METHOD })
-@Retention(RetentionPolicy.RUNTIME)
-public @interface NotInRepositoryMenu {}
+public interface SwitchUserServiceAware {
+
+	void setService(SwitchUserService switchUserService);
+}
 

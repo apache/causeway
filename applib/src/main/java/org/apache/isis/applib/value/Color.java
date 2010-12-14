@@ -20,7 +20,7 @@
 
 package org.apache.isis.applib.value;
 
-import org.apache.isis.applib.annotation.Facets;
+import org.apache.isis.applib.annotation.Value;
 
 
 /**
@@ -30,11 +30,8 @@ import org.apache.isis.applib.annotation.Facets;
  * <p>
  * Where there is no basic colors (RGB all equal 0) then you get black; where each color is at maximum (RGB
  * all equal 255) you get white.
- *
- * <p>
- * TODO: currently this value type still uses <tt>@Facets</tt> rather than <tt>@Value</tt>.
  */
-@Facets(facetFactoryNames = { "org.apache.isis.metamodel.value.ColorValueTypeFacetFactory" })
+@Value(semanticsProviderName="org.apache.isis.core.progmodel.facets.value.ColorValueSemanticsProvider")
 public class Color extends Magnitude<Color> {
 
     private static final long serialVersionUID = 1L;
@@ -58,7 +55,7 @@ public class Color extends Magnitude<Color> {
      */
     @Override
     public boolean isEqualTo(final Color number) {
-        return ((Color) number).color == color;
+        return (number).color == color;
     }
 
     /**
@@ -66,7 +63,7 @@ public class Color extends Magnitude<Color> {
      */
     @Override
     public boolean isLessThan(final Color value) {
-        return color < ((Color) value).color;
+        return color < (value).color;
     }
 
     public String title() {
@@ -104,6 +101,7 @@ public class Color extends Magnitude<Color> {
     }
 
 
+    @Override
     public String toString() {
         return "Color: #" + Integer.toHexString(color).toUpperCase();
     }

@@ -18,19 +18,33 @@
  */
 
 
-package org.apache.isis.applib.switchuser;
+package org.apache.isis.applib.query;
 
-import org.apache.isis.applib.fixtures.AbstractFixture;
+import java.io.Serializable;
+
 
 /**
- * Implement if require {@link SwitchUserService} to be injected into fixture.
+ * Although implements {@link Query} and thus is intended to be (and indeed is) {@link Serializable},
+ * it will be converted into a <tt>PersistenceQuery</tt> in the runtime for remoting purposes.
  * 
  * <p>
- * Most fixtures will subclass from {@link AbstractFixture} which does indeed
- * implement this interface.
+ * See discussion in {@link QueryBuiltInAbstract} for further details.
  */
-public interface SwitchUserServiceAware {
+public class QueryFindAllInstances<T> extends QueryBuiltInAbstract<T> {
 
-	void setService(SwitchUserService switchUserService);
+	private static final long serialVersionUID = 1L;
+	
+	public QueryFindAllInstances(final Class<T> type) {
+		super(type);
+	}
+
+	public QueryFindAllInstances(final String typeName) {
+		super(typeName);
+	}
+
+	@Override
+    public String getDescription() {
+		return getResultTypeName() + " (all instances)";
+	}
+
 }
-

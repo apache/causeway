@@ -18,29 +18,17 @@
  */
 
 
-package org.apache.isis.applib.profiles;
+package org.apache.isis.applib.fixtures.userprofile;
 
 import org.apache.isis.applib.fixtures.UserProfileFixture;
-import org.apache.isis.applib.switchuser.SwitchUserService;
-
 
 /**
- * Not intended to be used directly; decouples the {@link UserProfileFixture}, which needs to persist {@link Perspective}s,
- * from the rest of the framework's runtime.
+ * Not intended to be implemented directly; is implemented by {@link UserProfileFixture}.
  * 
  * <p>
- * A suitable implementation is injected into {@link UserProfileFixture} when installed.
- * 
- * @see SwitchUserService
+ * If using perspectives then subclass from {@link UserProfileFixture}.
  */
-public interface ProfileService {
+public interface UserProfileServiceAware {
 
-    Profile newUserProfile();
-
-    Profile newUserProfile(Profile profile);
-
-    void saveForUser(String name, Profile profile);
-
-    void saveAsDefault(Profile profile);
-
+	public void setService(UserProfileService perspectiveInstaller);
 }
