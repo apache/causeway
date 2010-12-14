@@ -43,13 +43,13 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemanticsProviderAbstract implements DateValueFacet {
 
+    //public static final String PREFERRED_FORMAT_KEY = ""
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";
     private static final TimeZone UTC_TIME_ZONE;
 
     static {
         TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
         if (timeZone == null) {
-            // for dotnet compatibility - Etc/UTC fails in dotnet
             timeZone = TimeZone.getTimeZone("UTC");
         }
         UTC_TIME_ZONE = timeZone;

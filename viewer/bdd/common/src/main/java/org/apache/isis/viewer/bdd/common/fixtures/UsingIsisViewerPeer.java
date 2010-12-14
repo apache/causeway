@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -313,7 +314,11 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         if (parseableFacet != null) {
             try {
                 return parseableFacet.parseTextEntry(contextAdapter, cellText);
+            } catch (final TextEntryParseException ex) {
+                throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '"+cellText+"')");
             } catch (final IllegalArgumentException ex) {
+                // REVIEW: isn't what is thrown, but perhaps 
+                // TextEntryParseException should inherit from IllegalArgumentException? 
                 throw ScenarioBoundValueException.arg(contextBinding, paramCell, "(cannot parse '"+cellText+"')");
             }
         }

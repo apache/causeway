@@ -13,101 +13,98 @@ import java.util.TimeZone;
  */
 public class DateParser {
 
-	/**
-	 * Taken from the {@link org.apache.isis.applib.value.Date}
-	 */
-	private static final TimeZone UTC_TIME_ZONE;
+    /**
+     * Taken from the {@link org.apache.isis.applib.value.Date}
+     */
+    private static final TimeZone UTC_TIME_ZONE;
+    static {
+        TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
+        if (timeZone == null) {
+            timeZone = TimeZone.getTimeZone("UTC");
+        }
+        UTC_TIME_ZONE = timeZone;
+    }
 
-	static {
-		// for dotnet compatibility -
-		TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
-		if (timeZone == null) {
-			// for dotnet compatibility - "Etc/UTC fails in dotnet
-			timeZone = TimeZone.getTimeZone("UTC");
-		}
-		UTC_TIME_ZONE = timeZone;
-	}
+    private static final String DEFAULT_DATE_MASK = "dd-MMM-yyyy";
+    private static final String DEFAULT_TIME_MASK = "hh:mm";
 
-	private static final String DEFAULT_DATE_MASK = "dd-MMM-yyyy";
-	private static final String DEFAULT_TIME_MASK = "hh:mm";
+    private String dateMask = DEFAULT_DATE_MASK;
+    private String timeMask = DEFAULT_TIME_MASK;
+    private DateFormat dateAndTimeFormat = null;
+    private DateFormat dateOnlyFormat = null;
+    private DateFormat timeOnlyFormat = null;
 
-	private String dateMask = DEFAULT_DATE_MASK;
-	private String timeMask = DEFAULT_TIME_MASK;
-	private DateFormat dateAndTimeFormat = null;
-	private DateFormat dateOnlyFormat = null;
-	private DateFormat timeOnlyFormat = null;
+    public DateParser() {
+    }
 
-	public DateParser() {
-	}
+    public Date parse(String dateAndOrTimeStr) {
+        try {
+            return getDateAndTimeFormat().parse(dateAndOrTimeStr);
+        } catch (ParseException e) {
+            try {
+                return getDateFormat().parse(dateAndOrTimeStr);
+            } catch (ParseException e2) {
+                try {
+                    return getTimeFormat().parse(dateAndOrTimeStr);
+                } catch (ParseException e3) {
+                    return null;
+                }
+            }
+        }
+    }
 
-	public Date parse(String dateAndOrTimeStr) {
-		try {
-			return getDateAndTimeFormat().parse(dateAndOrTimeStr);
-		} catch (ParseException e) {
-			try {
-				return getDateFormat().parse(dateAndOrTimeStr);
-			} catch (ParseException e2) {
-				try {
-					return getTimeFormat().parse(dateAndOrTimeStr);
-				} catch (ParseException e3) {
-					return null;
-				}
-			}
-		}
-	}
+    public void setDateFormat(String dateMask) {
+        this.dateMask = dateMask;
+        invalidateFormats();
+    }
 
-	public void setDateFormat(String dateMask) {
-		this.dateMask = dateMask;
-		invalidateFormats();
-	}
+    public void setTimeFormat(String timeMask) {
+        this.timeMask = timeMask;
+        invalidateFormats();
+    }
 
-	public void setTimeFormat(String timeMask) {
-		this.timeMask = timeMask;
-		invalidateFormats();
-	}
+    private void invalidateFormats() {
+        this.dateAndTimeFormat = null;
+    }
 
-	private void invalidateFormats() {
-		this.dateAndTimeFormat = null;
-	}
+    public String format(Date resultDate) {
+        return getDateAndTimeFormat().format(resultDate);
+    }
 
-	public String format(Date resultDate) {
-		return getDateAndTimeFormat().format(resultDate);
-	}
+    private DateFormat getDateAndTimeFormat() {
+        if (dateAndTimeFormat == null) {
+            dateAndTimeFormat = getUTCDateFormat(combinedMask());
+        }
+        return dateAndTimeFormat;
+    }
 
-	private DateFormat getDateAndTimeFormat() {
-		if (dateAndTimeFormat == null) {
-			dateAndTimeFormat = getUTCDateFormat(combinedMask());
-		}
-		return dateAndTimeFormat;
-	}
+    private DateFormat getTimeFormat() {
+        if (timeOnlyFormat == null) {
+            timeOnlyFormat = getUTCDateFormat(timeMask);
+        }
+        return timeOnlyFormat;
+    }
 
-	private DateFormat getTimeFormat() {
-		if (timeOnlyFormat == null) {
-			timeOnlyFormat = getUTCDateFormat(timeMask);
-		}
-		return timeOnlyFormat;
-	}
+    private DateFormat getDateFormat() {
+        if (dateOnlyFormat == null) {
+            dateOnlyFormat = getUTCDateFormat(dateMask);
+        }
+        return dateOnlyFormat;
+    }
 
-	private DateFormat getDateFormat() {
-		if (dateOnlyFormat == null) {
-			dateOnlyFormat = getUTCDateFormat(dateMask);
-		}
-		return dateOnlyFormat;
-	}
+    private DateFormat getUTCDateFormat(String dateTimeMask) {
+        DateFormat dateFormat = new SimpleDateFormat(dateTimeMask);
+        dateFormat.setTimeZone(UTC_TIME_ZONE);
+        return dateFormat;
+    }
 
-	private DateFormat getUTCDateFormat(String dateTimeMask) {
-		DateFormat dateFormat = new SimpleDateFormat(dateTimeMask);
-		dateFormat.setTimeZone(UTC_TIME_ZONE);
-		return dateFormat;
-	}
+    private String combinedMask() {
+        return MessageFormat.format("{0} {1}", dateMask, timeMask);
+    }
 
-	private String combinedMask() {
-		return MessageFormat.format("{0} {1}", dateMask, timeMask);
-	}
-
-	@Override
-	public String toString() {
-		return combinedMask();
-	}
+    @Override
+    public String toString() {
+        return combinedMask();
+    }
 
 }
