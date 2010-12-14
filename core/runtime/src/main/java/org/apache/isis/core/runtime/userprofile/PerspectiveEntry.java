@@ -28,193 +28,242 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.persistence.services.ServiceUtil;
 
 public class PerspectiveEntry implements DebugInfo {
-        private final List<Object> objects = new ArrayList<Object>();
-        private final List<Object> services = new ArrayList<Object>();
-        private String name;
 
-        public PerspectiveEntry() {}
-/*
-        public PerspectiveEntry(XElement doc) {
-            name = doc.Element("name").Value;
+    private final List<Object> objects = new ArrayList<Object>();
+    private final List<Object> services = new ArrayList<Object>();
+    private String name;
 
-            XElement servicesElement = doc.Element("services");
-            foreach (XElement serviceElement in servicesElement.Elements()) {
-                XAttribute id = serviceElement.Attribute("id");
-                IObjectAdapter s = IsisContext.ObjectPersistor.GetService(id.Value);
-                if (s != null) {
-                    services.Add(s.Object);
-                }
-                Console.WriteLine(id + "  " + s);
-            }
+    public PerspectiveEntry() {}
 
-            XElement objectsElement = doc.Element("objects");
-            foreach (XElement objectElement in objectsElement.Elements()) {
-                IObjectSpecification specification =
-                    IsisContext.Reflector.LoadSpecification(
-                        objectElement.Attribute("specification").Value);
+    /////////////////////////////////////////////////////////
+    // Name & Title
+    /////////////////////////////////////////////////////////
 
-                List<String> data = new List<string>();
-                foreach (XElement dataElement in objectElement.Elements("data")) {
-                    data.Add(dataElement.Value);
-                }
-                string[] dataArray = data.ToArray();
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
 
-                Type oidType = TypeUtils.GetType(objectElement.Attribute("oid").Value);
-                ConstructorInfo contructor = oidType.GetConstructor(new Type[] { typeof(String[]) });
-                IOid oid = (IOid)contructor.Invoke(new object[] { dataArray });
+    public String getTitle() {
+        return name + " (" + services.size() + " classes)";
+    }
 
 
-                IObjectAdapter s = IsisContext.ObjectPersistor.LoadObject(oid, specification);
-                if (s != null) {
-                    objects.Add(s.Object);
-                }
-                Console.WriteLine(oid + "  " + s);
+    /////////////////////////////////////////////////////////
+    // Objects, save
+    /////////////////////////////////////////////////////////
 
-            }
+    // REVIEW should this deal with Isis, and the services with IDs (or Isis)
+    public List<Object> getObjects() {
+        return objects;
+    }
+
+    public void addToObjects(Object obj) {
+        if (!objects.contains(obj)) {
+            objects.add(obj);
         }
+    }
 
+    public void removeFromObjects(Object obj) {
+        objects.remove(obj);
+    }
 
-        public void SaveAsXml(XElement element) {
-            element.Add(new XElement("name", name));
-
-            XElement servicesElement = new XElement("services");
-            foreach (object service in Services) {
-                XElement serviceElement = new XElement("service");
-                serviceElement.Add(new XAttribute("id", ServiceUtils.GetId(service)));
-                servicesElement.Add(serviceElement);
-            }
-            element.Add(servicesElement);
-
-            XElement objectsElement = new XElement("objects");
-            foreach (object pojo in Objects) {
-                IObjectAdapter obj = IsisContext.ObjectPersistor.GetAdapterFor(pojo);
-                if (obj.Oid is IEncodedToStrings) {
-                    XElement objectElement = new XElement("object");
-                    objectElement.Add(new XAttribute("specification", obj.Specification.FullName));
-                    objectElement.Add(new XAttribute("oid", obj.Oid.GetType().FullName));
-                    string[] oidData = ((IEncodedToStrings)obj.Oid).ToEncodedStrings();
-                    foreach (string data in oidData) {
-                        objectElement.Add(new XElement("data", data));
-                    }
-                    objectsElement.Add(objectElement);
-                }
-            }
-            element.Add(objectsElement);
+    public void save(List<ObjectAdapter> adapters) {
+        this.objects.clear();
+        for (ObjectAdapter adapter : adapters) {
+            addToObjects(adapter.getObject());
         }
-*/
+    }
 
-        public String getName() {
-            return name;
-        }
-        
-        public void setName(String name) {
-            this.name = name;
-        }
-        
-        // REVIEW should this deal with Isis, and the services with IDs (or Isis)
-        public List<Object> getObjects() {
-            return objects;
-        }
-        
-        public List<Object> getServices() {
-            return services;
-        }
+    /////////////////////////////////////////////////////////
+    // Services
+    /////////////////////////////////////////////////////////
 
-        public String getTitle() {
-            return name + " (" + services.size() + " classes)";
-        }
+    public List<Object> getServices() {
+        return services;
+    }
 
-        public void addToObjects(Object obj) {
-            if (!objects.contains(obj)) {
-                objects.add(obj);
-            }
-        }
+    public Object addToServices(Class serviceType) {
+        Object service = findService(serviceType);
+        addToServices(service);
+        return service;
+    }
 
-        public Object addToServices(Class serviceType) {
-            Object service = findService(serviceType);
-            addToServices(service);
-            return service;
+    public void addToServices(Object service) {
+        if (service != null && !services.contains(service)) {
+            services.add(service);
         }
+    }
 
-        private Object findService(Class serviceType) {
-            for (Object service : IsisContext.getServices()) {
-                if (service.getClass().isAssignableFrom(serviceType)) {
-                    return service;
-                }
-            }
-            throw new IsisException("No service of type " + serviceType.getName());
-        }
-
-        public void addToServices(Object service) {
-            if (service != null && !services.contains(service)) {
-                services.add(service);
-            }
-        }
-
-        public void addGenericRepository(Class type) {
-            Object service = IsisContext.getPersistenceSession().getService("repository#" + type.getName()).getObject();
-            addToServices(service);
-        }
-
-        public void removeFromObjects(Object obj) {
-            objects.remove(obj);
-        }
-
-        public void removeServices(Class serviceType) {
-            Object service = findService(serviceType);
-            if (!services.contains(service)) {
-                services.remove(service);
-            }
-        }
-
-        public void removeFromServices(Object service) {
+    public void removeFromServices(Class<?> serviceType) {
+        Object service = findService(serviceType);
+        if (!services.contains(service)) {
             services.remove(service);
         }
+    }
 
-        public void copy(PerspectiveEntry template) {
-            name = template.getName();
-            for (Object service : template.getServices()) {
-                addToServices(service);
-            }
-            for (Object obj : template.getObjects()) {
-                addToObjects(obj);
+    public void removeFromServices(Object service) {
+        services.remove(service);
+    }
+
+
+    private Object findService(Class<?> serviceType) {
+        for (Object service : IsisContext.getServices()) {
+            if (service.getClass().isAssignableFrom(serviceType)) {
+                return service;
             }
         }
+        throw new IsisException("No service of type " + serviceType.getName());
+    }
 
-        public void save(List<ObjectAdapter> objects) {
-            this.objects.clear();
-            for (ObjectAdapter obj : objects) {
-                addToObjects(obj.getObject());
+    /////////////////////////////////////////////////////////
+    // Generic Repository
+    /////////////////////////////////////////////////////////
+
+    public void addGenericRepository(Class type) {
+        Object service = getPersistenceSession().getService("repository#" + type.getName()).getObject();
+        addToServices(service);
+    }
+
+    
+    /////////////////////////////////////////////////////////
+    // copy
+    /////////////////////////////////////////////////////////
+
+    public void copy(PerspectiveEntry template) {
+        name = template.getName();
+        for (Object service : template.getServices()) {
+            addToServices(service);
+        }
+        for (Object obj : template.getObjects()) {
+            addToObjects(obj);
+        }
+    }
+
+    
+    /////////////////////////////////////////////////////////
+    // Debugging
+    /////////////////////////////////////////////////////////
+
+    @Override
+    public void debugData(DebugString debug) {
+        debug.appendln("Name", getName());
+        debug.blankLine();
+        debug.appendTitle("Services (Ids)");
+        debug.indent();
+        for (Object service : getServices()) {
+            debug.appendln(ServiceUtil.id(service));
+        }
+        debug.unindent();
+        
+        debug.blankLine();
+        debug.appendTitle("Objects");
+        debug.indent();
+        AdapterManager adapterManager = getPersistenceSession().getAdapterManager();
+        for (Object obj : getObjects()) {
+            debug.appendln(adapterManager.adapterFor(obj).toString());
+        }
+        debug.unindent();
+    }
+
+    @Override
+    public String debugTitle() {
+        return "Perspective";
+    }
+
+
+    /////////////////////////////////////////////////////////
+    // Dependencies (from Context)
+    /////////////////////////////////////////////////////////
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
+
+
+    /////////////////////////////////////////////////////////
+    // REVIEW: what's this commented out code???
+    /////////////////////////////////////////////////////////
+    
+    /*
+    public PerspectiveEntry(XElement doc) {
+        name = doc.Element("name").Value;
+
+        XElement servicesElement = doc.Element("services");
+        foreach (XElement serviceElement in servicesElement.Elements()) {
+            XAttribute id = serviceElement.Attribute("id");
+            IObjectAdapter s = IsisContext.ObjectPersistor.GetService(id.Value);
+            if (s != null) {
+                services.Add(s.Object);
             }
+            Console.WriteLine(id + "  " + s);
         }
 
-        public void debugData(DebugString debug) {
-            debug.appendln("Name", getName());
-            debug.blankLine();
-            debug.appendTitle("Services (Ids)");
-            debug.indent();
-            for (Object service : getServices()) {
-                debug.appendln(ServiceUtil.id(service));
-            }
-            debug.unindent();
-            
-            debug.blankLine();
-            debug.appendTitle("Objects");
-            debug.indent();
-            AdapterManager adapterManager = IsisContext.getPersistenceSession().getAdapterManager();
-            for (Object obj : getObjects()) {
-                debug.appendln(adapterManager.adapterFor(obj).toString());
-            }
-            debug.unindent();
-        }
+        XElement objectsElement = doc.Element("objects");
+        foreach (XElement objectElement in objectsElement.Elements()) {
+            IObjectSpecification specification =
+                IsisContext.Reflector.LoadSpecification(
+                    objectElement.Attribute("specification").Value);
 
-        public String debugTitle() {
-            return "Perspective";
+            List<String> data = new List<string>();
+            foreach (XElement dataElement in objectElement.Elements("data")) {
+                data.Add(dataElement.Value);
+            }
+            string[] dataArray = data.ToArray();
+
+            Type oidType = TypeUtils.GetType(objectElement.Attribute("oid").Value);
+            ConstructorInfo contructor = oidType.GetConstructor(new Type[] { typeof(String[]) });
+            IOid oid = (IOid)contructor.Invoke(new object[] { dataArray });
+
+
+            IObjectAdapter s = IsisContext.ObjectPersistor.LoadObject(oid, specification);
+            if (s != null) {
+                objects.Add(s.Object);
+            }
+            Console.WriteLine(oid + "  " + s);
+
         }
+    }
+
+
+    public void SaveAsXml(XElement element) {
+        element.Add(new XElement("name", name));
+
+        XElement servicesElement = new XElement("services");
+        foreach (object service in Services) {
+            XElement serviceElement = new XElement("service");
+            serviceElement.Add(new XAttribute("id", ServiceUtils.GetId(service)));
+            servicesElement.Add(serviceElement);
+        }
+        element.Add(servicesElement);
+
+        XElement objectsElement = new XElement("objects");
+        foreach (object pojo in Objects) {
+            IObjectAdapter obj = IsisContext.ObjectPersistor.GetAdapterFor(pojo);
+            if (obj.Oid is IEncodedToStrings) {
+                XElement objectElement = new XElement("object");
+                objectElement.Add(new XAttribute("specification", obj.Specification.FullName));
+                objectElement.Add(new XAttribute("oid", obj.Oid.GetType().FullName));
+                string[] oidData = ((IEncodedToStrings)obj.Oid).ToEncodedStrings();
+                foreach (string data in oidData) {
+                    objectElement.Add(new XElement("data", data));
+                }
+                objectsElement.Add(objectElement);
+            }
+        }
+        element.Add(objectsElement);
+    }
+*/
+
 }
 
 

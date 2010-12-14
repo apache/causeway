@@ -20,31 +20,35 @@
 
 package org.apache.isis.core.runtime.fixturesinstaller;
 
+import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
+import org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware;
 import org.apache.isis.applib.profiles.Perspective;
 import org.apache.isis.applib.profiles.Profile;
-import org.apache.isis.applib.profiles.ProfileService;
-import org.apache.isis.applib.profiles.ProfileServiceAware;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
 
-public class ProfileServiceImpl implements ProfileService {
+public class ProfileServiceImpl implements UserProfileService {
 
-	public Profile newUserProfile() {
+	@Override
+    public Profile newUserProfile() {
 		return new ProfileImpl();
 	}
 
-	public Profile newUserProfile(Profile profileTemplate) {
+	@Override
+    public Profile newUserProfile(Profile profileTemplate) {
 		return new ProfileImpl((ProfileImpl) profileTemplate);
 	}
 
-	public void saveAsDefault(Profile profile) {
+	@Override
+    public void saveAsDefault(Profile profile) {
 		getUserProfileLoader().saveAsDefault(createUserProfile(profile));
 	}
 
-	public void saveForUser(String name, Profile profile) {
+	@Override
+    public void saveForUser(String name, Profile profile) {
 		getUserProfileLoader().saveForUser(name, createUserProfile(profile));
 	}
 
@@ -53,8 +57,8 @@ public class ProfileServiceImpl implements ProfileService {
 	}
 
 	public void injectInto(Object fixture) {
-		if (fixture instanceof ProfileServiceAware) {
-			ProfileServiceAware serviceAware = (ProfileServiceAware) fixture;
+		if (fixture instanceof UserProfileServiceAware) {
+			UserProfileServiceAware serviceAware = (UserProfileServiceAware) fixture;
 			serviceAware.setService(this);
 		}
 	}
@@ -81,16 +85,19 @@ class ProfileImpl implements Profile {
 		return userProfile;
 	}
 
-	public void addToOptions(String name, String value) {
+	@Override
+    public void addToOptions(String name, String value) {
 		userProfile.addToOptions(name, value);
 	}
 
-	public void addToPerspectives(Perspective perspective) {
+	@Override
+    public void addToPerspectives(Perspective perspective) {
 		userProfile.addToPerspectives(((PerspectiveImpl) perspective)
 				.getPerspectiveEntry());
 	}
 
-	public Perspective getPerspective(String name) {
+	@Override
+    public Perspective getPerspective(String name) {
 		PerspectiveEntry perspectiveEntry = userProfile.getPerspective(name);
 		if (perspectiveEntry == null) {
 			throw new IsisException("No perspective found for "
@@ -99,7 +106,8 @@ class ProfileImpl implements Profile {
 		return new PerspectiveImpl(perspectiveEntry);
 	}
 
-	public Perspective newPerspective(String name) {
+	@Override
+    public Perspective newPerspective(String name) {
 		PerspectiveEntry perspectiveEntry = userProfile.newPerspective(name);
 		return new PerspectiveImpl(perspectiveEntry);
 	}
@@ -117,33 +125,45 @@ class PerspectiveImpl implements Perspective {
 		return entry;
 	}
 
-	public void addGenericRepository(Class<?>... classes) {
+	@Override
+    public void addGenericRepository(Class<?>... classes) {
 		for (Class<?> cls : classes) {
 			entry.addGenericRepository(cls);
 		}
 	}
 
-	public void addToObjects(Object... objects) {
+	@Override
+    public void addToObjects(Object... objects) {
 		for (Object object : objects) {
 			entry.addToObjects(object);
 		}
 	}
 
-	public Object addToServices(Class<?> cls) {
-		return entry.addToServices(cls);
+	@Override
+    public void addToServices(Class<?> cls) {
+		entry.addToServices(cls);
+	}
+	@Override
+	public void removeFromServices(Class<?> cls) {
+	    entry.removeFromServices(cls);
 	}
 
-	public void addToServices(Class<?>... classes) {
+	
+	@Override
+    public void addToServices(Class<?>... classes) {
 		for (Class<?> cls : classes) {
-			entry.addToServices(cls);
+			addToServices(cls);
 		}
 	}
 
-	public void removeFromServices(Class<?>... classes) {
+	@Override
+    public void removeFromServices(Class<?>... classes) {
 		for (Class<?> cls : classes) {
-			entry.removeFromServices(cls);
+			removeFromServices(cls);
 		}
 	}
+
+
 
 }
 

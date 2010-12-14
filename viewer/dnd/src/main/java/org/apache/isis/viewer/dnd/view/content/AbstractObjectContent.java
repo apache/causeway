@@ -20,6 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.content;
 
+import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -28,7 +29,6 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.ConsentAbstract;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -69,7 +69,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             final ObjectAdapter object = view.getContent().getAdapter();
             final ObjectSpecification spec = object.getSpecification();
             final ObjectAdapter instances = IsisContext.getPersistenceSession().findInstances(
-                    new QueryFindAllInstances(spec), QueryCardinality.MULTIPLE);
+                    new QueryFindAllInstances(spec.getFullName()), QueryCardinality.MULTIPLE);
             workspace.objectActionResult(instances, new Placement(view));
         }
     }
@@ -128,8 +128,10 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         }
     }
 
+    @Override
     public abstract Consent canClear();
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         final ObjectAdapter target = getObject();
         if (!(sourceContent instanceof ObjectContent) || target == null) {
@@ -180,10 +182,13 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
                 .getSingularName(), title()));
     }
 
+    @Override
     public abstract Consent canSet(final ObjectAdapter dragSource);
 
+    @Override
     public abstract void clear();
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         if (!(sourceContent instanceof ObjectContent)) {
             return null;
@@ -227,6 +232,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         return action;
     }
 
+    @Override
     public abstract ObjectAdapter getObject();
 
     @Override
@@ -253,13 +259,16 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         throw new UnexpectedCallException();
     }
 
+    @Override
     public abstract void setObject(final ObjectAdapter object);
 
+    @Override
     public String getIconName() {
         final ObjectAdapter object = getObject();
         return object == null ? null : object.getIconName();
     }
 
+    @Override
     public Image getIconPicture(final int iconHeight) {
         final ObjectAdapter adapter = getObject();
         if (adapter == null) {

@@ -23,7 +23,7 @@ package org.apache.isis.core.metamodel.specloader.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -51,7 +51,6 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.Target;
@@ -60,6 +59,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
+import org.apache.log4j.Logger;
 
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
@@ -109,10 +109,12 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     /**
      * Always returns <tt>null</tt>.
      */
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getReturnType() {
         final ActionInvocationFacet facet = getActionInvocationFacet();
         return facet.getReturnType();
@@ -121,15 +123,18 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     /**
      * Returns true if the represented action returns something, else returns false.
      */
+    @Override
     public boolean hasReturn() {
         return getReturnType() != null;
     }
 
+    @Override
     public ObjectSpecification getOnType() {
         final ActionInvocationFacet facet = getActionInvocationFacet();
         return facet.getOnType();
     }
 
+    @Override
     public ObjectAction[] getActions() {
         return new ObjectAction[0];
     }
@@ -138,6 +143,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         ObjectAction specification = this;
         return adapter.getInstance(specification);
@@ -147,6 +153,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // Target, Type, IsContributed
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public Target getTarget() {
         final ExecutedFacet facet = getFacet(ExecutedFacet.class);
         final Where executeWhere = facet.value();
@@ -161,10 +168,12 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         }
     }
 
+    @Override
     public ObjectActionType getType() {
         return ObjectActionType.getType(this);
     }
 
+    @Override
     public boolean isContributed() {
     	if (!knownWhetherContributed) {
     		contributed = determineWhetherContributed();
@@ -189,10 +198,12 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // Parameters
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public int getParameterCount() {
         return objectActionPeer.getParameters().length;
     }
 
+    @Override
     public boolean promptForParameters(final ObjectAdapter target) {
     	ObjectActionParameter[] parameters = getParameters();
         if (isContributed() && !target.getSpecification().isService()) {
@@ -209,6 +220,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      * Although this is lazily loaded, the method is also <tt>synchronized</tt> so there shouldn't be any
      * thread race conditions.
      */
+    @Override
     public synchronized ObjectActionParameter[] getParameters() {
         if (this.parameters == null) {
             final int parameterCount = getParameterCount();
@@ -231,6 +243,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return parameters;
     }
 
+    @Override
     public synchronized ObjectSpecification[] getParameterTypes() {
         List<ObjectSpecification> parameterTypes = new ArrayList<ObjectSpecification>();
         ObjectActionParameter[] parameters = getParameters();
@@ -240,6 +253,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return parameterTypes.toArray(new ObjectSpecification[]{});
     }
 
+    @Override
     public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
         final ObjectActionParameter[] allParameters = getParameters();
         final ObjectActionParameter[] selectedParameters = new ObjectActionParameter[allParameters.length];
@@ -267,6 +281,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // Visible (or hidden)
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -283,6 +298,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // Usable (or disabled)
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -303,6 +319,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      * TODO: currently this method is hard-coded to assume all interactions are initiated
      * {@link InteractionInvocationMethod#BY_USER by user}.
      */
+    @Override
     public Consent isProposedArgumentSetValid(final ObjectAdapter object, final ObjectAdapter[] proposedArguments) {
         final ObjectAdapter[] parameters = realParameters(object, proposedArguments);
         return isProposedArgumentSetValidResultSet(realTarget(object), parameters).createConsent();
@@ -333,6 +350,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return resultSet;
     }
 
+    @Override
     public ActionInvocationContext createActionInvocationInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -345,6 +363,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // execute
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter execute(final ObjectAdapter object, final ObjectAdapter[] parameters) {
         LOG.debug("execute action " + object + "." + getId());
         final ObjectAdapter[] params = realParameters(object, parameters);
@@ -362,6 +381,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      * reflector redesign this has been removed, because NOF 3.x only supports instance methods, not
      * class-level methods.
      */
+    @Override
     public ObjectAdapter realTarget(final ObjectAdapter target) {
         if (target == null) {
             return findService();
@@ -395,6 +415,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // defaults
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
         final ObjectAdapter realTarget = realTarget(target);
 
@@ -466,6 +487,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // options (choices)
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter[][] getChoices(final ObjectAdapter target) {
         final ObjectAdapter realTarget = realTarget(target);
         
@@ -512,7 +534,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);
                 }
             } else if (SpecificationFacets.isBoundedSet(paramSpec)) {
-                QueryFindAllInstances query = new QueryFindAllInstances(paramSpec);
+                QueryFindAllInstances query = new QueryFindAllInstances(paramSpec.getFullName());
 				final List<ObjectAdapter> allInstancesAdapter = getRuntimeContext().allMatchingQuery(query);
                 parameterChoicesAdapters[i] = new ObjectAdapter[allInstancesAdapter.size()];
                 int j = 0;
@@ -538,6 +560,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // debug, toString
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public String debugData() {
         final DebugString debugString = new DebugString();
         objectActionPeer.debugData(debugString);

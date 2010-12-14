@@ -4079,12 +4079,117 @@ isis.fixtures= ClaimsFixture,LogOnAsCliveFixture</programlisting>
       <title>XML Snapshots</title>
 
       <abstract>
-        <para>***</para>
+        <para>Generating <acronym>XML</acronym> snapshots from domain
+        objects.</para>
       </abstract>
 
-      <para></para>
+      <para>The <emphasis>Apache Isis</emphasis> framework provides the
+      capability to generate <acronym>XML</acronym> snapshots (and if required
+      corresponding <acronym>XSD</acronym> schemas) based on graphs of domain
+      objects. This is done using the
+      <classname>org.apache.isis.core.runtime.snapshot.XmlSnapshot</classname>
+      class.</para>
 
-      <para></para>
+      <sect1>
+        <title>Generating an XML Snapshot</title>
+
+        <para>The <classname>XmlSnapshot</classname> can be created either
+        directly or using a builder.</para>
+
+        <sect2>
+          <title>Standard Usage</title>
+
+          <para>The standard usage is to instantiate directly.</para>
+
+          <programlisting>XmlSnapshot snapshot = new XmlSnapshot(customer);
+Element customerAsXml = snapshot.getXmlElement();</programlisting>
+
+          <para></para>
+
+          <para>returns customer's fields, titles of simple references, number
+          of items in collections</para>
+
+          <para></para>
+
+          <para>In order to use the <classname>XmlSnapshot</classname>, the
+          domain object must implement
+          <classname>org.apache.isis.applib.snapshot.Snapshottable</classname>.
+          This is just a marker interface.</para>
+
+          <para>Notes:</para>
+
+          <orderedlist>
+            <listitem>
+              <para>navigates to another domain object represented by simple
+              reference &amp;quot;placeOfBirth&amp;quot;</para>
+            </listitem>
+
+            <listitem>
+              <para>navigates to all <classname>Order</classname>s of
+              <classname>Customer</classname>, and from them for their
+              <classname>Product</classname>s</para>
+            </listitem>
+
+            <listitem>
+              <para></para>
+            </listitem>
+          </orderedlist>
+        </sect2>
+
+        <sect2>
+          <title>Including</title>
+
+          <para></para>
+
+          <para>Note that XmlSnapshot is mutable; it's possible</para>
+
+          <programlisting>XmlSnapshot snapshot = new XmlSnapshot(customer);
+snapshot.include("placeOfBirth"); // (1)
+snapshot.include("orders/product"); // (2)
+Element customerAsXml = snapshot.getXmlElement(); // (3)</programlisting>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Fluent Usage</title>
+
+          <para>There is also an alternative "fluent" use:</para>
+
+          <programlisting>XmlSnapshot snapshot = 
+     XmlSnapshot.create(customer)
+                .includePath("placeOfBirth")
+                .include("orders/product")
+                .build();
+Element customerAsXml = snapshot.getXmlElement();</programlisting>
+
+          <para>Alternatively, the domain object can also implement</para>
+        </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Fluent Usage</title>
+
+        <para>There is also an alternative "fluent" use:</para>
+
+        <programlisting>XmlSnapshot snapshot = 
+     XmlSnapshot.create(customer)
+                .includePath("placeOfBirth")
+                .include("orders/product")
+                .build();
+Element customerAsXml = snapshot.getXmlElement();</programlisting>
+
+        <para>In order to use the <classname>XmlSnapshot</classname>, the
+        domain object must implement
+        <classname>org.apache.isis.applib.snapshot.Snapshottable</classname>.
+        This is just a marker interface.</para>
+
+        <para>Alternatively, the domain object can also implement</para>
+
+        <para></para>
+
+        <para></para>
+      </sect1>
     </chapter>
   </part>
 

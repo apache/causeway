@@ -23,10 +23,10 @@ package org.apache.isis.core.runtime.persistence.services;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
@@ -36,18 +36,53 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByTitle;
 
 
-public class RepositoryHelper {
+public final class RepositoryHelper {
+    
+    private RepositoryHelper(){}
 
     public static Object[] allInstances(final Class<?> cls) {
         return allInstances(getSpecificationLoader().loadSpecification(cls), cls);
     }
 
-    public static Object[] allInstances(final ObjectSpecification spec, final Class<?> cls) {
-        final ObjectAdapter instances = getPersistenceSession().findInstances(new QueryFindAllInstances(spec), QueryCardinality.MULTIPLE);
+    public static <T> Object[] allInstances(final ObjectSpecification spec, final Class<T> cls) {
+        QueryFindAllInstances<T> query = new QueryFindAllInstances<T>(spec.getFullName());
+        final ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.MULTIPLE);
         final Object[] array = convertToArray(instances, cls);
         return array;
     }
 
+    public static List<Object> findByPersistenceQuery(final PersistenceQuery persistenceQuery, final Class<?> cls) {
+		final ObjectAdapter instances = getPersistenceSession().findInstances(persistenceQuery);
+        return convertToList(instances, cls);
+    }
+
+    public static List<Object> findByTitle(final Class<?> type, final String title) {
+        ObjectSpecification spec = getSpecificationLoader().loadSpecification(type);
+        return findByTitle(spec, type, title);
+    }
+
+    public static List<Object> findByTitle(
+            final ObjectSpecification spec,
+            final Class<?> cls,
+            final String title) {
+        final PersistenceQuery criteria = new PersistenceQueryFindByTitle(spec, title);
+        return findByPersistenceQuery(criteria, cls);
+    }
+
+    public static boolean hasInstances(final Class<?> type) {
+        ObjectSpecification spec = getSpecificationLoader().loadSpecification(type);
+        return hasInstances(spec);
+    }
+
+    public static boolean hasInstances(final ObjectSpecification spec) {
+        return getPersistenceSession().hasInstances(spec);
+    }
+
+    
+    ///////////////////////////////////////////////////////////////////////
+    // Helpers
+    ///////////////////////////////////////////////////////////////////////
+    
     private static List<Object> convertToList(final ObjectAdapter instances, final Class<?> cls) {
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(instances);
         final List<Object> list = new ArrayList<Object>();
@@ -61,31 +96,10 @@ public class RepositoryHelper {
         return convertToList(instances, cls).toArray();
     }
 
-    public static List<Object> findByPersistenceQuery(final PersistenceQuery persistenceQuery, final Class<?> cls) {
-		final ObjectAdapter instances = getPersistenceSession().findInstances(persistenceQuery);
-        return convertToList(instances, cls);
-
-    }
-
-    public static List<Object> findByTitle(final Class<?> type, final String title) {
-        return findByTitle(getSpecificationLoader().loadSpecification(type), type, title);
-    }
-
-    public static List<Object> findByTitle(
-            final ObjectSpecification spec,
-            final Class<?> cls,
-            final String title) {
-        final PersistenceQuery criteria = new PersistenceQueryFindByTitle(spec, title);
-        return findByPersistenceQuery(criteria, cls);
-    }
-
-    public static boolean hasInstances(final Class<?> type) {
-        return hasInstances(getSpecificationLoader().loadSpecification(type));
-    }
-
-    public static boolean hasInstances(final ObjectSpecification spec) {
-        return getPersistenceSession().hasInstances(spec);
-    }
+    
+    ///////////////////////////////////////////////////////////////////////
+    // Context lookup
+    ///////////////////////////////////////////////////////////////////////
 
 	private static PersistenceSession getPersistenceSession() {
 		return IsisContext.getPersistenceSession();

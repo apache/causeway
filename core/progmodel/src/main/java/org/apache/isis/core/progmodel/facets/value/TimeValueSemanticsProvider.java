@@ -20,8 +20,9 @@
 
 package org.apache.isis.core.progmodel.facets.value;
 
+import java.text.DateFormat;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.Map;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -31,11 +32,13 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import com.google.inject.internal.Maps;
+
 import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 
 public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract {
-    private static Hashtable formats = new Hashtable();
+    private static final Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
         initFormats(formats);
@@ -57,10 +60,8 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
         super(holder, org.apache.isis.applib.value.Time.class, configuration, specificationLoader, runtimeContext);
     }
 
-    // private Time time;
-
     @Override
-    protected Hashtable formats() {
+    protected Map<String, DateFormat> formats() {
         return formats;
     }
 

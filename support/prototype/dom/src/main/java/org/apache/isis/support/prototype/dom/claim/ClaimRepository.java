@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotInRepositoryMenu;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.value.Date;
 
 @Named("Claims")
@@ -35,7 +35,7 @@ public interface ClaimRepository {
 
     public List<Claim> claimsFor(Claimant claimant);
 
-    @NotInRepositoryMenu
+    @NotInServiceMenu
     public List<Claim> claimsSince(Claimant claimant, Date since);
 
     public Claim newClaim(Claimant claimant);

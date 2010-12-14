@@ -25,8 +25,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
@@ -104,10 +104,9 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
             final RuntimeContext runtimeContext) {
         super(facetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration,
                 specificationLoader, runtimeContext);
-        final Hashtable formats = formats();
-        final Enumeration elements = formats.elements();
-        while (elements.hasMoreElements()) {
-            final DateFormat format = (DateFormat) elements.nextElement();
+        final Map<String, DateFormat> formats = formats();
+        for (Map.Entry<String, DateFormat> mapEntry : formats.entrySet()) {
+            final DateFormat format = mapEntry.getValue();
             format.setLenient(false);
             if (ignoreTimeZone()) {
                 format.setTimeZone(UTC_TIME_ZONE);
@@ -116,12 +115,12 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
         final String defaultFormat = configuration.getString(ConfigurationConstants.ROOT + "value.format." + propertyName,
                 defaultFormat());
         final String required = defaultFormat.toLowerCase().trim();
-        format = (DateFormat) formats.get(required);
+        format = formats.get(required);
         if (format == null) {
             setMask(defaultFormat);
         }
 
-        encodingFormat = (DateFormat) formats.get(ISO_ENCODING_FORMAT);
+        encodingFormat = formats.get(ISO_ENCODING_FORMAT);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -147,18 +146,18 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
         try {
             return setDate(format.parse(dateString));
         } catch (final ParseException e) {
-            final Hashtable formats = formats();
-            final Enumeration elements = formats.elements();
+            final Map<String, DateFormat> formats = formats();
+            final Iterator<DateFormat> elements = formats.values().iterator();
             return setDate(parseDate(dateString, elements));
         }
     }
 
-    private Date parseDate(final String dateString, final Enumeration elements) {
-        final DateFormat format = (DateFormat) elements.nextElement();
+    private Date parseDate(final String dateString, final Iterator<DateFormat> elements) {
+        final DateFormat format = elements.next();
         try {
             return format.parse(dateString);
         } catch (final ParseException e) {
-            if (elements.hasMoreElements()) {
+            if (elements.hasNext()) {
                 return parseDate(dateString, elements);
             } else {
                 throw new TextEntryParseException("Not recognised as a date: " + dateString);
@@ -274,10 +273,12 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     // DateValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public final Date dateValue(final ObjectAdapter object) {
         return object == null ? null : dateValue(object.getObject());
     }
 
+    @Override
     public final ObjectAdapter createValue(final Date date) {
         return getRuntimeContext().adapterFor(setDate(date));
     }
@@ -285,6 +286,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     /**
      * For subclasses to implement.
      */
+    @Override
     public abstract int getLevel();
 
     // //////////////////////////////////////////////////////////////////
@@ -299,7 +301,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
 
     protected abstract String defaultFormat();
 
-    protected abstract Hashtable formats();
+    protected abstract Map<String, DateFormat> formats();
 
     protected boolean ignoreTimeZone() {
         return false;

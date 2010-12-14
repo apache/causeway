@@ -24,25 +24,25 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.applib.annotation.NotContributed;
-import org.apache.isis.applib.annotation.NotInRepositoryMenu;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu.NotInRepositoryMenuAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu.NotInRepositoryMenuFacet;
-import org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu.NotInRepositoryMenuFacetAbstract;
+import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
+import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
 
 
 public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private NotInRepositoryMenuAnnotationFacetFactory facetFactory;
+    private NotInServiceMenuAnnotationFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new NotInRepositoryMenuAnnotationFacetFactory();
+        facetFactory = new NotInServiceMenuAnnotationFacetFactory();
     }
 
     @Override
@@ -65,16 +65,16 @@ public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacet
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class CustomerRepository {
             @SuppressWarnings("unused")
-			@NotInRepositoryMenu
+			@NotInServiceMenu
             public void someAction() {}
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
         facetFactory.process(CustomerRepository.class, actionMethod, methodRemover, facetHolder);
 
-        final Facet facet = facetHolder.getFacet(NotInRepositoryMenuFacet.class);
+        final Facet facet = facetHolder.getFacet(NotInServiceMenuFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotInRepositoryMenuFacetAbstract);
+        assertTrue(facet instanceof NotInServiceMenuFacetAbstract);
 
         assertNoMethodsRemoved();
     }

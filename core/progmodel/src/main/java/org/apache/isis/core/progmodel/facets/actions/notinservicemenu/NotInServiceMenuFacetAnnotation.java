@@ -17,17 +17,17 @@
  *  under the License.
  */
 
-package org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+package org.apache.isis.core.progmodel.facets.actions.notinservicemenu;
 
-/**
- * Indicates that the (repository) action should not be contributed to any objects.
- * 
- * <p>
- * In the standard Apache Isis Programming Model, corresponds to annotating the action method using
- * <tt>@NotContributed</tt>.
- */
-public interface NotInRepositoryMenuFacet extends Facet {
+import org.apache.isis.core.metamodel.facets.FacetHolder;
+
+
+public class NotInServiceMenuFacetAnnotation extends NotInServiceMenuFacetAbstract {
+
+    public NotInServiceMenuFacetAnnotation(final FacetHolder holder) {
+        super(holder);
+    }
 
 }
+

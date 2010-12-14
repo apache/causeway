@@ -20,7 +20,6 @@
 
 package org.apache.isis.core.runtime.snapshot;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
@@ -173,21 +172,11 @@ final class NofMetaModel {
             final Element element,
             final String prefix,
             final String fullyQualifiedClassName,
-            final ObjectAdapter collection,
-            final boolean addOids) {
+            final ObjectAdapter collection) {
         setAttribute(element, "feature", NOF_METAMODEL_FEATURE_COLLECTION);
         setAttribute(element, "type", prefix + ":" + fullyQualifiedClassName);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         setAttribute(element, "size", "" + facet.size(collection));
-        if (addOids) {
-            throw new IsisException();
-            /*
-             * Element oidsElement = appendElement(element, "oids"); for (Enumeration e = collection.oids();
-             * e.hasMoreElements();) { Oid oid = (Oid) e.nextElement(); DomTransferableWriter dtw = new
-             * DomTransferableWriter(oidsElement, this, oid.getClass().getName()); oid.writeData(dtw);
-             * dtw.close(); }
-             */
-        }
     }
 
 }

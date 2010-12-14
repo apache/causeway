@@ -29,8 +29,8 @@ import org.apache.isis.applib.fixtures.CompositeFixture;
 import org.apache.isis.applib.fixtures.FixtureType;
 import org.apache.isis.applib.fixtures.InstallableFixture;
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.applib.profiles.ProfileService;
-import org.apache.isis.applib.profiles.ProfileServiceAware;
+import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
+import org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -51,7 +51,7 @@ public class FixturesInstallerDelegate {
 
     protected final List<Object> fixtures = new ArrayList<Object>();
     private final SwitchUserServiceImpl switchUserService = new SwitchUserServiceImpl();
-    private final ProfileService perspectivePersistenceService = new ProfileServiceImpl();
+    private final UserProfileService perspectivePersistenceService = new ProfileServiceImpl();
 
     /**
      * Optionally injected in {@link #FixtureBuilderImpl(PersistenceSession) constructor}.
@@ -203,8 +203,8 @@ public class FixturesInstallerDelegate {
 
     private void installFixture(final Object fixture) {
     	switchUserService.injectInto(fixture);
-    	if (fixture instanceof ProfileServiceAware) {
-			ProfileServiceAware serviceAware = (ProfileServiceAware) fixture;
+    	if (fixture instanceof UserProfileServiceAware) {
+			UserProfileServiceAware serviceAware = (UserProfileServiceAware) fixture;
 			serviceAware.setService(perspectivePersistenceService);
     	}
 
@@ -223,11 +223,11 @@ public class FixturesInstallerDelegate {
 	private boolean shouldInstallFixture(InstallableFixture installableFixture) {
 		final FixtureType fixtureType = installableFixture.getType();
 		
-		if(fixtureType == FixtureType.OBJECT_STORE) {
+		if(fixtureType == FixtureType.DOMAIN_OBJECTS) {
 			return !IsisContext.getPersistenceSession().isFixturesInstalled();
 		}
 		
-		if(fixtureType == FixtureType.USER_PROFILE) {
+		if(fixtureType == FixtureType.USER_PROFILES) {
 			return !IsisContext.getUserProfileLoader().isFixturesInstalled();
 		}
 

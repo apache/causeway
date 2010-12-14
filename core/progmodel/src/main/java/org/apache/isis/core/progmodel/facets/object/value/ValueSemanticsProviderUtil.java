@@ -31,7 +31,7 @@ public final class ValueSemanticsProviderUtil {
 
     private ValueSemanticsProviderUtil() {}
 
-    public static final String SEMANTICS_PROVIDER_NAME_KEY_PREFIX = "isis.reflector.java.facets.value.";
+    public static final String SEMANTICS_PROVIDER_NAME_KEY_PREFIX = "isis.core.progmodel.value.";
     public static final String SEMANTICS_PROVIDER_NAME_KEY_SUFFIX = ".semanticsProviderName";
 
     static String semanticsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {

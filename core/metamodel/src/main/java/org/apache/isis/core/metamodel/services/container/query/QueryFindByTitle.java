@@ -24,6 +24,7 @@ import java.io.Serializable;
 import java.text.MessageFormat;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.query.QueryBuiltInAbstract;
 
 
 /**

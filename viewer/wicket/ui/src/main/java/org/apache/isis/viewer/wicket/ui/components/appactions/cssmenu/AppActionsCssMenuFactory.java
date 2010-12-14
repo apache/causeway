@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu.NotInRepositoryMenuFacet;
+import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ApplicationActionsModel;
@@ -117,7 +117,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 		for (final ObjectAction noAction : serviceSpec.getObjectActions(ObjectActionType.USER)) {
 
 		    // skip if annotated to not be included in repository menu
-		    if (noAction.getFacet(NotInRepositoryMenuFacet.class) != null) {
+		    if (noAction.getFacet(NotInServiceMenuFacet.class) != null) {
 		        continue;
 		    }
 			final Builder subMenuItemBuilder = serviceMenuItem.newSubMenuItem(serviceAdapterMemento, noAction, getLinkFactory());

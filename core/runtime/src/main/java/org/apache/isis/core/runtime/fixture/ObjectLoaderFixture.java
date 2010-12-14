@@ -40,7 +40,7 @@ public class ObjectLoaderFixture implements InstallableFixture {
 
     @Hidden
     public FixtureType getType() {
-        return FixtureType.OBJECT_STORE;
+        return FixtureType.DOMAIN_OBJECTS;
     }
 }    
 

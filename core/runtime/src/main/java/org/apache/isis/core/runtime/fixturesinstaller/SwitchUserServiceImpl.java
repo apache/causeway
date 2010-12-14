@@ -20,9 +20,11 @@
 
 package org.apache.isis.core.runtime.fixturesinstaller;
 
+import java.util.List;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.applib.switchuser.SwitchUserService;
-import org.apache.isis.applib.switchuser.SwitchUserServiceAware;
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
@@ -35,10 +37,19 @@ public class SwitchUserServiceImpl implements SwitchUserService {
     public SwitchUserServiceImpl() {
     }
 
+    @Override
+    public void switchUser(final String username, final List<String> roles) {
+        switchUser(new LogonFixture(username, roles));
+    }
+    
+    @Override
     public void switchUser(final String username, final String... roles) {
-    	getTransactionManager().endTransaction();
+        switchUser(new LogonFixture(username, roles));
+    }
+
+    private void switchUser(LogonFixture logonFixture) {
+        getTransactionManager().endTransaction();
     	IsisContext.closeSession();
-    	LogonFixture logonFixture = new LogonFixture(username, roles);
     	AuthenticationRequestLogonFixture authRequest = new AuthenticationRequestLogonFixture(logonFixture);
     	AuthenticationSession session = getAuthenticationManager().authenticate(authRequest);
         IsisContext.openSession(session);
@@ -53,11 +64,11 @@ public class SwitchUserServiceImpl implements SwitchUserService {
 	}
 
 	
-	private static AuthenticationManager getAuthenticationManager() {
+	protected AuthenticationManager getAuthenticationManager() {
 		return IsisContext.getAuthenticationManager();
 	}
 	
-	private static IsisTransactionManager getTransactionManager() {
+	protected IsisTransactionManager getTransactionManager() {
 		return IsisContext.getTransactionManager();
 	}
 	

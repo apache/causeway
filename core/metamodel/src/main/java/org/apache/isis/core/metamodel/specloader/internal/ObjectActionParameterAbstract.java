@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
@@ -40,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -66,6 +66,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Subclasses should override either {@link #isObject()} or {@link #isCollection()}.
      */
+    @Override
     public boolean isObject() {
         return false;
     }
@@ -73,6 +74,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Subclasses should override either {@link #isObject()} or {@link #isCollection()}.
      */
+    @Override
     public boolean isCollection() {
         return false;
     }
@@ -80,22 +82,27 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     /**
      * Parameter number, 0-based.
      */
+    @Override
     public int getNumber() {
         return number;
     }
 
+    @Override
     public ObjectAction getAction() {
         return parentAction;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return peer.getSpecification();
     }
 
+    @Override
     public Identifier getIdentifier() {
         return parentAction.getIdentifier();
     }
 
+    @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
         String name = facet == null ? null : facet.value();
@@ -103,12 +110,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return name;
     }
 
+    @Override
     public String getDescription() {
         final DescribedAsFacet facet = getFacet(DescribedAsFacet.class);
         final String description = facet.value();
         return description == null ? "" : description;
     }
 
+    @Override
     public boolean isOptional() {
         final MandatoryFacet facet = getFacet(MandatoryFacet.class);
         return facet.isInvertedSemantics();
@@ -122,40 +131,48 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // FacetHolder
     // //////////////////////////////////////////////////////////
 
+    @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return peer != null ? peer.containsFacet(facetType) : false;
     }
 
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         return peer != null ? peer.getFacet(cls) : null;
     }
 
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return peer != null ? peer.getFacetTypes() : new Class[] {};
     }
 
+    @Override
     public Facet[] getFacets(final Filter<Facet> filter) {
         return peer != null ? peer.getFacets(filter) : new Facet[] {};
     }
 
+    @Override
     public void addFacet(final Facet facet) {
         if (peer != null) {
             peer.addFacet(facet);
         }
     }
 
+    @Override
     public void addFacet(final MultiTypedFacet facet) {
         if (peer != null) {
             peer.addFacet(facet);
         }
     }
 
+    @Override
     public void removeFacet(final Facet facet) {
         if (peer != null) {
             peer.removeFacet(facet);
         }
     }
 
+    @Override
     public void removeFacet(final Class<? extends Facet> facetType) {
         if (peer != null) {
             peer.removeFacet(facetType);
@@ -166,6 +183,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     // Interaction
     // //////////////////////////////////////////////////////////
 
+    @Override
     public ActionArgumentContext createProposedArgumentInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -176,6 +194,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                 proposedArguments, position);
     }
 
+    @Override
     public ObjectAdapter[] getChoices(ObjectAdapter adapter) {
         final List<ObjectAdapter> parameterChoices = new ArrayList<ObjectAdapter>();
         final ActionParameterChoicesFacet choicesFacet = getFacet(ActionParameterChoicesFacet.class);
@@ -188,7 +207,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             }
         }
         if (parameterChoices.size() == 0 && SpecificationFacets.isBoundedSet(getSpecification())) {
-            QueryFindAllInstances query = new QueryFindAllInstances(getSpecification());
+            QueryFindAllInstances query = new QueryFindAllInstances(getSpecification().getFullName());
 			final List<ObjectAdapter> allInstancesAdapter = getRuntimeContext().allMatchingQuery(query);
             for (ObjectAdapter choiceAdapter: allInstancesAdapter) {
                 parameterChoices.add(choiceAdapter);
@@ -206,6 +225,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         }
     }
     
+    @Override
     public ObjectAdapter getDefault(ObjectAdapter adapter) {
         if (parentAction.isContributed() && adapter != null) {
             if (adapter.getSpecification().isOfType(getSpecification())) {

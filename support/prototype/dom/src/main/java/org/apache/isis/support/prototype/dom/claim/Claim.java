@@ -28,8 +28,10 @@ import org.apache.isis.applib.AbstractDomainObject;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.MaxLength;
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.util.Reasons;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
@@ -124,16 +126,18 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     // {{ changeStatus
     @MemberOrder(sequence = "1")
-    public void changeStatus(final String status) {
+    public void changeStatus(
+        @MustSatisfy(ClaimStatii.ChoicesSpecification.class)
+        final String status) {
         setStatus(status);
     }
 
     public List<String> choices0ChangeStatus() {
-        return Arrays.asList("New", "Incomplete", "Done");
+        return ClaimStatii.ALL;
     }
 
     private String ifAlreadySubmitted() {
-        return "Submitted".equals(getStatus()) ? "Already submitted" : null;
+        return ClaimStatii.isSubmitted(getStatus()) ? "Already submitted" : null;
     }
 
     // }}
@@ -206,7 +210,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     }
 
     public String disableSubmit() {
-        return getStatus().equals("New") ? null : "Claim has already been submitted";
+        return ClaimStatii.isSubmitted(getStatus()) ? null : "Claim has already been submitted";
     }
 
     public Approver default0Submit() {
@@ -260,11 +264,11 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // }}
 
     public String validate() {
-        if (getStatus().equals("Incomplete")) {
+        if (ClaimStatii.isIncomplete(getStatus())) {
             return "incomplete";
         }
         if (getDescription().contains("foobaz")) {
-            return "no foobaz allowed in description!";
+            return "no 'foobaz' allowed in description!";
         }
         return null;
     }
@@ -274,5 +278,34 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // public CalendarEvent getCalendarEvent() {
     // return CalendarEvent.newAllDayEvent(getDate().dateValue());
     // }
+
+    public static class ClaimStatii {
+
+        public static final List<String> ALL = 
+            Collections.unmodifiableList(Arrays.asList("New", "Incomplete", "Submitted"));
+
+        public static class ChoicesSpecification implements Specification {
+
+            @Override
+            public String satisfies(Object obj) {
+                for (String str : ALL) {
+                    if (str.equals(obj)) {
+                        return null;
+                    }
+                }
+                return "Must be one of " + ALL;
+            }
+        }
+
+        public static boolean isSubmitted(String status) {
+            return "Submitted".equals(status);
+        }
+
+        public static boolean isIncomplete(String status) {
+            return "Incomplete".equals(status);
+        }
+
+    }
+
 
 }

@@ -37,7 +37,7 @@ import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedAnnotation
 import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedViaNamingConventionFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.exploration.ExplorationAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu.NotInRepositoryMenuAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.prototype.PrototypeAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.CollectionFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.CollectionFieldMethodsFacetFactory;
@@ -179,7 +179,7 @@ public class ProgrammingModelFacetsJava5 extends ProgrammingModelFacetsAbstract 
         addFactory(ExplorationAnnotationFacetFactory.class);
         addFactory(PrototypeAnnotationFacetFactory.class);
         addFactory(NotContributedAnnotationFacetFactory.class);
-        addFactory(NotInRepositoryMenuAnnotationFacetFactory.class);
+        addFactory(NotInServiceMenuAnnotationFacetFactory.class);
         addFactory(FieldOrderAnnotationFacetFactory.class);
         addFactory(HiddenAnnotationFacetFactory.class);
         addFactory(ImmutableAnnotationFacetFactory.class);

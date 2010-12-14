@@ -18,11 +18,11 @@
  */
 
 
-package org.apache.isis.core.progmodel.facets.actions.notinrepositorymenu;
+package org.apache.isis.core.progmodel.facets.actions.notinservicemenu;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.annotation.NotInRepositoryMenu;
+import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
@@ -30,20 +30,20 @@ import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
-public class NotInRepositoryMenuAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
+public class NotInServiceMenuAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
-    public NotInRepositoryMenuAnnotationFacetFactory() {
+    public NotInServiceMenuAnnotationFacetFactory() {
         super(ObjectFeatureType.ACTIONS_ONLY);
     }
 
     @Override
     public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-        final NotInRepositoryMenu annotation = getAnnotation(method, NotInRepositoryMenu.class);
+        final NotInServiceMenu annotation = getAnnotation(method, NotInServiceMenu.class);
         return FacetUtil.addFacet(create(annotation, holder));
     }
 
-    private NotInRepositoryMenuFacet create(final NotInRepositoryMenu annotation, final FacetHolder holder) {
-        return annotation == null ? null : new NotInRepositoryMenuFacetAnnotation(holder);
+    private NotInServiceMenuFacet create(final NotInServiceMenu annotation, final FacetHolder holder) {
+        return annotation == null ? null : new NotInServiceMenuFacetAnnotation(holder);
     }
 
 }

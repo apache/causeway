@@ -31,7 +31,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.apache.log4j.Logger;
 import org.apache.isis.applib.snapshot.Snapshottable;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -51,6 +50,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
+import org.apache.log4j.Logger;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -68,8 +68,8 @@ import org.w3c.dom.NodeList;
  * <pre>
  * XmlSnapshot snapshot = new XmlSnapshot(customer); // where customer is a reference to an ANO
  * Element customerAsXml = snapshot.toXml(); // returns customer's fields, titles of simple references, number of items in collections
- * snapshot.include(&quot;placeOfBirth&quot;); // navigates to ANO represented by simple reference &quot;placeOfBirth&quot;
- * snapshot.include(&quot;orders/product&quot;); // navigates to all Orders of Customer, and from them for their products 
+ * snapshot.include(&quot;placeOfBirth&quot;); // navigates to another object represented by simple reference &quot;placeOfBirth&quot;
+ * snapshot.include(&quot;orders/product&quot;); // navigates to all <tt>Order</tt>s of <tt>Customer</tt>, and from them for their <tt>Product</tt>s 
  * </pre>
  * 
  * <p>
@@ -89,7 +89,7 @@ public final class XmlSnapshot {
 
     public static class Builder {
     	private final Snapshottable snapshottable;
-        private boolean addOids;
+        //private boolean addOids;
         private XmlSchema schema;
         static class PathAndAnnotation {
         	public PathAndAnnotation(String path, String annotation) {
@@ -104,10 +104,6 @@ public final class XmlSnapshot {
     	public Builder(Snapshottable domainObject) {
 			this.snapshottable = domainObject;
 		}
-    	public Builder withOids() {
-    		this.addOids = true;
-    		return this;
-    	}
     	public Builder usingSchema(XmlSchema schema) {
     		this.schema = schema;
     		return this;
@@ -123,8 +119,8 @@ public final class XmlSnapshot {
     	public XmlSnapshot build() {
     		ObjectAdapter adapter = getAdapterManager().adapterFor(snapshottable);
     		XmlSnapshot snapshot = (schema != null) ? 
-    				new XmlSnapshot(adapter, schema, addOids) : 
-    				new XmlSnapshot(adapter, addOids);
+    				new XmlSnapshot(adapter, schema) : 
+    				new XmlSnapshot(adapter);
     		for(PathAndAnnotation paa: paths) {
     			if (paa.annotation != null) {
     				snapshot.include(paa.path, paa.annotation);
@@ -141,8 +137,6 @@ public final class XmlSnapshot {
     	return new Builder(snapshottable);
     }
     
-    private final boolean addOids;
-
     private final NofMetaModel nofMeta;
 
     private final Place rootPlace;
@@ -173,24 +167,16 @@ public final class XmlSnapshot {
      * Start a snapshot at the root object, using own namespace manager.
      */
     public XmlSnapshot(final ObjectAdapter rootObject) {
-        this(rootObject, false);
-    }
-
-    /**
-     * Start a snapshot at the root object, using own namespace manager.
-     */
-    public XmlSnapshot(final ObjectAdapter rootObject, final boolean addOids) {
-        this(rootObject, new XmlSchema(), addOids);
+        this(rootObject, new XmlSchema());
     }
 
     /**
      * Start a snapshot at the root object, using supplied namespace manager.
      */
-    public XmlSnapshot(final ObjectAdapter rootObject, final XmlSchema schema, final boolean addOids) {
+    public XmlSnapshot(final ObjectAdapter rootObject, final XmlSchema schema) {
 
         LOG.debug(".ctor(" + log("rootObj", rootObject) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
 
-        this.addOids = addOids;
         this.nofMeta = new NofMetaModel();
         this.xsMeta = new XsMetaModel();
 
@@ -505,7 +491,7 @@ public final class XmlSnapshot {
                 return true; // not a failure if the reference was null
             }
 
-            final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, (ObjectAdapter) referencedObject, names,
+            final boolean appendedXml = appendXmlThenIncludeRemaining(fieldPlace, referencedObject, names,
                     annotation);
             LOG.debug("includeField(Pl, Vec, Str): 1->1: invoked appendXmlThenIncludeRemaining for "
                     + log("referencedObj", referencedObject) + andlog("returned", "" + appendedXml));
@@ -517,7 +503,7 @@ public final class XmlSnapshot {
 
             final OneToManyAssociation oneToManyAssociation = (OneToManyAssociation) field;
             final ObjectAdapter collection = oneToManyAssociation.get(fieldPlace.getObject());
-            final CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
+            final CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
 
             LOG.debug("includeField(Pl, Vec, Str): 1->M: " + log("collection.size", "" + facet.size(collection)));
             boolean allFieldsNavigated = true;
@@ -718,7 +704,7 @@ public final class XmlSnapshot {
                 ObjectAdapter referencedObjectAdapter;
 
                 try {
-                    referencedObjectAdapter = (ObjectAdapter) oneToOneAssociation.get(object);
+                    referencedObjectAdapter = oneToOneAssociation.get(object);
 
                     // XML
                     nofMeta.setAttributesForReference(xmlReferenceElement, schema.getPrefix(), fullyQualifiedClassName);
@@ -752,8 +738,7 @@ public final class XmlSnapshot {
                     final String fullyQualifiedClassName = referencedTypeNos.getFullName();
 
                     // XML
-                    nofMeta.setNofCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection,
-                            addOids);
+                    nofMeta.setNofCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection);
                 } catch (final Exception ex) {
                     LOG.warn("objectToElement(NO): " + log("field", fieldName)
                             + ": get(obj) threw exception - skipping XML generation");

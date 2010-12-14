@@ -20,9 +20,9 @@
 
 package org.apache.isis.core.runtime.persistence.query;
 
+import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.services.container.query.QueryFindAllInstances;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 

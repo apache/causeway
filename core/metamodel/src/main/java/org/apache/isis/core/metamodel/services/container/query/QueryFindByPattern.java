@@ -23,6 +23,7 @@ package org.apache.isis.core.metamodel.services.container.query;
 import java.io.Serializable;
 
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.applib.query.QueryBuiltInAbstract;
 
 
 /**
