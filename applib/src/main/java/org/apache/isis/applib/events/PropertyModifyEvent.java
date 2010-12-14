@@ -30,7 +30,7 @@ import org.apache.isis.applib.Identifier;
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the value is invalid; otherwise
  * the value is valid.
  */
-public class PropertyModifyEvent extends ValidityEvent implements ProposedHolderEvent {
+public class PropertyModifyEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
 

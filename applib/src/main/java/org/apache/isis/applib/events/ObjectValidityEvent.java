@@ -31,7 +31,7 @@ import org.apache.isis.applib.Identifier;
  * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the object is invalid,
  * otherwise ok.
  */
-public class ObjectValidityEvent extends ValidityEvent implements ProposedHolderEvent {
+public class ObjectValidityEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
 

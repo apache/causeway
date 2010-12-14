@@ -33,7 +33,7 @@ import org.apache.isis.applib.Identifier;
  * <p>
  * Called once per argument, and before {@link ActionInvocationEvent}.
  */
-public class ActionArgumentEvent extends ValidityEvent implements ProposedHolderEvent {
+public class ActionArgumentEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
 

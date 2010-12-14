@@ -32,7 +32,7 @@ import org.apache.isis.applib.Identifier;
  * 
  * @see CollectionAddToEvent
  */
-public class CollectionRemoveFromEvent extends ValidityEvent implements ProposedHolderEvent {
+public class CollectionRemoveFromEvent extends ValidityEvent {
 
     private static final long serialVersionUID = 1L;
 

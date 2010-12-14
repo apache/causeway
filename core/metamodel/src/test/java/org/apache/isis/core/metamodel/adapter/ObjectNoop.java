@@ -20,9 +20,6 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
-import org.apache.isis.core.metamodel.adapter.Instance;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -35,70 +32,93 @@ import org.apache.isis.core.metamodel.spec.Specification;
  */
 public class ObjectNoop implements ObjectAdapter {
 
+    @Override
     public void changeState(final ResolveState newState) {}
 
+    @Override
     public void checkLock(final Version version) {}
 
+    @Override
     public void fireChangedEvent() {}
 
+    @Override
     public String getIconName() {
         return null;
     }
 
+    @Override
     public Object getObject() {
         return null;
     }
 
+    @Override
     public Oid getOid() {
         return null;
     }
 
+    @Override
     public ResolveState getResolveState() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
 
+    @Override
     public Version getVersion() {
         return null;
     }
 
+    @Override
     public void replacePojo(final Object pojo) {}
 
+    @Override
     public void setOptimisticLock(final Version version) {}
 
+    @Override
     public String titleString() {
         return null;
     }
 
+    @Override
     public TypeOfFacet getTypeOfFacet() {
         return null;
     }
 
+    @Override
     public void setTypeOfFacet(final TypeOfFacet typeOfFacet) {}
 
+    @Override
     public ObjectAdapter getOwner() {
         return null;
     }
 
+    @Override
     public Instance getInstance(Specification specification) {
         return null;
     }
 
+    @Override
     public boolean isAggregated() {
         return false;
     }
 
-	public boolean isPersistent() {
+	@Override
+    public boolean isPersistent() {
 		return false;
 	}
 
-	public boolean isTransient() {
+	@Override
+    public boolean isTransient() {
 		return false;
 	}
 
+    @Override
+    public ObjectAdapter getAggregateRoot() {
+        return null;
+    }
 
 
 }

@@ -37,6 +37,7 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 
 public class TestProxyAdapter implements ObjectAdapter {
+    
     private final Hashtable fieldContents = new Hashtable();
     private Object object;
     private Oid oid;
@@ -193,6 +194,11 @@ public class TestProxyAdapter implements ObjectAdapter {
     @Override
     public boolean isAggregated() {
         return false;
+    }
+
+    @Override
+    public ObjectAdapter getAggregateRoot() {
+        return this;
     }
 
 }

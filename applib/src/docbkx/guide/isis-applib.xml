@@ -70,7 +70,7 @@
     <emphasis>Apache Isis</emphasis> application library (or
     <emphasis>applib</emphasis>), in order that the framework can correctly
     pick up and render the business rules and logic encoded within their
-    domain objects.</para>
+    domain objects. </para>
   </preface>
 
   <!-- main content -->
@@ -603,6 +603,8 @@ persist(newCust);</programlisting>
           <title>Object lifecycle methods</title>
 
           <tgroup cols="2">
+            <colspec align="left" colwidth="105" />
+
             <colspec align="left" />
 
             <thead>
@@ -690,12 +692,13 @@ persist(newCust);</programlisting>
         <title>How to perform lazy loading (generally done
         automatically)</title>
 
-        <para>The DomainObjectContainer provides the resolve() method in order
-        to lazily resolve the value of a property or a collection. In earlier
-        versions of the framework it was necessary to call this method prior
-        to accessing or mutating any property or collection. This is no longer
-        required because <emphasis>Apache Isis</emphasis> uses bytecode
-        enhancement to automatically call this method.</para>
+        <para>The <classname>DomainObjectContainer</classname> provides the
+        resolve() method in order to lazily resolve the value of a property or
+        a collection. In earlier versions of the framework it was necessary to
+        call this method prior to accessing or mutating any property or
+        collection. This is no longer required because <emphasis>Apache
+        Isis</emphasis> uses bytecode enhancement to automatically call this
+        method.</para>
 
         <para>While it is possible to disable this bytecode enhancement using
         <filename>isis.properties</filename> file, this is not generally
@@ -2755,7 +2758,7 @@ public class Department {
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/AbstractContainedObject-hierarchy.png"
-                       scale="60" />
+                       scale="65" />
           </imageobject>
         </mediaobject>
 
@@ -3439,9 +3442,8 @@ public interface EmailService {
           <para>These formats cut across the above categories; for example the
           byte format relates to both <classname>byte</classname> (primitive)
           and <classname>java.lang.Byte</classname> (wrapper). In all cases
-          this setting can be overriden for a specific field using the <link
-          linkend="mask-annotation"> <literal moreinfo="none">@Mask</literal>
-          annotation</link>.</para>
+          this setting can be overriden for a specific field using the @Mask
+          annotation (see <xref linkend="sec.MaskAnnotation" />).</para>
 
           <sect3>
             <title>Byte format</title>
@@ -3914,7 +3916,7 @@ isis.fixtures= ClaimsFixture,LogOnAsCliveFixture</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata fileref="images/Fixtures.png" scale="50" />
+            <imagedata fileref="images/Fixtures.png" scale="65" />
           </imageobject>
         </mediaobject>
 
@@ -4224,11 +4226,6 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
     <appendix>
       <title>Recognized Methods and Prefixes</title>
 
-      <abstract>
-        <para>Methods and method prefixes recognized by <emphasis>Apache
-        Isis</emphasis> using the default programming model.</para>
-      </abstract>
-
       <para>The following table lists all of the methods or method prefixes
       that are recognized by <emphasis>Apache Isis</emphasis>' default
       programming model:</para>
@@ -4236,8 +4233,20 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
       <table>
         <title>Recognized Method Prefixes</title>
 
-        <tgroup cols="6">
+        <tgroup cols="7">
           <colspec align="center" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec />
 
           <thead>
             <row>
@@ -4252,6 +4261,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry align="center">action</entry>
 
               <entry align="center">action param</entry>
+
+              <entry align="center">See also</entry>
             </row>
           </thead>
 
@@ -4263,11 +4274,13 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry></entry>
 
-              <entry>Y (see also removeFrom)</entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
               <entry></entry>
+
+              <entry>removeFrom</entry>
             </row>
 
             <row>
@@ -4282,6 +4295,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
             </row>
 
             <row>
@@ -4289,19 +4304,23 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry></entry>
 
-              <entry>Y (see also modify)</entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
               <entry></entry>
 
               <entry></entry>
+
+              <entry>modify</entry>
             </row>
 
             <row>
               <entry>created</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4324,6 +4343,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
             </row>
 
             <row>
@@ -4338,6 +4359,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry>Y</entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
@@ -4345,19 +4368,21 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry></entry>
 
-              <entry>Y (see also set)</entry>
+              <entry>Y</entry>
 
-              <entry>Y (see also set)</entry>
+              <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
-              <entry></entry>
+              <entry>set</entry>
             </row>
 
             <row>
               <entry>getId</entry>
 
-              <entry>Y (service only)</entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
@@ -4366,6 +4391,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry>(services only)</entry>
             </row>
 
             <row>
@@ -4380,12 +4407,16 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry>Y</entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
               <entry>iconName</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4408,12 +4439,16 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
               <entry>loading</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4429,19 +4464,23 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry></entry>
 
-              <entry>Y (see also clear)</entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
               <entry></entry>
 
               <entry></entry>
+
+              <entry>clear</entry>
             </row>
 
             <row>
               <entry>persisted</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4464,12 +4503,16 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
               <entry>removing</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4492,6 +4535,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
@@ -4501,11 +4546,13 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry></entry>
 
-              <entry>Y (see also addTo)</entry>
+              <entry>Y</entry>
 
               <entry></entry>
 
               <entry></entry>
+
+              <entry>addTo</entry>
             </row>
 
             <row>
@@ -4513,19 +4560,23 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
               <entry></entry>
 
-              <entry>Y (see also get)</entry>
+              <entry>Y</entry>
 
-              <entry>Y (see also get)</entry>
+              <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
-              <entry></entry>
+              <entry>get</entry>
             </row>
 
             <row>
               <entry>toString</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4548,12 +4599,16 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
               <entry>updating</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4576,6 +4631,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
@@ -4590,6 +4647,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4600,8 +4659,22 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
       <table>
         <title>Deprecated Method Prefixes</title>
 
-        <tgroup cols="6">
+        <tgroup cols="7">
           <colspec align="center" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec align="center" colwidth="50" />
+
+          <colspec />
+
+          <colspec />
 
           <thead>
             <row>
@@ -4616,6 +4689,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry align="center">action</entry>
 
               <entry align="center">action param</entry>
+
+              <entry align="center">See also</entry>
             </row>
           </thead>
 
@@ -4624,6 +4699,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry>deleted</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4646,12 +4723,16 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
 
             <row>
               <entry>saved</entry>
 
               <entry>Y</entry>
+
+              <entry></entry>
 
               <entry></entry>
 
@@ -4674,6 +4755,8 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
               <entry></entry>
 
               <entry></entry>
+
+              <entry></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4681,7 +4764,7 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
 
       <para>In order to be recognized, all methods must be
       <code>public</code>. Any methods that do not match are deemed to be
-      action methods that the user can invoke from the user interface.</para>
+      action methods that the user can invoke from the user interface. </para>
     </appendix>
 
     <appendix>
@@ -4698,20 +4781,15 @@ Element customerXsd = snapshot.getXsdElement();</programlisting>
       <sect1>
         <title>@ActionOrder</title>
 
-        <para><emphasis>Note: The recommended mechanism for specifying the
-        order in which actions are listed to the user is
-        <code>@MemberOrder</code> (see <xref
-        linkend="sec.MemberOrderAnnotation" />).</emphasis></para>
+        <note>
+          <para>The recommended mechanism for specifying the order in which
+          actions are listed to the user is <code>@MemberOrder</code> (see
+          <xref linkend="sec.MemberOrderAnnotation" />)</para>
+        </note>
 
         <para><code>@ActionOrder</code> provides a mechanism to specify the
         order in which actions appear in the user interface, in which the
         order is specified in one place in the class.</para>
-
-        <para>The syntax is:</para>
-
-        <programlisting><literal moreinfo="none">@ActionOrder("&lt;comma separated list of action names&gt;")</literal> </programlisting>
-
-        <para>The action names are not case sensitive.</para>
 
         <para>For example:</para>
 
@@ -4725,6 +4803,8 @@ public class Customer {
 ...
 }</programlisting>
 
+        <para>The action names are not case sensitive.</para>
+
         <para>Compared to <classname>@MemberOrder</classname>, there is
         (currently) one additional advantage in that you can easily specify
         groupings (which may be rendered by the viewer as sub-menus). This
@@ -4733,17 +4813,12 @@ public class Customer {
 
         <para>For example:</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@ActionOrder("(Account Management: PlaceOrder, CheckCredit), (Personal Details: ChangeOfAddress, AddEmail)")</emphasis>
+        <programlisting format="linespecific">@ActionOrder("(Account Management: PlaceOrder, CheckCredit), (Personal Details: ChangeOfAddress, AddEmail)")
 public class Customer {
-
-    public Order placeNewOrder() {}
-
-    public CreditRating checkCredit() {}
-
-    public void changeOfAddress() {}
-
-    public void addEmail(String emailAddress) {}
-
+    public Order placeNewOrder() { ... }
+    public CreditRating checkCredit() { ... }
+    public void changeOfAddress() { ... }
+    public void addEmail(String emailAddress) { ... }
     ...
 }</programlisting>
 
@@ -4756,11 +4831,22 @@ public class Customer {
       <sect1>
         <title>@Aggregated</title>
 
-        <para>***</para>
+        <para>This annotation indicates that the object is aggregated, or
+        wholly owned, by a root object. This information is of use by some
+        object stores implementations (to store the aggregated objects
+        "inline"). At the time of writing none of the viewers exploit this
+        information, though this may change in the future. (For example, the
+        <acronym>DnD</acronym> viewer could be enhanced to prevent aggregated
+        objects from being "dragged out" from their root object).</para>
 
-        <para></para>
+        <para>All value types and all collections are automatically
+        aggregated.</para>
 
-        <para></para>
+        <warning>
+          <para>Outside of value types and collections, the
+          <classname>@Aggregated</classname> semantics are not completely
+          well-defined and so its use is currently discouraged.</para>
+        </warning>
       </sect1>
 
       <sect1>
@@ -4772,9 +4858,9 @@ public class Customer {
 
         <para>For example:</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@Bounded</emphasis>
+        <programlisting format="linespecific">@Bounded
 public class County {
-    // members and actions here
+    ...
 }</programlisting>
 
         <para>The number of instances is expected to be small enough that all
@@ -4790,12 +4876,21 @@ public class County {
         </note>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.DebugAnnotation">
         <title>@Debug</title>
 
-        <para>The <classname>@Debug </classname>annotation marks an action
+        <para>The <classname>@Debug</classname> annotation marks an action
         method as available in debug mode only, and so will not normally be
         displayed by the user interface.</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Customer {
+    public Order placeNewOrder() { ... }
+    @Debug
+    public List&lt;Order&gt; listRecentOrders() { ... }
+    ...
+}</programlisting>
 
         <para>The exact means to access <classname>@Debug</classname> actions
         depends on the viewer.</para>
@@ -4804,11 +4899,19 @@ public class County {
       <sect1>
         <title>@Defaulted</title>
 
-        <para></para>
+        <para>The concept of "defaulted" means being able to provide a default
+        value for the type by way of the
+        <classname>org.apache.isis.applib.adapters.DefaultsProvider</classname>
+        interface. Generally this only applies to value types, where the
+        <classname>@Value</classname> annotation (see <xref
+        linkend="sec.ValueAnnotation" />) implies encodability through the
+        <classname>ValueSemanticsProvider</classname> interface (see <xref
+        linkend="chp.ValueTypes" />).</para>
 
-        <para>***</para>
-
-        <para></para>
+        <para>For these reasons the <classname>@Defaulted</classname>
+        annotation is generally never applied directly, but can be thought of
+        as a placeholder for future enhancements whereby non-value types might
+        also have a default value provided for them.</para>
       </sect1>
 
       <sect1>
@@ -4836,8 +4939,8 @@ public class County {
 
           <para>For example:</para>
 
-          <programlisting format="linespecific"><emphasis role="strong">@DescribedAs("A Customer who may have originally become known to us via " +
-             "the marketing system or who may have contacted us directly.")</emphasis>
+          <programlisting format="linespecific">@DescribedAs("A customer who may have originally become known to us via " +
+             "the marketing system or who may have contacted us directly.")
 public class ProspectiveSale {
    ...
 }</programlisting>
@@ -4854,8 +4957,8 @@ public class ProspectiveSale {
           <para>For example:</para>
 
           <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@DescribedAs("The name that the customer has indicated that they wish to be " +
-                 "addressed as (e.g. Johnny rather than Jonathan)")</emphasis>
+    @DescribedAs("The name that the customer has indicated that they wish to be " +
+                 "addressed as (e.g. Johnny rather than Jonathan)")
     public String getFirstName() { ... }
 }</programlisting>
         </sect2>
@@ -4873,10 +4976,9 @@ public class ProspectiveSale {
     public Order placeOrder(
                       Product product,
                       @Named("Quantity")
-                      <emphasis role="strong">@DescribedAs("The quantity of the product being ordered")</emphasis>
+                      @DescribedAs("The quantity of the product being ordered")
                       int quantity) {
-
-        Order order = new Order();
+        Order order = createTransientInstance(Order.class);
         order.modifyCustomer(this);
         order.modifyProduct(product);
         order.setQuantity(quantity);        
@@ -4900,10 +5002,10 @@ public class ProspectiveSale {
         <para>For example:</para>
 
         <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@Disabled</emphasis>
+    @Disabled
     public void assessCreditWorthiness() { ... }
 
-    <emphasis role="strong">@Disabled</emphasis>
+    @Disabled
     public int getInitialCreditRating(){ ... }
     public void setInitialCreditRating(int initialCreditRating) { ... }
 }</programlisting>
@@ -4918,256 +5020,408 @@ public class ProspectiveSale {
         instead.</para>
 
         <para>This annotation can also take a single parameter indicating when
-        it is to be hidden, for example the following code would disable the
-        action until the object has been saved.</para>
+        it is to be hidden. For example:</para>
 
         <programlisting format="linespecific">public class Customer {
     <emphasis role="strong">@Disabled</emphasis>(When.UNTIL_PERSISTED)
     public void assessCreditWorthiness() { ... }
 }</programlisting>
 
-        <para>The acceptable values for the parameter are:
-        <code>When.ALWAYS</code>, <code>When.NEVER</code>,
-        <code>When.ONCE_PERSISTED</code> and
-        <code>When.UNTIL_PERSISTED</code>. By default the annotated property
-        or action is always disabled i.e. it is implicitly
-        <code>When.ALWAYS.</code></para>
+        <para>This would disable the action until the object has been
+        saved.</para>
+
+        <para>The acceptable values for the parameter are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>When.ALWAYS</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.NEVER</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.ONCE_PERSISTED</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.UNTIL_PERSISTED</code></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>By default the annotated property or action is always disabled
+        (ie defaults to <classname>When.ALWAYS</classname>).</para>
       </sect1>
 
       <sect1>
         <title>@Encodable</title>
 
-        <para></para>
+        <para>Encodability means the ability to convert an object to-and-from
+        a string, by way of the
+        <classname>org.apache.isis.applib.adapters.EncoderDecoder</classname>
+        interface. Generally this only applies to value types, where the
+        <classname>@Value</classname> annotation (see <xref
+        linkend="sec.ValueAnnotation" />) implies encodability through the
+        <classname>ValueSemanticsProvider</classname> interface (see <xref
+        linkend="chp.ValueTypes" />).</para>
 
-        <para>***</para>
-
-        <para></para>
+        <para>For these reasons the <classname>@Encodable</classname>
+        annotation is generally never applied directly, but can be thought of
+        as a placeholder for future enhancements whereby non-value types might
+        also be directly encoded.</para>
       </sect1>
 
       <sect1>
         <title>@EqualByContent</title>
 
-        <para></para>
+        <para>Equal-by-content is a characteristic of value types, and is
+        implied by any class annotated with the the
+        <classname>@Value</classname> annotation (see <xref
+        linkend="sec.ValueAnnotation" /> and also <xref
+        linkend="chp.ValueTypes" />).</para>
 
-        <para>***</para>
+        <para>The <classname>@EqualByContent</classname> annotation exists so
+        that this semantic could, if required, by applied directly to an
+        object without it necessarily also being annotated as a value.</para>
 
-        <para></para>
+        <para>That said, this annotation is only really for completeness.
+        Moreover, the semantic captured by this annotation is currently used
+        by the framework (not in any object store nor viewer).</para>
       </sect1>
 
       <sect1>
         <title>@Executed</title>
 
-        <para>The <classname>@Executed</classname> annotation overrides the
-        default location where a method is executed.</para>
+        <para>The <classname>@Executed</classname> annotation is relevant only
+        for client/server deployments (eg with the DnD viewer).</para>
 
-        <bridgehead>Forcing a method to be executed on the client</bridgehead>
+        <para>In a client/server deployment, all methods for persistent
+        objects are executed on the server-side and for transient objects are
+        executed on the client-side.</para>
 
-        <para>The <classname>@Executed(Where.LOCALLY)</classname> annotation
-        marks an action method so that it executes on the client, rather than
-        being forwarded to the server for execution. This is useful for
-        methods that invoke a service that must be run client-side, for
-        example spawning off a separate process (such as a web browser or
-        Acrobat Reader).</para>
+        <para>This annotation can be used to override that default.</para>
 
-        <bridgehead>Forcing a method to be executed on the server</bridgehead>
+        <sect2>
+          <title>Forcing a method to be executed on the client</title>
 
-        <para>The <classname>@Executed(Where.REMOTELY)</classname> annotation
-        marks an action method so that it executes on the server, even though
-        it would normally be executed on the client (as methods for transient
-        objects are). This is useful for methods that although based on
-        transient objects need access to persistent objects.</para>
+          <para>The <classname>@Executed(Where.LOCALLY)</classname> annotation
+          marks an action method so that it executes on the client, rather
+          than being forwarded to the server for execution. This is useful for
+          methods that invoke a service that must be run client-side, for
+          example spawning off a separate process (such as a web browser or
+          Acrobat Reader).</para>
+        </sect2>
+
+        <sect2>
+          <title>Forcing a method to be executed on the server</title>
+
+          <para>The <classname>@Executed(Where.REMOTELY)</classname>
+          annotation marks an action method so that it executes on the server,
+          even though it would normally be executed on the client (as methods
+          for transient objects are). This is useful for methods that although
+          based on transient objects need access to persistent objects.</para>
+        </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.ExplorationAnnotation">
         <title>@Exploration</title>
 
         <para>The <classname>@Exploration</classname> annotation marks an
         action method as available in exploration mode only, and therefore not
-        intended for use in the production system</para>
+        intended for use in the production system. An exploration action may
+        or may not also be a debug action (annotated with
+        <classname>@Debug</classname>, see <xref
+        linkend="sec.DebugAnnotation" />).</para>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public class Customer {
+    public Order placeNewOrder() { ... }
+    @Exploration
+    public List&lt;Order&gt; listRecentOrders() { ... }
+    ...
+}</programlisting>
+
+        <para>See also the <classname>@Prototype</classname> annotation, <xref
+        linkend="sec.PrototypeAnnotation" /></para>
       </sect1>
 
       <sect1>
         <title>@Facets</title>
 
-        <para></para>
+        <para>The <classname>@Facets</classname> annotation specifies
+        <classname>FacetFactory</classname> implementations and so can be used
+        to run install arbitrary <classname>Facet</classname>s for a type.
+        Generally this is not needed, but can be useful for overriding a
+        custom programming model where a <classname>FacetFactory</classname>
+        is not typically included.</para>
 
-        <para>***</para>
-
-        <para></para>
+        <para>See the core documentation for more on writing
+        <classname>FacetFactory</classname>s.</para>
       </sect1>
 
       <sect1>
         <title>@FieldOrder</title>
 
-        <para>Note: The recommended mechanism for specifying the order in
-        which fields are listed to the user is <code>@MemberOrder</code> (see
-        below). <code>@FieldOrder</code> provides an alternative mechanism, in
-        which the order is specified in one place in the class. However,
-        <code>@FieldOrder</code> is more 'brittle' to change: if you change
-        the name of an existing property you will need to ensure that the
-        corresponding name within the <code>@FieldOrder</code> annotation is
-        also changed.</para>
+        <note>
+          <para>The recommended mechanism for specifying the order in which
+          fields are listed to the user is <code>@MemberOrder</code> (see
+          <xref linkend="sec.MemberOrderAnnotation" />)</para>
+        </note>
 
-        <para>The syntax is: <literal moreinfo="none">@FieldOrder("&lt;comma
-        separated list of field names&gt;") </literal>(the field names are not
-        case sensitive.).</para>
+        <para><code>@FieldOrder</code> provides a mechanism to specify the
+        order in which fields appear in the user interface, in which the order
+        is specified in one place in the class.</para>
 
         <para>For example:</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@FieldOrder("Name, Address, DateOfBirth, RecentOrders")</emphasis>
+        <programlisting format="linespecific">@FieldOrder("Name, Address, DateOfBirth, RecentOrders")
 public class Customer {
-
     public Date getDateOfBirth() {...}
-
     public List&lt;Order&gt; getRecentOrders() {...}
-
     public String getAddress() {...}
-
     public String getName() {...}
-
     ...
 }</programlisting>
+
+        <para>The field names are not case sensitive.</para>
+
+        <para>However, <code>@FieldOrder</code> is more 'brittle' to change:
+        if you change the name of an existing property you will need to ensure
+        that the corresponding name within the <code>@FieldOrder</code>
+        annotation is also changed.</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.HiddenAnnotation">
         <title>@Hidden</title>
 
         <para>The <literal moreinfo="none">@Hidden</literal> annotation
         indicates that the member (property, collection or action) to which it
-        is applied should never be visible to the user. For example:</para>
+        is applied should never be visible to the user. It can also be applied
+        to service types (it has no effect if applied to entities or
+        values).</para>
+
+        <para>For example:</para>
 
         <programlisting format="linespecific">public class Customer {
-    private int internalId;
+    @Hidden
+    public int getInternalId() { ... }
 
-    <emphasis role="strong">@Hidden</emphasis>
-    public int getInternalId() {
-        return internalId;
-    }
-
-    <emphasis role="strong">@Hidden</emphasis>
+    @Hidden
     public void updateStatus() { ... }
+    ...
+}</programlisting>
+
+        <para>Or, applied to a service:</para>
+
+        <programlisting format="linespecific">@Hidden
+public class EmailService {
+    public void sendEmail(...) { ... }
+    ...
 }</programlisting>
 
         <para>This annotation can also take a single parameter indicating when
-        it is to be hidden, for example the following code would show the Id
-        until the object has been saved, and then would hide it.</para>
+        it is to be hidden. For example:</para>
 
         <programlisting format="linespecific">public class Customer {
-    private int internalId;
-
-    <emphasis role="strong">@Hidden</emphasis>(When.ONCE_PERSISTED)
-    public int getInternalId() {
-        return internalId;
-    }
+    @Hidden(When.ONCE_PERSISTED)
+    public int getInternalId() { ... }
+    ...
 }</programlisting>
 
-        <para>The acceptable values for the parameter are:
-        <code>When.ALWAYS</code>, <code>When.NEVER</code>,
-        <code>When.ONCE_PERSISTED</code> and
-        <code>When.UNTIL_PERSISTED</code>. By default the annotated property
-        or action is always hidden i.e. it is implicitly
-        <code>When.ALWAYS.</code></para>
+        <para>This would show the <varname>Id</varname> until the object has
+        been saved, and then would hide it.</para>
+
+        <para>The acceptable values for the parameter are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>When.ALWAYS</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.NEVER</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.ONCE_PERSISTED</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.UNTIL_PERSISTED</code></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>By default the annotated property or action is always hidden (ie
+        defaults to <classname>When.ALWAYS</classname>).</para>
       </sect1>
 
       <sect1>
         <title>@Ignore</title>
 
-        <para></para>
+        <para>The <classname>@Ignore</classname> annotation can be used to
+        cause Apache Isis to complete ignore a class member. This means it
+        won't appear in any viewer, its value will not be persisted, and it
+        won't appear in any XML snapshots (see <xref
+        linkend="chp.XmlSnapshots" />).</para>
 
-        <para>***</para>
+        <para>A common use-case is to ignore implementation-level artifacts.
+        For example:</para>
 
-        <para></para>
+        <programlisting format="linespecific">public class Customer implements Comparable&lt;Customer&gt; {
+    ...
+    @Ignore
+    public int compareTo(Customer c) { 
+        return getSalary() - c.getSalary();
+    }
+    ...
+}</programlisting>
+
+        <para>Note that <methodname>@Ignore</methodname> does not simply imply
+        <methodname>@Hidden</methodname> and
+        <methodname>@NotPersisted</methodname>; it actually means that the
+        class member will not be part of the Isis metamodel.</para>
       </sect1>
 
       <sect1>
         <title>@Immutable</title>
 
         <para>The <literal moreinfo="none">@Immutable</literal> annotation may
-        be applied to a class. The framework does not allow the state of such
-        objects to be changed through the UI, and it should be considered a
-        programmer error to do so programmatically. The ObjectStorePersistor,
-        as used to run the in-memory and Hibernate object stores will actually
-        fail if the programmer tries to change an object in a way that cause
-        the persistor to try and save it. For example the following class
-        would prevent the user from changing the object even when
-        transient:</para>
+        be applied to a class, and indicates to the framework that the state
+        of such objects may not be changed. The viewers will prevent any
+        change through the user interface, and moreover the object stores will
+        reject any changes to the objects that might have occurred
+        programmatically.</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@Immutable</emphasis>
+        <para>For example:</para>
+
+        <programlisting format="linespecific">@Immutable
 public class Country {
     ...
 }</programlisting>
 
         <para>This annotation can also take a single parameter indicating when
-        it is to become immutable, for example the following code would allow
-        the user to create an email object and set it up, and then prevent any
-        changes once it has been saved.</para>
+        it is to become immutable. For example:</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@Immutable</emphasis>(When.ONCE_PERSISTED)
+        <programlisting format="linespecific">@Immutable(When.ONCE_PERSISTED)
 public class Email {
     ...
 }</programlisting>
 
-        <para>The acceptable values for the parameter are:
-        <code>When.ALWAYS</code>, <code>When.NEVER</code>,
-        <code>When.ONCE_PERSISTED</code> and
-        <code>When.UNTIL_PERSISTED</code>. By default the annotated property
-        or action is always immutable i.e. it is implicitly
-        <code>When.ALWAYS.</code></para>
+        <para>This would allow the user to create an email object and set it
+        up, and then prevent any changes once it has been saved.</para>
+
+        <para>The acceptable values for the parameter are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>When.ALWAYS</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.NEVER</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.ONCE_PERSISTED</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>When.UNTIL_PERSISTED</code></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>By default the annotated property or action is always immutable
+        (ie defaults to <classname>When.ALWAYS</classname>).</para>
       </sect1>
 
-      <sect1>
-        <title id="mask-annotation">@Mask</title>
+      <sect1 id="sec.MaskAnnotation">
+        <title>@Mask</title>
 
-        <para>The <literal moreinfo="none">@Mask </literal>annotation may be
+        <para>The <literal moreinfo="none">@Mask</literal> annotation may be
         applied to any property, or to any parameter within an action method,
-        that allows the user to type in text as input. The mask serves to
-        validate, and potentially to normalise, the format of the input. The
-        characters that can be used are based on Swing's MaskFormatter, and
-        also Java's SimpleDateFormat. When applying a mask to a value
-        property, the annotation should be applied to the 'getter'. For
-        example:</para>
+        that allows the user to type in text as input. It can also annotate a
+        string-based value type, and thereby apply to all properties or
+        parameters of that type.</para>
+
+        <para>The mask serves to validate, and potentially to normalise, the
+        format of the input. The characters that can be used are based on
+        Swing's <classname>javax.swing.text.MaskFormatter</classname>, and
+        also Java's <classname>java.util.SimpleDateFormat</classname>.</para>
+
+        <para>For example, on a property:</para>
 
         <programlisting format="linespecific">public class Email {
-    private String telNo;
-
-    <emphasis role="strong">@Mask("(NNN)NNN-NNNN")</emphasis>
+    @Mask("(NNN)NNN-NNNN")
     public String getTelephoneNumber() {...}
-
     public void setTelephoneNumber(String telNo) {...}
     ...
 }</programlisting>
 
-        <para>When applying a mask to a value parameter within an action
-        method, the annotation should be applied 'in-line' before that
-        parameter). For example:</para>
+        <para>Or, on an action parameter:</para>
 
-        <programlisting format="linespecific">public void newContact(
-     @Named("Contact Name")
-     String contactName,
-     @Named("Telephone Number")
-     <emphasis role="strong">@Mask("(NNN)NNN-NNNN")</emphasis>
-     String telNo) {}</programlisting>
+        <programlisting format="linespecific">public void ContactRepository {
+    public void newContact(
+            @Named("Contact Name") String contactName
+           ,@Mask("(NNN)NNN-NNNN") 
+            @Named("Telephone Number") String telNo) { 
+        ...
+    }
+    ... 
+}</programlisting>
+
+        <para>Or, on a value type:</para>
+
+        <programlisting format="linespecific">@Value(...)
+@MaxLength(30)
+public class CustomerFirstName {
+    ...
+}</programlisting>
+
+        <para>See also <classname>@RegEx</classname> annotation, <xref
+        linkend="sec.RegExAnnotation" />.</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.MaxLengthAnnotation">
         <title>@MaxLength</title>
 
         <para>The <literal moreinfo="none">@MaxLength</literal> annotation
         indicates the maximum number of characters that the user may enter
         into a <literal moreinfo="none">String</literal> property, or a
-        <literal moreinfo="none">String</literal> parameter in an action. (It
-        is ignored if applied to a property or parameter of any other type.)
-        For example:</para>
+        <literal moreinfo="none">String</literal> parameter in an action, or
+        for a string-based value type. It is ignored if applied to any other
+        type.</para>
+
+        <para>For example, on a property:</para>
 
         <programlisting format="linespecific">public class Customer {
-
-    <emphasis role="strong">@MaxLength(30)</emphasis>
+    @MaxLength(30)
     public String getFirstName() { ... }
     public void setFirstName(String firstName) { ... }
     ...
 }</programlisting>
 
-        <para>If the model is being persisted on a relational database then
+        <para>Or, on an action parameter:</para>
+
+        <programlisting format="linespecific">public class CustomerRepository {
+    public Customer newCustomer(
+        @MaxLength(30)
+        @Named("First Name") String firstName
+       ,@MaxLength(30)
+        @Named("Last Name") String lastName) {
+    ...
+}</programlisting>
+
+        <para>Or, for a value type:</para>
+
+        <programlisting format="linespecific">@Value(...)
+@MaxLength(30)
+public class CustomerFirstName {
+    ...
+}</programlisting>
+
+        <para>If the model is being persisted to a relational database then
         <literal moreinfo="none">@MaxLength</literal> should be specified for
         all <literal moreinfo="none">String</literal> properties and action
         parameters.</para>
@@ -5182,21 +5436,16 @@ public class Email {
         provide alternative mechanisms).</para>
 
         <para><code>@MemberOrder</code> is specified at the individual member
-        level, on a 'relative' basis. The syntax is:</para>
+        level, relative to other members, as a string. The simplest convention
+        is to use numbers - 1, 2, 3 - though it is a better idea to leave gaps
+        in the numbers - 10, 20, 30 perhaps - such that a new member may be
+        added without having to edit existing numbers. A useful alternative is
+        to adopt the 'dewey-decimal' notation - 1, 1.1, 1.2, 2, 3, 5.1.1,
+        5.2.2, 5.2, 5.3 - which allows for an indefinite amount of future
+        insertion, and allows subclasses to insert their class members as
+        required.</para>
 
-        <programlisting>@MemberOrder(sequence = "&lt;relative order&gt;")</programlisting>
-
-        <para>where <code>&lt;relative order&gt;</code> may be any string. The
-        actual sequence is determined by comparing all the values of the
-        sequence specifier string, using the standard <code>String</code>
-        comparator.</para>
-
-        <para>The simplest convention is to use numbers - 1, 2, 3 - though it
-        is a better idea to leave gaps in the numbers - 10, 20, 30 perhaps -
-        such that a new member may be added without having to edit existing
-        numbers. A useful alternative is to adopt the 'dot-decimal' notation -
-        1, 1.1, 1.2, 2, 3, 5.1.1, 5.2.2, 5.2, 5.3 - which allows for an
-        indefinite amount of future insertion. For example:</para>
+        <para>For example:</para>
 
         <programlisting>Public Class Customer {
     @MemberOrder(sequence="2.1")
@@ -5222,17 +5471,14 @@ public class Email {
         sequence specifier, but in such a case the relative ordering of those
         members will be indeterminate.</para>
 
-        <para>This approach is especially useful when dealing with inheritance
-        hierarchies, as it allows sub-classes to specify where their
-        additional members should be placed in relation to those inherited
-        from the super-class.</para>
-
-        <para>Note that certain styles of user interface will lay out an
-        object's properties and its collections separately, in which case the
-        relative member order of properties and collections will be evaluated
-        separately. However, since other styles of user interface may
-        interleave properties and collections, it is safer to assume the
-        latter.</para>
+        <note>
+          <para>Certain styles of user interface may lay out an object's
+          properties and its collections separately, in which case the
+          relative member order of properties and collections will be
+          evaluated separately. In general, though, consider the layout of all
+          properties and collections together, and of all actions
+          together.</para>
+        </note>
       </sect1>
 
       <sect1>
@@ -5240,17 +5486,30 @@ public class Email {
 
         <para>The <literal moreinfo="none">@MultiLine</literal> annotation
         provides information about the carriage returns in a <literal
-        moreinfo="none">String</literal> property or action parameter. The
-        annotation indicates that:</para>
+        moreinfo="none">String</literal> property or action parameter, or for
+        a string-based value type. It also implies a hint to the viewer that
+        the widget to be used should be over multiple lines (eg a text area
+        rather than a text field), with appropriate wrapping and/or
+        scrollbars.</para>
 
-        <para>- the <code>String</code> property or parameter may contain
-        carriage returns, and</para>
+        <para>More formally, the annotation indicates that:</para>
 
-        <para>- (optionally) the typical number of such carriage returns,
-        and</para>
+        <itemizedlist>
+          <listitem>
+            <para>the <code>String</code> property or parameter may contain
+            carriage returns, and</para>
+          </listitem>
 
-        <para>- (optionally) that the text should be wrapped (the default is
-        that text is not wrapped).</para>
+          <listitem>
+            <para>(optionally) the typical number of such carriage returns
+            (meaning the number of rows in the text area), and</para>
+          </listitem>
+
+          <listitem>
+            <para>(optionally) that the text should be wrapped (the default is
+            that text is not wrapped).</para>
+          </listitem>
+        </itemizedlist>
 
         <warning>
           <para>Currently the <literal
@@ -5258,9 +5517,7 @@ public class Email {
           implemented.</para>
         </warning>
 
-        <para>This may be used by the viewing mechanism to render the property
-        as a multi-line textbox (or text-editor when changes are permitted),
-        with appropriate wrapping and/or scrollbars. The syntax is:</para>
+        <para>The syntax is:</para>
 
         <para><literal
         moreinfo="none">@MultiLine([numberOfLines=&lt;typicalNumberOfCRs&gt;]
@@ -5269,7 +5526,7 @@ public class Email {
         <para>For example:</para>
 
         <programlisting format="linespecific">public class BugReport {
-    <emphasis role="strong">@MultiLine(numberOfLines=10)</emphasis>
+    @MultiLine(numberOfLines=10)
     public String getStepsToReproduce() { ... }
     public void setStepsToReproduce(String stepsToReproduce) { ... }
     ...
@@ -5278,24 +5535,28 @@ public class Email {
         <para>Here the <literal moreinfo="none">stepsToReproduce</literal> may
         be displayed in a text area of 10 rows, with no wrapping. A horizontal
         scrollbar may appear if the number of characters on any given row
-        exceeds the width. Another example:</para>
+        exceeds the width.</para>
+
+        <para>Another example:</para>
 
         <programlisting format="linespecific">public class Email {
-    <emphasis role="strong">@MultiLine(numberOfLines=20, preventWrapping=false)</emphasis>
+    @MultiLine(numberOfLines=20, preventWrapping=false)
     public String getBody() { ... }
     public void setBody(String body) { ... }
     ...
 }</programlisting>
 
         <para>Here the body should be displayed in a text area of 20 rows,
-        with wrapping. If this attribute is combined with the <literal
-        moreinfo="none">&lt;TypicalLength&gt;</literal>, then the expected
-        width of the text area in the user interface will be determined by the
-        value of the typical length divided by the number of specified lines.
-        For example:</para>
+        with wrapping.</para>
+
+        <para>If the annotation is combined with the <literal
+        moreinfo="none">@TypicalLength</literal>, then the expected width of
+        the text area in the user interface will be determined by the value of
+        the typical length divided by the number of specified lines. For
+        example:</para>
 
         <programlisting format="linespecific">public class Email {
-    <emphasis role="strong">@MultiLine(numberOfLines=20, preventWrapping=false)</emphasis>
+    @MultiLine(numberOfLines=20, preventWrapping=false)
     @TypicalLength(800)
     public String getBody() { ... }
     public void setBody(String body) { ... }
@@ -5310,21 +5571,38 @@ public class Email {
         <title>@MustSatisfy</title>
 
         <para>The <literal moreinfo="none">@MustSatisfy</literal> annotation
-        allows validation to be applied to properties using an (implementation
-        of a) <classname>org.apache.isis.applib.spec.Specification</classname>
+        allows validation to be applied to properties and parameters using an
+        (implementation of a)
+        <classname>org.apache.isis.applib.spec.Specification</classname>
         object.</para>
 
-        <para>For example:</para>
+        <para>For example, on a property:</para>
 
         <programlisting format="linespecific">public class Customer {
-    <emphasis role="strong">@MustSatisfy(StartWithCapitalLetterSpecification.class)</emphasis>
+    @MustSatisfy(StartWithCapitalLetterSpecification.class)
     public String getFirstName() { ... }
+    ...
+}</programlisting>
 
+        <para>Or, on an action parameter:</para>
+
+        <programlisting format="linespecific">public class CustomerRepository {
+    public Customer newCustomer(
+            @MustSatisfy(StartWithCapitalLetterSpecification.class)
+            @Named("First Name") firstName
+           ,@MustSatisfy(StartWithCapitalLetterSpecification.class)
+            @Named("Last Name") lastName) {
+        ...
+    }
     ...
 }</programlisting>
 
         <para>The <classname>Specification</classname> is consulted during
         validation, being passed the proposed value.</para>
+
+        <para>An alternative to using <classname>@MustSatisfy</classname> is
+        to define a custom value type, see <xref
+        linkend="chp.ValueTypes" />.</para>
       </sect1>
 
       <sect1 id="sec.NamedAnnotation">
@@ -5343,34 +5621,43 @@ public class Email {
             <literal>@Named</literal> is common is to rename parameters for
             built-in value types. Even here though a custom value type can be
             defined using <classname>@Value</classname> so that the value type
-            is used as the parameter name. @Named may also be used if the name
-            needs punctuation or other symbols in the name presented to the
-            user.</para>
+            is used as the parameter name. <classname>@Named</classname> may
+            also be used if the name needs punctuation or other symbols in the
+            name presented to the user.</para>
           </warning></para>
 
-        <bridgehead>Specifying the name of an object</bridgehead>
+        <sect2>
+          <title>Specifying the name of an object</title>
 
-        <para>By default the name of an object is derived, reflectively from
-        the class name. To specify a different name for an object, use the
-        <literal moreinfo="none">@Named</literal> annotation in front of the
-        class declaration. For example:</para>
+          <para>By default the name of an object is derived, reflectively from
+          the class name. To specify a different name for an object, use the
+          <literal moreinfo="none">@Named</literal> annotation in front of the
+          class declaration.</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@Named("Customer")</emphasis>
+          <para>For example:</para>
+
+          <programlisting format="linespecific">@Named("Customer")
 public class CustomerImpl implements Customer{
    ...
 }</programlisting>
 
-        <para>See also: <literal moreinfo="none">@Plural</literal>.</para>
+          <para>See also the <literal moreinfo="none">@Plural</literal>
+          annotation, <xref linkend="sec.PluralAnnotation" />.</para>
+        </sect2>
 
-        <bridgehead>Specifying the name of a member</bridgehead>
+        <sect2>
+          <title>Specifying the name of a class member</title>
 
-        <para>By default, the name of a member (a property, collection or
-        action) presented to the user is derived, reflectively, from the name
-        of the member defined in the program code. To specify a different name
-        use the <literal moreinfo="none">@Named </literal>annotation
-        immediately before the member declaration. For example:</para>
+          <para>By default, the name of a class member (a property, collection
+          or action) presented to the user is derived, reflectively, from the
+          name of the member defined in the program code. To specify a
+          different name use the <literal moreinfo="none">@Named
+          </literal>annotation immediately before the member
+          declaration.</para>
 
-        <programlisting format="linespecific">public class Customer {
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer {
     <emphasis role="strong">@Named("Given Name")</emphasis>
     public String getFirstName() { ... }
 
@@ -5380,28 +5667,33 @@ public class CustomerImpl implements Customer{
     public CreditRating getCreditRating() { ... }
 }</programlisting>
 
-        <para>Note that the framework provides a separate and more powerful
-        mechanism for internationalisation.</para>
+          <para>Note that the framework provides a separate and more powerful
+          mechanism for internationalisation.</para>
+        </sect2>
 
-        <bridgehead>Specifying the name for an action parameter</bridgehead>
+        <sect2>
+          <title>Specifying the name for an action parameter</title>
 
-        <para>The most common usage of <literal moreinfo="none">@Named
-        </literal>will be to specify names for the parameters of an action:
-        because, by default, the user interface will use the type of the
-        parameter as the name. (This is because the parameter name declared in
-        the code for the action method cannot be picked up reflectively.) To
-        specify the name of a parameter, the <literal
-        moreinfo="none">@Named</literal> annotation is applied 'in-line' (i.e.
-        preceding the individual parameter declaration). For example:</para>
+          <para>The most common usage of <literal
+          moreinfo="none">@Named</literal> is be to specify names for the
+          parameters of an action. This is because the parameter name declared
+          in the code for the action method cannot be picked up reflectively
+          (by default, the user interface will use the type of the parameter
+          as the name; for a String or a Boolean, this is almost certainly not
+          what is required).</para>
 
-        <programlisting format="linespecific">public class Customer {
+          <para>To specify the name of a parameter, the <literal
+          moreinfo="none">@Named</literal> annotation is applied 'in-line'
+          (i.e. preceding the individual parameter declaration.</para>
 
+          <para>For example:</para>
+
+          <programlisting format="linespecific">public class Customer {
     public Order placeOrder(
-                      Product product,
-                      <emphasis role="strong">@Named("Quantity")</emphasis>
-                      int quantity) {
-
-        Order order = new Order();
+            Product product
+           ,@Named("Quantity")
+            int quantity) {
+        Order order = newTransientInstance(Order.class);
         order.modifyCustomer(this);
         order.modifyProduct(product);
         order.setQuantity(quantity);        
@@ -5409,38 +5701,71 @@ public class CustomerImpl implements Customer{
     }
     ...
 }</programlisting>
+
+          <para>An alternative is to use a value type, as described in <xref
+          linkend="chp.ValueTypes" />.</para>
+        </sect2>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.NotContributedAnnotation">
         <title>@NotContributed</title>
 
-        <para></para>
+        <para>The <classname>@NotContributed</classname> annotation applies
+        only to action methods, and specifically to the actions of services.
+        If present, it indicates that the action should not be contributed to
+        any of its domain object arguments.</para>
 
-        <para>***</para>
+        <para>For example:</para>
 
-        <para></para>
+        <programlisting format="linespecific">public class OrderServices {
+    @NotContributed
+    public void cancel(Order order);
+    ...
+}</programlisting>
+
+        <para>If the action should neither be contributed nor appear in the
+        service's service menu (see <xref
+        linkend="sec.NotInServiceMenuAnnotation" />), then you could instead
+        simply mark it as <classname>@Hidden</classname> (see <xref
+        linkend="sec.HiddenAnnotation" />).</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.NotInServiceMenuAnnotation">
         <title>@NotInServiceMenu</title>
 
-        <para></para>
+        <para>The <classname>@NotInServiceMenu</classname> annotation applies
+        only to action methods, and specifically to the actions of services.
+        If present, it indicates that the action should not appear in the
+        service menu for the service. It may, however, still be contributed to
+        any of its domain object arguments.</para>
 
-        <para>***</para>
+        <para>For example:</para>
 
-        <para></para>
+        <programlisting format="linespecific">public class OrderServices {
+    @NotInServiceMenu
+    public void cancel(Order order);
+    ...
+}</programlisting>
+
+        <para>If the action should neither be contributed (see <xref
+        linkend="sec.NotContributedAnnotation" />) nor appear in the service's
+        service menu, then you could instead simply mark it as
+        <classname>@Hidden</classname> (see <xref
+        linkend="sec.HiddenAnnotation" />).</para>
       </sect1>
 
       <sect1 id="not-persistable">
         <title>@NotPersistable</title>
 
-        <para>This annotation indicates that transient instances of this class
-        may be created but may not be persisted. The framework will not
-        provide the user with an option to 'save' the object, and attempting
-        to persist such an object programmatically would be an error. For
-        example:</para>
+        <para>The <classname>@NotPersistable</classname> annotation indicates
+        that transient instances of this class may be created but may not be
+        persisted. The framework will not provide the user with an option to
+        'save' the object, and attempting to persist such an object
+        programmatically would be an error.</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@NotPersistable</emphasis>
+        <para>For example:</para>
+
+        <programlisting format="linespecific"><classname>@NotPersistable</classname>
 public class InputForm {
     // members and actions here
 }</programlisting>
@@ -5449,35 +5774,52 @@ public class InputForm {
         whether it is only the user that cannot persist the object, for
         example the following code would prevent the user from saving the
         object (via the viewer) but still allow the program to persist the
-        object. By default the annotated object is effectively transient, e.g.
-        it is implicitly
-        <classname>By</classname>.<varname>USER_OR_PROGRAM</varname>.</para>
+        object.</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@NotPersistable</emphasis>(By.USER)
+        <para>For example:</para>
+
+        <programlisting format="linespecific">@NotPersistable(By.USER)
 public class InputForm {
     ...
 }</programlisting>
+
+        <para>The acceptable values for the parameter are:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>By.USER</code></para>
+          </listitem>
+
+          <listitem>
+            <para><code>By.USER_OR_PROGRAM</code></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>By default the annotated object is effectively transient (ie
+        default to
+        <classname>By</classname>.<varname>USER_OR_PROGRAM</varname>).</para>
       </sect1>
 
       <sect1>
         <title>@NotPersisted</title>
 
-        <para>This indicates that the property is not to be persisted. Note
-        that in many cases the same thing could be achieved by providing the
-        property with a 'getter' but no 'setter'. For example:</para>
+        <para>The <classname>@NotPersisted</classname> annotation indicates
+        that the property is not to be persisted.</para>
 
-        <remark>Check that this is acceptable for Hibernate</remark>
+        <note>
+          <para>In many cases the same thing can be achieved simply by
+          providing the property with a 'getter' but no 'setter'.</para>
+        </note>
+
+        <para>For example:</para>
 
         <programlisting format="linespecific">public class Order {
 
-    private Order previousOrder;
-
-    <emphasis role="strong">@NotPersisted</emphasis>
+    @NotPersisted
     public Order getPreviousOrder() {...}
-
     public void setPreviousOrder(Order previousOrder) {...}
 
-    // rest of code
+    ...
 }</programlisting>
       </sect1>
 
@@ -5489,73 +5831,88 @@ public class InputForm {
         unless a value has been specified for each property. Similarly, by
         default, the system assumes that all parameters in an action are
         required and will not let the user execute that action unless values
-        have been specified for each parameter. To indicate that either a
-        property, or an action parameter, is optional, use the <literal
-        moreinfo="none">@Optional</literal> annotation.</para>
+        have been specified for each parameter.</para>
 
-        <bridgehead>Making a property optional</bridgehead>
+        <para>To indicate that either a property, or an action parameter, is
+        optional, use the <literal moreinfo="none">@Optional</literal>
+        annotation.</para>
 
-        <para>To indicate that a property is optional (i.e. that the user may
-        save the object without necessarily specifying a value for this
-        property), use the @Optional annotation immediately before the
-        declaration of that property. For example:</para>
+        <note>
+          <para>The <literal moreinfo="none">@Optional</literal>annotation has
+          no meaning for a primitive property (or parameter) such as <literal
+          moreinfo="none">int</literal> - because primitives will always
+          return a default value (e.g. zero). If optionality is required, then
+          use the corresponding wrapper class (e.g. java.lang.Integer).</para>
+        </note>
 
-        <programlisting format="linespecific">public class Order {
+        <sect2>
+          <title>Making a property optional</title>
+
+          <para>Annotate the getter to indicate that a property is
+          <classname>@Optional</classname>. For example:</para>
+
+          <programlisting format="linespecific">public class Order {
     public Product getProduct() { ... }
     
     public java.util.Date getShipDate() { ... }
     public void setShipDate(Date java.util.shipDate) { ... }
 
-    <emphasis role="strong">@Optional</emphasis>
+    @Optional
     public String getComments() { ... }
     public void setComments(String comments) { ... }
 }</programlisting>
 
-        <para>Here the <literal moreinfo="none">product</literal> and <literal
-        moreinfo="none">shipDate</literal> properties are both required, but
-        the <literal moreinfo="none">comments</literal> property is
-        optional.</para>
+          <para>Here the <literal moreinfo="none">product</literal> and
+          <literal moreinfo="none">shipDate</literal> properties are both
+          required, but the <literal moreinfo="none">comments</literal>
+          property is optional.</para>
+        </sect2>
 
-        <bridgehead>Making an action parameter optional</bridgehead>
+        <sect2>
+          <title>Making an action parameter optional</title>
 
-        <para>To indicate that an action may be invoked without having to
-        specify a value for a particular parameter, the
-        <literal>@Optional</literal> annotation should be used in-line i.e.
-        immediately before the declaration of that parameter. For
-        example:</para>
+          <para>To indicate that an action may be invoked without having to
+          specify a value for a particular parameter, annotate with
+          <literal>@Optional</literal>. For example:</para>
 
-        <programlisting format="linespecific">public class Customer {
+          <programlisting format="linespecific">public class Customer {
     public Order placeOrder(
-              Product product,
-              @Named("Quantity") int quantity, 
-              @Optional @Named("Special Instructions") String instr) {
-        ....
+            Product product
+           ,@Named("Quantity") int quantity
+           ,@Optional @Named("Special Instructions") String instr) {
+        ...
     }
     ...
 }</programlisting>
-
-        <para>Note that the <literal
-        moreinfo="none">@Optional</literal>annotation has no meaning for a
-        primitive property (or parameter) such as <literal
-        moreinfo="none">int</literal> - because primitives will always return
-        a default value (e.g. zero). If optionality is required, then use the
-        corresponding wrapper class (e.g. java.lang.Integer).</para>
+        </sect2>
       </sect1>
 
       <sect1>
         <title>@Parseable</title>
 
-        <para></para>
+        <para>Parseability means being able to parse a string representation
+        into an object by way of the
+        <classname>org.apache.isis.applib.adapters.Parser</classname>
+        interface. Generally this only applies to value types, where the
+        <classname>@Value</classname> annotation (see <xref
+        linkend="sec.ValueAnnotation" />) implies encodability through the
+        <classname>ValueSemanticsProvider</classname> interface (see <xref
+        linkend="chp.ValueTypes" />).</para>
 
-        <para>***</para>
-
-        <para></para>
+        <para>For these reasons the <classname>@Parser</classname> annotation
+        is generally never applied directly, but can be thought of as a
+        placeholder for future enhancements whereby non-value types might also
+        have be able to be parsed. For example, a
+        <classname>Customer</classname> could in theory be parsed from a
+        string representing that <classname>Customer</classname>'s title
+        (perhaps in conjunction with some other annotation to determine the
+        repository by which to perform the lookup).</para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.PluralAnnotation">
         <title>@Plural</title>
 
-        <para>Where Apache Isis displays a collection of several objects it
+        <para>When the framework displays a collection of several objects it
         may use the plural form of the object type in the title. By default
         the plural name will be created by adding an 's' to the end of the
         singular name (whether that is the class name or another name
@@ -5572,65 +5929,96 @@ public class Child {
 }</programlisting>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.PrototypeAnnotation">
         <title>@Prototype</title>
 
-        <para></para>
+        <para>The <classname>@Prototype</classname> annotation marks an action
+        method as available in prototype mode only, and therefore not intended
+        for use in the production system. A prototype action may or may not
+        also be a debug action (annotated with <classname>@Debug</classname>,
+        see <xref linkend="sec.DebugAnnotation" />).</para>
 
-        <para>***</para>
+        <para>For example:</para>
 
-        <para></para>
+        <programlisting format="linespecific">public class Customer {
+    public Order placeNewOrder() { ... }
+    @Prototype
+    public List&lt;Order&gt; listRecentOrders() { ... }
+    ...
+}</programlisting>
+
+        <para>See also the <classname>@Exploration</classname> annotation,
+        <xref linkend="sec.ExplorationAnnotation" /></para>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.RegExAnnotation">
         <title>@RegEx</title>
 
         <para>The <literal moreinfo="none">@RegEx</literal> annotation may be
-        applied to any property, or to any parameter within an action method,
-        that is a value type (i.e. that allows the user to type in text as
-        input). It serves both to validate and potentially to normalise the
-        format of the input. <literal moreinfo="none">@Regex</literal> is
-        therefore similar in use to <literal moreinfo="none">@Mask</literal>
-        but provides more flexibility. The syntax is:</para>
+        applied to any string property, or to any parameter within an action
+        method. It can also be applied to any string-based value type. It
+        serves both to validate and potentially to normalise the format of the
+        input. <literal moreinfo="none">@Regex</literal> is therefore similar
+        in use to <literal moreinfo="none">@Mask</literal> (see <xref
+        linkend="sec.MaskAnnotation" />) but provides more flexibility.</para>
 
-        <para><literal moreinfo="none">@RegEx(validation = &lt;regEx
-        string&gt;, format = &lt;regEx string&gt;, caseSensitive =
+        <para>The syntax is:</para>
+
+        <para><literal moreinfo="none">@RegEx(validation = "regEx string",
+        format = "regEx string", caseSensitive =
         &lt;true|false&gt;)</literal></para>
 
-        <para>The first parameter is required; the format defaults to 'no
-        formatting'; caseSensitive defaults to false. When applying Regex to a
-        value property, the annotation should be applied to the 'getter'. For
-        example:</para>
+        <para>Only the first parameter is required; the format defaults to "no
+        formatting", and caseSensitive defaults to false.</para>
 
-        <programlisting format="linespecific">    private String email;
+        <para>For example, on a property:</para>
 
-<emphasis role="strong">    @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")</emphasis>
+        <programlisting format="linespecific">public class Customer {
+    @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
     public String getEmail() {}
+    ...
+}</programlisting>
 
-    public void setEmail(String email) {}</programlisting>
+        <para>Or, on a parameter:</para>
 
-        <para>When applying a RegEx expression to a value parameter within an
-        action method, the annotation should precede that parameter:</para>
+        <programlisting format="linespecific">public class Customer {
+    public void updateEmail(
+            @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
+            @Named("Email") String email) {
+        ...
+    }
+    ...
+)</programlisting>
 
-        <programlisting format="linespecific">    public void newContact(
-        @Named("Contact Name")
-        String contactName,
-        @Named("Email")
-        <emphasis role="strong">@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")</emphasis>
-        String email) {}</programlisting>
+        <para>Or, on a value type:</para>
+
+        <programlisting format="linespecific">@Value(...)
+@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
+public class EmailAddress {
+   ...
+}</programlisting>
       </sect1>
 
       <sect1>
         <title>@TypeOf</title>
 
         <para>The <literal moreinfo="none">@TypeOf</literal> annotation is
-        used to specify the type of elements in a collection, when it is not
-        possible to use generics - for example when invoking an external
-        method that does not use generics.</para>
+        used to specify the type of elements in a collection, when for
+        whatever reason it is not possible to use generics.</para>
 
-        <programlisting format="linespecific"><emphasis role="strong">@TypeOf(Customer.class)</emphasis>
-public List allNewCustomers() {
-    return CustomerDatabase.allNewCustomers();
+        <note>
+          <para>Given that Apache Isis only supports Java 1.6 and later, it's
+          not that obvious what such a reason might be...</para>
+        </note>
+
+        <para>For example:</para>
+
+        <programlisting format="linespecific">public void AccountService {
+    @TypeOf(Customer.class)
+    public List errantAccounts() {
+        return CustomerDatabase.allNewCustomers();
+    }
+    ...
 }</programlisting>
       </sect1>
 
@@ -5640,26 +6028,49 @@ public List allNewCustomers() {
         <para>The <literal moreinfo="none">@TypicalLength</literal> annotation
         indicates the typical length of a <literal
         moreinfo="none">String</literal> property or <literal
-        moreinfo="none">String</literal> parameter in an action. This may be
-        used by the viewing mechanism to determine the space that should be
-        given to that property or parameter in the appropriate view. For
-        example:</para>
+        moreinfo="none">String</literal> parameter in an action. It can also
+        be specified for string-based value types.</para>
+
+        <para>The information is generally used by the viewing mechanism to
+        determine the space that should be given to that property or parameter
+        in the appropriate view. If the typical length is the same as the
+        <literal moreinfo="none">@MaxLength</literal> (see <xref
+        linkend="sec.MaxLengthAnnotation" />) then there is no need to specify
+        <literal moreinfo="none">@TypicalLength</literal> as well. If the
+        value specified is zero or negative then it will be ignored.</para>
+
+        <para>For example, for a property:</para>
 
         <programlisting format="linespecific">public class Customer {
     @MaxLength(30)
-    <emphasis role="strong">@TypicalLength(20)</emphasis>
+    @TypicalLength(20)
     public String getFirstName() { ... }
     public void setFirstName(String firstName) { ... }
 }</programlisting>
 
-        <para>If the typical length is the same as the <literal
-        moreinfo="none">&lt;MaxLength&gt;</literal> then there is no need to
-        specify <literal moreinfo="none">&lt;TypicalLength&gt;</literal> as
-        well. If the value specified is zero or negative then it will be
-        ignored.</para>
+        <para>Or, for a parameter:</para>
+
+        <programlisting format="linespecific">public class CustomerRepository {
+    public Customer newCustomer(
+            @TypicalLength(20)
+            @Named("First Name") String firstName
+           ,@TypicalLength(20)
+            @Named("Last Name") String lastName) {
+        ...
+    }
+    ...
+}</programlisting>
+
+        <para>Or, for value type:</para>
+
+        <programlisting format="linespecific">@Value(...)
+@TypicalLength(20)
+public class FirstName {
+    ...
+}</programlisting>
       </sect1>
 
-      <sect1>
+      <sect1 id="sec.ValueAnnotation">
         <title>@Value</title>
 
         <para>The <literal moreinfo="none">@Value</literal> annotation
@@ -5677,25 +6088,8 @@ public class ComplexNumber {
 
         <para>The <classname>ValueSemanticsProvider</classname> allows the
         framework to interact with the value, parsing strings and displaying
-        as text, and encoding/decoding (for serialization).</para>
-
-        <para></para>
-
-        <para></para>
-
-        <para></para>
-
-        <para>AbstractValueSemanticsProvider</para>
-
-        <para></para>
-
-        <para>DefaultsProvider</para>
-
-        <para>EncoderDecoder</para>
-
-        <para>Parser</para>
-
-        <para></para>
+        as text, and encoding/decoding (for serialization). For more
+        information, see <xref linkend="chp.ValueTypes" />.</para>
       </sect1>
     </appendix>
 
@@ -5713,9 +6107,15 @@ public class ComplexNumber {
       lightweight general purpose repository during prototyping.</para>
 
       <table>
-        <title>DomainObjectContainer methods</title>
+        <title>DomainObjectContainer methods (1 of 2)</title>
 
         <tgroup cols="3">
+          <colspec align="center" colwidth="70" />
+
+          <colspec align="left" colwidth="180" />
+
+          <colspec align="left" />
+
           <thead>
             <row>
               <entry align="center">Category</entry>
@@ -5730,20 +6130,21 @@ public class ComplexNumber {
             <row>
               <entry morerows="2">Object creation</entry>
 
-              <entry>newTransientInstance(Class&lt;T&gt;)</entry>
+              <entry><methodname>newTransientInstance(Class&lt;T&gt;)</methodname></entry>
 
               <entry>Creates new non-persisted object</entry>
             </row>
 
             <row>
-              <entry>newPersistentInstance(Class&lt;T&gt;)</entry>
+              <entry><methodname>newPersistentInstance(Class&lt;T&gt;)</methodname></entry>
 
               <entry>Creates new object, will be persisted at end of
               action</entry>
             </row>
 
             <row>
-              <entry>newInstance(Class&lt;T&gt;, Object)</entry>
+              <entry><methodname>newInstance(Class&lt;T&gt;,
+              Object)</methodname></entry>
 
               <entry>Creates object in state persistence state as that
               provided</entry>
@@ -5752,116 +6153,144 @@ public class ComplexNumber {
             <row>
               <entry morerows="1">Validation</entry>
 
-              <entry>isValid(Object o)</entry>
+              <entry><methodname>isValid(Object)</methodname></entry>
 
               <entry>whether object is valid</entry>
             </row>
 
             <row>
-              <entry>validate(Object o)</entry>
+              <entry><methodname>validate(Object)</methodname></entry>
 
               <entry>reason why object is invalid (if any)</entry>
             </row>
 
             <row>
-              <entry morerows="4">Object persistence</entry>
-
-              <entry>isPersistent(Object)</entry>
-
-              <entry>whether object is persistent</entry>
-            </row>
-
-            <row>
-              <entry>persist(Object)</entry>
-
-              <entry>persist the transient object</entry>
-            </row>
-
-            <row>
-              <entry>persistIfNotAlready(Object)</entry>
-
-              <entry>persist the object (provided is not already
-              persisted)</entry>
-            </row>
-
-            <row>
-              <entry>remove(Object)</entry>
-
-              <entry>remove the persisted object</entry>
-            </row>
-
-            <row>
-              <entry>removeIfNotAlready(Object)</entry>
-
-              <entry>remove the object (provided is not already
-              transient)</entry>
-            </row>
-
-            <row>
               <entry morerows="6">Generic Repository</entry>
 
-              <entry>allInstances(Class&lt;T&gt;)</entry>
+              <entry><methodname>allInstances(Class&lt;T&gt;)</methodname></entry>
 
               <entry>All persisted instances of specified type</entry>
             </row>
 
             <row>
-              <entry>allMatches(Class&lt;T&gt;, Filter&lt;T&gt;)</entry>
+              <entry><methodname>allMatches(Class&lt;T&gt;,
+              Filter&lt;T&gt;)</methodname></entry>
 
               <entry>All persistenced instances of specified type matching
               filter</entry>
             </row>
 
             <row>
-              <entry>allMatches(Class&lt;T&gt;, String)</entry>
+              <entry><methodname>allMatches(Class&lt;T&gt;,
+              String)</methodname></entry>
 
               <entry>All persisted instances with the specified string as
               their title</entry>
             </row>
 
             <row>
-              <entry>allMatches(Class&lt;T&gt;, Object)</entry>
+              <entry><methodname>allMatches(Class&lt;T&gt;,
+              Object)</methodname></entry>
 
               <entry>All persisted instances matching object
               (query-by-example)</entry>
             </row>
 
             <row>
-              <entry>allMatches(Query&lt;T&gt;)</entry>
+              <entry><methodname>allMatches(Query&lt;T&gt;)</methodname></entry>
 
               <entry>All instances satisfying the provided query</entry>
             </row>
 
             <row>
-              <entry>firstMatch(...)</entry>
+              <entry><methodname>firstMatch(...)</methodname></entry>
 
-              <entry>As for allMatches, but returning first instance</entry>
+              <entry>As for <methodname>allMatches(...)</methodname>, but
+              returning first instance</entry>
             </row>
 
             <row>
-              <entry>uniqueMatch(...)</entry>
+              <entry><methodname>uniqueMatch(...)</methodname></entry>
 
-              <entry>As for firstMatch(...), but requiring there to be only
-              one match</entry>
+              <entry>As for <methodname>firstMatch(...)</methodname>, but
+              requiring there to be only one match</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>DomainObjectContainer methods (2 of 2)</title>
+
+        <tgroup cols="3">
+          <colspec align="center" colwidth="70" />
+
+          <colspec align="left" colwidth="180" />
+
+          <colspec align="left" />
+
+          <thead>
+            <row>
+              <entry align="center">Category</entry>
+
+              <entry align="center">Method</entry>
+
+              <entry align="center">Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry morerows="4">Object persistence</entry>
+
+              <entry><methodname>isPersistent(Object)</methodname></entry>
+
+              <entry>whether object is persistent</entry>
+            </row>
+
+            <row>
+              <entry><methodname>persist(Object)</methodname></entry>
+
+              <entry>persist the transient object</entry>
+            </row>
+
+            <row>
+              <entry><methodname>persistIfNotAlready(Object)</methodname></entry>
+
+              <entry>persist the object (provided is not already
+              persisted)</entry>
+            </row>
+
+            <row>
+              <entry><methodname>remove(Object)</methodname></entry>
+
+              <entry>remove the persisted object</entry>
+            </row>
+
+            <row>
+              <entry><methodname>removeIfNotAlready(Object)</methodname></entry>
+
+              <entry>remove the object (provided is not already
+              transient)</entry>
             </row>
 
             <row>
               <entry morerows="2">Messages and warnings</entry>
 
-              <entry>informUser(String)</entry>
+              <entry><methodname>informUser(String)</methodname></entry>
 
               <entry>Inform the user</entry>
             </row>
 
             <row>
-              <entry>warnUser(String)</entry>
+              <entry><methodname>warnUser(String)</methodname></entry>
 
               <entry>Warn the user about a situation, requiring
               acknowledgement.</entry>
             </row>
 
             <row>
-              <entry>raiseError(String)</entry>
+              <entry><methodname>raiseError(String)</methodname></entry>
 
               <entry>Notify user of a serious application error, typically
               requiring further action on behalf of the user</entry>
@@ -5870,7 +6299,7 @@ public class ComplexNumber {
             <row>
               <entry>Security</entry>
 
-              <entry>getUser()</entry>
+              <entry><methodname>getUser()</methodname></entry>
 
               <entry>The currently-logged on user</entry>
             </row>
@@ -5878,13 +6307,13 @@ public class ComplexNumber {
             <row>
               <entry morerows="1">Properties</entry>
 
-              <entry>getProperty(String)</entry>
+              <entry><methodname>getProperty(String)</methodname></entry>
 
               <entry>Value of configuration property</entry>
             </row>
 
             <row>
-              <entry>getPropertyNames()</entry>
+              <entry><methodname>getPropertyNames()</methodname></entry>
 
               <entry>All configuration properties available</entry>
             </row>
@@ -5893,14 +6322,14 @@ public class ComplexNumber {
               <entry morerows="1">Lazy loading, dirty object tracking
               (*)</entry>
 
-              <entry>resolve(Object)</entry>
+              <entry><methodname>resolve(Object)</methodname></entry>
 
               <entry>Lazy load object (overloaded to optionally load a
               property of object)</entry>
             </row>
 
             <row>
-              <entry>objectChanged(Object)</entry>
+              <entry><methodname>objectChanged(Object)</methodname></entry>
 
               <entry>Mark object as dirty</entry>
             </row>
@@ -5908,13 +6337,13 @@ public class ComplexNumber {
             <row>
               <entry morerows="1">Object store control (**)</entry>
 
-              <entry>flush()</entry>
+              <entry><methodname>flush()</methodname></entry>
 
               <entry>Flush all pending changes to object store</entry>
             </row>
 
             <row>
-              <entry>commit()</entry>
+              <entry><methodname>commit()</methodname></entry>
 
               <entry>Commit all pending changes to object store</entry>
             </row>
@@ -5929,57 +6358,80 @@ public class ComplexNumber {
           <para>(**) the use of these methods is discouraged - they are
           typically used only for tests</para>
         </note></para>
-
-      <sect1>
-        <title>Lazy Loading, Dirty Object Tracking</title>
-
-        <para></para>
-      </sect1>
     </appendix>
 
     <appendix id="apx.SecurityClasses">
       <title>Security Classes</title>
 
-      <para></para>
+      <abstract>
+        <para>A simple set of classes to represent the currently logged on
+        user and their roles.</para>
+      </abstract>
 
-      <sect1>
-        <title>User details</title>
+      <para>When the user logs onto an Isis application, the framework
+      constructs a representation of their user and roles using classes from
+      the applib. This allows the application to inspect and act upon those
+      details if required.</para>
 
-        <sect2>
-          <title>UserMemento</title>
+      <para>The user details are captured in the
+      <classname>org.apache.isis.applib.security.UserMemento</classname> class
+      ("memento" because it is a snapshot of their credentials at the point of
+      logging on). The <classname>UserMemento</classname> class defines the
+      following properties:</para>
 
-          <para>sdfsf</para>
-        </sect2>
+      <itemizedlist>
+        <listitem>
+          <para><varname>name</varname> (a
+          <classname>String</classname>)</para>
+        </listitem>
 
-        <sect2>
-          <title>RoleMemento</title>
+        <listitem>
+          <para>collection of roles (as
+          <classname>RoleMemento</classname>)</para>
+        </listitem>
+      </itemizedlist>
 
-          <para>asdad</para>
+      <para>The org.apache.isis.applib.security.RoleMemento class in turn
+      defines two properties:</para>
 
-          <para></para>
-        </sect2>
-      </sect1>
+      <itemizedlist>
+        <listitem>
+          <para><varname>name</varname> (a
+          <classname>String</classname>)</para>
+        </listitem>
+
+        <listitem>
+          <para><varname>description</varname> (a
+          <classname>String</classname>)</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>To obtain the current user, the application can call
+      <methodname>DomainObjectContainer#getUser()</methodname>. For more on
+      the <classname>DomainObjectContainer</classname>, see <xref
+      linkend="apx.DomainObjectContainer" />.</para>
     </appendix>
 
     <appendix id="apx.UtilityClasses">
       <title>Utility Classes</title>
 
       <abstract>
-        <para>***</para>
+        <para>Simple utility classes for domain objects.</para>
       </abstract>
 
-      <para></para>
-
-      <para></para>
+      <para>The <package>org.apache.isis.applib.util</package> package has a
+      number of simple utility classes designed to simplify the coding of some
+      common tasks.</para>
 
       <sect1>
         <title>Title creation</title>
 
-        <para>asdfsd</para>
-
-        <para>The TitleBuffer helper class</para>
-
-        <para></para>
+        <para>The <classname>TitleBuffer</classname> utility class is intended
+        to make it easy to construct title strings (returned from the
+        <methodname>title()</methodname> method). For example, it has
+        overloaded versions of methods called
+        <methodname>append()</methodname> and
+        <methodname>concat()</methodname>.</para>
       </sect1>
 
       <sect1>
@@ -6022,15 +6474,23 @@ public class ComplexNumber {
     <appendix>
       <title>Events</title>
 
-      <para></para>
+      <abstract>
+        <para>The <classname>InteractionEvent</classname> hierarchy.</para>
+      </abstract>
 
-      <para>org.apache.isis.applib.events.InteractionEvent</para>
+      <para>Although not supported by the default programming model, the
+      applib nevertheless defines an event hierarchy that characterizes all of
+      the different types of interactions that can occur. This is used by the
+      wrapper programming model, and is exploited by the JUnit viewer.</para>
 
-      <para></para>
+      <para>The following <acronym>UML</acronym> class diagram shows the
+      hierarchy of events:</para>
 
-      <para></para>
-
-      <para></para>
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/Events.png" scale="30" />
+        </imageobject>
+      </mediaobject>
     </appendix>
   </part>
 </book>

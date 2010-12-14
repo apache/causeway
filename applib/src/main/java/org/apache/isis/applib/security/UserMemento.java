@@ -78,13 +78,16 @@ public final class UserMemento {
     
     
     /**
-     * Determine if the specified user is this user. Returns true if the names match (is case sensitive).
+     * Determine if the specified name is this user. 
+     * 
+     * <p>
+     * @return true if the names match (is case sensitive).
      */
-    public boolean isCurrentUser(final String user) {
-        if (user == null) {
-            throw new IllegalStateException("no user specified");
+    public boolean isCurrentUser(final String userName) {
+        if (userName == null) {
+            throw new IllegalArgumentException("no user name provided");
         }
-        return name.equals(user);
+        return name.equals(userName);
     }
     // }}
 

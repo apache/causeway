@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
  * For a repository action, is equivalent to {@link NotContributed} and also {@link NotInServiceMenu}.
  */
 @Inherited
-@Target( { ElementType.METHOD })
+@Target( { ElementType.TYPE, ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Hidden {
     When value() default When.ALWAYS;

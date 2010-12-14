@@ -52,4 +52,12 @@ public class ActionInvocationEvent extends ValidityEvent {
         this.args = args;
     }
 
+    /**
+     * Does not apply
+     */
+	@Override
+	public Object getProposed() {
+		return null;
+	}
+
 }

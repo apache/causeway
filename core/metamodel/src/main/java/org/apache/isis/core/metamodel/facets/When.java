@@ -44,4 +44,17 @@ public final class When extends EnumerationAbstract {
                this == When.UNTIL_PERSISTED && isTransient;
     }
 
+    public static org.apache.isis.core.metamodel.facets.When decode(org.apache.isis.applib.annotation.When when) {
+        if (when == org.apache.isis.applib.annotation.When.ALWAYS) {
+            return org.apache.isis.core.metamodel.facets.When.ALWAYS;
+        }
+        if (when == org.apache.isis.applib.annotation.When.ONCE_PERSISTED) {
+            return org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED;
+        }
+        if (when == org.apache.isis.applib.annotation.When.UNTIL_PERSISTED) {
+            return org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED;
+        }
+        return org.apache.isis.core.metamodel.facets.When.NEVER;
+    }
+
 }

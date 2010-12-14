@@ -28,13 +28,10 @@ import java.lang.annotation.Target;
 
 
 /**
- * Indicates that a property is not mandatory.
- * 
- * <p>
- * Can also be specified for types that are annotated as <tt>@Value</tt> types. The value need not have string semantics.
+ * Indicates that a property or parameter is not mandatory.
  */
 @Inherited
-@Target( { ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
+@Target( { ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Optional {
 

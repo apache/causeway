@@ -51,6 +51,7 @@ public class OptionalAnnotationFacetFactory extends AnnotationBasedFacetFactoryA
         return FacetUtil.addFacet(create(annotation, holder));
     }
 
+
     @Override
     public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
         final Class<?>[] parameterTypes = method.getParameterTypes();

@@ -24,11 +24,15 @@ import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectMetaModel;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
+import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 
 /**
  * Only provides a concrete implementation of the methods corresponding to 
@@ -51,21 +55,24 @@ public class StandaloneAdapter implements ObjectAdapter {
 	/**
 	 * Returns the {@link ObjectSpecification} as provided in the constructor.
 	 */
-	public ObjectSpecification getSpecification() {
+	@Override
+    public ObjectSpecification getSpecification() {
 		return spec;
 	}
 
 	/**
 	 * Returns the domain object as provided in the constructor.
 	 */
-	public Object getObject() {
+	@Override
+    public Object getObject() {
 		return domainObject;
 	}
 	
 	/**
 	 * Replaces the {@link #getObject() domain object}.
 	 */
-	public void replacePojo(Object pojo) {
+	@Override
+    public void replacePojo(Object pojo) {
 		this.domainObject = pojo;
 	}
 
@@ -75,7 +82,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * <p>
 	 * As per the {@link PersistenceState} provided in the constructor.
 	 */
-	public boolean isPersistent() {
+	@Override
+    public boolean isPersistent() {
 		return persistenceState.isPersistent();
 	}
 
@@ -85,18 +93,21 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * <p>
 	 * As per the {@link PersistenceState} provided in the constructor.
 	 */
-	public boolean isTransient() {
+	@Override
+    public boolean isTransient() {
 		return persistenceState.isTransient();
 	}
 
 	/**
 	 * Always returns <tt>null</tt>.
 	 */
-	public ObjectAdapter getOwner() {
+	@Override
+    public ObjectAdapter getOwner() {
 		return null;
 	}
 
-	public String titleString() {
+	@Override
+    public String titleString() {
 		final ObjectSpecification specification = getSpecification();
         if (specification.isCollection()) {
             return "A collection of " + (" " + specification.getPluralName()).toLowerCase();
@@ -114,7 +125,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * Returns the {@link #setTypeOfFacet(TypeOfFacet) overridden} {@link TypeOfFacet}, else
 	 * looks up from {@link #getSpecification() specification} (if any).
 	 */
-	public TypeOfFacet getTypeOfFacet() {
+	@Override
+    public TypeOfFacet getTypeOfFacet() {
         if (typeOfFacet == null) {
             return getSpecification().getFacet(TypeOfFacet.class);
         }
@@ -124,7 +136,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	/**
 	 * Override (or set the) {@link TypeOfFacet}.
 	 */
-	public void setTypeOfFacet(TypeOfFacet typeOfFacet) {
+	@Override
+    public void setTypeOfFacet(TypeOfFacet typeOfFacet) {
         this.typeOfFacet = typeOfFacet;
 	}
 
@@ -140,7 +153,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public ResolveState getResolveState() {
+	@Override
+    public ResolveState getResolveState() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -149,7 +163,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public void changeState(ResolveState newState) {
+	@Override
+    public void changeState(ResolveState newState) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -159,7 +174,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public Oid getOid() {
+	@Override
+    public Oid getOid() {
 		return null;
 	}
 
@@ -168,7 +184,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public boolean isAggregated() {
+	@Override
+    public boolean isAggregated() {
 		return false;
 	}
 
@@ -177,7 +194,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public String getIconName() {
+	@Override
+    public String getIconName() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -187,7 +205,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public Instance getInstance(Specification specification) {
+	@Override
+    public Instance getInstance(Specification specification) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -197,7 +216,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public Version getVersion() {
+	@Override
+    public Version getVersion() {
 		throw new UnsupportedOperationException();
 	}
 
@@ -206,7 +226,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public void checkLock(Version version) {
+	@Override
+    public void checkLock(Version version) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -215,7 +236,8 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public void setOptimisticLock(Version version) {
+	@Override
+    public void setOptimisticLock(Version version) {
 		throw new UnsupportedOperationException();
 	}
 
@@ -224,8 +246,32 @@ public class StandaloneAdapter implements ObjectAdapter {
 	 * 
 	 * @throws UnsupportedOperationException
 	 */
-	public void fireChangedEvent() {
+	@Override
+    public void fireChangedEvent() {
 		throw new UnsupportedOperationException();
 	}
+
+	
+    @Override
+    public ObjectAdapter getAggregateRoot() {
+        if (getSpecification().isAggregated()) {
+            Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
+            return getAdapterManager().getAdapterFor(parentOid);
+        } else {
+            return this;
+        }
+    }
+
+    //////////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    //////////////////////////////////////////////////////////////////
+    
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
 
 }

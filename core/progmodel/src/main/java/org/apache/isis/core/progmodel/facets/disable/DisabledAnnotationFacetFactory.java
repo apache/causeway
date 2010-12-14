@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
@@ -43,7 +44,7 @@ public class DisabledAnnotationFacetFactory extends AnnotationBasedFacetFactoryA
     }
 
     private DisabledFacet create(final Disabled annotation, final FacetHolder holder) {
-        return annotation == null ? null : new DisabledFacetAnnotation(decodeWhen(annotation.value()), holder);
+        return annotation == null ? null : new DisabledFacetAnnotation(When.decode(annotation.value()), holder);
     }
 
 }

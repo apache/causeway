@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.facets.Facet;
@@ -43,6 +44,9 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
+import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.persistence.adaptermanager.ObjectToAdapterTransformer;
 
 
@@ -76,6 +80,7 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         }
     }
 
+    @Override
     public void checkLock(final Version version) {}
 
     boolean contains(final ObjectAdapter object) {
@@ -98,34 +103,42 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         return null;
     }
 
+    @Override
     public String getIconName() {
         return null;
     }
 
+    @Override
     public Object getObject() {
         return collection;
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public ResolveState getResolveState() {
         return resolveState;
     }
 
-	public boolean isPersistent() {
+	@Override
+    public boolean isPersistent() {
 		return getResolveState().isPersistent();
 	}
 
-	public boolean isTransient() {
+	@Override
+    public boolean isTransient() {
 		return getResolveState().isTransient();
 	}
 
+    @Override
     public ObjectSpecification getSpecification() {
         return specification;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }
@@ -137,10 +150,12 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         }
     }
 
+    @Override
     public void replacePojo(final Object pojo) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void setOptimisticLock(final Version version) {}
 
     public void setupResolveState(final ResolveState resolveState) {
@@ -163,6 +178,7 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         return collection.size();
     }
 
+    @Override
     public String titleString() {
         return "title";
     }
@@ -171,6 +187,7 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         this.version = version;
     }
 
+    @Override
     public void changeState(final ResolveState newState) {}
 
     public void add(final ObjectAdapter element) {
@@ -201,24 +218,49 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         this.removeValidMessage = removeValidMessage;
     }
 
+    @Override
     public void fireChangedEvent() {}
 
+    @Override
     public void setTypeOfFacet(final TypeOfFacet typeOfFacet) {}
 
+    @Override
     public TypeOfFacet getTypeOfFacet() {
         return null;
     }
 
+    @Override
     public ObjectAdapter getOwner() {
         return null;
     }
 
+    @Override
     public Instance getInstance(Specification specification) {
         return null;
     }
 
+    @Override
     public boolean isAggregated() {
         return true;
+    }
+
+    
+    @Override
+    public ObjectAdapter getAggregateRoot() {
+        Oid parentOid = ((AggregatedOid) this.getOid()).getParentOid();
+        return getAdapterManager().getAdapterFor(parentOid);
+    }
+
+    //////////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    //////////////////////////////////////////////////////////////////
+    
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
     }
 
 }
@@ -230,10 +272,12 @@ class TestProxyCollectionFacet implements CollectionFacet {
         return coll;
     }
 
+    @Override
     public boolean contains(final ObjectAdapter collection, final ObjectAdapter element) {
         return collectionDowncasted(collection).contains(element);
     }
 
+    @Override
     public Enumeration elements(final ObjectAdapter collection) {
         TestProxyCollectionAdapter collectionDowncasted = collectionDowncasted(collection);
         List list = EnumerationUtils.toList(collectionDowncasted.elements());
@@ -241,59 +285,75 @@ class TestProxyCollectionFacet implements CollectionFacet {
         return new IteratorEnumeration(transformedCollection.iterator());
     }
 
+    @Override
     public ObjectAdapter firstElement(final ObjectAdapter collection) {
         return collectionDowncasted(collection).firstElement();
     }
 
+    @Override
     public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {}
 
+    @Override
     public int size(final ObjectAdapter collection) {
         return collectionDowncasted(collection).size();
     }
 
+    @Override
     public Class<? extends Facet> facetType() {
         return CollectionFacet.class;
     }
 
+    @Override
     public void setFacetHolder(final FacetHolder facetHolder) {}
 
+    @Override
     public boolean alwaysReplace() {
         return false;
     }
     
+    @Override
     public boolean isDerived() {
     	return false;
     }
 
+    @Override
     public boolean isNoop() {
         return false;
     }
 
+    @Override
     public FacetHolder getFacetHolder() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public TypeOfFacet getTypeOfFacet() {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public Iterator<ObjectAdapter> iterator(ObjectAdapter wrappedCollection) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public Collection<ObjectAdapter> collection(ObjectAdapter wrappedCollection) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public Iterable<ObjectAdapter> iterable(ObjectAdapter collectionAdapter) {
         throw new NotYetImplementedException();
     }
 
-	public Facet getUnderlyingFacet() {
+	@Override
+    public Facet getUnderlyingFacet() {
 		return null;
 	}
-	public void setUnderlyingFacet(Facet underlyingFacet) {
+	@Override
+    public void setUnderlyingFacet(Facet underlyingFacet) {
 		throw new UnsupportedOperationException();
 	}
+
 
 }

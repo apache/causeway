@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -55,7 +56,7 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     private ImmutableFacet create(final Immutable annotation, final FacetHolder holder) {
-        return annotation == null ? null : new ImmutableFacetAnnotation(decodeWhen(annotation.value()), holder);
+        return annotation == null ? null : new ImmutableFacetAnnotation(When.decode(annotation.value()), holder);
     }
 
 

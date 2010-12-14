@@ -34,6 +34,8 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
+import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.persistence.objectstore.ObjectStore;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.CreateObjectCommand;
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.DestroyObjectCommand;
@@ -67,6 +69,7 @@ public class NoSqlObjectStore implements ObjectStore {
         return oidGenerator;
     }
 
+    @Override
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         // TODO should this be done at a higher level so it is applicable for all OSes
         if (object.getSpecification().isAggregated()) {
@@ -77,6 +80,7 @@ public class NoSqlObjectStore implements ObjectStore {
         }
     }
 
+    @Override
     public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
         if (object.getSpecification().isAggregated()) {
             throw new NoSqlStoreException("Can't delete an aggregated object");
@@ -85,21 +89,26 @@ public class NoSqlObjectStore implements ObjectStore {
         }
     }
 
-    public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
+    @Override
+    public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter adapter) {
         // TODO should this be done at a higher level so it is applicable for all OSes
-        if (object.getSpecification().isAggregated()) {
-            Oid parentOid = ((AggregatedOid) object.getOid()).getParentOid();
-            ObjectAdapter parent = IsisContext.getPersistenceSession().getAdapterManager().getAdapterFor(parentOid);
-            return new WriteObjectCommand(true, keyCreator, versionCreator, parent);
-        } else {
-            return new WriteObjectCommand(true, keyCreator, versionCreator, object);
-        }
+        final ObjectAdapter rootAdapter = aggregateRootAdapterFor(adapter);
+        return new WriteObjectCommand(true, keyCreator, versionCreator, rootAdapter);
     }
 
+    /**
+     * Returns either itself, or its parent adapter (if aggregated)
+     */
+    public ObjectAdapter aggregateRootAdapterFor(final ObjectAdapter adapter) {
+        return adapter.getAggregateRoot();
+    }
+
+    @Override
     public void execute(List<PersistenceCommand> commands) {
         database.write(commands);
     }
 
+    @Override
     public ObjectAdapter[] getInstances(PersistenceQuery persistenceQuery) {
         ObjectSpecification specification = persistenceQuery.getSpecification(); 
         List<ObjectAdapter> instances = new ArrayList<ObjectAdapter>(); 
@@ -127,12 +136,14 @@ public class NoSqlObjectStore implements ObjectStore {
         } 
     }
 
+    @Override
     public ObjectAdapter getObject(Oid oid, ObjectSpecification hint) {
         String key = keyCreator.key(oid);
         StateReader reader = database.getInstance(key, hint.getFullName());
         return objectReader.load(reader, keyCreator, versionCreator);
     }
 
+    @Override
     public Oid getOidForService(String name) {
         Oid oid = serviceCache.get(name);
         if (oid == null) {
@@ -143,21 +154,26 @@ public class NoSqlObjectStore implements ObjectStore {
         return oid;
     }
 
+    @Override
     public boolean hasInstances(ObjectSpecification specification) {
         return database.hasInstances(specification.getFullName());
     }
 
+    @Override
     public boolean isFixturesInstalled() {
         return isDataLoaded;
     }
 
+    @Override
     public void registerService(String name, Oid oid) {
         String key = keyCreator.key(oid);
         database.addService(name, key);
     }
 
+    @Override
     public void reset() {}
 
+    @Override
     public void resolveField(ObjectAdapter object, ObjectAssociation field) {
         ObjectAdapter fieldValue = field.get(object);
         if (fieldValue != null) {
@@ -165,6 +181,7 @@ public class NoSqlObjectStore implements ObjectStore {
         }
     }
 
+    @Override
     public void resolveImmediately(ObjectAdapter object) {
         Oid oid= object.getOid();;
         if (oid instanceof AggregatedOid) {
@@ -177,31 +194,53 @@ public class NoSqlObjectStore implements ObjectStore {
         }
     }
 
+    @Override
     public void debugData(DebugString debug) {
         // TODO show details
     }
 
+    @Override
     public String debugTitle() {
         return "NoSql Object Store";
     }
 
+    @Override
     public void close() {
         database.close();
     }
 
+    @Override
     public void open() {
         database.open();
     }
 
+    @Override
     public String name() {
         return "personal object store";
     }
 
+    @Override
     public void abortTransaction() {}
 
+    @Override
     public void endTransaction() {}
 
+    @Override
     public void startTransaction() {}
+
+
+    //////////////////////////////////////////////////////////////////
+    // Dependencies (from context)
+    //////////////////////////////////////////////////////////////////
+    
+    protected AdapterManager getAdapterManager() {
+        return getPersistenceSession().getAdapterManager();
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
+    }
+
 
 }
 

@@ -49,21 +49,6 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
         return cls.equals(String.class);
     }
 
-    protected org.apache.isis.core.metamodel.facets.When decodeWhen(final org.apache.isis.applib.annotation.When when) {
-        if (when == org.apache.isis.applib.annotation.When.ALWAYS) {
-            return org.apache.isis.core.metamodel.facets.When.ALWAYS;
-        }
-        if (when == org.apache.isis.applib.annotation.When.ONCE_PERSISTED) {
-            return org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED;
-        }
-        if (when == org.apache.isis.applib.annotation.When.UNTIL_PERSISTED) {
-            return org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED;
-        }
-        return org.apache.isis.core.metamodel.facets.When.NEVER;
-    }
-
-
-
     /**
      * Searches for annotation on provided class, and if not found for the superclass.
      *

@@ -43,7 +43,7 @@ import org.apache.isis.applib.Identifier;
  * @see VisibilityEvent
  * @see UsabilityEvent
  */
-public abstract class ValidityEvent extends InteractionEvent {
+public abstract class ValidityEvent extends InteractionEvent implements ProposedHolderEvent {
 
     private static final long serialVersionUID = 1L;
 

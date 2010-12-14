@@ -26,6 +26,7 @@ import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
@@ -51,7 +52,7 @@ public class HiddenAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
     }
 
     private HiddenFacet create(final Hidden annotation, final FacetHolder holder) {
-        return annotation == null ? null : new HiddenFacetAnnotation(decodeWhen(annotation.value()), holder);
+        return annotation == null ? null : new HiddenFacetAnnotation(When.decode(annotation.value()), holder);
     }
 
 }

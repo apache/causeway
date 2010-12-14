@@ -28,7 +28,7 @@ import java.lang.annotation.Target;
 
 
 /**
- * Indicates that an instance or a property should not be persisted.
+ * Indicates that a property should not be persisted.
  */
 @Inherited
 @Target( { ElementType.METHOD })

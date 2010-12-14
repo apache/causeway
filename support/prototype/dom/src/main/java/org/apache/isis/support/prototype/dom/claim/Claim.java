@@ -48,7 +48,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // {{ Lifecycle
     public void created() {
         status = "New";
-        date = new Date();
+        date = new Date(); // applib date uses the Clock
     }
 
     // }}
@@ -127,17 +127,17 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // {{ changeStatus
     @MemberOrder(sequence = "1")
     public void changeStatus(
-        @MustSatisfy(ClaimStatii.ChoicesSpecification.class)
+        @MustSatisfy(ClaimStatus.ChoicesSpecification.class)
         final String status) {
         setStatus(status);
     }
 
     public List<String> choices0ChangeStatus() {
-        return ClaimStatii.ALL;
+        return ClaimStatus.ALL;
     }
 
     private String ifAlreadySubmitted() {
-        return ClaimStatii.isSubmitted(getStatus()) ? "Already submitted" : null;
+        return ClaimStatus.SUBMITTED.equals(getStatus()) ? "Already submitted" : null;
     }
 
     // }}
@@ -205,12 +205,12 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
 
     // {{ action: Submit
     public void submit(Approver approver) {
-        setStatus("Submitted");
+        setStatus(ClaimStatus.SUBMITTED);
         setApprover(approver);
     }
 
     public String disableSubmit() {
-        return ClaimStatii.isSubmitted(getStatus()) ? null : "Claim has already been submitted";
+        return !ClaimStatus.SUBMITTED.equals(getStatus()) ? null : "Claim has already been submitted";
     }
 
     public Approver default0Submit() {
@@ -264,7 +264,7 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // }}
 
     public String validate() {
-        if (ClaimStatii.isIncomplete(getStatus())) {
+        if (ClaimStatus.INCOMPLETE.equals(getStatus())) {
             return "incomplete";
         }
         if (getDescription().contains("foobaz")) {
@@ -279,10 +279,14 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
     // return CalendarEvent.newAllDayEvent(getDate().dateValue());
     // }
 
-    public static class ClaimStatii {
+    public static class ClaimStatus {
 
+        private static final String NEW = "New";
+        private static final String INCOMPLETE = "Incomplete";
+        private static final String SUBMITTED = "Submitted";
+        
         public static final List<String> ALL = 
-            Collections.unmodifiableList(Arrays.asList("New", "Incomplete", "Submitted"));
+            Collections.unmodifiableList(Arrays.asList(NEW, INCOMPLETE, SUBMITTED));
 
         public static class ChoicesSpecification implements Specification {
 
@@ -295,14 +299,6 @@ public class Claim extends AbstractDomainObject /* implements Calendarable */{
                 }
                 return "Must be one of " + ALL;
             }
-        }
-
-        public static boolean isSubmitted(String status) {
-            return "Submitted".equals(status);
-        }
-
-        public static boolean isIncomplete(String status) {
-            return "Incomplete".equals(status);
         }
 
     }
