@@ -4726,7 +4726,7 @@ public class Customer {
 }</programlisting>
 
         <para>Compared to <classname>@MemberOrder</classname>, there is
-        (currentlyon) one additional advantage in that you can easily specify
+        (currently) one additional advantage in that you can easily specify
         groupings (which may be rendered by the viewer as sub-menus). This
         information may be used by the viewing mechanism to render actions
         into sub-menus.</para>

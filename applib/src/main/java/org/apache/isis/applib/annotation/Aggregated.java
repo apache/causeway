@@ -36,11 +36,6 @@ import java.lang.annotation.Target;
  * instances. So for example in the DnD viewer an aggregated object may not be drag/dropped into an empty
  * &quot;slot&quot;. Instead, the user would need to use copy/paste.
  * 
- * <p>
- * Note that aggregated objects are arbitrarily large and are usually mutable. {@link Value}s are similar
- * (the only thing that one can definitively say about a value is that it is an aggregate, however values are
- * typically small and are usually immutable.
- * 
  * @see Value
  */
 @Inherited
