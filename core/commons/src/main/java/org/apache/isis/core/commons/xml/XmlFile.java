@@ -28,13 +28,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
-import org.apache.isis.core.commons.exceptions.IsisException;
 import org.xml.sax.ContentHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 import org.xml.sax.helpers.XMLReaderFactory;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
+import org.apache.isis.core.commons.exceptions.IsisException;
 
 public class XmlFile {
     private static final String[] ESCAPE_STRING = { "&amp;", "&lt;", "&gt;", "&quot;", "&apos;" };
@@ -65,6 +68,7 @@ public class XmlFile {
         this.charset = charset;
     }
 
+    @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     private void createDirectoryIfRequired() {
         if (this.directory.exists()) {
             return;
@@ -128,6 +132,7 @@ public class XmlFile {
         }
     }
 
+    @SuppressWarnings("RV_RETURN_VALUE_IGNORED_BAD_PRACTICE")
     public void delete(final String fileName) {
         file(fileName).delete();
     }
