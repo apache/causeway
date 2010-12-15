@@ -9,9 +9,9 @@ import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.ScenarioCell;
-import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat.ThatSubcommandAbstract;
+import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 
 public class Contains extends ThatSubcommandAbstract {
 

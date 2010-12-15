@@ -12,8 +12,8 @@ import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 import org.apache.isis.viewer.bdd.common.ScenarioBoundValueException;
 import org.apache.isis.viewer.bdd.common.ScenarioCell;
-import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.fixtures.UsingIsisViewerPeer;
+import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 
 /**
  * Represents the context for a single {@link Perform} command; in effect, a row

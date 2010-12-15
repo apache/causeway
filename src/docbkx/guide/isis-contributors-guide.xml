@@ -60,6 +60,79 @@
     License v2</ulink>.</para>
 
     <para>This guide is ...</para>
+
+    <para></para>
+
+    <para>***</para>
+
+    <para></para>
+
+    <para><ulink url="http://starobjects.sourceforge.net">Star Objects</ulink>
+    is an umbrella project for the various sister projects for the <ulink
+    url="http://nakedobjects.org">Naked Objects</ulink> framework. Its purpose
+    is to :</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>describe the development environment common to all sister
+        projects:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>how to set up the development environment;</para>
+          </listitem>
+
+          <listitem>
+            <para>how to write site and docbook documentation</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+
+      <listitem>
+        <para>define standards common to all sister projects:</para>
+
+        <para>a <ulink url="http://maven.apache.org">Maven</ulink> corporate
+        <acronym>POM</acronym> that defines common third party dependencies,
+        configuration of build plugins and so on;</para>
+      </listitem>
+
+      <listitem>
+        <para>provide a Maven site skin to provide a common look-n-feel of the
+        Maven sites created for the sister projects.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This developers guide breaks into several parts:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>the first part is for those just wanting to build the sister
+        projects from source, without necessarily contributing any changes
+        back to the projects. As such, it is quite short;</para>
+      </listitem>
+
+      <listitem>
+        <para>the second part is for those who are intending to contribute
+        changes back. It deals with such matters as setting up the development
+        environment, explaining source code structure, how to use the
+        corporate POM, writing documentation and site documentation;</para>
+      </listitem>
+
+      <listitem>
+        <para>the third part is for use only by those maintaining
+        <emphasis>this</emphasis> (umbrella) project. It deals with releasing
+        the corporate POM and Maven site skin.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Both Naked Objects and all its sister projects are currently hosted
+    on <ulink url="http://sourceforge.net">Sourceforge</ulink>, under <ulink
+    url="http://www.apache.org/licenses/LICENSE-2.0.html">Apache Software
+    License v2</ulink>.</para>
+
+    <para></para>
+
+    <para></para>
   </preface>
 
   <!-- main content -->
@@ -71,7 +144,138 @@
       <para>*** partintro</para>
 
       <para></para>
+
+      <para></para>
+
+      <para>This part of the developers guide describes how to build any of
+      the sister projects from source, for example, just to get a better
+      understanding of how the project works, or because your organization
+      requires any open source projects to be re-built in-house.</para>
+
+      <para>This part of the guide also describes the prerequisite software
+      that needs to be installed prior to building from source.</para>
+
+      <para>If you are looking to contribute to any of the sister projects,
+      the steps in this part of the guide also apply, but see also <xref
+      linkend="prt.BeingAContributor" /> for additional steps.</para>
+
+      <para></para>
     </partintro>
+
+    <chapter id="chp.PrerequisiteSoftware">
+      <title>Prerequisite Software</title>
+
+      <abstract>
+        <para>This chapter describes the (Java) software needed to build the
+        sister projects. Follow the steps in this chapter if you want to build
+        the sister projects from source, or want to contribute back to the
+        sister projects.</para>
+      </abstract>
+
+      <para>For the most part the sister projects are implemented using Java.
+      Some sister projects may have their own additional prerequisites;
+      consult their documentation.</para>
+
+      <sect1>
+        <title>Command Line Software</title>
+
+        <para>Install the following software (you may well already have these
+        installed):</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>a <ulink
+            url="http://subversion.tigris.org">Subversion</ulink> <ulink
+            url="http://subversion.tigris.org/">client</ulink>;</para>
+          </listitem>
+
+          <listitem>
+            <para><ulink url="http://java.sun.com">Java 5 or 6</ulink> and
+            setup the <varname>JAVA_HOME</varname> environment
+            variable;</para>
+          </listitem>
+
+          <listitem>
+            <para><ulink url="http://maven.apache.org">Maven 2.2.1</ulink>,
+            setup the <varname>MAVEN_HOME</varname> environment
+            variable.</para>
+
+            <para><note>
+                <para>At the time of writing, Maven 3.0 was not currently
+                supported; see ISIS-11.</para>
+              </note></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Add Subversion's <filename>svn</filename> executable and Maven's
+        <filename>mvn</filename> executable to your <varname>PATH</varname>
+        environment variable.</para>
+      </sect1>
+
+      <sect1>
+        <title>IDE</title>
+
+        <para>Although it is possible to develop from the command line tools,
+        if you are looking to develop on or contribute back to any of the
+        sister projects then you should set up a development
+        environment.</para>
+
+        <para>Any <acronym>IDE</acronym> that supports Maven will do; we use
+        Eclipse along with a number of plugins:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Install <ulink url="http://eclipse.org">Eclipse 3.5</ulink>
+            (Java or JEE edition).</para>
+          </listitem>
+
+          <listitem>
+            <para>the <ulink
+            url="http://m2eclipse.codehaus.org">m2eclipse</ulink> plugin, for
+            Maven support</para>
+
+            <para>Normally Eclipse uses its own <filename>.project</filename>
+            and <filename>.classpath</filename> files to (respectively) define
+            the layout of the project and the classpath for a project. With
+            Maven however this same information is available in the
+            <filename>pom.xml</filename>. What <emphasis>m2eclipse</emphasis>
+            does is generate the <filename>.project</filename> and
+            <filename>.classpath</filename> files on-the-fly, and uses
+            Eclipse's own "Classpath Container" to reference Maven modules in
+            the local repository. m2eclipse will also download any referenced
+            modules from remote repositories into the local repository.</para>
+          </listitem>
+
+          <listitem>
+            <para>the <ulink
+            url="http://subclipse.tigris.org">Subclipse</ulink> plugin, for
+            Subversion support</para>
+          </listitem>
+
+          <listitem>
+            <para>the <ulink
+            url="http://eclipse-cs.sourceforge.net">eclipse-cs</ulink> plugin,
+            for <ulink
+            url="http://checkstyle.sourceforge.net">Checkstyle</ulink>
+            support</para>
+          </listitem>
+
+          <listitem>
+            <para>the <ulink url="http://pmd.sourceforge.net/eclipse">PMD for
+            eclipse</ulink> plugin, for <ulink
+            url="http://pmd.sourceforge.net">PMD</ulink> support</para>
+          </listitem>
+
+          <listitem>
+            <para>the <ulink url="http://www.eclemma.org/">EclEmma</ulink>
+            plugin, for <ulink url="http://emma.sourceforge.net">Emma</ulink>
+            code coverage support</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>Install each of these from their respective update sites.</para>
+      </sect1>
+    </chapter>
 
     <chapter id="chp.SetUpDevelopmentEnvironment">
       <title>Set Up Development Environment</title>

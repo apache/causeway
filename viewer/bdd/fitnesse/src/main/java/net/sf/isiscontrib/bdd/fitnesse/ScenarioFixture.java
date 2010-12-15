@@ -19,7 +19,7 @@ import org.apache.isis.viewer.bdd.common.ScenarioValueException;
 import org.apache.isis.viewer.bdd.common.fixtures.CheckListPeer.CheckMode;
 import org.apache.isis.viewer.bdd.common.fixtures.SetUpObjectsPeer;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.Perform;
-import org.apache.isis.viewer.bdd.common.parsers.JavaUtilDateParser;
+import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 
 import fit.Fixture;
 import fitlibrary.DoFixture;
@@ -38,7 +38,8 @@ public class ScenarioFixture extends DoFixture {
     }
 
     public ScenarioFixture() {
-        registerParseDelegate(java.util.Date.class, new JavaUtilDateParser());
+        DateParser dateParser = getScenario().getDateParser();
+        registerParseDelegate(java.util.Date.class, dateParser);
     }
 
     // ////////////////////////////////////////////////////////////

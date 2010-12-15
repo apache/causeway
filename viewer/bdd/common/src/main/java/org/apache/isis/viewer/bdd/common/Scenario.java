@@ -32,7 +32,7 @@ import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.defaults.profilestore.InMemoryUserProfileStoreInstaller;
 import org.apache.isis.viewer.bdd.common.components.BddAuthenticationManagerInstaller;
 import org.apache.isis.viewer.bdd.common.components.BddInMemoryPersistenceMechanismInstaller;
-import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
+import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.RunViewer;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;

@@ -88,7 +88,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     private final DateFormat encodingFormat;
     protected DateFormat format;
     private String configuredFormat;
-    private String formatKey;
+    private String propertyType;
 
 
     /**
@@ -113,7 +113,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
      * Allows the specific facet subclass to be specified (rather than use {@link #type()}.
      */
     public ValueSemanticsProviderAbstractTemporal(
-            final String propertyName,
+            final String propertyType,
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
             final Class<?> adaptedClass,
@@ -128,8 +128,8 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
                 specificationLoader, runtimeContext);
         configureFormats();
         
-        this.formatKey = FORMAT_KEY_PREFIX + propertyName;
-        configuredFormat = getConfiguration().getString(formatKey, defaultFormat());
+        this.propertyType = propertyType;
+        configuredFormat = getConfiguration().getString(FORMAT_KEY_PREFIX + propertyType, defaultFormat()).toLowerCase().trim();
         buildFormat(configuredFormat);
 
         encodingFormat = formats().get(ISO_ENCODING_FORMAT);
@@ -147,7 +147,8 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     }
 
     protected void buildDefaultFormatIfRequired() {
-        String currentlyConfiguredFormat = FORMATS.get().get(formatKey);
+        Map<String, String> map = FORMATS.get();
+        String currentlyConfiguredFormat = map.get(propertyType);
         if ( currentlyConfiguredFormat==null || configuredFormat.equals(currentlyConfiguredFormat)) {
             return;
         }
@@ -159,8 +160,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
 
     protected void buildFormat(String configuredFormat) {
         final Map<String, DateFormat> formats = formats();
-        final String required = configuredFormat.toLowerCase().trim();
-        format = formats.get(required);
+        format = formats.get(configuredFormat);
         if (format == null) {
             setMask(configuredFormat);
         }

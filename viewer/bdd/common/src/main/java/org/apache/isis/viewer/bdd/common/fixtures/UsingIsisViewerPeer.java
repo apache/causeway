@@ -43,6 +43,7 @@ import org.apache.isis.viewer.bdd.common.fixtures.perform.PerformContext;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.RemoveFromCollection;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.SaveObject;
 import org.apache.isis.viewer.bdd.common.fixtures.perform.SetProperty;
+import org.apache.isis.viewer.bdd.common.parsers.DateParser;
 
 public class UsingIsisViewerPeer extends AbstractFixturePeer {
 

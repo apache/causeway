@@ -1,4 +1,4 @@
-package org.apache.isis.viewer.bdd.common.fixtures;
+package org.apache.isis.viewer.bdd.common.parsers;
 
 import java.text.DateFormat;
 import java.text.MessageFormat;
@@ -25,7 +25,7 @@ public class DateParser {
         UTC_TIME_ZONE = timeZone;
     }
 
-    private static final String DEFAULT_DATE_MASK = "dd-MMM-yyyy";
+    private static final String DEFAULT_DATE_MASK = "yyyy-MM-dd";
     private static final String DEFAULT_TIME_MASK = "hh:mm";
 
     private String dateMask = DEFAULT_DATE_MASK;
@@ -65,6 +65,8 @@ public class DateParser {
 
     private void invalidateFormats() {
         this.dateAndTimeFormat = null;
+        this.dateOnlyFormat = null;
+        this.timeOnlyFormat = null;
     }
 
     public String format(Date resultDate) {
