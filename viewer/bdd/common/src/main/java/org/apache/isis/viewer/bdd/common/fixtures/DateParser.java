@@ -73,7 +73,7 @@ public class DateParser {
 
     private DateFormat getDateAndTimeFormat() {
         if (dateAndTimeFormat == null) {
-            dateAndTimeFormat = getUTCDateFormat(combinedMask());
+            dateAndTimeFormat = getUTCDateFormat(getCombinedMask());
         }
         return dateAndTimeFormat;
     }
@@ -98,13 +98,13 @@ public class DateParser {
         return dateFormat;
     }
 
-    private String combinedMask() {
+    public String getCombinedMask() {
         return MessageFormat.format("{0} {1}", dateMask, timeMask);
     }
 
     @Override
     public String toString() {
-        return combinedMask();
+        return getCombinedMask();
     }
 
 }

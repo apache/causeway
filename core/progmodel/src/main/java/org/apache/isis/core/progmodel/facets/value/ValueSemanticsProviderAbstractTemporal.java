@@ -40,12 +40,31 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
+import com.google.inject.internal.Maps;
+
 
 public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemanticsProviderAbstract implements DateValueFacet {
 
-    //public static final String PREFERRED_FORMAT_KEY = ""
+    /**
+     * Introduced to allow BDD tests to provide a different format string
+     * "mid-flight".
+     */
+    public static void setFormat(String propertyType, String formatStr) {
+        FORMATS.get().put(propertyType, formatStr);
+    }
+
+    private final static ThreadLocal<Map<String,String>> FORMATS = 
+        new ThreadLocal<Map<String,String>>() {
+            @Override
+            protected java.util.Map<String,String> initialValue() { 
+                return Maps.newHashMap();
+            }
+        };
+    
     protected static final String ISO_ENCODING_FORMAT = "iso_encoding";
     private static final TimeZone UTC_TIME_ZONE;
+
+    public final static String FORMAT_KEY_PREFIX = ConfigurationConstants.ROOT + "value.format.";
 
     static {
         TimeZone timeZone = TimeZone.getTimeZone("Etc/UTC");
@@ -68,6 +87,9 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
 
     private final DateFormat encodingFormat;
     protected DateFormat format;
+    private String configuredFormat;
+    private String formatKey;
+
 
     /**
      * Uses {@link #type()} as the facet type.
@@ -104,6 +126,16 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
             final RuntimeContext runtimeContext) {
         super(facetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration,
                 specificationLoader, runtimeContext);
+        configureFormats();
+        
+        this.formatKey = FORMAT_KEY_PREFIX + propertyName;
+        configuredFormat = getConfiguration().getString(formatKey, defaultFormat());
+        buildFormat(configuredFormat);
+
+        encodingFormat = formats().get(ISO_ENCODING_FORMAT);
+    }
+
+    protected void configureFormats() {
         final Map<String, DateFormat> formats = formats();
         for (Map.Entry<String, DateFormat> mapEntry : formats.entrySet()) {
             final DateFormat format = mapEntry.getValue();
@@ -112,15 +144,26 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
                 format.setTimeZone(UTC_TIME_ZONE);
             }
         }
-        final String defaultFormat = configuration.getString(ConfigurationConstants.ROOT + "value.format." + propertyName,
-                defaultFormat());
-        final String required = defaultFormat.toLowerCase().trim();
-        format = formats.get(required);
-        if (format == null) {
-            setMask(defaultFormat);
+    }
+
+    protected void buildDefaultFormatIfRequired() {
+        String currentlyConfiguredFormat = FORMATS.get().get(formatKey);
+        if ( currentlyConfiguredFormat==null || configuredFormat.equals(currentlyConfiguredFormat)) {
+            return;
         }
 
-        encodingFormat = formats.get(ISO_ENCODING_FORMAT);
+        // (re)create format
+        configuredFormat = currentlyConfiguredFormat;
+        buildFormat(configuredFormat);
+    }
+
+    protected void buildFormat(String configuredFormat) {
+        final Map<String, DateFormat> formats = formats();
+        final String required = configuredFormat.toLowerCase().trim();
+        format = formats.get(required);
+        if (format == null) {
+            setMask(configuredFormat);
+        }
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -129,6 +172,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
 
     @Override
     protected Object doParse(final Object original, final String entry) {
+        buildDefaultFormatIfRequired();
         final String dateString = entry.trim();
         final String str = dateString.toLowerCase();
         if (str.equals("today") || str.equals("now")) {
@@ -328,5 +372,6 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     protected boolean isEmpty() {
         return false;
     }
+
 
 }

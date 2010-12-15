@@ -15,6 +15,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
+import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstallerNoop;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
@@ -32,9 +34,9 @@ import org.apache.isis.viewer.bdd.common.components.BddAuthenticationManagerInst
 import org.apache.isis.viewer.bdd.common.components.BddInMemoryPersistenceMechanismInstaller;
 import org.apache.isis.viewer.bdd.common.fixtures.DateParser;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.OpenSession;
+import org.apache.isis.viewer.bdd.common.story.bootstrapping.RunViewer;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.SetClock;
 import org.apache.isis.viewer.bdd.common.story.bootstrapping.ShutdownIsis;
-import org.apache.isis.viewer.bdd.common.story.bootstrapping.RunViewer;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryDefault;
 import org.apache.isis.viewer.bdd.common.story.registries.AliasRegistryHolder;
 
@@ -231,10 +233,20 @@ public class Scenario implements AliasRegistryHolder {
 
     public void usingDateFormat(String dateFormatStr) {
         dateParser.setDateFormat(dateFormatStr);
+        setTemporalFormat("date", dateFormatStr);
+        setTemporalFormat("datetime", dateParser.getCombinedMask());
+        setTemporalFormat("timestamp", dateParser.getCombinedMask());
     }
 
     public void usingTimeFormat(String timeFormatStr) {
         dateParser.setTimeFormat(timeFormatStr);
+        setTemporalFormat("time", timeFormatStr);
+        setTemporalFormat("datetime", dateParser.getCombinedMask());
+        setTemporalFormat("timestamp", dateParser.getCombinedMask());
+    }
+
+    private void setTemporalFormat(String propertyType, String formatStr) {
+        ValueSemanticsProviderAbstractTemporal.setFormat(propertyType, formatStr);
     }
 
     public DateParser getDateParser() {
@@ -272,6 +284,10 @@ public class Scenario implements AliasRegistryHolder {
 
     public IsisTransactionManager getTransactionManager() {
         return IsisContext.getTransactionManager();
+    }
+
+    protected IsisConfiguration getConfiguration() {
+        return IsisContext.getConfiguration();
     }
 
 
