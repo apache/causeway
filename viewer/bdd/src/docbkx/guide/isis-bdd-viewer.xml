@@ -1005,6 +1005,19 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
 
       <para>This fixture is typically called only once in the scenario.</para>
 
+      <para><note>
+          <para>Date/time formats are based on the currently used locale. By
+          default, Isis will use the current locale. To change this, set the
+          relevant locale within <filename>isis.properties</filename>. For
+          example:</para>
+
+          <programlisting>isis.locale=de_DE</programlisting>
+        </note><note>
+          <para>Dates are always intepreted strictly as UTC dates. This means
+          that you shouldn't need to worry about the timezone in which the
+          tests are being run.</para>
+        </note></para>
+
       <sect2>
         <title>Common</title>
 
@@ -1014,7 +1027,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
         <itemizedlist>
           <listitem>
             <para><methodname>#usingDateFormat(String)</methodname> is used to
-            specify the date format. </para>
+            specify the date format.</para>
 
             <para>If not called, the format defaults to "dd-MMM-yyyy", eg
             02-Aug-2010.</para>
@@ -2758,7 +2771,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
       <title>Check Collection Contents</title>
 
       <para>These fixtures are used to assert various facts about the contents
-      of a collection. </para>
+      of a collection.</para>
 
       <para>They are typically used in the "Then", though can be helpful as a
       way of confirming/documenting a "Given".</para>
@@ -3170,7 +3183,7 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <para>There are a number of fixtures available to help you debug your
     <acronym>BDD</acronym> scenarios.</para>
 
-    <para>Note: </para>
+    <para>Note:</para>
 
     <itemizedlist>
       <listitem>
