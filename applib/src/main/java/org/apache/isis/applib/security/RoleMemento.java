@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.security;
 
 import org.apache.isis.applib.annotation.MemberOrder;
@@ -25,7 +24,6 @@ import org.apache.isis.applib.annotation.NotPersistable;
 
 @NotPersistable
 public final class RoleMemento {
-	
 
     /**
      * Creates a new role with the specified name. Description is left blank.
@@ -48,24 +46,27 @@ public final class RoleMemento {
         this.description = description;
     }
 
-    
     // {{ Identification
     public String title() {
         return name;
     }
+
     // }}
 
     // {{ Name
     private final String name;
-    @MemberOrder(sequence="1.1")
+
+    @MemberOrder(sequence = "1.1")
     public String getName() {
         return name;
     }
+
     // }}
 
     // {{ Description
     private final String description;
-    @MemberOrder(sequence="1.2")
+
+    @MemberOrder(sequence = "1.2")
     public String getDescription() {
         return description;
     }

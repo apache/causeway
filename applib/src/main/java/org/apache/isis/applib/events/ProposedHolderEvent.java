@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 /**

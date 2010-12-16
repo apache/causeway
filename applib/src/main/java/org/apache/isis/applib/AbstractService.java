@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib;
 
 public abstract class AbstractService extends AbstractContainedObject {
@@ -31,4 +30,3 @@ public abstract class AbstractService extends AbstractContainedObject {
     }
 
 }
-

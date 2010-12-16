@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures;
 
 import java.util.ArrayList;
@@ -27,16 +26,14 @@ import java.util.List;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 
-
 /**
  * Convenience class for creating fixtures.
  * 
  * <p>
- * Most subclasses will simply override {@link #install()} to setup objects.  In addition though
- * fixtures may also:
+ * Most subclasses will simply override {@link #install()} to setup objects. In addition though fixtures may also:
  * <ul>
  * <li>change the date/time within the course of fixture installation, using {@link #setDate(int, int, int)} and
- *     {@link #setTime(int, int)}.
+ * {@link #setTime(int, int)}.
  * <li>change the current user using {@link #switchUser(String, String...)}.
  * <li>create composite fixtures using {@link #addFixture(Object)}.
  * <li>search for existing objects using {@link #firstMatch(Class, org.apache.isis.applib.Filter)} or
@@ -44,41 +41,42 @@ import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
  * </ul>
  * 
  * <p>
- * To automatically logon for the demo/test, use {@link LogonFixture}. 
+ * To automatically logon for the demo/test, use {@link LogonFixture}.
  */
 public abstract class AbstractFixture extends BaseFixture implements CompositeFixture, SwitchUserServiceAware {
-	
+
     private final List<Object> fixtures = new ArrayList<Object>();
 
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // Constructor
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
-	/**
-	 * Assumed to be {@link FixtureType#DOMAIN_OBJECTS data} fixture.
-	 */
+    /**
+     * Assumed to be {@link FixtureType#DOMAIN_OBJECTS data} fixture.
+     */
     public AbstractFixture() {
-    	this(FixtureType.DOMAIN_OBJECTS);
+        this(FixtureType.DOMAIN_OBJECTS);
     }
 
     public AbstractFixture(final FixtureType fixtureType) {
-    	super(fixtureType);
+        super(fixtureType);
     }
 
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // install() hook (for non-composites)
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
     /**
-     * Most subclasses will override this method, but composite fixtures
-     * should instead call {@link #addFixture(Object)} in their constructor.
+     * Most subclasses will override this method, but composite fixtures should instead call {@link #addFixture(Object)}
+     * in their constructor.
      */
     @Override
-    public void install() {}
+    public void install() {
+    }
 
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // CompositeFixture impl
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
 
     /**
      * Allows the fixture to act as a composite (call within constructor).
@@ -95,40 +93,51 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
         return Collections.unmodifiableList(fixtures);
     }
 
-
-    /////////////////////////////////////////////////////////////////
+    // ///////////////////////////////////////////////////////////////
     // Date and time
-    /////////////////////////////////////////////////////////////////
-    
+    // ///////////////////////////////////////////////////////////////
+
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
+     * initialized}.
      */
     public void earlierDate(final int years, final int months, final int days) {
-    	if (shouldIgnoreCallBecauseNoClockSetup("earlierDate()")) return;
+        if (shouldIgnoreCallBecauseNoClockSetup("earlierDate()")) {
+            return;
+        }
         clock.addDate(-years, -months, -days);
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
+     * initialized}.
      */
-	public void earlierTime(final int hours, final int minutes) {
-    	if (shouldIgnoreCallBecauseNoClockSetup("earlierTime()")) return;
+    public void earlierTime(final int hours, final int minutes) {
+        if (shouldIgnoreCallBecauseNoClockSetup("earlierTime()")) {
+            return;
+        }
         clock.addTime(-hours, -minutes);
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
+     * initialized}.
      */
     public void laterDate(final int years, final int months, final int days) {
-    	if (shouldIgnoreCallBecauseNoClockSetup("laterDate()")) return;
+        if (shouldIgnoreCallBecauseNoClockSetup("laterDate()")) {
+            return;
+        }
         clock.addDate(years, months, days);
     }
 
     /**
-     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize() initialized}.
+     * Will print warning message and do nothing if {@link FixtureClock} could not be {@link FixtureClock#initialize()
+     * initialized}.
      */
     public void laterTime(final int hours, final int minutes) {
-    	if (shouldIgnoreCallBecauseNoClockSetup("laterTime()")) return;
+        if (shouldIgnoreCallBecauseNoClockSetup("laterTime()")) {
+            return;
+        }
         clock.addTime(hours, minutes);
     }
 
@@ -136,11 +145,12 @@ public abstract class AbstractFixture extends BaseFixture implements CompositeFi
     protected void switchUser(final String username, final String... roles) {
         switchUserService.switchUser(username, roles);
     }
+
     // }}
 
-
     // {{ Injected: SwitchUserService
-	private SwitchUserService switchUserService;
+    private SwitchUserService switchUserService;
+
     @Override
     public void setService(final SwitchUserService fixtureService) {
         this.switchUserService = fixtureService;

@@ -17,10 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 public enum When {
     ALWAYS, ONCE_PERSISTED, UNTIL_PERSISTED, NEVER
 }
-

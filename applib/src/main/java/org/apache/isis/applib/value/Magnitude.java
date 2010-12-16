@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.io.Serializable;
-
 
 public abstract class Magnitude<T extends Magnitude<T>> implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -56,7 +54,7 @@ public abstract class Magnitude<T extends Magnitude<T>> implements Serializable 
 
     @SuppressWarnings("unchecked")
     private T thisAsT() {
-        return (T)this;
+        return (T) this;
     }
 
 }

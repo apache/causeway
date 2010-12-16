@@ -218,7 +218,7 @@ public class Time extends Magnitude<Time> {
     }
 
     public String titleString() {
-        DateFormat timeInstance = DateFormat.getTimeInstance(DateFormat.SHORT);
+        final DateFormat timeInstance = DateFormat.getTimeInstance(DateFormat.SHORT);
         return (date == null) ? "" : timeInstance.format(date);
     }
 
@@ -249,19 +249,24 @@ public class Time extends Magnitude<Time> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        Time other = (Time) obj;
+        }
+        final Time other = (Time) obj;
         if (date == null) {
-            if (other.date != null)
+            if (other.date != null) {
                 return false;
-        } else if (!date.equals(other.date))
+            }
+        } else if (!date.equals(other.date)) {
             return false;
+        }
         return true;
     }
 

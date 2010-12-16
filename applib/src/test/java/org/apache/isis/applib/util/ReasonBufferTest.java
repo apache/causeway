@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.util;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import org.junit.Before;
+import org.junit.Test;
 
 public class ReasonBufferTest {
     private ReasonBuffer reason;
@@ -66,4 +64,3 @@ public class ReasonBufferTest {
     }
 
 }
-

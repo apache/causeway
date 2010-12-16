@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.util;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Not public API, provides a number of utilities to represent formal {@link Identifier} names more naturally.
@@ -30,8 +28,8 @@ public class NameUtils {
     private static final char SPACE = ' ';
 
     /**
-     * Returns a word spaced version of the specified name, so there are spaces between the words, where each
-     * word starts with a capital letter. E.g., "NextAvailableDate" is returned as "Next Available Date".
+     * Returns a word spaced version of the specified name, so there are spaces between the words, where each word
+     * starts with a capital letter. E.g., "NextAvailableDate" is returned as "Next Available Date".
      */
     public static String naturalName(final String name) {
 
@@ -58,7 +56,7 @@ public class NameUtils {
                     naturalName.append(SPACE);
                 }
                 if (Character.isUpperCase(character) && Character.isLowerCase(nextCharacter)
-                        && Character.isUpperCase(previousCharacter)) {
+                    && Character.isUpperCase(previousCharacter)) {
                     naturalName.append(SPACE);
                 }
                 if (Character.isDigit(character) && !Character.isDigit(previousCharacter)) {

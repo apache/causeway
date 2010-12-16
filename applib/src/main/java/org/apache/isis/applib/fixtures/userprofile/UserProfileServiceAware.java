@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures.userprofile;
 
 import org.apache.isis.applib.fixtures.UserProfileFixture;
@@ -30,5 +29,5 @@ import org.apache.isis.applib.fixtures.UserProfileFixture;
  */
 public interface UserProfileServiceAware {
 
-	public void setService(UserProfileService perspectiveInstaller);
+    public void setService(UserProfileService perspectiveInstaller);
 }

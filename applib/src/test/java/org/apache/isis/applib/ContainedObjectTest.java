@@ -17,17 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib;
+
+import static org.junit.Assert.assertEquals;
 
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.applib.security.UserMemento;
-
-import static org.junit.Assert.assertEquals;
-
 
 public class ContainedObjectTest {
 
@@ -39,63 +38,70 @@ public class ContainedObjectTest {
     public void setUp() throws Exception {
         context = new Mockery();
         container = context.mock(DomainObjectContainer.class);
-        object = new AbstractContainedObject() {};
-        object.setContainer(container);  
+        object = new AbstractContainedObject() {
+        };
+        object.setContainer(container);
     }
-    
+
     @Test
     public void testContainer() throws Exception {
         assertEquals(container, object.getContainer());
     }
-    
+
     @Test
     public void testInformUser() throws Exception {
-        context.checking(new Expectations() {{
-            one (container).informUser("message");  
-        }});
-        
+        context.checking(new Expectations() {
+            {
+                one(container).informUser("message");
+            }
+        });
+
         object.informUser("message");
-        
+
         context.assertIsSatisfied();
     }
-    
+
     @Test
     public void testWarnUser() throws Exception {
-        context.checking(new Expectations() {{
-            one (container).warnUser("message");  
-        }});
-        
+        context.checking(new Expectations() {
+            {
+                one(container).warnUser("message");
+            }
+        });
+
         object.warnUser("message");
-        
+
         context.assertIsSatisfied();
     }
-    
+
     @Test
     public void testRaiseError() throws Exception {
-        context.checking(new Expectations() {{
-            one (container).raiseError("message");  
-        }});
-        
+        context.checking(new Expectations() {
+            {
+                one(container).raiseError("message");
+            }
+        });
+
         object.raiseError("message");
-        
+
         context.assertIsSatisfied();
     }
-    
+
     @Test
     public void testGetUser() throws Exception {
         final UserMemento memento = new UserMemento("Harry");
-        context.checking(new Expectations() {{
-            one (container).getUser();
-            will(returnValue(memento));
-            
-        }});
-        
-        UserMemento user = object.getUser();
+        context.checking(new Expectations() {
+            {
+                one(container).getUser();
+                will(returnValue(memento));
+
+            }
+        });
+
+        final UserMemento user = object.getUser();
         assertEquals(memento, user);
-        
+
         context.assertIsSatisfied();
     }
 
 }
-
-

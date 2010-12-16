@@ -37,7 +37,7 @@ public class TitleBuffer {
      * <code>toString</code> returns an empty string.
      */
     public static boolean isEmpty(final Object object) {
-        String title = titleFor(object);
+        final String title = titleFor(object);
         return title == null || title.equals("");
     }
 
@@ -45,7 +45,7 @@ public class TitleBuffer {
      * Reflectively run the <tt>String title()</tt> method if it exists, else fall back to the <tt>toString()</tt>
      * method.
      */
-    private static String titleFor(Object object) {
+    private static String titleFor(final Object object) {
         if (object == null) {
             return null;
         } else {
@@ -53,15 +53,15 @@ public class TitleBuffer {
             try {
                 method = object.getClass().getMethod("title", new Class[0]);
                 return (String) method.invoke(object, new Object[0]);
-            } catch (SecurityException e) {
+            } catch (final SecurityException e) {
                 throw new TitleBufferException(e);
-            } catch (NoSuchMethodException e) {
+            } catch (final NoSuchMethodException e) {
                 return object.toString();
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 throw new TitleBufferException(e);
-            } catch (IllegalAccessException e) {
+            } catch (final IllegalAccessException e) {
                 throw new TitleBufferException(e);
-            } catch (InvocationTargetException e) {
+            } catch (final InvocationTargetException e) {
                 throw new TitleBufferException(e);
             }
         }

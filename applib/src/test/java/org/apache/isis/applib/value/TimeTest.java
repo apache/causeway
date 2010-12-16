@@ -17,8 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -27,11 +30,6 @@ import java.util.TimeZone;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 
 public class TimeTest {
     public static void main(final String[] args) {

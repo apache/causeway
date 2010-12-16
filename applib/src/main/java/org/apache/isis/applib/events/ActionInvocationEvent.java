@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Represents a check as to whether a particular argument for an action is valid or not.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the set of arguments are
- * invalid; otherwise the arguments are valid.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the set of arguments are invalid; otherwise
+ * the arguments are valid.
  * 
  * <p>
  * Called after each of the {@link ActionArgumentEvent}s.
@@ -55,9 +53,9 @@ public class ActionInvocationEvent extends ValidityEvent {
     /**
      * Does not apply
      */
-	@Override
-	public Object getProposed() {
-		return null;
-	}
+    @Override
+    public Object getProposed() {
+        return null;
+    }
 
 }

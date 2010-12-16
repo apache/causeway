@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import java.util.Calendar;
@@ -25,7 +24,6 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.isis.applib.clock.Clock;
-
 
 public class TestClock extends Clock {
 

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib;
 
 import java.util.List;
@@ -25,16 +24,15 @@ import java.util.List;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 
-
-
 /**
- * Represents a container that the domain objects work within. It provides access to the persistence mechanism and user interface.
+ * Represents a container that the domain objects work within. It provides access to the persistence mechanism and user
+ * interface.
  */
 public interface DomainObjectContainer {
 
-    //////////////////////////////////////////////////////////////////
-	// resolve, objectChanged
-	//////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // resolve, objectChanged
+    // ////////////////////////////////////////////////////////////////
 
     /**
      * Ensure that the specified object is completely loaded into memory.
@@ -45,8 +43,8 @@ public interface DomainObjectContainer {
     void resolve(Object domainObject);
 
     /**
-     * Ensure that the specified object is completely loaded into memory, though only if the supplied field
-     * reference is <tt>null</tt>.
+     * Ensure that the specified object is completely loaded into memory, though only if the supplied field reference is
+     * <tt>null</tt>.
      * 
      * <p>
      * This forces the lazy loading mechanism to load the object if it is not already loaded.
@@ -58,10 +56,9 @@ public interface DomainObjectContainer {
      */
     void objectChanged(Object domainObject);
 
-    
-	//////////////////////////////////////////////////////////////////
-	// flush, commit
-	//////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // flush, commit
+    // ////////////////////////////////////////////////////////////////
 
     /**
      * Flush all changes to the object store.
@@ -81,9 +78,9 @@ public interface DomainObjectContainer {
      */
     void commit();
 
-	//////////////////////////////////////////////////////////////////
-	// new{Transient/Persistent}Instance
-	//////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // new{Transient/Persistent}Instance
+    // ////////////////////////////////////////////////////////////////
 
     /**
      * Create a new instance of the specified class, but do not persist it.
@@ -95,25 +92,24 @@ public interface DomainObjectContainer {
     /**
      * Returns a new instance of the specified class that will have been persisted.
      */
-    <T> T newPersistentInstance(final Class<T> ofType) ;
-    
+    <T> T newPersistentInstance(final Class<T> ofType);
+
     /**
      * Returns a new instance of the specified class that has the sane persisted state as the specified object.
      */
     <T> T newInstance(final Class<T> ofType, final Object object);
 
-
-	//////////////////////////////////////////////////////////////////
-	// isValid, validate
-	//////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // isValid, validate
+    // ////////////////////////////////////////////////////////////////
 
     /**
-     * Whether the object is in a valid state, that is that none of the validation of
-     * properties, collections and object-level is vetoing.
+     * Whether the object is in a valid state, that is that none of the validation of properties, collections and
+     * object-level is vetoing.
      * 
      * @see #validate(Object)
      */
-	boolean isValid(Object domainObject);
+    boolean isValid(Object domainObject);
 
     /**
      * The reason, if any why the object is in a invalid state
@@ -123,15 +119,14 @@ public interface DomainObjectContainer {
      * 
      * @see #isValid(Object)
      */
-	String validate(Object domainObject);
+    String validate(Object domainObject);
 
-	//////////////////////////////////////////////////////////////////
-	// isPersistent, persist, remove
-	//////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // isPersistent, persist, remove
+    // ////////////////////////////////////////////////////////////////
 
     /**
-     * Determines if the specified object is persistent (that it is stored permanently outside of the virtual
-     * machine).
+     * Determines if the specified object is persistent (that it is stored permanently outside of the virtual machine).
      */
     boolean isPersistent(Object domainObject);
 
@@ -163,7 +158,7 @@ public interface DomainObjectContainer {
      * @param persistentDomainObject
      */
     void remove(Object persistentDomainObject);
-    
+
     /**
      * Removes (deletes) the domain object but only if is persistent.
      * 
@@ -171,14 +166,13 @@ public interface DomainObjectContainer {
      */
     void removeIfNotAlready(Object domainObject);
 
-    
-	//////////////////////////////////////////////////////////////////
-	// info, warn, error
-	//////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // info, warn, error
+    // ////////////////////////////////////////////////////////////////
 
     /**
-     * Make the specified message available to the user. Note this will probably be displayed in transitory
-     * fashion, so is only suitable for useful but optional information.
+     * Make the specified message available to the user. Note this will probably be displayed in transitory fashion, so
+     * is only suitable for useful but optional information.
      * 
      * @see #warnUser(String)
      * @see #raiseError(String)
@@ -186,8 +180,8 @@ public interface DomainObjectContainer {
     void informUser(String message);
 
     /**
-     * Warn the user about a situation with the specified message. The container should guarantee to display
-     * this warning to the user, and will typically require acknowledgement.
+     * Warn the user about a situation with the specified message. The container should guarantee to display this
+     * warning to the user, and will typically require acknowledgement.
      * 
      * @see #raiseError(String)
      * @see #informUser(String)
@@ -195,218 +189,199 @@ public interface DomainObjectContainer {
     void warnUser(String message);
 
     /**
-     * Notify the user of an application error with the specified message. Note this will probably be
-     * displayed in an alarming fashion, so is only suitable for errors.  The user will typically
-     * be required to perform additional steps after the error (eg to inform the helpdesk).
+     * Notify the user of an application error with the specified message. Note this will probably be displayed in an
+     * alarming fashion, so is only suitable for errors. The user will typically be required to perform additional steps
+     * after the error (eg to inform the helpdesk).
      * 
      * @see #warnUser(String)
      * @see #informUser(String)
      */
     void raiseError(String message);
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // properties
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     /**
      * Get the configuration property with the specified name.
      */
     String getProperty(String name);
-    
+
     /**
-     * Get the configuration property with the specified name and if it doesn't exist then return the specified default value.
+     * Get the configuration property with the specified name and if it doesn't exist then return the specified default
+     * value.
      */
     String getProperty(String name, String defaultValue);
-    
+
     /**
      * Get the names of all the available properties.
      */
     List<String> getPropertyNames();
 
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
     // security
-    //////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
 
     /**
-	 * Get the details about the current user.
-	 * @uml.property  name="user"
-	 * @uml.associationEnd  
-	 */
+     * Get the details about the current user.
+     * 
+     * @uml.property name="user"
+     * @uml.associationEnd
+     */
     UserMemento getUser();
 
-    
-    
-	//////////////////////////////////////////////////////////////////
-	// allInstances, allMatches, firstMatch, uniqueMatch
-	//////////////////////////////////////////////////////////////////
+    // ////////////////////////////////////////////////////////////////
+    // allInstances, allMatches, firstMatch, uniqueMatch
+    // ////////////////////////////////////////////////////////////////
 
-	/**
-	 * Returns all the instances of the specified type (including subtypes).
-	 * 
-	 * <p>
-	 * If there are no instances the list will be empty. This method creates a
-	 * new {@link List} object each time it is called so the caller is free to
-	 * use or modify the returned {@link List}, but the changes will not be
-	 * reflected back to the repository.
-	 * 
-	 * <p>
-	 * This method should only be called where the number of instances is known to
-	 * be relatively low.
-	 */
+    /**
+     * Returns all the instances of the specified type (including subtypes).
+     * 
+     * <p>
+     * If there are no instances the list will be empty. This method creates a new {@link List} object each time it is
+     * called so the caller is free to use or modify the returned {@link List}, but the changes will not be reflected
+     * back to the repository.
+     * 
+     * <p>
+     * This method should only be called where the number of instances is known to be relatively low.
+     */
     public <T> List<T> allInstances(Class<T> ofType);
 
+    /**
+     * Returns all the instances of the specified type (including subtypes) that the filter object accepts.
+     * 
+     * <p>
+     * If there are no instances the list will be empty. This method creates a new {@link List} object each time it is
+     * called so the caller is free to use or modify the returned {@link List}, but the changes will not be reflected
+     * back to the repository.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #allMatches(Query)} for
+     * production code.
+     */
+    public <T> List<T> allMatches(final Class<T> ofType, final Filter<T> filter);
 
-    
-	/**
-	 * Returns all the instances of the specified type (including subtypes) that
-	 * the filter object accepts.
-	 * 
-	 * <p>
-	 * If there are no instances the list will be empty. This method creates a
-	 * new {@link List} object each time it is called so the caller is free to
-	 * use or modify the returned {@link List}, but the changes will not be
-	 * reflected back to the repository.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #allMatches(Query)} for production code.
-	 */
-	public <T> List<T> allMatches(final Class<T> ofType, final Filter<T> filter);
-
-	/**
-	 * Returns all the instances of the specified type (including subtypes) that
-	 * have the given title.
-	 * 
-	 * <p>
-	 * If there are no instances the list will be empty. This method creates a
-	 * new {@link List} object each time it is called so the caller is free to
-	 * use or modify the returned {@link List}, but the changes will not be
-	 * reflected back to the repository.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #allMatches(Query)} for production code.
-	 */
+    /**
+     * Returns all the instances of the specified type (including subtypes) that have the given title.
+     * 
+     * <p>
+     * If there are no instances the list will be empty. This method creates a new {@link List} object each time it is
+     * called so the caller is free to use or modify the returned {@link List}, but the changes will not be reflected
+     * back to the repository.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #allMatches(Query)} for
+     * production code.
+     */
     public <T> List<T> allMatches(Class<T> ofType, String title);
 
-	/**
-	 * Returns all the instances of the specified type (including subtypes) that
-	 * match the given object: where any property that is set will be tested and
-	 * properties that are not set will be ignored.
-	 * 
-	 * <p>
-	 * If there are no instances the list will be empty. This method creates a
-	 * new {@link List} object each time it is called so the caller is free to
-	 * use or modify the returned {@link List}, but the changes will not be
-	 * reflected back to the repository.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #allMatches(Query)} for production code.
-	 */
+    /**
+     * Returns all the instances of the specified type (including subtypes) that match the given object: where any
+     * property that is set will be tested and properties that are not set will be ignored.
+     * 
+     * <p>
+     * If there are no instances the list will be empty. This method creates a new {@link List} object each time it is
+     * called so the caller is free to use or modify the returned {@link List}, but the changes will not be reflected
+     * back to the repository.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #allMatches(Query)} for
+     * production code.
+     */
     <T> List<T> allMatches(Class<T> ofType, T pattern);
 
-	/**
-	 * Returns all the instances that match the given {@link Query}.
-	 * 
-	 * <p>
-	 * If there are no instances the list will be empty. This method creates a
-	 * new {@link List} object each time it is called so the caller is free to
-	 * use or modify the returned {@link List}, but the changes will not be
-	 * reflected back to the repository.
-	 */
+    /**
+     * Returns all the instances that match the given {@link Query}.
+     * 
+     * <p>
+     * If there are no instances the list will be empty. This method creates a new {@link List} object each time it is
+     * called so the caller is free to use or modify the returned {@link List}, but the changes will not be reflected
+     * back to the repository.
+     */
     <T> List<T> allMatches(Query<T> query);
 
-    
-	/**
-	 * Returns the first instance of the specified type (including subtypes)
-	 * that matches the supplied {@link Filter}, or <tt>null</tt> if none.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #firstMatch(Query)} for production code.
-	 */
-	public <T> T firstMatch(final Class<T> ofType, final Filter<T> filter);
-    
-	/**
-	 * Returns the first instance of the specified type (including subtypes)
-	 * that matches the supplied title, or <tt>null</tt> if none.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #firstMatch(Query)} for production code.
-	 */
+    /**
+     * Returns the first instance of the specified type (including subtypes) that matches the supplied {@link Filter},
+     * or <tt>null</tt> if none.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #firstMatch(Query)} for
+     * production code.
+     */
+    public <T> T firstMatch(final Class<T> ofType, final Filter<T> filter);
+
+    /**
+     * Returns the first instance of the specified type (including subtypes) that matches the supplied title, or
+     * <tt>null</tt> if none.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #firstMatch(Query)} for
+     * production code.
+     */
     <T> T firstMatch(Class<T> ofType, String title);
 
-	/**
-	 * Returns the first instance of the specified type (including subtypes)
-	 * that matches the supplied object as a pattern, or <tt>null</tt> if none.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #firstMatch(Query)} for production code.
-	 */
+    /**
+     * Returns the first instance of the specified type (including subtypes) that matches the supplied object as a
+     * pattern, or <tt>null</tt> if none.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #firstMatch(Query)} for
+     * production code.
+     */
     <T> T firstMatch(Class<T> ofType, T pattern);
 
-	/**
-	 * Returns the first instance that matches the supplied query, 
-	 * or <tt>null</tt> if none.
-	 */
+    /**
+     * Returns the first instance that matches the supplied query, or <tt>null</tt> if none.
+     */
     <T> T firstMatch(Query<T> query);
-    
-    
-	/**
-	 * Find the only instance of the specified type (including subtypes) that
-	 * has the specified title.
-	 * 
-	 * <p>
-	 * If no instance is found then <tt>null</tt> will be return, while if there
-	 * is more that one instances a run-time exception will be thrown.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #uniqueMatch(Query)} for production code.
-	 */
-	public <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter);
 
-	/**
-	 * Find the only instance of the specified type (including subtypes) that
-	 * has the specified title.
-	 * 
-	 * <p>
-	 * If no instance is found then <tt>null</tt> will be returned, while if
-	 * there is more that one instances a run-time exception will be thrown.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #uniqueMatch(Query)} for production code.
-	 */
+    /**
+     * Find the only instance of the specified type (including subtypes) that has the specified title.
+     * 
+     * <p>
+     * If no instance is found then <tt>null</tt> will be return, while if there is more that one instances a run-time
+     * exception will be thrown.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #uniqueMatch(Query)} for
+     * production code.
+     */
+    public <T> T uniqueMatch(final Class<T> ofType, final Filter<T> filter);
+
+    /**
+     * Find the only instance of the specified type (including subtypes) that has the specified title.
+     * 
+     * <p>
+     * If no instance is found then <tt>null</tt> will be returned, while if there is more that one instances a run-time
+     * exception will be thrown.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #uniqueMatch(Query)} for
+     * production code.
+     */
     <T> T uniqueMatch(Class<T> ofType, String title);
 
-	/**
-	 * Find the only instance of the patterned object type (including subtypes)
-	 * that matches the set fields in the pattern object: where any property
-	 * that is set will be tested and properties that are not set will be
-	 * ignored.
-	 * 
-	 * <p>
-	 * If no instance is found then null will be return, while if there is more
-	 * that one instances a run-time exception will be thrown.
-	 * 
-	 * <p>
-	 * This method is useful during exploration/prototyping, but you may want to use
-	 * {@link #uniqueMatch(Query)} for production code.
-	 */
+    /**
+     * Find the only instance of the patterned object type (including subtypes) that matches the set fields in the
+     * pattern object: where any property that is set will be tested and properties that are not set will be ignored.
+     * 
+     * <p>
+     * If no instance is found then null will be return, while if there is more that one instances a run-time exception
+     * will be thrown.
+     * 
+     * <p>
+     * This method is useful during exploration/prototyping, but you may want to use {@link #uniqueMatch(Query)} for
+     * production code.
+     */
     <T> T uniqueMatch(Class<T> ofType, T pattern);
 
-	/**
-	 * Find the only instance that matches the provided query.
-	 * 
-	 * <p>
-	 * If no instance is found then null will be return, while if there is more
-	 * that one instances a run-time exception will be thrown.
-	 */
+    /**
+     * Find the only instance that matches the provided query.
+     * 
+     * <p>
+     * If no instance is found then null will be return, while if there is more that one instances a run-time exception
+     * will be thrown.
+     */
     <T> T uniqueMatch(Query<T> query);
-
 
 }

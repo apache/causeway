@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Represents a check to determine whether a proposed change is valid.
@@ -53,6 +51,6 @@ public abstract class ValidityEvent extends InteractionEvent implements Proposed
 
     @Override
     public Object getSource() {
-    	return super.getSource();
+        return super.getSource();
     }
 }

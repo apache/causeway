@@ -17,11 +17,8 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib;
 
 public class TestDomainObject {
 
 }
-
-

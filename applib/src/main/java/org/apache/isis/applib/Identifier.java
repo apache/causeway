@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib;
 
 import org.apache.isis.applib.util.NameUtils;
-
 
 public class Identifier implements Comparable<Identifier> {
 
@@ -33,37 +31,37 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public static enum Depth {
-    	CLASS {
-			@Override
-			public String toIdentityString(Identifier identifier) {
-				return identifier.toClassIdentityString();
-			}
-		},
-    	CLASS_MEMBERNAME {
-			@Override
-			public String toIdentityString(Identifier identifier) {
-				return identifier.toClassAndNameIdentityString();
-			}
-		},
-    	CLASS_MEMBERNAME_PARMS {
-			@Override
-			public String toIdentityString(Identifier identifier) {
-				return identifier.toFullIdentityString();
-			}
-		},
-    	MEMBERNAME_ONLY {
-			@Override
-			public String toIdentityString(Identifier identifier) {
-				return identifier.toNameIdentityString();
-			}
-		},
-    	PARMS_ONLY {
-			@Override
-			public String toIdentityString(Identifier identifier) {
-				return identifier.toParmsIdentityString();
-			}
-		};
-		public abstract String toIdentityString(Identifier identifier);
+        CLASS {
+            @Override
+            public String toIdentityString(final Identifier identifier) {
+                return identifier.toClassIdentityString();
+            }
+        },
+        CLASS_MEMBERNAME {
+            @Override
+            public String toIdentityString(final Identifier identifier) {
+                return identifier.toClassAndNameIdentityString();
+            }
+        },
+        CLASS_MEMBERNAME_PARMS {
+            @Override
+            public String toIdentityString(final Identifier identifier) {
+                return identifier.toFullIdentityString();
+            }
+        },
+        MEMBERNAME_ONLY {
+            @Override
+            public String toIdentityString(final Identifier identifier) {
+                return identifier.toNameIdentityString();
+            }
+        },
+        PARMS_ONLY {
+            @Override
+            public String toIdentityString(final Identifier identifier) {
+                return identifier.toParmsIdentityString();
+            }
+        };
+        public abstract String toIdentityString(Identifier identifier);
     }
 
     public static Depth CLASS = Depth.CLASS;
@@ -71,7 +69,6 @@ public class Identifier implements Comparable<Identifier> {
     public static Depth CLASS_MEMBERNAME_PARMS = Depth.CLASS_MEMBERNAME_PARMS;
     public static Depth MEMBERNAME_ONLY = Depth.MEMBERNAME_ONLY;
     public static Depth PARMS_ONLY = Depth.PARMS_ONLY;
-
 
     // ///////////////////////////////////////////////////////////////////////////
     // Factory methods
@@ -85,32 +82,29 @@ public class Identifier implements Comparable<Identifier> {
         return new Identifier(className, "", new String[] {}, Type.CLASS);
     }
 
-    public static Identifier propertyOrCollectionIdentifier(final Class<?> declaringClass, final String propertyOrCollectionName) {
+    public static Identifier propertyOrCollectionIdentifier(final Class<?> declaringClass,
+        final String propertyOrCollectionName) {
         return propertyOrCollectionIdentifier(declaringClass.getCanonicalName(), propertyOrCollectionName);
     }
 
-    public static Identifier propertyOrCollectionIdentifier(final String declaringClassName, final String propertyOrCollectionName) {
-        return new Identifier(declaringClassName, propertyOrCollectionName, new String[] {}, Type.PROPERTY_OR_COLLECTION);
+    public static Identifier propertyOrCollectionIdentifier(final String declaringClassName,
+        final String propertyOrCollectionName) {
+        return new Identifier(declaringClassName, propertyOrCollectionName, new String[] {},
+            Type.PROPERTY_OR_COLLECTION);
     }
 
-    public static Identifier actionIdentifier(
-            final Class<?> declaringClass,
-            final String actionName,
-            final Class<?>[] parameterClasses) {
+    public static Identifier actionIdentifier(final Class<?> declaringClass, final String actionName,
+        final Class<?>[] parameterClasses) {
         return actionIdentifier(declaringClass.getCanonicalName(), actionName, toParameterStringArray(parameterClasses));
     }
 
-    public static Identifier actionIdentifier(
-            final String declaringClassName,
-            final String actionName,
-            final Class<?>[] parameterClasses) {
+    public static Identifier actionIdentifier(final String declaringClassName, final String actionName,
+        final Class<?>[] parameterClasses) {
         return actionIdentifier(declaringClassName, actionName, toParameterStringArray(parameterClasses));
     }
 
-    public static Identifier actionIdentifier(
-            final String declaringClassName,
-            final String actionName,
-            final String[] parameterClassNames) {
+    public static Identifier actionIdentifier(final String declaringClassName, final String actionName,
+        final String[] parameterClassNames) {
         return new Identifier(declaringClassName, actionName, parameterClassNames, Type.ACTION);
     }
 
@@ -177,7 +171,7 @@ public class Identifier implements Comparable<Identifier> {
 
     /**
      * Convenience method.
-     *
+     * 
      * @return
      */
     public boolean isPropertyOrCollection() {
@@ -189,46 +183,43 @@ public class Identifier implements Comparable<Identifier> {
     // ///////////////////////////////////////////////////////////////////////////
 
     public String toIdentityString(final Depth depth) {
-    	return depth.toIdentityString(this);
+        return depth.toIdentityString(this);
     }
 
     public String toClassIdentityString() {
         return toClassIdentityString(new StringBuilder()).toString();
     }
 
-    public StringBuilder toClassIdentityString(StringBuilder buf) {
+    public StringBuilder toClassIdentityString(final StringBuilder buf) {
         return buf.append(className);
     }
-
 
     public String toNameIdentityString() {
         return toNameIdentityString(new StringBuilder()).toString();
     }
 
-    public StringBuilder toNameIdentityString(StringBuilder buf) {
+    public StringBuilder toNameIdentityString(final StringBuilder buf) {
         return buf.append(memberName);
     }
-
 
     public String toClassAndNameIdentityString() {
         return toClassAndNameIdentityString(new StringBuilder()).toString();
     }
 
-    public StringBuilder toClassAndNameIdentityString(StringBuilder buf) {
-    	return toClassIdentityString(buf).append("#").append(memberName);
+    public StringBuilder toClassAndNameIdentityString(final StringBuilder buf) {
+        return toClassIdentityString(buf).append("#").append(memberName);
     }
-
 
     public String toParmsIdentityString() {
-    	return toParmsIdentityString(new StringBuilder()).toString();
+        return toParmsIdentityString(new StringBuilder()).toString();
     }
 
-    public StringBuilder toParmsIdentityString(StringBuilder buf) {
+    public StringBuilder toParmsIdentityString(final StringBuilder buf) {
         if (type == Type.ACTION) {
             buf.append('(');
             for (int i = 0; i < parameterNames.length; i++) {
                 if (i > 0) {
-                	buf.append(",");
+                    buf.append(",");
                 }
                 buf.append(parameterNames[i]);
             }
@@ -241,9 +232,9 @@ public class Identifier implements Comparable<Identifier> {
         return getMemberName() + toParmsIdentityString();
     }
 
-    public StringBuilder toNameParmsIdentityString(StringBuilder buf) {
-    	buf.append(getMemberName());
-    	toParmsIdentityString(buf);
+    public StringBuilder toNameParmsIdentityString(final StringBuilder buf) {
+        buf.append(getMemberName());
+        toParmsIdentityString(buf);
         return buf;
     }
 
@@ -265,6 +256,7 @@ public class Identifier implements Comparable<Identifier> {
     // compareTo
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public int compareTo(final Identifier o2) {
         return toString().compareTo(o2.toString());
     }
@@ -282,17 +274,16 @@ public class Identifier implements Comparable<Identifier> {
             return true;
         }
         if (!(obj instanceof Identifier)) {
-        	return false;
+            return false;
         }
         final Identifier other = (Identifier) obj;
-		return equals(other);
+        return equals(other);
     }
 
-	public boolean equals(final Identifier other) {
-		return equals(other.className, className) &&
-		       equals(other.memberName, other.memberName) &&
-		       equals(other.parameterNames, parameterNames);
-	}
+    public boolean equals(final Identifier other) {
+        return equals(other.className, className) && equals(other.memberName, other.memberName)
+            && equals(other.parameterNames, parameterNames);
+    }
 
     private boolean equals(final String a, final String b) {
         if (a == b) {
@@ -313,7 +304,7 @@ public class Identifier implements Comparable<Identifier> {
             return false;
         } else if (a != null && b == null) {
             return false;
-        } else if (a != null && b != null){
+        } else if (a != null && b != null) {
             if (a.length != b.length) {
                 return false;
             }
@@ -328,7 +319,7 @@ public class Identifier implements Comparable<Identifier> {
 
     @Override
     public int hashCode() {
-    	return toString().hashCode();
+        return toString().hashCode();
     }
 
     // ///////////////////////////////////////////////////////////////////////////

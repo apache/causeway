@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.util;
 
 public class TitleBufferException extends RuntimeException {
@@ -47,5 +46,3 @@ public class TitleBufferException extends RuntimeException {
         return cause;
     }
 }
-
-

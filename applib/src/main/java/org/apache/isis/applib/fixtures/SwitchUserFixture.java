@@ -17,16 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures;
 
 import java.util.List;
 
-import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
-import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
-
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
+import org.apache.isis.applib.fixtures.switchuser.SwitchUserServiceAware;
 
 /**
  * Sole purpose is to switch the current user while object fixtures are being installed.
@@ -35,9 +34,8 @@ import com.google.common.collect.Lists;
  * An alternative is to switch user using the {@link AbstractFixture#switchUser(String, String...) switchUser} method.
  * 
  * <p>
- * Note that (unlike the otherwise similar {@link DateFixture}) the last user switched to is
- * <i>not</i> used as the logon fixture.  If you want to automatically logon as some user,
- * use the {@link LogonFixture}.
+ * Note that (unlike the otherwise similar {@link DateFixture}) the last user switched to is <i>not</i> used as the
+ * logon fixture. If you want to automatically logon as some user, use the {@link LogonFixture}.
  * 
  * @see DateFixture
  * @see LogonFixture
@@ -49,7 +47,7 @@ public class SwitchUserFixture extends BaseFixture implements SwitchUserServiceA
     private SwitchUserService switchUserService;
 
     public SwitchUserFixture(final String username, final String... roles) {
-    	this(username, Lists.newArrayList(roles));
+        this(username, Lists.newArrayList(roles));
     }
 
     public SwitchUserFixture(final String username, final List<String> roles) {
@@ -61,18 +59,18 @@ public class SwitchUserFixture extends BaseFixture implements SwitchUserServiceA
     public String getUsername() {
         return username;
     }
-    
+
     public List<String> getRoles() {
         return roles;
     }
 
     @Override
     public void install() {
-        switchUserService.switchUser(username, roles.toArray(new String[]{}));
+        switchUserService.switchUser(username, roles.toArray(new String[] {}));
     }
 
     @Override
-    public void setService(SwitchUserService switchUserService) {
+    public void setService(final SwitchUserService switchUserService) {
         this.switchUserService = switchUserService;
     }
 

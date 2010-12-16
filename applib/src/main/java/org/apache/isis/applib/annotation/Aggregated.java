@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -26,10 +25,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * Indicates that the class is part of (aggregated within) a larger class, which may reference objects outside
- * the aggregate but may not be referenced by objects other than within the aggregate.
+ * Indicates that the class is part of (aggregated within) a larger class, which may reference objects outside the
+ * aggregate but may not be referenced by objects other than within the aggregate.
  * 
  * <p>
  * This is/should be interpreted by viewers as meaning that references to the object may not be shared between
@@ -39,7 +37,7 @@ import java.lang.annotation.Target;
  * @see Value
  */
 @Inherited
-@Target( { ElementType.TYPE })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Aggregated {}
-
+public @interface Aggregated {
+}

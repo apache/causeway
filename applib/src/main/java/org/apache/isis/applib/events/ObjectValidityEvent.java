@@ -17,19 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 import org.apache.isis.applib.Identifier;
 
-
 /**
- * Represents a check as to whether the current values of the properties/collections of an object are valid
- * (for example, prior to saving that object).
+ * Represents a check as to whether the current values of the properties/collections of an object are valid (for
+ * example, prior to saving that object).
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the object is invalid,
- * otherwise ok.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the object is invalid, otherwise ok.
  */
 public class ObjectValidityEvent extends ValidityEvent {
 
@@ -39,8 +36,9 @@ public class ObjectValidityEvent extends ValidityEvent {
         super(source, classIdentifier);
     }
 
-	public Object getProposed() {
-		return getSource();
-	}
+    @Override
+    public Object getProposed() {
+        return getSource();
+    }
 
 }

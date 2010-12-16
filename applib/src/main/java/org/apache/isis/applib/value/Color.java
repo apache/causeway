@@ -17,21 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
 
 import org.apache.isis.applib.annotation.Value;
 
-
 /**
- * Color is simple numerical representation of a color using the brightness of red, green and blue (RGB)
- * components.
- *
+ * Color is simple numerical representation of a color using the brightness of red, green and blue (RGB) components.
+ * 
  * <p>
- * Where there is no basic colors (RGB all equal 0) then you get black; where each color is at maximum (RGB
- * all equal 255) you get white.
+ * Where there is no basic colors (RGB all equal 0) then you get black; where each color is at maximum (RGB all equal
+ * 255) you get white.
  */
-@Value(semanticsProviderName="org.apache.isis.core.progmodel.facets.value.ColorValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.ColorValueSemanticsProvider")
 public class Color extends Magnitude<Color> {
 
     private static final long serialVersionUID = 1L;
@@ -48,7 +45,6 @@ public class Color extends Magnitude<Color> {
     public int intValue() {
         return color;
     }
-
 
     /**
      * returns true if the number of this object has the same value as the specified number
@@ -76,21 +72,23 @@ public class Color extends Magnitude<Color> {
         }
     }
 
-
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        Color other = (Color) obj;
-        if (color != other.color)
+        }
+        final Color other = (Color) obj;
+        if (color != other.color) {
             return false;
+        }
         return true;
     }
-
 
     @Override
     public int hashCode() {
@@ -99,7 +97,6 @@ public class Color extends Magnitude<Color> {
         result = prime * result + color;
         return result;
     }
-
 
     @Override
     public String toString() {

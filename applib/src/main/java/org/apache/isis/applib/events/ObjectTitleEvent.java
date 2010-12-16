@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Represents an access (reading) of an object's title.

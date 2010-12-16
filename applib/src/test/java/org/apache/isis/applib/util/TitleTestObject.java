@@ -17,14 +17,14 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.util;
 
 class TitleTestObject {
 
     private String title;
 
-    public TitleTestObject() {}
+    public TitleTestObject() {
+    }
 
     public TitleTestObject(final String title) {
         this.title = title;
@@ -37,10 +37,9 @@ class TitleTestObject {
     public String title() {
         return title;
     }
-    
+
     @Override
     public String toString() {
         return "xxx";
     }
 }
-

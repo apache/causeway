@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures;
 
 import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
@@ -25,15 +24,15 @@ import org.apache.isis.applib.fixtures.userprofile.UserProfileServiceAware;
 import org.apache.isis.applib.profiles.Profile;
 
 public abstract class UserProfileFixture extends BaseFixture implements UserProfileServiceAware {
-	
+
     private UserProfileService profileService;
 
     public UserProfileFixture() {
-		super(FixtureType.USER_PROFILES);
-	}
-    
+        super(FixtureType.USER_PROFILES);
+    }
+
     @Override
-    public void setService(UserProfileService profileService) {
+    public void setService(final UserProfileService profileService) {
         this.profileService = profileService;
     }
 
@@ -48,17 +47,16 @@ public abstract class UserProfileFixture extends BaseFixture implements UserProf
         return profileService.newUserProfile();
     }
 
-    protected Profile newUserProfile(Profile profile) {
+    protected Profile newUserProfile(final Profile profile) {
         return profileService.newUserProfile(profile);
     }
 
-    protected void saveForUser(String name, Profile profile) {
+    protected void saveForUser(final String name, final Profile profile) {
         profileService.saveForUser(name, profile);
     }
 
-    protected void saveAsDefault(Profile profile) {  
+    protected void saveAsDefault(final Profile profile) {
         profileService.saveAsDefault(profile);
     }
 
 }
-

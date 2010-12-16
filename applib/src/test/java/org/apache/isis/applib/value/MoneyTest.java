@@ -17,21 +17,18 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
-
-import java.math.BigDecimal;
-
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.math.BigDecimal;
+
+import org.junit.Test;
 
 public class MoneyTest {
-
 
     @Test
     public void testAdd() {
@@ -49,7 +46,7 @@ public class MoneyTest {
         assertEquals(330.60, m3.doubleValue(), 0.0);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testAddThrowsExceptionForDifferentCurrencies() {
         final Money m1 = new Money(100, "pds");
         final Money m2 = new Money(200, "uds");
@@ -57,12 +54,12 @@ public class MoneyTest {
         m1.add(m2);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testDoubleConstructorExpectsCurrencyToBeSpecified() {
         new Money(100.50, null);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testLongConstructorExpectsCurrencyToBeSpecified() {
         new Money(100L, null);
     }
@@ -148,7 +145,7 @@ public class MoneyTest {
         assertFalse(m1.isEqualTo(m2));
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testIsEqualToThrowsExceptionWithDifferentCurrencies() {
         final Money m1 = new Money(100, "pds");
         final Money m2 = new Money(100, "usd");
@@ -200,7 +197,8 @@ public class MoneyTest {
         try {
             m2.isLessThan(m1);
             fail();
-        } catch (final IllegalArgumentException expected) {}
+        } catch (final IllegalArgumentException expected) {
+        }
     }
 
     @Test
@@ -223,7 +221,7 @@ public class MoneyTest {
         assertEquals(200.0, m3.doubleValue(), 0.0);
     }
 
-    @Test(expected=IllegalArgumentException.class)
+    @Test(expected = IllegalArgumentException.class)
     public void testSubtractThrowsExceptionForDifferentCurrencies() {
         final Money m1 = new Money(100, "pds");
         final Money m2 = new Money(200, "uds");

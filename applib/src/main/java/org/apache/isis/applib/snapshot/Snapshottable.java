@@ -17,13 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.snapshot;
 
-
 /**
- * Marker interface for domain objects that can be snapshot using 
- * <xx>XmlSnapshot</tt>.
+ * Marker interface for domain objects that can be snapshot using <xx>XmlSnapshot</tt>.
  */
 public interface Snapshottable {
 

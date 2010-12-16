@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures;
 
 /**
@@ -28,8 +27,8 @@ package org.apache.isis.applib.fixtures;
  * {@link AbstractFixture#setTime(int, int)}.
  * 
  * <p>
- * Note that the last date set <i>will</i> remain in force for the application itself.  To revert to the
- * current time, have a fixture at the end call {@link #resetClock()}.
+ * Note that the last date set <i>will</i> remain in force for the application itself. To revert to the current time,
+ * have a fixture at the end call {@link #resetClock()}.
  * 
  * @see SwitchUserFixture
  */
@@ -48,34 +47,36 @@ public class DateFixture extends BaseFixture {
         this(year, month, day, 0, 0);
     }
 
-
     private final int year;
 
     public int getYear() {
         return year;
     }
+
     private final int month;
 
     public int getMonth() {
         return month;
     }
+
     private final int day;
 
     public int getDay() {
         return day;
     }
+
     private final int hour;
 
     public int getHour() {
         return hour;
     }
+
     private final int minute;
 
     public int getMinute() {
         return minute;
     }
 
-    
     @Override
     public void install() {
         setDate(year, month, day);

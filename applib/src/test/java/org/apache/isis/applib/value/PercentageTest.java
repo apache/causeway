@@ -17,17 +17,15 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.value;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Before;
+import org.junit.Test;
 
 public class PercentageTest {
     Percentage p1;
@@ -73,4 +71,3 @@ public class PercentageTest {
         assertFalse(p1.isLessThan(p1));
     }
 }
-

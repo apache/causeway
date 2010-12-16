@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -25,7 +24,6 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
-
 
 /**
  * Indicates the position a method should be placed in.
@@ -45,4 +43,3 @@ public @interface MemberOrder {
      */
     String name() default "";
 }
-

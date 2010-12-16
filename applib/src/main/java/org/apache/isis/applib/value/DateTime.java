@@ -49,7 +49,7 @@ public class DateTime extends Magnitude<DateTime> {
         this.date = date;
     }
 
-    public DateTime(int year, int month, int day) {
+    public DateTime(final int year, final int month, final int day) {
         this(year, month, day, 0, 0);
     }
 
@@ -171,19 +171,24 @@ public class DateTime extends Magnitude<DateTime> {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj)
+    public boolean equals(final Object obj) {
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null) {
             return false;
-        if (getClass() != obj.getClass())
+        }
+        if (getClass() != obj.getClass()) {
             return false;
-        DateTime other = (DateTime) obj;
+        }
+        final DateTime other = (DateTime) obj;
         if (date == null) {
-            if (other.date != null)
+            if (other.date != null) {
                 return false;
-        } else if (!date.equals(other.date))
+            }
+        } else if (!date.equals(other.date)) {
             return false;
+        }
         return true;
     }
 

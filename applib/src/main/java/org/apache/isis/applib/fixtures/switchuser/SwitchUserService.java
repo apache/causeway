@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures.switchuser;
 
 import java.util.List;
@@ -25,10 +24,9 @@ import java.util.List;
 import org.apache.isis.applib.fixtures.AbstractFixture;
 import org.apache.isis.applib.fixtures.userprofile.UserProfileService;
 
-
 /**
- * Not intended to be used directly; decouples the {@link AbstractFixture}, which needs to
- * be able to switch users dynamically, from the rest of the framework's runtime.
+ * Not intended to be used directly; decouples the {@link AbstractFixture}, which needs to be able to switch users
+ * dynamically, from the rest of the framework's runtime.
  * 
  * <p>
  * A suitable implementation is injected into {@link AbstractFixture} when installed.
@@ -48,4 +46,3 @@ public interface SwitchUserService {
     void switchUser(String username, List<String> roles);
 
 }
-

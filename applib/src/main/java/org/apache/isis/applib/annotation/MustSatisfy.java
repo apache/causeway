@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -32,7 +31,7 @@ import org.apache.isis.applib.spec.Specification;
  * 
  */
 @Inherited
-@Target( { ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE })
+@Target({ ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface MustSatisfy {
     /**
@@ -43,4 +42,3 @@ public @interface MustSatisfy {
      */
     Class<? extends Specification>[] value();
 }
-

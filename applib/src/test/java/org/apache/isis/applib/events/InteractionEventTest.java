@@ -17,8 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
+
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -26,20 +30,14 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.events.InteractionEvent;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-
 
 @RunWith(JMock.class)
 public class InteractionEventTest {
 
     @SuppressWarnings("unused")
-	private final Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private InteractionEvent interactionEvent;
 
@@ -51,7 +49,8 @@ public class InteractionEventTest {
     @Before
     public void setUp() {
         source = new Object();
-        identifier = Identifier.actionIdentifier("CustomerOrder", "cancelOrder", new Class[] { String.class, boolean.class });
+        identifier =
+            Identifier.actionIdentifier("CustomerOrder", "cancelOrder", new Class[] { String.class, boolean.class });
         advisorClass = this.getClass();
     }
 

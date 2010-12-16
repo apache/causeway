@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.marker;
 
 import org.apache.isis.applib.annotation.Immutable;
-
 
 /**
  * Marker interface to show that an object can always be changed, even after persisted.

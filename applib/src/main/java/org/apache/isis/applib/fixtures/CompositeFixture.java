@@ -17,12 +17,11 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures;
 
 import java.util.List;
 
 public interface CompositeFixture {
 
-	public List<Object> getFixtures();
+    public List<Object> getFixtures();
 }

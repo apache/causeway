@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Represents a check as to whether a property is usable or has been disabled.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the property is disabled;
- * otherwise property is enabled.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the property is disabled; otherwise
+ * property is enabled.
  */
 public class PropertyUsabilityEvent extends UsabilityEvent {
 

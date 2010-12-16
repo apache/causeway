@@ -171,7 +171,7 @@ public class Date extends Magnitude<Date> {
         final Class<?> cls = originalCalendar.getClass();
         try {
             final Method getActualMaximum = cls.getMethod("getActualMaximum", new Class[] { int.class });
-            Integer dayOfMonth = Integer.valueOf(Calendar.DAY_OF_MONTH);
+            final Integer dayOfMonth = Integer.valueOf(Calendar.DAY_OF_MONTH);
             return ((Integer) getActualMaximum.invoke(originalCalendar, new Object[] { dayOfMonth })).intValue();
         } catch (final NoSuchMethodException ignore) {
             // expected if pre java 1.2 - fall through
@@ -197,14 +197,14 @@ public class Date extends Magnitude<Date> {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (!(o instanceof Date)) {
             return false;
         }
-        Date date1 = (Date) o;
+        final Date date1 = (Date) o;
         if (!date.equals(date1.date)) {
             return false;
         }
@@ -372,7 +372,7 @@ public class Date extends Magnitude<Date> {
     }
 
     public String title() {
-        DateFormat dateInstance = DateFormat.getDateInstance(DateFormat.MEDIUM);
+        final DateFormat dateInstance = DateFormat.getDateInstance(DateFormat.MEDIUM);
         return dateInstance.format(date);
     }
 

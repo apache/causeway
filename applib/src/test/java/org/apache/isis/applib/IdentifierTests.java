@@ -17,8 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertThat;
 
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
@@ -26,19 +30,12 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.applib.Identifier;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.junit.Assert.assertThat;
-
 
 @RunWith(JMock.class)
 public class IdentifierTests {
 
     @SuppressWarnings("unused")
-	private final Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery();
 
     private Identifier identifier;
 
@@ -54,8 +51,8 @@ public class IdentifierTests {
 
     @Test
     public void classIdentifierClassNameIsSet() {
-        Class<?> domainClass = SomeDomainClass.class;
-        String domainClassFullyQualifiedName = domainClass.getCanonicalName();
+        final Class<?> domainClass = SomeDomainClass.class;
+        final String domainClassFullyQualifiedName = domainClass.getCanonicalName();
         identifier = Identifier.classIdentifier(domainClass);
         assertThat(identifier.getClassName(), is(domainClassFullyQualifiedName));
     }

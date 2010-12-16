@@ -17,14 +17,12 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
 import org.apache.isis.applib.clock.Clock;
-
 
 /**
  * This clock, for use by fixtures, can be set to specific time.
@@ -33,13 +31,13 @@ import org.apache.isis.applib.clock.Clock;
  * If not set it will provide the time provided by the system clock.
  * 
  * <p>
- * Note that - by design - it does not provide any mechanism to advance the time (eg automatic ticking of the
- * clock). That is, the time returned is always explicitly under the control of the programmer (it can be
- * moved forward or back as required).
+ * Note that - by design - it does not provide any mechanism to advance the time (eg automatic ticking of the clock).
+ * That is, the time returned is always explicitly under the control of the programmer (it can be moved forward or back
+ * as required).
  */
 public class FixtureClock extends Clock {
     private static final TimeZone UTC_TIME_ZONE;
-    
+
     static {
         TimeZone tempTimeZone = TimeZone.getTimeZone("Etc/UTC");
         if (tempTimeZone == null) {
@@ -48,58 +46,53 @@ public class FixtureClock extends Clock {
         UTC_TIME_ZONE = tempTimeZone;
     }
 
-    
     /**
-     * Configures the system to use a FixtureClock rather than the in-built system clock.  
-     * Can be called multiple times.
+     * Configures the system to use a FixtureClock rather than the in-built system clock. Can be called multiple times.
      * 
      * <p>
      * Must call before any other call to {@link Clock#getInstance()}.
      * 
-     * @throws IllegalStateException if Clock singleton already initialized with some other implementation.
+     * @throws IllegalStateException
+     *             if Clock singleton already initialized with some other implementation.
      */
     public synchronized static FixtureClock initialize() {
-    	if (!isInitialized() || 
-    		!(getInstance() instanceof FixtureClock)) { 
-    		// installs the FixtureClock as the Clock singleton via the Clock's constructor
-    		// if was initialized, then will replace.
-    		// (if non-replaceable, then superclass will throw exception for us.
-    		new FixtureClock(); 
-    	}
+        if (!isInitialized() || !(getInstance() instanceof FixtureClock)) {
+            // installs the FixtureClock as the Clock singleton via the Clock's constructor
+            // if was initialized, then will replace.
+            // (if non-replaceable, then superclass will throw exception for us.
+            new FixtureClock();
+        }
         return (FixtureClock) getInstance();
     }
 
     /**
      * Makes {@link Clock#remove()} visible.
      */
-    public static boolean remove()  {
-    	return Clock.remove();
+    public static boolean remove() {
+        return Clock.remove();
     }
 
-
-    
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Constructor
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     // if non-null, then indicates that the time has been explicitly set.
     // Otherwise returns the system time.
     private Calendar calendar = null;
 
+    private FixtureClock() {
+    }
 
-    private FixtureClock() {}
-
-
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // hook
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     /**
      * Access via {@link Clock#getTime()}.
      * 
      * <p>
-     * Will just return the system time until {@link #setDate(int, int, int)} or
-     * {@link #setTime(int, int)} (or one of the overloads) has been called.
+     * Will just return the system time until {@link #setDate(int, int, int)} or {@link #setTime(int, int)} (or one of
+     * the overloads) has been called.
      */
     @Override
     protected long time() {
@@ -109,18 +102,16 @@ public class FixtureClock extends Clock {
         return calendar.getTime().getTime();
     }
 
-    
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // setting/adjusting time
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     /**
      * Sets the clock to epoch, that is midnight, 1 Jan 1970 UTC.
      * 
      * <p>
-     * This is typically called before either {@link #setDate(int, int, int)} 
-     * (so that time is set to midnight) and/or {@link #setTime(int, int)}
-     * (so that date is set to a well known value).
+     * This is typically called before either {@link #setDate(int, int, int)} (so that time is set to midnight) and/or
+     * {@link #setTime(int, int)} (so that date is set to a well known value).
      */
     public void clear() {
         setupCalendarIfRequired();
@@ -128,8 +119,8 @@ public class FixtureClock extends Clock {
     }
 
     /**
-     * Sets the hours and minutes as specified, and sets the seconds and
-     * milliseconds to zero, but the date portion is left unchanged.
+     * Sets the hours and minutes as specified, and sets the seconds and milliseconds to zero, but the date portion is
+     * left unchanged.
      * 
      * @see #setDate(int, int, int)
      * @see #addTime(int, int)
@@ -159,8 +150,7 @@ public class FixtureClock extends Clock {
      * Adjusts the time by the specified number of hours and minutes.
      * 
      * <p>
-     * Typically called after {@link #setTime(int, int)}, to move the clock
-     * forward or perhaps back.
+     * Typically called after {@link #setTime(int, int)}, to move the clock forward or perhaps back.
      * 
      * @see #addDate(int, int, int)
      */
@@ -174,8 +164,7 @@ public class FixtureClock extends Clock {
      * Adjusts the time by the specified number of years, months or days.
      * 
      * <p>
-     * Typically called after {@link #setDate(int, int, int)}, to move the clock
-     * forward or perhaps back.
+     * Typically called after {@link #setDate(int, int, int)}, to move the clock forward or perhaps back.
      * 
      * @see #addTime(int, int)
      */
@@ -188,15 +177,15 @@ public class FixtureClock extends Clock {
 
     private void setupCalendarIfRequired() {
         if (calendar != null) {
-        	return;
+            return;
         }
         calendar = Calendar.getInstance();
         calendar.setTimeZone(UTC_TIME_ZONE);
     }
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // reset
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     /**
      * Go back to just returning the system's time.
@@ -205,13 +194,12 @@ public class FixtureClock extends Clock {
         calendar = null;
     }
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // toString
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
 
     @Override
     public String toString() {
-    	return (calendar==null?"System":"Explicitly set") + 
-    			": " + Clock.getTimeAsCalendar().getTime().toString();
+        return (calendar == null ? "System" : "Explicitly set") + ": " + Clock.getTimeAsCalendar().getTime().toString();
     }
 }

@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Represents a check as to whether a particular object to be removed from a collection is valid or not.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the object is invalid;
- * otherwise the object is valid.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the object is invalid; otherwise the object
+ * is valid.
  * 
  * @see CollectionAddToEvent
  */
@@ -43,6 +41,7 @@ public class CollectionRemoveFromEvent extends ValidityEvent {
         this.proposed = proposed;
     }
 
+    @Override
     public Object getProposed() {
         return proposed;
     }

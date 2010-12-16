@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -28,16 +27,14 @@ import java.lang.annotation.Target;
 
 import org.apache.isis.applib.adapters.Parser;
 
-
 /**
  * The typical entry length of a field, use to determine the optimum width for display
  * 
  * @see Parser
  */
 @Inherited
-@Target( { ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE })
+@Target({ ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface TypicalLength {
     int value();
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -26,17 +25,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * Indicates that the class has additional facets, and specifies the how to obtain the <tt>FacetFactory</tt>
- * to manufacture them.
+ * Indicates that the class has additional facets, and specifies the how to obtain the <tt>FacetFactory</tt> to
+ * manufacture them.
  * 
  * <p>
  * At least one named factory (as per {@link #facetFactoryNames()}) or one class factory (as per
  * {@link #facetFactoryClasses()}) should be specified.
  */
 @Inherited
-@Target( { ElementType.TYPE })
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Facets {
     /**

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures.userprofile;
 
 import org.apache.isis.applib.fixtures.UserProfileFixture;
@@ -25,10 +24,9 @@ import org.apache.isis.applib.fixtures.switchuser.SwitchUserService;
 import org.apache.isis.applib.profiles.Perspective;
 import org.apache.isis.applib.profiles.Profile;
 
-
 /**
- * Not intended to be used directly; decouples the {@link UserProfileFixture}, which needs to persist {@link Perspective}s,
- * from the rest of the framework's runtime.
+ * Not intended to be used directly; decouples the {@link UserProfileFixture}, which needs to persist
+ * {@link Perspective}s, from the rest of the framework's runtime.
  * 
  * <p>
  * A suitable implementation is injected into {@link UserProfileFixture} when installed.

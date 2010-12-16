@@ -17,36 +17,35 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.util;
 
 /**
  * An alternative to {@link ReasonBuffer}.
  */
 public class Reasons {
-	private Reasons() {}
+    private Reasons() {
+    }
 
-	public static String coalesce(String... reasons) {
-		StringBuilder buf = new StringBuilder();
-		for (String reason : reasons) {
-			appendIfNotNull(buf, reason);
-		}
-		return asStringElseNull(buf);
-	}
+    public static String coalesce(final String... reasons) {
+        final StringBuilder buf = new StringBuilder();
+        for (final String reason : reasons) {
+            appendIfNotNull(buf, reason);
+        }
+        return asStringElseNull(buf);
+    }
 
-	private static void appendIfNotNull(StringBuilder buf, String reason) {
-		if (reason == null) {
-			return;
-		}
-		if (buf.length() > 0) {
-			buf.append("; ");
-		}
-		buf.append(reason);
-	}
+    private static void appendIfNotNull(final StringBuilder buf, final String reason) {
+        if (reason == null) {
+            return;
+        }
+        if (buf.length() > 0) {
+            buf.append("; ");
+        }
+        buf.append(reason);
+    }
 
-	private static String asStringElseNull(StringBuilder buf) {
-		return buf.length() == 0? null: buf.toString();
-	}
-	
+    private static String asStringElseNull(final StringBuilder buf) {
+        return buf.length() == 0 ? null : buf.toString();
+    }
+
 }
-

@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 /**
  * Interaction events, corresponding to gestures in the user interface.
  * 

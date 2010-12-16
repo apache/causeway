@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.util;
 
 import static org.hamcrest.Matchers.is;
@@ -26,9 +25,7 @@ import static org.junit.Assert.assertThat;
 
 import org.junit.Test;
 
-
 public class ReasonsTest {
-
 
     @Test
     public void testNoReasonReturnsNull() throws Exception {
@@ -37,7 +34,7 @@ public class ReasonsTest {
 
     @Test
     public void testSingleNullReturnsNull() throws Exception {
-        assertThat(Reasons.coalesce((String)null), is(nullValue()));
+        assertThat(Reasons.coalesce((String) null), is(nullValue()));
     }
 
     @Test
@@ -65,6 +62,4 @@ public class ReasonsTest {
         assertThat(Reasons.coalesce("foobar", null, "yada"), is("foobar; yada"));
     }
 
-
 }
-

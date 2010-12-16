@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -26,19 +25,18 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
  * Indicates the a (repository) action should be not be contributed.
  * 
  * <p>
- * It may still be appear in the repository menu (unless it has been annotated as {@link NotInServiceMenu}).
- * If {@link Hidden}, then also implies that the menu should not be contributed.
+ * It may still be appear in the repository menu (unless it has been annotated as {@link NotInServiceMenu}). If
+ * {@link Hidden}, then also implies that the menu should not be contributed.
  * 
  * <p>
  * Has no meanings for actions on regular entities.
  */
 @Inherited
-@Target( { ElementType.METHOD })
+@Target({ ElementType.METHOD })
 @Retention(RetentionPolicy.RUNTIME)
-public @interface NotContributed {}
-
+public @interface NotContributed {
+}

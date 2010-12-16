@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.adapters;
 
 public abstract class AbstractValueSemanticsProvider<T> implements ValueSemanticsProvider<T> {
@@ -26,8 +25,7 @@ public abstract class AbstractValueSemanticsProvider<T> implements ValueSemantic
     private boolean equalByContent;
 
     /**
-     * Defaults {@link #isImmutable()} to <tt>true</tt> and {@link #isEqualByContent()} to <tt>true</tt>
-     * also.
+     * Defaults {@link #isImmutable()} to <tt>true</tt> and {@link #isEqualByContent()} to <tt>true</tt> also.
      */
     public AbstractValueSemanticsProvider() {
         this(true, true);
@@ -38,14 +36,17 @@ public abstract class AbstractValueSemanticsProvider<T> implements ValueSemantic
         this.equalByContent = equalByContent;
     }
 
+    @Override
     public EncoderDecoder<T> getEncoderDecoder() {
         return (EncoderDecoder<T>) (this instanceof EncoderDecoder ? this : null);
     }
 
+    @Override
     public Parser<T> getParser() {
         return (Parser<T>) (this instanceof Parser ? this : null);
     }
 
+    @Override
     public DefaultsProvider<T> getDefaultsProvider() {
         return (DefaultsProvider<T>) (this instanceof DefaultsProvider ? this : null);
     }
@@ -53,6 +54,7 @@ public abstract class AbstractValueSemanticsProvider<T> implements ValueSemantic
     /**
      * Defaults to <tt>true</tt> if no-arg constructor is used.
      */
+    @Override
     public boolean isEqualByContent() {
         return equalByContent;
     }
@@ -60,9 +62,9 @@ public abstract class AbstractValueSemanticsProvider<T> implements ValueSemantic
     /**
      * Defaults to <tt>true</tt> if no-arg constructor is used.
      */
+    @Override
     public boolean isImmutable() {
         return immutable;
     }
 
 }
-

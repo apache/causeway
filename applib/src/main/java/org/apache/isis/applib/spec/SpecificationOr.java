@@ -17,29 +17,24 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.spec;
 
 import org.apache.isis.applib.util.ReasonBuffer;
-
 
 /**
  * Adapter to make it easy to perform boolean algebra on {@link Specification}s.
  * 
  * <p>
- * Subclasses represent the conjunction of multiple {@link Specification}s.  An 
- * implementation should instantiate the {@link Specification}s to be satisfied 
- * in its constructor.
+ * Subclasses represent the conjunction of multiple {@link Specification}s. An implementation should instantiate the
+ * {@link Specification}s to be satisfied in its constructor.
  * 
  * <p>
  * For example:
+ * 
  * <pre>
  * public class TeaOrCoffeeSpec extends SpecificationOr {
  *     public TeaOrCoffeeSpec() {
- *         super(
- *             new MustBeTeaSpec(), 
- *             new MustBeCoffeeSpec()
- *         );
+ *         super(new MustBeTeaSpec(), new MustBeCoffeeSpec());
  *     }
  * }
  * </pre>
@@ -51,14 +46,15 @@ public abstract class SpecificationOr implements Specification {
 
     private final Specification[] specifications;
 
-    public SpecificationOr(Specification... specifications) {
+    public SpecificationOr(final Specification... specifications) {
         this.specifications = specifications;
     }
- 
-    public String satisfies(Object obj) {
-        ReasonBuffer buf = new ReasonBuffer();
-        for(Specification specification: specifications) {
-            String reasonNotSatisfiedIfAny = specification.satisfies(obj);
+
+    @Override
+    public String satisfies(final Object obj) {
+        final ReasonBuffer buf = new ReasonBuffer();
+        for (final Specification specification : specifications) {
+            final String reasonNotSatisfiedIfAny = specification.satisfies(obj);
             if (reasonNotSatisfiedIfAny == null) {
                 // at least one is ok, so all is ok.
                 return null;
@@ -67,6 +63,5 @@ public abstract class SpecificationOr implements Specification {
         }
         return buf.getReason(); // may be null if all were satisfied.
     }
-
 
 }

@@ -17,14 +17,13 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.util;
-
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+
+import org.junit.Before;
+import org.junit.Test;
 
 public class TitleBufferTest {
 
@@ -286,6 +285,7 @@ public class TitleBufferTest {
         try {
             t3.truncate(0);
             fail("Exception expected");
-        } catch (final IllegalArgumentException ee) {}
+        } catch (final IllegalArgumentException ee) {
+        }
     }
 }

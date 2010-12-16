@@ -17,18 +17,16 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.events;
 
 import org.apache.isis.applib.Identifier;
-
 
 /**
  * Represents a check as to whether a collection is visible or has been hidden.
  * 
  * <p>
- * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the collection is invisible;
- * otherwise collection is visible.
+ * If {@link #getReason()} is not <tt>null</tt> then provides the reason why the collection is invisible; otherwise
+ * collection is visible.
  */
 public class CollectionVisibilityEvent extends VisibilityEvent {
 

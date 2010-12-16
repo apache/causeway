@@ -17,12 +17,10 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib;
 
 /**
- * Indicates that a problem has occurred within the application, as opposed to within a supporting framework
- * or system.
+ * Indicates that a problem has occurred within the application, as opposed to within a supporting framework or system.
  */
 public class ApplicationException extends RuntimeException {
     private static final long serialVersionUID = 1L;

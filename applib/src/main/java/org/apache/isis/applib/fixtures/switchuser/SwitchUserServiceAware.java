@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.fixtures.switchuser;
 
 import org.apache.isis.applib.fixtures.AbstractFixture;
@@ -26,11 +25,9 @@ import org.apache.isis.applib.fixtures.AbstractFixture;
  * Implement if require {@link SwitchUserService} to be injected into fixture.
  * 
  * <p>
- * Most fixtures will subclass from {@link AbstractFixture} which does indeed
- * implement this interface.
+ * Most fixtures will subclass from {@link AbstractFixture} which does indeed implement this interface.
  */
 public interface SwitchUserServiceAware {
 
-	void setService(SwitchUserService switchUserService);
+    void setService(SwitchUserService switchUserService);
 }
-

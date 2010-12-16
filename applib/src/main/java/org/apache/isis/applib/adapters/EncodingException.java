@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.adapters;
 
 /**
@@ -43,4 +42,3 @@ public class EncodingException extends RuntimeException {
     }
 
 }
-

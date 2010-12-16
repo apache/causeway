@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.annotation;
 
 import java.lang.annotation.ElementType;
@@ -26,15 +25,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
  * Provides a mask that a value entry should conform to
  * 
  * A mask to apply to string attributes.
  * 
  * <p>
- * The characters that can be used are shown in the following table (adapted from masks used by Swing's
- * MaskFormatter, Java's SimpleDateFormat and also Microsoft's MaskedEdit control): 
+ * The characters that can be used are shown in the following table (adapted from masks used by Swing's MaskFormatter,
+ * Java's SimpleDateFormat and also Microsoft's MaskedEdit control):
  * 
  * <table border='2'>
  * <tr>
@@ -49,14 +47,14 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>.</td>
- * <td align='left'>Decimal placeholder. The actual character used is the one specified as the decimal
- * placeholder in your international settings. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Decimal placeholder. The actual character used is the one specified as the decimal placeholder in
+ * your international settings. This character is treated as a literal for masking purposes.</td>
  * <td align='left'>MS</td>
  * </tr>
  * <tr>
  * <td align='center'>,</td>
- * <td align='left'>Thousands separator. The actual character used is the one specified as the thousands
- * separator in your international settings. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Thousands separator. The actual character used is the one specified as the thousands separator in
+ * your international settings. This character is treated as a literal for masking purposes.</td>
  * <td align='left'>MS</td>
  * </tr>
  * <tr>
@@ -71,8 +69,8 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>&amp;</td>
- * <td align='left'>Character placeholder. Valid values for this placeholder are ANSI characters in the
- * following ranges: 32-126 and 128-255.</td>
+ * <td align='left'>Character placeholder. Valid values for this placeholder are ANSI characters in the following
+ * ranges: 32-126 and 128-255.</td>
  * <td align='left'>MS</td>
  * </tr>
  * 
@@ -100,14 +98,12 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>U</td>
- * <td align='left'>Any character (<code>Character.isLetter</code>). All lowercase letters are mapped to
- * upper case.</td>
+ * <td align='left'>Any character (<code>Character.isLetter</code>). All lowercase letters are mapped to upper case.</td>
  * <td align='left'>Swing</td>
  * </tr>
  * <tr>
  * <td align='center'>L</td>
- * <td align='left'>Any character (<code>Character.isLetter</code>). All lowercase letters are mapped to
- * lower case.</td>
+ * <td align='left'>Any character (<code>Character.isLetter</code>). All lowercase letters are mapped to lower case.</td>
  * <td align='left'>Swing</td>
  * </tr>
  * <tr>
@@ -118,10 +114,12 @@ import java.lang.annotation.Target;
  * </table>
  * 
  * <p>
- * Can also be specified for types that are annotated as <tt>@Value</tt> types. To apply, the value must have string semantics.
+ * Can also be specified for types that are annotated as <tt>@Value</tt> types. To apply, the value must have string
+ * semantics.
  * 
  * <p>
- * Not yet implemented: <table border='2'>
+ * Not yet implemented:
+ * <table border='2'>
  * <tr>
  * <th align='center'>Character</th>
  * <th align='center'>Description</th>
@@ -129,8 +127,8 @@ import java.lang.annotation.Target;
  * </tr>
  * <tr>
  * <td align='center'>\ or '</td>
- * <td align='left'>Treat the next character in the mask string as a literal. This allows you to include the
- * '#', '&', 'A', and '?' characters in the mask. This character is treated as a literal for masking purposes.</td>
+ * <td align='left'>Treat the next character in the mask string as a literal. This allows you to include the '#', '&',
+ * 'A', and '?' characters in the mask. This character is treated as a literal for masking purposes.</td>
  * <td align='left'>MS (\), Swing (')</td>
  * </tr>
  * <tr>
@@ -182,9 +180,8 @@ import java.lang.annotation.Target;
  * 
  */
 @Inherited
-@Target( { ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
+@Target({ ElementType.TYPE, ElementType.METHOD, ElementType.PARAMETER })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Mask {
     String value();
 }
-

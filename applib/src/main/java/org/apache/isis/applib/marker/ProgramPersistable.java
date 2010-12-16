@@ -17,11 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.applib.marker;
 
 import org.apache.isis.applib.annotation.NotPersisted;
-
 
 /**
  * Marker interface to show that an object cannot be persisted.
