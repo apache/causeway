@@ -638,15 +638,12 @@
 
         <para>Generally speaking all Maven artifacts are automatically
         downloads from the Maven <ulink
-        url="http://repo1.maven.org/maven2/">central repo</ulink> (though note
-        that all the sister projects also release to the <ulink
-        url="http://starobjects.sourceforge.net/m2-repo">Sister projects Maven
-        repo</ulink>). However, some artifacts must be manually installed or
-        built, either because they haven't been formally released or because
-        there are licensing restrictions preventing them from being hosted in
-        the repository. These must therefore be downloaded and manually
-        installed into your local repository
-        (<filename>~/.m2/repository</filename>) .</para>
+        url="http://repo1.maven.org/maven2/">central repo</ulink>. However,
+        some artifacts must be manually installed or built, either because
+        they haven't been formally released or because there are licensing
+        restrictions preventing them from being hosted in the repository.
+        These must therefore be downloaded and manually installed into your
+        local repository (<filename>~/.m2/repository</filename>) .</para>
 
         <para><emphasis>Apache Isis</emphasis> currently use the
         <acronym>JIMI</acronym> jar to generate documentation.
@@ -662,8 +659,9 @@
 
           <listitem>
             <para>Within the unzipped files, you'll find the
-            JimiProClasses.zip file. This is the <acronym>JAR</acronym> that
-            needs to be installed. Make a note of its location.</para>
+            <filename>JimiProClasses.zip</filename> file. This is the
+            <acronym>JAR</acronym> that needs to be installed. Make a note of
+            its location.</para>
           </listitem>
 
           <listitem>
