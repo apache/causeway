@@ -47,7 +47,7 @@
   <toc></toc>
 
   <preface id="preface">
-    <title>Preface</title>
+    <title>Preface2</title>
 
     <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
     rapidly develop domain-driven applications following the <ulink
@@ -1463,7 +1463,8 @@ protected IsisConfiguration getConfiguration() {
         Preferences &gt; Java &gt; Code Style &gt; Cleanup:</para>
 
         <para><screenshot>
-            <screeninfo>Eclipse Java Code Style Cleanup</screeninfo>
+            <screeninfo>Configuring Eclipse's Java Code Style
+            Cleanup</screeninfo>
 
             <mediaobject>
               <imageobject>
@@ -1475,7 +1476,37 @@ protected IsisConfiguration getConfiguration() {
 
         <para>The cleanup wizard can be run on an adhoc basis using Source
         &gt; Cleanup. Note that this can be done recursively, from a higher
-        level package if required.</para>
+        level package if required. For example:</para>
+
+        <screenshot>
+          <screeninfo>Running Source Code Cleanup (1 of 3)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/doc/Eclipse-cleanup-1.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <screenshot>
+          <screeninfo>Running Source Code Cleanup (2 of 3)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/doc/Eclipse-cleanup-2.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <screenshot>
+          <screeninfo>Running Source Code Cleanup (3 of 3)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/doc/Eclipse-cleanup-3.png" scale="50" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
       </sect1>
 
       <sect1 id="sec.ImportOrder">
