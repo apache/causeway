@@ -19,42 +19,11 @@
 Using switchUser in a Fixture
 
 
-  Beware of when you call <<<switchUser()>>> in a <<<Fixture>>> as it causes the current transaction to be ended and a new one started (for the new user). If you share a reference between the two you will get an exception like this:
+  Beware of when you call <<<switchUser()>>> in a <<<Fixture>>> as it 
+  causes the current transaction to be ended and a new one started (for the 
+  new user). If you share a reference between the two you will get an 
+  exception like this.
 
-+----------
-2010-04-26 21:11:00,091 [FixturesInstallerDelegate main       ERROR]  installing fixture com.mydomain.fixture.PlanFixture failed; aborting 
-java.lang.IllegalStateException: Cannot save an object that is not persistent: PojoAdapter@79f7abae[T~~~:TOID#-7FFFFED7C441852B,specification=Participant,version=null,pojo-toString=com.mydomain.dom.Participant$$EnhancerByCGLIB$$754db115@5006279d,pojo-hash=#5006279d]
-        at org.apache.isis.extensions.xml.objectstore.internal.data.ObjectData.addAssociation(ObjectData.java:107)
-        at org.apache.isis.extensions.xml.objectstore.internal.commands.AbstractXmlPersistenceCommand.saveReference(AbstractXmlPersistenceCommand.java:60)
-        at org.apache.isis.extensions.xml.objectstore.internal.commands.AbstractXmlPersistenceCommand.createObjectData(AbstractXmlPersistenceCommand.java:51)
-        at org.apache.isis.extensions.xml.objectstore.internal.commands.XmlCreateObjectCommand.execute(XmlCreateObjectCommand.java:25)
-        at org.apache.isis.extensions.xml.objectstore.XmlObjectStore.execute(XmlObjectStore.java:263)
-        at org.apache.isis.runtime.persistence.objectstore.transaction.ObjectStoreTransaction.doFlush(ObjectStoreTransaction.java:111)
-        at org.apache.isis.runtime.transaction.[[NAME]]ObjectTransactionAbstract.commit([[NAME]]ObjectTransactionAbstract.java:91)
-        at org.apache.isis.runtime.persistence.objectstore.transaction.ObjectStoreTransactionManager.endTransaction(ObjectStoreTransactionManager.java:84)
-        at org.apache.isis.runtime.fixturesinstaller.FixturesInstallerDelegate.installFixtureInTransaction(FixturesInstallerDelegate.java:158)
-        at org.apache.isis.runtime.fixturesinstaller.FixturesInstallerDelegate.installFixtures(FixturesInstallerDelegate.java:143)
-        at org.apache.isis.runtime.fixturesinstaller.FixturesInstallerDelegate.installFixtures(FixturesInstallerDelegate.java:124)
-        at org.apache.isis.runtime.fixturesinstaller.FixturesInstallerAbstract.installFixtures(FixturesInstallerAbstract.java:19)
-        at org.apache.isis.runtime.system.IsisSystemAbstract.installFixturesIfRequired(IsisSystemAbstract.java:139)
-        at org.apache.isis.runtime.system.IsisSystemAbstract.init(IsisSystemAbstract.java:115)
-        at org.apache.isis.runtime.system.IsisSystemBootstrapper.bootSystem(IsisSystemBootstrapper.java:42)
-        at org.apache.isis.webapp.IsisWebAppBootstrapper.bootstrapIsis(IsisWebAppBootstrapper.java:124)
-        at org.apache.isis.webapp.IsisWebAppBootstrapper.contextInitialized(IsisWebAppBootstrapper.java:66)
-        at org.mortbay.jetty.handler.ContextHandler.startContext(ContextHandler.java:548)
-        at org.mortbay.jetty.servlet.Context.startContext(Context.java:136)
-        at org.mortbay.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1239)
-        at org.mortbay.jetty.handler.ContextHandler.doStart(ContextHandler.java:517)
-        at org.mortbay.jetty.webapp.WebAppContext.doStart(WebAppContext.java:466)
-        at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50)
-        at org.mortbay.jetty.handler.HandlerWrapper.doStart(HandlerWrapper.java:130)
-        at org.mortbay.jetty.Server.doStart(Server.java:222)
-        at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50)
-        at org.apache.isis.webserver.WebServer.bootstrapIsis(WebServer.java:83)
-        at org.apache.isis.runtime.IsisAbstract.run(IsisAbstract.java:108)
-        at org.apache.isis.webserver.WebServer.main(WebServer.java:33)
-2010-04-26 21:11:00,093 [[[NAME]]ObjectTransactionAbstract main       INFO ]  abort transaction ObjectStoreTransaction@5b4bc4e6[state=IN_PROGRESS,commands=103]
-+----------
 
   The fixture code shared the <<<Participant>>> object between the two transactions when coded like this:
 
@@ -69,7 +38,8 @@ java.lang.IllegalStateException: Cannot save an object that is not persistent: P
         plan.getOwner().modifyLeader(peterPlanner);
 +----------
 
-  To resolve the problem you will need to retrieve the object again so it is part of the second transaction. In this example we can change to code to this:
+  To resolve the problem you will need to retrieve the object again so it is 
+  part of the second transaction. In this example we can change to code to this:
 
 +----------
         accounts.createAccount("ACME", "Peter Planner", "pplanner@acme.com");
@@ -82,6 +52,7 @@ java.lang.IllegalStateException: Cannot save an object that is not persistent: P
         Work work = plan1.createWork();
         BcpPlan plan = (BcpPlan) work.getTarget();
         plan.getOwner().modifyLeader(peterPlanner);
+
 +----------
 
   An alternative is to force this separation by putting the switch call into a separate fixture, as you now have no choice but to look it up.
@@ -90,7 +61,9 @@ java.lang.IllegalStateException: Cannot save an object that is not persistent: P
 
 * Deployment limitations of using switch user
 
-  Switch user will only work in exploration and prototype mode.  To make it run on the server (ie using Tomcat) I changed the deployment type by adding the following to the isis.properties file:
+  Switch user will only work in exploration and prototype mode.  To make it 
+  run on the server (ie using Tomcat) I changed the deployment type by adding 
+  the following to the isis.properties file:
 
 --------
 isis.deploymentType=prototype

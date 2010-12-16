@@ -96,6 +96,14 @@
             </item>
 		</menu>
 
+        <menu name="For Contributors">
+            <item name="${docbkxGuideTitle} ${docbkxGuideSubTitle}">
+                <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
+                <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
+            </item>
+            <item name="Jottings" href="jottings.html" />
+        </menu>
+
 		<menu name="Other Resources">
 			<item name="Blogs">
 				<item name="Dan Haywood's blog" href="http://danhaywood.com/" />
@@ -105,18 +113,6 @@
 				<item name="Richard Pawson's Thesis" href="Pawson-Naked-Objects-thesis.pdf" />
     			<item name="Naked Objects for .NET" href="http://www.nakedobjects.net/" />
 			</item>
-		</menu>
-
-		<menu name="For Contributors">
-            <item name="Dev Env" href="contributors-devenv.html" />
-			<item name="Building" href="contributors-building.html" />
-            <item name="Writing Docs" href="contributors-writing-docs.html" />
-			<item name="Deploying" href="contributors-deploying.html" />
-			<item name="Jottings" href="jottings.html" />
-            <item name="${docbkxGuideTitle}">
-                <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
-                <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
-            </item>
 		</menu>
 
 

@@ -47,7 +47,7 @@
   <toc></toc>
 
   <preface id="preface">
-    <title>Preface2</title>
+    <title>Preface</title>
 
     <para><emphasis>Apache Isis</emphasis> is designed to allow programmers
     rapidly develop domain-driven applications following the <ulink
@@ -3001,11 +3001,20 @@ sentences in the paragraph to be indented.  A blank line terminates the paragrap
       <sect1>
         <title>Links and Figures</title>
 
-        <para>To create a hyperlink, use:</para>
+        <para>To create an external link, use:</para>
 
         <screen>  Link to {{http://www.pixware.fr}}.
   or 
   Link to {{{http://www.pixware.fr}Pixware home page}}.</screen>
+
+        <para>To create an internal link (to a page relative to this one),
+        use:</para>
+
+        <screen>  Link to {{{./docbkx/guide/isis-applib.pdf}AppLib Guide (PDF)}}</screen>
+
+        <warning>
+          <para>the "./" is required for internal links.</para>
+        </warning>
 
         <para>To create an anchor, use:</para>
 
