@@ -15,13 +15,26 @@
 ~~  specific language governing permissions and limitations
 ~~  under the License.
 
-
-
 Runtime
  
- The <runtime> model has the code which is used to manage the domain objects at runtime.
- Each pojo is wrapped in an adapter (cf <<<java.lang.Object>>>) from which the
- object specification (cf <<<java.lang.Class>>>) can be obtained.
+ The <runtime> module is the "engine-room" of the framework, taking 
+ responsibility to manage domain object (pojo) instances at runtime.
+
+ Each pojo is wrapped in an <<<ObjectAdapter>>> (cf <<<java.lang.Object>>>) 
+ from which the <<<ObjectSpecification>>> (cf <<<java.lang.Class>>>) can be 
+ obtained.  Associated with each <<<ObjectAdapter>>> is an <<<Oid>>>: an
+ opaque serializable identifier to the object.  The <runtime> module maintains 
+ a 3-way {{{http://martinfowler.com/eaaCatalog/identityMap.html}identity map}} 
+ between these, allowing forward and reverse lookups. 
  
- The <runtime> also manages persistence and transactions, with the actual
- persistence being delegated to an object store.
+ The <runtime> module defines a number of APIs the most important of which is 
+ the <<<ObjectStore>>> API.  The <runtime> module manages persistence 
+ and transaction demarcation, with the actual storage of objects being 
+ delegated to an object store implementation.
+
+ The other major API defined by the <runtime> module security API, dealing with
+ authentication and authorization.  
+ 
+ In addition to all the above, the <runtime> module defines a command-line 
+ bootstrapper, making it easy to bootstrap <Apache Isis> from a main() or a 
+ JUnit test case.

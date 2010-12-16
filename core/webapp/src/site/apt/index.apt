@@ -19,7 +19,26 @@
 
 WebApp Support
  
- The <webapp> module provides servlet and filter implementations to allow the
- runtime to be hosted within a webapp.
+ The <webapp> module is a small module that provides reusable servlet context 
+ listeners and filters to webapp viewers.  They include:
+ 
+ * <<<IsisWebAppBootstrapper>>> which is a servlet context listener to bootstrap
+   an Isis runtime and bind to the servlet context
 
- It generally isn't required until deployment time.
+ * <<<IsisSessionFilter>>> which is a filter used to
+   creating an <<<IsisSession>>> for each request (the 
+   {{{http://community.jboss.org/wiki/OpenSessioninView}Open session in View}}
+    pattern)
+
+ * <<<ResourceServlet>>> which serves up static content from the specified
+   resource
+   
+ * <<<StaticContentFilter>>> which decorates static content with headers for
+   caching    
+ 
+ []
+ 
+ Not every webapp-based viewer is required to use these classes; refer to their
+ documentation for exact details of what should reside in the <<<web.xml>>>.
+ 
+ 

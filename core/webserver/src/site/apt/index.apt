@@ -16,19 +16,18 @@
 ~~  under the License.
 
 
-
 WebServer (Jetty)
  
- The <webserver> module bundles up {{{http://jetty.codehaus.org/jetty/}Jetty}} to make it easy to any application that's
- in webapp format.
+ The <webserver> module is intended to make it easy to run webapp-based viewers,
+ using the webapp as defined in <<<src/main/webapp/WEB-INF/web.xml>>>.
  
- There are a couple of use cases:
+ This is a useful facility to have during development, but is not (expected to 
+ be) needed for deployment.   
  
- * if using the {{{../webapp/index.html}webapp}} module to deploy your application
-   as a webapp, then you can check that your deployment runs ok an on webserver
-   
- * if using a viewer that does not use the <webapp> module but instead defines
-   has its own web app structure in <<<WEB-INF/web.xml>>> then again you can use 
-   <webserver> to run your web application.  
+ In essence all the module does is to bundle up 
+ {{{http://jetty.codehaus.org/jetty/}Jetty}}.  An alternative would be to 
+ use <<<mvn jetty:run>>>; this module is for when you'd rather just run a
+ standalone program (ie, with a <<<main()>>> in it) without the overhead of
+ Maven.
    
  [] 
