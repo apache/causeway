@@ -4192,76 +4192,83 @@ Persistable: User Persistable</screen>
         behaviour it can offer, and to find other information such as the
         object's title, a suggested order of it fields, when the actions can
         or can't be used. The details about this interface are recorded in an
-        instance of <classname>ObjectSpecification</classname>. As each class of
-        domain object is loaded into the system introspection is performed and
-        an instance of <classname>ObjectSpecification</classname> is generated. That
-        specification object is subsequently available from any object adapter
-        (using the <methodname>ObjectAdapter.getSpecification</methodname> method) for
+        instance of <classname>ObjectSpecification</classname>. As each class
+        of domain object is loaded into the system introspection is performed
+        and an instance of <classname>ObjectSpecification</classname> is
+        generated. That specification object is subsequently available from
+        any object adapter (using the
+        <methodname>ObjectAdapter.getSpecification</methodname> method) for
         that type of domain object; or it can be retrieved directly, by name
-        or class, from the <classname>ObjectSpecificationLoader</classname> instance
-        (obtained from the <classname>Isis</classname> repository).</para>
+        or class, from the <classname>ObjectSpecificationLoader</classname>
+        instance (obtained from the <classname>Isis</classname>
+        repository).</para>
 
-        <para>Through an object's <classname>ObjectSpecification</classname> instance
-        the rest of the NOF can find out the fields that an object has, the
-        methods it offers, the title to use to identify the object, and other
-        details about the object. These are used normally used by the
-        implementations of ObjectAdapter etc when another component ask the
-        adapter for details about another object. For example For example the
-        statement <code>adapter.getField(no.getFields()[0])</code> would
+        <para>Through an object's <classname>ObjectSpecification</classname>
+        instance the rest of the NOF can find out the fields that an object
+        has, the methods it offers, the title to use to identify the object,
+        and other details about the object. These are used normally used by
+        the implementations of ObjectAdapter etc when another component ask
+        the adapter for details about another object. For example For example
+        the statement <code>adapter.getField(no.getFields()[0])</code> would
         retrieve the first field in the domain object held by the [[NAME]]
         referenced by <code>adapter</code>.</para>
 
-	<sect2><title>How it Works</title>
+        <sect2>
+          <title>How it Works</title>
 
-        <para>When a domain object is used within the NOF the
-        <classname>ObjectSpecificationLoader</classname> instance is asked for the
-        <classname>ObjectSpecification</classname> for the domain object's class (by
-        name or <classname>java.lang.Class</classname> object). For performance
-        reasons these objects are normally cached and if the class has
-        previously been introspected then the cached version would be
-        returned. The first time that class is requested however the loader is
-        responsible for performing the introspection and creating a complete
-        <classname>ObjectSpecification</classname>.</para>
+          <para>When a domain object is used within the NOF the
+          <classname>ObjectSpecificationLoader</classname> instance is asked
+          for the <classname>ObjectSpecification</classname> for the domain
+          object's class (by name or <classname>java.lang.Class</classname>
+          object). For performance reasons these objects are normally cached
+          and if the class has previously been introspected then the cached
+          version would be returned. The first time that class is requested
+          however the loader is responsible for performing the introspection
+          and creating a complete
+          <classname>ObjectSpecification</classname>.</para>
 
-        <para>For each field that the reflector recognises the loader creates
-        either a <classname>OneToOneAssociation</classname> object for a value field
-        or a reference field, or a <classname>OneToManyAssociation</classname> object
-        for a collection or array. Using the field objects the NOF can access
-        or change the values and references in the domain object. The fields
-        can also be used by the NOF to find out the field name, if the fields
-        are visible and whether it can be modified.</para>
+          <para>For each field that the reflector recognises the loader
+          creates either a <classname>OneToOneAssociation</classname> object
+          for a value field or a reference field, or a
+          <classname>OneToManyAssociation</classname> object for a collection
+          or array. Using the field objects the NOF can access or change the
+          values and references in the domain object. The fields can also be
+          used by the NOF to find out the field name, if the fields are
+          visible and whether it can be modified.</para>
 
-        <para>For each action method that the reflector recognises the loader
-        must create an <classname>Action</classname> object. Using the action object
-        the NOF can invoke the method on the domain object. The action object
-        also can be used by the NOF to find out the action's name, whether it
-        is visible and whether it can be executed.</para>
+          <para>For each action method that the reflector recognises the
+          loader must create an <classname>Action</classname> object. Using
+          the action object the NOF can invoke the method on the domain
+          object. The action object also can be used by the NOF to find out
+          the action's name, whether it is visible and whether it can be
+          executed.</para>
 
-        <para>In addition to the fields and actions the specification must can
-        also: return the various forms of class name (singular; plural; short;
-        and full); retrieve a title from, or generate a title for, the domain
-        object; flag the type of object (abstract, lookup, object, value, and
-        whether persistable); refer to its superclass, any inteferfaces it
-        implements and any subclasses; and allow objects to marked/cleared as
-        being dirty.</para>
-	</sect2>
+          <para>In addition to the fields and actions the specification must
+          can also: return the various forms of class name (singular; plural;
+          short; and full); retrieve a title from, or generate a title for,
+          the domain object; flag the type of object (abstract, lookup,
+          object, value, and whether persistable); refer to its superclass,
+          any inteferfaces it implements and any subclasses; and allow objects
+          to marked/cleared as being dirty.</para>
+        </sect2>
 
-	<sect2>
-        <title>Installation</title>
+        <sect2>
+          <title>Installation</title>
 
-        <para>To set up the NOF to use a reflection mechanism the
-        <classname>Isis</classname> repository must be given a
-        <classname>ObjectSpecificationLoader</classname> instance before the
-        repository is initialised. This can be done using the repository's
-        static <methodname>setSpecificationLoader</methodname> method. For example,
-        the following sets the NOF up to use the basic reflector.</para>
+          <para>To set up the NOF to use a reflection mechanism the
+          <classname>Isis</classname> repository must be given a
+          <classname>ObjectSpecificationLoader</classname> instance before the
+          repository is initialised. This can be done using the repository's
+          static <methodname>setSpecificationLoader</methodname> method. For
+          example, the following sets the NOF up to use the basic
+          reflector.</para>
 
-        <programlisting>ObjectSpecificationLoader loader = new
+          <programlisting>ObjectSpecificationLoader loader = new
         JavaSpecificationLoader();
         Isis.setSpecificationLoader(loader);</programlisting>
 
-        <para />
-	</sect2>
+          <para></para>
+        </sect2>
       </sect1>
 
       <sect1>
@@ -5927,6 +5934,22 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
         <para></para>
 
         <para></para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title></title>
+
+        <para></para>
+
+        <para>To store profiles (during exploration) for users the a profile
+        store must be specified. </para>
+
+        <para>On the command line use -e xml to store them in an XML. </para>
+
+        <para>Without this the profile will simply be kept in memory, and lost
+        on exit. </para>
 
         <para></para>
       </sect1>
