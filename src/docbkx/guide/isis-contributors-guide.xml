@@ -118,8 +118,9 @@
       in-house.</para>
 
       <para>This part of the guide also covers how to build
-      <emphasis>Isis</emphasis>' site+documentation (along with prerequisite
-      software that needs to be installed prior to doing this).</para>
+      <emphasis>Isis</emphasis>' site and documentation (along with
+      prerequisite software that needs to be installed prior to doing
+      this).</para>
 
       <para>If you are looking to contribute to <emphasis>Apache
       Isis</emphasis> itself, the information in this part of the guide does
@@ -136,8 +137,8 @@
       </abstract>
 
       <para>This chapter describes the prerequisite software needed to build
-      <emphasis>Apache Isis</emphasis> modules, and its
-      site+documentation.</para>
+      <emphasis>Apache Isis</emphasis> modules, and its site and
+      documentation.</para>
 
       <sect1>
         <title>Command Line Software</title>
@@ -271,47 +272,51 @@
                 <para><ulink url="???">EasyShell</ulink>, to provide easy
                 integration with the operating system shell and command
                 line.</para>
-
-                <para>The following diagram shows the context menu that
-                EasyShell adds within package explorer:</para>
-
-                <mediaobject>
-                  <imageobject>
-                    <imagedata fileref="images/dev-env/easyshell-integration.png"
-                               scale="50" />
-                  </imageobject>
-                </mediaobject>
-
-                <para>Key bindings for the EasyShell commands can be set up
-                using Windows &gt; Preferences &gt; General &gt; Keys:</para>
-
-                <mediaobject>
-                  <imageobject>
-                    <imagedata fileref="images/dev-env/easyshell-keys.png"
-                               scale="45" />
-                  </imageobject>
-                </mediaobject>
               </listitem>
 
               <listitem>
                 <para><ulink
                 url="http://www.soyatec.com/euml2/">Soyatec</ulink>, for a
-                free (or commercial) UML/code live synchronization (a la
-                TogetherJ).</para>
+                free (or commercial) <acronym>UML</acronym>/code live
+                synchronization (a la the venerable <ulink
+                url="http://www.borland.com/us/products/together/index.html">TogetherJ</ulink>).</para>
 
                 <para>To install the free edition, it is necessary to install
-                the GMF at the same time (see this <ulink
+                the <acronym>GMF</acronym> at the same time (see this <ulink
                 url="http://www.soyatec.com/forum/viewtopic.php?t=898&amp;sid=1a1388b502a12114e6b8f28d7bbdee2a">forum
                 posting</ulink>). Note also that at the time of writing
                 Soyatec only supported up to Eclipse 3.5.</para>
               </listitem>
             </itemizedlist>
 
+            <para>The following diagram shows the context menu that
+            <emphasis>EasyShell</emphasis> adds within package
+            explorer:</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/dev-env/easyshell-integration.png"
+                           scale="50" />
+              </imageobject>
+            </mediaobject>
+
+            <para>Key bindings for the <emphasis>EasyShell</emphasis> commands
+            can be set up using Windows &gt; Preferences &gt; General &gt;
+            Keys:</para>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/dev-env/easyshell-keys.png"
+                           scale="45" />
+              </imageobject>
+            </mediaobject>
+
+            <para></para>
+
             <para>In addition, if you are also a contributor to
             <emphasis>Isis</emphasis>, then there are some additional plugins
             (FindBugs, CheckStyle, PMD) that should be installed for enforcing
-            coding standards; see <xref
-            linkend="chp.CodingStandardsEnforcement" />.</para>
+            coding standards; see <xref linkend="chp.CodingQuality" />.</para>
           </sect3>
 
           <sect3>
@@ -503,13 +508,6 @@
 
                 <para>Using <code>-D modules=...</code> for any of the above
                 will build just the corresponding module</para>
-              </listitem>
-
-              <listitem>
-                <para><code>skin</code></para>
-
-                <para>Using <code>-D modules=skin</code> will build just the
-                skin module</para>
               </listitem>
             </itemizedlist>
           </listitem>
@@ -1544,7 +1542,7 @@ protected IsisConfiguration getConfiguration() {
       </sect1>
     </chapter>
 
-    <chapter>
+    <chapter id="chp.CodeQuality">
       <title>Code Quality</title>
 
       <abstract>
@@ -1615,36 +1613,26 @@ protected IsisConfiguration getConfiguration() {
         outputs.</para>
       </warning>
 
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
-      <para></para>
-
       <sect1>
         <title>Code Coverage (Cobertura and Emma)</title>
 
-        <para>Code coverage of unit testing is provided using EclEmma for
-        Eclipse and Cobertura for Maven. Although there is an Eclipse plugin
-        for Cobertura, it has not been maintained and no longer runs on the
-        latest versions of Eclipse. Conversely, although there is a Maven
-        plugin for Emma, the Cobertura plugin gives reports that are more
+        <para>Code coverage of unit testing is provided using
+        <emphasis>EclEmma</emphasis> for Eclipse and
+        <emphasis>Cobertura</emphasis> for Maven. Although there is an Eclipse
+        plugin for <emphasis>Cobertura</emphasis>, it has not been maintained
+        and no longer runs on the latest versions of Eclipse. Conversely,
+        although there is a Maven plugin for Emma, the
+        <emphasis>Cobertura</emphasis> plugin gives reports that are more
         easily understood.</para>
 
         <note>
           <para>In fact, in the future we may move to <ulink
           url="http://www.eclemma.org/jacoco/">JaCoCo</ulink>, a new code
           coverage tool being developed by the originators of EclEmma. One of
-          the benefits of JaCoCo is that the instrumentation is performed via
-          a java:agent, ie on-the-fly. This would allow code coverage to be
-          captured during integration tests, for example, without requiring a
-          specific build.</para>
+          the benefits of <emphasis>JaCoCo</emphasis> is that the
+          instrumentation is performed via a java:agent, ie on-the-fly. This
+          would allow code coverage to be captured during integration tests,
+          for example, without requiring a specific build.</para>
         </note>
 
         <sect2>
@@ -1688,19 +1676,8 @@ protected IsisConfiguration getConfiguration() {
           manage the history of coverage runs (selecting none / deleting all
           removes the highlights on the editor).</para>
 
-          <para>To change what code is instrumented, use Coverage &gt;
-          Coverage ... :</para>
-
-          <screenshot>
-            <screeninfo>EclEmma's Coverage Configurations dialog</screeninfo>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/dev-env/eclemma-coverage-configurations.png"
-                           scale="45" />
-              </imageobject>
-            </mediaobject>
-          </screenshot>
+          <para>To change what code is instrumented, use Run &gt; Coverage
+          ...</para>
         </sect2>
 
         <sect2>
@@ -1874,10 +1851,12 @@ protected IsisConfiguration getConfiguration() {
             </mediaobject>
           </screenshot>
 
-          <para><remark>According to eclipse-cs' documentation, it is meant to
-          integrate with m2eclipse and transparently pick up any Maven
-          configuration of mvn-checkstyle-plugin. This doesn't seem to work
-          for me, though.</remark></para>
+          <para><warning>
+              <para>According to eclipse-cs' documentation, it is meant to
+              integrate with m2eclipse and transparently pick up any Maven
+              configuration of mvn-checkstyle-plugin. This doesn't seem to
+              work for me, though.</para>
+            </warning></para>
 
           <para>You may then need to enable CheckStyle for each project as
           required, using the context menu in Package Explorer. CheckStyle
@@ -2068,12 +2047,12 @@ protected IsisConfiguration getConfiguration() {
       </sect1>
     </chapter>
 
-    <chapter id="chp.WritingDocBookDocumentation">
+    <chapter id="chp.WritingDocumentation">
       <title>Writing Documentation</title>
 
       <abstract>
         <para>This chapter provides some guidance on writing both DocBook and
-        site (APT) documentation. </para>
+        site (APT) documentation.</para>
       </abstract>
 
       <para>This chapter provides some guidance on writing both DocBook and
@@ -2084,6 +2063,10 @@ protected IsisConfiguration getConfiguration() {
       <para>See <xref linkend="chp.BuildingSiteAndDocs" /> for details on how
       to build the site documentation.</para>
 
+      <para>See <xref linkend="chp.AptQuickStart" /> and <xref
+      linkend="chp.DocBookQuickStart" /> for details on how to write APT or
+      DocBook documentation.</para>
+
       <sect1>
         <title>Overview</title>
 
@@ -2093,7 +2076,7 @@ protected IsisConfiguration getConfiguration() {
         Isis</emphasis> is concerned, the site created reflects the module
         hierarchy, with at least one single index.html page to introduce each
         module. The main site (corresponding to isis-parent) has rather more
-        content, eg discussing the naked objects pattern. </para>
+        content, eg discussing the naked objects pattern.</para>
 
         <para>This additional site content can be written in a number of
         formats, but the most straightforward is to use Maven's own APT
@@ -2110,23 +2093,27 @@ protected IsisConfiguration getConfiguration() {
         <acronym>PDF</acronym> or <acronym>HTML</acronym>. These guides can be
         found under <filename>src/docbkx</filename> (relative to the module's
         <filename>pom.xml</filename>).</para>
+      </sect1>
 
-        <para>The following table indicates which modules have DocBook guides,
-        and which do not:</para>
+      <sect1>
+        <title>Maven Modules</title>
+
+        <para>The following tables indicates which modules have DocBook
+        guides, and which do not:</para>
 
         <table>
-          <title></title>
+          <title>Isis Modules (1 of 2)</title>
 
           <tgroup cols="6">
-            <colspec colname="_1" colwidth="60" />
+            <colspec colname="_1" colwidth="20" />
 
-            <colspec colname="_2" colwidth="60" />
+            <colspec colname="_2" colwidth="20" />
 
-            <colspec colname="_3" colwidth="60" />
+            <colspec colname="_3" colwidth="20" />
 
             <colspec colname="_4" colwidth="60" />
 
-            <colspec colwidth="50" />
+            <colspec align="center" colwidth="50" />
 
             <colspec />
 
@@ -2324,6 +2311,132 @@ protected IsisConfiguration getConfiguration() {
                 <entry>Default (no-op) security mechanism</entry>
               </row>
 
+              <row>
+                <entry></entry>
+
+                <entry nameend="_4" namest="_2">viewer</entry>
+
+                <entry></entry>
+
+                <entry>Parent for viewers</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3">bdd</entry>
+
+                <entry>Y</entry>
+
+                <entry>BDD (Concordion) viewer</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3">dnd</entry>
+
+                <entry>Y</entry>
+
+                <entry>DnD viewer</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3">html</entry>
+
+                <entry>Y</entry>
+
+                <entry>HTML viewer</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3">junit</entry>
+
+                <entry>Y</entry>
+
+                <entry>JUnit viewer</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3">restful</entry>
+
+                <entry>Y</entry>
+
+                <entry>Restful viewer</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3">scimpi</entry>
+
+                <entry>Y</entry>
+
+                <entry>Scimpi (customizable web UI) viewer</entry>
+              </row>
+
+              <row>
+                <entry></entry>
+
+                <entry></entry>
+
+                <entry nameend="_4" namest="_3">wicket</entry>
+
+                <entry>Y</entry>
+
+                <entry><ulink url="http://wicket.apache.org">Apache
+                Wicket</ulink>-based viewer</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <table>
+          <title>Isis Modules (2 of 2)</title>
+
+          <tgroup cols="6">
+            <colspec colname="_1" colwidth="20" />
+
+            <colspec colname="_2" colwidth="20" />
+
+            <colspec colname="_3" colwidth="20" />
+
+            <colspec colname="_4" colwidth="60" />
+
+            <colspec align="center" colwidth="50" />
+
+            <colspec />
+
+            <thead>
+              <row>
+                <entry align="center" nameend="_4"
+                namest="_1">Directory</entry>
+
+                <entry align="center">DocBk?</entry>
+
+                <entry align="center">Description</entry>
+              </row>
+            </thead>
+
+            <tbody>
               <row>
                 <entry></entry>
 
@@ -2655,101 +2768,6 @@ protected IsisConfiguration getConfiguration() {
 
                 <entry>XStream marshalling</entry>
               </row>
-
-              <row>
-                <entry></entry>
-
-                <entry nameend="_4" namest="_2">viewer</entry>
-
-                <entry></entry>
-
-                <entry>Parent for viewers</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">bdd</entry>
-
-                <entry>Y</entry>
-
-                <entry>BDD (Concordion) viewer</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">dnd</entry>
-
-                <entry>Y</entry>
-
-                <entry>DnD viewer</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">html</entry>
-
-                <entry>Y</entry>
-
-                <entry>HTML viewer</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">junit</entry>
-
-                <entry>Y</entry>
-
-                <entry>JUnit viewer</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">restful</entry>
-
-                <entry>Y</entry>
-
-                <entry>Restful viewer</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">scimpi</entry>
-
-                <entry>Y</entry>
-
-                <entry>Scimpi (customizable web UI) viewer</entry>
-              </row>
-
-              <row>
-                <entry></entry>
-
-                <entry></entry>
-
-                <entry nameend="_4" namest="_3">wicket</entry>
-
-                <entry>Y</entry>
-
-                <entry><ulink url="http://wicket.apache.org">Apache
-                Wicket</ulink>-based viewer</entry>
-              </row>
             </tbody>
           </tgroup>
         </table>
@@ -2768,9 +2786,23 @@ protected IsisConfiguration getConfiguration() {
         more detailed docbook guide where needed. Much of this signposting is
         taken care of already, being configured in the site menu.</para>
       </sect1>
+    </chapter>
+
+    <chapter id="chp.WritingSiteDocs">
+      <title>APT Quick Start</title>
+
+      <abstract>
+        <para>Common use cases for writingy site documentation using
+        APT.</para>
+      </abstract>
+
+      <para>As discussed in <xref linkend="chp.WritingDocumentation" />,
+      <emphasis>Apache Isis</emphasis> uses Maven's <acronym>APT</acronym>
+      (almost plain text) syntax for most of its site documentation. This
+      chapter is a quick-start on using APT.</para>
 
       <sect1 id="sec.additional-site-content">
-        <title>Writing Additional Site Content</title>
+        <title>File Formats and Locations</title>
 
         <para>When writing additional site content</para>
 
@@ -2871,48 +2903,49 @@ protected IsisConfiguration getConfiguration() {
         <ulink
         url="http://maven.apache.org/doxia/references/apt-format.html">http://maven.apache.org/doxia/references/apt-format.html</ulink>,
         but the following are some of the main formatting tips.</para>
+      </sect1>
 
-        <sect2 id="sec.apt-quick-start">
-          <title>Sections and Sub-sections</title>
+      <sect1>
+        <title>Sections and Sub-sections</title>
 
-          <para>Sections are not indented, paragraphs are.</para>
+        <para>Sections are not indented, paragraphs are.</para>
 
-          <screen>My section title (not indented).
+        <screen>My section title (not indented).
 
   My paragraph first line (indented by 2 spaces).  There is no need for remaining 
 sentences in the paragraph to be indented.  A blank line terminates the paragraph.</screen>
 
-          <para>Subsections can be defined using leading asterisks
-          (<varname>*</varname>) to indicate the subsection level
-          indents:</para>
+        <para>Subsections can be defined using leading asterisks
+        (<varname>*</varname>) to indicate the subsection level
+        indents:</para>
 
-          <screen>Section title
+        <screen>Section title
 
 * Sub-section title
 
 ** Sub-sub-section title
 
 *** Sub-sub-sub-section title</screen>
-        </sect2>
+      </sect1>
 
-        <sect2>
-          <title>Fonts</title>
+      <sect1>
+        <title>Fonts</title>
 
-          <para>In addition to regular font, we can specify italics, bold or
-          monospaced:</para>
+        <para>In addition to regular font, we can specify italics, bold or
+        monospaced:</para>
 
-          <screen>  &lt;italicised text&gt;
+        <screen>  &lt;italicised text&gt;
   &lt;&lt;bold text&gt;&gt;
   &lt;&lt;&lt;monospaced text&gt;&gt;&gt;</screen>
-        </sect2>
+      </sect1>
 
-        <sect2>
-          <title>Lists</title>
+      <sect1>
+        <title>Lists</title>
 
-          <para>List items are indented, and begin with an asterisk
-          (<varname>*</varname>)</para>
+        <para>List items are indented, and begin with an asterisk
+        (<varname>*</varname>)</para>
 
-          <screen>  * List item 1.
+        <screen>  * List item 1.
 
   * List item 2.
 
@@ -2924,95 +2957,347 @@ sentences in the paragraph to be indented.  A blank line terminates the paragrap
 
   * List item 3.</screen>
 
-          <para>To force the end of a list, use the <varname>[]</varname>
-          pseudo-element:</para>
+        <para>To force the end of a list, use the <varname>[]</varname>
+        pseudo-element:</para>
 
-          <screen>  * List item 3.
+        <screen>  * List item 3.
  
   []
 
   This text is not in the list</screen>
-        </sect2>
+      </sect1>
 
-        <sect2>
-          <title>Links and Figures</title>
+      <sect1>
+        <title>Links and Figures</title>
 
-          <para>To create a hyperlink, use:</para>
+        <para>To create a hyperlink, use:</para>
 
-          <screen>  Link to {{http://www.pixware.fr}}.
+        <screen>  Link to {{http://www.pixware.fr}}.
   or 
   Link to {{{http://www.pixware.fr}Pixware home page}}.</screen>
 
-          <para>To create an anchor, use:</para>
+        <para>To create an anchor, use:</para>
 
-          <screen>  {Anchor}. This text is anchored.
+        <screen>  {Anchor}. This text is anchored.
   and then
   Link to {{anchor}}.
   or
   Link to {{{anchor}showing alternate text}}</screen>
 
-          <para>Figures are specified by</para>
+        <para>Figures are specified by</para>
 
-          <screen>  [images/foo/bar.png] Figure caption</screen>
-        </sect2>
+        <screen>  [images/foo/bar.png] Figure caption</screen>
+      </sect1>
 
-        <sect2>
-          <title>Code Blocks (verbatim text)</title>
+      <sect1>
+        <title>Code Blocks (verbatim text)</title>
 
-          <para>To quote a code block, use 3 dashes (<varname>---</varname>)
-          before and after:</para>
+        <para>To quote a code block, use 3 dashes (<varname>---</varname>)
+        before and after:</para>
 
-          <screen>----------------------------------------
+        <screen>----------------------------------------
 public class FooBar {
   ...
 }
 ----------------------------------------</screen>
 
-          <para>To put into a box, use a plus symbol
-          (<varname>+--</varname>)</para>
-        </sect2>
-
-        <sect2>
-          <title>Other Code Elements</title>
-
-          <para>In addition to the above, <acronym>APT</acronym> supports
-          tables, horizontal rules (===), page breaks, comments and special
-          characters. See the <ulink
-          url="http://maven.apache.org/doxia/references/apt-format.html">Maven
-          Doxia</ulink> site for further details.</para>
-        </sect2>
+        <para>To put into a box, use a plus symbol
+        (<varname>+--</varname>)</para>
       </sect1>
+
+      <sect1>
+        <title>Other Code Elements</title>
+
+        <para>In addition to the above, <acronym>APT</acronym> supports
+        tables, horizontal rules (===), page breaks, comments and special
+        characters. See the <ulink
+        url="http://maven.apache.org/doxia/references/apt-format.html">Maven
+        Doxia</ulink> site for further details.</para>
+      </sect1>
+    </chapter>
+
+    <chapter id="chp.WritingDocBookDocs">
+      <title>DocBook Quick Start</title>
+
+      <abstract>
+        <para>Common use cases for writing formal documentation using
+        DocBook.</para>
+      </abstract>
+
+      <para>As discussed in <xref linkend="chp.WritingDocumentation" />,
+      <emphasis>Apache Isis</emphasis> uses DocBook as its primary
+      documentation format, each significant module providing its own guide
+      which is then converted into both PDF and HTML forms.</para>
+
+      <para>DocBook is just XML, so you could edit the text with any text
+      editor. However, you may find it easier to use an editor; and the we
+      recommend here is from <ulink
+      url="http://www.xmlmind.com/xmleditor">XMLMind</ulink>. The personal
+      edition is free for use on open source projects.</para>
+
+      <para>Below is a quick notes on using XmlMind.</para>
 
       <sect1>
         <title>Writing DocBook Guides (using XMLMind)</title>
 
-        <para>As discussed above, <emphasis>Apache Isis</emphasis> uses
-        DocBook as its primary documentation format, each significant module
-        providing its own guide which is then converted into both PDF and HTML
-        forms.</para>
+        <para>DocBook guides can be found in src/docbkx (relative to the
+        module's <filename>pom.xml</filename>).</para>
+      </sect1>
 
-        <para>DocBook is just XML, so you could edit the text with any text
-        editor. However, you may find it easier to use an editor; and the we
-        recommend here is from <ulink
-        url="http://www.xmlmind.com/xmleditor">XMLMind</ulink>. The personal
-        edition is free for use on open source projects.</para>
+      <sect1>
+        <title>Creating a Document</title>
 
-        <para>Below is some very brief notes on using XmlMind. The BDD viewers
-        user guide (in <filename>viewer/bdd/src/docbkx/guide</filename>), or
-        online <ulink
-        url="http://incubator.apache.org/isis/viewer/bdd/docbkx/pdf/isis-bdd-viewer.pdf">here</ulink>,
-        has some more detailed notes in its appendix (do note that in that
-        guide it is talking about XHTML, not DocBook... much of the material
-        relating to navigating around etc still applies, however).</para>
+        <para>Use <emphasis>File &gt; New Document</emphasis> to create an
+        <emphasis>DocBook </emphasis>document. This will create a v4.5
+        docbook:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-new-document.png"
+                       scale="50" />
+          </imageobject>
+        </mediaobject>
+
+        <para>The file should be saved under
+        <filename>src/docbkx/guide</filename>.</para>
+
+        <para>Once the file has been created, change the
+        <literal>DOCTYPE</literal> entry to reference <acronym>DTD</acronym>s
+        stored locally. We use the <literal>svn:externals</literal> property
+        to "symbolically link" 3 directories under
+        <filename>trunk/src/docbkx/guide</filename>
+        (<filename>dtd-4.5</filename>, <filename>images</filename> and
+        <filename>style</filename>); these can therefore be referenced
+        locally.</para>
+
+        <para>In addition, the standard Apache license comment is
+        required.</para>
+
+        <para>Here's the boilerplate to copy-n-paste in:</para>
+
+        <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!--
+  Licensed to the Apache Software Foundation (ASF) under one
+  or more contributor license agreements.  See the NOTICE file
+  distributed with this work for additional information
+  regarding copyright ownership.  The ASF licenses this file
+  to you under the Apache License, Version 2.0 (the
+  "License"); you may not use this file except in compliance
+  with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing,
+  software distributed under the License is distributed on an
+  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+  KIND, either express or implied.  See the License for the
+  specific language governing permissions and limitations
+  under the License.
+--&gt;
+&lt;!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+"file:./src/docbkx/dtd-4.5/docbookx.dtd"&gt;
+
+&lt;book&gt;
+    ...
+&lt;/book&gt;</programlisting>
+
+        <para>Note the <acronym>DTD</acronym> location, as
+        <filename>file:./src/test/resources/dtd</filename>.</para>
+      </sect1>
+
+      <sect1>
+        <title>Loading a Document</title>
+
+        <para>To load an existing document, simply use
+        <emphasis>File&gt;Open</emphasis>. This will display the DocBook
+        styled using the CSS. DocBook does allow the CSS to be customized; at
+        the time of writing we have not done this for DocBook.</para>
+      </sect1>
+
+      <sect1>
+        <title>Navigating the Document</title>
+
+        <para>To navigate around, use up arrow, down arrow, pg up, pg down to
+        move around.</para>
+
+        <para>It is also possible to navigate by opening up an alternative
+        view, using <emphasis>View &gt; Add</emphasis> to bring up a
+        dialog:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-add-view.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>For example, this is a view of the raw XML:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-view-left.png" scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>Alternatively it could be styled as a document structure:</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-document-structure-view.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <para>This can then be used to navigate, collapsing sections if
+        needed.</para>
+      </sect1>
+
+      <sect1>
+        <title>Knowing where you are</title>
+
+        <para>The position within the document is shown as a XPath like
+        expression. If the unstyled view is open, then the current position is
+        highlighted (even if the section is collapsed). In the styled view the
+        current cursor position is shown just as in a regular word
+        processor.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-navigate-xpath.png"
+                       scale="35" />
+          </imageobject>
+        </mediaobject>
+      </sect1>
+
+      <sect1>
+        <title>Selecting Content (eg to delete/move, or prior to adding new
+        content)s</title>
+
+        <para>The XMLMind editor understands the structure of DocBook
+        documents, and will only let you enter content where it is valid to do
+        so. What you can do (in terms of edits) therefore depends on where you
+        are in the document.</para>
+
+        <para>Use <emphasis>Select &gt; Select Parent</emphasis>
+        (<command>ctrl+up</command>) to successively select larger segments of
+        the document; and <emphasis>Select &gt; Select Child</emphasis>
+        (<command>ctrl+down</command>) to selects smaller segments.</para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-selectingcontent-1.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-selectingcontent-2.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/doc/DocBook-selectingcontent-3.png"
+                       scale="40" />
+          </imageobject>
+        </mediaobject>
+      </sect1>
+
+      <sect1>
+        <title>Writing Content</title>
 
         <sect2>
-          <title>Images</title>
+          <title>Adding New Paragraphs</title>
+
+          <para>To modify the content in a paragraph, just start writing!
+          Hitting enter will start a new paragraph; delete will join two
+          paragraphs together. Behind the scenes the &lt;para&gt; elements are
+          added.</para>
+        </sect2>
+
+        <sect2>
+          <title>Formatting Existing Paragraphs</title>
+
+          <para>Using <emphasis>Edit &gt; Insert</emphasis>
+          (<command>ctrl+I</command>) within a paragraph will only bring up
+          elements that are valid within that paragraph, such as
+          <literal>emphasis</literal>:</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/doc/DocBook-insert-within.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+
+          <para>That said, for adding tags within a paragraph (such as
+          emboldening or emphasis), it is generally easier to write the words
+          and then use <emphasis>Edit &gt; Convert (wrap)</emphasis>. First,
+          highlight the words by holding shift and then navigating as usual
+          (eg <command>shift+left</command>, <command>shift+right</command>).
+          Then, use <emphasis>Edit&gt;Convert(wrap)</emphasis> to add the
+          emphasis.</para>
+        </sect2>
+
+        <sect2>
+          <title>Adding a new heading (sect1, sect2) etc</title>
+
+          <para>In general, use <emphasis>Edit &gt; Insert After</emphasis>
+          (<command>ctrl+J</command>) after to add new content after the
+          current location, and <emphasis>Edit &gt; Insert Before</emphasis>
+          (<command>ctrl+H</command>) to insert before. This will bring up a
+          list of valid elements in the top right:</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/doc/DocBook-inserting-sections.png"
+                         scale="40" />
+            </imageobject>
+          </mediaobject>
+
+          <para>Note that it isn't possible to add a new subsection in the
+          middle of existing paragraphs; as the screenshot below shows,
+          attempting to add a section "sect3" under <emphasis>this</emphasis>
+          paragraph would not be allowed, for example:</para>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/doc/DocBook-cant-add-section-in-middle.png"
+                         scale="70" />
+            </imageobject>
+          </mediaobject>
+
+          <para>Instead, go to last paragraph (eg like this one) and add the
+          subsection there. Then cut-and-paste the content around as
+          required.</para>
+        </sect2>
+
+        <sect2>
+          <title>Adding lists</title>
+
+          <para>Adding lists are added as for any element: use
+          <command>ctrl+J</command> and then select
+          <literal>itemizedlist</literal> (unordered list) or
+          <literal>&lt;orderedlist&gt;</literal>. You’ll get the first
+          <literal>listitem</literal> for free. Create new list items by
+          selecting the current list item (<command>ctrl+up</command> as far
+          as required) then use <command>ctrl+J</command>.</para>
+
+          <para>If you want to terminate the list, then select the current
+          list (<command>ctrl+up</command>), then <command>ctrl+J</command>
+          and select <literal>para</literal> for next paragraph.</para>
+        </sect2>
+
+        <sect2>
+          <title>Adding Images</title>
 
           <para>Images should be saved as <filename>.png</filename> files,
           under the <filename>images</filename> subdirectory (relative the
           directory holding <filename>xxx-guide.xml</filename>).</para>
 
-          <para>Images should be embedded into the documentation using a
+          <para>Images should be embedded into the documentation using either
+          a <sgmltag>mediaobject/imageobject/imagedata</sgmltag> tag or a
           <sgmltag>screenshot/mediaobject/imageobject/imagedata</sgmltag> tag.
           In XMLMind, use Edit&gt;Insert and select screenshot:</para>
 
@@ -3044,27 +3329,77 @@ public class FooBar {
         </sect2>
 
         <sect2>
-          <title>Tables</title>
+          <title>Adding and Altering Tables</title>
 
-          <para>In XMLMind, use Edit &gt; Insert, then select one of table,
-          table(head_column), table(head_row), table(head_row_column):</para>
+          <para>Use <emphasis>Edit &gt; Insert After</emphasis> (or
+          <emphasis>Edit &gt; Insert Before</emphasis>), and then select one
+          of the table elements:</para>
 
-          <screenshot>
-            <screeninfo>Table</screeninfo>
+          <itemizedlist>
+            <listitem>
+              <para><literal>table</literal></para>
+            </listitem>
 
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/doc/embedded-imagedata.png"
-                           scale="50" />
-              </imageobject>
-            </mediaobject>
-          </screenshot>
+            <listitem>
+              <para><literal>table (head_column)</literal></para>
+
+              <para>to include a header column (on the left hand side)</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>table (head_row)</literal></para>
+
+              <para>to include a header row</para>
+            </listitem>
+
+            <listitem>
+              <para><literal>table (head_row_column)</literal></para>
+
+              <para>to include a header row and column</para>
+            </listitem>
+          </itemizedlist>
 
           <para>This will create a 2x2 table body with a header row and/or
           column if requested. Then use DocBook &gt; Column &gt; Insert or
           DocBook &gt; Row &gt; Insert to adjust the number of columns and
           rows as required.</para>
+
+          <para>To adjust the width of columns, select the first row and then
+          use Edit&gt;Insert before to insert &lt;colspec&gt; elements.</para>
+
+          <para>It's also possible to merge cells using
+          DocBook&gt;Cell&gt;Increment ... Span</para>
         </sect2>
+      </sect1>
+
+      <sect1>
+        <title>Deleting Content</title>
+
+        <para>To delete content, select the content first
+        (<command>ctrl+up</command> / <command>ctrl+down</command>), then
+        <emphasis>Edit &gt; Delete</emphasis>
+        (<command>ctrl+K</command>).</para>
+
+        <para>In general you shouldn’t need to use the <emphasis>Edit &gt;
+        Force Deletion</emphasis>; instead try adjusting the range being
+        selected if <emphasis>Edit &gt; Delete</emphasis> isn’t
+        enabled.</para>
+      </sect1>
+
+      <sect1>
+        <title>Moving Content</title>
+
+        <para>Select the content you want using <command>ctrl+up</command>. If
+        necessary extend the selection using <emphasis>Select &gt; Extend
+        Selection to Following Sibling</emphasis> or <emphasis>Select &gt;
+        Extend Selection to Preceding Sibling</emphasis>.</para>
+
+        <para>Use <emphasis>Edit &gt; Cut</emphasis> to cut, and then
+        <emphasis>Edit &gt; Paste After</emphasis> or <emphasis>Edit &gt;
+        Paste Before</emphasis> to paste wherever. If these are greyed out,
+        bear in mind that XmlMind won’t let you paste in content where it
+        would be invalid. If necessary, adjust the selection until they become
+        enabled.</para>
       </sect1>
     </chapter>
   </part>

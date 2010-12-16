@@ -3763,7 +3763,8 @@ and running in &lt;span concordion:set="#deploymentType"&gt;exploration&lt;/span
     <sect1>
       <title>Navigating the Document</title>
 
-      <para>Use up arrow, down arrow, pg up, pg down to move around.</para>
+      <para>To navigate around, use up arrow, down arrow, pg up, pg down to
+      move around.</para>
 
       <para>It is also possible to navigate by opening up an alternative view
       to inspect the raw XHTML, using <emphasis>View &gt; Add</emphasis> to
