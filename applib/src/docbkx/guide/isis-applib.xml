@@ -128,29 +128,6 @@
     </sect1>
 
     <sect1>
-      <title>Principles</title>
-
-      <para>The conventions of the programming model are best described as
-      'intentional' - they convey an intention as to how domain objects, their
-      properties and behaviours, are to be made available to users. The
-      specific way in which those intentions are interpreted or implemented
-      will depend upon the framework, and/or the particular components or
-      options selected within that framework.</para>
-
-      <para>To pick a single example, marking up a domain class with the
-      annotation <code>@Bounded</code> is an indication that the class is
-      intended to have only a small number of instances and that the set does
-      not change very often - such as the class <code>Country</code>. This is
-      an indication to any interested framework that the whole set of
-      instances might be offered to the user in a convenient form such as a
-      drop-down list. The programming convention has <emphasis>not</emphasis>
-      been defined as <code>@DropDownList</code> because the user interface
-      might not support drop-down-lists - but it might provide a capability to
-      select from an <code>@Bounded</code> class by typing the initial letters
-      of the desired instance.</para>
-    </sect1>
-
-    <sect1>
       <title>Where Next?</title>
 
       <para>This guide itself is in several parts. The first part is a set of
@@ -169,6 +146,25 @@
     <title>Writing Domain Objects</title>
 
     <partintro>
+      <para>The conventions of the programming model are best described as
+      'intentional' - they convey an intention as to how domain objects, their
+      properties and behaviours, are to be made available to users. The
+      specific way in which those intentions are interpreted or implemented
+      will depend upon the framework, and/or the particular components or
+      options selected within that framework.</para>
+
+      <para>To pick a single example, marking up a domain class with the
+      annotation <code>@Bounded</code> is an indication that the class is
+      intended to have only a small number of instances and that the set does
+      not change very often - such as the class <code>Country</code>. This is
+      an indication to any interested framework that the whole set of
+      instances might be offered to the user in a convenient form such as a
+      drop-down list. The programming convention has <emphasis>not</emphasis>
+      been defined as <code>@DropDownList</code> because the user interface
+      might not support drop-down-lists - but it might provide a capability to
+      select from an <code>@Bounded</code> class by typing the initial letters
+      of the desired instance.</para>
+
       <para>This part of the guide is a set of chapters that provides how-to's
       for writing domain objects, by which we mean domain entities, value
       types, services and repositories/factories.</para>
@@ -4094,7 +4090,7 @@ plan.getOwner().modifyLeader(peterPlanner);
           <sect3>
             <title>Gotchas</title>
 
-            <para> like this. The fixture code shared the
+            <para>like this. The fixture code shared the
             &lt;&lt;&lt;Participant&gt;&gt;&gt; object between the two
             transactions when coded like this: +---------- Account account =
             accounts.createAccount("ACME", "Peter Planner",
@@ -4117,7 +4113,7 @@ plan.getOwner().modifyLeader(peterPlanner);
             only work in exploration and prototype mode. To make it run on the
             server (ie using Tomcat) I changed the deployment type by adding
             the following to the isis.properties file: --------
-            isis.deploymentType=prototype --------- </para>
+            isis.deploymentType=prototype ---------</para>
           </sect3>
         </sect2>
 
