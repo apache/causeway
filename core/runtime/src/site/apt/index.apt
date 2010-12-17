@@ -38,3 +38,10 @@ Runtime
  In addition to all the above, the <runtime> module defines a command-line 
  bootstrapper, making it easy to bootstrap <Apache Isis> from a main() or a 
  JUnit test case.
+
+Documentation
+
+ See the {{{../index.html}core}} documentation 
+ ({{{../docbkx/html/guide/isis-core.html}HTML}} or 
+ {{{../docbkx/pdf/isis-core.pdf}PDF}}).
+  

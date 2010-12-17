@@ -30,4 +30,11 @@ WebServer (Jetty)
  standalone program (ie, with a <<<main()>>> in it) without the overhead of
  Maven.
    
- [] 
+Documentation
+
+ See the {{{../index.html}core}} documentation 
+ ({{{../docbkx/html/guide/isis-core.html}HTML}} or 
+ {{{../docbkx/pdf/isis-core.pdf}PDF}}).
+ 
+
+ 

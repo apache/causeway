@@ -41,4 +41,8 @@ WebApp Support
  Not every webapp-based viewer is required to use these classes; refer to their
  documentation for exact details of what should reside in the <<<web.xml>>>.
  
- 
+Documentation
+
+ See the {{{../index.html}core}} documentation 
+ ({{{../docbkx/html/guide/isis-core.html}HTML}} or 
+ {{{../docbkx/pdf/isis-core.pdf}PDF}}).

@@ -28,5 +28,10 @@ ProgModel
  defined within core, however, to allow custom programming models (perhaps
  extending or trimming back the default programming model) to be defined.
  
- 
+Documentation
+
+ See the {{{../index.html}core}} documentation 
+ ({{{../docbkx/html/guide/isis-core.html}HTML}} or 
+ {{{../docbkx/pdf/isis-core.pdf}PDF}}).
+  
  

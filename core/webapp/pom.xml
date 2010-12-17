@@ -9,7 +9,7 @@
 
 	<groupId>org.apache.isis.core</groupId>
 	<artifactId>webapp</artifactId>
-	<name>Core Webapp Bootstrapper</name>
+	<name>Core Webapp Components</name>
 
 	<properties>
         <siteBaseDir>../..</siteBaseDir>

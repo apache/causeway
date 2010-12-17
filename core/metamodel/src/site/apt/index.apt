@@ -43,3 +43,10 @@ MetaModel
  The <metamodel> module does not itself define the programming model 
  conventions; that is the responsibility of the 
  {{{../progmodel/index.html}core progmodel}}.
+
+Documentation
+
+ See the {{{../index.html}core}} documentation 
+ ({{{../docbkx/html/guide/isis-core.html}HTML}} or 
+ {{{../docbkx/pdf/isis-core.pdf}PDF}}).
+ 
