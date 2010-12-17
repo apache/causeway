@@ -22,15 +22,16 @@ package org.apache.isis.core.metamodel.java5;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
-public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAbstract implements AnnotationBasedFacetFactory {
+public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAbstract {
 
-    public AnnotationBasedFacetFactoryAbstract(final ObjectFeatureType[] featureTypes) {
+    public AnnotationBasedFacetFactoryAbstract(final List<ObjectFeatureType> featureTypes) {
         super(featureTypes);
     }
 

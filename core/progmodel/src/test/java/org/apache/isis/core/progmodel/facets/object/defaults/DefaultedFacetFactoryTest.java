@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
+import java.util.List;
+
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
@@ -47,7 +49,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

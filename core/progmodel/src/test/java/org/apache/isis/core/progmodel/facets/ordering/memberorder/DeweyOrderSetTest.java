@@ -27,10 +27,11 @@ import junit.framework.TestSuite;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
+import com.google.common.collect.ImmutableList;
+
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.progmodel.facets.ordering.OrderSet;
-import org.apache.isis.core.progmodel.facets.ordering.memberorder.DeweyOrderSet;
-import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderFacetAnnotation;
 
 
 public class DeweyOrderSetTest extends TestCase {
@@ -39,16 +40,16 @@ public class DeweyOrderSetTest extends TestCase {
         junit.textui.TestRunner.run(new TestSuite(DeweyOrderSetTest.class));
     }
 
-    private final MemberPeerStub lastNameMember = new MemberPeerStub("LastName");
-    private final MemberPeerStub firstNameMember = new MemberPeerStub("FirstName");
-    private final MemberPeerStub houseNumberMember = new MemberPeerStub("HouseNumber");
-    private final MemberPeerStub streetNameMember = new MemberPeerStub("StreetName");
-    private final MemberPeerStub postalTownMember = new MemberPeerStub("PostalTown");
-    private final ObjectMemberPeer[] lastNameAndFirstName = new MemberPeerStub[] { lastNameMember, firstNameMember };
-    private final ObjectMemberPeer[] nameAndAddressMembers = new MemberPeerStub[] { lastNameMember, firstNameMember,
-            houseNumberMember, streetNameMember, postalTownMember };
-    private final ObjectMemberPeer[] lastNameFirstNameAndPostalTown = new MemberPeerStub[] { lastNameMember,
-            firstNameMember, postalTownMember };
+    private final ObjectMemberPeer lastNameMember = new MemberPeerStub("LastName");
+    private final ObjectMemberPeer firstNameMember = new MemberPeerStub("FirstName");
+    private final ObjectMemberPeer houseNumberMember = new MemberPeerStub("HouseNumber");
+    private final ObjectMemberPeer streetNameMember = new MemberPeerStub("StreetName");
+    private final ObjectMemberPeer postalTownMember = new MemberPeerStub("PostalTown");
+    private final List<ObjectMemberPeer> lastNameAndFirstName = ImmutableList.of( lastNameMember, firstNameMember );
+    private final List<ObjectMemberPeer> nameAndAddressMembers = ImmutableList.of( lastNameMember, firstNameMember,
+            houseNumberMember, streetNameMember, postalTownMember );
+    private final List<ObjectMemberPeer> lastNameFirstNameAndPostalTown = ImmutableList.of( lastNameMember,
+            firstNameMember, postalTownMember );
 
     @Override
     protected void setUp() {
@@ -145,7 +146,7 @@ public class DeweyOrderSetTest extends TestCase {
         postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "3", postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
-        final OrderSet childOrderSet = (OrderSet) orderSet.children().get(0);
+        final OrderSet childOrderSet = orderSet.children().get(0);
         assertEquals(3, childOrderSet.size());
         assertEquals(0, childOrderSet.children().size());
     }
@@ -158,7 +159,7 @@ public class DeweyOrderSetTest extends TestCase {
         postalTownMember.addFacet(new MemberOrderFacetAnnotation("address", "4", postalTownMember));
 
         final DeweyOrderSet orderSet = DeweyOrderSet.createOrderSet(nameAndAddressMembers);
-        final OrderSet childOrderSet = (OrderSet) orderSet.children().get(0);
+        final OrderSet childOrderSet = orderSet.children().get(0);
         assertEquals(postalTownMember, childOrderSet.elementList().get(0));
         assertEquals(streetNameMember, childOrderSet.elementList().get(1));
         assertEquals(houseNumberMember, childOrderSet.elementList().get(2));

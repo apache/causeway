@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.progmodel.facets;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
@@ -34,7 +36,7 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(
             final String[] prefixes,
-            final ObjectFeatureType[] featureTypes) {
+            final List<ObjectFeatureType> featureTypes) {
         super(prefixes, featureTypes);
     }
 
@@ -54,6 +56,7 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
      * Injected so can propogate to any {@link #registerFactory(FacetFactory) registered} {@link FacetFactory}
      * s that are also {@link CollectionTypeRegistryAware}.
      */
+    @Override
     public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
         this.collectionTypeRegistry = collectionTypeRegistry;
     }

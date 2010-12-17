@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.ordering;
 
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
@@ -27,7 +28,7 @@ import org.apache.isis.core.metamodel.util.NameUtils;
 
 
 public class SimpleOrderSet extends OrderSet {
-    public static SimpleOrderSet createOrderSet(final String order, final ObjectMemberPeer[] members) {
+    public static SimpleOrderSet createOrderSet(final String order, final List<ObjectMemberPeer> members) {
         SimpleOrderSet set = new SimpleOrderSet(members);
 
         final StringTokenizer st = new StringTokenizer(order, ",");
@@ -57,9 +58,9 @@ public class SimpleOrderSet extends OrderSet {
     }
 
     private final SimpleOrderSet parent;
-    private final ObjectMemberPeer[] members;
+    private final List<ObjectMemberPeer> members;
 
-    private SimpleOrderSet(final ObjectMemberPeer[] members) {
+    private SimpleOrderSet(final List<ObjectMemberPeer> members) {
         super("");
         this.members = members;
         parent = null;
@@ -69,7 +70,7 @@ public class SimpleOrderSet extends OrderSet {
             final SimpleOrderSet set,
             final String groupName,
             final String name,
-            final ObjectMemberPeer[] members) {
+            final List<ObjectMemberPeer> members) {
         super(groupName);
         parent = set;
         parent.addElement(this);
@@ -85,9 +86,10 @@ public class SimpleOrderSet extends OrderSet {
     }
 
     private void addAnyRemainingMember() {
-        for (int i = 0; i < members.length; i++) {
-            if (members[i] != null) {
-                addElement(members[i]);
+        for (int i = 0; i < members.size(); i++) {
+            if (members.get(i) != null) {
+                ObjectMemberPeer member = members.get(i);
+                addElement(member);
             }
         }
 
@@ -99,12 +101,12 @@ public class SimpleOrderSet extends OrderSet {
 
     private ObjectMemberPeer getMemberWithName(final String name) {
         final String searchName = NameUtils.simpleName(name);
-        for (int i = 0; i < members.length; i++) {
-            final ObjectMemberPeer member = members[i];
+        for (int i = 0; i < members.size(); i++) {
+            final ObjectMemberPeer member = members.get(i);
             if (member != null) {
                 final String testName = NameUtils.simpleName(member.getIdentifier().getMemberName());
                 if (testName.equals(searchName)) {
-                    members[i] = null;
+                    members.set(i, null);
                     return member;
                 }
             }

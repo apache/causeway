@@ -22,15 +22,13 @@ package org.apache.isis.core.progmodel.facets.disable;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.disable.DisabledAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.disable.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.disable.DisabledFacetAbstract;
 
 
 public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -52,7 +50,7 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));

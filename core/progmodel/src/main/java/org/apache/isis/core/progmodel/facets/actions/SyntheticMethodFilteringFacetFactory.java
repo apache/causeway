@@ -21,6 +21,7 @@
 package org.apache.isis.core.progmodel.facets.actions;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.facets.Facet;
@@ -38,9 +39,10 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 public class SyntheticMethodFilteringFacetFactory extends FacetFactoryAbstract implements MethodFilteringFacetFactory {
 
     public SyntheticMethodFilteringFacetFactory() {
-        super(new ObjectFeatureType[0]);
+        super(new ArrayList<ObjectFeatureType>());
     }
 
+    @Override
     public boolean recognizes(final Method method) {
         return isSynthetic(method);
     }

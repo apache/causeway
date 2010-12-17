@@ -75,16 +75,22 @@ public class FacetProcessor implements RuntimeContextAware {
      * 
      * <p>
      * Derived from factories that implement {@link MethodPrefixBasedFacetFactory}.
+     * 
+     * <p>
+     * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<String> methodPrefixes;
+    private List<String> cachedMethodPrefixes;
 
     /**
      * All registered {@link FacetFactory factories} that implement {@link MethodFilteringFacetFactory}.
      * 
      * <p>
      * Used within {@link #recognizes(Method)}.
+     * 
+     * <p>
+     * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<MethodFilteringFacetFactory> methodFilteringFactories;
+    private List<MethodFilteringFacetFactory> cachedMethodFilteringFactories;
 
     /**
      * All registered {@link FacetFactory factories} that implement
@@ -92,8 +98,11 @@ public class FacetProcessor implements RuntimeContextAware {
      * 
      * <p>
      * Used within {@link #recognizes(Method)}.
+     * 
+     * <p>
+     * If <tt>null</tt>, indicates that the cache hasn't been built.
      */
-    private List<PropertyOrCollectionIdentifyingFacetFactory> propertyOrCollectionIdentifyingFactories;
+    private List<PropertyOrCollectionIdentifyingFacetFactory> cachedPropertyOrCollectionIdentifyingFactories;
 
     /**
      * ObjectFeatureType => List<FacetFactory>
@@ -170,14 +179,13 @@ public class FacetProcessor implements RuntimeContextAware {
      * <p>
      * Delegates to all known {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
-    public Set<Method> findPropertyOrCollectionCandidateAccessors(final Method[] methods, final Set<Method> candidates) {
+    public Set<Method> findPropertyOrCollectionCandidateAccessors(final List<Method> methods, final Set<Method> candidates) {
         cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
-        for (int i = 0; i < methods.length; i++) {
-            final Method method = methods[i];
+        for (Method method: methods) {
             if (method == null) {
                 continue;
             }
-            for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : propertyOrCollectionIdentifyingFactories) {
+            for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
                 if (facetFactory.isPropertyOrCollectionAccessorCandidate(method)) {
                     candidates.add(method);
                 }
@@ -199,7 +207,7 @@ public class FacetProcessor implements RuntimeContextAware {
      *      List)
      */
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
-        for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : propertyOrCollectionIdentifyingFactories) {
+        for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
             facetFactory.findAndRemovePropertyAccessors(methodRemover, methodListToAppendTo);
         }
     }
@@ -213,7 +221,7 @@ public class FacetProcessor implements RuntimeContextAware {
      */
     public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
-        for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : propertyOrCollectionIdentifyingFactories) {
+        for (final PropertyOrCollectionIdentifyingFacetFactory facetFactory : cachedPropertyOrCollectionIdentifyingFactories) {
             facetFactory.findAndRemoveCollectionAccessors(methodRemover, methodListToAppendTo);
         }
     }
@@ -238,14 +246,14 @@ public class FacetProcessor implements RuntimeContextAware {
     public boolean recognizes(final Method method) {
         cacheMethodPrefixesIfRequired();
         final String methodName = method.getName();
-        for (final String prefix : methodPrefixes) {
+        for (final String prefix : cachedMethodPrefixes) {
             if (methodName.startsWith(prefix)) {
                 return true;
             }
         }
 
         cacheMethodFilteringFacetFactoriesIfRequired();
-        for (final MethodFilteringFacetFactory factory : methodFilteringFactories) {
+        for (final MethodFilteringFacetFactory factory : cachedMethodFilteringFactories) {
             if (factory.recognizes(method)) {
                 return true;
             }
@@ -347,9 +355,9 @@ public class FacetProcessor implements RuntimeContextAware {
 
     private void clearCaches() {
         factoryListByFeatureType = null;
-        methodPrefixes = null;
-        methodFilteringFactories = null;
-        propertyOrCollectionIdentifyingFactories = null;
+        cachedMethodPrefixes = null;
+        cachedMethodFilteringFactories = null;
+        cachedPropertyOrCollectionIdentifyingFactories = null;
     }
 
     private synchronized void cacheByFeatureTypeIfRequired() {
@@ -358,51 +366,51 @@ public class FacetProcessor implements RuntimeContextAware {
         }
         factoryListByFeatureType = new HashMap<ObjectFeatureType, List<FacetFactory>>();
         for (final FacetFactory factory : factories) {
-            final ObjectFeatureType[] featureTypes = factory.getFeatureTypes();
-            for (int i = 0; i < featureTypes.length; i++) {
-                final List<FacetFactory> factoryList = getList(factoryListByFeatureType, featureTypes[i]);
+            final List<ObjectFeatureType> featureTypes = factory.getFeatureTypes();
+            for (ObjectFeatureType featureType: featureTypes) {
+                final List<FacetFactory> factoryList = getList(factoryListByFeatureType, featureType);
                 factoryList.add(factory);
             }
         }
     }
 
     private synchronized void cacheMethodPrefixesIfRequired() {
-        if (methodPrefixes != null) {
+        if (cachedMethodPrefixes != null) {
             return;
         }
-        methodPrefixes = new ArrayList<String>();
+        cachedMethodPrefixes = new ArrayList<String>();
         for (final FacetFactory facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
                 final MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
-                ListUtils.combine(methodPrefixes, methodPrefixBasedFacetFactory.getPrefixes());
+                ListUtils.combine(cachedMethodPrefixes, methodPrefixBasedFacetFactory.getPrefixes());
             }
         }
     }
 
     private synchronized void cacheMethodFilteringFacetFactoriesIfRequired() {
-        if (methodFilteringFactories != null) {
+        if (cachedMethodFilteringFactories != null) {
             return;
         }
-        methodFilteringFactories = new ArrayList<MethodFilteringFacetFactory>();
+        cachedMethodFilteringFactories = new ArrayList<MethodFilteringFacetFactory>();
         for (final FacetFactory factory : factories) {
             if (factory instanceof MethodFilteringFacetFactory) {
                 final MethodFilteringFacetFactory methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
-                methodFilteringFactories.add(methodFilteringFacetFactory);
+                cachedMethodFilteringFactories.add(methodFilteringFacetFactory);
             }
         }
     }
 
     private synchronized void cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired() {
-        if (propertyOrCollectionIdentifyingFactories != null) {
+        if (cachedPropertyOrCollectionIdentifyingFactories != null) {
             return;
         }
-        propertyOrCollectionIdentifyingFactories = new ArrayList<PropertyOrCollectionIdentifyingFacetFactory>();
+        cachedPropertyOrCollectionIdentifyingFactories = new ArrayList<PropertyOrCollectionIdentifyingFacetFactory>();
         final Iterator<FacetFactory> iter = factories.iterator();
         while (iter.hasNext()) {
             final FacetFactory factory = iter.next();
             if (factory instanceof PropertyOrCollectionIdentifyingFacetFactory) {
                 final PropertyOrCollectionIdentifyingFacetFactory identifyingFacetFactory = (PropertyOrCollectionIdentifyingFacetFactory) factory;
-                propertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);
+                cachedPropertyOrCollectionIdentifyingFactories.add(identifyingFacetFactory);
             }
         }
     }
@@ -448,7 +456,8 @@ public class FacetProcessor implements RuntimeContextAware {
      * Injected so can propogate to any {@link #registerFactory(FacetFactory) registered} {@link FacetFactory}
      * s that are also {@link RuntimeContextAware}.
      */
-	public void setRuntimeContext(RuntimeContext runtimeContext) {
+	@Override
+    public void setRuntimeContext(RuntimeContext runtimeContext) {
 		this.runtimeContext = runtimeContext;
 	}
 

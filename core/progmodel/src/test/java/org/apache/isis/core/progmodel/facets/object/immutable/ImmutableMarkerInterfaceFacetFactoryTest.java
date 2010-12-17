@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
+import java.util.List;
+
 import org.apache.isis.applib.marker.AlwaysImmutable;
 import org.apache.isis.applib.marker.ImmutableOncePersisted;
 import org.apache.isis.applib.marker.ImmutableUntilPersisted;
@@ -28,8 +30,6 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableFacetMarkerInterface;
-import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableMarkerInterfacesFacetFactory;
 
 
 public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -51,7 +51,7 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

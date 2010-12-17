@@ -78,17 +78,17 @@ public final class MethodFinderUtils {
      * @return Method
      */
     public static Method removeMethod(
-            final Method[] methods,
+            final List<Method> methods,
             final MethodScope methodScope,
             final String name,
             final Class<?> returnType,
             final Class<?>[] paramTypes) {
-        method: for (int i = 0; i < methods.length; i++) {
-            if (methods[i] == null) {
+        method: for (int i = 0; i < methods.size(); i++) {
+            if (methods.get(i) == null) {
                 continue;
             }
 
-            final Method method = methods[i];
+            final Method method = methods.get(i);
             final int modifiers = method.getModifiers();
 
             // check for public modifier
@@ -124,7 +124,7 @@ public final class MethodFinderUtils {
                     }
                 }
             }
-            methods[i] = null;
+            methods.set(i, null);
 
             return method;
         }
@@ -161,7 +161,7 @@ public final class MethodFinderUtils {
      * @return Method
      */
     public static List<Method> removeMethods(
-            final Method[] methods,
+            final List<Method> methods,
             final MethodScope forClass,
             final String prefix,
             final Class<?> returnType,
@@ -170,12 +170,12 @@ public final class MethodFinderUtils {
 
         final List<Method> validMethods = new ArrayList<Method>();
 
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i] == null) {
+        for (int i = 0; i < methods.size(); i++) {
+            if (methods.get(i) == null) {
                 continue;
             }
 
-            final Method method = methods[i];
+            final Method method = methods.get(i);
 
             if (!inScope(forClass, method)) {
                 continue;
@@ -189,7 +189,7 @@ public final class MethodFinderUtils {
 
             if (goodPrefix && goodCount && goodReturn) {
                 validMethods.add(method);
-                methods[i] = null;
+                methods.set(i, null);
             }
         }
         return validMethods;

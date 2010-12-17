@@ -22,6 +22,7 @@ package org.apache.isis.metamodel.examples.facets.namefile;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
@@ -44,7 +45,8 @@ public class NameFileFacetFactory implements FacetFactory {
         }
     }
 
-    public ObjectFeatureType[] getFeatureTypes() {
+    @Override
+    public List<ObjectFeatureType> getFeatureTypes() {
         return ObjectFeatureType.EVERYTHING_BUT_PARAMETERS;
     }
 
@@ -52,6 +54,7 @@ public class NameFileFacetFactory implements FacetFactory {
     /**
      * Simply attaches a {@link NameFileFacet}.
      */
+    @Override
     public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
         return FacetUtil.addFacet(create(cls, holder));
     }
@@ -64,6 +67,7 @@ public class NameFileFacetFactory implements FacetFactory {
     /**
      * Simply attaches a {@link NameFileFacet}.
      */
+    @Override
     public boolean process(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
     	if (!(holder instanceof Identified)) {
     		return false;
@@ -80,6 +84,7 @@ public class NameFileFacetFactory implements FacetFactory {
     }
 
 
+    @Override
     public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
         // nothing to do
         return false;

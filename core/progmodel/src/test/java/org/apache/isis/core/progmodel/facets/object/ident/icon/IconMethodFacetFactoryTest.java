@@ -21,13 +21,11 @@
 package org.apache.isis.core.progmodel.facets.object.ident.icon;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.ident.icon.IconFacet;
-import org.apache.isis.core.progmodel.facets.object.ident.icon.IconFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.object.ident.icon.IconMethodFacetFactory;
 
 
 public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -49,7 +47,7 @@ public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

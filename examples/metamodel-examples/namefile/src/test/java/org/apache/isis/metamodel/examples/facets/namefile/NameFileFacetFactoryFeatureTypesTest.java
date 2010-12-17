@@ -21,14 +21,16 @@
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.collection.IsArrayContaining.hasItemInArray;
+import static org.hamcrest.Matchers.hasItem;
 import static org.junit.Assert.assertThat;
+
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.metamodel.examples.facets.namefile.NameFileFacetFactory;
 
 
 
@@ -48,32 +50,32 @@ public class NameFileFacetFactoryFeatureTypesTest {
 
     @Test
     public void featureTypesLength() {
-        ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes.length, is(4));
+        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes.size(), is(4));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingObject() {
-        ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItemInArray(ObjectFeatureType.OBJECT));
+        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(ObjectFeatureType.OBJECT));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingProperty() {
-        ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItemInArray(ObjectFeatureType.PROPERTY));
+        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(ObjectFeatureType.PROPERTY));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingCollection() {
-        ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItemInArray(ObjectFeatureType.COLLECTION));
+        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(ObjectFeatureType.COLLECTION));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingAction() {
-        ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItemInArray(ObjectFeatureType.ACTION));
+        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(ObjectFeatureType.ACTION));
     }
 
 }

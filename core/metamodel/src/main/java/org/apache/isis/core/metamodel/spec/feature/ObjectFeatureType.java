@@ -20,6 +20,10 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
@@ -43,27 +47,27 @@ public final class ObjectFeatureType {
     public final static ObjectFeatureType ACTION = new ObjectFeatureType(3, "Action");
     public final static ObjectFeatureType ACTION_PARAMETER = new ObjectFeatureType(4, "Parameter");
 
-    public final static ObjectFeatureType[] COLLECTIONS_ONLY = new ObjectFeatureType[] { COLLECTION };
-    public final static ObjectFeatureType[] ACTIONS_ONLY = new ObjectFeatureType[] { ACTION };
-    public final static ObjectFeatureType[] PARAMETERS_ONLY = new ObjectFeatureType[] { ACTION_PARAMETER };
-    public final static ObjectFeatureType[] ACTIONS_AND_PARAMETERS = new ObjectFeatureType[] { ACTION, ACTION_PARAMETER };
-    public final static ObjectFeatureType[] COLLECTIONS_AND_ACTIONS = new ObjectFeatureType[] { COLLECTION, ACTION };
-    public final static ObjectFeatureType[] PROPERTIES_AND_PARAMETERS = new ObjectFeatureType[] { PROPERTY,
-            ACTION_PARAMETER };
-    public final static ObjectFeatureType[] OBJECTS_PROPERTIES_AND_PARAMETERS = new ObjectFeatureType[] { OBJECT,
-            PROPERTY, ACTION_PARAMETER };
-    public final static ObjectFeatureType[] OBJECTS_AND_PROPERTIES = new ObjectFeatureType[] { OBJECT, PROPERTY };
-    public final static ObjectFeatureType[] PROPERTIES_ONLY = new ObjectFeatureType[] { PROPERTY };
-    public final static ObjectFeatureType[] OBJECTS_ONLY = new ObjectFeatureType[] { OBJECT };
-    public final static ObjectFeatureType[] OBJECTS_PROPERTIES_AND_COLLECTIONS = new ObjectFeatureType[] { OBJECT,
-            PROPERTY, COLLECTION };
-    public final static ObjectFeatureType[] PROPERTIES_AND_COLLECTIONS = new ObjectFeatureType[] { PROPERTY, COLLECTION };
-    public final static ObjectFeatureType[] PROPERTIES_COLLECTIONS_AND_ACTIONS = new ObjectFeatureType[] { PROPERTY,
-            COLLECTION, ACTION };
-    public final static ObjectFeatureType[] EVERYTHING_BUT_PARAMETERS = new ObjectFeatureType[] { OBJECT, PROPERTY,
-            COLLECTION, ACTION };
-    public final static ObjectFeatureType[] EVERYTHING = new ObjectFeatureType[] { OBJECT, PROPERTY, COLLECTION,
-            ACTION, ACTION_PARAMETER };
+    public final static List<ObjectFeatureType> COLLECTIONS_ONLY = ImmutableList.of( COLLECTION );
+    public final static List<ObjectFeatureType> ACTIONS_ONLY = ImmutableList.of( ACTION );
+    public final static List<ObjectFeatureType> PARAMETERS_ONLY = ImmutableList.of( ACTION_PARAMETER );
+    public final static List<ObjectFeatureType> ACTIONS_AND_PARAMETERS = ImmutableList.of( ACTION, ACTION_PARAMETER );
+    public final static List<ObjectFeatureType> COLLECTIONS_AND_ACTIONS = ImmutableList.of( COLLECTION, ACTION );
+    public final static List<ObjectFeatureType> PROPERTIES_AND_PARAMETERS = ImmutableList.of( PROPERTY,
+            ACTION_PARAMETER );
+    public final static List<ObjectFeatureType> OBJECTS_PROPERTIES_AND_PARAMETERS = ImmutableList.of( OBJECT,
+            PROPERTY, ACTION_PARAMETER );
+    public final static List<ObjectFeatureType> OBJECTS_AND_PROPERTIES = ImmutableList.of( OBJECT, PROPERTY );
+    public final static List<ObjectFeatureType> PROPERTIES_ONLY = ImmutableList.of( PROPERTY );
+    public final static List<ObjectFeatureType> OBJECTS_ONLY = ImmutableList.of( OBJECT );
+    public final static List<ObjectFeatureType> OBJECTS_PROPERTIES_AND_COLLECTIONS = ImmutableList.of( OBJECT,
+            PROPERTY, COLLECTION );
+    public final static List<ObjectFeatureType> PROPERTIES_AND_COLLECTIONS = ImmutableList.of( PROPERTY, COLLECTION );
+    public final static List<ObjectFeatureType> PROPERTIES_COLLECTIONS_AND_ACTIONS = ImmutableList.of( PROPERTY,
+            COLLECTION, ACTION );
+    public final static List<ObjectFeatureType> EVERYTHING_BUT_PARAMETERS = ImmutableList.of( OBJECT, PROPERTY,
+            COLLECTION, ACTION );
+    public final static List<ObjectFeatureType> EVERYTHING = ImmutableList.of(OBJECT, PROPERTY, COLLECTION,
+            ACTION, ACTION_PARAMETER);
 
     private final int num;
     private final String name;

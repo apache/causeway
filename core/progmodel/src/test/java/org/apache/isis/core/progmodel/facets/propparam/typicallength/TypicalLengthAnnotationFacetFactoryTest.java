@@ -21,14 +21,13 @@
 package org.apache.isis.core.progmodel.facets.propparam.typicallength;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.typicallength.TypicalLengthAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.typicallength.TypicalLengthFacetAnnotation;
 
 
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -50,7 +49,7 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

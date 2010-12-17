@@ -21,14 +21,13 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.mandatory;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.OptionalAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.OptionalFacet;
 
 
 public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -50,7 +49,7 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

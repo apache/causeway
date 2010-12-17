@@ -20,14 +20,13 @@
 
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
+import java.util.List;
+
 import org.apache.isis.applib.marker.NonPersistable;
 import org.apache.isis.applib.marker.ProgramPersistable;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacetMarkerInterface;
-import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableMarkerInterfacesFacetFactory;
 
 
 public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -49,7 +48,7 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

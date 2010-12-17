@@ -20,13 +20,12 @@
 
 package org.apache.isis.core.progmodel.facets.ordering.fieldorder;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.FieldOrder;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ordering.fieldorder.FieldOrderAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.ordering.fieldorder.FieldOrderFacet;
-import org.apache.isis.core.progmodel.facets.ordering.fieldorder.FieldOrderFacetAnnotation;
 
 
 public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -48,7 +47,7 @@ public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

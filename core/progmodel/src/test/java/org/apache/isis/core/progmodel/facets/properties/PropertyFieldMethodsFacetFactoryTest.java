@@ -21,6 +21,7 @@
 package org.apache.isis.core.progmodel.facets.properties;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facets.Facet;
@@ -51,7 +52,6 @@ import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacet;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.propcoll.access.PropertyAccessorFacetViaAccessor;
 import org.apache.isis.core.progmodel.facets.propcoll.derived.DerivedFacetInferred;
-import org.apache.isis.core.progmodel.facets.properties.PropertyMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.defaults.PropertyDefaultFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaClearMethod;
@@ -83,7 +83,7 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

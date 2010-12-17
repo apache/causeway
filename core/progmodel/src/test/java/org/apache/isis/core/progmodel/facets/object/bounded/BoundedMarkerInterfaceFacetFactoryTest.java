@@ -20,13 +20,13 @@
 
 package org.apache.isis.core.progmodel.facets.object.bounded;
 
+import java.util.List;
+
 import org.apache.isis.applib.marker.Bounded;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.bounded.BoundedFacetAbstract;
-import org.apache.isis.core.progmodel.facets.object.bounded.BoundedMarkerInterfaceFacetFactory;
 
 
 public class BoundedMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -48,7 +48,7 @@ public class BoundedMarkerInterfaceFacetFactoryTest extends AbstractFacetFactory
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

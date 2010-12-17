@@ -47,7 +47,6 @@ import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionP
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.actions.ActionMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionParameterChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFacetViaMethod;
@@ -91,7 +90,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

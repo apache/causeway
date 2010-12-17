@@ -20,14 +20,14 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
+import java.util.List;
+
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableFacetAnnotation;
 
 
 public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -49,7 +49,7 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));

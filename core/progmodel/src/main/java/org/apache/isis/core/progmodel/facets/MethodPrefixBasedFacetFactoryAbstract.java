@@ -69,11 +69,12 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
 
     private final List<String> prefixes;
 
-    public MethodPrefixBasedFacetFactoryAbstract(final String[] prefixes, final ObjectFeatureType[] featureTypes) {
+    public MethodPrefixBasedFacetFactoryAbstract(final String[] prefixes, final List<ObjectFeatureType> featureTypes) {
         super(featureTypes);
         this.prefixes = ListUtils.combine(prefixes, PREFIXES);
     }
 
+    @Override
     public List<String> getPrefixes() {
         return prefixes;
     }

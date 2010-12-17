@@ -21,14 +21,13 @@
 package org.apache.isis.core.progmodel.facets.actions.exploration;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.Exploration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.actions.exploration.ExplorationAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.actions.exploration.ExplorationFacetAbstract;
 
 
 public class ExplorationAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -50,7 +49,7 @@ public class ExplorationAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

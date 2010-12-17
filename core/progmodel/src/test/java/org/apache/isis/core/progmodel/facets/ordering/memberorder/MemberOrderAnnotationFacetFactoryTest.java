@@ -22,14 +22,12 @@ package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderFacet;
-import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderFacetAnnotation;
 
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -51,7 +49,7 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));

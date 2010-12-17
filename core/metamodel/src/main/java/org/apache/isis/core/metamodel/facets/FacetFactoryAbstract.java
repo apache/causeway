@@ -22,6 +22,9 @@ package org.apache.isis.core.metamodel.facets;
 
 
 import java.lang.reflect.Method;
+import java.util.List;
+
+import com.google.common.collect.ImmutableList;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -30,26 +33,30 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 
 public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLoaderAware {
 
-    private final ObjectFeatureType[] featureTypes;
+    private final List<ObjectFeatureType> featureTypes;
     
     private SpecificationLoader specificationLoader;
 
-    public FacetFactoryAbstract(final ObjectFeatureType[] featureTypes) {
-        this.featureTypes = featureTypes;
+    public FacetFactoryAbstract(final List<ObjectFeatureType> featureTypes) {
+        this.featureTypes = ImmutableList.copyOf(featureTypes);
     }
 
-    public ObjectFeatureType[] getFeatureTypes() {
+    @Override
+    public List<ObjectFeatureType> getFeatureTypes() {
         return featureTypes;
     }
 
+    @Override
     public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
         return false;
     }
 
+    @Override
     public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
         return false;
     }
 
+    @Override
     public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
         return false;
     }
@@ -66,6 +73,7 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     /**
      * Injected
      */
+    @Override
     public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
     }

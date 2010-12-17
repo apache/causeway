@@ -20,6 +20,7 @@
 package org.apache.isis.core.progmodel.facets.object.facets;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.Facets;
 import org.apache.isis.core.metamodel.facets.Facet;
@@ -48,7 +49,7 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));
@@ -58,7 +59,7 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public static class CustomerFacetFactory implements FacetFactory {
         @Override
-        public ObjectFeatureType[] getFeatureTypes() {
+        public List<ObjectFeatureType> getFeatureTypes() {
             return null;
         }
 
@@ -81,7 +82,7 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public static class CustomerFacetFactory2 implements FacetFactory {
         @Override
-        public ObjectFeatureType[] getFeatureTypes() {
+        public List<ObjectFeatureType> getFeatureTypes() {
             return null;
         }
 

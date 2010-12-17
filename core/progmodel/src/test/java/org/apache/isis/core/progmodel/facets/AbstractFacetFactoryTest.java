@@ -21,10 +21,12 @@
 package org.apache.isis.core.progmodel.facets;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
+
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
@@ -57,7 +59,7 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     	return Utils.contains(types, type);
     }
 
-    protected boolean contains(final ObjectFeatureType[] featureTypes, final ObjectFeatureType featureType) {
+    protected boolean contains(final List<ObjectFeatureType> featureTypes, final ObjectFeatureType featureType) {
     	return Utils.contains(featureTypes, featureType);
     }
 

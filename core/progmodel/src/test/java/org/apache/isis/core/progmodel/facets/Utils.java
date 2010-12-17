@@ -21,6 +21,7 @@
 package org.apache.isis.core.progmodel.facets;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
@@ -43,6 +44,10 @@ class Utils {
             }
         }
         return false;
+    }
+
+    protected static boolean contains(final List<ObjectFeatureType> list, final ObjectFeatureType val) {
+        return list.contains(val);
     }
 
     protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {

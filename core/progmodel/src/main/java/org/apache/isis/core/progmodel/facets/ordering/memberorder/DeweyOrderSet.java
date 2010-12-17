@@ -21,6 +21,7 @@
 package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.SortedSet;
@@ -65,15 +66,14 @@ import org.apache.isis.core.progmodel.facets.ordering.OrderSet;
  * 
  */
 public class DeweyOrderSet extends OrderSet {
-    public static DeweyOrderSet createOrderSet(final ObjectMemberPeer[] members) {
+    public static DeweyOrderSet createOrderSet(final List<ObjectMemberPeer> members) {
 
         final SortedMap sortedMembersByGroup = new TreeMap();
         final SortedSet nonAnnotatedGroup = new TreeSet(new MemberIdentifierComparator());
 
         // spin over all the members and put them into a Map of SortedSets
         // any non-annotated members go into additional nonAnnotatedGroup set.
-        for (int i = 0; i < members.length; i++) {
-            final ObjectMemberPeer member = members[i];
+        for (ObjectMemberPeer member : members) {
             final MemberOrderFacet memberOrder = member.getFacet(MemberOrderFacet.class);
             if (memberOrder == null) {
                 nonAnnotatedGroup.add(member);
@@ -102,7 +102,6 @@ public class DeweyOrderSet extends OrderSet {
         }
 
         // now populate the OrderSets
-
         for (final Iterator iter = groupNames.iterator(); iter.hasNext();) {
             final String groupName = (String) iter.next();
             final DeweyOrderSet deweyOrderSet = (DeweyOrderSet) orderSetsByGroup.get(groupName);

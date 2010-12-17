@@ -21,14 +21,13 @@
 package org.apache.isis.core.progmodel.facets.propparam.multiline;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.multiline.MultiLineAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.multiline.MultiLineFacetAnnotation;
 
 
 public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -50,7 +49,7 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

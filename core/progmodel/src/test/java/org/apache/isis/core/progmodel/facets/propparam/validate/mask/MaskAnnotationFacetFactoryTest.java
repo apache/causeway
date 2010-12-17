@@ -21,6 +21,7 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.mask;
 
 import java.lang.reflect.Method;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facets.Facet;
@@ -28,9 +29,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskFacet;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskFacetAnnotation;
 
 
 public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -56,7 +54,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));

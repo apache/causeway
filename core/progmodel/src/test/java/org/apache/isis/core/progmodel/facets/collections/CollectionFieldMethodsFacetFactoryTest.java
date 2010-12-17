@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
-import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
@@ -42,7 +41,6 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.progmodel.facets.actions.DescribedAsFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.NamedFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.collections.CollectionFieldMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetViaAccessor;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionClearFacetViaAccessor;
@@ -84,7 +82,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));

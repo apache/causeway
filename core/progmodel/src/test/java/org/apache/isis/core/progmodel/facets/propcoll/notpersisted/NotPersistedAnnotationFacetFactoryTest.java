@@ -22,14 +22,13 @@ package org.apache.isis.core.progmodel.facets.propcoll.notpersisted;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propcoll.notpersisted.NotPersistedAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propcoll.notpersisted.NotPersistedFacetAnnotation;
 
 
 public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -51,7 +50,7 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
 
     @Override
     public void testFeatureTypes() {
-        final ObjectFeatureType[] featureTypes = facetFactory.getFeatureTypes();
+        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
         assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
         assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));

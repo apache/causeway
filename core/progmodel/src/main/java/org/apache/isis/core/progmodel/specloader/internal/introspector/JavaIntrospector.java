@@ -24,11 +24,16 @@ import java.beans.Introspector;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
@@ -67,6 +72,7 @@ public class JavaIntrospector {
 
     private final class JavaIntrospectorMethodRemover implements MethodRemover {
 
+        @Override
         public void removeMethod(
                 final MethodScope methodScope,
                 final String methodName,
@@ -76,6 +82,7 @@ public class JavaIntrospector {
             		methods, methodScope, methodName, returnType, parameterTypes);
         }
 
+        @Override
         public List<Method> removeMethods(
                 final MethodScope methodScope,
                 final String prefix,
@@ -85,26 +92,28 @@ public class JavaIntrospector {
             return MethodFinderUtils.removeMethods(methods, methodScope, prefix, returnType, canBeVoid, paramCount);
         }
 
+        @Override
         public void removeMethod(final Method method) {
-            for (int i = 0; i < methods.length; i++) {
-                if (methods[i] == null) {
+            for (int i = 0; i < methods.size(); i++) {
+                if (methods.get(i) == null) {
                     continue;
                 }
-                if (methods[i].equals(method)) {
-                    methods[i] = null;
+                if (methods.get(i).equals(method)) {
+                    methods.set(i, null);
                 }
             }
         }
 
+        @Override
         public void removeMethods(final List<Method> methodList) {
             final List<Method> methodList2 = methodList;
-            for (int i = 0; i < methods.length; i++) {
-                if (methods[i] == null) {
+            for (int i = 0; i < methods.size(); i++) {
+                if (methods.get(i) == null) {
                     continue;
                 }
                 for (final Method method : methodList2) {
-                    if (methods[i].equals(method)) {
-                        methods[i] = null;
+                    if (methods.get(i).equals(method)) {
+                        methods.set(i, null);
                         break;
                     }
                 }
@@ -122,7 +131,7 @@ public class JavaIntrospector {
 
     private final String className;
     private final Class<?> type;
-    private final Method methods[];
+    private final List<Method> methods;
 
     private OrderSet orderedFields;
     private OrderSet orderedObjectActions;
@@ -154,7 +163,7 @@ public class JavaIntrospector {
         // interfaces or non-public concrete implementations. Therefore the test
         // has been removed.
 
-        methods = type.getMethods();
+        methods = Arrays.asList(type.getMethods());
         className = type.getName();
     }
 
@@ -231,13 +240,13 @@ public class JavaIntrospector {
         getFacetProcessor().process(type, methodRemover, javaSpecification);
 
         // if this class has additional facets (as per @Facets), then process them.
-        final FacetsFacet facetsFacet = (FacetsFacet) javaSpecification.getFacet(FacetsFacet.class);
+        final FacetsFacet facetsFacet = javaSpecification.getFacet(FacetsFacet.class);
         if (facetsFacet != null) {
             final Class<? extends FacetFactory>[] facetFactories = facetsFacet.facetFactories();
             for (int i = 0; i < facetFactories.length; i++) {
                 FacetFactory facetFactory = null;
                 try {
-                    facetFactory = (FacetFactory) facetFactories[i].newInstance();
+                    facetFactory = facetFactories[i].newInstance();
                 } catch (final InstantiationException e) {
                     throw new IsisException(e);
                 } catch (final IllegalAccessException e) {
@@ -253,11 +262,11 @@ public class JavaIntrospector {
         LOG.debug("introspecting " + className() + ": properties and collections");
 
         // find the properties and collections (fields) ...
-        final ObjectAssociationPeer[] findFieldMethods = findAndCreateFieldPeers();
+        final List<ObjectMemberPeer> fieldPeers = findAndCreateFieldPeers();
 
         // ... and the ordering of the properties and collections
         String fieldOrder;
-        final FieldOrderFacet fieldOrderFacet = (FieldOrderFacet) javaSpecification.getFacet(FieldOrderFacet.class);
+        final FieldOrderFacet fieldOrderFacet = javaSpecification.getFacet(FieldOrderFacet.class);
         if (fieldOrderFacet == null) {
             fieldOrder = null;
         } else {
@@ -268,7 +277,7 @@ public class JavaIntrospector {
             // TODO: the calling of fieldOrder() should be a facet
             fieldOrder = invokeSortOrderMethod("field");
         }
-        orderedFields = createOrderSet(fieldOrder, findFieldMethods);
+        orderedFields = createOrderSet(fieldOrder, fieldPeers);
     }
 
     public void introspectActions() {
@@ -276,12 +285,12 @@ public class JavaIntrospector {
 
         // find the actions ...
         MethodScope methodScope = MethodScope.OBJECT;
-		final ObjectActionPeer[] actionPeers = findActionMethodsPeers(methodScope);
+		final List<ObjectMemberPeer> actionPeers = findActionMethodsPeers(methodScope);
 
 
         // ... and the ordering of actions ...
         String actionOrder;
-        final ActionOrderFacet actionOrderFacet = (ActionOrderFacet) javaSpecification.getFacet(ActionOrderFacet.class);
+        final ActionOrderFacet actionOrderFacet = javaSpecification.getFacet(ActionOrderFacet.class);
         if (actionOrderFacet == null) {
             actionOrder = null;
         } else {
@@ -295,7 +304,7 @@ public class JavaIntrospector {
 
         // find the class actions ...
         MethodScope methodsScope2 = MethodScope.CLASS;
-		final ObjectActionPeer[] findClassActionMethods = findActionMethodsPeers(methodsScope2);
+		final List<ObjectMemberPeer> findClassActionMethods = findActionMethodsPeers(methodsScope2);
 
         // ... and the ordering of class actions
         actionOrder = null;
@@ -310,8 +319,10 @@ public class JavaIntrospector {
     // find Properties and Collections (fields)
     // ////////////////////////////////////////////////////////////////////////////
 
-    private ObjectAssociationPeer[] findAndCreateFieldPeers() {
-        LOG.debug("  looking for fields for " + type);
+    private List<ObjectMemberPeer> findAndCreateFieldPeers() {
+        if(LOG.isDebugEnabled()) {
+            LOG.debug("  looking for fields for " + type);
+        }
 
         // Ensure all return types are known
         final Set<Method> propertyOrCollectionCandidates = getFacetProcessor().findPropertyOrCollectionCandidateAccessors(
@@ -324,19 +335,15 @@ public class JavaIntrospector {
 		reflector.loadSpecifications(typesToLoad, type);
 
         // now create FieldPeers for value properties, for collections and for reference properties
-        final List<ObjectAssociationPeer> fieldPeers = new ArrayList<ObjectAssociationPeer>();
+        final List<ObjectMemberPeer> fieldPeers = new ArrayList<ObjectMemberPeer>();
 
         findAndRemoveCollectionAccessorsAndCreateCorrespondingFieldPeers(fieldPeers);
         findAndRemovePropertyAccessorsAndCreateCorrespondingFieldPeers(fieldPeers);
 
-        return toArray(fieldPeers);
+        return Collections.unmodifiableList(fieldPeers);
     }
 
-    private ObjectAssociationPeer[] toArray(final List<ObjectAssociationPeer> fields) {
-        return (ObjectAssociationPeer[]) fields.toArray(new ObjectAssociationPeer[] {});
-    }
-
-    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFieldPeers(final List<ObjectAssociationPeer> associationPeers) {
+    private void findAndRemoveCollectionAccessorsAndCreateCorrespondingFieldPeers(final List<ObjectMemberPeer> associationPeers) {
         final List<Method> collectionAccessors = new ArrayList<Method>();
         getFacetProcessor().findAndRemoveCollectionAccessors(new JavaIntrospectorMethodRemover(), collectionAccessors);
         createCollectionPeersFromAccessors(collectionAccessors, associationPeers);
@@ -346,7 +353,7 @@ public class JavaIntrospector {
      * Since the value properties and collections have already been processed, this will pick up the remaining
      * reference properties.
      */
-    private void findAndRemovePropertyAccessorsAndCreateCorrespondingFieldPeers(final List<ObjectAssociationPeer> fields) {
+    private void findAndRemovePropertyAccessorsAndCreateCorrespondingFieldPeers(final List<ObjectMemberPeer> fields) {
         final List<Method> propertyAccessors = new ArrayList<Method>();
         getFacetProcessor().findAndRemovePropertyAccessors(new JavaIntrospectorMethodRemover(), propertyAccessors);
 
@@ -356,7 +363,7 @@ public class JavaIntrospector {
         createPropertyPeersFromAccessors(propertyAccessors, fields);
     }
 
-    private void createCollectionPeersFromAccessors(final List<Method> collectionAccessors, final List<ObjectAssociationPeer> associationPeerListToAppendto) {
+    private void createCollectionPeersFromAccessors(final List<Method> collectionAccessors, final List<ObjectMemberPeer> associationPeerListToAppendto) {
         for (final Method getMethod : collectionAccessors) {
             LOG.debug("  identified one-many association method " + getMethod);
             final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
@@ -377,7 +384,7 @@ public class JavaIntrospector {
             }
             collection.setElementType(elementType);
 
-            // skip if class strategy says so.
+            // skip if class substituor says so.
             if (getClassSubstitutor().getClass(elementType) == null) {
                 continue;
             }
@@ -386,7 +393,7 @@ public class JavaIntrospector {
         }
     }
 
-    private void createPropertyPeersFromAccessors(final List<Method> propertyAccessors, final List<ObjectAssociationPeer> associationPeerListToAppendto)
+    private void createPropertyPeersFromAccessors(final List<Method> propertyAccessors, final List<ObjectMemberPeer> associationPeerListToAppendto)
             throws ReflectionException {
 
         for (final Method accessorMethod : propertyAccessors) {
@@ -421,41 +428,49 @@ public class JavaIntrospector {
     // find Actions
     // ////////////////////////////////////////////////////////////////////////////
 
-	private ObjectActionPeer[] findActionMethodsPeers(
+	private List<ObjectMemberPeer> findActionMethodsPeers(
 			MethodScope methodScope) {
-		final ObjectActionPeer[] actionPeers1 = findActionMethodPeers(methodScope, true);
-        final ObjectActionPeer[] actionPeers2 = findActionMethodPeers(methodScope, false);
-        final ObjectActionPeer[] actionPeers = new ObjectActionPeer[actionPeers1.length + actionPeers2.length];
-        System.arraycopy(actionPeers1, 0, actionPeers, 0, actionPeers1.length);
-        System.arraycopy(actionPeers2, 0, actionPeers, actionPeers1.length, actionPeers2.length);
-		return actionPeers;
+		final List<ObjectMemberPeer> actionPeers1 = findActionMethodPeers(methodScope, RecognisedHelpersStrategy.SKIP);
+        final List<ObjectMemberPeer> actionPeers2 = findActionMethodPeers(methodScope, RecognisedHelpersStrategy.DONT_SKIP);
+		List<ObjectMemberPeer> peers = Lists.newArrayList(actionPeers1);
+        peers.addAll(actionPeers2);
+        return peers;
 	}
 
 
-    private ObjectActionPeer[] findActionMethodPeers(final MethodScope methodScope, boolean skipRecognisedHelperMethod) {
+	private enum RecognisedHelpersStrategy {
+	    SKIP,
+	    DONT_SKIP;
+        public boolean skip() {
+            return this == SKIP;
+        }
+	}
+	
+    private List<ObjectMemberPeer> findActionMethodPeers(final MethodScope methodScope, RecognisedHelpersStrategy skipRecognisedHelpers) {
     	if(LOG.isDebugEnabled()) {
     		LOG.debug("  looking for action methods");
     	}
 
-        final List<ObjectActionPeer> actionPeers = new ArrayList<ObjectActionPeer>();
+        final List<ObjectMemberPeer> actionPeers = new ArrayList<ObjectMemberPeer>();
 
-        for (int i = 0; i < methods.length; i++) {
-            if (methods[i] == null) {
+        for (int i = 0; i < methods.size(); i++) {
+            Method method = methods.get(i);
+            if (method == null) {
                 continue;
             }
-            ObjectActionPeer actionPeer = findActionMethodPeer(methodScope, skipRecognisedHelperMethod, methods[i]);
+            ObjectActionPeer actionPeer = findActionMethodPeer(methodScope, skipRecognisedHelpers, method);
             if (actionPeer != null) {
-            	methods[i] = null;
+            	methods.set(i, null);
             	actionPeers.add(actionPeer);
             }
         }
 
-        return convertToArray(actionPeers);
+        return actionPeers;
     }
 
-    private ObjectActionPeer findActionMethodPeer(final MethodScope methodScope, boolean skipRecognisedHelperMethod, final Method actionMethod) {
+    private ObjectActionPeer findActionMethodPeer(final MethodScope methodScope, RecognisedHelpersStrategy skipRecognisedHelpers, final Method actionMethod) {
 
-    	if (!representsAction(methodScope, skipRecognisedHelperMethod, actionMethod)) {
+    	if (!representsAction(methodScope, skipRecognisedHelpers, actionMethod)) {
     		return null;
     	}
 
@@ -491,7 +506,7 @@ public class JavaIntrospector {
         return action;
 	}
 
-    private boolean representsAction(final MethodScope methodScope, boolean skipRecognisedHelperMethod, final Method actionMethod) {
+    private boolean representsAction(final MethodScope methodScope, RecognisedHelpersStrategy skipRecognisedHelpers, final Method actionMethod) {
 
         if (!MethodFinderUtils.inScope(methodScope, actionMethod)) {
             return false;
@@ -513,7 +528,7 @@ public class JavaIntrospector {
             if (actionMethod.getName().startsWith("set")) {
             	return false;
             }
-            if (skipRecognisedHelperMethod) {
+            if (skipRecognisedHelpers.skip()) {
                 LOG.info("  skipping possible helper method " + actionMethod);
             	return false;
             }
@@ -558,7 +573,7 @@ public class JavaIntrospector {
 	}
 
 	private ObjectActionPeer[] convertToArray(final List<ObjectActionPeer> actions) {
-        return (ObjectActionPeer[]) actions.toArray(new ObjectActionPeer[] {});
+        return actions.toArray(new ObjectActionPeer[] {});
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -614,7 +629,7 @@ public class JavaIntrospector {
     // Sort Member Peers
     // ////////////////////////////////////////////////////////////////////////////
 
-    private OrderSet createOrderSet(final String order, final ObjectMemberPeer[] members) {
+    private OrderSet createOrderSet(final String order, final List<ObjectMemberPeer> members) {
         if (order != null) {
             OrderSet set;
             set = SimpleOrderSet.createOrderSet(order, members);
@@ -697,7 +712,7 @@ public class JavaIntrospector {
      * <p>
      * Have therefore made private.
      */
-    private static ObjectAssociationPeer[] orderArray(final ObjectAssociationPeer[] original, final String[] order) {
+    private static List<ObjectAssociationPeer> orderArray(final List<ObjectAssociationPeer> original, final String[] order) {
         if (order == null) {
             return original;
 
@@ -706,20 +721,20 @@ public class JavaIntrospector {
                 order[i] = NameUtils.simpleName(order[i]);
             }
 
-            final ObjectAssociationPeer[] ordered = new ObjectAssociationPeer[original.length];
+            final List<ObjectAssociationPeer> ordered = Lists.newArrayListWithCapacity(original.size());
 
             // work through each order element and find, if there is one, a
             // matching member.
             int orderedIndex = 0;
             ordering: for (int orderIndex = 0; orderIndex < order.length; orderIndex++) {
-                for (int memberIndex = 0; memberIndex < original.length; memberIndex++) {
-                    final ObjectAssociationPeer member = original[memberIndex];
+                for (int memberIndex = 0; memberIndex < original.size(); memberIndex++) {
+                    final ObjectAssociationPeer member = original.get(memberIndex);
                     if (member == null) {
                         continue;
                     }
                     if (member.getIdentifier().getMemberName().equalsIgnoreCase(order[orderIndex])) {
-                        ordered[orderedIndex++] = original[memberIndex];
-                        original[memberIndex] = null;
+                        ordered.set(orderedIndex++, original.get(memberIndex));
+                        original.set(memberIndex, null);
 
                         continue ordering;
                     }
@@ -730,23 +745,22 @@ public class JavaIntrospector {
                 }
             }
 
-            final ObjectAssociationPeer[] results = new ObjectAssociationPeer[original.length];
-            int index = 0;
-            for (int i = 0; i < ordered.length; i++) {
-                final ObjectAssociationPeer member = ordered[i];
-                if (member != null) {
-                    results[index++] = member;
-                }
-            }
-            for (int i = 0; i < original.length; i++) {
-                final ObjectAssociationPeer member = original[i];
-                if (member != null) {
-                    results[index++] = member;
-                }
-            }
+            final List<ObjectAssociationPeer> results = Lists.newArrayListWithCapacity(original.size());
+            int index = append(0, results, ordered);
+            index = append(index, results, original);
 
             return results;
         }
+    }
+
+    protected static int append(int index, final List<ObjectAssociationPeer> to, List<ObjectAssociationPeer> from) {
+        for (int i = 0; i < from.size(); i++) {
+            final ObjectAssociationPeer member = from.get(i);
+            if (member != null) {
+                to.set(index++, member);
+            }
+        }
+        return index;
     }
 
 
@@ -759,6 +773,7 @@ public class JavaIntrospector {
         return reflector;
     }
 
+    @Override
     public String toString() {
         ToString str = new ToString(this);
         str.append("class", className);
