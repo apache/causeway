@@ -23,6 +23,8 @@ Core Framework
   form the core of Apache Isis.
   Specifically, they provide:
 
+  * JUnit/JMock {{{./testsupport/index.html}testing support}}
+
   * {{{./commons/index.html}common}} utilities
  
   * a {{{./metamodel/index.html}metamodel}} for domain models
@@ -34,8 +36,6 @@ Core Framework
   * reusable components for {{{./webapp/index.html}webapp}}-based viewers
   
   * {{{./webserver/index.html}bootstrapping}} support for webapp-based viewers
-  
-  * JUnit/JMock {{{./testsupport/index.html}testing support}}
 
   []
   
@@ -53,5 +53,4 @@ Core Framework
    
   * programming model definition ({{{../defaults/progmodel/index.html}default}} and {{{../alternatives/progmodel/index.html}alternatives}})
 
-   
   []
