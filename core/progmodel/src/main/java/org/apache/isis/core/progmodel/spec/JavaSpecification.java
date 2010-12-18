@@ -27,6 +27,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -68,7 +72,7 @@ import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationIm
 import org.apache.isis.core.metamodel.specloader.internal.OneToOneAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectAssociationPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.metamodel.util.CallbackUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.metamodel.util.SpecUtils;
@@ -84,9 +88,6 @@ import org.apache.isis.core.progmodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.progmodel.facets.ordering.OrderSet;
 import org.apache.isis.core.progmodel.specloader.internal.introspector.JavaIntrospector;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 
 public class JavaSpecification extends IntrospectableSpecificationAbstract implements DebugInfo, FacetHolder {
@@ -209,6 +210,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     // introspect
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public synchronized void introspect(final FacetDecoratorSet decorator) {
         if (introspector == null) {
             throw new ReflectionException("Introspection already taken place, cannot introspect again");
@@ -220,13 +222,13 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
 
         fullName = introspector.getFullName();
         shortName = introspector.shortName();
-        NamedFacet namedFacet = (NamedFacet) getFacet(NamedFacet.class);
+        NamedFacet namedFacet = getFacet(NamedFacet.class);
         if (namedFacet == null) {
             namedFacet = new NamedFacetInferred(NameUtils.naturalName(shortName), this);
             addFacet(namedFacet);
         }
 
-        PluralFacet pluralFacet = (PluralFacet) getFacet(PluralFacet.class);
+        PluralFacet pluralFacet = getFacet(PluralFacet.class);
         if (pluralFacet == null) {
             pluralFacet = new PluralFacetInferred(NameUtils.pluralName(namedFacet.value()), this);
             addFacet(pluralFacet);
@@ -289,21 +291,21 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
 
         decorateAllFacets(decorator);
 
-        clearDirtyObjectFacet = (ClearDirtyObjectFacet) getFacet(ClearDirtyObjectFacet.class);
-        markDirtyObjectFacet = (MarkDirtyObjectFacet) getFacet(MarkDirtyObjectFacet.class);
-        isDirtyObjectFacet = (IsDirtyObjectFacet) getFacet(IsDirtyObjectFacet.class);
-        namedFacet = (NamedFacet) getFacet(NamedFacet.class);
+        clearDirtyObjectFacet = getFacet(ClearDirtyObjectFacet.class);
+        markDirtyObjectFacet = getFacet(MarkDirtyObjectFacet.class);
+        isDirtyObjectFacet = getFacet(IsDirtyObjectFacet.class);
+        namedFacet = getFacet(NamedFacet.class);
         singularName = namedFacet.value();
 
-        pluralFacet = (PluralFacet) getFacet(PluralFacet.class);
+        pluralFacet = getFacet(PluralFacet.class);
         pluralName = pluralFacet.value();
 
-        final DescribedAsFacet describedAsFacet = (DescribedAsFacet) getFacet(DescribedAsFacet.class);
+        final DescribedAsFacet describedAsFacet = getFacet(DescribedAsFacet.class);
         description = describedAsFacet.value();
 
-        iconMethod = (IconFacet) getFacet(IconFacet.class);
+        iconMethod = getFacet(IconFacet.class);
 
-        final NotPersistableFacet notPersistableFacet = (NotPersistableFacet) getFacet(NotPersistableFacet.class);
+        final NotPersistableFacet notPersistableFacet = getFacet(NotPersistableFacet.class);
         final InitiatedBy initiatedBy = notPersistableFacet.value();
         if (initiatedBy == InitiatedBy.USER_OR_PROGRAM) {
             persistable = Persistability.TRANSIENT;
@@ -416,6 +418,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     // getStaticallyAvailableFields, getDynamically..Fields, getField
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAssociation getAssociation(final String id) {
         // TODO put fields into hash
         for (int i = 0; i < fields.length; i++) {
@@ -430,6 +433,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     // getObjectAction, getAction, getActions, getClassActions
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String id,
@@ -438,6 +442,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         return getAction(availableActions, type, id, parameters);
     }
 
+    @Override
     public ObjectAction getObjectAction(final ObjectActionType type, final String nameParmsIdentityString) {
         final ObjectAction[] availableActions = ArrayUtils.combine(objectActions, getServiceActions(type));
         return getAction2(availableActions, type, nameParmsIdentityString);
@@ -592,18 +597,13 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         return actions;
     }
 
-    private ObjectAssociation createObjectField(final ObjectAssociationPeer peer) {
-        ObjectAssociation field;
-        if (peer.isOneToOne()) {
-            field = new OneToOneAssociationImpl(peer, getRuntimeContext());
-
-        } else if (peer.isOneToMany()) {
-            field = new OneToManyAssociationImpl(peer, getRuntimeContext());
+    private ObjectAssociation createObjectField(final ObjectMemberPeer peer) {
+        if (peer.isCollection()) {
+            return new OneToManyAssociationImpl(peer, getRuntimeContext());
 
         } else {
-            throw new IsisException();
+            return new OneToOneAssociationImpl(peer, getRuntimeContext());
         }
-        return field;
     }
 
     @Override
@@ -626,27 +626,32 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         return service;
     }
 
+    @Override
     public String getShortName() {
         return shortName;
     }
 
+    @Override
     public String getSingularName() {
         return singularName;
     }
 
+    @Override
     public String getPluralName() {
         return pluralName;
     }
 
+    @Override
     public String getDescription() {
         return description == null ? "" : description;
     }
 
     private TitleFacet titleFacet;
 
+    @Override
     public String getTitle(final ObjectAdapter object) {
         if (titleFacet == null) {
-            titleFacet = (TitleFacet) getFacet(TitleFacet.class);
+            titleFacet = getFacet(TitleFacet.class);
         }
         if (titleFacet != null) {
             final String titleString = titleFacet.title(object);
@@ -735,6 +740,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
      * }
      * </pre>
      */
+    @Override
     public void markAsService() {
         final ObjectAssociation[] fields = getAssociations();
         if (fields != null && fields.length > 0) {
@@ -766,6 +772,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     // Debug, toString
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public void debugData(final DebugString debug) {
         debug.blankLine();
         debug.appendln("Title", getFacet(TitleFacet.class));
@@ -775,6 +782,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         debug.unindent();
     }
 
+    @Override
     public String debugTitle() {
         return "NO Member Specification";
     }

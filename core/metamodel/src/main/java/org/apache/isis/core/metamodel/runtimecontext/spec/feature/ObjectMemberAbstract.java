@@ -41,32 +41,12 @@ import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.NameUtils;
 
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
-    /**
-     * powertype for subclasses.
-     */
-    protected static enum MemberType {
-        ONE_TO_ONE_ASSOCIATION,
-        ONE_TO_MANY_ASSOCIATION,
-        ACTION;
-        public boolean isAction() {
-            return this == ACTION;
-        }
-        public boolean isAssociation() {
-            return !isAction();
-        }
-        public boolean isOneToManyAssociation() {
-            return this == ONE_TO_MANY_ASSOCIATION;
-        }
-        public boolean isOneToOneAssociation() {
-            return this == ONE_TO_ONE_ASSOCIATION;
-        }
-    }
-    
     protected final String defaultName;
     private final String id;
     private final Identified facetHolder;
@@ -92,51 +72,61 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // Identifiers
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public Identifier getIdentifier() {
         return facetHolder.getIdentifier();
     }
 
-    @Override
-    public String toString() {
-        return String.format("id=%s,name='%s'", getId(), getName());
+    protected SpecificationLoader getSpecificationLoader() {
+        return runtimeContext.getSpecificationLoader();
     }
+
 
     // /////////////////////////////////////////////////////////////
     // Facets
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return facetHolder.containsFacet(facetType);
     }
 
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         return facetHolder.getFacet(cls);
     }
 
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return facetHolder.getFacetTypes();
     }
 
+    @Override
     public Facet[] getFacets(final Filter<Facet> filter) {
         return facetHolder.getFacets(filter);
     }
 
+    @Override
     public void addFacet(final Facet facet) {
         facetHolder.addFacet(facet);
     }
 
+    @Override
     public void addFacet(final MultiTypedFacet facet) {
         facetHolder.addFacet(facet);
     }
 
+    @Override
     public void removeFacet(final Facet facet) {
         facetHolder.removeFacet(facet);
     }
 
+    @Override
     public void removeFacet(final Class<? extends Facet> facetType) {
         facetHolder.removeFacet(facetType);
     }
@@ -150,6 +140,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * 
      * @see #getId()
      */
+    @Override
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
         String name = facet.value();
@@ -157,11 +148,13 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return name;
     }
 
+    @Override
     public String getDescription() {
         final DescribedAsFacet facet = getFacet(DescribedAsFacet.class);
         return facet.value();
     }
 
+    @Override
     public String getHelp() {
         final HelpFacet facet = getFacet(HelpFacet.class);
         return facet.value();
@@ -172,6 +165,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // /////////////////////////////////////////////////////////////
 
 
+    @Override
     public boolean isAlwaysHidden() {
         return containsFacet(HiddenFacet.class);
     }
@@ -184,6 +178,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * TODO: currently this method is hard-coded to assume all interactions are initiated
      * {@link InteractionInvocationMethod#BY_USER by user}.
      */
+    @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return isVisibleResult(session, target).createConsent();
     }
@@ -205,6 +200,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
      * TODO: currently this method is hard-coded to assume all interactions are initiated
      * {@link InteractionInvocationMethod#BY_USER by user}.
      */
+    @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
         return isUsableResult(session, target).createConsent();
     }
@@ -219,25 +215,38 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     // isAssociation, isAction
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isAction() {
         return memberType.isAction();
     }
 
+    @Override
     public boolean isAssociation() {
         return memberType.isAssociation();
     }
 
+    @Override
     public boolean isOneToManyAssociation() {
-        return memberType.isOneToManyAssociation();
+        return memberType.isCollection();
     }
 
+    @Override
     public boolean isOneToOneAssociation() {
-        return memberType.isOneToOneAssociation();
+        return memberType.isProperty();
     }
 
 
     // //////////////////////////////////////////////////////////////////
-    // RuntimeContext
+    // toString
+    // //////////////////////////////////////////////////////////////////
+
+    @Override
+    public String toString() {
+        return String.format("id=%s,name='%s'", getId(), getName());
+    }
+    
+    // //////////////////////////////////////////////////////////////////
+    // Dependencies
     // //////////////////////////////////////////////////////////////////
 
     public RuntimeContext getRuntimeContext() {
@@ -247,5 +256,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     protected AuthenticationSession getAuthenticationSession() {
         return getRuntimeContext().getAuthenticationSession();
     }
+
+    
 
 }

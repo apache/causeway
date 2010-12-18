@@ -27,21 +27,42 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.NamedAndDescribedFacetHolderImpl;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 final class MemberPeerStub extends NamedAndDescribedFacetHolderImpl implements ObjectMemberPeer {
 
-    public MemberPeerStub(final String name) {
-        super(name);
+    public static MemberPeerStub createProperty(final String name) {
+        return new MemberPeerStub(MemberType.PROPERTY, name);
     }
 
+    public static MemberPeerStub createCollection(final String name) {
+        return new MemberPeerStub(MemberType.COLLECTION, name);
+    }
+
+    public static MemberPeerStub createAction(final String name) {
+        return new MemberPeerStub(MemberType.ACTION, name);
+    }
+
+    private final MemberType memberType;
+
+    private MemberPeerStub(final MemberType collection, final String name) {
+        super(name);
+        this.memberType = collection;
+    }
+
+
+    @Override
     public void debugData(final DebugString debugString) {}
 
     public String getHelp() {
         return null;
     }
 
+    @Override
     public Identifier getIdentifier() {
         return Identifier.classIdentifier(MemberPeerStub.this.getName());
     }
@@ -71,8 +92,32 @@ final class MemberPeerStub extends NamedAndDescribedFacetHolderImpl implements O
     }
 
     @Override
+    public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
+        return null;
+    }
+
+    @Override
     public String toString() {
         return getName();
+    }
+
+    protected MemberType getMemberType() {
+        return memberType;
+    }
+    
+    @Override
+    public boolean isProperty() {
+        return getMemberType().isProperty();
+    }
+
+    @Override
+    public boolean isCollection() {
+        return getMemberType().isCollection();
+    }
+
+    @Override
+    public boolean isAction() {
+        return getMemberType().isAction();
     }
 
 }

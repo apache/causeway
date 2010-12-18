@@ -23,8 +23,6 @@ package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderComparator;
-import org.apache.isis.core.progmodel.facets.ordering.memberorder.MemberOrderFacetAnnotation;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
@@ -37,8 +35,8 @@ public class MemberOrderComparatorTest extends TestCase {
 
     private MemberOrderComparator comparator, laxComparator;
 
-    private final MemberPeerStub m1 = new MemberPeerStub("abc");
-    private final MemberPeerStub m2 = new MemberPeerStub("abc");
+    private final MemberPeerStub m1 = MemberPeerStub.createProperty("abc");
+    private final MemberPeerStub m2 = MemberPeerStub.createProperty("abc");
 
     @Override
     protected void setUp() {

@@ -23,7 +23,8 @@ package org.apache.isis.core.progmodel.facets.propparam.enums;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
@@ -32,10 +33,11 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
         super(holder);
     }
 
-    public Object[] getChoices(ObjectAdapter adapter) {
+    @Override
+    public Object[] getChoices(ObjectAdapter adapter, SpecificationLoader specificationLoader) {
         FacetHolder facetHolder = getFacetHolder();
-        ObjectAssociationPeer noap = (ObjectAssociationPeer) facetHolder;
-        ObjectSpecification noSpec = noap.getSpecification();
+        ObjectMemberPeer noap = (ObjectMemberPeer) facetHolder;
+        ObjectSpecification noSpec = noap.getSpecification(specificationLoader);
         ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null)
             return new Object[0];

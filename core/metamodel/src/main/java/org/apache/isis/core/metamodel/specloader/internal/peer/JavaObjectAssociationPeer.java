@@ -20,50 +20,43 @@
 
 package org.apache.isis.core.metamodel.specloader.internal.peer;
 
+import java.beans.Introspector;
+import java.lang.reflect.Method;
+
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.util.NameUtils;
 
 
-public abstract class JavaObjectAssociationPeer extends JavaObjectMemberPeer implements ObjectAssociationPeer {
+public class JavaObjectAssociationPeer extends JavaObjectMemberPeer {
 
-    private final boolean oneToMany;
-    private final SpecificationLoader specificationLoader;
-    protected Class<?> type;
-
-    public JavaObjectAssociationPeer(final Identifier identifier, final Class<?> returnType, final boolean oneToMany, SpecificationLoader specificationLoader) {
-        super(identifier);
-        type = returnType;
-        this.oneToMany = oneToMany;
-        this.specificationLoader = specificationLoader;
+    public static JavaObjectAssociationPeer createPropertyPeer(Class<?> type, Method method, Class<?> returnType,
+        SpecificationLoader specificationLoader) {
+        return new JavaObjectAssociationPeer(MemberType.PROPERTY, type, method, returnType, specificationLoader);
     }
-
-    /**
-     * return the object type, as a Class object, that the method returns.
-     */
-    public ObjectSpecification getSpecification() {
-        return type == null ? null : getSpecificationLoader().loadSpecification(type);
-    }
-
-    public void setType(final Class<?> type) {
-        this.type = type;
-    }
-
-    public final boolean isOneToMany() {
-        return oneToMany;
-    }
-
-    public final boolean isOneToOne() {
-        return !isOneToMany();
-    }
-
-    //////////////////////////////////////////////////////////////////////
-    // Dependencies
-    //////////////////////////////////////////////////////////////////////
     
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+    public static JavaObjectAssociationPeer createCollectionPeer(Class<?> type, Method method,
+        SpecificationLoader specificationLoader) {
+        return new JavaObjectAssociationPeer(MemberType.COLLECTION, type, method, null, specificationLoader);
     }
+
+
+    public JavaObjectAssociationPeer(final MemberType memberType, final Class<?> type, final Method method, final Class<?> returnType, SpecificationLoader specificationLoader) {
+        super(memberType, type, method, determineIdentifier(type, method), returnType, specificationLoader);
+    }
+
+    private static Identifier determineIdentifier(Class<?> type, Method method) {
+        final String capitalizedName = NameUtils.javaBaseName(method.getName());
+        final String beanName = Introspector.decapitalize(capitalizedName);
+        return Identifier.propertyOrCollectionIdentifier(type.getName(), beanName);
+    }
+
+    @Override
+    public String toString() {
+        return getMemberType().name() + " Peer [identifier=\"" + getIdentifier() + "\",type=" + getType().getName() + " ]";
+    }
+
 
 
 }

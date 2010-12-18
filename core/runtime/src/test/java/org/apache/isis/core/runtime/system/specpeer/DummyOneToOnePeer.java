@@ -22,21 +22,18 @@ package org.apache.isis.core.runtime.system.specpeer;
 
 import java.util.Vector;
 
-import junit.framework.Assert;
-
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 @SuppressWarnings("unchecked")
-public class DummyOneToOnePeer extends FacetHolderImpl implements ObjectAssociationPeer {
+public class DummyOneToOnePeer extends FacetHolderImpl implements ObjectMemberPeer {
 	
     private final ExpectedSet expectedActions = new ExpectedSet();
     Vector actions = new Vector();
@@ -58,35 +55,21 @@ public class DummyOneToOnePeer extends FacetHolderImpl implements ObjectAssociat
         return getObject;
     }
 
-    public ObjectAdapter getDefault(final ObjectAdapter target) {
-        return null;
-    }
-
-    public Object[] getOptions(final ObjectAdapter target) {
-        return null;
-    }
-
+    @Override
     public Identifier getIdentifier() {
         return null;
     }
 
-    public ObjectSpecification getSpecification() {
+    @Override
+    public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
         return null;
     }
 
     public void initAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {}
 
-    public boolean isPersisted() {
-        return true;
-    }
-
     public boolean isEmpty(final ObjectAdapter inObject) {
         actions.addElement("empty " + inObject);
         return isEmpty;
-    }
-
-    public boolean isMandatory() {
-        return false;
     }
 
     public void setAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {
@@ -98,70 +81,26 @@ public class DummyOneToOnePeer extends FacetHolderImpl implements ObjectAssociat
         expectedActions.verify();
     }
 
-    public void assertAction(final int index, final String expected) {
-        Assert.assertEquals(expected, actions.elementAt(index));
-    }
-
-    public Consent isAssociationValid(final ObjectAdapter inObject, final ObjectAdapter value) {
-        return null;
-    }
-
-    public String getDescription() {
-        return null;
-    }
-
-    public String getName() {
-        return null;
-    }
-
-    public boolean isVisibleDeclaratively() {
-        return true;
-    }
-
-    public boolean isVisibleForSession(final AuthenticationSession session) {
-        return true;
-    }
-
-    public boolean isVisible(final ObjectAdapter target) {
-        return isVisible;
-    }
-
-    public void setupVisible(final boolean isVisible) {
-        this.isVisible = isVisible;
-    }
-
-    public Consent isUsableDeclaratively() {
-        return Allow.DEFAULT;
-    }
-
-    public Consent isUsableForSession(final AuthenticationSession session) {
-        return Allow.DEFAULT;
-    }
-
-    public Consent isUsable(final ObjectAdapter target) {
-        return null;
-    }
-
-    public boolean isOptionEnabled() {
-        return false;
-    }
-
-    public String getHelp() {
-        return null;
-    }
-
+    @Override
     public void debugData(final DebugString debugString) {}
 
-    public String getBusinessKeyName() {
-        return null;
+    protected MemberType getMemberType() {
+        return MemberType.PROPERTY;
     }
 
-    public boolean isOneToMany() {
-        return false;
+    @Override
+    public boolean isProperty() {
+        return getMemberType().isProperty();
     }
 
-    public boolean isOneToOne() {
-        return true;
+    @Override
+    public boolean isCollection() {
+        return getMemberType().isCollection();
+    }
+
+    @Override
+    public boolean isAction() {
+        return getMemberType().isAction();
     }
 
 }

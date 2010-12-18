@@ -20,24 +20,66 @@
 
 package org.apache.isis.core.metamodel.specloader.internal.peer;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.MultiTypedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
-public class JavaObjectActionParamPeer extends FacetHolderImpl implements ObjectActionParamPeer {
+public class JavaObjectActionParamPeer implements FacetHolder, ObjectActionParamPeer {
+
     private final ObjectSpecification specification;
+    private final FacetHolderImpl holder = new FacetHolderImpl();
 
     public JavaObjectActionParamPeer(final ObjectSpecification specification) {
         this.specification = specification;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return specification;
     }
 
-    public Identifier getIdentifier() {
-        throw new NotYetImplementedException();
+    @Override
+    public Class<? extends Facet>[] getFacetTypes() {
+        return holder.getFacetTypes();
     }
+
+    @Override
+    public boolean containsFacet(Class<? extends Facet> facetType) {
+        return holder.containsFacet(facetType);
+    }
+
+    @Override
+    public <T extends Facet> T getFacet(Class<T> cls) {
+        return holder.getFacet(cls);
+    }
+
+    @Override
+    public Facet[] getFacets(Filter<Facet> filter) {
+        return holder.getFacets(filter);
+    }
+
+    @Override
+    public void addFacet(Facet facet) {
+        holder.addFacet(facet);
+    }
+
+    @Override
+    public void addFacet(MultiTypedFacet facet) {
+        holder.addFacet(facet);
+    }
+
+    @Override
+    public void removeFacet(Facet facet) {
+        holder.removeFacet(facet);
+    }
+
+    @Override
+    public void removeFacet(Class<? extends Facet> facetType) {
+        holder.removeFacet(facetType);
+    }
+
 }

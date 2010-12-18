@@ -32,9 +32,7 @@ import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectMemberPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaOneToOneAssociationPeer;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetNone;
 import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFacetNone;
 import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedFacetAtDefault;
@@ -97,17 +95,17 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
             facets.add(new NamedFacetNone(holder));
             facets.add(new DescribedAsFacetNone(holder));
             facets.add(new HelpFacetNone(holder));
-        }
-
-        if (holder instanceof JavaOneToOneAssociationPeer) {
-            facets.add(new MaxLengthFacetUnlimited(holder));
-            facets.add(new MultiLineFacetNone(true, holder));
-        }
-
-        if (holder instanceof JavaObjectActionPeer) {
-            facets.add(new ExecutedFacetAtDefault(holder));
-            facets.add(new ActionDefaultsFacetNone(holder));
-            facets.add(new ActionChoicesFacetNone(holder));
+            
+            JavaObjectMemberPeer objectMemberPeer = (JavaObjectMemberPeer) holder;
+            if (objectMemberPeer.isProperty()) {
+                facets.add(new MaxLengthFacetUnlimited(holder));
+                facets.add(new MultiLineFacetNone(true, holder));
+            }
+            if (objectMemberPeer.isAction()) {
+                facets.add(new ExecutedFacetAtDefault(holder));
+                facets.add(new ActionDefaultsFacetNone(holder));
+                facets.add(new ActionChoicesFacetNone(holder));
+            }
         }
 
         return FacetUtil.addFacets(facets);

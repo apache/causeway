@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.choices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Provides a set of choices for a property.
@@ -40,5 +41,5 @@ public interface PropertyChoicesFacet extends Facet {
     /**
      * Gets the available choices for this property.
      */
-    public Object[] getChoices(ObjectAdapter adapter);
+    public Object[] getChoices(ObjectAdapter adapter, SpecificationLoader specificationLoader);
 }

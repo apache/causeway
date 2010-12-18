@@ -20,18 +20,32 @@
 
 package org.apache.isis.core.metamodel.specloader.internal.peer;
 
-import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.Debuggable;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 /**
  * Details about action and field members gained via reflection.
  * 
  * @see org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer
- * @see org.apache.isis.core.metamodel.specloader.internal.peer.ObjectAssociationPeer
  */
-public interface ObjectMemberPeer extends Identified {
+public interface ObjectMemberPeer extends Identified, Debuggable {
 
-    void debugData(DebugString debugString);
+
+    /**
+     * The type of a {@link MemberType#PROPERTY}, the return type of an 
+     * {@link MemberType#ACTION}, the referenced
+     * type of a {@link MemberType#COLLECTION}.
+     */
+    ObjectSpecification getSpecification(SpecificationLoader specificationLoader);
+
+
+    boolean isProperty();
+    boolean isCollection();
+    boolean isAction();
+
 
 }

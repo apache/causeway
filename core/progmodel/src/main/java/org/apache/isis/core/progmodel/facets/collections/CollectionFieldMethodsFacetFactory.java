@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facets.Facet;
@@ -35,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.MethodScope;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaOneToManyAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectAssociationPeer;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
@@ -249,24 +250,25 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
             final Class<?> cls,
             final String capitalizedName,
             final Class<?> returnType,
-            final JavaOneToManyAssociationPeer collection) {
+            final JavaObjectAssociationPeer collection) {
         final Method method = findMethod(cls, OBJECT, CHOICES_PREFIX + capitalizedName, Object[].class, NO_PARAMETERS_TYPES);
         removeMethod(methodRemover, method);
         if (method == null) {
             return;
         }
-        collectionFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, collection, getSpecificationLoader(),
-                getRuntimeContext()));
+        collectionFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, collection, getRuntimeContext()));
     }
 
     // ///////////////////////////////////////////////////////////////
     // PropertyOrCollectionIdentifyingFacetFactory impl.
     // ///////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
         return method.getName().startsWith(GET_PREFIX);
     }
 
+    @Override
     public boolean isCollectionAccessor(final Method method) {
         if (!isPropertyOrCollectionAccessorCandidate(method)) {
             return false;
@@ -279,6 +281,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
      * The method way well represent a reference property, but this facet factory does not have any opinion on
      * the matter.
      */
+    @Override
     public boolean isPropertyAccessor(final Method method) {
         return false;
     }
@@ -291,6 +294,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
         return false;
     }
 
+    @Override
     public void findAndRemoveCollectionAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         final Class<?>[] collectionClasses = getCollectionTypeRepository().getCollectionType();
         for (int i = 0; i < collectionClasses.length; i++) {
@@ -300,6 +304,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
         }
     }
 
+    @Override
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
     // does nothing
     }
@@ -318,6 +323,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
     /**
      * Injected because {@link RuntimeContextAware}
      */
+    @Override
     public void setRuntimeContext(RuntimeContext runtimeContext) {
         this.runtimeContext = runtimeContext;
     }

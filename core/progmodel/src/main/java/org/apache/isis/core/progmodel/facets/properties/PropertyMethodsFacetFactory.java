@@ -244,7 +244,7 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
             return;
         }
         methodRemover.removeMethod(method);
-        propertyFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, property, getSpecificationLoader(), getRuntimeContext()));
+        propertyFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, property, getRuntimeContext()));
     }
 
     // ///////////////////////////////////////////////////////////////

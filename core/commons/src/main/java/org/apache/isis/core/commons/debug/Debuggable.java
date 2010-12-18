@@ -18,15 +18,16 @@
  */
 
 
-package org.apache.isis.core.metamodel.specloader.internal.peer;
+package org.apache.isis.core.commons.debug;
 
+/**
+ * The information to be displayed in a trace or a debug window
+ */
+public interface Debuggable {
 
-
-public interface ObjectActionPeer extends ObjectMemberPeer {
-
-
-    // ////////////// Parameters /////////////////
-
-    ObjectActionParamPeer[] getParameters();
+    /**
+     * Debug details describing the object being investigated
+     */
+    void debugData(DebugString debug);
 
 }

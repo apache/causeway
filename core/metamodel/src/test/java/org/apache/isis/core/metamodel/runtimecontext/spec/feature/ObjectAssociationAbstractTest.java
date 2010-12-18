@@ -35,7 +35,6 @@ import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.Mandat
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract.MemberType;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.jmock.Expectations;
@@ -59,7 +58,7 @@ public class ObjectAssociationAbstractTest {
     public void setup() {
         facetHolder = new IdentifiedImpl();
         objectAssociation = new ObjectAssociationAbstract("id", new TestProxySpecification("test"),
-                MemberType.ONE_TO_ONE_ASSOCIATION, facetHolder, null) {
+                MemberType.PROPERTY, facetHolder, null) {
 
             public ObjectAdapter get(ObjectAdapter fromObject) {
                 return null;

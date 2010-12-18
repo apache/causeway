@@ -20,17 +20,14 @@
 
 package org.apache.isis.core.metamodel.specloader.internal.peer;
 
+import java.lang.reflect.Method;
+
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
-import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
-import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.Target;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
+import org.apache.isis.core.metamodel.spec.identifier.Util;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 /*
@@ -42,50 +39,35 @@ import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
  */
 public class JavaObjectActionPeer extends JavaObjectMemberPeer implements ObjectActionPeer {
 
-    private final JavaObjectActionParamPeer[] parameters;
+    private JavaObjectActionParamPeer[] paramPeers;
 
-    public JavaObjectActionPeer(final Identifier identifier, final JavaObjectActionParamPeer[] parameters) {
-        super(identifier);
-        this.parameters = parameters;
+    public JavaObjectActionPeer(final Class<?> type, final Method method, final Class<?> returnType, final SpecificationLoader specificationLoader) {
+        super(MemberType.ACTION, type, method, determineIdentifier(type, method), returnType, specificationLoader);
     }
 
-    // ////////////////////// Type etc ////////////////////
-
-    public Target getTarget() {
-        final ExecutedFacet executedFacet = getFacet(ExecutedFacet.class);
-        return executedFacet == null ? Target.DEFAULT : executedFacet.getTarget();
+    private static Identifier determineIdentifier(Class<?> type, Method method) {
+        return Util.actionIdentifierFor(type, method);
     }
 
-    public ObjectActionType getType() {
-        return ObjectActionType.getType(this);
-    }
-
-    // ////////////////////// execute ////////////////////
-
-    public ObjectAdapter execute(final ObjectAdapter inObject, final ObjectAdapter[] parameters) throws ReflectiveActionException {
-        final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
-        return facet.invoke(inObject, parameters);
-    }
-
+    
     // ////////////////////// Parameters ////////////////////
 
-    public int getParameterCount() {
-        return parameters.length;
-    }
 
+    @Override
     public ObjectActionParamPeer[] getParameters() {
-        return parameters;
+        if (paramPeers == null) {
+            paramPeers = Util.getParamPeers(getMethod(), getSpecificationLoader());
+        }
+        return paramPeers;
     }
 
     // ///////////////////////// toString, debugData /////////////////////////
 
     @Override
     public String toString() {
-        final StringBuffer parameters = new StringBuffer();
         final ActionInvocationFacet facet = getFacet(ActionInvocationFacet.class);
         final ObjectSpecification onType = facet.getOnType();
-        return "JavaAction [name=" + getIdentifier().getMemberName() + ",type=" + onType.getShortName() + ",parameters="
-                + parameters + "]";
+        return "JavaObjectActionPeer [name=" + getIdentifier().getMemberName() + ",type=" + onType.getShortName() + "]";
     }
 
 }

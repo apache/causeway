@@ -39,38 +39,39 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
     private final Method method;
     private final Class<?> choicesClass;
-	private final SpecificationLoader specificationLoader;
 	private final RuntimeContext runtimeContext;
 
     public PropertyChoicesFacetViaMethod(
     		final Method method, 
     		final Class<?> choicesClass, 
     		final FacetHolder holder, 
-    		final SpecificationLoader specificationLoader, 
     		final RuntimeContext runtimeContext) {
         super(holder);
         this.method = method;
         this.choicesClass = choicesClass;
-        this.specificationLoader = specificationLoader;
         this.runtimeContext = runtimeContext;
     }
 
     /**
      * Returns a singleton list of the {@link Method} provided in the constructor. 
      */
+    @Override
     public List<Method> getMethods() {
     	return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
+	@Override
+    public boolean impliesResolve() {
 		return true;
 	}
 
-	public boolean impliesObjectChanged() {
+	@Override
+    public boolean impliesObjectChanged() {
 		return false;
 	}
 
-	public Object[] getChoices(final ObjectAdapter owningAdapter) {
+	@Override
+    public Object[] getChoices(final ObjectAdapter owningAdapter, final SpecificationLoader specificationLoader) {
         final Object options = ObjectInvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
             return null;
@@ -78,7 +79,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
         if (options.getClass().isArray()) {
             return ArrayUtils.getObjectAsObjectArray(options);
         }
-        final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesClass);
+        final ObjectSpecification specification = specificationLoader.loadSpecification(choicesClass);
         return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getRuntimeContext());
     }
 
@@ -92,10 +93,6 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 	// Dependencies (from constructor)
 	//////////////////////////////////////////////////////////
 	
-	private SpecificationLoader getSpecificationLoader() {
-		return specificationLoader;
-	}
-
 	private RuntimeContext getRuntimeContext() {
 		return runtimeContext;
 	}

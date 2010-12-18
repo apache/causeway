@@ -23,12 +23,7 @@ package org.apache.isis.core.commons.debug;
 /**
  * The information to be displayed in a trace or a debug window
  */
-public interface DebugInfo {
-
-    /**
-     * Debug details describing the object being investigated
-     */
-    void debugData(DebugString debug);
+public interface DebugInfo extends Debuggable {
 
     /**
      * The title for the debug information

@@ -40,11 +40,11 @@ public class DeweyOrderSetTest extends TestCase {
         junit.textui.TestRunner.run(new TestSuite(DeweyOrderSetTest.class));
     }
 
-    private final ObjectMemberPeer lastNameMember = new MemberPeerStub("LastName");
-    private final ObjectMemberPeer firstNameMember = new MemberPeerStub("FirstName");
-    private final ObjectMemberPeer houseNumberMember = new MemberPeerStub("HouseNumber");
-    private final ObjectMemberPeer streetNameMember = new MemberPeerStub("StreetName");
-    private final ObjectMemberPeer postalTownMember = new MemberPeerStub("PostalTown");
+    private final ObjectMemberPeer lastNameMember = MemberPeerStub.createProperty("LastName");
+    private final ObjectMemberPeer firstNameMember = MemberPeerStub.createProperty("FirstName");
+    private final ObjectMemberPeer houseNumberMember = MemberPeerStub.createProperty("HouseNumber");
+    private final ObjectMemberPeer streetNameMember = MemberPeerStub.createProperty("StreetName");
+    private final ObjectMemberPeer postalTownMember = MemberPeerStub.createProperty("PostalTown");
     private final List<ObjectMemberPeer> lastNameAndFirstName = ImmutableList.of( lastNameMember, firstNameMember );
     private final List<ObjectMemberPeer> nameAndAddressMembers = ImmutableList.of( lastNameMember, firstNameMember,
             houseNumberMember, streetNameMember, postalTownMember );

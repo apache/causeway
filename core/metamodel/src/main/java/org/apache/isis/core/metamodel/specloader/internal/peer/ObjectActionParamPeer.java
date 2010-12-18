@@ -20,12 +20,10 @@
 
 package org.apache.isis.core.metamodel.specloader.internal.peer;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
-public interface ObjectActionParamPeer extends FacetHolder {
 
-    ObjectSpecification getSpecification();
+public interface ObjectActionParamPeer extends FacetHolderAndSpec {
 
+    
 }

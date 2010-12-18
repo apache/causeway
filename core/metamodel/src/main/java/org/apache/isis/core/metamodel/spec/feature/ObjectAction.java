@@ -182,8 +182,4 @@ public interface ObjectAction extends ObjectMember {
      */
     ObjectAdapter[][] getChoices(ObjectAdapter target);
 
-
-    
-
-
 }

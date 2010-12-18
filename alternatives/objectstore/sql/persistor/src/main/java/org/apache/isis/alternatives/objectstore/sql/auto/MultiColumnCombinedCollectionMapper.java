@@ -27,7 +27,7 @@ import org.apache.isis.alternatives.objectstore.sql.FieldMappingLookup;
 import org.apache.isis.alternatives.objectstore.sql.ObjectMappingLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 /**
  * @author Kevin
@@ -45,10 +45,11 @@ public class MultiColumnCombinedCollectionMapper extends
 		super(objectAssociation, parameterBase, lookup, objectMapperLookup);
 	}
 
-	protected String determineColumnName(ObjectAssociation objectAssociation){
+	@Override
+    protected String determineColumnName(ObjectAssociation objectAssociation){
 	    if (objectAssociation instanceof OneToManyAssociationImpl){
 	    	OneToManyAssociationImpl fkAssoc = (OneToManyAssociationImpl) objectAssociation;
-	    	ObjectAssociationPeer peer = fkAssoc.getAssociationPeer();
+	    	ObjectMemberPeer peer = fkAssoc.getAssociationPeer();
 	    	String fullClassName = peer.getIdentifier().getClassName();
 	    	int lastPos = fullClassName.lastIndexOf('.');
 	    	return fullClassName.substring(lastPos+1)+"_"+fkAssoc.getId();

@@ -48,20 +48,21 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 
 public class OneToOneAssociationImpl extends ObjectAssociationAbstract implements OneToOneAssociation {
 
-    private final ObjectAssociationPeer associationPeer;
+    private final ObjectMemberPeer associationPeer;
 
     public OneToOneAssociationImpl(
-    		final ObjectAssociationPeer association, 
+    		final ObjectMemberPeer association, 
     		final RuntimeContext runtimeContext) {
-        super(association.getIdentifier().getMemberName(), association.getSpecification(), MemberType.ONE_TO_ONE_ASSOCIATION, association, runtimeContext);
+        super(association.getIdentifier().getMemberName(), association.getSpecification(runtimeContext.getSpecificationLoader()), MemberType.PROPERTY, association, runtimeContext);
         this.associationPeer = association;
     }
 
@@ -244,7 +245,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter ownerAdapter) {
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter);
+        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLoader());
         if (pojoOptions != null) {
             final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {
@@ -271,6 +272,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+
     @Override
     public Instance getInstance(ObjectAdapter ownerAdapter) {
         OneToOneAssociation specification = this;

@@ -20,7 +20,6 @@
 
 package org.apache.isis.core.progmodel.specloader.internal.introspector;
 
-import java.beans.Introspector;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -34,7 +33,6 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.ToString;
@@ -45,6 +43,7 @@ import org.apache.isis.core.metamodel.facets.MethodScope;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.spec.identifier.Util;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorAbstract;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -52,10 +51,9 @@ import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetPr
 import org.apache.isis.core.metamodel.specloader.internal.introspector.MethodFinderUtils;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaOneToManyAssociationPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaOneToOneAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectAssociationPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.util.NameUtils;
@@ -129,7 +127,6 @@ public class JavaIntrospector {
     private static final String GET_PREFIX = "get";
     private static final String IS_PREFIX = "is";
 
-    private final String className;
     private final Class<?> type;
     private final List<Method> methods;
 
@@ -164,7 +161,6 @@ public class JavaIntrospector {
         // has been removed.
 
         methods = Arrays.asList(type.getMethods());
-        className = type.getName();
     }
 
     // ////////////////////////////////////////////////////////////////////////////
@@ -191,13 +187,6 @@ public class JavaIntrospector {
         return type;
     }
 
-    /**
-     * As per {@link Class#getName()}.
-     */
-    String className() {
-        return className;
-    }
-
     public String getFullName() {
         return type.getName();
     }
@@ -218,8 +207,12 @@ public class JavaIntrospector {
         return JavaClassUtils.isFinal(type);
     }
 
+    private String getClassName() {
+        return type.getName();
+    }
+
     public String shortName() {
-        final String name = type.getName();
+        final String name = getClassName();
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
@@ -229,9 +222,9 @@ public class JavaIntrospector {
     // ////////////////////////////////////////////////////////////////////////////
 
     public void introspectClass() {
-        LOG.info("introspecting " + className());
+        LOG.info("introspecting " + getClassName());
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("introspecting " + className() + ": class-level details");
+        	LOG.debug("introspecting " + getClassName() + ": class-level details");
         }
 
         // process facets at object level
@@ -259,7 +252,7 @@ public class JavaIntrospector {
     }
 
     public void introspectPropertiesAndCollections() {
-        LOG.debug("introspecting " + className() + ": properties and collections");
+        LOG.debug("introspecting " + getClassName() + ": properties and collections");
 
         // find the properties and collections (fields) ...
         final List<ObjectMemberPeer> fieldPeers = findAndCreateFieldPeers();
@@ -281,7 +274,7 @@ public class JavaIntrospector {
     }
 
     public void introspectActions() {
-        LOG.debug("introspecting " + className() + ": actions");
+        LOG.debug("introspecting " + getClassName() + ": actions");
 
         // find the actions ...
         MethodScope methodScope = MethodScope.OBJECT;
@@ -365,14 +358,12 @@ public class JavaIntrospector {
 
     private void createCollectionPeersFromAccessors(final List<Method> collectionAccessors, final List<ObjectMemberPeer> associationPeerListToAppendto) {
         for (final Method getMethod : collectionAccessors) {
-            LOG.debug("  identified one-many association method " + getMethod);
-            final String capitalizedName = NameUtils.javaBaseName(getMethod.getName());
-            final String collectionNameName = Introspector.decapitalize(capitalizedName);
-
-            final Identifier identifier = Identifier.propertyOrCollectionIdentifier(className(), collectionNameName);
+            if (LOG.isDebugEnabled()) {
+                LOG.debug("  identified one-many association method " + getMethod);
+            }
 
             // create property and add facets
-            final JavaOneToManyAssociationPeer collection = new JavaOneToManyAssociationPeer(identifier, getSpecificationLoader());
+            final JavaObjectAssociationPeer collection = JavaObjectAssociationPeer.createCollectionPeer(type, getMethod, getSpecificationLoader());
             getFacetProcessor().process(type, getMethod, new JavaIntrospectorMethodRemover(), collection,
                     ObjectFeatureType.COLLECTION);
 
@@ -382,9 +373,9 @@ public class JavaIntrospector {
             if (typeOfFacet != null) {
                 elementType = typeOfFacet.value();
             }
-            collection.setElementType(elementType);
+            collection.setType(elementType);
 
-            // skip if class substituor says so.
+            // skip if class substitutor says so.
             if (getClassSubstitutor().getClass(elementType) == null) {
                 continue;
             }
@@ -396,28 +387,21 @@ public class JavaIntrospector {
     private void createPropertyPeersFromAccessors(final List<Method> propertyAccessors, final List<ObjectMemberPeer> associationPeerListToAppendto)
             throws ReflectionException {
 
-        for (final Method accessorMethod : propertyAccessors) {
-            LOG.debug("  identified 1-1 association method " + accessorMethod);
+        for (final Method getMethod : propertyAccessors) {
+            LOG.debug("  identified 1-1 association method " + getMethod);
 
-            final String capitalizedName = NameUtils.javaBaseName(accessorMethod.getName());
-            final String beanName = Introspector.decapitalize(capitalizedName);
-            final Class<?> returnType = accessorMethod.getReturnType();
+            final Class<?> returnType = getMethod.getReturnType();
 
             // skip if class strategy says so.
             if (getClassSubstitutor().getClass(returnType) == null) {
                 continue;
             }
 
-            if (LOG.isDebugEnabled()) {
-            	LOG.debug("one-to-one association " + capitalizedName + " ->" + accessorMethod);
-            }
-            final Identifier identifier = Identifier.propertyOrCollectionIdentifier(className, beanName);
-
             // create a 1:1 association peer
-            final JavaOneToOneAssociationPeer associationPeer = new JavaOneToOneAssociationPeer(identifier, returnType, getSpecificationLoader());
+            final JavaObjectAssociationPeer associationPeer = JavaObjectAssociationPeer.createPropertyPeer(type, getMethod, returnType, getSpecificationLoader());
 
             // process facets for the 1:1 association
-            getFacetProcessor().process(type, accessorMethod, new JavaIntrospectorMethodRemover(), associationPeer,
+            getFacetProcessor().process(type, getMethod, new JavaIntrospectorMethodRemover(), associationPeer,
                     ObjectFeatureType.PROPERTY);
 
             associationPeerListToAppendto.add(associationPeer);
@@ -479,32 +463,33 @@ public class JavaIntrospector {
     }
 
 	private ObjectActionPeer createAction(final Method actionMethod) {
-		final Class<?>[] parameterTypes = getParameterTypesFor(actionMethod);
-        final int numParameters = parameterTypes.length;
-
-        final JavaObjectActionParamPeer[] actionParams = new JavaObjectActionParamPeer[numParameters];
-        for (int j = 0; j < numParameters; j++) {
-            ObjectSpecification paramSpec = getSpecificationLoader().loadSpecification(parameterTypes[j]);
-            if (paramSpec == null) {
-            	return null;
-            }
-            actionParams[j] = new JavaObjectActionParamPeer(paramSpec);
-        }
-
-
-        final String fullMethodName = actionMethod.getName();
-        final Identifier identifier = Identifier.actionIdentifier(className, fullMethodName, parameterTypes);
-        final JavaObjectActionPeer action = new JavaObjectActionPeer(identifier, actionParams);
+	    
+		if (!isAllParamTypesValid(actionMethod)) {
+		    return null;
+		}
+        
+        Class<?> returnType = actionMethod.getReturnType();
+        final JavaObjectActionPeer action = new JavaObjectActionPeer(type, actionMethod, returnType, reflector);
 
         // process facets on the action & parameters
         getFacetProcessor()
                 .process(type, actionMethod, new JavaIntrospectorMethodRemover(), action, ObjectFeatureType.ACTION);
+
+        ObjectActionParamPeer[] actionParams = action.getParameters();
         for (int j = 0; j < actionParams.length; j++) {
             getFacetProcessor().processParams(actionMethod, j, actionParams[j]);
         }
 
         return action;
 	}
+
+    public boolean isAllParamTypesValid(final Method actionMethod) {
+        return Util.isAllParamTypesValid(actionMethod, getSpecificationLoader());
+    }
+
+    private JavaObjectActionParamPeer[] getParamPeersFor(final Method actionMethod) {
+        return Util.getParamPeers(actionMethod, getSpecificationLoader());
+    }
 
     private boolean representsAction(final MethodScope methodScope, RecognisedHelpersStrategy skipRecognisedHelpers, final Method actionMethod) {
 
@@ -542,23 +527,8 @@ public class JavaIntrospector {
     }
 
 	private boolean loadParamSpecs(final Method actionMethod) {
-		final Class<?>[] parameterTypes = getParameterTypesFor(actionMethod);
+		final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
         return loadParamSpecs(parameterTypes);
-	}
-
-	private Class<?>[] getParameterTypesFor(final Method actionMethod) {
-
-		// build/validate action parameters
-        // as for return type, if the reflector's class strategy says to skip any of the
-        // action's parameter types, then just ignore this action altogether.
-        final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
-
-
-        // previously we wrapped primitives.  However, this prevents the lookup of
-        // actions during remote authorization calls (using Identifier class).
-        // ... should we remove ... ?
-        // final Class<?>[] parameterClasses = WrapperUtils.wrapAsNecessary(parameterTypes);
-		return parameterTypes;
 	}
 
 	private boolean loadParamSpecs(final Class<?>[] parameterTypes) {
@@ -645,7 +615,7 @@ public class JavaIntrospector {
         if (method == null) {
             return null;
         } else if (!JavaClassUtils.isStatic(method)) {
-            LOG.warn("method " + className + "." + type + "Order() must be declared as static");
+            LOG.warn("method " + getClassName() + "." + type + "Order() must be declared as static");
             return null;
         } else {
             String s;
@@ -661,7 +631,7 @@ public class JavaIntrospector {
         try {
             return method.invoke(null, parameters);
         } catch (final IllegalAccessException ignore) {
-            LOG.warn("method " + className + "." + method.getName() + "() must be declared as public");
+            LOG.warn("method " + getClassName() + "." + method.getName() + "() must be declared as public");
             return null;
         } catch (final InvocationTargetException e) {
             throw new ReflectionException(e);
@@ -712,7 +682,7 @@ public class JavaIntrospector {
      * <p>
      * Have therefore made private.
      */
-    private static List<ObjectAssociationPeer> orderArray(final List<ObjectAssociationPeer> original, final String[] order) {
+    private static List<ObjectMemberPeer> orderArray(final List<ObjectMemberPeer> original, final String[] order) {
         if (order == null) {
             return original;
 
@@ -721,14 +691,14 @@ public class JavaIntrospector {
                 order[i] = NameUtils.simpleName(order[i]);
             }
 
-            final List<ObjectAssociationPeer> ordered = Lists.newArrayListWithCapacity(original.size());
+            final List<ObjectMemberPeer> ordered = Lists.newArrayListWithCapacity(original.size());
 
             // work through each order element and find, if there is one, a
             // matching member.
             int orderedIndex = 0;
             ordering: for (int orderIndex = 0; orderIndex < order.length; orderIndex++) {
                 for (int memberIndex = 0; memberIndex < original.size(); memberIndex++) {
-                    final ObjectAssociationPeer member = original.get(memberIndex);
+                    final ObjectMemberPeer member = original.get(memberIndex);
                     if (member == null) {
                         continue;
                     }
@@ -745,7 +715,7 @@ public class JavaIntrospector {
                 }
             }
 
-            final List<ObjectAssociationPeer> results = Lists.newArrayListWithCapacity(original.size());
+            final List<ObjectMemberPeer> results = Lists.newArrayListWithCapacity(original.size());
             int index = append(0, results, ordered);
             index = append(index, results, original);
 
@@ -753,9 +723,9 @@ public class JavaIntrospector {
         }
     }
 
-    protected static int append(int index, final List<ObjectAssociationPeer> to, List<ObjectAssociationPeer> from) {
+    protected static int append(int index, final List<ObjectMemberPeer> to, List<ObjectMemberPeer> from) {
         for (int i = 0; i < from.size(); i++) {
-            final ObjectAssociationPeer member = from.get(i);
+            final ObjectMemberPeer member = from.get(i);
             if (member != null) {
                 to.set(index++, member);
             }
@@ -776,7 +746,7 @@ public class JavaIntrospector {
     @Override
     public String toString() {
         ToString str = new ToString(this);
-        str.append("class", className);
+        str.append("class", getClassName());
         return str.toString();
     }
 

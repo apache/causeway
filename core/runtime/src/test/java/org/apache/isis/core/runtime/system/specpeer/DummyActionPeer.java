@@ -27,9 +27,11 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
 import org.apache.isis.core.runtime.testsystem.TestSpecification;
@@ -44,6 +46,7 @@ public final class DummyActionPeer extends FacetHolderImpl implements ObjectActi
     private ObjectAdapter returnObject;
     private ObjectSpecification returnType;
 
+    @Override
     public void debugData(final DebugString debugString) {}
 
     public ObjectAdapter execute(final ObjectAdapter object, final ObjectAdapter[] parameters) {
@@ -63,6 +66,7 @@ public final class DummyActionPeer extends FacetHolderImpl implements ObjectActi
         return null;
     }
 
+    @Override
     public Identifier getIdentifier() {
         return Identifier.classIdentifier(name);
     }
@@ -184,9 +188,33 @@ public final class DummyActionPeer extends FacetHolderImpl implements ObjectActi
         return new int[3];
     }
 
+    @Override
     public ObjectActionParamPeer[] getParameters() {
         return new ObjectActionParamPeer[] { new DummyActionParamPeer(), new DummyActionParamPeer(),
                 new DummyActionParamPeer(), };
     }
 
+    @Override
+    public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
+        return null;
+    }
+
+    protected MemberType getMemberType() {
+        return MemberType.ACTION;
+    }
+
+    @Override
+    public boolean isProperty() {
+        return getMemberType().isProperty();
+    }
+
+    @Override
+    public boolean isCollection() {
+        return getMemberType().isCollection();
+    }
+
+    @Override
+    public boolean isAction() {
+        return getMemberType().isAction();
+    }
 }

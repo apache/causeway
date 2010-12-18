@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facets.Facet;
@@ -42,7 +41,6 @@ import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
@@ -628,15 +626,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         assertEquals(customerNoSpec, actionInvocationFacetViaMethod.getOnType());
     }
 
-    private static ObjectActionPeer createHolderWithParms() {
-        JavaObjectActionParamPeer param1 = new JavaObjectActionParamPeer(
-                new TestProxySpecification("java.lang.Integer"));
-        JavaObjectActionParamPeer param2 = new JavaObjectActionParamPeer(new TestProxySpecification("java.lang.Long"));
-        JavaObjectActionParamPeer[] parms = new JavaObjectActionParamPeer[] { param1, param2 };
-        Identifier id = Identifier.classIdentifier("action");
-        return new JavaObjectActionPeer(id, parms);
-    }
-
     public void testInstallsParameterDefaultsMethodAndRemovesMethod() {
         class Customer {
             @SuppressWarnings("unused")
@@ -660,7 +649,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method default0Method = findMethod(Customer.class, "default0SomeAction", new Class[] {});
         Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[] {});
 
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(Customer.class, actionMethod, void.class, reflector);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
@@ -707,7 +696,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method choices0Method = findMethod(Customer.class, "choices0SomeAction", new Class[] {});
         Method choices1Method = findMethod(Customer.class, "choices1SomeAction", new Class[] {});
 
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(Customer.class, actionMethod, void.class, reflector);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
@@ -745,7 +734,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
 
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(CustomerEx.class, actionMethod, void.class, reflector);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
@@ -793,7 +782,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
 
 
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(CustomerEx.class, actionMethod, void.class, reflector);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
@@ -848,7 +837,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(Customer.class, actionMethod, void.class, reflector);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {
@@ -862,23 +851,27 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testBothDefaultMethodCausesException() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             public void someAction(final int x, final long y) {}
 
+            @SuppressWarnings("unused")
             public int default0SomeAction() {
                 return 0;
             }
 
+            @SuppressWarnings("unused")
             public long default1SomeAction() {
                 return 0;
             }
 
+            @SuppressWarnings("unused")
             public Object[] defaultSomeAction(final int x, final long y) {
                 return null;
             }
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(Customer.class, actionMethod, void.class, reflector);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {
@@ -892,23 +885,27 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testBothDefaultChoicesMethodCausesException() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             public void someAction(final int x, final long y) {}
 
+            @SuppressWarnings("unused")
             public int default0SomeAction() {
                 return 0;
             }
 
+            @SuppressWarnings("unused")
             public long default1SomeAction() {
                 return 0;
             }
 
+            @SuppressWarnings("unused")
             public Object[] choicesSomeAction(final int x, final long y) {
                 return null;
             }
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(Customer.class, actionMethod, void.class, reflector);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {
@@ -922,23 +919,27 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testBothChoicesDefaultMethodCausesException() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             public void someAction(final int x, final long y) {}
 
+            @SuppressWarnings("unused")
             public int[] choices0SomeAction() {
                 return new int[0];
             }
 
+            @SuppressWarnings("unused")
             public long[] choices1SomeAction() {
                 return new long[0];
             }
 
+            @SuppressWarnings("unused")
             public Object[] defaultSomeAction(final int x, final long y) {
                 return null;
             }
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectActionPeer facetHolderWithParms = createHolderWithParms();
+        ObjectActionPeer facetHolderWithParms = new JavaObjectActionPeer(Customer.class, actionMethod, void.class, reflector);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {
