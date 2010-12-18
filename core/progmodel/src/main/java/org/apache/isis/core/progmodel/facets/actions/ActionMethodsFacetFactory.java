@@ -37,8 +37,8 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -88,7 +88,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
     // ///////////////////////////////////////////////////////
 
     @Override
-    public boolean process(Class<?> cls, final Method actionMethod, final MethodRemover methodRemover, final FacetHolder action) {
+    public boolean process(Class<?> cls, final Method actionMethod, final MethodRemover methodRemover, final FacetHolder holder) {
 
         final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
         final Class<?> returnType = actionMethod.getReturnType();
@@ -99,55 +99,62 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
         final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
         final ObjectSpecification returnSpec = getSpecificationLoader().loadSpecification(returnType.getName());
         if (returnSpec != null) {
-            facets.add(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, action, getRuntimeContext()));
-            checkForDebugPrefix(facets, capitalizedName, action);
-            checkForExplorationPrefix(facets, capitalizedName, action);
-            checkForExecutionLocationPrefix(facets, capitalizedName, action);
+            facets.add(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext()));
+            checkForDebugPrefix(facets, capitalizedName, holder);
+            checkForExplorationPrefix(facets, capitalizedName, holder);
+            checkForExecutionLocationPrefix(facets, capitalizedName, holder);
         }
 
         removeMethod(methodRemover, actionMethod);
 
         final boolean forClass = (actionMethod.getModifiers() & Modifier.STATIC) > 0;
-        findAndRemoveValidMethod(facets, methodRemover, cls, forClass, capitalizedName, returnType, paramTypes, action);
+        findAndRemoveValidMethod(facets, methodRemover, cls, forClass, capitalizedName, returnType, paramTypes, holder);
         boolean oldChoicesOrDefaultsMethodsUsed = findAndRemoveParametersDefaultsMethod(facets, methodRemover, cls, forClass,
-                capitalizedName, returnType, paramTypes, action);
+                capitalizedName, returnType, paramTypes, holder);
         oldChoicesOrDefaultsMethodsUsed = findAndRemoveParametersChoicesMethod(facets, methodRemover, cls, forClass,
-                capitalizedName, returnType, paramTypes, action)
+                capitalizedName, returnType, paramTypes, holder)
                 || oldChoicesOrDefaultsMethodsUsed;
 
-        defaultNamedFacet(facets, methodRemover, capitalizedName, action); // must be called after the checkForXxxPrefix methods
-        findAndRemoveNameMethod(facets, methodRemover, cls, capitalizedName, new Class[] {}, action);
-        findAndRemoveDescriptionMethod(facets, methodRemover, cls, capitalizedName, new Class[] {}, action);
+        defaultNamedFacet(facets, methodRemover, capitalizedName, holder); // must be called after the checkForXxxPrefix methods
+        findAndRemoveNameMethod(facets, methodRemover, cls, capitalizedName, new Class[] {}, holder);
+        findAndRemoveDescriptionMethod(facets, methodRemover, cls, capitalizedName, new Class[] {}, holder);
 
-        findAndRemoveAlwaysHideMethod(facets, methodRemover, cls, capitalizedName, paramTypes, action);
-        findAndRemoveProtectMethod(facets, methodRemover, cls, capitalizedName, paramTypes, action);
+        findAndRemoveAlwaysHideMethod(facets, methodRemover, cls, capitalizedName, paramTypes, holder);
+        findAndRemoveProtectMethod(facets, methodRemover, cls, capitalizedName, paramTypes, holder);
 
-        findAndRemoveHideForSessionMethod(facets, methodRemover, cls, capitalizedName, UserMemento.class, action);
-        findAndRemoveDisableForSessionMethod(facets, methodRemover, cls, capitalizedName, UserMemento.class, action);
-        findAndRemoveHideMethod(facets, methodRemover, cls, forClass, capitalizedName, paramTypes, action);
-        findAndRemoveDisableMethod(facets, methodRemover, cls, forClass, capitalizedName, paramTypes, action);
+        findAndRemoveHideForSessionMethod(facets, methodRemover, cls, capitalizedName, UserMemento.class, holder);
+        findAndRemoveDisableForSessionMethod(facets, methodRemover, cls, capitalizedName, UserMemento.class, holder);
+        findAndRemoveHideMethod(facets, methodRemover, cls, forClass, capitalizedName, paramTypes, holder);
+        findAndRemoveDisableMethod(facets, methodRemover, cls, forClass, capitalizedName, paramTypes, holder);
 
-        if (action instanceof JavaObjectActionPeer) {
-            final JavaObjectActionPeer javaObjectActionPeer = (JavaObjectActionPeer) action;
-            // process the action's parameters names, descriptions and optional
-            // an alternative design would be to have another facet factory processing just ACTION_PARAMETER,
-            // and have it remove these
-            // supporting methods. However, the FacetFactory API doesn't allow for methods of the class to be
-            // removed while processing
-            // action parameters, only while processing Methods (ie actions)
-            final ObjectActionParamPeer[] actionParameters = javaObjectActionPeer.getParameters();
+        if (holder instanceof ObjectMemberPeer) {
+            final ObjectMemberPeer memberPeer = (ObjectMemberPeer) holder;
 
-            findAndRemoveOptionalForActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
-                    actionParameters);
-            findAndRemoveNamesForActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
-                    actionParameters);
-            findAndRemoveDescriptionsforActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
-                    actionParameters);
-
-            findAndRemoveChoicesForActionParametersMethod(oldChoicesOrDefaultsMethodsUsed, methodRemover, cls, capitalizedName,
-                    paramTypes, actionParameters);
-            findAndRemoveDefaultForActionParametersMethod(oldChoicesOrDefaultsMethodsUsed, methodRemover, cls, capitalizedName,
-                    paramTypes, actionParameters);
+            if(memberPeer.getFeatureType().isAction()) {
+                // REVIEW: it may not be necessary to do this check, because properties and collections have no "children" (parameters)
+                // and so their list will be null.
+                
+                // process the action's parameters names, descriptions and optional
+                // an alternative design would be to have another facet factory processing just ACTION_PARAMETER,
+                // and have it remove these
+                // supporting methods. However, the FacetFactory API doesn't allow for methods of the class to be
+                // removed while processing
+                // action parameters, only while processing Methods (ie actions)
+                final List<TypedHolder> children = memberPeer.getChildren();
+                
+                findAndRemoveOptionalForActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
+                    children);
+                findAndRemoveNamesForActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
+                    children);
+                findAndRemoveDescriptionsforActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
+                    children);
+                
+                findAndRemoveChoicesForActionParametersMethod(oldChoicesOrDefaultsMethodsUsed, methodRemover, cls, capitalizedName,
+                    paramTypes, children);
+                findAndRemoveDefaultForActionParametersMethod(oldChoicesOrDefaultsMethodsUsed, methodRemover, cls, capitalizedName,
+                    paramTypes, children);
+            }
+            
         }
         return FacetUtil.addFacets(facets);
     }
@@ -288,7 +295,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final String capitalizedName,
             final Class<?> returnType,
             final Class<?>[] params,
-            final FacetHolder[] parameters) {
+            final List<TypedHolder> parameters) {
         if (params.length == 0) {
             return;
         }
@@ -305,7 +312,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
         for (int i = 0; i < names.length; i++) {
             if (names[i]) {
                 // add facets directly to parameters, not to actions
-                FacetUtil.addFacet(new MandatoryFacetOverriddenByMethod(parameters[i]));
+                FacetUtil.addFacet(new MandatoryFacetOverriddenByMethod(parameters.get(i)));
             }
         }
     }
@@ -316,7 +323,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final String capitalizedName,
             final Class<?> returnType,
             final Class<?>[] params,
-            final FacetHolder[] parameters) {
+            final List<TypedHolder> parameters) {
         Method method = findMethodWithOrWithoutParameters(cls, CLASS, PARAMETER_NAMES_PREFIX + capitalizedName,
                 String[].class, params);
         if (method == null) {
@@ -326,13 +333,13 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
 
         final Object[] parameterObjects = new Object[method.getParameterTypes().length];
         final String[] names = (String[]) InvokeUtils.invokeStatic(method, parameterObjects);
-        if (names.length != parameters.length) {
-            throw new ReflectionException("Invalid number of parameter names, expected " + parameters.length + ", but got "
+        if (names.length != parameters.size()) {
+            throw new ReflectionException("Invalid number of parameter names, expected " + parameters.size() + ", but got "
                     + names.length + ", on " + method);
         }
         for (int i = 0; i < names.length; i++) {
             // add facets directly to parameters, not to actions
-            FacetUtil.addFacet(new NamedFacetViaMethod(names[i], method, parameters[i]));
+            FacetUtil.addFacet(new NamedFacetViaMethod(names[i], method, parameters.get(i)));
         }
     }
 
@@ -342,7 +349,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final Class<?> cls,
             final String capitalizedName,
             final Class<?>[] params,
-            final FacetHolder[] parameters) {
+            final List<TypedHolder> parameters) {
 
         for (int i = 0; i < params.length; i++) {
             final Class<?> returnType = (Array.newInstance(params[i], 0)).getClass();
@@ -362,7 +369,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
                 removeMethod(methodRemover, method);
 
                 // add facets directly to parameters, not to actions
-                FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(method, returnType, parameters[i], getSpecificationLoader(), getRuntimeContext()));
+                FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(method, returnType, parameters.get(i), getRuntimeContext()));
             }
         }
     }
@@ -373,7 +380,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final Class<?> cls,
             final String capitalizedName,
             final Class<?>[] params,
-            final FacetHolder[] parameters) {
+            final List<TypedHolder> parameters) {
 
         for (int i = 0; i < params.length; i++) {
 
@@ -387,7 +394,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
 
                 removeMethod(methodRemover, method);
                 // add facets directly to parameters, not to actions
-                FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(method, parameters[i]));
+                FacetUtil.addFacet(new ActionParameterDefaultsFacetViaMethod(method, parameters.get(i)));
             }
         }
     }
@@ -398,7 +405,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final String capitalizedName,
             final Class<?> returnType,
             final Class<?>[] params,
-            final FacetHolder[] parameters) {
+            final List<TypedHolder> parameters) {
         final Method method = findMethodWithOrWithoutParameters(cls, CLASS, PARAMETER_DESCRIPTIONS_PREFIX + capitalizedName,
                 String[].class, params);
         if (method == null) {
@@ -410,7 +417,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
         final String[] names = (String[]) InvokeUtils.invokeStatic(method, parameterObjects);
         for (int i = 0; i < names.length; i++) {
             // add facets directly to parameters, not to actions
-            FacetUtil.addFacet(new DescribedAsFacetViaMethod(names[i], method, parameters[i]));
+            FacetUtil.addFacet(new DescribedAsFacetViaMethod(names[i], method, parameters.get(i)));
         }
         methodRemover.removeMethod(method);
     }
@@ -449,7 +456,8 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
     /**
      * Injected because {@link RuntimeContextAware}
      */
-	public void setRuntimeContext(final RuntimeContext runtimeContext) {
+	@Override
+    public void setRuntimeContext(final RuntimeContext runtimeContext) {
 		this.runtimeContext = runtimeContext;
 	}
 

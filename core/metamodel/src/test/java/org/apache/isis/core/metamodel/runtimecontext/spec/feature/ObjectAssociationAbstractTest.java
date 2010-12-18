@@ -58,7 +58,7 @@ public class ObjectAssociationAbstractTest {
     public void setup() {
         facetHolder = new IdentifiedImpl();
         objectAssociation = new ObjectAssociationAbstract("id", new TestProxySpecification("test"),
-                MemberType.PROPERTY, facetHolder, null) {
+                FeatureType.PROPERTY, facetHolder, null) {
 
             public ObjectAdapter get(ObjectAdapter fromObject) {
                 return null;

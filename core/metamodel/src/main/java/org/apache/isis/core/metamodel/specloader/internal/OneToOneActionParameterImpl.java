@@ -23,15 +23,22 @@ package org.apache.isis.core.metamodel.specloader.internal;
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract implements OneToOneActionParameter {
 
-    public OneToOneActionParameterImpl(final int index, final ObjectActionImpl actionImpl, final ObjectActionParamPeer peer) {
+    public OneToOneActionParameterImpl(final int index, final ObjectActionImpl actionImpl, final TypedHolder peer) {
         super(index, actionImpl, peer);
     }
+
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.ACTION_PARAMETER;
+    }
+
 
     @Override
     public boolean isObject() {
@@ -42,6 +49,7 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
      * TODO: need to be able to validate parameters individually, eg if have <tt>RegEx</tt> annotation;
      * should delegate to the Check framework instead.
      */
+    @Override
     public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
         return null;
     }
@@ -50,6 +58,7 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         OneToOneActionParameter specification = this;
         return adapter.getInstance(specification);
@@ -64,6 +73,7 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
      * Gets the proposed value of the {@link Instance} (downcast as a
      * {@link MutableProposed}, wrapping the proposed value into a {@link ObjectAdapter}.
      */
+    @Override
     public ObjectAdapter get(ObjectAdapter owner) {
         MutableProposedHolder proposedHolder = getProposedHolder(owner);
         Object proposed = proposedHolder.getProposed();
@@ -88,6 +98,5 @@ public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract i
         MutableProposedHolder proposedHolder = (MutableProposedHolder) instance;
         return proposedHolder;
     }
-
 
 }

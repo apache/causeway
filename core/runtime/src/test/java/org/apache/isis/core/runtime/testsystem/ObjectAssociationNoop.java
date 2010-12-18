@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
@@ -40,7 +40,7 @@ public class ObjectAssociationNoop extends ObjectAssociationAbstract {
     		final String name, 
     		final ObjectSpecification spec, 
     		final RuntimeContext runtimeContext) {
-        super(name, spec, MemberType.PROPERTY, new IdentifiedImpl(), runtimeContext);
+        super(name, spec, FeatureType.PROPERTY, new IdentifiedImpl(), runtimeContext);
     }
 
     public String debugData() {

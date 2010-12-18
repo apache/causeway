@@ -41,7 +41,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
@@ -191,11 +191,11 @@ public class ObjectMemberAbstractTest {
 class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     protected ObjectMemberAbstractImpl(final String id) {
-        super(id, new IdentifiedImpl(), MemberType.PROPERTY, new RuntimeContextNoRuntime());
+        super(id, new IdentifiedImpl(), FeatureType.PROPERTY, new RuntimeContextNoRuntime());
     }
 
     protected ObjectMemberAbstractImpl(final String id, final RuntimeContext runtimeContext) {
-        super(id, new IdentifiedImpl(), MemberType.PROPERTY, runtimeContext);
+        super(id, new IdentifiedImpl(), FeatureType.PROPERTY, runtimeContext);
     }
 
 

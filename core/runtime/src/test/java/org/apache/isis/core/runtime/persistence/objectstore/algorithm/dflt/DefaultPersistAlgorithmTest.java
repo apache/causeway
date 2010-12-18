@@ -26,6 +26,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -33,7 +34,6 @@ import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.persistence.NotPersistableException;
 import org.apache.isis.core.runtime.persistence.adapterfactory.pojo.PojoAdapter;
 import org.apache.isis.core.runtime.persistence.objectstore.algorithm.ToPersistObjectSet;
-import org.apache.isis.core.runtime.persistence.objectstore.algorithm.dflt.DefaultPersistAlgorithm;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.testspec.OneToOneAssociationTest;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
@@ -50,10 +50,12 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
             return persistedObjects;
         }
 
+        @Override
         public void addPersistedObject(final ObjectAdapter object) {
             persistedObjects.add(object);
         }
 
+        @Override
         public void remapAsPersistent(final ObjectAdapter object) {
             object.changeState(ResolveState.RESOLVED);
         }
@@ -76,34 +78,48 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
         final TestProxySpecification spec = system.getSpecification(object);
         final ObjectAssociation[] fields = new ObjectAssociation[] { new OneToOneAssociationTest() {
 
+            @Override
             public void initAssociation(ObjectAdapter inObject, ObjectAdapter associate) {}
 
+            @Override
             public Consent isAssociationValid(ObjectAdapter inObject, ObjectAdapter associate) {
                 return null;
             }
 
+            @Override
             public void setAssociation(ObjectAdapter inObject, ObjectAdapter associate) {}
 
+            @Override
             public void set(ObjectAdapter owner, ObjectAdapter newValue) {}
 
+            @Override
             public ObjectAdapter get(ObjectAdapter target) {
                 return null;
             }
 
+            @Override
             public ObjectSpecification getSpecification() {
                 return null;
             }
 
+            @Override
             public String debugData() {
                 return null;
             }
 
+            @Override
             public String getId() {
                 return null;
             }
 
+            @Override
             public String getName() {
                 return null;
+            }
+
+            @Override
+            public FeatureType getFeatureType() {
+                return FeatureType.PROPERTY;
             }
 
         } };

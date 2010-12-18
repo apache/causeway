@@ -45,19 +45,19 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public abstract class ObjectActionParameterAbstract implements ObjectActionParameter {
 
     private final int number;
     private final ObjectActionImpl parentAction;
-    private final ObjectActionParamPeer peer;
+    private final TypedHolder peer;
 
     protected ObjectActionParameterAbstract(
             final int number,
             final ObjectActionImpl objectAction,
-            final ObjectActionParamPeer peer) {
+            final TypedHolder peer) {
         this.number = number;
         this.parentAction = objectAction;
         this.peer = peer;
@@ -94,7 +94,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectSpecification getSpecification() {
-        return peer.getSpecification();
+        return peer.getSpecification(getRuntimeContext().getSpecificationLoader());
     }
 
     @Override
@@ -106,7 +106,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
         String name = facet == null ? null : facet.value();
-        name = name == null ? peer.getSpecification().getSingularName() : name;
+        name = name == null ? peer.getSpecification(getRuntimeContext().getSpecificationLoader()).getSingularName() : name;
         return name;
     }
 

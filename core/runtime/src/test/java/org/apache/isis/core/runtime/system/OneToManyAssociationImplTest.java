@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
-import org.apache.isis.core.runtime.system.specpeer.DummyOneToManyPeer;
+import org.apache.isis.core.runtime.system.specpeer.DummyCollectionPeer;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
 
 
@@ -38,7 +38,7 @@ public class OneToManyAssociationImplTest extends ProxyJunit3TestCase {
 //    private ObjectAdapter associate;
     private OneToManyAssociation association;
 //    private TestSpecification type;
-    private DummyOneToManyPeer associationDelegate;
+    private DummyCollectionPeer associationDelegate;
 	private RuntimeContext runtimeContext;
 
     @Override
@@ -49,7 +49,7 @@ public class OneToManyAssociationImplTest extends ProxyJunit3TestCase {
 //        associate = system.createPersistentTestObject();
         runtimeContext = new RuntimeContextNoRuntime();
 
-        associationDelegate = new DummyOneToManyPeer(system.getSpecification(String.class));
+        associationDelegate = new DummyCollectionPeer(system.getSpecification(String.class));
         association = new OneToManyAssociationImpl(associationDelegate, runtimeContext);
     }
 

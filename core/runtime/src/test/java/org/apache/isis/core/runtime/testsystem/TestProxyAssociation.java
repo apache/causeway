@@ -43,6 +43,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
@@ -66,22 +67,27 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
     }
 
     // TODO: this is inconsistent with #get that casts the value to a ObjectAdapter
+    @Override
     public void clearAssociation(final ObjectAdapter inObject) {
         values.put(inObject, "NULL");
     }
 
+    @Override
     public String debugData() {
         return "";
     }
 
+    @Override
     public ObjectAdapter get(final ObjectAdapter inObject) {
         return (ObjectAdapter) values.get(inObject);
     }
 
+    @Override
     public String getBusinessKeyName() {
         return null;
     }
 
+    @Override
     public String getDescription() {
         return "no description";
     }
@@ -91,74 +97,92 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
         throw new UnexpectedCallException();
     }
 
+    @Override
     public String getHelp() {
         return "no help";
     }
 
+    @Override
     public String getId() {
         return name;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter target) {
         return null;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return spec;
     }
 
+    @Override
     public void initAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {
         setAssociation(inObject, associate);
     }
 
+    @Override
     public Consent isAssociationValid(final ObjectAdapter inObject, final ObjectAdapter value) {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public boolean isNotPersisted() {
         return false;
     }
 
+    @Override
     public boolean isEmpty(final ObjectAdapter inObject) {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public boolean isMandatory() {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public boolean hasChoices() {
         return false;
     }
 
+    @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
         return ConsentAbstract.allowIf(target != unuseableForObject);
     }
 
+    @Override
     public boolean isAlwaysHidden() {
         return false;
     }
 
+    @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return ConsentAbstract.allowIf(isVisible);
     }
 
+    @Override
     public void setAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {
         values.put(inObject, associate);
     }
 
+    @Override
     public void set(ObjectAdapter owner, ObjectAdapter newValue) {
         setAssociation(owner, newValue);
     }
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         return null;
     }
 
+    @Override
     public void toDefault(final ObjectAdapter target) {}
 
     @Override
@@ -193,6 +217,7 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
         this.unuseableForObject = object;
     }
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -200,6 +225,7 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
         return null;
     }
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -207,6 +233,7 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
         return null;
     }
 
+    @Override
     public ValidityContext<?> createValidateInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -227,6 +254,7 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
         return null;
     }
 
+    @Override
     public PropertyAccessContext createAccessInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod interactionMethod,
@@ -239,25 +267,35 @@ public class TestProxyAssociation extends FacetHolderNoop implements OneToOneAss
     // isAction, isAssociation
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isAction() {
         return false;
     }
 
-    public boolean isAssociation() {
+    @Override
+    public boolean isPropertyOrCollection() {
         return true;
     }
 
+    @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+    @Override
     public boolean isOneToOneAssociation() {
         return true;
+    }
+    
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.PROPERTY;
     }
 
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         OneToOneAssociation specification = this;
         return adapter.getInstance(specification);

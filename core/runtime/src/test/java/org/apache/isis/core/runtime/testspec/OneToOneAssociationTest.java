@@ -153,7 +153,7 @@ public abstract class OneToOneAssociationTest extends FacetHolderNoop implements
         return false;
     }
 
-    public boolean isAssociation() {
+    public boolean isPropertyOrCollection() {
         return true;
     }
 

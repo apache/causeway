@@ -27,7 +27,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import org.apache.isis.alternatives.remoting.common.client.facets.ActionInvocationFacetWrapProxy;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+
 import org.apache.isis.alternatives.remoting.common.data.Data;
 import org.apache.isis.alternatives.remoting.common.data.DummyNullValue;
 import org.apache.isis.alternatives.remoting.common.data.DummyReferenceData;
@@ -39,22 +45,16 @@ import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.testsystem.TestProxySystem;
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Level;
-import org.apache.log4j.LogManager;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
 
 public class ProxyAction_ExecuteRemotelyTest {
 
     //private Mockery mockery = new JUnit4Mockery();
 
     private ActionInvocationFacetWrapProxy proxy;
-    private ObjectActionPeer mockObjectActionPeer;
+    private ObjectMemberPeer mockObjectActionPeer;
     private ObjectEncoderDecoder mockEncoder;
     private ServerFacade mockDistribution;
     private ObjectAdapter target;

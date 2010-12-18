@@ -29,13 +29,14 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.internal.ObjectActionImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
@@ -52,7 +53,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
     private final Mockery mockery = new JUnit4Mockery();
 
     private ObjectActionImpl action;
-    private ObjectActionPeer mockObjectActionPeer;
+    private ObjectMemberPeer mockObjectActionPeer;
     private RuntimeContext mockRuntimeContext;
 
 
@@ -61,7 +62,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        mockObjectActionPeer = mockery.mock(ObjectActionPeer.class);
+        mockObjectActionPeer = mockery.mock(ObjectMemberPeer.class);
         mockRuntimeContext = mockery.mock(RuntimeContext.class);
 
         action = new ObjectActionImpl("reduceheadcount", mockObjectActionPeer, mockRuntimeContext);
@@ -75,14 +76,17 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
 
         final TestProxyAdapter result = new TestProxyAdapter();
         final ActionInvocationFacet facet = new ActionInvocationFacetAbstract(mockObjectActionPeer) {
+            @Override
             public ObjectAdapter invoke(ObjectAdapter target, ObjectAdapter[] parameters) {
                 return result;
             }
 
+            @Override
             public ObjectSpecification getReturnType() {
                 return null;
             }
 
+            @Override
             public ObjectSpecification getOnType() {
                 return new TestSpecification();
             }

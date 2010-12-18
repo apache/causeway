@@ -43,7 +43,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
@@ -57,7 +57,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public OneToManyAssociationImpl(
     		final ObjectMemberPeer association, 
     		final RuntimeContext runtimeContext) {
-        super(association.getIdentifier().getMemberName(), association.getSpecification(runtimeContext.getSpecificationLoader()), MemberType.COLLECTION, association, runtimeContext);
+        super(association.getIdentifier().getMemberName(), association.getSpecification(runtimeContext.getSpecificationLoader()), FeatureType.COLLECTION, association, runtimeContext);
         this.reflectiveAdapter = association;
     }
 

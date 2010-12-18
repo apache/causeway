@@ -18,34 +18,44 @@
  */
 
 
-package org.apache.isis.core.runtime.system.specpeer;
+package org.apache.isis.core.metamodel.specloader.internal.peer;
 
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
-public class DummyActionParamPeer extends FacetHolderImpl implements TypedHolder {
+/**
+ * A {@link FacetHolder} that also has a {@link ObjectSpecification type}.
+ * 
+ * <p>
+ * Used to represent class members when building up the metamodel.
+ */
+public interface TypedHolder extends FacetHolder {
 
-    @Override
-    public ObjectSpecification getSpecification(SpecificationLoader specificationLoader) {
-        return null;
-    }
+    public Class<?> getType();
+    
+    /**
+     * Type may not be known initially (eg {@link FeatureType#COLLECTION}s).
+     * 
+     * <p>
+     * For example, the accessor might return a raw type such as 
+     * <tt>java.util.List</tt>, rather than a generic one such as 
+     * <tt>java.util.List&lt;Customer&gt;</tt>.
+     */
+    public void setType(Class<?> type);
 
-    @Override
-    public Class<?> getType() {
-        return null;
-    }
+    /**
+     * The {@link ObjectSpecification} corresponding to {@link #getType()}
+     * (or null if not yet {@link #setType(Class)}).
+     */
+    ObjectSpecification getSpecification(SpecificationLoader specificationLoader);
 
-    @Override
-    public void setType(Class<?> type) {
-    }
+    /**
+     * @return
+     */
+    public FeatureType getFeatureType();
 
-    @Override
-    public FeatureType getFeatureType() {
-        return FeatureType.ACTION_PARAMETER;
-    }
 
 }

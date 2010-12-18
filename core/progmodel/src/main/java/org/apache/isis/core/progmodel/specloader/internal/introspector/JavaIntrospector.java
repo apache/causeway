@@ -49,12 +49,9 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.internal.introspector.MethodFinderUtils;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectAssociationPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.progmodel.facets.object.facets.FacetsFacet;
@@ -363,7 +360,7 @@ public class JavaIntrospector {
             }
 
             // create property and add facets
-            final JavaObjectAssociationPeer collection = JavaObjectAssociationPeer.createCollectionPeer(type, getMethod, getSpecificationLoader());
+            final ObjectMemberPeer collection = ObjectMemberPeerImpl.createCollectionPeer(type, getMethod, getSpecificationLoader());
             getFacetProcessor().process(type, getMethod, new JavaIntrospectorMethodRemover(), collection,
                     ObjectFeatureType.COLLECTION);
 
@@ -398,7 +395,7 @@ public class JavaIntrospector {
             }
 
             // create a 1:1 association peer
-            final JavaObjectAssociationPeer associationPeer = JavaObjectAssociationPeer.createPropertyPeer(type, getMethod, returnType, getSpecificationLoader());
+            final ObjectMemberPeer associationPeer = ObjectMemberPeerImpl.createPropertyPeer(type, getMethod, returnType, getSpecificationLoader());
 
             // process facets for the 1:1 association
             getFacetProcessor().process(type, getMethod, new JavaIntrospectorMethodRemover(), associationPeer,
@@ -442,7 +439,7 @@ public class JavaIntrospector {
             if (method == null) {
                 continue;
             }
-            ObjectActionPeer actionPeer = findActionMethodPeer(methodScope, skipRecognisedHelpers, method);
+            ObjectMemberPeer actionPeer = findActionMethodPeer(methodScope, skipRecognisedHelpers, method);
             if (actionPeer != null) {
             	methods.set(i, null);
             	actionPeers.add(actionPeer);
@@ -452,7 +449,7 @@ public class JavaIntrospector {
         return actionPeers;
     }
 
-    private ObjectActionPeer findActionMethodPeer(final MethodScope methodScope, RecognisedHelpersStrategy skipRecognisedHelpers, final Method actionMethod) {
+    private ObjectMemberPeer findActionMethodPeer(final MethodScope methodScope, RecognisedHelpersStrategy skipRecognisedHelpers, final Method actionMethod) {
 
     	if (!representsAction(methodScope, skipRecognisedHelpers, actionMethod)) {
     		return null;
@@ -462,22 +459,22 @@ public class JavaIntrospector {
         return createAction(actionMethod);
     }
 
-	private ObjectActionPeer createAction(final Method actionMethod) {
+	private ObjectMemberPeer createAction(final Method actionMethod) {
 	    
 		if (!isAllParamTypesValid(actionMethod)) {
 		    return null;
 		}
         
         Class<?> returnType = actionMethod.getReturnType();
-        final JavaObjectActionPeer action = new JavaObjectActionPeer(type, actionMethod, returnType, reflector);
+        final ObjectMemberPeer action = ObjectMemberPeerImpl.createActionPeer(type, actionMethod, returnType, reflector);
 
         // process facets on the action & parameters
         getFacetProcessor()
                 .process(type, actionMethod, new JavaIntrospectorMethodRemover(), action, ObjectFeatureType.ACTION);
 
-        ObjectActionParamPeer[] actionParams = action.getParameters();
-        for (int j = 0; j < actionParams.length; j++) {
-            getFacetProcessor().processParams(actionMethod, j, actionParams[j]);
+        List<TypedHolder> actionParams = action.getChildren();
+        for (int j = 0; j < actionParams.size(); j++) {
+            getFacetProcessor().processParams(actionMethod, j, actionParams.get(j));
         }
 
         return action;
@@ -487,7 +484,7 @@ public class JavaIntrospector {
         return Util.isAllParamTypesValid(actionMethod, getSpecificationLoader());
     }
 
-    private JavaObjectActionParamPeer[] getParamPeersFor(final Method actionMethod) {
+    private List<TypedHolder> getParamPeersFor(final Method actionMethod) {
         return Util.getParamPeers(actionMethod, getSpecificationLoader());
     }
 
@@ -542,8 +539,8 @@ public class JavaIntrospector {
 		return true;
 	}
 
-	private ObjectActionPeer[] convertToArray(final List<ObjectActionPeer> actions) {
-        return actions.toArray(new ObjectActionPeer[] {});
+	private ObjectMemberPeer[] convertToArray(final List<ObjectMemberPeer> actions) {
+        return actions.toArray(new ObjectMemberPeer[] {});
     }
 
     // ////////////////////////////////////////////////////////////////////////////

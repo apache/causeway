@@ -20,6 +20,9 @@
 
 package org.apache.isis.core.runtime.system.specpeer;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,18 +30,17 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.runtime.testsystem.TestSpecification;
 
 
 
-public final class DummyActionPeer extends FacetHolderImpl implements ObjectActionPeer {
+public final class DummyActionPeer extends FacetHolderImpl implements ObjectMemberPeer {
 
     private final ExpectedSet expectedActions = new ExpectedSet();
     private String name;
@@ -116,8 +118,13 @@ public final class DummyActionPeer extends FacetHolderImpl implements ObjectActi
         return null;
     }
 
-    public ObjectActionType getType() {
+    @Override
+    public Class<?> getType() {
         return null;
+    }
+
+    @Override
+    public void setType(Class<?> type) {
     }
 
     public boolean isVisibleDeclaratively() {
@@ -189,9 +196,9 @@ public final class DummyActionPeer extends FacetHolderImpl implements ObjectActi
     }
 
     @Override
-    public ObjectActionParamPeer[] getParameters() {
-        return new ObjectActionParamPeer[] { new DummyActionParamPeer(), new DummyActionParamPeer(),
-                new DummyActionParamPeer(), };
+    public List<TypedHolder> getChildren() {
+        return Arrays.asList( (TypedHolder)new DummyActionParamPeer(), new DummyActionParamPeer(),
+                new DummyActionParamPeer() );
     }
 
     @Override
@@ -199,22 +206,9 @@ public final class DummyActionPeer extends FacetHolderImpl implements ObjectActi
         return null;
     }
 
-    protected MemberType getMemberType() {
-        return MemberType.ACTION;
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.ACTION;
     }
 
-    @Override
-    public boolean isProperty() {
-        return getMemberType().isProperty();
-    }
-
-    @Override
-    public boolean isCollection() {
-        return getMemberType().isCollection();
-    }
-
-    @Override
-    public boolean isAction() {
-        return getMemberType().isAction();
-    }
 }

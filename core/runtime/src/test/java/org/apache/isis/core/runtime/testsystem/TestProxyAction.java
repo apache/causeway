@@ -34,6 +34,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -51,62 +52,77 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
 		runtimeContext = new RuntimeContextNoRuntime();
     }
 
+    @Override
     public ObjectAdapter execute(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         return null;
     }
 
+    @Override
     public ObjectAction[] getActions() {
         return null;
     }
 
+    @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
         return null;
     }
 
+    @Override
     public ObjectSpecification getOnType() {
         return null;
     }
 
+    @Override
     public ObjectAdapter[][] getChoices(final ObjectAdapter target) {
         return null;
     }
 
+    @Override
     public int getParameterCount() {
         return 0;
     }
 
+    @Override
     public ObjectActionParameter[] getParameters() {
         return null;
     }
 
+    @Override
     public ObjectSpecification[] getParameterTypes() {
         return null;
     }
 
+    @Override
     public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
         return null;
     }
 
+    @Override
     public ObjectSpecification getReturnType() {
         return null;
     }
 
+    @Override
     public Target getTarget() {
         return null;
     }
 
+    @Override
     public ObjectActionType getType() {
         return null;
     }
 
+    @Override
     public boolean hasReturn() {
         return false;
     }
 
+    @Override
     public boolean isContributed() {
         return false;
     }
 
+    @Override
     public boolean promptForParameters(final ObjectAdapter target) {
         return false;
     }
@@ -115,46 +131,57 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
         return false;
     }
 
+    @Override
     public Consent isProposedArgumentSetValid(final ObjectAdapter object, final ObjectAdapter[] parameters) {
         return null;
     }
 
+    @Override
     public ObjectAdapter realTarget(final ObjectAdapter target) {
         return null;
     }
 
+    @Override
     public String debugData() {
         return null;
     }
 
+    @Override
     public String getHelp() {
         return null;
     }
 
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public boolean isAlwaysHidden() {
         return false;
     }
     
+    @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
 
+    @Override
     public String getDescription() {
         return null;
     }
 
+    @Override
     public String getName() {
         return null;
     }
@@ -164,6 +191,7 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
         return Identifier.classIdentifier("");
     }
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -171,6 +199,7 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
         return null;
     }
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -178,6 +207,7 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
         return null;
     }
 
+    @Override
     public ActionInvocationContext createActionInvocationInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -191,16 +221,20 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     // isAction, isAssociation
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isAction() {
         return true;
     }
 
-    public boolean isAssociation() {
+    @Override
+    public boolean isPropertyOrCollection() {
         return false;
     }
+    @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+    @Override
     public boolean isOneToOneAssociation() {
         return false;
     }
@@ -209,6 +243,7 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         return null;
     }
@@ -221,6 +256,14 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
 	public RuntimeContext getRuntimeContext() {
 		return runtimeContext;
 	}
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
+     */
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.ACTION;
+    }
 
 }
 

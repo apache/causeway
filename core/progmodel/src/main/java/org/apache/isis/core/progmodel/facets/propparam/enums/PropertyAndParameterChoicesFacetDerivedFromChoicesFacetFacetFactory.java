@@ -26,11 +26,15 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends
-    FacetFactoryAbstract {
+    FacetFactoryAbstract implements RuntimeContextAware {
 
+
+    private RuntimeContext runtimeContext;
 
     public PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory() {
         super(ObjectFeatureType.PROPERTIES_AND_PARAMETERS);
@@ -58,8 +62,21 @@ public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory
             return false;
         }
         
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(holder));
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(holder, runtimeContext));
         return true;
+    }
+
+
+    ///////////////////////////////////////////////
+    // Injected
+    ///////////////////////////////////////////////
+    
+    /**
+     * Injected since {@link RuntimeContextAware}.
+     */
+    @Override
+    public void setRuntimeContext(RuntimeContext runtimeContext) {
+        this.runtimeContext = runtimeContext;
     }
 
 }

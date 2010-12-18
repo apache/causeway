@@ -20,32 +20,24 @@
 
 package org.apache.isis.core.metamodel.specloader.internal.peer;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.debug.Debuggable;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 /**
  * Details about action and field members gained via reflection.
- * 
- * @see org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer
  */
-public interface ObjectMemberPeer extends Identified, Debuggable {
-
+public interface ObjectMemberPeer extends Identified, TypedHolder, Debuggable {
 
     /**
-     * The type of a {@link MemberType#PROPERTY}, the return type of an 
-     * {@link MemberType#ACTION}, the referenced
-     * type of a {@link MemberType#COLLECTION}.
+     * Associated {@link TypedHolder}s.
+     * 
+     * Only {@link FeatureType#ACTION action}s have a non-empty list, 
+     * namely their parameters.
      */
-    ObjectSpecification getSpecification(SpecificationLoader specificationLoader);
-
-
-    boolean isProperty();
-    boolean isCollection();
-    boolean isAction();
-
+    List<TypedHolder> getChildren();
 
 }

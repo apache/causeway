@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.adapter;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
-import org.apache.isis.core.metamodel.adapter.Instance;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -34,6 +32,7 @@ import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -53,110 +52,139 @@ public class ObjectActionNoop implements ObjectAction {
         return null;
     }
 
+    @Override
     public String debugData() {
         return null;
     }
 
+    @Override
     public ObjectAdapter execute(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         return null;
     }
 
+    @Override
     public ObjectAction[] getActions() {
         return null;
     }
 
+    @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
         return null;
     }
 
+    @Override
     public String getDescription() {
         return null;
     }
 
+    @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return false;
     }
 
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         return null;
     }
 
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return new Class[0];
     }
 
+    @Override
     public Facet[] getFacets(final Filter<Facet> filter) {
         return null;
     }
 
+    @Override
     public void addFacet(final Facet facet) {}
 
+    @Override
     public void addFacet(final MultiTypedFacet facet) {}
 
+    @Override
     public void removeFacet(final Facet facet) {}
 
+    @Override
     public void removeFacet(final Class<? extends Facet> facetType) {}
 
+    @Override
     public Identifier getIdentifier() {
         return null;
     }
 
+    @Override
     public String getHelp() {
         return null;
     }
 
+    @Override
     public String getId() {
         return null;
     }
 
+    @Override
     public String getName() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getOnType() {
         return null;
     }
 
+    @Override
     public ObjectAdapter[][] getChoices(final ObjectAdapter target) {
         return null;
     }
 
+    @Override
     public int getParameterCount() {
         return 0;
     }
 
+    @Override
     public ObjectActionParameter[] getParameters() {
         return null;
     }
 
+    @Override
     public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
         return null;
     }
 
+    @Override
     public ObjectSpecification getReturnType() {
         return null;
     }
 
+    @Override
     public Target getTarget() {
         return null;
     }
 
+    @Override
     public ObjectActionType getType() {
         return null;
     }
 
+    @Override
     public boolean hasReturn() {
         return false;
     }
 
+    @Override
     public boolean isContributed() {
         return false;
     }
 
+    @Override
     public boolean promptForParameters(final ObjectAdapter target) {
         return false;
     }
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -164,30 +192,37 @@ public class ObjectActionNoop implements ObjectAction {
         return null;
     }
 
+    @Override
     public boolean isAlwaysHidden() {
         return false;
     }
     
+    @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public Consent isProposedArgumentSetValid(final ObjectAdapter object, final ObjectAdapter[] parameters) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public ObjectAdapter realTarget(final ObjectAdapter target) {
         return target;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -195,6 +230,7 @@ public class ObjectActionNoop implements ObjectAction {
         return null;
     }
 
+    @Override
     public ActionInvocationContext createActionInvocationInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -208,17 +244,21 @@ public class ObjectActionNoop implements ObjectAction {
     // isAction, isAssociation
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isAction() {
         return true;
     }
 
-    public boolean isAssociation() {
+    @Override
+    public boolean isPropertyOrCollection() {
         return false;
     }
     
+    @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+    @Override
     public boolean isOneToOneAssociation() {
         return false;
     }
@@ -228,11 +268,13 @@ public class ObjectActionNoop implements ObjectAction {
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         ObjectAction specification = this;
         return adapter.getInstance(specification);
     }
 
+    @Override
     public ObjectSpecification[] getParameterTypes() {
         return null;
     }
@@ -241,6 +283,14 @@ public class ObjectActionNoop implements ObjectAction {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
+     */
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.ACTION;
+    }
 
 
 

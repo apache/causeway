@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.NamedAndDescribed;
 import org.apache.isis.core.metamodel.spec.TypedSpecification;
 
@@ -30,5 +31,6 @@ import org.apache.isis.core.metamodel.spec.TypedSpecification;
  */
 public interface ObjectFeature extends TypedSpecification, NamedAndDescribed {
 
+    FeatureType getFeatureType();
 
 }

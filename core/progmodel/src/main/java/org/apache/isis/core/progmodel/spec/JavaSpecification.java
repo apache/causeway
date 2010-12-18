@@ -70,8 +70,7 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 import org.apache.isis.core.metamodel.specloader.internal.ObjectActionImpl;
 import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.internal.OneToOneAssociationImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.metamodel.util.CallbackUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
@@ -551,10 +550,12 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         int actionCnt = 0;
         while (elements.hasMoreElements()) {
             final Object element = elements.nextElement();
-            if (element instanceof JavaObjectAssociationPeer) {
-                final JavaObjectAssociationPeer javaObjectAssociationPeer = (JavaObjectAssociationPeer) element;
-                final ObjectAssociation objectAssociation = createObjectField(javaObjectAssociationPeer);
-                fields[actionCnt++] = objectAssociation;
+            if (element instanceof ObjectMemberPeerImpl) {
+                ObjectMemberPeerImpl javaObjectMemberPeer = (ObjectMemberPeerImpl) element;
+                if (javaObjectMemberPeer.getFeatureType().isPropertyOrCollection()) {
+                    final ObjectAssociation objectAssociation = createObjectAssociation(javaObjectMemberPeer);
+                    fields[actionCnt++] = objectAssociation;
+                }
             } else if (element instanceof OrderSet) {
                 // Not supported at present
             } else {
@@ -576,11 +577,13 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         int actionCnt = 0;
         while (elements.hasMoreElements()) {
             final Object element = elements.nextElement();
-            if (element instanceof JavaObjectActionPeer) {
-                final JavaObjectActionPeer javaObjectActionPeer = (JavaObjectActionPeer) element;
-                final String actionId = javaObjectActionPeer.getIdentifier().getMemberName();
-                final ObjectAction objectAction = new ObjectActionImpl(actionId, javaObjectActionPeer, getRuntimeContext());
-                actions[actionCnt++] = objectAction;
+            if (element instanceof ObjectMemberPeerImpl) {
+                final ObjectMemberPeerImpl memberPeer = (ObjectMemberPeerImpl) element;
+                if(memberPeer.getFeatureType().isAction()) {
+                    final String actionId = memberPeer.getIdentifier().getMemberName();
+                    final ObjectAction objectAction = new ObjectActionImpl(actionId, memberPeer, getRuntimeContext());
+                    actions[actionCnt++] = objectAction;
+                }
             } else if (element instanceof OrderSet) {
                 final OrderSet set = ((OrderSet) element);
                 actions[actionCnt++] = new ObjectActionSet("", set.getGroupFullName(), orderActions(set), getRuntimeContext());
@@ -597,8 +600,8 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         return actions;
     }
 
-    private ObjectAssociation createObjectField(final ObjectMemberPeer peer) {
-        if (peer.isCollection()) {
+    private ObjectAssociation createObjectAssociation(final ObjectMemberPeer peer) {
+        if (peer.getFeatureType().isCollection()) {
             return new OneToManyAssociationImpl(peer, getRuntimeContext());
 
         } else {

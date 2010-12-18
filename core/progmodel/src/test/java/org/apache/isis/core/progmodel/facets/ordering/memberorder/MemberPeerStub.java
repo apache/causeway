@@ -20,6 +20,9 @@
 
 package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -27,31 +30,32 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.NamedAndDescribedFacetHolderImpl;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 final class MemberPeerStub extends NamedAndDescribedFacetHolderImpl implements ObjectMemberPeer {
 
     public static MemberPeerStub createProperty(final String name) {
-        return new MemberPeerStub(MemberType.PROPERTY, name);
+        return new MemberPeerStub(FeatureType.PROPERTY, name);
     }
 
     public static MemberPeerStub createCollection(final String name) {
-        return new MemberPeerStub(MemberType.COLLECTION, name);
+        return new MemberPeerStub(FeatureType.COLLECTION, name);
     }
 
     public static MemberPeerStub createAction(final String name) {
-        return new MemberPeerStub(MemberType.ACTION, name);
+        return new MemberPeerStub(FeatureType.ACTION, name);
     }
 
-    private final MemberType memberType;
+    private final FeatureType featureType;
 
-    private MemberPeerStub(final MemberType collection, final String name) {
+    private MemberPeerStub(final FeatureType collection, final String name) {
         super(name);
-        this.memberType = collection;
+        this.featureType = collection;
     }
 
 
@@ -92,6 +96,15 @@ final class MemberPeerStub extends NamedAndDescribedFacetHolderImpl implements O
     }
 
     @Override
+    public Class<?> getType() {
+        return null;
+    }
+
+    @Override
+    public void setType(Class<?> type) {
+    }
+
+    @Override
     public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
         return null;
     }
@@ -101,23 +114,17 @@ final class MemberPeerStub extends NamedAndDescribedFacetHolderImpl implements O
         return getName();
     }
 
-    protected MemberType getMemberType() {
-        return memberType;
-    }
-    
     @Override
-    public boolean isProperty() {
-        return getMemberType().isProperty();
+    public FeatureType getFeatureType() {
+        return featureType;
     }
 
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer#getChildren()
+     */
     @Override
-    public boolean isCollection() {
-        return getMemberType().isCollection();
-    }
-
-    @Override
-    public boolean isAction() {
-        return getMemberType().isAction();
+    public List<TypedHolder> getChildren() {
+        return Collections.emptyList();
     }
 
 }

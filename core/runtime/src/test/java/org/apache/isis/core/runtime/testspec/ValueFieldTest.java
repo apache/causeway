@@ -185,7 +185,7 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return false;
     }
 
-    public boolean isAssociation() {
+    public boolean isPropertyOrCollection() {
         return true;
     }
 

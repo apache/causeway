@@ -33,12 +33,13 @@ import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 // TODO need to pull up the common methods. like getName(), from subclasses
 public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract implements ObjectAssociation {
+    
     private final ObjectSpecification specification;
 
     public ObjectAssociationAbstract(
             final String associationId,
             final ObjectSpecification specification,
-            final MemberType memberType,
+            final FeatureType memberType,
             final Identified facetHolder, 
             final RuntimeContext runtimeContext) {
         super(associationId, facetHolder, memberType, runtimeContext);
@@ -48,6 +49,7 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
         this.specification = specification;
     }
 
+    @Override
     public abstract ObjectAdapter get(final ObjectAdapter fromObject);
 
     /**
@@ -55,29 +57,36 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
      * reference this will be type that the accessor returns. For a collection it will be the type of element,
      * not the type of collection.
      */
+    @Override
     public ObjectSpecification getSpecification() {
         return specification;
     }
 
+    @Override
     public boolean isNotPersisted() {
         return containsFacet(NotPersistedFacet.class);
     }
     
+    @Override
     public boolean hasChoices() {
         return containsFacet(PropertyChoicesFacet.class);
     }
 
+    @Override
     public boolean isMandatory() {
     	final MandatoryFacet mandatoryFacet = getFacet(MandatoryFacet.class);
     	return mandatoryFacet != null && !mandatoryFacet.isInvertedSemantics();
     }
     
+    @Override
     public abstract boolean isEmpty(final ObjectAdapter adapter);
 
+    @Override
     public boolean isOneToOneAssociation() {
         return !isOneToManyAssociation();
     }
 
+    @Override
     public String getBusinessKeyName() {
         throw new NotYetImplementedException();
     }

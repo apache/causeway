@@ -31,11 +31,12 @@ import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLeng
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements
@@ -44,25 +45,29 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     public ObjectActionParameterParseable(
             final int index,
             final ObjectActionImpl action,
-            final ObjectActionParamPeer peer) {
+            final TypedHolder peer) {
         super(index, action, peer);
     }
 
+    @Override
     public int getNoLines() {
         final MultiLineFacet facet = getFacet(MultiLineFacet.class);
         return facet.numberOfLines();
     }
 
+    @Override
     public boolean canWrap() {
         final MultiLineFacet facet = getFacet(MultiLineFacet.class);
         return !facet.preventWrapping();
     }
 
+    @Override
     public int getMaximumLength() {
         final MaxLengthFacet facet = getFacet(MaxLengthFacet.class);
         return facet.value();
     }
 
+    @Override
     public int getTypicalLineLength() {
         final TypicalLengthFacet facet = getFacet(TypicalLengthFacet.class);
         return facet.value();
@@ -74,6 +79,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
      * <p>
      * Assumed to be invoked {@link InteractionInvocationMethod#BY_USER by user}.
      */
+    @Override
     public String isValid(final ObjectAdapter adapter, final Object proposedValue) {
 
         if (!(proposedValue instanceof String)) {
@@ -123,6 +129,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         OneToOneActionParameter specification = this;
         return adapter.getInstance(specification);
@@ -138,6 +145,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
      * Gets the proposed value of the {@link Instance} (downcast as a
      * {@link MutableProposed}, wrapping the proposed value into a {@link ObjectAdapter}.
      */
+    @Override
     public ObjectAdapter get(ObjectAdapter owner) {
         MutableProposedHolder proposedHolder = getProposedHolder(owner);
         Object proposed = proposedHolder.getProposed();
@@ -161,6 +169,14 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         }
         MutableProposedHolder proposedHolder = (MutableProposedHolder) instance;
         return proposedHolder;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
+     */
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.ACTION_PARAMETER;
     }
 
 

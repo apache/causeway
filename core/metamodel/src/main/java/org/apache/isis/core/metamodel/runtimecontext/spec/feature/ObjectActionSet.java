@@ -70,54 +70,71 @@ public class ObjectActionSet implements ObjectAction {
         this(id, name, actions.toArray(new ObjectAction[]{}), runtimeContext);
     }
 
-    // /////////////////////////////////////////////////////////////
-    // description, actions
-    // /////////////////////////////////////////////////////////////
-
-    public ObjectAction[] getActions() {
-        return actions;
-    }
-
-    public String getDescription() {
-        return "";
-    }
-
-    public Identifier getIdentifier() {
-        return null;
-    }
-
-    public String getHelp() {
-        return "";
-    }
-
+    @Override
     public String getId() {
         return id;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.ACTION;
+    }
+    
+    // /////////////////////////////////////////////////////////////
+    // description, actions
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public ObjectAction[] getActions() {
+        return actions;
+    }
+
+    @Override
+    public String getDescription() {
+        return "";
+    }
+
+    @Override
+    public Identifier getIdentifier() {
+        return null;
+    }
+
+    @Override
+    public String getHelp() {
+        return "";
+    }
+
+    @Override
     public ObjectSpecification getOnType() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getReturnType() {
         return null;
     }
 
+    @Override
     public Target getTarget() {
         return Target.DEFAULT;
     }
 
+    @Override
     public ObjectActionType getType() {
         return ObjectActionType.SET;
     }
 
+    @Override
     public boolean hasReturn() {
         return false;
     }
 
+    @Override
     public boolean isContributed() {
         return false;
     }
@@ -125,6 +142,7 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Always returns <tt>null</tt>.
      */
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
@@ -133,6 +151,7 @@ public class ObjectActionSet implements ObjectAction {
     // target
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter realTarget(final ObjectAdapter target) {
         return null;
     }
@@ -141,6 +160,7 @@ public class ObjectActionSet implements ObjectAction {
     // execute
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter execute(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         throw new UnexpectedCallException();
     }
@@ -152,6 +172,7 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Does nothing
      */
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         return null;
     }
@@ -159,6 +180,7 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Does nothing
      */
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return new Class[0];
     }
@@ -166,6 +188,7 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Does nothing
      */
+    @Override
     public Facet[] getFacets(final Filter<Facet> filter) {
         return new Facet[0];
     }
@@ -173,21 +196,25 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Does nothing
      */
+    @Override
     public void addFacet(final Facet facet) {}
 
     /**
      * Does nothing
      */
+    @Override
     public void addFacet(final MultiTypedFacet facet) {}
 
     /**
      * Does nothing
      */
+    @Override
     public void removeFacet(final Facet facet) {}
 
     /**
      * Does nothing
      */
+    @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return false;
     }
@@ -195,29 +222,35 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Does nothing
      */
+    @Override
     public void removeFacet(final Class<? extends Facet> facetType) {}
 
     // /////////////////////////////////////////////////////////////
     // parameters
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public int getParameterCount() {
         return 0;
     }
 
+    @Override
     public ObjectActionParameter[] getParameters() {
         return new ObjectActionParameter[0];
     }
 
+    @Override
     public ObjectSpecification[] getParameterTypes() {
         return new ObjectSpecification[0];
     }
 
 
+    @Override
     public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
         return new ObjectActionParameter[0];
     }
 
+    @Override
     public boolean promptForParameters(final ObjectAdapter target) {
         return false;
     }
@@ -226,6 +259,7 @@ public class ObjectActionSet implements ObjectAction {
     // visibility
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isAlwaysHidden() {
         return false;
     }
@@ -233,6 +267,7 @@ public class ObjectActionSet implements ObjectAction {
     /**
      * Does nothing, but shouldn't be called.
      */
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -240,6 +275,7 @@ public class ObjectActionSet implements ObjectAction {
         return null;
     }
 
+    @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
@@ -248,6 +284,7 @@ public class ObjectActionSet implements ObjectAction {
     // usability
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -255,6 +292,7 @@ public class ObjectActionSet implements ObjectAction {
         return null;
     }
 
+    @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
@@ -263,6 +301,7 @@ public class ObjectActionSet implements ObjectAction {
     // validity
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public ActionInvocationContext createActionInvocationInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -271,6 +310,7 @@ public class ObjectActionSet implements ObjectAction {
         return null;
     }
 
+    @Override
     public Consent isProposedArgumentSetValid(final ObjectAdapter object, final ObjectAdapter[] parameters) {
         throw new UnexpectedCallException();
     }
@@ -279,6 +319,7 @@ public class ObjectActionSet implements ObjectAction {
     // defaults
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter[] getDefaults(final ObjectAdapter target) {
         throw new UnexpectedCallException();
     }
@@ -287,6 +328,7 @@ public class ObjectActionSet implements ObjectAction {
     // options
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter[][] getChoices(final ObjectAdapter target) {
         throw new UnexpectedCallException();
     }
@@ -296,16 +338,20 @@ public class ObjectActionSet implements ObjectAction {
     // isAction, isAssociation
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isAction() {
         return true;
     }
 
-    public boolean isAssociation() {
+    @Override
+    public boolean isPropertyOrCollection() {
         return false;
     }
+    @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+    @Override
     public boolean isOneToOneAssociation() {
         return false;
     }
@@ -315,6 +361,7 @@ public class ObjectActionSet implements ObjectAction {
     // debug
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public String debugData() {
         return "";
     }
@@ -324,6 +371,7 @@ public class ObjectActionSet implements ObjectAction {
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         ObjectAction specification = this;
         return adapter.getInstance(specification);
@@ -337,5 +385,6 @@ public class ObjectActionSet implements ObjectAction {
 	public RuntimeContext getRuntimeContext() {
 		return runtimeContext;
 	}
+
 
 }

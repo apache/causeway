@@ -50,13 +50,13 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     protected final String defaultName;
     private final String id;
     private final Identified facetHolder;
-    private final MemberType memberType;
+    private final FeatureType featureType;
 	private RuntimeContext runtimeContext;
 
     protected ObjectMemberAbstract(
     		final String id, 
     		final Identified facetHolder, 
-    		final MemberType memberType, 
+    		final FeatureType memberType, 
     		final RuntimeContext runtimeContext) {
         if (id == null) {
             throw new IllegalArgumentException("Name must always be set");
@@ -64,9 +64,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.id = id;
         this.defaultName = NameUtils.naturalName(id);
         this.facetHolder = facetHolder;
-        this.memberType = memberType;
+        this.featureType = memberType;
         this.runtimeContext = runtimeContext;
     }
+
 
     // /////////////////////////////////////////////////////////////
     // Identifiers
@@ -82,11 +83,13 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return facetHolder.getIdentifier();
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return runtimeContext.getSpecificationLoader();
+    @Override
+    public FeatureType getFeatureType() {
+        return featureType;
     }
+    
 
-
+    
     // /////////////////////////////////////////////////////////////
     // Facets
     // /////////////////////////////////////////////////////////////
@@ -217,22 +220,22 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     @Override
     public boolean isAction() {
-        return memberType.isAction();
+        return featureType.isAction();
     }
 
     @Override
-    public boolean isAssociation() {
-        return memberType.isAssociation();
+    public boolean isPropertyOrCollection() {
+        return featureType.isPropertyOrCollection();
     }
 
     @Override
     public boolean isOneToManyAssociation() {
-        return memberType.isCollection();
+        return featureType.isCollection();
     }
 
     @Override
     public boolean isOneToOneAssociation() {
-        return memberType.isProperty();
+        return featureType.isProperty();
     }
 
 
@@ -255,6 +258,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     
     protected AuthenticationSession getAuthenticationSession() {
         return getRuntimeContext().getAuthenticationSession();
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return getRuntimeContext().getSpecificationLoader();
     }
 
     

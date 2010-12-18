@@ -23,6 +23,8 @@ package org.apache.isis.core.metamodel.specloader.internal;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -50,7 +52,7 @@ import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
@@ -58,9 +60,8 @@ import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionPeer;
-import org.apache.log4j.Logger;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
@@ -74,7 +75,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     	return type;
     }
 
-    private final ObjectActionPeer objectActionPeer;
+    private final ObjectMemberPeer memberPeer;
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
@@ -97,10 +98,10 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     public ObjectActionImpl(
     		final String methodId, 
-    		final ObjectActionPeer objectActionPeer, 
+    		final ObjectMemberPeer memberPeer, 
     		final RuntimeContext runtimeContext) {
-        super(methodId, objectActionPeer, MemberType.ACTION, runtimeContext);
-        this.objectActionPeer = objectActionPeer;
+        super(methodId, memberPeer, FeatureType.ACTION, runtimeContext);
+        this.memberPeer = memberPeer;
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -201,7 +202,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public int getParameterCount() {
-        return objectActionPeer.getParameters().length;
+        return memberPeer.getChildren().size();
     }
 
     @Override
@@ -226,13 +227,14 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         if (this.parameters == null) {
             final int parameterCount = getParameterCount();
             final ObjectActionParameter[] parameters = new ObjectActionParameter[parameterCount];
-            final ObjectActionParamPeer[] paramPeers = objectActionPeer.getParameters();
+            final List<TypedHolder> paramPeers = memberPeer.getChildren();
             for (int i = 0; i < parameterCount; i++) {
-                final ObjectSpecification specification = paramPeers[i].getSpecification();
+                TypedHolder paramPeer = paramPeers.get(i);
+                final ObjectSpecification specification = paramPeer.getSpecification(getSpecificationLoader());
                 if (specification.isParseable()) {
-                    parameters[i] = new ObjectActionParameterParseable(i, this, paramPeers[i]);
+                    parameters[i] = new ObjectActionParameterParseable(i, this, paramPeer);
                 } else if (specification.isNotCollection()) {
-                    parameters[i] = new OneToOneActionParameterImpl(i, this, paramPeers[i]);
+                    parameters[i] = new OneToOneActionParameterImpl(i, this, paramPeer);
                 } else if (specification.isCollection()) {
                     throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
                 } else {
@@ -374,7 +376,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     private ActionInvocationFacet getActionInvocationFacet() {
-        return objectActionPeer.getFacet(ActionInvocationFacet.class);
+        return memberPeer.getFacet(ActionInvocationFacet.class);
     }
 
     /**
@@ -564,7 +566,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     @Override
     public String debugData() {
         final DebugString debugString = new DebugString();
-        objectActionPeer.debugData(debugString);
+        memberPeer.debugData(debugString);
         return debugString.toString();
     }
 

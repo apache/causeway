@@ -24,6 +24,7 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 
 public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract implements ActionParameterChoicesFacet {
@@ -32,9 +33,17 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return ActionParameterChoicesFacet.class;
     }
 
-    public ActionParameterChoicesFacetAbstract(final FacetHolder holder) {
+    private final RuntimeContext runtimeContext;
+    
+    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final RuntimeContext runtimeContext) {
         super(type(), holder, false);
+        this.runtimeContext = runtimeContext;
     }
+
+    protected RuntimeContext getRuntimeContext() {
+        return runtimeContext;
+    }
+
 
 }
 

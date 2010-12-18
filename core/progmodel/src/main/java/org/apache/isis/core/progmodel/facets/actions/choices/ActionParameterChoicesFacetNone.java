@@ -22,14 +22,16 @@ package org.apache.isis.core.progmodel.facets.actions.choices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 
 public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetNone(final FacetHolder holder) {
-        super(holder);
+    public ActionParameterChoicesFacetNone(final FacetHolder holder, final RuntimeContext runtimeContext) {
+        super(holder, runtimeContext);
     }
 
+    @Override
     public Object[] getChoices(final ObjectAdapter inObject) {
         return new ObjectAdapter[0];
     }

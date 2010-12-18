@@ -30,7 +30,6 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 
@@ -40,38 +39,37 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
 
     private final Method method;
     private final Class<?> choicesType;
-	private final SpecificationLoader specificationLoader;
-	private final RuntimeContext runtimeContext;
 
     public ActionParameterChoicesFacetViaMethod(
     		final Method method, 
     		final Class<?> choicesType, 
     		final FacetHolder holder, 
-    		final SpecificationLoader specificationLoader, 
     		final RuntimeContext runtimeContext) {
-        super(holder);
+        super(holder, runtimeContext);
         this.method = method;
         this.choicesType = choicesType;
-        this.specificationLoader = specificationLoader;
-        this.runtimeContext = runtimeContext;
     }
 
     /**
      * Returns a singleton list of the {@link Method} provided in the constructor. 
      */
+    @Override
     public List<Method> getMethods() {
     	return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
+	@Override
+    public boolean impliesResolve() {
 		return true;
 	}
 
-	public boolean impliesObjectChanged() {
+	@Override
+    public boolean impliesObjectChanged() {
 		return false;
 	}
 	
 
+    @Override
     public Object[] getChoices(final ObjectAdapter owningAdapter) {
         final Object options = ObjectInvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
@@ -81,7 +79,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
             return ArrayUtils.getObjectAsObjectArray(options);
         }
         else {
-            final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesType);
+            final ObjectSpecification specification = getRuntimeContext().getSpecificationLoader().loadSpecification(choicesType);
             return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getRuntimeContext());
         }
     }
@@ -93,17 +91,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
 
 
 	
-	////////////////////////////////////////////////////////////////////
-	// Dependencies (from constructor)
-	////////////////////////////////////////////////////////////////////
 
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
-	private SpecificationLoader getSpecificationLoader() {
-		return specificationLoader;
-	}
 
 }
 

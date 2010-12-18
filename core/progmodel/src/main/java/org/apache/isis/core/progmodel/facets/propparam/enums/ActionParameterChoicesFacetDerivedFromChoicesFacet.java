@@ -22,24 +22,29 @@ package org.apache.isis.core.progmodel.facets.propparam.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectActionParamPeer;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionParameterChoicesFacetAbstract;
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacet(FacetHolder holder) {
-        super(holder);
+    public ActionParameterChoicesFacetDerivedFromChoicesFacet(FacetHolder holder, final RuntimeContext runtimeContext) {
+        super(holder, runtimeContext);
     }
 
+    @Override
     public Object[] getChoices(ObjectAdapter adapter) {
         FacetHolder facetHolder = getFacetHolder();
-        ObjectActionParamPeer noapp = (ObjectActionParamPeer) facetHolder;
-        ObjectSpecification noSpec = noapp.getSpecification();
+        final SpecificationLoader specificationLoader = getRuntimeContext().getSpecificationLoader();
+        TypedHolder paramPeer = (TypedHolder) facetHolder;
+        ObjectSpecification noSpec = paramPeer.getSpecification(specificationLoader);
         ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null)
             return new Object[0];
         return choicesFacet.getChoices(adapter);
     }
+
 
 }

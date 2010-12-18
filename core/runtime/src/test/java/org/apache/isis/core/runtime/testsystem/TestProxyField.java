@@ -35,6 +35,7 @@ import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
@@ -53,30 +54,37 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
 		runtimeContext = new RuntimeContextNoRuntime();
     }
 
+    @Override
     public String debugData() {
         return "";
     }
 
+    @Override
     public ObjectAdapter get(final ObjectAdapter fromObject) {
         return ((TestProxyAdapter) fromObject).getField(this); // contentObject;
     }
 
+    @Override
     public String getBusinessKeyName() {
         return null;
     }
 
+    @Override
     public boolean isOneToManyAssociation() {
         return getSpecification().isCollection();
     }
 
+    @Override
     public boolean isOneToOneAssociation() {
         return !isOneToManyAssociation();
     }
 
+    @Override
     public boolean isNotPersisted() {
         return false;
     }
 
+    @Override
     public boolean isEmpty(final ObjectAdapter adapter) {
         return false;
     }
@@ -85,60 +93,75 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
         return getSpecification().isNotCollection();
     }
 
+    @Override
     public boolean hasChoices() {
         return false;
     }
 
+    @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public boolean isAlwaysHidden() {
         return false;
     }
     
+    @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         return null;
     }
 
+    @Override
     public void toDefault(final ObjectAdapter target) {}
 
+    @Override
     public Identifier getIdentifier() {
         return identifier;
     }
 
+    @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter object) {
         return new ObjectAdapter[] {};
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return spec;
     }
 
+    @Override
     public boolean isMandatory() {
         return false;
     }
 
+    @Override
     public String getHelp() {
         return null;
     }
 
+    @Override
     public String getId() {
         return name;
     }
 
+    @Override
     public String getDescription() {
         return null;
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -146,6 +169,7 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
         return null;
     }
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -177,18 +201,27 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
     // isAction, isAssociation
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isAction() {
         return false;
     }
 
-    public boolean isAssociation() {
+    @Override
+    public boolean isPropertyOrCollection() {
         return true;
     }
+
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.PROPERTY;
+    }
+
 
     // /////////////////////////////////////////////////////////////
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         return null;
     }

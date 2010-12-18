@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.MethodScope;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectAssociationPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
@@ -250,7 +250,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
             final Class<?> cls,
             final String capitalizedName,
             final Class<?> returnType,
-            final JavaObjectAssociationPeer collection) {
+            final ObjectMemberPeerImpl collection) {
         final Method method = findMethod(cls, OBJECT, CHOICES_PREFIX + capitalizedName, Object[].class, NO_PARAMETERS_TYPES);
         removeMethod(methodRemover, method);
         if (method == null) {

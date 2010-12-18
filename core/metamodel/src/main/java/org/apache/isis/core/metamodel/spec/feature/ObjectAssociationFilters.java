@@ -36,8 +36,8 @@ public class ObjectAssociationFilters {
      */
     public final static Filter<ObjectAssociation> PROPERTIES = new AbstractFilter<ObjectAssociation>() {
         @Override
-        public boolean accept(final ObjectAssociation property) {
-            return property.isOneToOneAssociation();
+        public boolean accept(final ObjectAssociation association) {
+            return association.isOneToOneAssociation();
         }
     };
 

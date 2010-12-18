@@ -31,8 +31,8 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectActionParamPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.JavaObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetNone;
 import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFacetNone;
 import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedFacetAtDefault;
@@ -91,17 +91,17 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder) {
         final List<Facet> facets = new ArrayList<Facet>();
 
-        if (holder instanceof JavaObjectMemberPeer) {
+        if (holder instanceof ObjectMemberPeerImpl) {
             facets.add(new NamedFacetNone(holder));
             facets.add(new DescribedAsFacetNone(holder));
             facets.add(new HelpFacetNone(holder));
             
-            JavaObjectMemberPeer objectMemberPeer = (JavaObjectMemberPeer) holder;
-            if (objectMemberPeer.isProperty()) {
+            ObjectMemberPeerImpl objectMemberPeer = (ObjectMemberPeerImpl) holder;
+            if (objectMemberPeer.getFeatureType().isProperty()) {
                 facets.add(new MaxLengthFacetUnlimited(holder));
                 facets.add(new MultiLineFacetNone(true, holder));
             }
-            if (objectMemberPeer.isAction()) {
+            if (objectMemberPeer.getFeatureType().isAction()) {
                 facets.add(new ExecutedFacetAtDefault(holder));
                 facets.add(new ActionDefaultsFacetNone(holder));
                 facets.add(new ActionChoicesFacetNone(holder));
@@ -115,14 +115,17 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
         final List<Facet> facets = new ArrayList<Facet>();
 
-        if (holder instanceof JavaObjectActionParamPeer) {
+        if (holder instanceof TypedHolder) {
 
-            facets.add(new NamedFacetNone(holder));
-            facets.add(new DescribedAsFacetNone(holder));
-            facets.add(new HelpFacetNone(holder));
-            facets.add(new MultiLineFacetNone(false, holder));
-
-            facets.add(new MaxLengthFacetUnlimited(holder));
+            TypedHolder typedHolder = (TypedHolder) holder;
+            if (typedHolder.getFeatureType().isActionParameter()) {
+                facets.add(new NamedFacetNone(holder));
+                facets.add(new DescribedAsFacetNone(holder));
+                facets.add(new HelpFacetNone(holder));
+                facets.add(new MultiLineFacetNone(false, holder));
+                
+                facets.add(new MaxLengthFacetUnlimited(holder));
+            }
         }
 
         return FacetUtil.addFacets(facets);

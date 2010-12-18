@@ -23,6 +23,7 @@ package org.apache.isis.core.runtime.testspec;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
@@ -36,24 +37,29 @@ import org.apache.isis.core.testsupport.testdomain.Person;
 
 class PersonNameField extends ValueFieldTest {
 
+    @Override
     public void clearAssociation(final ObjectAdapter inObject) {
         getPerson(inObject).setName("");
     }
 
+    @Override
     public String debugData() {
         return "";
     }
 
+    @Override
     public ObjectAdapter get(final ObjectAdapter fromObject) {
         final TestProxyAdapter adapter = new TestProxyAdapter();
         adapter.setupObject(getPerson(fromObject).getName());
         return adapter;
     }
 
+    @Override
     public String getId() {
         return "name";
     }
 
+    @Override
     public String getName() {
         return "Name";
     }
@@ -62,24 +68,34 @@ class PersonNameField extends ValueFieldTest {
         return (Person) inObject.getObject();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return new TestSpecification("java.lang.String");
     }
 
+    @Override
     public void initAssociation(final ObjectAdapter inObject, final ObjectAdapter association) {
         getPerson(inObject).setName((String) association.getObject());
     }
 
+    @Override
     public Consent isAssociationValid(final ObjectAdapter inObject, final ObjectAdapter association) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public void setAssociation(final ObjectAdapter inObject, final ObjectAdapter association) {
         getPerson(inObject).setName((String) association.getObject());
     }
 
+    @Override
     public void set(ObjectAdapter owner, ObjectAdapter newValue) {
         setAssociation(owner, newValue);
+    }
+
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.PROPERTY;
     }
 
 }

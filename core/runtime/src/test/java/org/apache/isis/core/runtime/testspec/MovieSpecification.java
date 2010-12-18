@@ -26,6 +26,7 @@ import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
@@ -45,10 +46,12 @@ class MovieDirectorField extends OneToOneAssociationTest {
         getMovie(inObject).setDirector(null);
     }
 
+    @Override
     public String debugData() {
         return "";
     }
 
+    @Override
     public ObjectAdapter get(final ObjectAdapter fromObject) {
         final Person director = getMovie(fromObject).getDirector();
         if (director == null) {
@@ -58,6 +61,7 @@ class MovieDirectorField extends OneToOneAssociationTest {
         }
     }
 
+    @Override
     public String getId() {
         return "director";
     }
@@ -66,45 +70,64 @@ class MovieDirectorField extends OneToOneAssociationTest {
         return (Movie) inObject.getObject();
     }
 
+    @Override
     public String getName() {
         return "Director";
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return IsisContext.getSpecificationLoader().loadSpecification(Person.class);
     }
 
+    @Override
     public void initAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {
         getMovie(inObject).setDirector(associate == null ? null : (Person) associate.getObject());
     }
 
+    @Override
     public Consent isAssociationValid(final ObjectAdapter inObject, final ObjectAdapter associate) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public void setAssociation(final ObjectAdapter inObject, final ObjectAdapter associate) {
         getMovie(inObject).setDirector((Person) associate.getObject());
     }
 
+    @Override
     public void set(ObjectAdapter owner, ObjectAdapter newValue) {
         setAssociation(owner, newValue);
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
+     */
+    @Override
+    public FeatureType getFeatureType() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
 
 class MovieNameField extends ValueFieldTest {
     
+    @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+    @Override
     public void clearAssociation(final ObjectAdapter inObject) {
         getMovie(inObject).setName("");
     }
 
+    @Override
     public String debugData() {
         return "";
     }
 
+    @Override
     public ObjectAdapter get(final ObjectAdapter fromObject) {
         final TestProxyAdapter adapter = new TestProxyAdapter();
         final String object = getMovie(fromObject).getName();
@@ -112,6 +135,7 @@ class MovieNameField extends ValueFieldTest {
         return adapter;
     }
 
+    @Override
     public String getId() {
         return "name";
     }
@@ -120,28 +144,39 @@ class MovieNameField extends ValueFieldTest {
         return (Movie) inObject.getObject();
     }
 
+    @Override
     public String getName() {
         return "Name";
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return new TestProxySpecification("java.lang.String");
     }
 
+    @Override
     public void initAssociation(final ObjectAdapter inObject, final ObjectAdapter association) {
         getMovie(inObject).setName((String) association.getObject());
     }
 
+    @Override
     public Consent isAssociationValid(final ObjectAdapter inObject, final ObjectAdapter association) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public void setAssociation(final ObjectAdapter inObject, final ObjectAdapter association) {
         getMovie(inObject).setName((String) association.getObject());
     }
 
+    @Override
     public void set(ObjectAdapter owner, ObjectAdapter newValue) {
         setAssociation(owner, newValue);
+    }
+
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.PROPERTY;
     }
 
 }

@@ -20,20 +20,23 @@
 
 package org.apache.isis.core.runtime.system.specpeer;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.MemberType;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 @SuppressWarnings("unchecked")
-public class DummyOneToOnePeer extends FacetHolderImpl implements ObjectMemberPeer {
+public class DummyPropertyPeer extends FacetHolderImpl implements ObjectMemberPeer {
 	
     private final ExpectedSet expectedActions = new ExpectedSet();
     Vector actions = new Vector();
@@ -61,6 +64,15 @@ public class DummyOneToOnePeer extends FacetHolderImpl implements ObjectMemberPe
     }
 
     @Override
+    public Class<?> getType() {
+        return null;
+    }
+
+    @Override
+    public void setType(Class<?> type) {
+    }
+
+    @Override
     public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
         return null;
     }
@@ -84,23 +96,14 @@ public class DummyOneToOnePeer extends FacetHolderImpl implements ObjectMemberPe
     @Override
     public void debugData(final DebugString debugString) {}
 
-    protected MemberType getMemberType() {
-        return MemberType.PROPERTY;
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.PROPERTY;
     }
 
     @Override
-    public boolean isProperty() {
-        return getMemberType().isProperty();
-    }
-
-    @Override
-    public boolean isCollection() {
-        return getMemberType().isCollection();
-    }
-
-    @Override
-    public boolean isAction() {
-        return getMemberType().isAction();
+    public List<TypedHolder> getChildren() {
+        return Collections.emptyList();
     }
 
 }
