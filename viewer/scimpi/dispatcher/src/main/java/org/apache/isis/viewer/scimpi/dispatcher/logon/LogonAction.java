@@ -45,6 +45,7 @@ public class LogonAction implements Action {
         } else {
             context.setSession(session);
 //            UserManager.logonUser(session);
+            context.startHttpSession();
             view = context.getParameter("view");
             if (view == null) {
                 // REVIEW this is duplicated in Logon.java

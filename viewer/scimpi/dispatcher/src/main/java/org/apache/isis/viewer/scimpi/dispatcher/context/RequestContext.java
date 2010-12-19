@@ -111,7 +111,7 @@ public abstract class RequestContext {
         variables.put(Scope.REQUEST, new HashMap<String, Object>());
     }
 
-    public void endSession() {
+    public void endHttpSession() {
         objectMapping.endSession();
         variables.get(Scope.SESSION).clear();
         session = null;
@@ -402,7 +402,7 @@ public abstract class RequestContext {
         Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<String, Object> entry = iterator.next();
-            buffer.append("&" + entry.getKey() + "=" + entry.getValue());
+            buffer.append("&amp;" + entry.getKey() + "=" + entry.getValue());
         }
         return buffer.toString();
     }
@@ -413,7 +413,7 @@ public abstract class RequestContext {
         Iterator<Entry<String, Object>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()) {
             Entry<String, Object> entry = iterator.next();
-            buffer.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue() + "\">\n");
+            buffer.append("<input type=\"hidden\" name=\"" + entry.getKey() + "\" value=\"" + entry.getValue() + "\" />\n");
         }
         return buffer.toString();
     }
@@ -637,6 +637,8 @@ public abstract class RequestContext {
 
     public abstract String getQueryString();
 
+    public abstract void startHttpSession(); 
+
     public abstract String clearSession();
 
     public void setSession(AuthenticationSession session) {
@@ -671,5 +673,5 @@ public abstract class RequestContext {
 
     public void clearTransientVariables() {
         objectMapping.endSession();
-    } 
+    }
 }

@@ -30,6 +30,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -197,6 +198,11 @@ public class ServletRequestContext extends RequestContext {
             throw new ScimpiNotFoundException("Cannot find file " + path);
         }
         return in;
+    }
+    
+    public void startHttpSession() {
+        HttpSession httpSession = request.getSession(true);
+        httpSession.setAttribute("scimpi-context", this);
     }
 
     protected String getSessionId() {

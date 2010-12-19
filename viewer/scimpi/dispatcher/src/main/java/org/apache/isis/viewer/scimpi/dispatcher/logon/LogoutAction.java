@@ -42,7 +42,7 @@ public class LogoutAction implements Action {
         if (session != null) {
             IsisContext.getUpdateNotifier().clear();
             UserManager.logoffUser(session);
-            context.endSession();
+            context.endHttpSession();
         }
         
         String view = context.getParameter("view");

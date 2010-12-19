@@ -41,13 +41,13 @@ public class DispatcherServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
         IOException {
-        LOG.info("POST " + request.getServletPath() + "  " + request.getQueryString());
+        LOG.info("post " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LOG.info("GET  " + request.getServletPath() + "  " + request.getQueryString());
+        LOG.info("get  " + request.getServletPath() + "  " + request.getQueryString());
         process(request, response);
     }
 
@@ -56,11 +56,13 @@ public class DispatcherServlet extends HttpServlet {
         // so an alternative is to bind this info onto the AuthSession.
         // The core/webapp will (hopefully) evolve to define a standard approach here...
         try {
-            HttpSession httpSession = request.getSession(true);
-            ServletRequestContext context = (ServletRequestContext) httpSession.getAttribute("scimpi-context");
+            ServletRequestContext context = null;
+            HttpSession httpSession = request.getSession(false);
+            if (httpSession != null) {
+                context = (ServletRequestContext) httpSession.getAttribute("scimpi-context");
+            }
             if (context == null || !context.isValid()) {
                 context = new ServletRequestContext();
-                httpSession.setAttribute("scimpi-context", context);
             }
             context.startRequest(request, response, getServletContext());
             dispatcher.process(context, request.getServletPath());
