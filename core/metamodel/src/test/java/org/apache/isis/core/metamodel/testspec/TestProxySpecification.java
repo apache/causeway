@@ -21,6 +21,7 @@
 package org.apache.isis.core.metamodel.testspec;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
@@ -56,7 +57,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     private ObjectAction action;
     public List<ObjectAssociation> fields = Lists.newArrayList();
     private final String name;
-    private ObjectSpecification[] subclasses = new ObjectSpecification[0];
+    private List<ObjectSpecification> subclasses = Collections.emptyList();
     private String title;
 
     private Persistability persistable;
@@ -181,7 +182,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String name,
-            final ObjectSpecification[] parameters) {
+            final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
             return action;
         }
@@ -230,8 +231,8 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public ObjectSpecification[] interfaces() {
-        return new ObjectSpecification[0];
+    public List<ObjectSpecification> interfaces() {
+        return Collections.emptyList();
     }
 
     public void introspect() {}
@@ -295,7 +296,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
         isEncodeable = true;
     }
 
-    public void setupSubclasses(final ObjectSpecification[] subclasses) {
+    public void setupSubclasses(final List<ObjectSpecification> subclasses) {
         this.subclasses = subclasses;
     }
 
@@ -308,7 +309,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public ObjectSpecification[] subclasses() {
+    public List<ObjectSpecification> subclasses() {
         return subclasses;
     }
 

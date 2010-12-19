@@ -108,6 +108,13 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         public ObjectSpecification[] toArray() {
             return classes.toArray(new ObjectSpecification[0]);
         }
+
+        /**
+         * @return
+         */
+        public List<ObjectSpecification> toList() {
+            return Collections.unmodifiableList(classes);
+        }
     }
 
     private final SubclassList subclasses;
@@ -122,7 +129,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     private String singularName;
     private String description;
 
-    private ObjectSpecification[] interfaces;
+    private List<ObjectSpecification> interfaces;
 
     private IconFacet iconMethod;
     private MarkDirtyObjectFacet markDirtyObjectFacet;
@@ -171,13 +178,13 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     }
 
     @Override
-    public ObjectSpecification[] interfaces() {
+    public List<ObjectSpecification> interfaces() {
         return interfaces;
     }
 
     @Override
-    public ObjectSpecification[] subclasses() {
-        return subclasses.toArray();
+    public List<ObjectSpecification> subclasses() {
+        return subclasses.toList();
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -193,8 +200,8 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
             return true;
         } else {
             if (interfaces != null) {
-                for (int i = 0, len = interfaces.length; i < len; i++) {
-                    if (interfaces[i].isOfType(specification)) {
+                for (int i = 0, len = interfaces.size(); i < len; i++) {
+                    if (interfaces.get(i).isOfType(specification)) {
                         return true;
                     }
                 }
@@ -258,11 +265,11 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         	}
             fields = Collections.emptyList();
             objectActions = Collections.emptyList();
-            interfaces = new ObjectSpecification[0];
+            interfaces = Collections.emptyList();
 
         } else {
 
-            List<ObjectSpecification> interfaceSpecList = new ArrayList<ObjectSpecification>();
+            List<ObjectSpecification> interfaceSpecList = Lists.newArrayList();
             for (int i = 0; i < interfaceNames.length; i++) {
 
                 Class<?> substitutedInterfaceClass = getSubstitutedClass(interfaceNames[i], getClassSubstitutor());
@@ -272,7 +279,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
                     interfacespec.addSubclass(this);
                 }
             }
-            interfaces = interfaceSpecList.toArray(new ObjectSpecification[]{});
+            interfaces = interfaceSpecList;
 
             introspector.introspectPropertiesAndCollections();
 
@@ -437,7 +444,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String id,
-            final ObjectSpecification[] parameters) {
+            final List<ObjectSpecification> parameters) {
         final List<ObjectAction> availableActions = ArrayUtils.combine(objectActions, getServiceActions(type));
         return getAction(availableActions, type, id, parameters);
     }
@@ -452,7 +459,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
             final List<ObjectAction> availableActions,
             final ObjectActionType type,
             final String actionName,
-            final ObjectSpecification[] parameters) {
+            final List<ObjectSpecification> parameters) {
         outer: for (int i = 0; i < availableActions.size(); i++) {
             final ObjectAction action = availableActions.get(i);
             if (action.getActions().size() > 0) {
@@ -469,11 +476,11 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
                 if (actionName != null && !actionName.equals(action.getId())) {
                     continue outer;
                 }
-                if (action.getParameters().size() != parameters.length) {
+                if (action.getParameters().size() != parameters.size()) {
                     continue outer;
                 }
-                for (int j = 0; j < parameters.length; j++) {
-                    if (!parameters[j].isOfType(action.getParameters().get(j).getSpecification())) {
+                for (int j = 0; j < parameters.size(); j++) {
+                    if (!parameters.get(j).isOfType(action.getParameters().get(j).getSpecification())) {
                         continue outer;
                     }
                 }

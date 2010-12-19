@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.List;
+
 public interface Hierarchical {
 
 	/**
@@ -38,7 +40,7 @@ public interface Hierarchical {
 	 * Get the list of specifications for all the interfaces that the class
 	 * represented by this specification implements.
 	 */
-	ObjectSpecification[] interfaces();
+	List<ObjectSpecification> interfaces();
 
 	/**
 	 * Determines if this specification represents the same specification, or a
@@ -55,7 +57,7 @@ public interface Hierarchical {
 	 * Get the list of specifications for the subclasses of the class
 	 * represented by this specification
 	 */
-	ObjectSpecification[] subclasses();
+	List<ObjectSpecification> subclasses();
 
 	/**
 	 * Get the specification for this specification's class's superclass.

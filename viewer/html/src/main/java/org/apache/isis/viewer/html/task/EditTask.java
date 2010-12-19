@@ -147,7 +147,7 @@ public class EditTask extends Task {
 
         if (targetAdapter.isTransient()) {
             final ObjectAction action = 
-                targetAdapter.getSpecification().getObjectAction(ObjectActionType.USER, "save", new ObjectSpecification[0]);
+                targetAdapter.getSpecification().getObjectAction(ObjectActionType.USER, "save", ObjectSpecification.EMPTY_LIST);
             if (action == null) {
                 getPersistenceSession().makePersistent(targetAdapter);
             } else {

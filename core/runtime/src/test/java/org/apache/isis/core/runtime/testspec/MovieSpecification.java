@@ -214,7 +214,7 @@ public class MovieSpecification extends TestProxySpecification {
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String name,
-            final ObjectSpecification[] parameters) {
+            final List<ObjectSpecification> parameters) {
         return null;
     }
 

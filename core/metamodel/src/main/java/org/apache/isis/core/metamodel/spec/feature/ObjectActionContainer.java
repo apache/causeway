@@ -36,7 +36,7 @@ public interface ObjectActionContainer {
     /**
      * Returns the action of the specified type with the specified signature.
      */
-    ObjectAction getObjectAction(ObjectActionType type, String id, ObjectSpecification[] parameters);
+    ObjectAction getObjectAction(ObjectActionType type, String id, List<ObjectSpecification> parameters);
 
     /**
      * Get the action object represented by the specified identity string.

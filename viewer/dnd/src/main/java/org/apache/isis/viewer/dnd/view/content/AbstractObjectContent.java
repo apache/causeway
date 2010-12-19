@@ -20,6 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.content;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.applib.query.QueryFindAllInstances;
@@ -230,7 +231,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
 
     private ObjectAction dropAction(final ObjectAdapter source, final ObjectAdapter target) {
         ObjectAction action = target.getSpecification().getObjectAction(ObjectActionType.USER, null,
-                new ObjectSpecification[] { source.getSpecification() });
+                Arrays.asList( source.getSpecification() ));
         return action;
     }
 

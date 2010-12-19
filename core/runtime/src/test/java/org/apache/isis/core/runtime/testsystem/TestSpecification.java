@@ -21,12 +21,12 @@
 package org.apache.isis.core.runtime.testsystem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.filters.Filter;
@@ -63,17 +63,13 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public List<ObjectAssociation> fields = Lists.newArrayList();
     private final int id = next++;
     private final String name;
-    private ObjectSpecification[] subclasses = new ObjectSpecification[0];
+    private List<ObjectSpecification> subclasses = Collections.emptyList();
     private String title;
 	private RuntimeContext runtimeContext;
 
     public TestSpecification() {
         this((String) null);
         this.runtimeContext = new RuntimeContextNoRuntime();
-    }
-
-    public TestSpecification(final Class<?> cls) {
-        this(cls.getName());
     }
 
     public TestSpecification(final String name) {
@@ -92,34 +88,9 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return super.clone();
     }
 
-    public void debugData(final DebugString debug) {}
-
-    public String debugInterface() {
-        return null;
-    }
-
-    public String debugTitle() {
-        return "";
-    }
-
-    public ObjectAdapter getAggregate(final ObjectAdapter object) {
-        return null;
-    }
-
-    public ObjectAction getClassAction(
-            final ObjectActionType type,
-            final String name,
-            final ObjectSpecification[] parameters) {
-        return null;
-    }
-
     @Override
     public List<ObjectAction> getServiceActionsFor(final ObjectActionType... type) {
         return null;
-    }
-
-    public int getFeatures() {
-        return 0;
     }
 
     @Override
@@ -140,14 +111,6 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
             }
         }
         throw new IsisException("Field not found: " + name);
-    }
-
-    public Object getFieldExtension(final String name, final Class<?> cls) {
-        return null;
-    }
-
-    public Class<?>[] getFieldExtensions(final String name) {
-        return new Class[0];
     }
 
     @Override
@@ -199,7 +162,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String name,
-            final ObjectSpecification[] parameters) {
+            final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
             return action;
         }
@@ -208,7 +171,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
 
     @Override
     public ObjectAction getObjectAction(final ObjectActionType type, final String name) {
-        return getObjectAction(type, name, new ObjectSpecification[0]);
+        return getObjectAction(type, name, ObjectSpecification.EMPTY_LIST);
     }
 
     @Override
@@ -251,11 +214,9 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public ObjectSpecification[] interfaces() {
-        return new ObjectSpecification[0];
+    public List<ObjectSpecification> interfaces() {
+        return Collections.emptyList();
     }
-
-    public void introspect() {}
 
     @Override
     public boolean isDirty(final ObjectAdapter object) {
@@ -305,28 +266,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return Persistability.USER_PERSISTABLE;
     }
 
-    public boolean queryByExample() {
-        return false;
-    }
-
     public void setupAction(final ObjectAction action) {
         this.action = action;
     }
 
-    public void setupFields(final List<ObjectAssociation> fields) {
-        this.fields = fields;
-    }
-
-    public void setupSubclasses(final ObjectSpecification[] subclasses) {
-        this.subclasses = subclasses;
-    }
-
-    public void setupTitle(final String title) {
-        this.title = title;
-    }
-
     @Override
-    public ObjectSpecification[] subclasses() {
+    public List<ObjectSpecification> subclasses() {
         return subclasses;
     }
 
@@ -417,8 +362,5 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return adapter;
     }
 
-	public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
 
 }

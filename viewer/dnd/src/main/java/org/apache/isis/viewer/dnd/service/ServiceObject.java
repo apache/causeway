@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.service;
 
+import java.util.Arrays;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -55,14 +57,17 @@ public class ServiceObject extends AbstractContent {
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public void debugDetails(final DebugString debug) {
         debug.appendln("service", adapter);
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return adapter;
     }
 
+    @Override
     public String getDescription() {
         final String specName = getSpecification().getSingularName();
         final String objectTitle = getObject().titleString();
@@ -70,10 +75,12 @@ public class ServiceObject extends AbstractContent {
                 + getSpecification().getDescription();
     }
 
+    @Override
     public String getHelp() {
         return "";
     }
 
+    @Override
     public String getId() {
         return "";
     }
@@ -82,10 +89,12 @@ public class ServiceObject extends AbstractContent {
         return adapter;
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return adapter.getSpecification();
     }
@@ -95,10 +104,12 @@ public class ServiceObject extends AbstractContent {
         return false;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }
 
+    @Override
     public boolean isTransient() {
         return adapter != null && adapter.isTransient();
     }
@@ -107,6 +118,7 @@ public class ServiceObject extends AbstractContent {
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public String title() {
         return adapter.titleString();
     }
@@ -121,6 +133,7 @@ public class ServiceObject extends AbstractContent {
         return (isTransient() ? "UNSAVED " : "") + getSpecification().getSingularName();
     }
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         ObjectAction action = actionFor(sourceContent);
         if (action == null) {
@@ -136,21 +149,24 @@ public class ServiceObject extends AbstractContent {
     private ObjectAction actionFor(final Content sourceContent) {
         ObjectAction action;
         action = adapter.getSpecification().getObjectAction(ObjectActionType.USER, null,
-                new ObjectSpecification[] { sourceContent.getSpecification() });
+                Arrays.asList( sourceContent.getSpecification() ));
         return action;
     }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         ObjectAction action = actionFor(sourceContent);
         ObjectAdapter source = sourceContent.getAdapter();
         return action.execute(adapter, new ObjectAdapter[] { source });
     }
 
+    @Override
     public String getIconName() {
         final ObjectAdapter object = getObject();
         return object == null ? null : object.getIconName();
     }
 
+    @Override
     public Image getIconPicture(final int iconHeight) {
         final ObjectAdapter adapter = getObject();
         final ObjectSpecification specification = adapter.getSpecification();

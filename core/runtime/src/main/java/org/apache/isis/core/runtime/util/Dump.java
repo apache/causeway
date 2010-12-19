@@ -528,10 +528,10 @@ public final class Dump {
         debug.unindent();
     }
 
-    private static String[] specificationNames(final ObjectSpecification[] specifications) {
-        final String[] names = new String[specifications.length];
+    private static String[] specificationNames(final List<ObjectSpecification> specifications) {
+        final String[] names = new String[specifications.size()];
         for (int i = 0; i < names.length; i++) {
-            names[i] = specifications[i].getFullName();
+            names[i] = specifications.get(i).getFullName();
         }
         return names;
     }

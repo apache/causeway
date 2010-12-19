@@ -26,6 +26,8 @@ import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.alternatives.remoting.common.IsisRemoteException;
 import org.apache.isis.alternatives.remoting.common.client.transaction.ClientTransactionEvent;
 import org.apache.isis.alternatives.remoting.common.data.Data;
@@ -196,11 +198,11 @@ public class ServerFacadeImpl implements ServerFacade {
         return member;
     }
 
-    private ObjectSpecification[] getMemberParameterSpecifications(final Identifier id) {
+    private List<ObjectSpecification> getMemberParameterSpecifications(final Identifier id) {
         final String[] parameters = id.getMemberParameterNames();
-        final ObjectSpecification[] specifications = new ObjectSpecification[parameters.length];
+        final List<ObjectSpecification> specifications = Lists.newArrayList();
         for (int i = 0; i < parameters.length; i++) {
-            specifications[i] = getSpecificationLoader().loadSpecification(parameters[i]);
+            specifications.add(getSpecificationLoader().loadSpecification(parameters[i]));
         }
         return specifications;
     }
@@ -531,9 +533,9 @@ public class ServerFacadeImpl implements ServerFacade {
     @SuppressWarnings("unused")
     private ObjectAction getActionMethod(final String actionType, final String actionIdentifier,
         final Data[] parameterData, final ObjectAdapter adapter) {
-        final ObjectSpecification[] parameterSpecs = new ObjectSpecification[parameterData.length];
-        for (int i = 0; i < parameterSpecs.length; i++) {
-            parameterSpecs[i] = getSpecification(parameterData[i].getType());
+        final List<ObjectSpecification> parameterSpecs = Lists.newArrayList();
+        for (int i = 0; i < parameterSpecs.size(); i++) {
+            parameterSpecs.add(getSpecification(parameterData[i].getType()));
         }
 
         final ObjectActionType type = ObjectActionImpl.getType(actionType);

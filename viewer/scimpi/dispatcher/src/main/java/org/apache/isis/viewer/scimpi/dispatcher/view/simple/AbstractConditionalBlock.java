@@ -42,11 +42,12 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
     public void process(Request request) {
         String id = request.getOptionalProperty(OBJECT);
         
+        
         String method = request.getOptionalProperty(METHOD + "-visible");
         if (method != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             // TODO needs to work irrespective of parameters 
-            ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, new ObjectSpecification[0]);
+            ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, ObjectSpecification.EMPTY_LIST);
             Consent visible = objectAction.isVisible(IsisContext.getAuthenticationSession(), object);
             processTags(visible.isAllowed(), request);
             return;
@@ -56,7 +57,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         if (method != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             // TODO needs to work irrespective of parameters 
-            ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, new ObjectSpecification[0]);
+            ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, ObjectSpecification.EMPTY_LIST);
             Consent usable = objectAction.isUsable(IsisContext.getAuthenticationSession(), object);
             processTags(usable.isAllowed(), request);
             return;

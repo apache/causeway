@@ -232,13 +232,13 @@ public class DebugAction implements Action {
         view.appendRow("Facets", buffer.toString());
     }
 
-    private void specificationClasses(DebugView view, String label, ObjectSpecification[] subclasses) {
+    private void specificationClasses(DebugView view, String label, List<ObjectSpecification> subclasses) {
         StringBuffer buffer = new StringBuffer();
-        if (subclasses.length == 0) {
+        if (subclasses.size() == 0) {
             buffer.append("none");
         } else {
-            for (int i = 0; i < subclasses.length; i++) {
-                buffer.append(specificationLink(subclasses[i]) + "<br>");
+            for (int i = 0; i < subclasses.size(); i++) {
+                buffer.append(specificationLink(subclasses.get(i)) + "<br>");
             }
         }
         view.appendRow(label, buffer.toString());

@@ -86,7 +86,7 @@ public class InstanceCollectionSpecification extends IntrospectableSpecification
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String id,
-            final ObjectSpecification[] parameters) {
+            final List<ObjectSpecification> parameters) {
         return null;
     }
 

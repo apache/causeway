@@ -21,6 +21,9 @@
 package org.apache.isis.core.metamodel.spec;
 
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -44,6 +47,9 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical, Dirtiable, DefaultProvider {
 
     // REVIEW why is there no Help method for classes?
+
+    public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
+
 
     /**
      * Returns the name of this specification. This will be the fully qualified name of the Class object that

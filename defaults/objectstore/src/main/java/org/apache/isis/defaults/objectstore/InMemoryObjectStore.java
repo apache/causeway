@@ -331,9 +331,9 @@ public class InMemoryObjectStore implements ObjectStore {
         }
         
         // includeSubclasses
-        final ObjectSpecification[] subclasses = spec.subclasses();
-        for (int i = 0; i < subclasses.length; i++) {
-            if (hasInstances(subclasses[i])) {
+        final List<ObjectSpecification> subclasses = spec.subclasses();
+        for (int i = 0; i < subclasses.size(); i++) {
+            if (hasInstances(subclasses.get(i))) {
                 return true;
             }
         }
@@ -349,9 +349,9 @@ public class InMemoryObjectStore implements ObjectStore {
         instancesFor(spec).findInstancesAndAdd(persistenceQuery, foundInstances);
 
         // include subclasses
-        final ObjectSpecification[] subclasses = spec.subclasses();
-        for (int i = 0; i < subclasses.length; i++) {
-            findInstances(subclasses[i], persistenceQuery, foundInstances);
+        final List<ObjectSpecification> subclasses = spec.subclasses();
+        for (int i = 0; i < subclasses.size(); i++) {
+            findInstances(subclasses.get(i), persistenceQuery, foundInstances);
         }
         
     }

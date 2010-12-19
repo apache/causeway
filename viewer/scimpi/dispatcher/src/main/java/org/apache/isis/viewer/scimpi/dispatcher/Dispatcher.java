@@ -32,6 +32,12 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.TreeSet;
 
+import org.apache.log4j.Logger;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceFactory;
@@ -59,11 +65,6 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.ProcessorLookup;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 import org.apache.isis.viewer.scimpi.dispatcher.view.Snippet;
-import org.apache.log4j.Logger;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 
 
 public class Dispatcher {
@@ -235,10 +236,10 @@ public class Dispatcher {
                 Facet facet = mappedObject.getSpecification().getFacet(CollectionFacet.class);
                 if (facet != null) {
                     ObjectSpecification specification = mappedObject.getSpecification();
-                    TypeOfFacet facet2 = (TypeOfFacet) specification.getFacet(TypeOfFacet.class);
+                    TypeOfFacet facet2 = specification.getFacet(TypeOfFacet.class);
                     file = findFileForSpecification(context, facet2.valueSpec(), "collection", EXTENSION);
                 } else {
-                    ObjectAdapter mappedObject2 = (ObjectAdapter) mappedObject;
+                    ObjectAdapter mappedObject2 = mappedObject;
                     if (mappedObject2.isTransient()) {
                         file = findFileForSpecification(context, mappedObject.getSpecification(), "edit", EXTENSION);
                     } else {
@@ -281,9 +282,9 @@ public class Dispatcher {
         String className = specification.getShortName();
         String fileName = context.findFile("/" + className + "/" + name + "." + extension);
         if (fileName == null) {
-            ObjectSpecification[] interfaces = specification.interfaces();
-            for (int i = 0; i < interfaces.length; i++) {
-                fileName = findFile(context, interfaces[i], name, extension);
+            List<ObjectSpecification> interfaces = specification.interfaces();
+            for (int i = 0; i < interfaces.size(); i++) {
+                fileName = findFile(context, interfaces.get(i), name, extension);
                 if (fileName != null) {
                     return fileName;
                 }

@@ -109,13 +109,13 @@ public abstract class IntrospectableSpecificationAbstract
     }
 
     @Override
-    public ObjectSpecification[] interfaces() {
-        return new ObjectSpecification[0];
+    public List<ObjectSpecification> interfaces() {
+        return Collections.emptyList();
     }
 
     @Override
-    public ObjectSpecification[] subclasses() {
-        return new ObjectSpecification[0];
+    public List<ObjectSpecification> subclasses() {
+        return Collections.emptyList();
     }
 
     @Override
@@ -163,9 +163,9 @@ public abstract class IntrospectableSpecificationAbstract
             noopFacet = facet;
         }
         if (interfaces() != null) {
-        	final ObjectSpecification[] interfaces = interfaces();
-        	for (int i = 0; i < interfaces.length; i++) {
-        		final ObjectSpecification interfaceSpec = interfaces[i];
+        	final List<ObjectSpecification> interfaces = interfaces();
+        	for (int i = 0; i < interfaces.size(); i++) {
+        		final ObjectSpecification interfaceSpec = interfaces.get(i);
         		if (interfaceSpec == null) {
         			// HACK: shouldn't happen, but occurring on occasion when running
         			// XATs under JUnit4. Some sort of race condition?
