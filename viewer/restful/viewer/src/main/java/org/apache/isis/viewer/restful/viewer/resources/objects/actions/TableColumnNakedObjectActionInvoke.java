@@ -1,6 +1,7 @@
 package org.apache.isis.viewer.restful.viewer.resources.objects.actions;
 
 import java.text.MessageFormat;
+import java.util.List;
 
 import nu.xom.Attribute;
 import nu.xom.Element;
@@ -33,14 +34,14 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
         final String formName = "action-" + actionId;
         final String uri = MessageFormat.format("{0}/object/{1}/action/{2}",
                 resourceContext.getHttpServletRequest().getContextPath(), getOidStrRealTarget(action), actionId);
-        final ObjectActionParameter[] parameters = action.getParameters();
+        final List<ObjectActionParameter> parameters = action.getParameters();
 
         final Element div = xhtmlRenderer.div(HtmlClass.ACTION);
         div.appendChild(renderForm(formName, uri, parameters));
         return div;
     }
 
-	private Element renderForm(final String formName, final String uri, final ObjectActionParameter[] parameters) {
+	private Element renderForm(final String formName, final String uri, final List<ObjectActionParameter> parameters) {
 
         final Element form = xhtmlRenderer.form(formName, HtmlClass.ACTION);
         form.addAttribute(new Attribute("method", "POST"));
@@ -53,9 +54,9 @@ public final class TableColumnNakedObjectActionInvoke extends TableColumnNakedOb
         return form;
     }
 
-   	private void renderInputFieldsForParameters(final ObjectActionParameter[] parameters, final Element form) {
-        for (int i = 0; i < parameters.length; i++) {
-            final ObjectActionParameter parameter = parameters[i];
+   	private void renderInputFieldsForParameters(final List<ObjectActionParameter> parameters, final Element form) {
+        for (int i = 0; i < parameters.size(); i++) {
+            final ObjectActionParameter parameter = parameters.get(i);
             final String inputFieldName = INPUT_FIELD_NAME_PREFIX + i;
 
             final Element inputLabel = new Element("p");

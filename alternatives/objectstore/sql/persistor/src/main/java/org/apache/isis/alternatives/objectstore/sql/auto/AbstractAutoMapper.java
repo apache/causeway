@@ -25,6 +25,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.alternatives.objectstore.sql.AbstractMapper;
 import org.apache.isis.alternatives.objectstore.sql.CollectionMapper;
 import org.apache.isis.alternatives.objectstore.sql.DatabaseConnector;
@@ -41,7 +43,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.log4j.Logger;
 
 
 public abstract class AbstractAutoMapper extends AbstractMapper {
@@ -56,7 +57,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     
     protected AbstractAutoMapper(final String className, final String parameterBase, FieldMappingLookup lookup, ObjectMappingLookup objectMapperLookup) {
         specification = IsisContext.getSpecificationLoader().loadSpecification(className);
-        if (specification.getPropertyList() == null || specification.getPropertyList().size() == 0) {
+        if (specification.getProperties() == null || specification.getProperties().size() == 0) {
             throw new SqlObjectStoreException(specification.getFullName() + " has no fields: " + specification);
         }
         setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
@@ -88,7 +89,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
             final String className,
             final IsisConfiguration configParameters,
             final String parameterBase) {
-        List<? extends ObjectAssociation> fields = specification.getAssociationList();
+        List<? extends ObjectAssociation> fields = specification.getAssociations();
 
         int simpleFieldCount = 0;
         int collectionFieldCount = 0;
@@ -225,6 +226,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return fieldMappingLookup.get(field);
     }
 
+    @Override
     public boolean needsTables(final DatabaseConnector connection) {
         for (int i = 0; collectionMappers != null && i < collectionMappers.length; i++) {
             if (collectionMappers[i].needsTables(connection)) {
@@ -234,6 +236,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
         return !connection.hasTable(table);
     }
 
+    @Override
     public String toString() {
         return "AbstractAutoMapper [table=" + table + ",noColumns=" + fieldMappings.size() + ",specification="
                 + specification.getFullName() + "]";

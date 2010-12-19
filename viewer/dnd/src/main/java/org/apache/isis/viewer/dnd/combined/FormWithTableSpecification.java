@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.combined;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -39,16 +41,20 @@ import org.apache.isis.viewer.dnd.view.composite.StackLayout;
 
 public class FormWithTableSpecification extends SplitViewSpecification {
 
+    @Override
     public Layout createLayout(Content content, Axes axes) {
         return new StackLayout();
     }
 
+    @Override
     View createMainView(Axes axes, Content mainContent, final Content secondaryContent) {
         View form1 = new FormSpecification() {
+            @Override
             protected boolean include(Content content, int sequence) {
                 return !secondaryContent.getId().equals(content.getId());
             };
             
+            @Override
             public Layout createLayout(Content content, Axes axes) {
                 GridLayout gridLayout = new GridLayout();
                 gridLayout.setSize(2);
@@ -58,15 +64,17 @@ public class FormWithTableSpecification extends SplitViewSpecification {
         return form1;
     }
     
+    @Override
     View createSecondaryView(Axes axes, final Content fieldContent) {
         return new InternalTableSpecification().createView(fieldContent, axes, -1);
     }
 
+    @Override
     Content determineSecondaryContent(Content content) {
         ObjectSpecification spec = content.getSpecification();
         ObjectAdapter target = content.getAdapter();
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        ObjectAssociation[] fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
         for (ObjectAssociation field : fields) {
             if (field.isOneToManyAssociation()) {
                 return Toolkit.getContentFactory().createFieldContent(field, target);
@@ -110,10 +118,12 @@ public class FormWithTableSpecification extends SplitViewSpecification {
         };
     }
 */
+    @Override
     public String getName() {
         return "Form with table (experimental)";
     }
 
+    @Override
     boolean validField(ObjectAssociation field) {
         return false;
     }

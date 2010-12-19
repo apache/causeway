@@ -40,13 +40,7 @@ public interface ObjectAssociationContainer {
      * Return all the fields that exist in an object of this specification, although they need not all be
      * accessible or visible.
      */
-    ObjectAssociation[] getAssociations();
-
-    /**
-     * As per {@link #getAssociations()}, but returning a {@link List}.
-     * @return
-     */
-    List<? extends ObjectAssociation> getAssociationList();
+    List<ObjectAssociation> getAssociations();
 
     /**
      * Return all {@link ObjectAssociation}s matching the supplied filter.
@@ -56,24 +50,18 @@ public interface ObjectAssociationContainer {
      * 
      * @see Filters
      */
-    ObjectAssociation[] getAssociations(Filter<ObjectAssociation> filter);
-
-    /**
-     * As per {@link #getAssociations(Filter)}, but returning a {@link List}.
-     * @return
-     */
-    List<? extends ObjectAssociation> getAssociationList(Filter<ObjectAssociation> filter);
+    List<ObjectAssociation> getAssociations(Filter<ObjectAssociation> filter);
 
     /**
      * All {@link ObjectAssociation association}s that represent {@link OneToOneAssociation properties}.
      */
-    List<OneToOneAssociation> getPropertyList();
+    List<OneToOneAssociation> getProperties();
 
     /**
      * All {@link ObjectAssociation association}s that represents {@link OneToManyAssociation collections}. 
      * @return
      */
-    List<OneToManyAssociation> getCollectionList();
+    List<OneToManyAssociation> getCollections();
 
 
 }

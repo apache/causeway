@@ -23,6 +23,7 @@ package org.apache.isis.core.progmodel.spec;
 import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -70,8 +71,8 @@ import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitut
 import org.apache.isis.core.metamodel.specloader.internal.ObjectActionImpl;
 import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.internal.OneToOneAssociationImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.util.CallbackUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.metamodel.util.SpecUtils;
@@ -255,8 +256,8 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         	if (LOG.isDebugEnabled()) {
         		LOG.debug("skipping introspection of properties, actions and interfaces for " + cls.getName() + " (java.xxx class)");
         	}
-            fields = new ObjectAssociation[0];
-            objectActions = new ObjectAction[0];
+            fields = Collections.emptyList();
+            objectActions = Collections.emptyList();
             interfaces = new ObjectSpecification[0];
 
         } else {
@@ -357,16 +358,16 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
 
     private void decorateAllFacets(final FacetDecoratorSet decoratorSet) {
         decoratorSet.decorateAllFacets(this);
-        for (int i = 0; i < fields.length; i++) {
-            ObjectAssociation objectAssociation = fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            ObjectAssociation objectAssociation = fields.get(i);
 			decoratorSet.decorateAllFacets(objectAssociation);
         }
-        for (int i = 0; i < objectActions.length; i++) {
-            ObjectAction objectAction = objectActions[i];
+        for (int i = 0; i < objectActions.size(); i++) {
+            ObjectAction objectAction = objectActions.get(i);
 			decoratorSet.decorateAllFacets(objectAction);
-            final ObjectActionParameter[] parameters = objectActions[i].getParameters();
-            for (int j = 0; j < parameters.length; j++) {
-                decoratorSet.decorateAllFacets(parameters[j]);
+            final List<ObjectActionParameter> parameters = objectActions.get(i).getParameters();
+            for (int j = 0; j < parameters.size(); j++) {
+                decoratorSet.decorateAllFacets(parameters.get(j));
             }
         }
     }
@@ -386,9 +387,9 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
 
     private void cataloguePropertiesAndCollections(final Hashtable<Method, ObjectMember> membersByMethod) {
         Filter noop = AbstractFilter.noop(ObjectAssociation.class);
-        final ObjectAssociation[] fields = getAssociations(noop);
-        for (int i = 0; i < fields.length; i++) {
-            final ObjectAssociation field = fields[i];
+        final List<ObjectAssociation> fields = getAssociations(noop);
+        for (int i = 0; i < fields.size(); i++) {
+            final ObjectAssociation field = fields.get(i);
             final Facet[] facets = field.getFacets(ImperativeFacet.FILTER);
             for (int j = 0; j < facets.length; j++) {
                 final ImperativeFacet facet = ImperativeFacetUtils.getImperativeFacet(facets[j]);
@@ -400,9 +401,9 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     }
 
     private void catalogueActions(final Hashtable<Method, ObjectMember> membersByMethod) {
-        final ObjectAction[] userActions = getObjectActions(ObjectActionType.USER);
-        for (int i = 0; i < userActions.length; i++) {
-            final ObjectAction userAction = userActions[i];
+        final List<ObjectAction> userActions = getObjectActions(ObjectActionType.USER);
+        for (int i = 0; i < userActions.size(); i++) {
+            final ObjectAction userAction = userActions.get(i);
             final Facet[] facets = userAction.getFacets(ImperativeFacet.FILTER);
             for (int j = 0; j < facets.length; j++) {
                 final ImperativeFacet facet = ImperativeFacetUtils.getImperativeFacet(facets[j]);
@@ -420,9 +421,9 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     @Override
     public ObjectAssociation getAssociation(final String id) {
         // TODO put fields into hash
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getId().equals(id)) {
-                return fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getId().equals(id)) {
+                return fields.get(i);
             }
         }
         throw new ObjectSpecificationException("No field called '" + id + "' in '" + getSingularName() + "'");
@@ -437,24 +438,24 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
             final ObjectActionType type,
             final String id,
             final ObjectSpecification[] parameters) {
-        final ObjectAction[] availableActions = ArrayUtils.combine(objectActions, getServiceActions(type));
+        final List<ObjectAction> availableActions = ArrayUtils.combine(objectActions, getServiceActions(type));
         return getAction(availableActions, type, id, parameters);
     }
 
     @Override
     public ObjectAction getObjectAction(final ObjectActionType type, final String nameParmsIdentityString) {
-        final ObjectAction[] availableActions = ArrayUtils.combine(objectActions, getServiceActions(type));
+        final List<ObjectAction> availableActions = ArrayUtils.combine(objectActions, getServiceActions(type));
         return getAction2(availableActions, type, nameParmsIdentityString);
     }
 
     private ObjectAction getAction(
-            final ObjectAction[] availableActions,
+            final List<ObjectAction> availableActions,
             final ObjectActionType type,
             final String actionName,
             final ObjectSpecification[] parameters) {
-        outer: for (int i = 0; i < availableActions.length; i++) {
-            final ObjectAction action = availableActions[i];
-            if (action.getActions().length > 0) {
+        outer: for (int i = 0; i < availableActions.size(); i++) {
+            final ObjectAction action = availableActions.get(i);
+            if (action.getActions().size() > 0) {
                 // deal with action set
                 final ObjectAction a = getAction(action.getActions(), type, actionName, parameters);
                 if (a != null) {
@@ -468,11 +469,11 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
                 if (actionName != null && !actionName.equals(action.getId())) {
                     continue outer;
                 }
-                if (action.getParameters().length != parameters.length) {
+                if (action.getParameters().size() != parameters.length) {
                     continue outer;
                 }
                 for (int j = 0; j < parameters.length; j++) {
-                    if (!parameters[j].isOfType(action.getParameters()[j].getSpecification())) {
+                    if (!parameters[j].isOfType(action.getParameters().get(j).getSpecification())) {
                         continue outer;
                     }
                 }
@@ -483,15 +484,15 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     }
 
     private ObjectAction getAction2(
-            final ObjectAction[] availableActions,
+            final List<ObjectAction> availableActions,
             final ObjectActionType type,
             final String nameParmsIdentityString) {
         if (nameParmsIdentityString == null) {
             return null;
         }
-        outer: for (int i = 0; i < availableActions.length; i++) {
-            final ObjectAction action = availableActions[i];
-            if (action.getActions().length > 0) {
+        outer: for (int i = 0; i < availableActions.size(); i++) {
+            final ObjectAction action = availableActions.get(i);
+            if (action.getActions().size() > 0) {
                 // deal with action set
                 final ObjectAction a = getAction2(action.getActions(), type, nameParmsIdentityString);
                 if (a != null) {
@@ -512,13 +513,13 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     }
 
     @Override
-    protected ObjectAction[] getActions(final ObjectAction[] availableActions, final ObjectActionType type) {
+    protected List<ObjectAction> getActions(final List<ObjectAction> availableActions, final ObjectActionType type) {
         final List<ObjectAction> actions = new ArrayList<ObjectAction>();
         for (final ObjectAction action : availableActions) {
             final ObjectActionType actionType = action.getType();
             if (actionType == ObjectActionType.SET) {
                 final ObjectActionSet actionSet = (ObjectActionSet) action;
-                final ObjectAction[] subActions = actionSet.getActions();
+                final List<ObjectAction> subActions = actionSet.getActions();
                 for (final ObjectAction subAction : subActions) {
                     if (sameActionTypeOrNotSpecified(type, subAction)) {
                         actions.add(subAction);
@@ -532,7 +533,7 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
             }
         }
 
-        return actions.toArray(new ObjectAction[0]);
+        return actions;
     }
 
     private boolean sameActionTypeOrNotSpecified(final ObjectActionType type, final ObjectAction action) {
@@ -543,18 +544,17 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     // orderFields, orderActions
     // //////////////////////////////////////////////////////////////////////
 
-    private ObjectAssociation[] orderFields(final OrderSet order) {
-        final ObjectAssociation[] fields = new ObjectAssociation[order.size()];
+    private List<ObjectAssociation> orderFields(final OrderSet order) {
+        final List<ObjectAssociation> fields = Lists.newArrayList();
         final Enumeration<ObjectAssociation> elements = CastUtils.enumerationOver(order.elements(),
                 ObjectAssociation.class);
-        int actionCnt = 0;
         while (elements.hasMoreElements()) {
             final Object element = elements.nextElement();
             if (element instanceof ObjectMemberPeerImpl) {
                 ObjectMemberPeerImpl javaObjectMemberPeer = (ObjectMemberPeerImpl) element;
                 if (javaObjectMemberPeer.getFeatureType().isPropertyOrCollection()) {
                     final ObjectAssociation objectAssociation = createObjectAssociation(javaObjectMemberPeer);
-                    fields[actionCnt++] = objectAssociation;
+                    fields.add(objectAssociation);
                 }
             } else if (element instanceof OrderSet) {
                 // Not supported at present
@@ -563,18 +563,12 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
             }
         }
 
-        if (actionCnt < fields.length) {
-            final ObjectAssociation[] actualActions = new ObjectAssociation[actionCnt];
-            System.arraycopy(fields, 0, actualActions, 0, actionCnt);
-            return actualActions;
-        }
         return fields;
     }
 
-    private ObjectAction[] orderActions(final OrderSet order) {
-        final ObjectAction[] actions = new ObjectAction[order.size()];
+    private List<ObjectAction> orderActions(final OrderSet order) {
+        final List<ObjectAction> actions = Lists.newArrayList();
         final Enumeration<ObjectAction> elements = CastUtils.enumerationOver(order.elements(), ObjectAction.class);
-        int actionCnt = 0;
         while (elements.hasMoreElements()) {
             final Object element = elements.nextElement();
             if (element instanceof ObjectMemberPeerImpl) {
@@ -582,21 +576,16 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
                 if(memberPeer.getFeatureType().isAction()) {
                     final String actionId = memberPeer.getIdentifier().getMemberName();
                     final ObjectAction objectAction = new ObjectActionImpl(actionId, memberPeer, getRuntimeContext());
-                    actions[actionCnt++] = objectAction;
+                    actions.add(objectAction);
                 }
             } else if (element instanceof OrderSet) {
                 final OrderSet set = ((OrderSet) element);
-                actions[actionCnt++] = new ObjectActionSet("", set.getGroupFullName(), orderActions(set), getRuntimeContext());
+                actions.add(new ObjectActionSet("", set.getGroupFullName(), orderActions(set), getRuntimeContext()));
             } else {
                 throw new UnknownTypeException(element);
             }
         }
 
-        if (actionCnt < actions.length) {
-            final ObjectAction[] actualActions = new ObjectAction[actionCnt];
-            System.arraycopy(actions, 0, actualActions, 0, actionCnt);
-            return actualActions;
-        }
         return actions;
     }
 
@@ -696,9 +685,9 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
                 final ObjectAdapter adapter = getRuntimeContext().adapterFor(object);
 
                 // initialize new object
-                final ObjectAssociation[] fields = adapter.getSpecification().getAssociations();
-        		for (int i = 0; i < fields.length; i++) {
-        		    fields[i].toDefault(adapter);
+                final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+        		for (int i = 0; i < fields.size(); i++) {
+        		    fields.get(i).toDefault(adapter);
         		}
         		getRuntimeContext().injectDependenciesInto(object);
 
@@ -745,11 +734,11 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
      */
     @Override
     public void markAsService() {
-        final ObjectAssociation[] fields = getAssociations();
-        if (fields != null && fields.length > 0) {
+        final List<ObjectAssociation> fields = getAssociations();
+        if (fields != null && fields.size() > 0) {
             StringBuilder buf = new StringBuilder();
-            for (int i = 0; i < fields.length; i++) {
-                final String name = fields[i].getId();
+            for (int i = 0; i < fields.size(); i++) {
+                final String name = fields.get(i).getId();
                 if ("id".indexOf(name) == -1) {
                     appendFieldName(buf, name);
                 }

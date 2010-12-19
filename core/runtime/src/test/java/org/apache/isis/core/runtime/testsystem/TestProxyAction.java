@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.runtime.testsystem;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.Instance;
@@ -58,7 +60,7 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     }
 
     @Override
-    public ObjectAction[] getActions() {
+    public List<ObjectAction> getActions() {
         return null;
     }
 
@@ -83,17 +85,17 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
     }
 
     @Override
-    public ObjectActionParameter[] getParameters() {
+    public List<ObjectActionParameter> getParameters() {
         return null;
     }
 
     @Override
-    public ObjectSpecification[] getParameterTypes() {
+    public List<ObjectSpecification> getParameterTypes() {
         return null;
     }
 
     @Override
-    public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
+    public List<ObjectActionParameter> getParameters(final Filter<ObjectActionParameter> filter) {
         return null;
     }
 

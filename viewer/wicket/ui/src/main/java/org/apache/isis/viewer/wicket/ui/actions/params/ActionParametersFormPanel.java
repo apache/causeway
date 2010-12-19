@@ -24,8 +24,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import java.util.Arrays;
 import java.util.List;
+
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.repeater.RepeatingView;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -39,12 +45,6 @@ import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.FormFeedbackPanel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.repeater.RepeatingView;
-
-import com.google.common.collect.Lists;
 
 /**
  * {@link PanelAbstract Panel} to capture the arguments for an action invocation.
@@ -95,7 +95,7 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 			final ObjectAction ObjectAction = actionModel
 					.getActionMemento().getAction();
 
-			ObjectActionParameter[] parameters = ObjectAction
+			List<ObjectActionParameter> parameters = ObjectAction
 					.getParameters();
 
 			RepeatingView rv = new RepeatingView(ID_ACTION_PARAMETERS);
@@ -116,16 +116,16 @@ public class ActionParametersFormPanel extends PanelAbstract<ActionModel> {
 			add(new Button(ID_OK_BUTTON) {
 				private static final long serialVersionUID = 1L;
 
-				public void onSubmit() {
+				@Override
+                public void onSubmit() {
 					actionExecutor.executeActionAndProcessResults();
 				};
 			});
 		}
 
 		private List<ActionParameterMemento> buildParameterMementos(
-				ObjectActionParameter[] parameters) {
-			List<ActionParameterMemento> parameterMementoList = Lists.transform(Arrays
-					.asList(parameters), Mementos.fromActionParameter());
+				List<ObjectActionParameter> parameters) {
+			List<ActionParameterMemento> parameterMementoList = Lists.transform(parameters, Mementos.fromActionParameter());
 			// we copy into a new array list otherwise we get lazy evaluation =
 			// reference to a non-serializable object
 			return Lists.newArrayList(parameterMementoList);

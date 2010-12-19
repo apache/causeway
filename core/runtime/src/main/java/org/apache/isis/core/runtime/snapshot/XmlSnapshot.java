@@ -31,6 +31,12 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.log4j.Logger;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import org.apache.isis.applib.snapshot.Snapshottable;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -50,11 +56,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.log4j.Logger;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 
 /**
@@ -477,7 +478,7 @@ public final class XmlSnapshot {
         final Place fieldPlace = new Place(object, xmlFieldElement);
 
         if (field instanceof OneToOneAssociation) {
-            if (field.getSpecification().getAssociations().length == 0) {
+            if (field.getSpecification().getAssociations().size() == 0) {
                 LOG.debug("includeField(Pl, Vec, Str): field is value; done");
                 return false;
             }
@@ -607,10 +608,10 @@ public final class XmlSnapshot {
 
         nofMeta.setAttributesForClass(element, oidOrHashCode(object).toString());
 
-        final ObjectAssociation[] fields = nos.getAssociations();
+        final List<ObjectAssociation> fields = nos.getAssociations();
         LOG.debug("objectToElement(NO): processing fields");
-        eachField: for (int i = 0; i < fields.length; i++) {
-            final ObjectAssociation field = fields[i];
+        eachField: for (int i = 0; i < fields.size(); i++) {
+            final ObjectAssociation field = fields.get(i);
             final String fieldName = field.getId();
 
             LOG.debug("objectToElement(NO): " + log("field", fieldName));
@@ -628,7 +629,7 @@ public final class XmlSnapshot {
             // the
             // same name, ultimately breaking the XSD.
             for (int j = 0; j < i; j++) {
-                if (fieldName.equals(fields[i].getName())) {
+                if (fieldName.equals(fields.get(i).getName())) {
                     LOG.debug("objectToElement(NO): " + log("field", fieldName) + " SKIPPED");
                     continue eachField;
                 }

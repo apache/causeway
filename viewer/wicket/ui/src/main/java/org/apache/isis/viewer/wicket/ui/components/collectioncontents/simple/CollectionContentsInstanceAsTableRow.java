@@ -22,6 +22,10 @@ package org.apache.isis.viewer.wicket.ui.components.collectioncontents.simple;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.repeater.RepeatingView;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -29,9 +33,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
-import org.apache.wicket.Component;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.repeater.RepeatingView;
 
 /**
  * Renders a single entity instance within the HTML table.
@@ -54,7 +55,7 @@ class CollectionContentsInstanceAsTableRow extends PanelAbstract<EntityModel> {
 		ObjectAdapter adapter = model.getObject();
 		ObjectSpecification typeOfSpec = model.getTypeOfSpecification();
 		List<? extends ObjectAssociation> propertyList = typeOfSpec
-				.getAssociationList(ObjectAssociationFilters.PROPERTIES);
+				.getAssociations(ObjectAssociationFilters.PROPERTIES);
 
 		add(new Label("title", adapter.titleString()));
 

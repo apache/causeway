@@ -351,7 +351,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         AggregateAdapters aggregateAdapters = new AggregateAdapters(rootAdapter);
         Oid rootOid = rootAdapter.getOid();
 
-        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollectionList()) {
+        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
             AggregatedOid aggregatedOid = new AggregatedOid(rootOid, otma.getIdentifier());
             ObjectAdapter collectionAdapter = getAdapterFor(aggregatedOid);
             if (collectionAdapter != null) {
@@ -552,7 +552,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
 
     @SuppressWarnings("unused")
     private void eagerlyCreateCollectionAdapters(ObjectAdapter rootAdapter, AggregateAdapters aggregateAdapters) {
-        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollectionList()) {
+        for (OneToManyAssociation otma : rootAdapter.getSpecification().getCollections()) {
             Object referencedCollection = getCollectionPojo(otma, rootAdapter);
             ObjectAdapter collectionAdapter = createAggregatedAdapter(referencedCollection, rootAdapter, otma);
 

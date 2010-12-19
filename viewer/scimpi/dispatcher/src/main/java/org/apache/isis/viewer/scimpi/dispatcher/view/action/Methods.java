@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -35,6 +37,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.InclusionList;
 
 public class Methods extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         String objectId = request.getOptionalProperty(OBJECT);
         boolean showForms = request.isRequested(FORMS, false);
@@ -59,7 +62,7 @@ public class Methods extends AbstractElementProcessor {
     }
 
     public static void writeMethods(Request request, String objectId, ObjectAdapter adapter, boolean showForms, InclusionList inclusionList) {
-        ObjectAction[] actions = adapter.getSpecification().getObjectActions(ObjectActionType.USER);
+        List<ObjectAction> actions = adapter.getSpecification().getObjectActions(ObjectActionType.USER);
         writeMethods(request, adapter, actions, objectId, showForms, inclusionList);
         // TODO determine if system is set up to display exploration methods
         if (true) {
@@ -73,18 +76,18 @@ public class Methods extends AbstractElementProcessor {
         }
     }
 
-    private static void writeMethods(Request request, ObjectAdapter adapter, ObjectAction[] actions, String objectId, boolean showForms, InclusionList inclusionList) {
+    private static void writeMethods(Request request, ObjectAdapter adapter, List<ObjectAction> actions, String objectId, boolean showForms, InclusionList inclusionList) {
         actions = inclusionList.includedActions(actions);
-        for (int j = 0; j < actions.length; j++) {
-            ObjectAction action = actions[j];
+        for (int j = 0; j < actions.size(); j++) {
+            ObjectAction action = actions.get(j);
             if (action instanceof ObjectActionSet) {
                 request.appendHtml("<div class=\"actions\">");
                 writeMethods(request, adapter, action.getActions(), objectId, showForms, inclusionList);
                 request.appendHtml("</div>");
             } else if (action.isContributed() && action.getParameterCount() == 1
-                    && adapter.getSpecification().isOfType(action.getParameters()[0].getSpecification())) {
+                    && adapter.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
                 if (objectId != null) {
-                    ObjectAdapter target = (ObjectAdapter) request.getContext().getMappedObject(objectId);
+                    ObjectAdapter target = request.getContext().getMappedObject(objectId);
                     ObjectAdapter realTarget = action.realTarget(target);
                     String realTargetId = request.getContext().mapObject(realTarget, Scope.INTERACTION);
                     writeMethod(request, adapter, new String[] { objectId }, action, realTargetId, showForms);
@@ -146,6 +149,7 @@ public class Methods extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "methods";
     }

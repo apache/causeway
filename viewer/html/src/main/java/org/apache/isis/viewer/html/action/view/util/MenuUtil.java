@@ -23,6 +23,8 @@ package org.apache.isis.viewer.html.action.view.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.inject.internal.Lists;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -37,35 +39,35 @@ public class MenuUtil {
 
     public static Component[] menu(final ObjectAdapter target, final String targetObjectId, final Context context) {
         final ObjectSpecification specification = target.getSpecification();
-        final ObjectAction[] actions1 = specification.getObjectActions(ObjectActionType.USER);
-        final ObjectAction[] actions2 = specification.getObjectActions(ObjectActionType.EXPLORATION);
-        final ObjectAction[] actions3 = specification.getObjectActions(ObjectActionType.PROTOTYPE);
-        final ObjectAction[] actions = concat(concat(actions1, actions2), actions3);
+        final List<ObjectAction> actions1 = specification.getObjectActions(ObjectActionType.USER);
+        final List<ObjectAction> actions2 = specification.getObjectActions(ObjectActionType.EXPLORATION);
+        final List<ObjectAction> actions3 = specification.getObjectActions(ObjectActionType.PROTOTYPE);
+        final List<ObjectAction> actions = concat(concat(actions1, actions2), actions3);
         final Component[] menuItems = createMenu("Actions", target, actions, context, targetObjectId);
         return menuItems;
     }
 
-	private static ObjectAction[] concat(
-			final ObjectAction[] actions1,
-			final ObjectAction[] actions2) {
-		final ObjectAction[] actions = new ObjectAction[actions1.length + actions2.length];
-        System.arraycopy(actions1, 0, actions, 0, actions1.length);
-        System.arraycopy(actions2, 0, actions, actions1.length, actions2.length);
+	private static List<ObjectAction> concat(
+			final List<ObjectAction> actions1,
+			final List<ObjectAction> actions2) {
+		final List<ObjectAction> actions = Lists.newArrayList();
+		actions.addAll(actions1);
+		actions.addAll(actions2);
 		return actions;
 	}
 
     private static Component[] createMenu(
             final String menuName,
             final ObjectAdapter target,
-            final ObjectAction[] actions,
+            final List<ObjectAction> actions,
             final Context context,
             final String targetObjectId) {
         final List<Component> menuItems = new ArrayList<Component>();
-        for (int j = 0; j < actions.length; j++) {
-            final ObjectAction action = actions[j];
+        for (int j = 0; j < actions.size(); j++) {
+            final ObjectAction action = actions.get(j);
             final String name = action.getName();
             Component menuItem = null;
-            if (action.getActions().length > 0) {
+            if (action.getActions().size() > 0) {
                 final Component[] components = createMenu(name, target, action.getActions(), context, targetObjectId);
                 menuItem = context.getComponentFactory().createSubmenu(name, components);
             } else {
@@ -104,7 +106,7 @@ public class MenuUtil {
                     collectParameters = false;
                     // TODO use new promptForParameters method instead of all this
                 } else if (action.getParameterCount() == 1 && action.isContributed()
-                        && target.getSpecification().isOfType(action.getParameters()[0].getSpecification())) {
+                        && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
                     collectParameters = false;
                 } else {
                     collectParameters = true;

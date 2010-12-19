@@ -20,7 +20,10 @@
 
 package org.apache.isis.viewer.dnd.view.composite;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.filters.Filter;
@@ -67,7 +70,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         ObjectSpecification spec = object.getSpecification();
         Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(IsisContext
                 .getAuthenticationSession(), object);
-        final ObjectAssociation[] flds = spec.getAssociations(filter);
+        final List<ObjectAssociation> flds = spec.getAssociations(filter);
 
         if (view.getSubviews().length == 0) {
             initialBuild(view, axes, object, flds);
@@ -76,11 +79,11 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private void initialBuild(final View view, Axes axes, final ObjectAdapter object, final ObjectAssociation[] flds) {
+    private void initialBuild(final View view, Axes axes, final ObjectAdapter object, final List<ObjectAssociation> flds) {
         LOG.debug("  as new build");
         // addViewAxes(view);
-        for (int f = 0; f < flds.length; f++) {
-            final ObjectAssociation field = flds[f];
+        for (int f = 0; f < flds.size(); f++) {
+            final ObjectAssociation field = flds.get(f);
             addField(view, axes, object, field, f);
         }
     }
@@ -97,7 +100,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
     }
 
-    private void updateBuild(final View view, Axes axes, final ObjectAdapter object, final ObjectAssociation[] flds) {
+    private void updateBuild(final View view, Axes axes, final ObjectAdapter object, final List<ObjectAssociation> flds) {
         LOG.debug("  as update build");
         /*
          * 1/ To remove fields: look through views and remove any that don't exists in visible fields
@@ -113,8 +116,8 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         outer: for (int i = 0; i < subviews.length; i++) {
             final FieldContent fieldContent = ((FieldContent) subviews[i].getContent());
 
-            for (int j = 0; j < flds.length; j++) {
-                final ObjectAssociation field = flds[j];
+            for (int j = 0; j < flds.size(); j++) {
+                final ObjectAssociation field = flds.get(j);
                 if (fieldContent.getField() == field) {
                     continue outer;
                 }
@@ -162,8 +165,8 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
         }
 
         // add new fields
-        outer2: for (int j = 0; j < flds.length; j++) {
-            final ObjectAssociation field = flds[j];
+        outer2: for (int j = 0; j < flds.size(); j++) {
+            final ObjectAssociation field = flds.get(j);
             for (int i = 0; i < subviews.length; i++) {
                 final FieldContent fieldContent = ((FieldContent) subviews[i].getContent());
                 if (fieldContent.getField() == field) {

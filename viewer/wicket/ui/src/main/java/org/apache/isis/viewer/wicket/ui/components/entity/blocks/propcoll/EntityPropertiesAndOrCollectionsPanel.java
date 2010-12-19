@@ -22,6 +22,24 @@ package org.apache.isis.viewer.wicket.ui.components.entity.blocks.propcoll;
 
 import java.util.List;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.Session;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxButton;
+import org.apache.wicket.feedback.FeedbackMessage;
+import org.apache.wicket.feedback.IFeedbackMessageFilter;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Button;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.FormComponent;
+import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
+import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
+import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
+import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.markup.repeater.RepeatingView;
+import org.apache.wicket.model.Model;
+
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -41,23 +59,6 @@ import org.apache.isis.viewer.wicket.ui.components.widgets.formcomponent.CancelH
 import org.apache.isis.viewer.wicket.ui.panels.FormAbstract;
 import org.apache.isis.viewer.wicket.ui.panels.PanelAbstract;
 import org.apache.isis.viewer.wicket.ui.util.EvenOrOddCssClassAppenderFactory;
-import org.apache.wicket.Component;
-import org.apache.wicket.Session;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxButton;
-import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.feedback.IFeedbackMessageFilter;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.FormComponent;
-import org.apache.wicket.markup.html.form.IFormVisitorParticipant;
-import org.apache.wicket.markup.html.form.validation.AbstractFormValidator;
-import org.apache.wicket.markup.html.panel.ComponentFeedbackPanel;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
-import org.apache.wicket.markup.repeater.RepeatingView;
-import org.apache.wicket.model.Model;
 
 
 /**
@@ -115,7 +116,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 			form = new PropCollForm(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS,
 					model,
 					render, 
-					(Component)this);
+					this);
 			addOrReplace(form);
 		} else {
 			permanentlyHide(ID_ENTITY_PROPERTIES_AND_OR_COLLECTIONS);
@@ -208,8 +209,8 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 	    @SuppressWarnings("unchecked")
 	    private List<ObjectAssociation> visibleAssociations(
 	    		ObjectAdapter adapter, ObjectSpecification noSpec) {
-	        return (List<ObjectAssociation>) noSpec
-	                .getAssociationList(visibleAssociationFilter(adapter));
+	        return noSpec
+	                .getAssociations(visibleAssociationFilter(adapter));
 	    }
 
 	    private Filter<ObjectAssociation> visibleAssociationFilter(

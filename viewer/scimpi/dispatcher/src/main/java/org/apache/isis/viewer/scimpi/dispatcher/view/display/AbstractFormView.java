@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -33,10 +35,12 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
 public abstract class AbstractFormView extends AbstractObjectProcessor {
 
+    @Override
     public String checkFieldType(ObjectAssociation objectField) {
         return objectField.isOneToOneAssociation() ? null : "is not an object";
     }
 
+    @Override
     public void process(Request request, ObjectAdapter object) {
         String cls = request.getOptionalProperty(CLASS, "form");
         String classString = " class=\"" + cls + "\"";
@@ -49,15 +53,15 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
         request.processUtilCloseTag();
 
         if (object != null) {
-            ObjectAssociation[] fields = tag.includedFields(object.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS));
+            List<ObjectAssociation> fields = tag.includedFields(object.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS));
             LinkedObject[] linkFields = tag.linkedFields(fields);
     
             String linkAllView = request.getOptionalProperty(LINK);
             if (linkAllView != null) {
                 linkAllView = request.getContext().fullUriPath(linkAllView);
                 for (int i = 0; i < linkFields.length; i++) {
-                    boolean isObject = fields[i].isOneToOneAssociation();
-                    boolean isNotParseable = !fields[i].getSpecification().containsFacet(ParseableFacet.class);
+                    boolean isObject = fields.get(i).isOneToOneAssociation();
+                    boolean isNotParseable = !fields.get(i).getSpecification().containsFacet(ParseableFacet.class);
                     linkFields[i] = isObject && isNotParseable ? new LinkedObject(linkAllView) : null;
                 }
             }
@@ -70,15 +74,15 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
     private void write(
             Request request,
             ObjectAdapter object,
-            ObjectAssociation[] fields,
+            List<ObjectAssociation> fields,
             LinkedObject[] linkFields, String classString, String title, String oddRowClass, String evenRowClass) {
         request.appendHtml("<div" + classString + ">");
         if (title != null) {
             request.appendHtml("<div class=\"title\">" + title+ "</div>");            
         }
         int row = 1;
-        for (int i = 0; i < fields.length; i++) {
-            ObjectAssociation field = fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            ObjectAssociation field = fields.get(i);
             if (ignoreField(field)) {
                 continue;
             }

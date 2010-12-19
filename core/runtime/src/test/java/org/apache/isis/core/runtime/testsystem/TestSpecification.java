@@ -21,8 +21,9 @@
 package org.apache.isis.core.runtime.testsystem;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -59,7 +60,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
 
     private static int next = 100;
     private ObjectAction action;
-    public ObjectAssociation[] fields = new ObjectAssociation[0];
+    public List<ObjectAssociation> fields = Lists.newArrayList();
     private final int id = next++;
     private final String name;
     private ObjectSpecification[] subclasses = new ObjectSpecification[0];
@@ -80,8 +81,10 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         title = "";
     }
 
+    @Override
     public void addSubclass(final ObjectSpecification specification) {}
 
+    @Override
     public void clearDirty(final ObjectAdapter object) {}
 
     @Override
@@ -110,7 +113,8 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return null;
     }
 
-    public ObjectAction[] getServiceActionsFor(final ObjectActionType... type) {
+    @Override
+    public List<ObjectAction> getServiceActionsFor(final ObjectActionType... type) {
         return null;
     }
 
@@ -118,18 +122,21 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return 0;
     }
 
+    @Override
     public boolean isAbstract() {
         return false;
     }
 
+    @Override
     public boolean isService() {
         return false;
     }
 
+    @Override
     public ObjectAssociation getAssociation(final String name) {
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].getId().equals(name)) {
-                return fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getId().equals(name)) {
+                return fields.get(i);
             }
         }
         throw new IsisException("Field not found: " + name);
@@ -143,58 +150,52 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return new Class[0];
     }
 
-    public ObjectAssociation[] getAssociations() {
+    @Override
+    public List<ObjectAssociation> getAssociations() {
         return fields;
     }
 
-    public List<? extends ObjectAssociation> getAssociationList() {
-        return Arrays.asList(getAssociations());
-    }
-
+    @Override
     @SuppressWarnings("unchecked")
-    public List<OneToOneAssociation> getPropertyList() {
-        List<OneToOneAssociation> list = new ArrayList<OneToOneAssociation>();
-        List associationList = getAssociationList(ObjectAssociationFilters.PROPERTIES);
-        list.addAll(associationList);
-        return list;
+    public List<OneToOneAssociation> getProperties() {
+        @SuppressWarnings("rawtypes")
+        List list = getAssociations(ObjectAssociationFilters.PROPERTIES);
+        return new ArrayList<OneToOneAssociation>(list);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public List<OneToManyAssociation> getCollectionList() {
-        List<OneToManyAssociation> list = new ArrayList<OneToManyAssociation>();
-        List associationList = getAssociationList(ObjectAssociationFilters.COLLECTIONS);
-        list.addAll(associationList);
-        return list;
+    public List<OneToManyAssociation> getCollections() {
+        @SuppressWarnings("rawtypes")
+        List list = getAssociations(ObjectAssociationFilters.COLLECTIONS);
+        return new ArrayList<OneToManyAssociation>(list);
     }
 
-    public ObjectAssociation[] getAssociations(final Filter<ObjectAssociation> filter) {
-        final ObjectAssociation[] allFields = getAssociations();
+    @Override
+    public List<ObjectAssociation> getAssociations(final Filter<ObjectAssociation> filter) {
+        final List<ObjectAssociation> allFields = getAssociations();
 
-        final ObjectAssociation[] selectedFields = new ObjectAssociation[allFields.length];
-        int v = 0;
-        for (int i = 0; i < allFields.length; i++) {
-            if (filter.accept(allFields[i])) {
-                selectedFields[v++] = allFields[i];
+        final List<ObjectAssociation> selectedFields = Lists.newArrayList();
+        for (int i = 0; i < allFields.size(); i++) {
+            if (filter.accept(allFields.get(i))) {
+                selectedFields.add(allFields.get(i));
             }
         }
 
-        final ObjectAssociation[] fields = new ObjectAssociation[v];
-        System.arraycopy(selectedFields, 0, fields, 0, v);
-        return fields;
+        return selectedFields;
     }
 
-    public List<? extends ObjectAssociation> getAssociationList(final Filter<ObjectAssociation> filter) {
-        return Arrays.asList(getAssociations(filter));
-    }
-
+    @Override
     public String getFullName() {
         return name;
     }
 
+    @Override
     public String getIconName(final ObjectAdapter reference) {
         return null;
     }
 
+    @Override
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String name,
@@ -205,18 +206,17 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return null;
     }
 
+    @Override
     public ObjectAction getObjectAction(final ObjectActionType type, final String name) {
         return getObjectAction(type, name, new ObjectSpecification[0]);
     }
 
-    public ObjectAction[] getObjectActions(final ObjectActionType... type) {
+    @Override
+    public List<ObjectAction> getObjectActions(final ObjectActionType... type) {
         return null;
     }
 
-    public List<? extends ObjectAction> getObjectActionList(final ObjectActionType... type) {
-        return null;
-    }
-
+    @Override
     public String getPluralName() {
         return null;
     }
@@ -225,60 +225,74 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return null;
     }
 
+    @Override
     public String getShortName() {
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
+    @Override
     public String getSingularName() {
         return name + " (singular)";
     }
 
+    @Override
     public String getDescription() {
         return getSingularName();
     }
 
+    @Override
     public String getTitle(final ObjectAdapter adapter) {
         return title;
     }
 
+    @Override
     public boolean hasSubclasses() {
         return false;
     }
 
+    @Override
     public ObjectSpecification[] interfaces() {
         return new ObjectSpecification[0];
     }
 
     public void introspect() {}
 
+    @Override
     public boolean isDirty(final ObjectAdapter object) {
         return false;
     }
 
+    @Override
     public boolean isOfType(final ObjectSpecification cls) {
         return cls == this;
     }
 
+    @Override
     public boolean isEncodeable() {
         return false;
     }
 
+    @Override
     public boolean isParseable() {
         return false;
     }
 
+    @Override
     public boolean isValueOrIsAggregated() {
         return false;
     }
 
+    @Override
     public boolean isValue() {
         return false;
     }
 
+    @Override
     public boolean isAggregated() {
         return false;
     }
 
+    @Override
     public void markDirty(final ObjectAdapter object) {}
 
     public Object newInstance() {
@@ -286,6 +300,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
                 + "; newInstance() method should be overridden");
     }
 
+    @Override
     public Persistability persistability() {
         return Persistability.USER_PERSISTABLE;
     }
@@ -298,7 +313,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         this.action = action;
     }
 
-    public void setupFields(final ObjectAssociation[] fields) {
+    public void setupFields(final List<ObjectAssociation> fields) {
         this.fields = fields;
     }
 
@@ -310,10 +325,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         this.title = title;
     }
 
+    @Override
     public ObjectSpecification[] subclasses() {
         return subclasses;
     }
 
+    @Override
     public ObjectSpecification superclass() {
         return null;
     }
@@ -323,10 +340,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return getFullName();
     }
 
+    @Override
     public Consent isValid(final ObjectAdapter transientObject) {
         return null;
     }
 
+    @Override
     public Object getDefaultValue() {
         return null;
     }
@@ -336,31 +355,38 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return null;
     }
 
+    @Override
     public boolean isCollectionOrIsAggregated() {
         return false;
     }
 
+    @Override
     public Object createObject(CreationMode creationMode) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public boolean isHidden() {
         return false;
     }
 
+    @Override
     public boolean isCollection() {
         return false;
     }
 
+    @Override
     public boolean isNotCollection() {
         return !isCollection();
     }
 
+    @Override
     public boolean isImmutable() {
         return false;
     }
 
 
+    @Override
     public ObjectValidityContext createValidityInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -368,6 +394,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return null;
     }
 
+    @Override
     public ObjectTitleContext createTitleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -375,6 +402,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
         return null;
     }
 
+    @Override
     public InteractionResult isValidResult(final ObjectAdapter transientObject) {
         return null;
     }
@@ -384,6 +412,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     // getInstance
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         return adapter;
     }

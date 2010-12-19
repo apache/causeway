@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.value;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -31,6 +33,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 public class ParameterName extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         String objectId = request.getOptionalProperty(OBJECT);
         String methodName = request.getRequiredProperty(METHOD);
@@ -38,7 +41,7 @@ public class ParameterName extends AbstractElementProcessor {
         
         ObjectAdapter object = MethodsUtils.findObject(request.getContext(), objectId);
         ObjectAction action = MethodsUtils.findAction(object, methodName);
-        ObjectActionParameter[] parameters = action.getParameters();
+        final List<ObjectActionParameter> parameters = action.getParameters();
 
         int index;
         if (field == null) {
@@ -46,13 +49,14 @@ public class ParameterName extends AbstractElementProcessor {
         } else {
             index = Integer.valueOf(field).intValue() - 1;
         }
-        if (index < 0 || index >= parameters.length) {
-            throw new ScimpiException("Parameter numbers should be between 1 and " + parameters.length + ": " + index);
+        if (index < 0 || index >= parameters.size()) {
+            throw new ScimpiException("Parameter numbers should be between 1 and " + parameters.size() + ": " + index);
         }
         
-        request.appendHtml(parameters[index].getName());
+        request.appendHtml(parameters.get(index).getName());
     }
 
+    @Override
     public String getName() {
         return "parameter-name";
     }

@@ -37,6 +37,7 @@ import org.apache.isis.viewer.html.request.Request;
 
 public class CollectionView implements Action {
 
+    @Override
     public final void execute(final Request request, final Context context, final Page page) {
         final String idString = request.getObjectId();
         final ObjectAdapter collection = context.getMappedCollection(idString);
@@ -59,7 +60,7 @@ public class CollectionView implements Action {
         }
         content.setIconName(iconName);
 
-        if (elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS).length != 0) {
+        if (elementSpecification.getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS).size() != 0) {
             final Table table = TableUtil.createTable(context, false, collection, titleString, elementSpecification);
             content.add(table);
         } else {
@@ -74,6 +75,7 @@ public class CollectionView implements Action {
         context.clearMessagesAndWarnings();
     }
 
+    @Override
     public String name() {
         return Request.COLLECTION_COMMAND;
     }

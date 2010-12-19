@@ -20,6 +20,9 @@
 
 package org.apache.isis.core.runtime.testspec;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
@@ -186,9 +189,7 @@ public class MovieSpecification extends TestProxySpecification {
 
     public MovieSpecification() {
         super(Movie.class);
-        fields = new ObjectAssociation[] { new MovieNameField(), new MovieDirectorField(),
-        // new MovieRolesField()
-        };
+        fields = Arrays.asList( (ObjectAssociation)new MovieNameField(), new MovieDirectorField() );
     }
 
     @Override
@@ -218,7 +219,7 @@ public class MovieSpecification extends TestProxySpecification {
     }
 
     @Override
-    public ObjectAction[] getObjectActions(final ObjectActionType... type) {
+    public List<ObjectAction> getObjectActions(final ObjectActionType... type) {
         return null;
     }
 

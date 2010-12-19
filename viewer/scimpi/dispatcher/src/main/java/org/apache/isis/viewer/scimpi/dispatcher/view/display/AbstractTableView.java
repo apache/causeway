@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -37,6 +38,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public abstract class AbstractTableView extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         RequestContext context = request.getContext();
 
@@ -47,7 +49,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         String field = request.getOptionalProperty(FIELD);
         if (field != null) {
             String objectId = request.getOptionalProperty(OBJECT);
-            ObjectAdapter object = (ObjectAdapter) context.getMappedObjectOrResult(objectId);
+            ObjectAdapter object = context.getMappedObjectOrResult(objectId);
             if (object == null) {
                 throw new ScimpiException("No object for result or " + objectId);
             }
@@ -58,12 +60,12 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             isFieldEditable = objectField.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             IsisContext.getPersistenceSession().resolveField(object, objectField);
             collection = objectField.get(object);
-            facet = (TypeOfFacet) objectField.getFacet(TypeOfFacet.class);
+            facet = objectField.getFacet(TypeOfFacet.class);
             parentObjectId = objectId == null ? context.mapObject(object, Scope.REQUEST) : objectId;
         } else {
             String id = request.getOptionalProperty(COLLECTION);
-            collection = (ObjectAdapter) context.getMappedObjectOrResult(id);
-            facet = (TypeOfFacet) collection.getTypeOfFacet();
+            collection = context.getMappedObjectOrResult(id);
+            facet = collection.getTypeOfFacet();
         }
 
         String rowClassesList = request.getOptionalProperty(ROW_CLASSES, ODD_ROW_CLASS + "|" + EVEN_ROW_CLASS);
@@ -72,7 +74,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             rowClasses = rowClassesList.split("[,|/]");
         }
 
-        ObjectAssociation[] allFields = facet.valueSpec().getAssociations(
+        List<ObjectAssociation> allFields = facet.valueSpec().getAssociations(
                 ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
         TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields);
         write(request, collection, rowBuilder, rowClasses);
@@ -83,7 +85,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             final Request request,
             RequestContext context,
             final String parent,
-            ObjectAssociation[] allFields);
+            final List<ObjectAssociation> allFields);
 
     public static void write(Request request, ObjectAdapter collection, TableContentWriter rowBuilder, String[] rowClasses) {
         RequestContext context = request.getContext();
@@ -91,7 +93,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         request.appendHtml("<table>");
         rowBuilder.writeHeaders(request);
 
-        CollectionFacet facet = (CollectionFacet) collection.getSpecification().getFacet(CollectionFacet.class);
+        CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         int row = 1;
         while (iterator.hasNext()) {
@@ -111,6 +113,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         request.appendHtml("</table>");
     }
 
+    @Override
     public String getName() {
         return "table";
     }

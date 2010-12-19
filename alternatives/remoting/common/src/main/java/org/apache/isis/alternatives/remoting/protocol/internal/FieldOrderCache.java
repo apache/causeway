@@ -21,6 +21,7 @@
 package org.apache.isis.alternatives.remoting.protocol.internal;
 
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -47,23 +48,23 @@ public class FieldOrderCache {
     }
 
     private ObjectAssociation[] loadFields(final ObjectSpecification specification) {
-        final ObjectAssociation[] originalFields = specification.getAssociations();
-        final Vector sorted = new Vector(originalFields.length);
-        outer: for (int i = 0; i < originalFields.length; i++) {
-            final String fieldId = originalFields[i].getId();
+        final List<ObjectAssociation> originalFields = specification.getAssociations();
+        final Vector sorted = new Vector(originalFields.size());
+        outer: for (int i = 0; i < originalFields.size(); i++) {
+            final String fieldId = originalFields.get(i).getId();
 
             for (int j = 0; j < sorted.size(); j++) {
                 final ObjectAssociation sortedElement = (ObjectAssociation) sorted.elementAt(j);
                 final String sortedFieldId = sortedElement.getId();
                 if (sortedFieldId.compareTo(fieldId) > 0) {
-                    sorted.insertElementAt(originalFields[i], j);
+                    sorted.insertElementAt(originalFields.get(i), j);
                     continue outer;
                 }
             }
-            sorted.addElement(originalFields[i]);
+            sorted.addElement(originalFields.get(i));
         }
 
-        final ObjectAssociation[] fields = new ObjectAssociation[originalFields.length];
+        final ObjectAssociation[] fields = new ObjectAssociation[originalFields.size()];
         sorted.copyInto(fields);
 
         return fields;

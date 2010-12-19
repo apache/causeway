@@ -26,9 +26,13 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.AbstractService;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.applib.annotation.Exploration;
@@ -42,8 +46,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 
 public class ObjectFixtureService {
@@ -85,7 +87,7 @@ public class ObjectFixtureService {
         objects.add(adapter.getObject());
 
         ObjectSpecification adapterSpec = adapter.getSpecification();
-        final ObjectAssociation[] associations = adapterSpec.getAssociations();
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations();
         for (ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;

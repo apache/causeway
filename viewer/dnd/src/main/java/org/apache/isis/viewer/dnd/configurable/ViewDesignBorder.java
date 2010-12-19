@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.configurable;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
@@ -41,16 +43,18 @@ public class ViewDesignBorder extends AbstractBorder {
         return viewUnderControl;
     }
     
+    @Override
     public void viewMenuOptions(UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
 
     //    ObjectAdapter object = getContent().getAdapter();
-        ObjectAssociation[] associations = getContent().getSpecification().getAssociations();
+        List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
        
         for (ObjectAssociation objectAssociation : associations) {
             final ObjectAssociation f = objectAssociation;
             UserActionAbstract action = new UserActionAbstract("Add field " + objectAssociation.getName()) {
 
+                @Override
                 public void execute(Workspace workspace, View view, Location at) {
                     NewObjectField field = new NewObjectField(f);
                     getNewObjectView().addField(field);

@@ -20,6 +20,9 @@
 
 package org.apache.isis.core.metamodel.runtimecontext.spec;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -56,44 +59,53 @@ public class ObjectSpecificationNoMember extends IntrospectableSpecificationAbst
 
     }
 
+    @Override
     public void markAsService() {}
 
+    @Override
     public void introspect(final FacetDecoratorSet decorator) {
-        fields = new ObjectAssociation[0];
+        fields = Collections.emptyList();
         superClassSpecification = null;
         
         setIntrospected(true);
     }
 
+    @Override
     public String getTitle(final ObjectAdapter adapter) {
         return "no title";
     }
 
+    @Override
     public String getShortName() {
         return name;
     }
 
+    @Override
     public String getSingularName() {
         return name;
     }
 
+    @Override
     public String getPluralName() {
         return name;
     }
 
+    @Override
     public String getDescription() {
         return name;
     }
 
+    @Override
     public ObjectAssociation getAssociation(final String name) {
         return null;
     }
 
     @Override
-    public ObjectAction[] getObjectActions(final ObjectActionType... type) {
-        return new ObjectAction[0];
+    public List<ObjectAction> getObjectActions(final ObjectActionType... type) {
+        return Collections.emptyList();
     }
 
+    @Override
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String id,
@@ -101,6 +113,7 @@ public class ObjectSpecificationNoMember extends IntrospectableSpecificationAbst
         return null;
     }
 
+    @Override
     public ObjectAction getObjectAction(final ObjectActionType type, final String id) {
         return null;
     }

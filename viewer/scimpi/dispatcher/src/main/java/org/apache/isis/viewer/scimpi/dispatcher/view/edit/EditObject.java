@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.edit;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -42,6 +44,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputForm;
 
 public class EditObject extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         RequestContext context = request.getContext();
 
@@ -57,11 +60,12 @@ public class EditObject extends AbstractElementProcessor {
         String className = request.getOptionalProperty(CLASS, "edit");
         String id = request.getOptionalProperty(ID);
 
-        final ObjectAdapter object = (ObjectAdapter) context.getMappedObjectOrResult(objectId);
+        final ObjectAdapter object = context.getMappedObjectOrResult(objectId);
         String actualObjectId = context.mapObject(object, Scope.INTERACTION);
         String version = context.mapVersion(object);
 
         EditFieldBlock containedBlock = new EditFieldBlock() {
+            @Override
             public boolean isVisible(String name) {
                 ObjectAssociation fld = object.getSpecification().getAssociation(name);
                 boolean isVisible = fld.isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
@@ -72,7 +76,7 @@ public class EditObject extends AbstractElementProcessor {
         request.setBlockContent(containedBlock);
         request.processUtilCloseTag();
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        ObjectAssociation[] fields = object.getSpecification().getAssociations(
+        List<ObjectAssociation> fields = object.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(session, object));
         fields = containedBlock.includedFields(fields);
 
@@ -99,12 +103,12 @@ public class EditObject extends AbstractElementProcessor {
         request.popBlockContent();
     }
 
-    private InputField[] createFields(ObjectAssociation[] fields) {
-        InputField[] formFields = new InputField[fields.length];
+    private InputField[] createFields(List<ObjectAssociation> fields) {
+        InputField[] formFields = new InputField[fields.size()];
         int length = 0;
-        for (int i = 0; i < fields.length; i++) {
-            if (!fields[i].isOneToManyAssociation()) {
-                formFields[i] = new InputField(fields[i].getId());
+        for (int i = 0; i < fields.size(); i++) {
+            if (!fields.get(i).isOneToManyAssociation()) {
+                formFields[i] = new InputField(fields.get(i).getId());
                 length++;
             }
         }
@@ -251,7 +255,7 @@ public class EditObject extends AbstractElementProcessor {
         for (int i = 0; i < formFields.length; i++) {
             String fieldId = formFields[i].getName();
             ObjectAssociation field = object.getSpecification().getAssociation(fieldId);
-            ObjectAdapter defaultValue = (ObjectAdapter) field.getDefault(object);
+            ObjectAdapter defaultValue = field.getDefault(object);
             if (defaultValue == null) {
                 continue;
             }
@@ -312,6 +316,7 @@ public class EditObject extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "edit";
     }

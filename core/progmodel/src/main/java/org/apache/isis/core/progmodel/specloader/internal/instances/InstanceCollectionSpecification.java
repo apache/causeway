@@ -20,6 +20,9 @@
 
 package org.apache.isis.core.progmodel.specloader.internal.instances;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectList;
@@ -46,14 +49,16 @@ public class InstanceCollectionSpecification extends IntrospectableSpecification
 	}
 
 
-	public void markAsService() {}
+	@Override
+    public void markAsService() {}
 
+    @Override
     public void introspect(final FacetDecoratorSet decorator) {
         fullName = ObjectList.class.getName();
         identifier = Identifier.classIdentifier(fullName);
         superClassSpecification = specificationLoader.loadSpecification(Object.class);
         superClassSpecification.addSubclass(this);
-        fields = new ObjectAssociation[0];
+        fields = Collections.emptyList();
 
         addFacet(new InstancesCollectionFacet(this));
         addFacet(new TypeOfFacetDefaultToObject(this, specificationLoader) {
@@ -62,20 +67,22 @@ public class InstanceCollectionSpecification extends IntrospectableSpecification
         setIntrospected(true);
     }
 
+    @Override
     public ObjectAssociation getAssociation(final String name) {
         return null;
     }
 
     @Override
-    public ObjectAction[] getServiceActionsFor(final ObjectActionType... type) {
-        return new ObjectAction[0];
+    public List<ObjectAction> getServiceActionsFor(final ObjectActionType... type) {
+        return Collections.emptyList();
     }
 
     @Override
-    public ObjectAction[] getObjectActions(final ObjectActionType... type) {
-        return new ObjectAction[0];
+    public List<ObjectAction> getObjectActions(final ObjectActionType... type) {
+        return Collections.emptyList();
     }
 
+    @Override
     public ObjectAction getObjectAction(
             final ObjectActionType type,
             final String id,
@@ -83,22 +90,27 @@ public class InstanceCollectionSpecification extends IntrospectableSpecification
         return null;
     }
 
+    @Override
     public ObjectAction getObjectAction(final ObjectActionType type, final String id) {
         return null;
     }
 
+    @Override
     public String getSingularName() {
         return "Instances";
     }
 
+    @Override
     public String getPluralName() {
         return "Instances";
     }
 
+    @Override
     public String getShortName() {
         return "Instances";
     }
 
+    @Override
     public String getTitle(final ObjectAdapter object) {
         return ((ObjectList) object.getObject()).titleString();
     }
@@ -108,6 +120,7 @@ public class InstanceCollectionSpecification extends IntrospectableSpecification
         return "instances";
     }
 
+    @Override
     public String getDescription() {
         return "Typed instances";
     }

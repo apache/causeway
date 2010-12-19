@@ -23,6 +23,16 @@ package org.apache.isis.alternatives.remoting.common.server;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.alternatives.remoting.common.data.DummyReferenceData;
 import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
 import org.apache.isis.alternatives.remoting.common.exchange.ClearAssociationRequest;
@@ -43,13 +53,6 @@ import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.core.runtime.testsystem.TestProxyAssociation;
 import org.apache.isis.core.runtime.testsystem.TestProxyVersion;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 
 @RunWith(JMock.class)
@@ -92,7 +95,7 @@ public class ServerFacadeImpl_AssociationTest extends ProxyJunit4TestCase {
 
         final TestProxySpecification spec = (TestProxySpecification) movieAdapter.getSpecification();
         nameField = new TestProxyAssociation("director", system.getSpecification(String.class));
-        spec.setupFields(new ObjectAssociation[] { nameField });
+        spec.setupFields(Arrays.asList( (ObjectAssociation)nameField ));
 
         personAdapter = system.createPersistentTestObject();
         final Oid personOid = personAdapter.getOid();

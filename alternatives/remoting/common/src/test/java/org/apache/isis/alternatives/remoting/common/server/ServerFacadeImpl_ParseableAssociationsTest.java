@@ -23,6 +23,16 @@ package org.apache.isis.alternatives.remoting.common.server;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.alternatives.remoting.common.data.DummyEncodeableObjectData;
 import org.apache.isis.alternatives.remoting.common.data.DummyReferenceData;
 import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
@@ -47,13 +57,6 @@ import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
 import org.apache.isis.core.runtime.testsystem.TestProxyAssociation;
 import org.apache.isis.core.runtime.testsystem.TestProxyVersion;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 
 @RunWith(JMock.class)
@@ -91,7 +94,7 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
 
         final TestProxySpecification spec = (TestProxySpecification) object.getSpecification();
         nameField = new TestProxyAssociation("name", system.getSpecification(String.class));
-        spec.setupFields(new ObjectAssociation[] { nameField });
+        spec.setupFields( Arrays.asList( (ObjectAssociation)nameField ));
 
         movieData = new DummyReferenceData(object.getOid(), "none", new TestProxyVersion(1));
 
@@ -124,39 +127,49 @@ public class ServerFacadeImpl_ParseableAssociationsTest extends ProxyJunit4TestC
     public void testSetValue() {
         final TestProxySpecification specf = system.getSpecification(String.class);
         specf.addFacet(new EncodableFacet() {
+            @Override
             public String toEncodedString(final ObjectAdapter object) {
                 return null;
             }
 
+            @Override
             public ObjectAdapter fromEncodedString(final String encodedData) {
                 return getAdapterManager().adapterFor(encodedData);
             }
 
+            @Override
             public Class facetType() {
                 return EncodableFacet.class;
             }
 
+            @Override
             public FacetHolder getFacetHolder() {
                 return null;
             }
 
+            @Override
             public void setFacetHolder(final FacetHolder facetHolder) {}
 
+            @Override
             public boolean alwaysReplace() {
                 return false;
             }
 
+            @Override
             public boolean isDerived() {
             	return false;
             }
 
+            @Override
             public boolean isNoop() {
                 return false;
             }
-        	public Facet getUnderlyingFacet() {
+        	@Override
+            public Facet getUnderlyingFacet() {
         		return null;
         	}
-        	public void setUnderlyingFacet(Facet underlyingFacet) {
+        	@Override
+            public void setUnderlyingFacet(Facet underlyingFacet) {
         		throw new UnsupportedOperationException();
         	}
 

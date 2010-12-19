@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.action;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
@@ -46,6 +47,7 @@ public class ActionAction implements Action {
 
     public static final String ACTION = "action";
 
+    @Override
     public String getName() {
         return ACTION;
     }
@@ -53,6 +55,7 @@ public class ActionAction implements Action {
     /**
      * REVIEW - this and EditAction are very similar - refactor out common code.
      */
+    @Override
     public void process(RequestContext context) throws IOException {
         String objectId = context.getParameter(OBJECT);
         String version = context.getParameter(VERSION);
@@ -180,7 +183,7 @@ public class ActionAction implements Action {
 
     private FormState validateParameters(RequestContext context, ObjectAction action, ObjectAdapter object) {
         FormState formState = new FormState();
-        ObjectActionParameter[] parameters2 = action.getParameters();
+        List<ObjectActionParameter> parameters2 = action.getParameters();
         int parameterCount = action.getParameterCount();
         for (int i = 0; i < parameterCount; i++) {
             String fieldName = parameterName(i);
@@ -192,7 +195,7 @@ public class ActionAction implements Action {
             
             if (newEntry == null) {
                 // TODO figure out a better way to determine if boolean or a password
-                ObjectSpecification spec = parameters2[i].getSpecification();
+                ObjectSpecification spec = parameters2.get(i).getSpecification();
                 if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
                         || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class))) {
                     newEntry = FALSE;
@@ -204,13 +207,13 @@ public class ActionAction implements Action {
             Consent consent = null;
 
             
-            if (!parameters2[i].isOptional() && newEntry.equals("")) {
-                consent = new Veto(parameters2[i].getName() + " required");
+            if (!parameters2.get(i).isOptional() && newEntry.equals("")) {
+                consent = new Veto(parameters2.get(i).getName() + " required");
 
-            } else  if (parameters2[i].getSpecification().getFacet(ParseableFacet.class) != null) {
+            } else  if (parameters2.get(i).getSpecification().getFacet(ParseableFacet.class) != null) {
                 try {
-                    ParseableFacet facet = (ParseableFacet) parameters2[i].getSpecification().getFacet(ParseableFacet.class);
-                    String message = parameters2[i].isValid(object, newEntry); 
+                    ParseableFacet facet = parameters2.get(i).getSpecification().getFacet(ParseableFacet.class);
+                    String message = parameters2.get(i).isValid(object, newEntry); 
                     if (message != null) { 
                         consent = new Veto(message); 
                     } 
@@ -242,8 +245,10 @@ public class ActionAction implements Action {
         return PARAMETER + (index + 1);
     }
 
+    @Override
     public void init() {}
 
+    @Override
     public void debug(DebugView view) {}
 }
 

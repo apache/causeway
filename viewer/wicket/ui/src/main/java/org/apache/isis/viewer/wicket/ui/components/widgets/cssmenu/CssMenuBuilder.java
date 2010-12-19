@@ -25,6 +25,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.wicket.Application;
+
+import com.google.common.collect.Collections2;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -34,9 +38,6 @@ import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.util.Actions;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem.Builder;
 import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuPanel.Style;
-import org.apache.wicket.Application;
-
-import com.google.common.collect.Collections2;
 
 /**
  * Used to build a {@link CssMenuItem} hierarchy from a {@link ObjectAdapterMemento object adapter}'s
@@ -120,7 +121,7 @@ public class CssMenuBuilder  {
 	private void addMenuItemForActionSet(CssMenuItem parent,
 			ObjectAction action) {
 		Builder builder = parent.newSubMenuItem(action.getName());
-		ObjectAction[] actions = action.getActions();
+		List<ObjectAction> actions = action.getActions();
 		addMenuItems(builder.itemBeingBuilt(), actions);
 		if (builder.itemBeingBuilt().hasSubMenuItems()) {
 			builder.build();

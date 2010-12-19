@@ -43,6 +43,7 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
         builder = new SplitViewBuilder(this);
     }
 
+    @Override
     public boolean canDisplay(ViewRequirement requirement) {
         if (requirement.isObject() && requirement.is(ViewRequirement.OPEN) && !requirement.isSubview()) {
             Content fieldContent = determineSecondaryContent(requirement.getContent());
@@ -72,7 +73,7 @@ public abstract class SplitViewSpecification extends CompositeViewSpecification 
         ObjectSpecification spec = content.getSpecification();
         ObjectAdapter target = content.getAdapter();
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        ObjectAssociation[] fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
         List<ObjectAssociation> selectableFields = new ArrayList<ObjectAssociation>();
         for (ObjectAssociation field : fields) {
             if (validField(field)) {

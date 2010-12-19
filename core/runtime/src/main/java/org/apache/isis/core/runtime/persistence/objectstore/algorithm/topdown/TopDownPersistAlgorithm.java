@@ -21,9 +21,10 @@
 package org.apache.isis.core.runtime.persistence.objectstore.algorithm.topdown;
 
 import java.util.Enumeration;
+import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.exceptions.IsisException;
+
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -44,6 +45,7 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
 
 
 
+    @Override
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
         if (object.getSpecification().isCollection()) {
             makeCollectionPersistent(object, toPersistObjectSet);
@@ -58,16 +60,16 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
             return;
         }
 
-        final ObjectAssociation[] fields = object.getSpecification().getAssociations();
-        if (!object.getSpecification().isEncodeable() && fields.length > 0) {
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
+        if (!object.getSpecification().isEncodeable() && fields.size() > 0) {
             LOG.info("persist " + object);
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
             toPersistObjectSet.addPersistedObject(object);
             CallbackUtils.callCallback(object, PersistedCallbackFacet.class);
 
-            for (int i = 0; i < fields.length; i++) {
-                final ObjectAssociation field = fields[i];
+            for (int i = 0; i < fields.size(); i++) {
+                final ObjectAssociation field = fields.get(i);
                 if (field.isNotPersisted()) {
                     continue;
                 } else if (field instanceof OneToManyAssociation) {
@@ -100,6 +102,7 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
         }
     }
 
+    @Override
     public String name() {
         return "Simple Top Down Persistence Walker";
     }

@@ -31,7 +31,7 @@ public interface ObjectActionContainer {
     /**
      * TODO: convert to relatedResourceActions
      */
-    ObjectAction[] getServiceActionsFor(ObjectActionType... type);
+    List<ObjectAction> getServiceActionsFor(ObjectActionType... type);
 
     /**
      * Returns the action of the specified type with the specified signature.
@@ -54,11 +54,7 @@ public interface ObjectActionContainer {
      * {@link ObjectActionType#EXPLORATION exploration} and {@link ObjectActionType#DEBUG
      * debug} actions (but not {@link ObjectActionType#SET action sets}).
      */
-    ObjectAction[] getObjectActions(ObjectActionType... type);
+    List<ObjectAction> getObjectActions(ObjectActionType... type);
 
-    /**
-     * As per {@link #getObjectActions(ObjectActionType)}, but returned as a {@link List}. 
-     */
-    List<? extends ObjectAction> getObjectActionList(ObjectActionType... type);
 
 }

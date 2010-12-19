@@ -24,6 +24,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.alternatives.remoting.common.IsisRemoteException;
 import org.apache.isis.alternatives.remoting.common.client.transaction.ClientTransactionEvent;
 import org.apache.isis.alternatives.remoting.common.data.Data;
@@ -103,7 +105,6 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
-import org.apache.log4j.Logger;
 
 /**
  * previously called <tt>ServerDistribution</tt>.
@@ -497,7 +498,7 @@ public class ServerFacadeImpl implements ServerFacade {
 
         final ObjectData[] persistedParameterData = new ObjectData[parameterData.length];
         for (int i = 0; i < persistedParameterData.length; i++) {
-            if (action.getParameters()[i].getSpecification().isNotCollection()
+            if (action.getParameters().get(i).getSpecification().isNotCollection()
                 && parameterData[i] instanceof ObjectData) {
                 persistedParameterData[i] =
                     encoderDecoder.encodeMadePersistentGraph((ObjectData) parameterData[i], parameters[i]);

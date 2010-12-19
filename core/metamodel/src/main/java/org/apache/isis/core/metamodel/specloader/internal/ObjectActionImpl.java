@@ -20,10 +20,12 @@
 
 package org.apache.isis.core.metamodel.specloader.internal;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -79,7 +81,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
-    private ObjectActionParameter[] parameters;
+    private List<ObjectActionParameter> parameters;
 
     /**
      * Controls the initialization of {@link #contributed}.
@@ -137,8 +139,8 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     @Override
-    public ObjectAction[] getActions() {
-        return new ObjectAction[0];
+    public List<ObjectAction> getActions() {
+        return Collections.emptyList();
     }
 
     // /////////////////////////////////////////////////////////////
@@ -186,9 +188,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
 	private boolean determineWhetherContributed() {
 		if (getOnType().isService() && getParameterCount() > 0) {
-            final ObjectActionParameter[] params = getParameters();
-            for (int i = 0; i < params.length; i++) {
-                if (params[i].isObject()) {
+            final List<ObjectActionParameter> params = getParameters();
+            for (int i = 0; i < params.size(); i++) {
+                if (params.get(i).isObject()) {
                     return true;
                 }
             }
@@ -207,9 +209,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public boolean promptForParameters(final ObjectAdapter target) {
-    	ObjectActionParameter[] parameters = getParameters();
+    	final List<ObjectActionParameter> parameters = getParameters();
         if (isContributed() && !target.getSpecification().isService()) {
-            return getParameterCount() > 1 || !target.getSpecification().isOfType(parameters[0].getSpecification());
+            return getParameterCount() > 1 || !target.getSpecification().isOfType(parameters.get(0).getSpecification());
         } else {
             return getParameterCount() > 0;
         }
@@ -223,18 +225,18 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
      * thread race conditions.
      */
     @Override
-    public synchronized ObjectActionParameter[] getParameters() {
+    public synchronized List<ObjectActionParameter> getParameters() {
         if (this.parameters == null) {
             final int parameterCount = getParameterCount();
-            final ObjectActionParameter[] parameters = new ObjectActionParameter[parameterCount];
+            final List<ObjectActionParameter> parameters = Lists.newArrayList();
             final List<TypedHolder> paramPeers = memberPeer.getChildren();
             for (int i = 0; i < parameterCount; i++) {
                 TypedHolder paramPeer = paramPeers.get(i);
                 final ObjectSpecification specification = paramPeer.getSpecification(getSpecificationLoader());
                 if (specification.isParseable()) {
-                    parameters[i] = new ObjectActionParameterParseable(i, this, paramPeer);
+                    parameters.add(new ObjectActionParameterParseable(i, this, paramPeer));
                 } else if (specification.isNotCollection()) {
-                    parameters[i] = new OneToOneActionParameterImpl(i, this, paramPeer);
+                    parameters.add(new OneToOneActionParameterImpl(i, this, paramPeer));
                 } else if (specification.isCollection()) {
                     throw new UnknownTypeException("collections not supported as parameters: " + getIdentifier());
                 } else {
@@ -247,37 +249,34 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     @Override
-    public synchronized ObjectSpecification[] getParameterTypes() {
-        List<ObjectSpecification> parameterTypes = new ArrayList<ObjectSpecification>();
-        ObjectActionParameter[] parameters = getParameters();
+    public synchronized List<ObjectSpecification> getParameterTypes() {
+        List<ObjectSpecification> parameterTypes = Lists.newArrayList();
+        final List<ObjectActionParameter> parameters = getParameters();
         for(ObjectActionParameter parameter: parameters) {
             parameterTypes.add(parameter.getSpecification());
         }
-        return parameterTypes.toArray(new ObjectSpecification[]{});
+        return parameterTypes;
     }
 
     @Override
-    public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
-        final ObjectActionParameter[] allParameters = getParameters();
-        final ObjectActionParameter[] selectedParameters = new ObjectActionParameter[allParameters.length];
-        int v = 0;
-        for (int i = 0; i < allParameters.length; i++) {
-            if (filter.accept(allParameters[i])) {
-                selectedParameters[v++] = allParameters[i];
+    public List<ObjectActionParameter> getParameters(final Filter<ObjectActionParameter> filter) {
+        final List<ObjectActionParameter> allParameters = getParameters();
+        final List<ObjectActionParameter> selectedParameters = Lists.newArrayList();
+        for (int i = 0; i < allParameters.size(); i++) {
+            if (filter.accept(allParameters.get(i))) {
+                selectedParameters.add(allParameters.get(i));
             }
         }
-        final ObjectActionParameter[] parameters = new ObjectActionParameter[v];
-        System.arraycopy(selectedParameters, 0, parameters, 0, v);
-        return parameters;
+        return selectedParameters;
     }
 
     private ObjectActionParameter getParameter(final int position) {
-        final ObjectActionParameter[] parameters = getParameters();
-        if (position >= parameters.length) {
-            throw new IllegalArgumentException("getParameter(int): only " + parameters.length + " parameters, position="
+        final List<ObjectActionParameter> parameters = getParameters();
+        if (position >= parameters.size()) {
+            throw new IllegalArgumentException("getParameter(int): only " + parameters.size() + " parameters, position="
                     + position);
         }
-        return parameters[position];
+        return parameters.get(position);
     }
 
     // /////////////////////////////////////////////////////////////
@@ -334,12 +333,12 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         final InteractionInvocationMethod invocationMethod = InteractionInvocationMethod.BY_USER;
 
         final InteractionResultSet resultSet = new InteractionResultSet();
-        final ObjectActionParameter[] actionParameters = getParameters();
+        final List<ObjectActionParameter> actionParameters = getParameters();
         if (proposedArguments != null) {
             // TODO: doesn't seem to be used...
             // ObjectAdapter[] params = realParameters(object, proposedArguments);
             for (int i = 0; i < proposedArguments.length; i++) {
-                final ValidityContext<?> ic = actionParameters[i].createProposedArgumentInteractionContext(getAuthenticationSession(),
+                final ValidityContext<?> ic = actionParameters.get(i).createProposedArgumentInteractionContext(getAuthenticationSession(),
                         invocationMethod, object, proposedArguments, i);
                 InteractionUtils.isValidResultSet(getParameter(i), ic, resultSet);
             }
@@ -423,7 +422,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         final ObjectAdapter realTarget = realTarget(target);
 
         final int parameterCount = getParameterCount();
-        final ObjectActionParameter[] parameters = getParameters();
+        final List<ObjectActionParameter> parameters = getParameters();
 
         final Object[] parameterDefaultPojos;
 
@@ -442,7 +441,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                 if (parameterDefaultPojos[i] != null) {
                      ObjectSpecification componentSpec = getRuntimeContext().getSpecificationLoader().loadSpecification(
                             parameterDefaultPojos[i].getClass());
-                    ObjectSpecification parameterSpec = parameters[i].getSpecification();
+                    ObjectSpecification parameterSpec = parameters.get(i).getSpecification();
                     if (!componentSpec.isOfType(parameterSpec)) {
                         throw new ModelException("Defaults type incompatible with parameter " + (i + 1) + " type; expected "
                                 + parameterSpec.getFullName() + ", but was " + componentSpec.getFullName());
@@ -454,7 +453,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         	// (the reflector will have made sure both aren't installed).
         	parameterDefaultPojos = new Object[parameterCount];
             for (int i = 0; i < parameterCount; i++) {
-            	ActionParameterDefaultsFacet paramFacet = parameters[i].getFacet(ActionParameterDefaultsFacet.class);
+            	ActionParameterDefaultsFacet paramFacet = parameters.get(i).getFacet(ActionParameterDefaultsFacet.class);
             	if (paramFacet != null && !paramFacet.isNoop()) {
             		parameterDefaultPojos[i] = paramFacet.getDefault(realTarget);
             	} else {
@@ -473,7 +472,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         // set the target if contributed.
         if (isContributed() && target != null) {
             for (int i = 0; i < parameterCount; i++) {
-                if (target.getSpecification().isOfType(parameters[i].getSpecification())) {
+                if (target.getSpecification().isOfType(parameters.get(i).getSpecification())) {
                     parameterDefaultAdapters[i] = target;
                 }
             }
@@ -498,7 +497,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         Object[][] parameterChoicesPojos;
         
         final ActionChoicesFacet facet = getFacet(ActionChoicesFacet.class);
-        ObjectActionParameter[] parameters = getParameters();
+        final List<ObjectActionParameter> parameters = getParameters();
         
         if (!facet.isNoop()) {
             // using the old choicesXxx() approach
@@ -516,7 +515,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         	
         	parameterChoicesPojos = new Object[parameterCount][];
             for (int i = 0; i < parameterCount; i++) {
-            	ActionParameterChoicesFacet paramFacet = parameters[i].getFacet(ActionParameterChoicesFacet.class);
+            	ActionParameterChoicesFacet paramFacet = parameters.get(i).getFacet(ActionParameterChoicesFacet.class);
             	if (paramFacet != null && !paramFacet.isNoop()) {
             		parameterChoicesPojos[i] = paramFacet.getChoices(realTarget);
             	} else {
@@ -528,7 +527,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
         final ObjectAdapter[][] parameterChoicesAdapters = new ObjectAdapter[parameterCount][];
         for (int i = 0; i < parameterCount; i++) {
-            final ObjectSpecification paramSpec = parameters[i].getSpecification();
+            final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
 
             if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
                 ObjectActionParameterAbstract.checkChoicesType(getRuntimeContext(), parameterChoicesPojos[i], paramSpec);
@@ -584,7 +583,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             if (i > 0) {
                 sb.append(",");
             }
-            sb.append(getParameters()[i].getSpecification().getShortName());
+            sb.append(getParameters().get(i).getSpecification().getShortName());
         }
         sb.append("}]");
         return sb.toString();

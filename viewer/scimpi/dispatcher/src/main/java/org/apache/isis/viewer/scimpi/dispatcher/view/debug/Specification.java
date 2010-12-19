@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -30,6 +32,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Specification extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         if (request.isRequested("always") || request.getContext().getDebug() == RequestContext.Debug.ON) {
             request.appendHtml("<div class=\"debug\">");
@@ -39,9 +42,9 @@ public class Specification extends AbstractElementProcessor {
             ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
             ObjectSpecification specification = object.getSpecification();
             request.appendHtml(specification.getSingularName() + " (" + specification.getFullName() + ") \n");
-            ObjectAssociation[] fields = specification.getAssociations();
-            for (int i = 0; i < fields.length; i++) {
-                request.appendHtml("    " + fields[i].getName() + " (" + fields[i].getSpecification().getSingularName() + ") \n" );
+            List<ObjectAssociation> fields = specification.getAssociations();
+            for (int i = 0; i < fields.size(); i++) {
+                request.appendHtml("    " + fields.get(i).getName() + " (" + fields.get(i).getSpecification().getSingularName() + ") \n" );
                 
             }
             
@@ -50,6 +53,7 @@ public class Specification extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "specification";
     }

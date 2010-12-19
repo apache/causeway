@@ -21,13 +21,13 @@
 package org.apache.isis.viewer.wicket.model.util;
 
 
+import com.google.common.base.Predicate;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-
-import com.google.common.base.Predicate;
 
 public final class Actions {
 
@@ -36,7 +36,8 @@ public final class Actions {
 	public static Predicate<ObjectAction> ofType(
 			final ObjectActionType type) {
 		return new Predicate<ObjectAction>(){
-			public boolean apply(ObjectAction input) {
+			@Override
+            public boolean apply(ObjectAction input) {
 				return input.getType() == type;
 			}};
 	}
@@ -53,7 +54,7 @@ public final class Actions {
     public static String labelFor(ObjectAction action,
             final ObjectAdapter contextAdapter) {
         if(action.getParameterCount() == 1) {
-            final ObjectActionParameter actionParam = action.getParameters()[0];
+            final ObjectActionParameter actionParam = action.getParameters().get(0);
             if (ActionParams.compatibleWith(contextAdapter, actionParam)) {
                 return nameFor(action);
             }

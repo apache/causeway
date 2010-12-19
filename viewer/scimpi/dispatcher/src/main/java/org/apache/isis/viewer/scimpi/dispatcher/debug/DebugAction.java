@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.debug;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -49,12 +50,15 @@ public class DebugAction implements Action {
         this.dispatcher = dispatcher;
     }
 
+    @Override
     public String getName() {
         return "debug";
     }
 
+    @Override
     public void debug(DebugView view) {}
 
+    @Override
     public void process(RequestContext context) throws IOException {
         DebugView view = new DebugView(context.getWriter(), new DebugString());
         view.header();
@@ -130,17 +134,17 @@ public class DebugAction implements Action {
         speficationFacets(view, spec);
         
         
-        ObjectAssociation[] fields = spec.getAssociations();
+        List<ObjectAssociation> fields = spec.getAssociations();
         specificationMembers(view, "Fields", fields);
-        ObjectAction[] userActions = spec.getObjectActions(ObjectActionType.USER);
+        List<ObjectAction> userActions = spec.getObjectActions(ObjectActionType.USER);
         specificationMembers(view, "User Actions", userActions);
         specificationMembers(view, "Exploration Actions", spec.getObjectActions(ObjectActionType.EXPLORATION));
         specificationMembers(view, "Prototype Actions", spec.getObjectActions(ObjectActionType.PROTOTYPE));
         specificationMembers(view, "Debug Actions", spec.getObjectActions(ObjectActionType.DEBUG));
 
         
-        for (int i = 0; i < fields.length; i++) {
-            ObjectAssociation field = fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            ObjectAssociation field = fields.get(i);
             view.divider("<span id=\"" + field.getId() + "\">Field: " + field.getName() + "</span>");
             view.appendRow("ID", field.getIdentifier());
             view.appendRow("Short ID", field.getId());
@@ -154,8 +158,8 @@ public class DebugAction implements Action {
             speficationFacets(view, field);
         }
         
-        for (int i = 0; i < userActions.length; i++) {
-            ObjectAction action = userActions[i];
+        for (int i = 0; i < userActions.size(); i++) {
+            final ObjectAction action = userActions.get(i);
             view.divider("<span id=\"" + action.getId() + "\">Action: " + action.getName() + "</span>");
             view.appendRow("ID", action.getIdentifier());
             view.appendRow("Short ID", action.getId());
@@ -170,20 +174,20 @@ public class DebugAction implements Action {
             
             speficationFacets(view, action);
 
-            ObjectActionParameter[] parameters = action.getParameters();
+            List<ObjectActionParameter> parameters = action.getParameters();
             StringBuffer buffer = new StringBuffer();
-            if (parameters.length == 0) {
+            if (parameters.size() == 0) {
                 buffer.append("none");
             } else {
-                ObjectActionParameter[] p = action.getParameters();
-                for (int j = 0; j < parameters.length; j++) {
-                    buffer.append(p[j].getName());
+                List<ObjectActionParameter> p = action.getParameters();
+                for (int j = 0; j < parameters.size(); j++) {
+                    buffer.append(p.get(j).getName());
                     buffer.append(" (");
-                    buffer.append(specificationLink(parameters[j].getSpecification()));
+                    buffer.append(specificationLink(parameters.get(j).getSpecification()));
                     buffer.append(")<br>");
-                    Class<? extends Facet>[] parameterFacets = p[j].getFacetTypes();
+                    Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
                     for (int k = 0; k < parameterFacets.length; k++) {
-                        buffer.append("&nbsp;&nbsp;" + p[j].getFacet(parameterFacets[k]).toString() + "<br>");
+                        buffer.append("&nbsp;&nbsp;" + p.get(j).getFacet(parameterFacets[k]).toString() + "<br>");
                     }
                 }
             }
@@ -197,13 +201,13 @@ public class DebugAction implements Action {
         */
     }
 
-    private void specificationMembers(DebugView view, String label, ObjectMember[] members) {
+    private void specificationMembers(DebugView view, String label, List<? extends ObjectMember> members) {
         StringBuffer buffer = new StringBuffer();
-        if (members.length == 0) {
+        if (members.size() == 0) {
             buffer.append("none");
         } else {
-            for (int i = 0; i < members.length; i++) {
-                buffer.append("<a href=\"#" + members[i].getId() + "\">" + members[i].getName() + "</a><br>");
+            for (int i = 0; i < members.size(); i++) {
+                buffer.append("<a href=\"#" + members.get(i).getId() + "\">" + members.get(i).getName() + "</a><br>");
             }
         }
         view.appendRow(label, buffer.toString());
@@ -211,6 +215,7 @@ public class DebugAction implements Action {
 
     private void speficationFacets(DebugView view, FacetHolder facetHolder) {
         Facet[] facets = facetHolder.getFacets(new AbstractFilter<Facet>() {
+            @Override
             public boolean accept(Facet facet) {
                 return true;
             }
@@ -263,6 +268,7 @@ public class DebugAction implements Action {
         }
     }
 
+    @Override
     public void init() {}
 }
 

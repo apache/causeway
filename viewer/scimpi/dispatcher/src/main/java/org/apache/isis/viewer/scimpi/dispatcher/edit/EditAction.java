@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.scimpi.dispatcher.edit;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
@@ -43,10 +44,12 @@ import org.apache.isis.viewer.scimpi.dispatcher.debug.DebugView;
 public class EditAction implements Action {
     public static final String ACTION = "edit";
 
+    @Override
     public String getName() {
         return ACTION;
     }
 
+    @Override
     public void process(RequestContext context) throws IOException {
         try {
             String objectId = context.getParameter(OBJECT);
@@ -55,8 +58,8 @@ public class EditAction implements Action {
             resultName = resultName == null ? RequestContext.RESULT : resultName;
             String override = context.getParameter(RESULT_OVERRIDE);
             
-            ObjectAdapter adapter = (ObjectAdapter) context.getMappedObject(objectId);
-            ObjectAssociation[] fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
+            ObjectAdapter adapter = context.getMappedObject(objectId);
+            List<ObjectAssociation> fields = adapter.getSpecification().getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
             FormState entryState = validateObject(context, adapter, fields);
             Version adapterVersion = adapter.getVersion();
             Version formVersion = context.getVersion(version);
@@ -125,16 +128,16 @@ public class EditAction implements Action {
     private FormState validateObject(
             RequestContext context,
             ObjectAdapter object,
-            ObjectAssociation[] fields) {
+            List<ObjectAssociation> fields) {
         FormState formState = new FormState();
-        for (int i = 0; i < fields.length; i++) {
-            ObjectAssociation field = fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            ObjectAssociation field = fields.get(i);
             String fieldId = field.getId();
             String newEntry = context.getParameter(fieldId);
-            if (fields[i].isOneToManyAssociation()) {
+            if (fields.get(i).isOneToManyAssociation()) {
                 continue;
             }
-            if (fields[i].isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
+            if (fields.get(i).isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
                 continue;
             }
             if (field.isUsable(IsisContext.getAuthenticationSession(), object).isVetoed()) {
@@ -159,7 +162,7 @@ public class EditAction implements Action {
 
             } else if (field.getSpecification().containsFacet(ParseableFacet.class)) {
                 try {
-                    ParseableFacet facet = (ParseableFacet) field.getSpecification().getFacet(ParseableFacet.class);
+                    ParseableFacet facet = field.getSpecification().getFacet(ParseableFacet.class);
                     ObjectAdapter originalValue = field.get(object);
                     ObjectAdapter newValue =  facet.parseTextEntry(originalValue, newEntry);
                     consent = ((OneToOneAssociation) field).isAssociationValid(object, newValue);
@@ -169,7 +172,7 @@ public class EditAction implements Action {
                 }
 
             } else {
-                ObjectAdapter associate = (ObjectAdapter) context.getMappedObject(newEntry);
+                ObjectAdapter associate = context.getMappedObject(newEntry);
                 if (associate != null) {
                     IsisContext.getPersistenceSession().resolveImmediately(associate);
                 }
@@ -186,38 +189,40 @@ public class EditAction implements Action {
         return formState;
     }
 
-    private void changeObject(RequestContext context, ObjectAdapter object, FormState editState, ObjectAssociation[] fields) {
-        for (int i = 0; i < fields.length; i++) {
-            FieldEditState field = editState.getField(fields[i].getId());
+    private void changeObject(RequestContext context, ObjectAdapter object, FormState editState, List<ObjectAssociation> fields) {
+        for (int i = 0; i < fields.size(); i++) {
+            FieldEditState field = editState.getField(fields.get(i).getId());
             if (field == null) {
                 continue;
             }
             String newEntry = field.getEntry();
-            ObjectAdapter originalValue = fields[i].get(object);
-            boolean isVisible = fields[i].isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
-            boolean isUsable = fields[i].isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
+            ObjectAdapter originalValue = fields.get(i).get(object);
+            boolean isVisible = fields.get(i).isVisible(IsisContext.getAuthenticationSession(), object).isAllowed();
+            boolean isUsable = fields.get(i).isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             boolean bothEmpty = originalValue == null && newEntry.equals("");
             boolean bothSame = newEntry.equals(originalValue == null ? "" : originalValue.titleString());
             if ((!isVisible ||!isUsable) || bothEmpty || bothSame) {
-                if (fields[i].getSpecification().getFacet(ParseableFacet.class) == null) {
+                if (fields.get(i).getSpecification().getFacet(ParseableFacet.class) == null) {
                     // REVIEW restores object to loader
                     context.getMappedObject(newEntry);
                 }
                 continue;
             }
             
-            if (fields[i].getSpecification().containsFacet(ParseableFacet.class)) {
-                ParseableFacet facet = (ParseableFacet) fields[i].getSpecification().getFacet(ParseableFacet.class);
+            if (fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
+                ParseableFacet facet = fields.get(i).getSpecification().getFacet(ParseableFacet.class);
                 ObjectAdapter newValue =  facet.parseTextEntry(originalValue, newEntry);
-                ((OneToOneAssociation) fields[i]).setAssociation(object, newValue);
+                ((OneToOneAssociation) fields.get(i)).setAssociation(object, newValue);
             } else {
-                ((OneToOneAssociation) fields[i]).setAssociation(object, (ObjectAdapter) field.getValue());
+                ((OneToOneAssociation) fields.get(i)).setAssociation(object, field.getValue());
             }
         }
     }
 
+    @Override
     public void init() {}
 
+    @Override
     public void debug(DebugView view) {}
 }
 

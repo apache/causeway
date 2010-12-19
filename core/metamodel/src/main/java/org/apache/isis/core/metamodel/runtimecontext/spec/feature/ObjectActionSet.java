@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.metamodel.runtimecontext.spec.feature;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
@@ -48,26 +49,18 @@ public class ObjectActionSet implements ObjectAction {
 
     private final String name;
     private final String id;
-    private final ObjectAction[] actions;
+    private final List<ObjectAction> actions;
 	private final RuntimeContext runtimeContext;
 	
     public ObjectActionSet(
     		final String id, 
     		final String name, 
-    		final ObjectAction[] actions, 
+    		final List<ObjectAction> actions, 
     		final RuntimeContext runtimeContext) {
         this.id = id;
         this.name = name;
         this.actions = actions;
         this.runtimeContext = runtimeContext;
-    }
-
-    public ObjectActionSet(
-    		final String id, 
-    		final String name, 
-    		final List<ObjectAction> actions, 
-    		final RuntimeContext runtimeContext) {
-        this(id, name, actions.toArray(new ObjectAction[]{}), runtimeContext);
     }
 
     @Override
@@ -90,7 +83,7 @@ public class ObjectActionSet implements ObjectAction {
     // /////////////////////////////////////////////////////////////
 
     @Override
-    public ObjectAction[] getActions() {
+    public List<ObjectAction> getActions() {
         return actions;
     }
 
@@ -235,19 +228,19 @@ public class ObjectActionSet implements ObjectAction {
     }
 
     @Override
-    public ObjectActionParameter[] getParameters() {
-        return new ObjectActionParameter[0];
+    public List<ObjectActionParameter> getParameters() {
+        return Collections.emptyList();
     }
 
     @Override
-    public ObjectSpecification[] getParameterTypes() {
-        return new ObjectSpecification[0];
+    public List<ObjectSpecification> getParameterTypes() {
+        return Collections.emptyList();
     }
 
 
     @Override
-    public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
-        return new ObjectActionParameter[0];
+    public List<ObjectActionParameter> getParameters(final Filter<ObjectActionParameter> filter) {
+        return Collections.emptyList();
     }
 
     @Override

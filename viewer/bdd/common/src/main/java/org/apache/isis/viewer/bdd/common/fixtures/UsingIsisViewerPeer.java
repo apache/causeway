@@ -223,12 +223,12 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         final ObjectSpecification spec = onAdapter.getSpecification();
         final List<ObjectMember> objectMembers = new ArrayList<ObjectMember>();
 
-        objectMembers.addAll(spec.getAssociationList());
+        objectMembers.addAll(spec.getAssociations());
 
         // see if action (of any type)
-        objectMembers.addAll(spec.getObjectActionList(ObjectActionType.USER));
-        objectMembers.addAll(spec.getObjectActionList(ObjectActionType.EXPLORATION));
-        objectMembers.addAll(spec.getObjectActionList(ObjectActionType.DEBUG));
+        objectMembers.addAll(spec.getObjectActions(ObjectActionType.USER));
+        objectMembers.addAll(spec.getObjectActions(ObjectActionType.EXPLORATION));
+        objectMembers.addAll(spec.getObjectActions(ObjectActionType.DEBUG));
         for (final ObjectMember member : objectMembers) {
             if (matchesId(member, memberId)) {
                 return member;
@@ -340,11 +340,11 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
      * <p>
      * Ensures that there are at least enough arguments for the number of parameters required.
      */
-    public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter, final ObjectAction nakedObjectAction,
+    public ObjectAdapter[] getAdapters(final ObjectAdapter onAdapter, final ObjectAction objectAction,
         CellBinding onMemberBinding, final List<ScenarioCell> argumentCells) throws ScenarioBoundValueException {
-        final ObjectActionParameter[] parameters = nakedObjectAction.getParameters();
+        final List<ObjectActionParameter> parameters = objectAction.getParameters();
 
-        int parameterCount = parameters.length;
+        int parameterCount = parameters.size();
         if (argumentCells.size() < parameterCount) {
             throw ScenarioBoundValueException.current(onMemberBinding, "(action requires " + parameterCount
                 + " arguments)");
@@ -353,7 +353,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
 
         for (int i = 0; i < parameterCount; i++) {
             final ScenarioCell paramCell = argumentCells.get(i);
-            final ObjectActionParameter parameter = parameters[i];
+            final ObjectActionParameter parameter = parameters.get(i);
             adapters[i] = getAdapter(null, parameter.getSpecification(), onMemberBinding, paramCell);
         }
         return adapters;

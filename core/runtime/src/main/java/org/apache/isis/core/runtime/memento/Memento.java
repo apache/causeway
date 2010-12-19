@@ -24,6 +24,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
@@ -46,9 +50,6 @@ import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionHydrator;
 import org.apache.isis.core.runtime.persistence.PersistorUtil;
-import org.apache.log4j.Logger;
-
-import com.google.common.collect.Lists;
 
 /**
  * Holds the state for the specified object in serializable form.
@@ -97,20 +98,20 @@ public class Memento implements Serializable {
 
     private ObjectData createObjectData(final ObjectAdapter adapter) {
         final ObjectSpecification cls = adapter.getSpecification();
-        final ObjectAssociation[] fields = cls.getAssociations();
+        final List<ObjectAssociation> fields = cls.getAssociations();
         final ObjectData data = new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullName());
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].isNotPersisted()) {
-                if (fields[i].isOneToManyAssociation()) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).isNotPersisted()) {
+                if (fields.get(i).isOneToManyAssociation()) {
                     continue;
                 }
-                if (fields[i].containsFacet(PropertyAccessorFacet.class)
-                    && !fields[i].containsFacet(PropertySetterFacet.class)) {
-                    LOG.debug("ignoring not-settable field " + fields[i].getName());
+                if (fields.get(i).containsFacet(PropertyAccessorFacet.class)
+                    && !fields.get(i).containsFacet(PropertySetterFacet.class)) {
+                    LOG.debug("ignoring not-settable field " + fields.get(i).getName());
                     continue;
                 }
             }
-            createFieldData(adapter, data, fields[i]);
+            createFieldData(adapter, data, fields.get(i));
         }
         return data;
     }
@@ -280,7 +281,7 @@ public class Memento implements Serializable {
 
     private void updateFields(final ObjectAdapter object, final Data state) {
         final ObjectData od = (ObjectData) state;
-        final ObjectAssociation[] fields = object.getSpecification().getAssociations();
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
         for (ObjectAssociation field : fields) {
             if (field.isNotPersisted()) {
                 if (field.isOneToManyAssociation()) {

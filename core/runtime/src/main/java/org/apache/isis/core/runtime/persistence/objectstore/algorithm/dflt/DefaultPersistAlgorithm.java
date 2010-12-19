@@ -20,8 +20,10 @@
 
 package org.apache.isis.core.runtime.persistence.objectstore.algorithm.dflt;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -39,10 +41,12 @@ import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
     private static final Logger LOG = Logger.getLogger(DefaultPersistAlgorithm.class);
 
+    @Override
     public String name() {
         return "Simple Bottom Up Persistence Walker";
     }
 
+    @Override
     public void makePersistent(final ObjectAdapter object, final ToPersistObjectSet toPersistObjectSet) {
         if (object.getSpecification().isCollection()) {
             LOG.info("persist " + object);
@@ -67,15 +71,15 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
             return;
         }
         
-        final ObjectAssociation[] fields = object.getSpecification().getAssociations();
-        if (!object.getSpecification().isEncodeable() && fields.length > 0) {
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
+        if (!object.getSpecification().isEncodeable() && fields.size() > 0) {
             LOG.info("make persistent " + object);
             CallbackUtils.callCallback(object, PersistingCallbackFacet.class);
             toPersistObjectSet.remapAsPersistent(object);
             object.changeState(ResolveState.SERIALIZING_RESOLVED); 
             
-            for (int i = 0; i < fields.length; i++) {
-                final ObjectAssociation field = fields[i];
+            for (int i = 0; i < fields.size(); i++) {
+                final ObjectAssociation field = fields.get(i);
                 if (field.isNotPersisted()) {
                     continue;
                 }

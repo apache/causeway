@@ -20,7 +20,15 @@
 
 package org.apache.isis.viewer.wicket.ui.panels;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.wicket.MarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.repeater.RepeatingView;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -35,18 +43,12 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PropertyMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
+import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
 import org.apache.isis.viewer.wicket.model.models.ScalarModel;
-import org.apache.isis.viewer.wicket.model.models.ActionModel.SingleResultsMode;
 import org.apache.isis.viewer.wicket.model.util.Mementos;
 import org.apache.isis.viewer.wicket.ui.ComponentType;
 import org.apache.isis.viewer.wicket.ui.pages.action.ActionPage;
-import org.apache.wicket.MarkupContainer;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.repeater.RepeatingView;
-
-import com.google.common.collect.Lists;
 
 /**
  * Convenience adapter for building bespoke panels for process objects.
@@ -65,7 +67,7 @@ public abstract class ProcessObjectPanelAbstract extends
 	}
 
     protected void addProperties(MarkupContainer mc, String idProperties, String idProperty) {
-        EntityModel entityModel = (EntityModel) getModel();
+        EntityModel entityModel = getModel();
         ObjectAdapter adapter = entityModel.getObject();
         ObjectSpecification noSpec = adapter.getSpecification();
 
@@ -89,8 +91,9 @@ public abstract class ProcessObjectPanelAbstract extends
     @SuppressWarnings("unchecked")
     private List<OneToOneAssociation> visibleProperties(
             ObjectAdapter adapter, ObjectSpecification noSpec) {
-        return (List<OneToOneAssociation>) noSpec
-                .getAssociationList(visiblePropertyFilter(adapter));
+        @SuppressWarnings("rawtypes")
+        List list = noSpec.getAssociations(visiblePropertyFilter(adapter));
+        return new ArrayList<OneToOneAssociation>(list);
     }
 
     private Filter<ObjectAssociation> visiblePropertyFilter(

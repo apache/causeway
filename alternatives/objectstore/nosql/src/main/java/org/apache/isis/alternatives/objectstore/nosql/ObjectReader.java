@@ -90,7 +90,7 @@ class ObjectReader {
 
     private void readFields(StateReader reader, ObjectAdapter object, KeyCreator keyCreator) {
         ObjectAssociationContainer specification = object.getSpecification();
-        ObjectAssociation[] associations = specification.getAssociations();
+        List<ObjectAssociation> associations = specification.getAssociations();
         for (ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;

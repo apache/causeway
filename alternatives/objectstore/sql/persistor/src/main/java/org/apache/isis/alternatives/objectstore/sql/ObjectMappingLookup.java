@@ -77,7 +77,7 @@ public class ObjectMappingLookup implements DebugInfo {
 
     private void add(final String className, final ObjectMapping mapper) {
         ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(className);
-        if (spec.getPropertyList().size() == 0) {
+        if (spec.getProperties().size() == 0) {
             throw new SqlObjectStoreException(spec.getFullName() + " has no fields to persist: " + spec);
         }
         add(spec, mapper, null);

@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.form;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -75,10 +77,12 @@ public class ExpandableViewBorder extends AbstractBorder {
             this.openCollectionViewSpecification = openCollectionViewSpecification;
         }
 
+        @Override
         public ViewAxis createAxis(Content content) {
             return null;
         }
 
+        @Override
         public View decorate(Axes axes, View view) {
             if (view.getContent().isObject()) {
                 return new ExpandableViewBorder(view, closedViewSpecification, openObjectViewSpecification);
@@ -107,6 +111,7 @@ public class ExpandableViewBorder extends AbstractBorder {
         canOpen();
     }
 
+    @Override
     protected void debugDetails(DebugString debug) {
         super.debugDetails(debug);
         debug.appendln("open spec", openViewSpecification);
@@ -201,13 +206,13 @@ public class ExpandableViewBorder extends AbstractBorder {
     private int canOpenObject(final Content content) {
         final ObjectAdapter object = ((ObjectContent) content).getObject();
         if (object != null) {
-            final ObjectAssociation[] fields = object.getSpecification().getAssociations(
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(
                     ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i].isOneToManyAssociation()) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).isOneToManyAssociation()) {
                     return CAN_OPEN;
-                } else if (fields[i].isOneToOneAssociation() && !fields[i].getSpecification().isParseable()
-                        && fieldContainsReference(object, fields[i])) {
+                } else if (fields.get(i).isOneToOneAssociation() && !fields.get(i).getSpecification().isParseable()
+                        && fieldContainsReference(object, fields.get(i))) {
                     return CAN_OPEN;
                 }
             }

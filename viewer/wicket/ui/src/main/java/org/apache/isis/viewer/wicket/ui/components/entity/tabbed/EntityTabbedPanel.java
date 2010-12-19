@@ -72,7 +72,7 @@ public class EntityTabbedPanel extends TabbedPanelAbstract<EntityModel> {
         });
 
         List<OneToManyAssociation> collectionList = getModel()
-                .getTypeOfSpecification().getCollectionList();
+                .getTypeOfSpecification().getCollections();
         for (OneToManyAssociation collection : collectionList) {
             final EntityCollectionModel collectionModel = EntityCollectionModel
                     .createParented(getModel(), collection);

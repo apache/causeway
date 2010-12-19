@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -41,6 +43,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.form.InputForm;
 
 public class ActionForm extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         CreateFormParameter parameters = new CreateFormParameter();
         parameters.objectId = request.getOptionalProperty(OBJECT);
@@ -152,18 +155,13 @@ public class ActionForm extends AbstractElementProcessor {
     }
 
     private static void initializeFields(RequestContext context, ObjectAdapter object, ObjectAction action, InputField[] fields) {
-        ObjectActionParameter[] parameters = action.getParameters();
+        List<ObjectActionParameter> parameters = action.getParameters();
         for (int i = 0; i < fields.length; i++) {
             InputField field = fields[i];
-            ObjectActionParameter param = parameters[i];
+            ObjectActionParameter param = parameters.get(i);
             
             ObjectAdapter[] optionsForParameter = action.getChoices(object)[i];
             FieldFactory.initializeField(context, object, param, optionsForParameter, !param.isOptional(), true, field);
-            
-            
-            
-            
-            
             
             
 /*            
@@ -250,7 +248,7 @@ public class ActionForm extends AbstractElementProcessor {
 
             String title = defaultValue == null ? "" : defaultValue.titleString();
             if (field.getType() == InputField.REFERENCE) {
-                ObjectSpecification objectSpecification = action.getParameters()[i].getSpecification();
+                ObjectSpecification objectSpecification = action.getParameters().get(i).getSpecification();
                 if (defaultValue != null) {
                     String html = "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
                             + objectSpecification.getShortName() + "\"/>" + title;
@@ -306,6 +304,7 @@ public class ActionForm extends AbstractElementProcessor {
         }
     }
 
+    @Override
     public String getName() {
         return "action-form";
     }

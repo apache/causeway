@@ -25,6 +25,12 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.wicket.Component;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.markup.html.link.BookmarkablePageLink;
+
+import com.google.common.collect.Maps;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -41,13 +47,7 @@ import org.apache.isis.viewer.wicket.model.mementos.ActionParameterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.mementos.PageParameterNames;
 import org.apache.isis.viewer.wicket.model.mementos.SpecMemento;
-import org.apache.isis.viewer.wicket.model.models.ActionModel.Mode;
 import org.apache.isis.viewer.wicket.model.util.ActionParams;
-import org.apache.wicket.Component;
-import org.apache.wicket.PageParameters;
-import org.apache.wicket.markup.html.link.BookmarkablePageLink;
-
-import com.google.common.collect.Maps;
 
 /**
  * Models an action invocation, either the gathering of arguments for the
@@ -149,7 +149,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         }
         // no need to prompt for contributed actions (ie if have a context
         // adapter)
-        ObjectActionParameter actionParam = noAction.getParameters()[0];
+        ObjectActionParameter actionParam = noAction.getParameters().get(0);
         return ActionParams.compatibleWith(contextAdapter, actionParam) ? Mode.RESULTS
                 : Mode.PARAMETERS;
     }
@@ -312,7 +312,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
             return false;
         }
 
-        ObjectActionParameter actionParam = action.getParameters()[paramNum];
+        ObjectActionParameter actionParam = action.getParameters().get(paramNum);
         ActionParameterMemento apm = new ActionParameterMemento(actionParam);
         ScalarModel argumentModel = getArgumentModel(apm);
         argumentModel.setObject(argumentAdapter);

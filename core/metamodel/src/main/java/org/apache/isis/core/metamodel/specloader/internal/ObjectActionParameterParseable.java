@@ -87,7 +87,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         }
         final String proposedString = (String) proposedValue;
 
-        final ObjectActionParameter objectActionParameter = getAction().getParameters()[getNumber()];
+        final ObjectActionParameter objectActionParameter = getAction().getParameters().get(getNumber());
         if (!(objectActionParameter instanceof ParseableEntryActionParameter)) {
             return null;
         }

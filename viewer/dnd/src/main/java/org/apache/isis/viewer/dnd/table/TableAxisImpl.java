@@ -20,6 +20,10 @@
 
 package org.apache.isis.viewer.dnd.table;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -29,7 +33,7 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
 public class TableAxisImpl implements TableAxis {
-    private final ObjectAssociation[] columns;
+    private final List<ObjectAssociation> columns;
     private final String[] columnName;
     private int rowHeaderOffet;
     private View table;
@@ -37,15 +41,15 @@ public class TableAxisImpl implements TableAxis {
 
     public TableAxisImpl(CollectionContent content) {
         // TODO create axis first, then after view built set up the axis details?
-        final ObjectSpecification elementSpecification = ((CollectionContent) content).getElementSpecification();
-        final ObjectAssociation[] accessibleFields = elementSpecification
+        final ObjectSpecification elementSpecification = (content).getElementSpecification();
+        final List<ObjectAssociation> accessibleFields = elementSpecification
                 .getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
 
         this.columns = tableFields(accessibleFields, content);
-        widths = new int[columns.length];
-        columnName = new String[columns.length];
+        widths = new int[columns.size()];
+        columnName = new String[columns.size()];
         for (int i = 0; i < widths.length; i++) {
-            columnName[i] = columns[i].getName();
+            columnName[i] = columns.get(i).getName();
         }
 
         // TODO make the setting of the column width strategy external so it can be changed
@@ -57,8 +61,8 @@ public class TableAxisImpl implements TableAxis {
      * int[columns.length]; columnName = new String[columns.length]; for (int i = 0; i < widths.length; i++) {
      * columnName[i] = columns[i].getName(); } }
      */
-    private ObjectAssociation[] tableFields(final ObjectAssociation[] viewFields, final CollectionContent content) {
-        for (int i = 0; i < viewFields.length; i++) {
+    private List<ObjectAssociation> tableFields(final List<ObjectAssociation> viewFields, final CollectionContent content) {
+        for (int i = 0; i < viewFields.size(); i++) {
             //final ObjectAssociation objectAssociation = viewFields[i];
             // TODO reinstate check to skip unsuitable types
             /*
@@ -75,19 +79,17 @@ public class TableAxisImpl implements TableAxis {
             // if(viewFields[i].getSpecification().isOfType(Isis.getSpecificationLoader().lo));
         }
 
-        final ObjectAssociation[] tableFields = new ObjectAssociation[viewFields.length];
-        int c = 0;
-        for (int i = 0; i < viewFields.length; i++) {
-            if (!(viewFields[i] instanceof OneToManyAssociation)) {
-                tableFields[c++] = viewFields[i];
+        final List<ObjectAssociation> tableFields = Lists.newArrayList();
+        for (int i = 0; i < viewFields.size(); i++) {
+            if (!(viewFields.get(i) instanceof OneToManyAssociation)) {
+                tableFields.add(viewFields.get(i));
             }
         }
 
-        final ObjectAssociation[] results = new ObjectAssociation[c];
-        System.arraycopy(tableFields, 0, results, 0, c);
-        return results;
+        return tableFields;
     }
 
+    @Override
     public void ensureOffset(final int offset) {
         rowHeaderOffet = Math.max(rowHeaderOffet, offset + 5);
     }
@@ -98,6 +100,7 @@ public class TableAxisImpl implements TableAxis {
      * 
      * If over the column border then returns -1.
      */
+    @Override
     public int getColumnAt(final int xPosition) {
         int edge = getHeaderOffset();
         for (int i = 0, cols = getColumnCount() + 1; i < cols; i++) {
@@ -119,6 +122,7 @@ public class TableAxisImpl implements TableAxis {
      * 
      * If no column border is identified then returns -1.
      */
+    @Override
     public int getColumnBorderAt(final int xPosition) {
         int edge = getHeaderOffset();
         for (int i = 0, cols = getColumnCount(); i < cols; i++) {
@@ -134,26 +138,32 @@ public class TableAxisImpl implements TableAxis {
         return -1;
     }
 
+    @Override
     public int getColumnCount() {
         return columnName.length;
     }
 
+    @Override
     public String getColumnName(final int column) {
         return columnName[column];
     }
 
+    @Override
     public int getColumnWidth(final int column) {
         return widths[column];
     }
 
+    @Override
     public ObjectAssociation getFieldForColumn(final int column) {
-        return columns[column];
+        return columns.get(column);
     }
 
+    @Override
     public int getHeaderOffset() {
         return rowHeaderOffet;
     }
 
+    @Override
     public int getLeftEdge(final int resizeColumn) {
         int width = getHeaderOffset();
         for (int i = 0, cols = getColumnCount(); i < resizeColumn && i < cols; i++) {
@@ -162,6 +172,7 @@ public class TableAxisImpl implements TableAxis {
         return width;
     }
 
+    @Override
     public void invalidateLayout() {
         final View[] rows = table.getSubviews();
         for (int i = 0; i < rows.length; i++) {
@@ -170,24 +181,29 @@ public class TableAxisImpl implements TableAxis {
         table.invalidateLayout();
     }
 
+    @Override
     public void setOffset(final int offset) {
         rowHeaderOffet = offset;
     }
 
+    @Override
     public void setRoot(final View view) {
         table = view;
     }
 
+    @Override
     public void setupColumnWidths(final ColumnWidthStrategy strategy) {
         for (int i = 0; i < widths.length; i++) {
-            widths[i] = strategy.getPreferredWidth(i, columns[i]);
+            widths[i] = strategy.getPreferredWidth(i, columns.get(i));
         }
     }
 
+    @Override
     public void setWidth(final int index, final int width) {
         widths[index] = width;
     }
 
+    @Override
     public String toString() {
         ToString str = new ToString(this);
         str.append("columns", columnName.length);

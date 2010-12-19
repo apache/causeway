@@ -22,6 +22,7 @@ package org.apache.isis.viewer.dnd.calendar;
 
 
 import java.util.Date;
+import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -55,6 +56,7 @@ public class CalendarGrid extends CompositeView {
     private int columns;
     private boolean acrossThenDown;
 
+    @Override
     protected void buildNewView() {
         CalendarCellContent[] cellContents = createContentForCells();      
         addCellsToView(cellContents);
@@ -110,26 +112,29 @@ public class CalendarGrid extends CompositeView {
     
     private ObjectAssociation findDate(final ObjectAdapter adapter) {
         final ObjectSpecification spec = adapter.getSpecification();
-        final ObjectAssociation[] fields = spec.getAssociations();
-        for (int i = 0; i < fields.length; i++) {
-            final Facet facet = fields[i].getSpecification().getFacet(DateValueFacet.class);
+        final List<ObjectAssociation> fields = spec.getAssociations();
+        for (int i = 0; i < fields.size(); i++) {
+            final Facet facet = fields.get(i).getSpecification().getFacet(DateValueFacet.class);
             if (facet != null) {
-                return fields[i];
+                return fields.get(i);
             }
         }
         return null;
     }
 
+    @Override
     protected void buildModifiedView() {
         disposeContentsOnly();
         buildNewView();
     }
     
     // TODO remove
+    @Override
     protected void buildView() {
         throw new UnexpectedCallException();
     }
 
+    @Override
     protected void doLayout(Size maximumSize) {
         boolean hasHeader = cellLayout.header(0) != null;
         int topInset = 0 + (acrossThenDown && hasHeader ? 30 : 0);
@@ -156,6 +161,7 @@ public class CalendarGrid extends CompositeView {
         }
     }
 
+    @Override
     public Size requiredSize(Size availableSpace) {
         return new Size(300, 300);
     }
@@ -313,81 +319,95 @@ public class CalendarGrid extends CompositeView {
         super.viewMenuOptions(options);
 
         options.add(new UserActionAbstract("Add row") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 addRow();
             }
         });
         options.add(new UserActionAbstract("Remove row") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 removeRow();
             }
         });
 
         options.add(new UserActionAbstract("Add column") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 addColumn();
             }
         });
         options.add(new UserActionAbstract("Remove column") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 removeColumn();
             }
         });
 
         options.add(new UserActionAbstract("Years") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 showYears();
             }
         });
 
         options.add(new UserActionAbstract("Months") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 showMonths();
             }
         });
 
         options.add(new UserActionAbstract("Weeks") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 showWeeks();
             }
         });
 
         options.add(new UserActionAbstract("Day") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 showSingleDay();
             }
         });
         options.add(new UserActionAbstract("Days") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 showDays();
             }
         });
 
         options.add(new UserActionAbstract("Across then down") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 acrossFirst(); 
             }
         });
 
         options.add(new UserActionAbstract("Down then across") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 downFirst();
             }
         });
 
         options.add(new UserActionAbstract("Previous period") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 previousePeriod();
             }
         });
 
         options.add(new UserActionAbstract("Next period") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 nextPeriod();
             }
         });
 
         options.add(new UserActionAbstract("Today") {
+            @Override
             public void execute(Workspace workspace, View view, Location at) {
                 today();
             }

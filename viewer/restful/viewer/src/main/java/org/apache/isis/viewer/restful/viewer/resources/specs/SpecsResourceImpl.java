@@ -39,6 +39,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specs
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specs() {
         init();
 
@@ -68,7 +69,8 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 		Arrays.sort(
 				noSpecs, 
 				new Comparator<ObjectSpecification>() {
-			public int compare(ObjectSpecification o1,
+			@Override
+            public int compare(ObjectSpecification o1,
 					ObjectSpecification o2) {
 				return o1.getFullName().compareTo(o2.getFullName());
 			}});
@@ -83,6 +85,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // spec
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String spec(final String specFullName) {
         init();
         final XhtmlTemplate xhtml = new XhtmlTemplate(specFullName, getServletRequest());
@@ -109,7 +112,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     private Element asDivProperties(final ObjectSpecification noSpec) {
         final Element div = xhtmlRenderer.div_p("Properties", HtmlClass.PROPERTIES);
 
-        final List<OneToOneAssociation> properties = noSpec.getPropertyList();
+        final List<OneToOneAssociation> properties = noSpec.getProperties();
         final Element ul = xhtmlRenderer.ul(HtmlClass.PROPERTIES);
         div.appendChild(ul);
         for (final ObjectAssociation property : properties) {
@@ -125,7 +128,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     private Element asDivCollections(final ObjectSpecification noSpec) {
         final Element div = xhtmlRenderer.div_p("Collections", HtmlClass.COLLECTIONS);
 
-        final List<OneToManyAssociation> collections = noSpec.getCollectionList();
+        final List<OneToManyAssociation> collections = noSpec.getCollections();
         final Element ul = xhtmlRenderer.ul(HtmlClass.COLLECTIONS);
         div.appendChild(ul);
         for (final ObjectAssociation collection : collections) {
@@ -141,7 +144,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     private Element asDivActions(final ObjectSpecification noSpec, final ObjectActionType type) {
         final Element div = xhtmlRenderer.div_p(type.name() + " actions", HtmlClass.ACTIONS);
 
-        final ObjectAction[] actions = ActionUtils.flattened(noSpec.getObjectActions(type));
+        final List<ObjectAction> actions = ActionUtils.flattened(noSpec.getObjectActions(type));
         final Element ul = xhtmlRenderer.ul(HtmlClass.ACTIONS);
         div.appendChild(ul);
         for (final ObjectAction action : actions) {
@@ -159,6 +162,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specFacet
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specFacet(
             final String specFullName,
             final String facetTypeName) {
@@ -195,6 +199,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specProperty
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specProperty(
             final String specFullName,
             final String propertyName) {
@@ -228,6 +233,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specCollection
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specCollection(
             final String specFullName,
             final String collectionName) {
@@ -261,6 +267,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specAction
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specAction(
     		final String specFullName, 
     		final String actionId) {
@@ -294,6 +301,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specPropertyFacet
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specPropertyFacet(
             final String specFullName,
             final String propertyName,
@@ -343,6 +351,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specCollectionFacet
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specCollectionFacet(
             final String specFullName,
             final String collectionId,
@@ -391,6 +400,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
     // specActionFacet
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String specActionFacet(
             final String specFullName,
             final String actionId,

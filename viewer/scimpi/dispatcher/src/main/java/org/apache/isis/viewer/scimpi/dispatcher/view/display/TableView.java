@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -40,7 +42,7 @@ public class TableView extends AbstractTableView {
         private final boolean includeHeading;
         private final boolean includeFooting;
         private final String[] headers;
-        private final ObjectAssociation[] fields;
+        private final List<ObjectAssociation> fields;
         private final boolean showSelectOption;
         private final boolean showDeleteOption;
         private final boolean showEditOption;
@@ -53,7 +55,7 @@ public class TableView extends AbstractTableView {
                 boolean includeHeading,
                 boolean includeFooting,
                 String[] headers,
-                ObjectAssociation[] fields,
+                List<ObjectAssociation> fields,
                 boolean showSelectOption,
                 boolean showDeleteOption,
                 boolean showEditOption,
@@ -73,12 +75,14 @@ public class TableView extends AbstractTableView {
             this.linkRow = linkRow;
         }
 
+        @Override
         public void writeFooters(PageWriter writer) {
             if (includeFooting) {
                 headerRow(writer, headers);
             }
         }
 
+        @Override
         public void writeHeaders(PageWriter writer) {
             if (includeHeading) {
                 headerRow(writer, headers);
@@ -97,6 +101,7 @@ public class TableView extends AbstractTableView {
             request.appendHtml("</tr>");
         }
 
+        @Override
         public void writeElement(Request request, RequestContext context, ObjectAdapter element) {
             String rowId = context.mapObject(element, Scope.INTERACTION);
             String scope = linkRow == null ? "" : "&" + SCOPE + "=" + linkRow.getScope();
@@ -105,7 +110,7 @@ public class TableView extends AbstractTableView {
                                 // Scope.REQUEST);
             result = context.encodedInteractionParameters();
 
-            if (fields.length == 0) {
+            if (fields.size() == 0) {
                 if (linkRow != null) {
                     request.appendHtml("<td><a href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "="
                             + rowId + result + scope + "\">" + element.titleString() + "</a></td>");
@@ -114,23 +119,23 @@ public class TableView extends AbstractTableView {
                 }
 
             } else {
-                for (int i = 0; i < fields.length; i++) {
-                    if (fields[i].isOneToManyAssociation()) {
+                for (int i = 0; i < fields.size(); i++) {
+                    if (fields.get(i).isOneToManyAssociation()) {
                         continue;
                     }
                     request.appendHtml("<td>");
-                    ObjectAdapter field = fields[i].get(element);
+                    ObjectAdapter field = fields.get(i).get(element);
                     if (field != null) {
-                        if (!fields[i].getSpecification().containsFacet(ParseableFacet.class)) {
+                        if (!fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                             request.appendHtml("<img class=\"" + "small-icon" + "\" src=\""
                                     + request.getContext().imagePath(field) + "\" alt=\""
-                                    + fields[i].getSpecification().getShortName() + "\"/>");
+                                    + fields.get(i).getSpecification().getShortName() + "\"/>");
                         }
                         if (linkRow != null) {
                             request.appendHtml("<a href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "="
                                     + rowId + result + scope + "\">");
                         } else if (linkedFields[i] != null) {
-                            ObjectAdapter fieldObject = (ObjectAdapter) fields[i].get(element);
+                            ObjectAdapter fieldObject = fields.get(i).get(element);
                             String id = context.mapObject(fieldObject, Scope.INTERACTION);
                             request.appendHtml("<a href=\"" + linkedFields[i].getForwardView() + "?"
                                     + linkedFields[i].getVariable() + "=" + id + "\">");
@@ -167,11 +172,12 @@ public class TableView extends AbstractTableView {
         }
     }
 
+    @Override
     protected TableContentWriter createRowBuilder(
             final Request request,
             RequestContext context,
             final String parent,
-            ObjectAssociation[] allFields) {
+            final List<ObjectAssociation> allFields) {
         final String fieldName = request.getOptionalProperty(FIELD);
         return rowBuilder(request, context, parent, fieldName, allFields);
     }
@@ -180,7 +186,8 @@ public class TableView extends AbstractTableView {
             final Request request,
             RequestContext context,
             final String object,
-            String fieldName, ObjectAssociation[] allFields) {
+            String fieldName, 
+            List<ObjectAssociation> allFields) {
         String linkRowView = request.getOptionalProperty(LINK);
         String linkObjectName = request.getOptionalProperty(ELEMENT_NAME, RequestContext.RESULT);
         String linkObjectScope = request.getOptionalProperty(SCOPE, Scope.INTERACTION.toString());
@@ -197,10 +204,10 @@ public class TableView extends AbstractTableView {
         LinkedFieldsBlock block = new LinkedFieldsBlock();
         request.setBlockContent(block);
         request.processUtilCloseTag();
-        final ObjectAssociation[] fields = block.includedFields(allFields);
+        final List<ObjectAssociation> fields = block.includedFields(allFields);
         final LinkedObject[] linkedFields = block.linkedFields(fields);
         for (int i = 0; i < linkedFields.length; i++) {
-            if (linkedFields[i] == null && linkFields && !fields[i].getSpecification().containsFacet(ParseableFacet.class)) {
+            if (linkedFields[i] == null && linkFields && !fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                 linkedFields[i] = new LinkedObject("_generic.shtml");
             }
             if (linkedFields[i] != null) {
@@ -208,13 +215,13 @@ public class TableView extends AbstractTableView {
             }
         }
 
-        final String headers[] = new String[fields.length];
+        final String headers[] = new String[fields.size()];
         int h = 0;
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].isOneToManyAssociation()) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).isOneToManyAssociation()) {
                 continue;
             }
-            headers[h++] = fields[i].getName();
+            headers[h++] = fields.get(i).getName();
         }
 
         request.popBlockContent();
@@ -228,12 +235,12 @@ public class TableView extends AbstractTableView {
             ObjectAdapter object,
             ObjectAssociation field,
             ObjectAdapter collection,
-            ObjectAssociation[] fields,
+            List<ObjectAssociation> fields,
             boolean linkAllFields) {
-        boolean[] linkFields = new boolean[fields.length];
+        boolean[] linkFields = new boolean[fields.size()];
         if (linkAllFields) {
             for (int i = 0; i < linkFields.length; i++) {
-                linkFields[i] = fields[i].isOneToOneAssociation();
+                linkFields[i] = fields.get(i).isOneToOneAssociation();
             }
         }
         RequestContext context = request.getContext();
@@ -241,6 +248,7 @@ public class TableView extends AbstractTableView {
         write(request, collection, rowBuilder, null);
     }
 
+    @Override
     public String getName() {
         return "table";
     }

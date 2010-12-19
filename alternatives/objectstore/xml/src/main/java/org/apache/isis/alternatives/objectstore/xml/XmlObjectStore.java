@@ -22,6 +22,8 @@ package org.apache.isis.alternatives.objectstore.xml;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.Clock;
 import org.apache.isis.alternatives.objectstore.xml.internal.commands.XmlCreateObjectCommand;
 import org.apache.isis.alternatives.objectstore.xml.internal.commands.XmlDestroyObjectCommand;
@@ -67,7 +69,6 @@ import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQueryBuiltIn;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
-import org.apache.log4j.Logger;
 
 public class XmlObjectStore implements ObjectStore {
 
@@ -143,9 +144,9 @@ public class XmlObjectStore implements ObjectStore {
         if (object.getResolveState().canChangeTo(ResolveState.RESOLVING)) {
             PersistorUtil.start(object, ResolveState.RESOLVING);
 
-            final ObjectAssociation[] fields = object.getSpecification().getAssociations();
-            for (int i = 0; i < fields.length; i++) {
-                final ObjectAssociation field = fields[i];
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations();
+            for (int i = 0; i < fields.size(); i++) {
+                final ObjectAssociation field = fields.get(i);
                 if (field.isNotPersisted()) {
                     continue;
                 }

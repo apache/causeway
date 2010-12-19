@@ -20,15 +20,14 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-/*
-import org.apache.isis.extensions.dnd.view.option.DisposeObjectOption;
-*/
 import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.option.DisposeObjectOption;
@@ -36,10 +35,9 @@ import org.apache.isis.viewer.dnd.view.option.DisposeObjectOption;
 public class OptionFactory {
 
     public static void addCreateOptions(final ObjectSpecification specification, final UserActionSet options) {
-        ObjectAction[] actions;
         // TODO do the same as addObjectMenuOptions and collect together all the
         // actions for all the types
-        actions = specification.getServiceActionsFor(ObjectActionType.USER, ObjectActionType.EXPLORATION,
+        List<ObjectAction> actions = specification.getServiceActionsFor(ObjectActionType.USER, ObjectActionType.EXPLORATION,
                 ObjectActionType.PROTOTYPE, ObjectActionType.DEBUG);
         menuOptions(actions, null, options);
     }
@@ -68,22 +66,22 @@ public class OptionFactory {
         options.add(new DisposeObjectOption());
     }
 
-    private static void menuOptions(final ObjectAction[] actions, final ObjectAdapter target, final UserActionSet menuOptionSet) {
-        for (int i = 0; i < actions.length; i++) {
+    private static void menuOptions(final List<ObjectAction> actions, final ObjectAdapter target, final UserActionSet menuOptionSet) {
+        for (int i = 0; i < actions.size(); i++) {
             UserAction option = null;
-            if (actions[i].getActions().length > 0) {
-                option = menuOptionSet.addNewActionSet(actions[i].getName());
-                menuOptions(actions[i].getActions(), target, (UserActionSet) option);
+            if (actions.get(i).getActions().size() > 0) {
+                option = menuOptionSet.addNewActionSet(actions.get(i).getName());
+                menuOptions(actions.get(i).getActions(), target, (UserActionSet) option);
 
             } else {
-                final int noOfParameters = actions[i].getParameterCount();
+                final int noOfParameters = actions.get(i).getParameterCount();
                 if (noOfParameters == 0) {
-                    option = ImmediateObjectOption.createOption(actions[i], target);
-                } else if (actions[i].isContributed() && noOfParameters == 1 && target != null
-                        && target.getSpecification().isOfType(actions[i].getParameters()[0].getSpecification())) {
-                    option = ImmediateObjectOption.createServiceOption(actions[i], target);
+                    option = ImmediateObjectOption.createOption(actions.get(i), target);
+                } else if (actions.get(i).isContributed() && noOfParameters == 1 && target != null
+                        && target.getSpecification().isOfType(actions.get(i).getParameters().get(0).getSpecification())) {
+                    option = ImmediateObjectOption.createServiceOption(actions.get(i), target);
                 } else {
-                    option = DialoggedObjectOption.createOption(actions[i], target);
+                    option = DialoggedObjectOption.createOption(actions.get(i), target);
                 }
                 if (option != null) {
                     menuOptionSet.add(option);

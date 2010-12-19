@@ -80,7 +80,7 @@ public class MethodsUtils {
             throw new ScimpiException("Object not specified when looking for " + methodName);
         }
 
-        ObjectAction[] actions = object.getSpecification().getObjectActions(ObjectActionType.USER,
+        List<ObjectAction> actions = object.getSpecification().getObjectActions(ObjectActionType.USER,
                 ObjectActionType.EXPLORATION, ObjectActionType.PROTOTYPE, ObjectActionType.DEBUG);
         ObjectAction action = findAction(actions, methodName);
        /* if (action == null) {
@@ -94,17 +94,17 @@ public class MethodsUtils {
         return action;
     }
 
-    private static ObjectAction findAction(final ObjectAction[] actions, final String methodName) {
-        for (int i = 0; i < actions.length; i++) {
-            if (actions[i].getActions().length > 0) {
-                final ObjectAction action = findAction(actions[i].getActions(), methodName);
+    private static ObjectAction findAction(final List<ObjectAction> actions, final String methodName) {
+        for (int i = 0; i < actions.size(); i++) {
+            if (actions.get(i).getActions().size() > 0) {
+                final ObjectAction action = findAction(actions.get(i).getActions(), methodName);
                 if (action != null) {
                     return action;
                 }
 
             } else {
-                if (actions[i].getId().equals(methodName)) {
-                    return actions[i];
+                if (actions.get(i).getId().equals(methodName)) {
+                    return actions.get(i);
                 }
             }
         }
@@ -128,7 +128,7 @@ public class MethodsUtils {
             }
             throw new DispatchException("Failed to find service " + serviceId);
         } else {
-            return (ObjectAdapter) context.getMappedObject(objectId);
+            return context.getMappedObject(objectId);
         }
     }
 

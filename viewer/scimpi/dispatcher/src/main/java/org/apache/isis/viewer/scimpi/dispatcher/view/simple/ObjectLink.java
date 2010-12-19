@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -31,12 +33,14 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class ObjectLink extends AbstractLink {
 
+    @Override
     protected boolean valid(Request request, ObjectAdapter object) {
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        ObjectAssociation[] visibleFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
-        return visibleFields.length > 0;
+        List<ObjectAssociation> visibleFields = object.getSpecification().getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, object));
+        return visibleFields.size() > 0;
     }
 
+    @Override
     protected String linkLabel(String name, ObjectAdapter object) {
         if (name == null) {
             return object.titleString();
@@ -45,10 +49,12 @@ public class ObjectLink extends AbstractLink {
         }
     }
     
+    @Override
     protected String defaultView() {
         return Dispatcher.GENERIC + "." + Dispatcher.EXTENSION;
     }
 
+    @Override
     public String getName() {
         return "object-link";
     }

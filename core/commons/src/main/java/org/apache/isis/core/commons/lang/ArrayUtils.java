@@ -87,14 +87,23 @@ public final class ArrayUtils {
     }
 
 	public static <T> T[] combine(final T[]... arrays) {
-	    final List<T> list = new ArrayList<T>();
+	    final List<T> combinedList = new ArrayList<T>();
 	    for (final T[] array : arrays) {
 	        for (final T t : array) {
-	            list.add(t);
+	            combinedList.add(t);
 	        }
 	    }
-	    return list.toArray(arrays[0]); // using 1st element of arrays to specify the type
+	    return combinedList.toArray(arrays[0]); // using 1st element of arrays to specify the type
 	}
+
+    public static <T> List<T> combine(final List<T>... lists) {
+        final List<T> combinedList = new ArrayList<T>();
+        for (final List<T> list : lists) {
+            combinedList.addAll(list);
+        }
+        return combinedList;
+    }
+
 
 	/**
 	 * Creates a mutable copy of the provided array.

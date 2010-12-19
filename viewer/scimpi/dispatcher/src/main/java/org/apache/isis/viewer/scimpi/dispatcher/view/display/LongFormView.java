@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -31,12 +33,13 @@ import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
 public class LongFormView extends AbstractFormView {
 
+    @Override
     protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject) {
         if (field.isOneToManyAssociation()) {
             IsisContext.getPersistenceSession().resolveField(object, field);
             ObjectAdapter collection = field.get(object);
-            TypeOfFacet facet = (TypeOfFacet) collection.getTypeOfFacet();
-            ObjectAssociation[] fields = facet.valueSpec().getAssociations(
+            TypeOfFacet facet = collection.getTypeOfFacet();
+            List<ObjectAssociation> fields = facet.valueSpec().getAssociations(
                     ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
             boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             TableView.write(request, object, field, collection, fields, isFieldEditable);
@@ -45,6 +48,7 @@ public class LongFormView extends AbstractFormView {
         }
     }
 
+    @Override
     public String getName() {
         return "long-form";
     }

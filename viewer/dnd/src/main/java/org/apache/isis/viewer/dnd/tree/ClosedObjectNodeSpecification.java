@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.tree;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -50,6 +52,7 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
         this.showObjectContents = showObjectContents;
     }
 
+    @Override
     public boolean canDisplay(ViewRequirement requirement) {
         return requirement.isObject() && requirement.hasReference();
     }
@@ -57,14 +60,14 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
     @Override
     public int canOpen(final Content content) {
         final ObjectAdapter object = ((ObjectContent) content).getObject();
-        final ObjectAssociation[] fields = object.getSpecification().getAssociations(
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
-        for (int i = 0; i < fields.length; i++) {
-            if (fields[i].isOneToManyAssociation()) {
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).isOneToManyAssociation()) {
                 return CAN_OPEN;
             }
 
-            if (  showObjectContents && fields[i].isOneToOneAssociation() &&
+            if (  showObjectContents && fields.get(i).isOneToOneAssociation() &&
                 !(SpecificationFacets.isBoundedSet(object.getSpecification()))) {
                 return CAN_OPEN;
             }
@@ -79,6 +82,7 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
         return treeLeafNode;
     }
 
+    @Override
     public String getName() {
         return "Object tree node - closed";
     }

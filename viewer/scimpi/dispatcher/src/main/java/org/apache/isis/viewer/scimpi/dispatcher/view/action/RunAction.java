@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
@@ -33,6 +35,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 public class RunAction extends AbstractElementProcessor {
     
+    @Override
     public void process(Request request) {
         RequestContext context = request.getContext();
 
@@ -56,9 +59,9 @@ public class RunAction extends AbstractElementProcessor {
         
         // swap null parameter of the object's type to run a contributed method
         if (action.isContributed()) {
-            ObjectActionParameter[] parameterSpecs = action.getParameters();
+            final List<ObjectActionParameter> parameterSpecs = action.getParameters();
             for (int i = 0; i < parameters.length; i++) {
-                if (parameters[i] == null && object.getSpecification().isOfType(parameterSpecs[i].getSpecification())) {
+                if (parameters[i] == null && object.getSpecification().isOfType(parameterSpecs.get(i).getSpecification())) {
                     parameters[i] = object;
                     break;
                 }
@@ -70,6 +73,7 @@ public class RunAction extends AbstractElementProcessor {
         request.popBlockContent();
     }
 
+    @Override
     public String getName() {
         return "run-action";
     }

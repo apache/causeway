@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
+import java.util.List;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
@@ -63,7 +65,7 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public ObjectAction[] getActions() {
+    public List<ObjectAction> getActions() {
         return null;
     }
 
@@ -145,12 +147,12 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public ObjectActionParameter[] getParameters() {
+    public List<ObjectActionParameter> getParameters() {
         return null;
     }
 
     @Override
-    public ObjectActionParameter[] getParameters(final Filter<ObjectActionParameter> filter) {
+    public List<ObjectActionParameter> getParameters(final Filter<ObjectActionParameter> filter) {
         return null;
     }
 
@@ -275,7 +277,7 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
-    public ObjectSpecification[] getParameterTypes() {
+    public List<ObjectSpecification> getParameterTypes() {
         return null;
     }
 

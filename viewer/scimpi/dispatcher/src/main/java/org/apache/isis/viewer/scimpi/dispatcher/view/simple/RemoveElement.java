@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
@@ -39,6 +41,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 public class RemoveElement extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         String title = request.getOptionalProperty(TITLE, "Delete");
         String cls = request.getOptionalProperty(CLASS, "element-delete");
@@ -64,6 +67,7 @@ public class RemoveElement extends AbstractElementProcessor {
     }
 
 
+    @Override
     public String getName() {
         return "remove-element";
     }
@@ -103,8 +107,8 @@ public class RemoveElement extends AbstractElementProcessor {
         // TODO check is valid to remove element
         AuthenticationSession session = IsisContext.getAuthenticationSession();
         Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(session, adapter);
-        ObjectAssociation[] visibleFields = adapter.getSpecification().getAssociations(filter);
-        return visibleFields.length > 0;
+        List<ObjectAssociation> visibleFields = adapter.getSpecification().getAssociations(filter);
+        return visibleFields.size() > 0;
     }
 }
 

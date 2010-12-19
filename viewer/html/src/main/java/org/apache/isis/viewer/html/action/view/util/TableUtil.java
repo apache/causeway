@@ -20,6 +20,11 @@
 
 package org.apache.isis.viewer.html.action.view.util;
 
+import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.PROPERTIES;
+import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS;
+
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -33,9 +38,6 @@ import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.html.component.ComponentFactory;
 import org.apache.isis.viewer.html.component.Table;
 import org.apache.isis.viewer.html.context.Context;
-
-import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.PROPERTIES;
-import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS;
 
 
 
@@ -63,10 +65,10 @@ public class TableUtil {
             final ObjectSpecification elementType) {
 
     	final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
-        final ObjectAssociation[] columnAssociations = 
+        final List<ObjectAssociation> columnAssociations = 
         	elementType.getAssociations(STATICALLY_VISIBLE_ASSOCIATIONS.and(PROPERTIES));
         
-        int len = columnAssociations.length;
+        int len = columnAssociations.size();
 
         ComponentFactory factory = context.getComponentFactory();
         final Table table = factory.createTable(len, addSelector);

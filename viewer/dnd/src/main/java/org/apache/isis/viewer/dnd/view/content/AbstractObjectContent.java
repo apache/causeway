@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.view.content;
 
+import java.util.List;
+
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -93,13 +95,13 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             final ObjectSpecification spec = original.getSpecification();
 
             final ObjectAdapter clone = getPersistenceSession().createInstance(spec);
-            final ObjectAssociation[] fields = spec.getAssociations();
-            for (int i = 0; i < fields.length; i++) {
-                final ObjectAdapter fld = fields[i].get(original);
+            final List<ObjectAssociation> fields = spec.getAssociations();
+            for (int i = 0; i < fields.size(); i++) {
+                final ObjectAdapter fld = fields.get(i).get(original);
 
-                if (fields[i].isOneToOneAssociation()) {
-                    ((OneToOneAssociation) fields[i]).setAssociation(clone, fld);
-                } else if (fields[i].isOneToManyAssociation()) {
+                if (fields.get(i).isOneToOneAssociation()) {
+                    ((OneToOneAssociation) fields.get(i)).setAssociation(clone, fld);
+                } else if (fields.get(i).isOneToManyAssociation()) {
                     // clone.setValue((OneToOneAssociation) fields[i], fld.getObject());
                 }
             }
@@ -159,7 +161,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             // TODO: use Facet for this test instead.
             return new Veto("Can't set field in persistent object with reference to non-persistent object");
         }
-        final ObjectAssociation[] fields = targetAdapter.getSpecification().getAssociations(
+        final List<ObjectAssociation> fields = targetAdapter.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), targetAdapter));
         for (final ObjectAssociation fld : fields) {
             if (!fld.isOneToOneAssociation()) {
@@ -209,11 +211,11 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             return action.execute(target, new ObjectAdapter[] { source });
         }
 
-        final ObjectAssociation[] associations = target.getSpecification().getAssociations(
+        final List<ObjectAssociation> associations = target.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), target));
 
-        for (int i = 0; i < associations.length; i++) {
-            final ObjectAssociation association = associations[i];
+        for (int i = 0; i < associations.size(); i++) {
+            final ObjectAssociation association = associations.get(i);
             if (association.isOneToOneAssociation() && source.getSpecification().isOfType(association.getSpecification())) {
                 OneToOneAssociation otoa = (OneToOneAssociation) association;
                 if (association.get(target) == null && otoa.isAssociationValid(target, source).isAllowed()) {

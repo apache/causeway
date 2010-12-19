@@ -21,8 +21,10 @@
 package org.apache.isis.core.metamodel.runtimecontext.spec;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
@@ -71,8 +73,8 @@ public abstract class IntrospectableSpecificationAbstract
 
 
     protected String fullName;
-    protected ObjectAssociation[] fields;
-    protected ObjectAction[] objectActions;
+    protected List<ObjectAssociation> fields;
+    protected List<ObjectAction> objectActions;
     protected ObjectSpecification superClassSpecification;
     protected Identifier identifier;
 
@@ -91,36 +93,45 @@ public abstract class IntrospectableSpecificationAbstract
     // Class and stuff immediately derivable from class
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public String getFullName() {
         return fullName;
     }
 
+    @Override
     public String getIconName(final ObjectAdapter object) {
         return null;
     }
 
+    @Override
     public boolean hasSubclasses() {
         return false;
     }
 
+    @Override
     public ObjectSpecification[] interfaces() {
         return new ObjectSpecification[0];
     }
 
+    @Override
     public ObjectSpecification[] subclasses() {
         return new ObjectSpecification[0];
     }
 
+    @Override
     public ObjectSpecification superclass() {
         return superClassSpecification;
     }
 
+    @Override
     public boolean isOfType(final ObjectSpecification specification) {
         return specification == this;
     }
 
+    @Override
     public void addSubclass(final ObjectSpecification specification) {}
 
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         return adapter;
     }
@@ -133,6 +144,7 @@ public abstract class IntrospectableSpecificationAbstract
     protected void setIntrospected(boolean introspected) {
 		this.introspected = introspected;
 	}
+    @Override
     public boolean isIntrospected() {
     	return introspected;
     }
@@ -188,6 +200,7 @@ public abstract class IntrospectableSpecificationAbstract
     // DefaultValue
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public Object getDefaultValue() {
         return null;
     }
@@ -196,6 +209,7 @@ public abstract class IntrospectableSpecificationAbstract
     // Identifier
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public Identifier getIdentifier() {
         return identifier;
     }
@@ -204,6 +218,7 @@ public abstract class IntrospectableSpecificationAbstract
     // create InteractionContext
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectTitleContext createTitleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod interactionMethod,
@@ -216,46 +231,39 @@ public abstract class IntrospectableSpecificationAbstract
     // getStaticallyAvailableFields, getDynamically..Fields, getField
     // //////////////////////////////////////////////////////////////////////
 
-    public ObjectAssociation[] getAssociations() {
+    @Override
+    public List<ObjectAssociation> getAssociations() {
         return fields;
     }
 
-    public List<? extends ObjectAssociation> getAssociationList() {
-        return Arrays.asList(fields);
-    }
+    @Override
+    public List<ObjectAssociation> getAssociations(final Filter<ObjectAssociation> filter) {
+        final List<ObjectAssociation> allFields = getAssociations();
 
-    public ObjectAssociation[] getAssociations(final Filter<ObjectAssociation> filter) {
-        final ObjectAssociation[] allFields = getAssociations();
-
-        final ObjectAssociation[] selectedFields = new ObjectAssociation[allFields.length];
-        int v = 0;
-        for (int i = 0; i < allFields.length; i++) {
-            if (filter.accept(allFields[i])) {
-                selectedFields[v++] = allFields[i];
+        final List<ObjectAssociation> selectedFields = Lists.newArrayList();
+        for (int i = 0; i < allFields.size(); i++) {
+            if (filter.accept(allFields.get(i))) {
+                selectedFields.add(allFields.get(i));
             }
         }
 
-        final ObjectAssociation[] fields = new ObjectAssociation[v];
-        System.arraycopy(selectedFields, 0, fields, 0, v);
-        return fields;
+        return selectedFields;
     }
 
-    public List<? extends ObjectAssociation> getAssociationList(final Filter<ObjectAssociation> filter) {
-        return Arrays.asList(getAssociations(filter));
-    }
-
+    @Override
     @SuppressWarnings("unchecked")
-    public List<OneToOneAssociation> getPropertyList() {
+    public List<OneToOneAssociation> getProperties() {
         List<OneToOneAssociation> list = new ArrayList<OneToOneAssociation>();
-        List associationList = getAssociationList(ObjectAssociationFilters.PROPERTIES);
+        List associationList = getAssociations(ObjectAssociationFilters.PROPERTIES);
         list.addAll(associationList);
         return list;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    public List<OneToManyAssociation> getCollectionList() {
+    public List<OneToManyAssociation> getCollections() {
         List<OneToManyAssociation> list = new ArrayList<OneToManyAssociation>();
-        List associationList = getAssociationList(ObjectAssociationFilters.COLLECTIONS);
+        List associationList = getAssociations(ObjectAssociationFilters.COLLECTIONS);
         list.addAll(associationList);
         return list;
     }
@@ -265,50 +273,47 @@ public abstract class IntrospectableSpecificationAbstract
     // getObjectAction, getAction, getActions
     // //////////////////////////////////////////////////////////////////////
 
-    protected ObjectAction[] getActions(final ObjectAction[] availableActions, final ObjectActionType type) {
-        return new ObjectAction[0];
+    protected List<ObjectAction> getActions(final List<ObjectAction> availableActions, final ObjectActionType type) {
+        return Collections.emptyList();
     }
 
-    public ObjectAction[] getObjectActions(final ObjectActionType... types) {
-    	List<? extends ObjectAction> actions = getObjectActionList(types);
-		return actions.toArray(new ObjectAction[]{});
-    }
-
-	public List<? extends ObjectAction> getObjectActionList(final ObjectActionType... types) {
-		List<ObjectAction> actions = new ArrayList<ObjectAction>();
-    	for(ObjectActionType type: types) {
+    @Override
+    public List<ObjectAction> getObjectActions(final ObjectActionType... types) {
+        List<ObjectAction> actions = new ArrayList<ObjectAction>();
+        for(ObjectActionType type: types) {
             addActions(type, actions);
-    	}
-		return actions;
-	}
+        }
+        return actions;
+    }
 
 	private void addActions(ObjectActionType type,
 			List<ObjectAction> actions) {
 		if (!isService()) {
-			actions.addAll(Arrays.asList(getServiceActions(type)));
+			actions.addAll(getServiceActions(type));
 		}
-		actions.addAll(Arrays.asList(getActions(objectActions, type)));
+		actions.addAll(getActions(objectActions, type));
 	}
 
-    public ObjectAction[] getServiceActionsFor(final ObjectActionType... types) {
+    @Override
+    public List<ObjectAction> getServiceActionsFor(final ObjectActionType... types) {
         final List<ObjectAdapter> services = getRuntimeContext().getServices();
         final List<ObjectAction> relatedActions = new ArrayList<ObjectAction>();
             for (ObjectAdapter serviceAdapter : services) {
                 final List<ObjectAction> matchingActions = new ArrayList<ObjectAction>();
             for (ObjectActionType type : types) {
-                final ObjectAction[] serviceActions = serviceAdapter.getSpecification().getObjectActions(type);
-                for (int j = 0; j < serviceActions.length; j++) {
-                    final ObjectSpecification returnType = serviceActions[j].getReturnType();
+                final List<ObjectAction> serviceActions = serviceAdapter.getSpecification().getObjectActions(type);
+                for (int j = 0; j < serviceActions.size(); j++) {
+                    final ObjectSpecification returnType = serviceActions.get(j).getReturnType();
                     if (returnType != null && returnType.isCollection()) {
-                        final TypeOfFacet facet = serviceActions[j].getFacet(TypeOfFacet.class);
+                        final TypeOfFacet facet = serviceActions.get(j).getFacet(TypeOfFacet.class);
                         if (facet != null) {
                             final ObjectSpecification elementType = facet.valueSpec();
                             if (elementType.isOfType(this)) {
-                                matchingActions.add(serviceActions[j]);
+                                matchingActions.add(serviceActions.get(j));
                             }
                         }
                     } else if (returnType != null && returnType.isOfType(this)) {
-                        matchingActions.add(serviceActions[j]);
+                        matchingActions.add(serviceActions.get(j));
                     }
                 }
             }
@@ -318,9 +323,10 @@ public abstract class IntrospectableSpecificationAbstract
                 relatedActions.add(set);
             }
         }
-        return (ObjectAction[]) relatedActions.toArray(new ObjectAction[relatedActions.size()]);
+        return relatedActions;
     }
 
+    @Override
     public boolean isAbstract() {
         return false;
     }
@@ -336,6 +342,7 @@ public abstract class IntrospectableSpecificationAbstract
         return false;
     }
 
+    @Override
     public boolean isService() {
         return false;
     }
@@ -344,12 +351,15 @@ public abstract class IntrospectableSpecificationAbstract
     // Dirty
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isDirty(final ObjectAdapter object) {
         return false;
     }
 
+    @Override
     public void clearDirty(final ObjectAdapter object) {}
 
+    @Override
     public void markDirty(final ObjectAdapter object) {}
 
     // //////////////////////////////////////////////////////////////////////
@@ -367,14 +377,14 @@ public abstract class IntrospectableSpecificationAbstract
      *         {@link ObjectAction}s of the requested type.
      *
      */
-    protected ObjectAction[] getServiceActions(final ObjectActionType type) {
+    protected List<ObjectAction> getServiceActions(final ObjectActionType type) {
         if (isService()) {
-            return new ObjectAction[0];
+            return Collections.emptyList();
         }
         final List<ObjectAdapter> services = getRuntimeContext().getServices();
 
         // will populate an ActionSet with all actions contributed by each service
-        final List<ObjectActionSet> serviceActionSets = new ArrayList<ObjectActionSet>();
+        final List<ObjectAction> serviceActionSets = Lists.newArrayList();
 
         for (ObjectAdapter serviceAdapter : services) {
             final ObjectSpecification specification = serviceAdapter.getSpecification();
@@ -382,10 +392,10 @@ public abstract class IntrospectableSpecificationAbstract
                 continue;
             }
 
-            final ObjectAction[] serviceActions = specification.getObjectActions(type);
+            final List<ObjectAction> serviceActions = specification.getObjectActions(type);
             final List<ObjectAction> matchingServiceActions = new ArrayList<ObjectAction>();
-            for (int j = 0; j < serviceActions.length; j++) {
-                final ObjectAction serviceAction = serviceActions[j];
+            for (int j = 0; j < serviceActions.size(); j++) {
+                final ObjectAction serviceAction = serviceActions.get(j);
                 if (serviceAction.isAlwaysHidden()) {
                     // ignore if permanently hidden
                     continue;
@@ -397,27 +407,26 @@ public abstract class IntrospectableSpecificationAbstract
             }
             // only add if there are matching subactions.
             if (matchingServiceActions.size() > 0) {
-                final ObjectAction[] asArray = matchingServiceActions.toArray(new ObjectAction[matchingServiceActions
-                        .size()]);
                 final ObjectActionSet objectActionSet = new ObjectActionSet("id", serviceAdapter.titleString(),
-                    asArray, runtimeContext);
+                    matchingServiceActions, runtimeContext);
                 serviceActionSets.add(objectActionSet);
             }
 
         }
-        return serviceActionSets.toArray(new ObjectAction[] {});
+        return serviceActionSets;
     }
 
     private boolean matchesParameterOf(final ObjectAction serviceAction) {
-        final ObjectActionParameter[] params = serviceAction.getParameters();
-        for (int k = 0; k < params.length; k++) {
-            if ( isOfType(params[k].getSpecification())) {
+        final List<ObjectActionParameter> params = serviceAction.getParameters();
+        for (int k = 0; k < params.size(); k++) {
+            if ( isOfType(params.get(k).getSpecification())) {
                 return true;
             }
         }
         return false;
     }
 
+    @Override
     public Consent isValid(final ObjectAdapter inObject) {
         return isValidResult(inObject).createConsent();
     }
@@ -426,6 +435,7 @@ public abstract class IntrospectableSpecificationAbstract
      * TODO: currently this method is hard-coded to assume all interactions are initiated
      * {@link InteractionInvocationMethod#BY_USER by user}.
      */
+    @Override
     public InteractionResult isValidResult(final ObjectAdapter targetObjectAdapter) {
         final ObjectValidityContext validityContext = createValidityInteractionContext(getAuthenticationSession(),
                 InteractionInvocationMethod.BY_USER, targetObjectAdapter);
@@ -435,6 +445,7 @@ public abstract class IntrospectableSpecificationAbstract
     /**
      * Create an {@link InteractionContext} representing an attempt to save the object.
      */
+    @Override
     public ObjectValidityContext createValidityInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod interactionMethod,
@@ -442,6 +453,7 @@ public abstract class IntrospectableSpecificationAbstract
         return new ObjectValidityContext(session, interactionMethod, targetObjectAdapter, getIdentifier());
     }
 
+    @Override
     public Persistability persistability() {
         return Persistability.USER_PERSISTABLE;
     }
@@ -450,38 +462,47 @@ public abstract class IntrospectableSpecificationAbstract
     // convenience isXxx (looked up from facets)
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isParseable() {
         return containsFacet(ParseableFacet.class);
     }
 
+    @Override
     public boolean isEncodeable() {
         return containsFacet(EncodableFacet.class);
     }
 
+    @Override
     public boolean isValueOrIsAggregated() {
         return isValue() || isAggregated();
     }
 
+    @Override
     public boolean isValue() {
         return containsFacet(ValueFacet.class);
     }
 
+    @Override
     public boolean isAggregated() {
         return containsFacet(AggregatedFacet.class);
     }
 
+    @Override
     public boolean isCollection() {
         return containsFacet(CollectionFacet.class);
     }
 
+    @Override
     public boolean isNotCollection() {
         return !isCollection();
     }
 
+    @Override
     public boolean isImmutable() {
         return containsFacet(ImmutableFacet.class);
     }
 
+    @Override
     public boolean isHidden() {
         return containsFacet(HiddenFacet.class);
     }
@@ -490,10 +511,12 @@ public abstract class IntrospectableSpecificationAbstract
     // misc
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isCollectionOrIsAggregated() {
         return false;
     }
 
+    @Override
     public Object createObject(CreationMode creationMode) {
         throw new UnsupportedOperationException(getFullName());
     }

@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.html.task;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -41,9 +43,9 @@ import org.apache.isis.viewer.html.context.Context;
 
 public class EditTask extends Task {
     private static int size(final ObjectAdapter object) {
-        final ObjectAssociation[] fields = object.getSpecification().getAssociations(
+        final List<ObjectAssociation> fields = object.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
-        return fields.length;
+        return fields.size();
     }
 
     private static boolean skipField(final ObjectAdapter object, final ObjectAssociation fld) {
@@ -56,12 +58,12 @@ public class EditTask extends Task {
     public EditTask(final Context context, final ObjectAdapter object) {
         super(context, "Edit", "", object, size(object));
 
-        final ObjectAssociation[] allFields = object.getSpecification().getAssociations(
+        final List<ObjectAssociation> allFields = object.getSpecification().getAssociations(
                 ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
 
         fields = new ObjectAssociation[names.length];
-        for (int i = 0, j = 0; j < allFields.length; j++) {
-            final ObjectAssociation fld = allFields[j];
+        for (int i = 0, j = 0; j < allFields.size(); j++) {
+            final ObjectAssociation fld = allFields.get(j);
             fields[i] = fld;
             names[i] = fld.getName();
             descriptions[i] = fld.getDescription();

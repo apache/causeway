@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -33,26 +35,30 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class EditLink extends AbstractLink {
 
+    @Override
     protected boolean valid(Request request, ObjectAdapter adapter) {
         ObjectSpecification specification = adapter.getSpecification();
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        ObjectAssociation[] visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(
+        List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters.dynamicallyVisible(
                 session, adapter));
-        ImmutableFacet facet = (ImmutableFacet) specification.getFacet(ImmutableFacet.class);
+        ImmutableFacet facet = specification.getFacet(ImmutableFacet.class);
         boolean isImmutable = facet != null && facet.value() == org.apache.isis.core.metamodel.facets.When.ALWAYS;
         boolean isImmutableOncePersisted = facet != null
                 && facet.value() == org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED && adapter.isPersistent();
-        return visibleFields.length > 0 && !isImmutable && !isImmutableOncePersisted;
+        return visibleFields.size() > 0 && !isImmutable && !isImmutableOncePersisted;
     }
 
+    @Override
     protected String linkLabel(String name, ObjectAdapter object) {
         return "edit";
     }
 
+    @Override
     protected String defaultView() {
         return  Dispatcher.GENERIC + Dispatcher.EDIT  + "." + Dispatcher.EXTENSION;
     }
 
+    @Override
     public String getName() {
         return "edit-link";
     }

@@ -40,6 +40,7 @@ import org.apache.isis.viewer.html.request.Request;
 
 public final class InvokeMethod implements Action {
 
+    @Override
     public void execute(final Request request, final Context context, final Page page) {
         final String idString = request.getObjectId();
         if (idString == null) {
@@ -58,7 +59,7 @@ public final class InvokeMethod implements Action {
         if (action.getParameterCount() == 0) {
             executeImmediately = true;
         } else if (action.getParameterCount() == 1 && isContributedMethod
-                && target.getSpecification().isOfType(action.getParameters()[0].getSpecification())) {
+                && target.getSpecification().isOfType(action.getParameters().get(0).getSpecification())) {
             executeImmediately = true;
         }
 
@@ -126,6 +127,7 @@ public final class InvokeMethod implements Action {
         }
     }
 
+    @Override
     public String name() {
         return "method";
     }

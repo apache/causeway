@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.form;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.filters.AbstractFilter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -41,45 +43,54 @@ public class FormWithDetailSpecification implements ViewSpecification {
         leftHandSideSpecification.addSubviewDecorator(new SelectObjectBorder.Factory());
     }
 
+    @Override
     public boolean canDisplay(ViewRequirement requirement) {
         return requirement.isObject() && requirement.isOpen() && !requirement.isSubview() && containsEnoughFields(requirement.getContent());
     }
 
     private boolean containsEnoughFields(Content content) {
         ObjectSpecification specification = content.getSpecification();
-        ObjectAssociation[] associations = specification.getAssociations(new AbstractFilter<ObjectAssociation>() {
+        List<ObjectAssociation> associations = specification.getAssociations(new AbstractFilter<ObjectAssociation>() {
+            @Override
             public boolean accept(ObjectAssociation t) {
                 return t.isOneToManyAssociation()
                         || (t.isOneToOneAssociation() && !((OneToOneAssociation) t).getSpecification().isParseable());
             }
         });
-        return associations.length >= 1;
+        return associations.size() >= 1;
     }
 
+    @Override
     public View createView(Content content, Axes axes, int sequence) {
         return new MasterDetailPanel(content, this, leftHandSideSpecification);
     }
 
+    @Override
     public String getName() {
         return "Form and details (experimental)";
     }
 
+    @Override
     public boolean isAligned() {
         return false;
     }
 
+    @Override
     public boolean isOpen() {
         return true;
     }
 
+    @Override
     public boolean isReplaceable() {
         return true;
     }
 
+    @Override
     public boolean isResizeable() {
         return true;
     }
 
+    @Override
     public boolean isSubView() {
         return false;
     }

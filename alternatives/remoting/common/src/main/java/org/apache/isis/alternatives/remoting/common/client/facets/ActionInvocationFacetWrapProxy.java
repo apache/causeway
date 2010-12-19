@@ -20,6 +20,10 @@
 
 package org.apache.isis.alternatives.remoting.common.client.facets;
 
+import java.util.List;
+
+import org.apache.log4j.Logger;
+
 import org.apache.isis.alternatives.remoting.common.data.Data;
 import org.apache.isis.alternatives.remoting.common.data.common.NullData;
 import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
@@ -51,7 +55,6 @@ import org.apache.isis.core.runtime.transaction.messagebroker.MessageBroker;
 import org.apache.isis.core.runtime.transaction.messagebroker.MessageList;
 import org.apache.isis.core.runtime.transaction.messagebroker.WarningList;
 import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -88,10 +91,12 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
         this.objectAction = objectAction;
     }
 
+    @Override
     public ActionInvocationFacet getDecoratedFacet() {
         return underlyingFacet;
     }
 
+    @Override
     public ObjectAdapter invoke(final ObjectAdapter target, final ObjectAdapter[] parameters) {
         if (isToBeExecutedRemotely(target)) {
             /*
@@ -105,10 +110,12 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
         }
     }
 
+    @Override
     public ObjectSpecification getReturnType() {
         return underlyingFacet.getReturnType();
     }
 
+    @Override
     public ObjectSpecification getOnType() {
         return underlyingFacet.getOnType();
     }
@@ -141,9 +148,9 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
 	            encoder.madePersistent(targetAdapter, response.getPersistedTarget());
 	        }
 
-	        final ObjectActionParameter[] parameters2 = objectAction.getParameters();
+	        final List<ObjectActionParameter> parameters2 = objectAction.getParameters();
 	        for (int i = 0; i < parameterAdapters.length; i++) {
-	            if (parameters2[i].getSpecification().isNotCollection()) {
+	            if (parameters2.get(i).getSpecification().isNotCollection()) {
 	                encoder.madePersistent(parameterAdapters[i], response.getPersistedParameters()[i]);
 	            }
 	        }

@@ -20,6 +20,9 @@
 
 package org.apache.isis.core.runtime.testspec;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -104,7 +107,7 @@ public class PersonSpecification extends TestProxySpecification {
 
     public PersonSpecification() {
         super(Person.class);
-        fields = new ObjectAssociation[] { new PersonNameField(), };
+        fields = Arrays.asList( (ObjectAssociation)new PersonNameField() );
     }
 
     @Override
@@ -126,7 +129,7 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public ObjectAction[] getObjectActions(final ObjectActionType... type) {
+    public List<ObjectAction> getObjectActions(final ObjectActionType... type) {
         return null;
     }
 

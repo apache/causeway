@@ -48,6 +48,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
         this.object = object;
     }
 
+    @Override
     public void execute(PersistenceCommandContext context) {
         String specName = object.getSpecification().getFullName();
         StateWriter writer = ((NoSqlCommandContext) context).createStateWriter(specName);
@@ -75,7 +76,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
     }
 
     private void writeFields(StateWriter writer, String specName, ObjectAdapter object) {
-        ObjectAssociation[] associations = object.getSpecification().getAssociations();
+        List<ObjectAssociation> associations = object.getSpecification().getAssociations();
         writer.writeType(specName);
         for (ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
@@ -157,10 +158,12 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
         }
     }
 
+    @Override
     public ObjectAdapter onObject() {
         return object;
     }
 
+    @Override
     public String toString() {
         ToString toString = new ToString(this);
         toString.append("oid", object.getOid());

@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -34,10 +36,12 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Members extends AbstractElementProcessor {
 
+    @Override
     public String getName() {
         return "members";
     }
 
+    @Override
     public void process(Request request) {
         String id = request.getOptionalProperty(OBJECT);
         String fieldName = request.getOptionalProperty(FIELD);
@@ -57,14 +61,14 @@ public class Members extends AbstractElementProcessor {
         ObjectSpecification specification = field == null ? object.getSpecification() : field.getSpecification();
         
         request.appendHtml(specification.getSingularName() + " (" + specification.getFullName() + ") \n");
-        ObjectAssociation[] fields = specification.getAssociations();
+        List<ObjectAssociation> fields = specification.getAssociations();
         for (ObjectAssociation fld : fields) {
             if (!fld.isAlwaysHidden()) {
                 request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "+  fld.getSpecification().getSingularName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n" );
             }
         }
         request.appendHtml("   --------------\n");
-        ObjectAction[] actions = specification.getObjectActions(ObjectActionType.USER);;
+        List<ObjectAction> actions = specification.getObjectActions(ObjectActionType.USER);;
         for (ObjectAction action : actions) {
             request.appendHtml("   " + action.getId() + " (");
             boolean first = true;

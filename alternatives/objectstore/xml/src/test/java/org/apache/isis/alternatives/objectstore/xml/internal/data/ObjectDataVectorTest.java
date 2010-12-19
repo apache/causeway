@@ -22,12 +22,14 @@ package org.apache.isis.alternatives.objectstore.xml.internal.data;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
+import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
+
+import org.apache.isis.alternatives.objectstore.xml.internal.version.FileVersion;
+import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
+import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 
 public class ObjectDataVectorTest {
 	private ObjectDataVector objectDataVector;
@@ -43,7 +45,7 @@ public class ObjectDataVectorTest {
 		oid = isTransient ? SerialOid.createTransient(serialNum) : SerialOid.createPersistent(serialNum);
 
 		spec = new TestProxySpecification(this.getClass());
-        spec.fields = new ObjectAssociation[0];
+        spec.fields = Collections.emptyList();
 
         version = new FileVersion("", System.currentTimeMillis());
         objectData = new ObjectData(spec, oid, version);

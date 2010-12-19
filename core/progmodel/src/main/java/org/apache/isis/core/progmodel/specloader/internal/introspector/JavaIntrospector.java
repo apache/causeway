@@ -49,8 +49,8 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetProcessor;
 import org.apache.isis.core.metamodel.specloader.internal.introspector.MethodFinderUtils;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.util.NameUtils;
@@ -688,11 +688,10 @@ public class JavaIntrospector {
                 order[i] = NameUtils.simpleName(order[i]);
             }
 
-            final List<ObjectMemberPeer> ordered = Lists.newArrayListWithCapacity(original.size());
+            final List<ObjectMemberPeer> ordered = Lists.newArrayList();
 
             // work through each order element and find, if there is one, a
             // matching member.
-            int orderedIndex = 0;
             ordering: for (int orderIndex = 0; orderIndex < order.length; orderIndex++) {
                 for (int memberIndex = 0; memberIndex < original.size(); memberIndex++) {
                     final ObjectMemberPeer member = original.get(memberIndex);
@@ -700,7 +699,7 @@ public class JavaIntrospector {
                         continue;
                     }
                     if (member.getIdentifier().getMemberName().equalsIgnoreCase(order[orderIndex])) {
-                        ordered.set(orderedIndex++, original.get(memberIndex));
+                        ordered.add(original.get(memberIndex));
                         original.set(memberIndex, null);
 
                         continue ordering;
@@ -712,29 +711,13 @@ public class JavaIntrospector {
                 }
             }
 
-            final List<ObjectMemberPeer> results = Lists.newArrayListWithCapacity(original.size());
-            int index = append(0, results, ordered);
-            index = append(index, results, original);
+            final List<ObjectMemberPeer> results = Lists.newArrayList();
+            results.addAll(ordered);
+            results.addAll(original);
 
             return results;
         }
     }
-
-    protected static int append(int index, final List<ObjectMemberPeer> to, List<ObjectMemberPeer> from) {
-        for (int i = 0; i < from.size(); i++) {
-            final ObjectMemberPeer member = from.get(i);
-            if (member != null) {
-                to.set(index++, member);
-            }
-        }
-        return index;
-    }
-
-
-
-    // ////////////////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // ////////////////////////////////////////////////////////////////////////////
 
     private SpecificationLoader getSpecificationLoader() {
         return reflector;

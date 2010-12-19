@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.view.action;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -34,18 +36,18 @@ public class ActionHelper {
     public static ActionHelper createInstance(final ObjectAdapter target, final ObjectAction action) {
         final int numberParameters = action.getParameterCount();
         final ObjectAdapter[] parameters = new ObjectAdapter[numberParameters];
-        final ObjectActionParameter[] parameterSpecs = action.getParameters();
+        final List<ObjectActionParameter> parameterSpecs = action.getParameters();
         ObjectAdapter[] defaultValues;
         ObjectAdapter[][] options;
 
         // action choices most be old or new syntax - cannot be mixed
 
-        defaultValues = new ObjectAdapter[parameterSpecs.length];
-        options = new ObjectAdapter[parameterSpecs.length][];
+        defaultValues = new ObjectAdapter[parameterSpecs.size()];
+        options = new ObjectAdapter[parameterSpecs.size()][];
 
-        for (int i = 0; i < parameterSpecs.length; i++) {
-            defaultValues[i] = parameterSpecs[i].getDefault(target);
-            options[i] = parameterSpecs[i].getChoices(target);
+        for (int i = 0; i < parameterSpecs.size(); i++) {
+            defaultValues[i] = parameterSpecs.get(i).getDefault(target);
+            options[i] = parameterSpecs.get(i).getChoices(target);
         }
 
         if (!hasValues(defaultValues) && !hasValues(options)) {
@@ -55,7 +57,7 @@ public class ActionHelper {
             options = action.getChoices(target);
         }
 
-        for (int i = 0; i < parameterSpecs.length; i++) {
+        for (int i = 0; i < parameterSpecs.size(); i++) {
             if (defaultValues[i] != null) {
                 parameters[i] = defaultValues[i];
             } else {
@@ -90,15 +92,15 @@ public class ActionHelper {
     public ParameterContent[] createParameters() {
         final ParameterContent[] parameterContents = new ParameterContent[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
-            final ObjectActionParameter[] parameters2 = action.getParameters();
+            final List<ObjectActionParameter> parameters2 = action.getParameters();
             final ObjectAdapter adapter = parameters[i];
-            final ObjectSpecification specification = parameters2[i].getSpecification();
+            final ObjectSpecification specification = parameters2.get(i).getSpecification();
             if (specification.isParseable()) {
-                final ParseableEntryActionParameter parseableEntryActionParameter = (ParseableEntryActionParameter) parameters2[i];
+                final ParseableEntryActionParameter parseableEntryActionParameter = (ParseableEntryActionParameter) parameters2.get(i);
                 parameterContents[i] = new TextParseableParameterImpl(parseableEntryActionParameter, adapter, options[i], i,
                         this);
             } else {
-                parameterContents[i] = new ObjectParameterImpl((OneToOneActionParameter) parameters2[i], adapter, options[i],
+                parameterContents[i] = new ObjectParameterImpl((OneToOneActionParameter) parameters2.get(i), adapter, options[i],
                         i, this);
             }
         }

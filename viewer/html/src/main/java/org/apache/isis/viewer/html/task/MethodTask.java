@@ -42,17 +42,17 @@ public final class MethodTask extends Task {
         super(context, action.getName(), action.getDescription(), target, action.getParameterCount());
         this.action = action;
 
-        final ObjectActionParameter[] parameters = action.getParameters();
-        final int len = parameters.length;
+        final List<ObjectActionParameter> parameters = action.getParameters();
+        final int len = parameters.size();
 
         for (int i = 0; i < len; i++) {
-            names[i] = parameters[i].getName();
-            descriptions[i] = parameters[i].getDescription();
-            fieldSpecifications[i] = parameters[i].getSpecification();
-            optional[i] = parameters[i].isOptional();
+            names[i] = parameters.get(i).getName();
+            descriptions[i] = parameters.get(i).getDescription();
+            fieldSpecifications[i] = parameters.get(i).getSpecification();
+            optional[i] = parameters.get(i).isOptional();
 
-            if (parameters[i].getSpecification().isParseable()) {
-                final ParseableEntryActionParameter valueParameter = (ParseableEntryActionParameter) parameters[i];
+            if (parameters.get(i).getSpecification().isParseable()) {
+                final ParseableEntryActionParameter valueParameter = (ParseableEntryActionParameter) parameters.get(i);
                 noLines[i] = valueParameter.getNoLines();
                 wraps[i] = valueParameter.canWrap();
                 maxLength[i] = valueParameter.getMaximumLength();

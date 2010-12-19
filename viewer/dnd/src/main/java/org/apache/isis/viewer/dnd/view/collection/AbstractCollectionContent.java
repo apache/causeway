@@ -21,6 +21,7 @@
 package org.apache.isis.viewer.dnd.view.collection;
 
 import java.util.Enumeration;
+import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -51,6 +52,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
     private Comparator order;
     private boolean reverse;
 
+    @Override
     public final Enumeration allElements() {
         final ObjectAdapter[] elements = elements();
 
@@ -60,16 +62,19 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
             int i = 0;
             int size = elements.length;
 
+            @Override
             public boolean hasMoreElements() {
                 return i < size;
             }
 
+            @Override
             public Object nextElement() {
                 return elements[i++];
             }
         };
     }
 
+    @Override
     public void debugDetails(final DebugString debug) {
         debug.appendln("order", order);
         debug.appendln("reverse order", reverse);
@@ -80,6 +85,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         return true;
     }
 
+    @Override
     public ObjectAdapter[] elements() {
         final ObjectAdapter collection = getCollection();
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
@@ -91,14 +97,17 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         return elementsArray;
     }
 
+    @Override
     public abstract ObjectAdapter getCollection();
 
+    @Override
     public ObjectSpecification getElementSpecification() {
         final ObjectAdapter collection = getCollection();
         final TypeOfFacet facet = collection.getTypeOfFacet();
         return facet.valueSpec();
     }
 
+    @Override
     public String getDescription() {
         return "Collection";
     }
@@ -206,9 +215,9 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
             }
         });
 
-        final ObjectAssociation[] fields = getElementSpecification().getAssociations();
-        for (int i = 0; i < fields.length; i++) {
-            final ObjectAssociation field = fields[i];
+        final List<ObjectAssociation> fields = getElementSpecification().getAssociations();
+        for (int i = 0; i < fields.size(); i++) {
+            final ObjectAssociation field = fields.get(i);
 
             sortOptions.add(new UserActionAbstract("Sort by " + field.getName()) {
                 @Override
@@ -220,14 +229,17 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         }
     }
 
+    @Override
     public void parseTextEntry(final String entryText) {
         throw new UnexpectedCallException();
     }
 
+    @Override
     public void setOrder(final Comparator order) {
         this.order = order;
     }
 
+    @Override
     public void setOrderByField(final ObjectAssociation field) {
         if (order instanceof FieldComparator && ((FieldComparator) order).getField() == field) {
             reverse = !reverse;
@@ -237,6 +249,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         }
     }
 
+    @Override
     public void setOrderByElement() {
         if (order == TITLE_COMPARATOR) {
             reverse = !reverse;
@@ -246,6 +259,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         }
     }
 
+    @Override
     public ObjectAssociation getFieldSortOrder() {
         if (order instanceof FieldComparator) {
             return ((FieldComparator) order).getField();
@@ -254,6 +268,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         }
     }
 
+    @Override
     public Image getIconPicture(final int iconHeight) {
         final ObjectAdapter adapter = getCollection();
         if (adapter == null) {
@@ -267,18 +282,22 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
         return icon;
     }
 
+    @Override
     public boolean getOrderByElement() {
         return order == TITLE_COMPARATOR;
     }
 
+    @Override
     public boolean getReverseSortOrder() {
         return reverse;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }

@@ -3,7 +3,6 @@ package org.apache.isis.viewer.restful.viewer.resources.objects;
 import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -64,7 +63,8 @@ import org.apache.isis.viewer.restful.viewer.xom.TableColumn;
 @Path("/object")
 public class ObjectResourceImpl extends ResourceAbstract implements ObjectResource {
 
-	public String object(
+	@Override
+    public String object(
 			final String oidEncodedStr) {
         init();
         String oidStr = UrlDecoderUtils.urlDecode(oidEncodedStr);
@@ -106,7 +106,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final Element div = xhtmlRenderer.div_p("Properties", HtmlClass.PROPERTIES);
 
         final ObjectSpecification noSpec = nakedObject.getSpecification();
-        final List<OneToOneAssociation> rows = noSpec.getPropertyList();
+        final List<OneToOneAssociation> rows = noSpec.getProperties();
 
         final List<TableColumn<OneToOneAssociation>> columns = new ArrayList<TableColumn<OneToOneAssociation>>();
         columns.add(new TableColumnOneToOneAssociationName(noSpec, session, nakedObject, getResourceContext()));
@@ -129,7 +129,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final Element div = xhtmlRenderer.div_p("Collections", HtmlClass.COLLECTIONS);
 
         final ObjectSpecification noSpec = nakedObject.getSpecification();
-        final List<OneToManyAssociation> rows = noSpec.getCollectionList();
+        final List<OneToManyAssociation> rows = noSpec.getCollections();
 
         final List<TableColumn<OneToManyAssociation>> columns = new ArrayList<TableColumn<OneToManyAssociation>>();
         columns.add(new TableColumnOneToManyAssociationName(noSpec, session, nakedObject, getResourceContext()));
@@ -153,8 +153,8 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         final List<ObjectAction> actions = new ArrayList<ObjectAction>();
         for (final ObjectActionType type : ResourceAbstract.ACTION_TYPES) {
-            final ObjectAction[] actionsForType = ActionUtils.flattened(noSpec.getObjectActions(type));
-            actions.addAll(Arrays.asList(actionsForType));
+            final List<ObjectAction> actionsForType = ActionUtils.flattened(noSpec.getObjectActions(type));
+            actions.addAll(actionsForType);
         }
         final List<ObjectAction> rows = ListUtils.toList(actions.toArray(new ObjectAction[0]));
 
@@ -178,6 +178,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     // properties
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String modifyProperty(
             final String oidEncodedStr,
             final String propertyEncodedId,
@@ -196,7 +197,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 
         final OneToOneAssociation property = (OneToOneAssociation) noSpec.getAssociation(propertyId);
 
-        final ObjectAdapter proposedValueNO = getNakedObject(proposedValue, nakedObject, property);
+        final ObjectAdapter proposedValueNO = getObjectAdapter(proposedValue, nakedObject, property);
 
         // make sure we have a value (should be using clear otherwise)
         if (proposedValueNO == null) {
@@ -227,6 +228,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         return xhtml.toXML();
     }
 
+    @Override
     public String clearProperty(
     		final String oidEncodedStr, 
     		final String propertyEncodedId) {
@@ -275,6 +277,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         ADD_TO, REMOVE_FROM
     }
 
+    @Override
     public String accessCollection(
     		final String oidEncodedStr, 
     		final String collectionEncodedId) {
@@ -323,6 +326,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         return xhtml.toXML();
     }
 
+    @Override
     public String addToCollection(
             final String oidStr,
             final String collectionEncodedId,
@@ -330,6 +334,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         return modifyCollection(oidStr, collectionEncodedId, proposedValueEncodedOidStr, CollectionModificationType.ADD_TO);
     }
 
+    @Override
     public String removeFromCollection(
             final String oidStr,
             final String collectionEncodedId,
@@ -396,6 +401,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
     // actions
     // /////////////////////////////////////////////////////////////////////
 
+    @Override
     public String invokeAction(
             final String oidEncodedStr,
             final String actionEncodedId,
@@ -416,8 +422,8 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 		final ObjectSpecification noSpec = nakedObject.getSpecification();
 		final ObjectAction action = getObjectAction(noSpec, actionId);
 		
-		final ObjectActionParameter[] parameters = action.getParameters();
-		final int parameterCount = parameters.length;
+		final List<ObjectActionParameter> parameters = action.getParameters();
+		final int parameterCount = parameters.size();
 		final int argumentCount = args.length;
 		if (parameterCount > argumentCount) {
 		    // this isn't an != check because JAX-RS will always give us 10 args, but some/all will be null.
@@ -426,10 +432,10 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 		}
 		
 		final ObjectAdapter[] proposedArguments = new ObjectAdapter[parameterCount];
-		for (int i = 0; i < parameters.length; i++) {
+		for (int i = 0; i < parameters.size(); i++) {
 		    final String proposedArg = args[i];
 		    if (proposedArg != null) {
-		        final ObjectAdapter argNO = getNakedObject(proposedArg, nakedObject, parameters[i]);
+		        final ObjectAdapter argNO = getObjectAdapter(proposedArg, nakedObject, parameters.get(i));
 		
 		        if (argNO == null) {
 		        	throw new WebApplicationException(responseOfGone("could not determine proposed value"));
@@ -555,7 +561,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         return xhtmlRenderer.aHref(uri, nakedObject.titleString(), "object", "results", HtmlClass.ACTION_RESULT);
     }
 
-    private ObjectAdapter getNakedObject(
+    private ObjectAdapter getObjectAdapter(
             final String proposedValue,
             final ObjectAdapter nakedObject,
             final ObjectFeature nakedObjectFeature) {

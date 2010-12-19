@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.combined;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -40,12 +42,15 @@ import org.apache.isis.viewer.dnd.view.composite.ColumnLayout;
 
 public class TwoPartViewSpecification extends SplitViewSpecification {
 
+    @Override
     public Layout createLayout(Content content, Axes axes) {
         return new ColumnLayout();
     }
 
+    @Override
     View createMainView(Axes axes, Content mainContent, final Content secondaryContent) {
         View form1 = new FormSpecification() {
+            @Override
             protected boolean include(Content content, int sequence) {
                 return !secondaryContent.getId().equals(content.getId());
             };
@@ -53,18 +58,20 @@ public class TwoPartViewSpecification extends SplitViewSpecification {
         return form1;
     }
     
+    @Override
     View createSecondaryView(Axes axes, final Content fieldContent) {
         View form = new InternalFormSpecification().createView(fieldContent, axes, -1);
         View labelledForm = LabelBorder.createFieldLabelBorder(new LabelAxis(), form);
         return labelledForm;
     }
 
+    @Override
     @Deprecated
     Content determineSecondaryContent(Content content) {
         ObjectSpecification spec = content.getSpecification();
         ObjectAdapter target = content.getAdapter();
         AuthenticationSession session = IsisContext.getAuthenticationSession();
-        ObjectAssociation[] fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
+        List<ObjectAssociation> fields = spec.getAssociations(ObjectAssociationFilters.dynamicallyVisible(session, target));
         for (ObjectAssociation field : fields) {
             if (validField(field)) {
                 return Toolkit.getContentFactory().createFieldContent(field, target);
@@ -73,11 +80,13 @@ public class TwoPartViewSpecification extends SplitViewSpecification {
         return null;
     }
 
+    @Override
     boolean validField(ObjectAssociation field) {
         return field.isOneToOneAssociation() && !field.getSpecification().isParseable();
     }
 
     
+    @Override
     public String getName() {
         return "Two part object (experimental)";
     }

@@ -25,6 +25,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.Debug;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -58,7 +60,6 @@ import org.apache.isis.defaults.objectstore.internal.ObjectStorePersistedObjects
 import org.apache.isis.defaults.objectstore.internal.commands.InMemoryCreateObjectCommand;
 import org.apache.isis.defaults.objectstore.internal.commands.InMemoryDestroyObjectCommand;
 import org.apache.isis.defaults.objectstore.internal.commands.InMemorySaveObjectCommand;
-import org.apache.log4j.Logger;
 
 
 public class InMemoryObjectStore implements ObjectStore {
@@ -75,6 +76,7 @@ public class InMemoryObjectStore implements ObjectStore {
     // Name
     // ///////////////////////////////////////////////////////
 
+    @Override
     public String name() {
         return "In-Memory Object Store";
     }
@@ -83,6 +85,7 @@ public class InMemoryObjectStore implements ObjectStore {
     // open, close, shutdown
     // ///////////////////////////////////////////////////////
 
+    @Override
     public void open() {
         // TODO: all a bit hacky, but is to keep tests running.  Should really sort out using mocks.
         InMemoryPersistenceSessionFactory inMemoryPersistenceSessionFactory = getInMemoryPersistenceSessionFactory();
@@ -137,7 +140,8 @@ public class InMemoryObjectStore implements ObjectStore {
 		}
 	}
 
-	public void close() {
+	@Override
+    public void close() {
         final InMemoryPersistenceSessionFactory inMemoryPersistenceSessionFactory = getInMemoryPersistenceSessionFactory();
         // TODO: this is hacky, only here to keep tests running.  Should sort out using mocks
         if (inMemoryPersistenceSessionFactory != null) {
@@ -154,6 +158,7 @@ public class InMemoryObjectStore implements ObjectStore {
     /**
      * No permanent persistence, so must always install fixtures.
      */
+    @Override
     public boolean isFixturesInstalled() {
         return false;
     }
@@ -162,30 +167,37 @@ public class InMemoryObjectStore implements ObjectStore {
     // reset
     // ///////////////////////////////////////////////////////
 
+    @Override
     public void reset() {}
 
     // ///////////////////////////////////////////////////////
     // Transaction management
     // ///////////////////////////////////////////////////////
 
+    @Override
     public void startTransaction() {}
 
+    @Override
     public void endTransaction() {}
 
+    @Override
     public void abortTransaction() {}
 
     // ///////////////////////////////////////////////////////
     // Command Creation
     // ///////////////////////////////////////////////////////
 
+    @Override
     public CreateObjectCommand createCreateObjectCommand(final ObjectAdapter object) {
         return new InMemoryCreateObjectCommand(object, persistedObjects);
     }
 
+    @Override
     public SaveObjectCommand createSaveObjectCommand(final ObjectAdapter object) {
         return new InMemorySaveObjectCommand(object, persistedObjects);
     }
 
+    @Override
     public DestroyObjectCommand createDestroyObjectCommand(final ObjectAdapter object) {
         return new InMemoryDestroyObjectCommand(object, persistedObjects);
     }
@@ -194,6 +206,7 @@ public class InMemoryObjectStore implements ObjectStore {
     // Command Execution
     // ///////////////////////////////////////////////////////
 
+    @Override
     public void execute(final List<PersistenceCommand> commands) throws ObjectPersistenceException {
         if (LOG.isInfoEnabled()) {
             LOG.info("execute commands");
@@ -208,6 +221,7 @@ public class InMemoryObjectStore implements ObjectStore {
     // getObject, resolveField, resolveImmediately
     // ///////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
             ObjectPersistenceException {
         LOG.debug("getObject " + oid);
@@ -221,6 +235,7 @@ public class InMemoryObjectStore implements ObjectStore {
         }
     }
 
+    @Override
     public void resolveImmediately(final ObjectAdapter adapter) throws ObjectPersistenceException {
 
         // this is a nasty hack, but even though this method is called by 
@@ -242,6 +257,7 @@ public class InMemoryObjectStore implements ObjectStore {
         }
     }
 
+    @Override
     public void resolveField(final ObjectAdapter object, final ObjectAssociation field) throws ObjectPersistenceException {
         final ObjectAdapter reference = field.get(object);
         PersistorUtil.start(reference, ResolveState.RESOLVING);
@@ -264,9 +280,9 @@ public class InMemoryObjectStore implements ObjectStore {
         all.addElement(adapter);
         PersistorUtil.start(adapter, ResolveState.RESOLVING);
 
-        final ObjectAssociation[] fields = adapter.getSpecification().getAssociations();
-        for (int i = 0; i < fields.length; i++) {
-            final ObjectAssociation field = fields[i];
+        final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
+        for (int i = 0; i < fields.size(); i++) {
+            final ObjectAssociation field = fields.get(i);
             if (field.isOneToManyAssociation()) {
                 final ObjectAdapter col = field.get(adapter);
                 final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(col);
@@ -288,6 +304,7 @@ public class InMemoryObjectStore implements ObjectStore {
     // getInstances, hasInstances
     // ///////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter[] getInstances(final PersistenceQuery persistenceQuery) 
     throws ObjectPersistenceException,
             UnsupportedFindException {
@@ -307,6 +324,7 @@ public class InMemoryObjectStore implements ObjectStore {
         return toInstancesArray(instances);
     }
 
+    @Override
     public boolean hasInstances(final ObjectSpecification spec) {
         if (instancesFor(spec).hasInstances()) {
             return true;
@@ -357,10 +375,12 @@ public class InMemoryObjectStore implements ObjectStore {
     // ///////////////////////////////////////////////////////
 
 
+    @Override
     public Oid getOidForService(final String name) {
         return persistedObjects.getService(name);
     }
 
+    @Override
     public void registerService(final String name, final Oid oid) {
     	persistedObjects.registerService(name, oid);
     }
@@ -373,10 +393,12 @@ public class InMemoryObjectStore implements ObjectStore {
     // Debugging
     // ///////////////////////////////////////////////////////
 
+    @Override
     public String debugTitle() {
         return name();
     }
 
+    @Override
     public void debugData(final DebugString debug) {
         debug.appendTitle("Domain Objects");
         for(final ObjectSpecification spec: persistedObjects.specifications()) {
@@ -443,12 +465,10 @@ public class InMemoryObjectStore implements ObjectStore {
         recursiveElements.addElement(object);
 
         // work through all its fields
-        ObjectAssociation[] fields;
+        List<ObjectAssociation> fields = object.getSpecification().getAssociations();
 
-        fields = object.getSpecification().getAssociations();
-
-        for (int i = 0; i < fields.length; i++) {
-            final ObjectAssociation field = fields[i];
+        for (int i = 0; i < fields.size(); i++) {
+            final ObjectAssociation field = fields.get(i);
             final Object obj = field.get(object);
 
             final String id = field.getId();

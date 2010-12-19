@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.action;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -55,11 +57,11 @@ public class ActionContent implements BlockContent {
 
     public ObjectAdapter[] getParameters(Request request) {
         ObjectAdapter[] params = new ObjectAdapter[parameters.length];
-        ObjectActionParameter[] pars = action.getParameters();
+        List<ObjectActionParameter> pars = action.getParameters();
         for (int i = 0; i < parameters.length; i++) {
-            ObjectSpecification typ = pars[i].getSpecification();
+            ObjectSpecification typ = pars.get(i).getSpecification();
             if (typ.getFacet(ParseableFacet.class) != null) {
-                ParseableFacet facet = (ParseableFacet) typ.getFacet(ParseableFacet.class);
+                ParseableFacet facet = typ.getFacet(ParseableFacet.class);
                 params[i] = facet.parseTextEntry(null, parameters[i]);
             } else {
                 params[i] = request.getContext().getMappedObject(parameters[i]);

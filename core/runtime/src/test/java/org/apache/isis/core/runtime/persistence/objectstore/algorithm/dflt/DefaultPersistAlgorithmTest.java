@@ -21,6 +21,7 @@
 package org.apache.isis.core.runtime.persistence.objectstore.algorithm.dflt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -76,7 +77,7 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
         // object.setupResolveState(ResolveState.TRANSIENT);
 
         final TestProxySpecification spec = system.getSpecification(object);
-        final ObjectAssociation[] fields = new ObjectAssociation[] { new OneToOneAssociationTest() {
+        final List<ObjectAssociation> fields = Arrays.asList( (ObjectAssociation)new OneToOneAssociationTest() {
 
             @Override
             public void initAssociation(ObjectAdapter inObject, ObjectAdapter associate) {}
@@ -122,7 +123,8 @@ public class DefaultPersistAlgorithmTest extends ProxyJunit3TestCase {
                 return FeatureType.PROPERTY;
             }
 
-        } };
+        }
+        );
         spec.setupFields(fields);
 
         fieldsObject = new TestProxyAdapter();

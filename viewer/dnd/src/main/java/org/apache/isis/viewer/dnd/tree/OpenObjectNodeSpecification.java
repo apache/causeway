@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.tree;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -48,6 +50,7 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
         builder = new ObjectFieldBuilder(this);
     }
     
+    @Override
     public Layout createLayout(Content content, Axes axes) {
         return new StackLayout();
     }
@@ -56,13 +59,14 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
      * This is only used to control root nodes. Therefore a object tree can only be displayed for an object
      * with fields that are collections.
      */
+    @Override
     public boolean canDisplay(ViewRequirement requirement) {
         if (requirement.isObject() && requirement.hasReference()) {
             final ObjectAdapter object = requirement.getAdapter();
-            final ObjectAssociation[] fields = object.getSpecification().getAssociations(
+            final List<ObjectAssociation> fields = object.getSpecification().getAssociations(
                     ObjectAssociationFilters.dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i].isOneToManyAssociation()) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).isOneToManyAssociation()) {
                     return true;
                 }
             }
@@ -71,6 +75,7 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
         return false;
     }
     
+    @Override
     protected View createNodeView(Content content, Axes axes) {
         return decorator.decorate(axes, super.createNodeView(content, axes));
     }
@@ -90,6 +95,7 @@ public class OpenObjectNodeSpecification extends CompositeNodeSpecification {
         return false;
     }
 
+    @Override
     public String getName() {
         return "Object tree node - open";
     }

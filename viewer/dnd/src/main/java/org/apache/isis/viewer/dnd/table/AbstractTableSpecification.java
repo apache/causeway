@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.dnd.table;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -43,6 +45,7 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
             TableRowSpecification rowSpecification = new TableRowSpecification();
 
             // TODO do directly without specification
+            @Override
             public View createView(Content content, Axes axes, int sequence) {
                 //ViewSpecification rowSpecification = new SubviewIconSpecification();
                 return rowSpecification.createView(content, axes, -1);
@@ -52,30 +55,34 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
         addSubviewDecorator(new TableRowBorder.Factory());
         
         addViewDecorator(new CompositeViewDecorator() {
+            @Override
             public View decorate(View view, Axes axes) {
                 axes.getAxis(TableAxis.class).setRoot(view);
                 return view;
             }});
     }
 
+    @Override
     public Layout createLayout(Content content, Axes axes) {
         return new StackLayout();
     }
     
+    @Override
     public void createAxes(Content content, Axes axes) {
         axes.add(new TableAxisImpl((CollectionContent) content), TableAxis.class);
     }
 
+    @Override
     public boolean canDisplay(ViewRequirement requirement) {
         if (!requirement.isCollection() || !requirement.isOpen()) {
             return false;
         } else {
             CollectionContent collectionContent = (CollectionContent) requirement.getContent();
             final ObjectSpecification elementSpecification = collectionContent.getElementSpecification();
-            final ObjectAssociation[] fields = elementSpecification
+            final List<ObjectAssociation> fields = elementSpecification
                     .getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
-            for (int i = 0; i < fields.length; i++) {
-                if (fields[i].isOneToOneAssociation()) {
+            for (int i = 0; i < fields.size(); i++) {
+                if (fields.get(i).isOneToOneAssociation()) {
                     return true;
                 }
             }
@@ -92,6 +99,7 @@ public abstract class AbstractTableSpecification extends CompositeViewSpecificat
     protected abstract View doCreateView(final View table, final Content content, final ViewAxis axis);
  */
 
+    @Override
     public String getName() {
         return "Standard Table";
     }

@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -31,11 +33,12 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request.RepeatMarker;
 
 public class TableBuilder extends AbstractTableView {
 
+    @Override
     protected TableContentWriter createRowBuilder(
             final Request request,
             RequestContext context,
             final String parent,
-            ObjectAssociation[] allFields) {
+            List<ObjectAssociation> allFields) {
 
         final String variable = request.getOptionalProperty(ELEMENT_NAME, ELEMENT);
 
@@ -47,12 +50,15 @@ public class TableBuilder extends AbstractTableView {
 
         return new TableContentWriter() {
 
+            @Override
             public void writeFooters(PageWriter writer) {}
 
+            @Override
             public void writeHeaders(PageWriter writer) {
                 writer.appendHtml(headers);
             }
 
+            @Override
             public void writeElement(Request request, RequestContext context, ObjectAdapter element) {
                 context.addVariable(variable, context.mapObject(element, Scope.REQUEST), Scope.REQUEST);
                 RepeatMarker end = request.createMarker();
@@ -64,6 +70,7 @@ public class TableBuilder extends AbstractTableView {
         };
     }
 
+    @Override
     public String getName() {
         return "table-builder";
     }

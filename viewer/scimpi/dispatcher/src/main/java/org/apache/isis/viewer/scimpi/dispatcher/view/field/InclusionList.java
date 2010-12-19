@@ -21,7 +21,10 @@
 package org.apache.isis.viewer.scimpi.dispatcher.view.field;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -49,19 +52,16 @@ public class InclusionList implements BlockContent {
         excludedList.add(field);
     }
 
-    public ObjectAssociation[] includedFields(ObjectAssociation[] originalFields) {
-        ObjectAssociation[] includedFields = new ObjectAssociation[originalFields.length];
-        int j = 0;
-        for (int i = 0; i < originalFields.length; i++) {
-            String id2 = originalFields[i].getId();
+    public List<ObjectAssociation> includedFields(List<ObjectAssociation> originalFields) {
+        List<ObjectAssociation> includedFields = Lists.newArrayList();
+        for (int i = 0; i < originalFields.size(); i++) {
+            String id2 = originalFields.get(i).getId();
             if (includes(id2)) {
-                includedFields[j++] = originalFields[i];
+                includedFields.add(originalFields.get(i));
             }
         }
 
-        ObjectAssociation[] fields = new ObjectAssociation[j];
-        System.arraycopy(includedFields, 0, fields, 0, j);
-        return fields;
+        return includedFields;
     }
 
     public void hideExcludedParameters(InputField[] inputFields) {
@@ -77,19 +77,16 @@ public class InclusionList implements BlockContent {
         return inIncludedList(id) && !inExcludedList(id);
     }
 
-    public ObjectAction[] includedActions(ObjectAction[] originalActions) {
-        ObjectAction[] includedActions = new ObjectAction[originalActions.length];
-        int j = 0;
-        for (int i = 0; i < originalActions.length; i++) {
-            String id2 = originalActions[i].getId();
+    public List<ObjectAction> includedActions(List<ObjectAction> originalActions) {
+        List<ObjectAction> includedActions = Lists.newArrayList();
+        for (int i = 0; i < originalActions.size(); i++) {
+            String id2 = originalActions.get(i).getId();
             if (includes(id2)) {
-                includedActions[j++] = originalActions[i];
+                includedActions.add(originalActions.get(i));
             }
         }
 
-        ObjectAction[] fields = new ObjectAction[j];
-        System.arraycopy(includedActions, 0, fields, 0, j);
-        return fields;
+        return includedActions;
     }
 }
 

@@ -53,18 +53,17 @@ public class NewObjectView extends CompositeView {
         invalidateContent();
     }
     
+    @Override
     protected void buildView() {
         if (getSubviews().length == 0) {
             ObjectAdapter object = getContent().getAdapter();
-            ObjectAssociation[] associations = getContent().getSpecification().getAssociations();
+            List<ObjectAssociation> associations = getContent().getSpecification().getAssociations();
            
             
-            ObjectAssociation field = associations[0];
+            ObjectAssociation field = associations.get(0);
             
             addFieldView(object, field);
-            addFieldView(object, associations[2]); 
-            
-            
+            addFieldView(object, associations.get(2)); 
         }
     }
 
@@ -90,20 +89,24 @@ public class NewObjectView extends CompositeView {
         addView(fieldView);
     }
 
+    @Override
     protected void doLayout(Size maximumSize) {
         layout.layout(this, maximumSize);
     }
 
+    @Override
     protected Size requiredSize(Size availableSpace) {
         return layout.getRequiredSize(this);
     }
 
+    @Override
     public void loadOptions(Options viewOptions) {
         Options options = viewOptions.getOptions("fields");
       //  options.options()
        
     }
     
+    @Override
     public void saveOptions(Options viewOptions) {
        for (NewObjectField field : fields) {
            field.saveOptions(viewOptions.getOptions("fields"));

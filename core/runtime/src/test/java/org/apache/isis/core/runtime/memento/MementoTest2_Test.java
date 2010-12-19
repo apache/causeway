@@ -22,6 +22,8 @@ package org.apache.isis.core.runtime.memento;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.jmock.Expectations;
@@ -30,23 +32,16 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
-import org.apache.isis.core.runtime.memento.Data;
-import org.apache.isis.core.runtime.memento.Memento;
-import org.apache.isis.core.runtime.memento.ObjectData;
-import org.apache.isis.core.runtime.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 
 
@@ -85,7 +80,7 @@ public class MementoTest2_Test {
                 will(returnValue(false));
 
                 atLeast(1).of(rootSpecification).getAssociations();
-                will(returnValue(new ObjectAssociation[] {nameField}));
+                will(returnValue(Arrays.asList( (ObjectAssociation)nameField)));
 
                 atLeast(1).of(rootSpecification).getFullName();
                 will(returnValue(TestObject.class.getName()));

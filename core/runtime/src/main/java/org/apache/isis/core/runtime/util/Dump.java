@@ -21,6 +21,7 @@
 package org.apache.isis.core.runtime.util;
 
 import java.util.Enumeration;
+import java.util.List;
 import java.util.Vector;
 
 import org.apache.isis.core.commons.debug.Debug;
@@ -104,11 +105,10 @@ public final class Dump {
         } else  {
             // object is a regular Object
             try {
-                ObjectAssociation[] fields;
-                fields = objectSpec.getAssociations();
-                for (int i = 0; i < fields.length; i++) {
-                    final ObjectAssociation field = fields[i];
-                    final ObjectAdapter obj = field.get((ObjectAdapter) object);
+                List<ObjectAssociation> fields = objectSpec.getAssociations();
+                for (int i = 0; i < fields.size(); i++) {
+                    final ObjectAssociation field = fields.get(i);
+                    final ObjectAdapter obj = field.get(object);
 
                     final String name = field.getId();
                     if (obj == null) {
@@ -135,9 +135,9 @@ public final class Dump {
         } else {
             info.append("\n");
             if (object.getSpecification().isCollection()) {
-                collectionGraph((ObjectAdapter) object, level, ignoreObjects, info, authenticationSession);
+                collectionGraph(object, level, ignoreObjects, info, authenticationSession);
             } else if (object.getSpecification().isNotCollection()) {
-                objectGraph((ObjectAdapter) object, level, ignoreObjects, info, authenticationSession);
+                objectGraph(object, level, ignoreObjects, info, authenticationSession);
             } else {
                 info.append("??? " + object);
             }
@@ -201,10 +201,9 @@ public final class Dump {
 
         try {
             // work through all its fields
-            ObjectAssociation[] fields;
-            fields = object.getSpecification().getAssociations();
-            for (int i = 0; i < fields.length; i++) {
-                final ObjectAssociation field = fields[i];
+            List<ObjectAssociation> fields = object.getSpecification().getAssociations();
+            for (int i = 0; i < fields.size(); i++) {
+                final ObjectAssociation field = fields.get(i);
                 final ObjectAdapter obj = field.get(object);
                 final String name = field.getId();
                 graphIndent(s, level);
@@ -336,10 +335,10 @@ public final class Dump {
 
     private static void specificationActionMethods(final ObjectSpecification specification, final DebugString debug) {
         try {
-            final ObjectAction[] userActions = specification.getObjectActions(ObjectActionType.USER);
-            final ObjectAction[] explActions = specification.getObjectActions(ObjectActionType.EXPLORATION);
-            final ObjectAction[] prototypeActions = specification.getObjectActions(ObjectActionType.PROTOTYPE);
-            final ObjectAction[] debActions = specification.getObjectActions(ObjectActionType.DEBUG);
+            final List<ObjectAction> userActions = specification.getObjectActions(ObjectActionType.USER);
+            final List<ObjectAction> explActions = specification.getObjectActions(ObjectActionType.EXPLORATION);
+            final List<ObjectAction> prototypeActions = specification.getObjectActions(ObjectActionType.PROTOTYPE);
+            final List<ObjectAction> debActions = specification.getObjectActions(ObjectActionType.DEBUG);
             specificationMethods(userActions, explActions, prototypeActions, debActions, debug);
         } catch (final RuntimeException e) {
             debug.appendException(e);
@@ -348,10 +347,10 @@ public final class Dump {
 
     private static void specificationServiceMethods(final ObjectSpecification specification, final DebugString debug) {
         try {
-            final ObjectAction[] userActions = specification.getServiceActionsFor(ObjectActionType.USER);
-            final ObjectAction[] explActions = specification.getServiceActionsFor(ObjectActionType.EXPLORATION);
-            final ObjectAction[] prototypeActions = specification.getServiceActionsFor(ObjectActionType.PROTOTYPE);
-            final ObjectAction[] debActions = specification.getServiceActionsFor(ObjectActionType.DEBUG);
+            final List<ObjectAction> userActions = specification.getServiceActionsFor(ObjectActionType.USER);
+            final List<ObjectAction> explActions = specification.getServiceActionsFor(ObjectActionType.EXPLORATION);
+            final List<ObjectAction> prototypeActions = specification.getServiceActionsFor(ObjectActionType.PROTOTYPE);
+            final List<ObjectAction> debActions = specification.getServiceActionsFor(ObjectActionType.DEBUG);
             specificationMethods(userActions, explActions, prototypeActions,debActions, debug);
         } catch (final RuntimeException e) {
             debug.appendException(e);
@@ -359,31 +358,31 @@ public final class Dump {
     }
 
     private static void specificationFields(final ObjectSpecification specification, final DebugString debug) {
-        final ObjectAssociation[] fields = specification.getAssociations();
+        final List<ObjectAssociation> fields = specification.getAssociations();
         debug.appendln("All");
         debug.indent();
-        for (int i = 0; i < fields.length; i++) {
-            debug.appendln((i + 1) + "." + fields[i].getId());
+        for (int i = 0; i < fields.size(); i++) {
+            debug.appendln((i + 1) + "." + fields.get(i).getId());
         }
         debug.unindent();
 
-        final ObjectAssociation[] fields2 = specification
+        final List<ObjectAssociation> fields2 = specification
                 .getAssociations(ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
         debug.appendln("Static");
         debug.indent();
-        for (int i = 0; i < fields2.length; i++) {
-            debug.appendln((i + 1) + "." + fields2[i].getId());
+        for (int i = 0; i < fields2.size(); i++) {
+            debug.appendln((i + 1) + "." + fields2.get(i).getId());
         }
         debug.unindent();
         debug.appendln();
 
         try {
-            if (fields.length == 0) {
+            if (fields.size() == 0) {
                 debug.appendln("none");
             } else {
-                for (int i = 0; i < fields.length; i++) {
+                for (int i = 0; i < fields.size(); i++) {
 
-                    final ObjectAssociation field = (ObjectAssociation) fields[i];
+                    final ObjectAssociation field = fields.get(i);
                     debug.appendln((i + 1) + "." + field.getId() + "  (" + field.getClass().getName() + ")");
 
                     debug.indent();
@@ -439,12 +438,12 @@ public final class Dump {
     }
 
     private static void specificationMethods(
-            final ObjectAction[] userActions,
-            final ObjectAction[] explActions,
-            final ObjectAction[] prototypeActions,
-            final ObjectAction[] debugActions,
+            final List<ObjectAction> userActions,
+            final List<ObjectAction> explActions,
+            final List<ObjectAction> prototypeActions,
+            final List<ObjectAction> debugActions,
             final DebugString debug) {
-		if (userActions.length == 0 && explActions.length == 0 && prototypeActions.length == 0 && debugActions.length == 0) {
+		if (userActions.size() == 0 && explActions.size() == 0 && prototypeActions.size() == 0 && debugActions.size() == 0) {
             debug.appendln("no actions...");
         } else {
             appendActionDetails(debug, "User actions", userActions);
@@ -455,11 +454,11 @@ public final class Dump {
     }
 
 	private static void appendActionDetails(final DebugString debug, String desc,
-			ObjectAction[] actions) {
+	        List<ObjectAction> actions) {
 		debug.appendln(desc);
 		debug.indent();
-		for (int i = 0; i < actions.length; i++) {
-		    actionDetails(debug, actions[i], 8, i);
+		for (int i = 0; i < actions.size(); i++) {
+		    actionDetails(debug, actions.get(i), 8, i);
 		}
 		debug.unindent();
 	}
@@ -469,10 +468,10 @@ public final class Dump {
         debug.indent();
         final int newIndent = indent + 4;
         try {
-            final ObjectAction[] debActions = a.getActions();
-            if (debActions.length > 0) {
-                for (int i = 0; i < debActions.length; i++) {
-                    actionDetails(debug, debActions[i], newIndent, i);
+            final List<ObjectAction> debActions = a.getActions();
+            if (debActions.size() > 0) {
+                for (int i = 0; i < debActions.size(); i++) {
+                    actionDetails(debug, debActions.get(i), newIndent, i);
                 }
 
             } else {
@@ -500,22 +499,22 @@ public final class Dump {
                 final ObjectSpecification returnType = a.getReturnType();
                 debug.appendln("Returns", returnType == null ? "VOID" : returnType.toString());
 
-                final ObjectActionParameter[] parameters = a.getParameters();
-                if (parameters.length == 0) {
+                final List<ObjectActionParameter> parameters = a.getParameters();
+                if (parameters.size() == 0) {
                     debug.appendln("Parameters", "none");
                 } else {
                     debug.appendln("Parameters");
                     debug.indent();
-                    final ObjectActionParameter[] p = a.getParameters();
-                    for (int j = 0; j < parameters.length; j++) {
-                        debug.append(p[j].getName());
+                    final List<ObjectActionParameter> p = a.getParameters();
+                    for (int j = 0; j < parameters.size(); j++) {
+                        debug.append(p.get(j).getName());
                         debug.append(" (");
-                        debug.append(parameters[j].getSpecification().getFullName());
+                        debug.append(parameters.get(j).getSpecification().getFullName());
                         debug.appendln(")");
                         debug.indent();
-                        final Class<? extends Facet>[] parameterFacets = p[j].getFacetTypes();
+                        final Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
                         for (int i = 0; i < parameterFacets.length; i++) {
-                            debug.appendln(p[j].getFacet(parameterFacets[i]).toString());
+                            debug.appendln(p.get(j).getFacet(parameterFacets[i]).toString());
                         }
                         debug.unindent();
                     }

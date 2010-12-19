@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
@@ -131,7 +133,7 @@ public interface ObjectAction extends ObjectMember {
      * <p>
      * If any actions are returned then this action is only a set and not an action itself.
      */
-    ObjectAction[] getActions();
+    List<ObjectAction> getActions();
 
     
     ////////////////////////////////////////////////////////
@@ -152,20 +154,20 @@ public interface ObjectAction extends ObjectMember {
      * 
      * @return
      */
-    ObjectActionParameter[] getParameters();
+    List<ObjectActionParameter> getParameters();
 
     /**
      * Returns the {@link ObjectSpecification type} of each of the
      * {@link #getParameters() parameters}.
      */
-    ObjectSpecification[] getParameterTypes();
+    List<ObjectSpecification> getParameterTypes();
     
     /**
      * Returns set of parameter information matching the supplied filter.
      * 
      * @return
      */
-    ObjectActionParameter[] getParameters(Filter<ObjectActionParameter> filter);
+    List<ObjectActionParameter> getParameters(Filter<ObjectActionParameter> filter);
 
 
     ////////////////////////////////////////////////////////

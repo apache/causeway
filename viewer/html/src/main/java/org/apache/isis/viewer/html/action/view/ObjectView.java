@@ -20,6 +20,8 @@
 
 package org.apache.isis.viewer.html.action.view;
 
+import java.util.List;
+
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -54,9 +56,9 @@ public class ObjectView extends ObjectViewAbstract {
                 || (adapter.isPersistent() && SpecificationFacets.isImmutableOncePersisted(specification));
 
         boolean allFieldUneditable = true;
-        final ObjectAssociation[] flds = specification.getAssociations();
-        for (int i = 0; i < flds.length; i++) {
-            if (flds[i].isUsable(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
+        final List<ObjectAssociation> flds = specification.getAssociations();
+        for (int i = 0; i < flds.size(); i++) {
+            if (flds.get(i).isUsable(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
                 allFieldUneditable = false;
                 break;
             }
@@ -69,10 +71,10 @@ public class ObjectView extends ObjectViewAbstract {
 
     private void createObjectView(final Context context, final ObjectAdapter object, final ViewPane pane, final String id) {
         final ObjectSpecification specification = object.getSpecification();
-        final ObjectAssociation[] visibleFields = specification.getAssociations(ObjectAssociationFilters
+        final List<ObjectAssociation> visibleFields = specification.getAssociations(ObjectAssociationFilters
                 .dynamicallyVisible(IsisContext.getAuthenticationSession(), object));
-        for (int i = 0; i < visibleFields.length; i++) {
-            final ObjectAssociation field = visibleFields[i];
+        for (int i = 0; i < visibleFields.size(); i++) {
+            final ObjectAssociation field = visibleFields.get(i);
 
             final ComponentFactory factory = context.getComponentFactory();
             final Block fieldBlock = factory.createBlock("field", field.getDescription());
@@ -109,6 +111,7 @@ public class ObjectView extends ObjectViewAbstract {
         }
     }
 
+    @Override
     public String name() {
         return Request.OBJECT_COMMAND;
     }

@@ -38,6 +38,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 
 public abstract class AbstractConditionalBlock extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         String id = request.getOptionalProperty(OBJECT);
         
@@ -64,7 +65,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         method = request.getOptionalProperty(METHOD + "-exists");
         if (method != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
-            List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActionList(ObjectActionType.USER);
+            List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActions(ObjectActionType.USER);
             boolean methodExists = false;
             for (ObjectAction objectAssociation : objectActions) {
                 if (objectAssociation.getId().equals(method)) {
@@ -88,7 +89,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         field = request.getOptionalProperty(FIELD + "-exists");
         if (field != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
-            List<? extends ObjectAssociation> objectFields = object.getSpecification().getAssociationList();
+            List<? extends ObjectAssociation> objectFields = object.getSpecification().getAssociations();
             boolean fieldExists = false;
             for (ObjectAssociation objectAssociation : objectFields) {
                 if (objectAssociation.getId().equals(field)) {
@@ -118,7 +119,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
             if (fld == null) {
                 processTags(true, request);
             } else {
-                    CollectionFacet facet = (CollectionFacet) fld.getSpecification().getFacet(CollectionFacet.class);
+                    CollectionFacet facet = fld.getSpecification().getFacet(CollectionFacet.class);
                     boolean isEmpty = facet != null &&   facet.size(fld) == 0;
                     // boolean isEmpty = fld == null || (fld instanceof CollectionAdapter && ((CollectionAdapter) fld).size() == 0);
                     processTags(isEmpty, request);
@@ -144,7 +145,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
 
         String persistent = request.getOptionalProperty("persistent");
         if (persistent != null) {
-            ObjectAdapter object = (ObjectAdapter) request.getContext().getMappedObjectOrResult(persistent);
+            ObjectAdapter object = request.getContext().getMappedObjectOrResult(persistent);
             processTags(object.isPersistent(), request);
             return;
         }
@@ -163,7 +164,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
                 String collection = request.getOptionalProperty("empty");
                 if (collection != null) {
                     ObjectAdapter object = request.getContext().getMappedObjectOrResult(collection);
-                    CollectionFacet facet = (CollectionFacet) object.getSpecification().getFacet(CollectionFacet.class);
+                    CollectionFacet facet = object.getSpecification().getFacet(CollectionFacet.class);
                     processTags(facet.size(object) == 0, request);
                 }
             } else {

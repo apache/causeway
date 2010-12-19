@@ -39,7 +39,8 @@ public class HistogramSpecification extends CompositeViewSpecification {
 
     static List<? extends ObjectAssociation> availableFields(CollectionContent content) {
         List<? extends ObjectAssociation> associationList;
-        associationList = content.getElementSpecification().getAssociationList(new AbstractFilter<ObjectAssociation>() {
+        associationList = content.getElementSpecification().getAssociations(new AbstractFilter<ObjectAssociation>() {
+            @Override
             public boolean accept(ObjectAssociation t) {
                 return NumberAdapters.contains(t);
             }
@@ -49,16 +50,19 @@ public class HistogramSpecification extends CompositeViewSpecification {
 
     public HistogramSpecification() {
         builder = new CollectionElementBuilder(new ViewFactory() {
+            @Override
             public View createView(Content content, Axes axes, int sequence) {
                 return new HistogramBar(content, axes.getAxis(HistogramAxis.class), HistogramSpecification.this);
             }
         });
     }
 
+    @Override
     public Layout createLayout(Content content, Axes axes) {
         return new HistogramLayout();
     }
 
+    @Override
     public boolean canDisplay(ViewRequirement requirement) {
         return requirement.isCollection() && requirement.isOpen() && availableFields((CollectionContent) requirement.getContent()).size() > 0;
     }
@@ -69,6 +73,7 @@ public class HistogramSpecification extends CompositeViewSpecification {
         axes.add(new HistogramAxis(content));
     }
 
+    @Override
     public String getName() {
         return "Histogram (experimental)";
     }

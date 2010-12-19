@@ -19,6 +19,8 @@
 
 package org.apache.isis.core.runtime.persistence.query;
 
+import java.util.List;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -49,10 +51,10 @@ public class PersistenceQueryFindByPattern extends PersistenceQueryBuiltInAbstra
     private boolean matchesPattern(final ObjectAdapter pattern, final ObjectAdapter instance) {
         final ObjectAdapter object = instance;
         final ObjectSpecification nc = object.getSpecification();
-        final ObjectAssociation[] fields = nc.getAssociations();
+        final List<ObjectAssociation> fields = nc.getAssociations();
 
-        for (int f = 0; f < fields.length; f++) {
-            final ObjectAssociation fld = fields[f];
+        for (int f = 0; f < fields.size(); f++) {
+            final ObjectAssociation fld = fields.get(f);
 
             // are ignoring internal collections - these probably should be considered
             // ignore non-persistent fields - there is no persisted field to compare against

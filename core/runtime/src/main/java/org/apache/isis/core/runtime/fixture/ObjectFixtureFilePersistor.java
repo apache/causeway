@@ -27,10 +27,12 @@ import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -173,7 +175,7 @@ public class ObjectFixtureFilePersistor {
         writer.println(adapter.getSpecification().getFullName() + "#" + id);
 
         ObjectSpecification adapterSpec = adapter.getSpecification();
-        final ObjectAssociation[] associations = adapterSpec.getAssociations();
+        final List<ObjectAssociation> associations = adapterSpec.getAssociations();
         for (ObjectAssociation association : associations) {
             if (association.isNotPersisted()) {
                 continue;
