@@ -72,7 +72,7 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         super.setUp();
 
         facetFactory = new PropertyMethodsFacetFactory();
-        facetFactory.setSpecificationLoader(reflector);
+        facetFactory.setSpecificationLookup(reflector);
     }
 
     @Override

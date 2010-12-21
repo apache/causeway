@@ -24,6 +24,8 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Percentage;
@@ -33,20 +35,18 @@ import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAbstract implements FloatingPointValueFacet {
+public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Percentage> implements FloatingPointValueFacet {
 
     private static final NumberFormat PERCENTAGE_FORMAT = NumberFormat.getPercentInstance();
     private static final NumberFormat DECIMAL_FORMAT = NumberFormat.getNumberInstance();
 
+    private static final Percentage DEFAULT_VALUE = new Percentage(0.0f);
+    private static final int TYPICAL_LENGTH = 12;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
-    private static final Object DEFAULT_VALUE = new Percentage(0.0f);
 
     public static Class<? extends Facet> type() {
         return FloatingPointValueFacet.class;
@@ -59,15 +59,14 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAbst
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public PercentageValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public PercentageValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, Percentage.class, 12, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, Percentage.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(
                 ConfigurationConstants.ROOT + "value.format.percentage");
@@ -83,7 +82,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAbst
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String text) {
+    protected Percentage doParse(final Object context, final String text) {
         try {
             return new Percentage(new Float(format.parse(text).floatValue()));
         } catch (final ParseException e) {
@@ -109,6 +108,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAbst
         return value == null ? "" : format.format(((Percentage) value).floatValue());
     }
 
+    @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
         return titleString(new DecimalFormat(usingMask), value);
     }
@@ -124,7 +124,7 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAbst
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Percentage doRestore(final String data) {
         return new Percentage(Float.valueOf(data).floatValue());
     }
 
@@ -132,13 +132,15 @@ public class PercentageValueSemanticsProvider extends ValueSemanticsProviderAbst
     // FloatingPointValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Float floatValue(final ObjectAdapter object) {
         final Percentage per = (Percentage) object.getObject();
         return new Float(per.floatValue());
     }
 
+    @Override
     public ObjectAdapter createValue(final Float value) {
-        return getRuntimeContext().adapterFor(value);
+        return getAdapterMap().adapterFor(value);
     }
 
     // //////////////////////////////////////////////////////////////////

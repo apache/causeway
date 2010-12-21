@@ -21,15 +21,15 @@
 package org.apache.isis.core.progmodel.facets.actcoll.typeof;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 
 
 public class TypeOfFacetDefaultToObject extends TypeOfFacetAbstract {
 
     public TypeOfFacetDefaultToObject(
             final FacetHolder holder, 
-            final SpecificationLoader specificationLoader) {
-        super(Object.class, holder, specificationLoader);
+            final SpecificationLookup specificationLookup) {
+        super(Object.class, holder, specificationLookup);
     }
     
 

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -40,7 +41,11 @@ import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -94,7 +99,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
     @Override
     public ObjectSpecification getSpecification() {
-        return peer.getSpecification(getRuntimeContext().getSpecificationLoader());
+        return ObjectMemberAbstract.getSpecification(getSpecificationLookup(), peer.getType());
     }
 
     @Override
@@ -106,7 +111,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     public String getName() {
         final NamedFacet facet = getFacet(NamedFacet.class);
         String name = facet == null ? null : facet.value();
-        name = name == null ? peer.getSpecification(getRuntimeContext().getSpecificationLoader()).getSingularName() : name;
+        name = name == null ? getSpecification().getSingularName() : name;
         return name;
     }
 
@@ -201,14 +206,14 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
 
         if (choicesFacet != null) {
             Object[] choices = choicesFacet.getChoices(parentAction.realTarget(adapter));
-            checkChoicesType(getRuntimeContext(), choices, getSpecification());
+            checkChoicesType(getSpecificationLookup(), choices, getSpecification());
             for (Object choice : choices) {
-                parameterChoices.add(getRuntimeContext().adapterFor(choice));
+                parameterChoices.add(getAdapterMap().adapterFor(choice));
             }
         }
         if (parameterChoices.size() == 0 && SpecificationFacets.isBoundedSet(getSpecification())) {
-            QueryFindAllInstances query = new QueryFindAllInstances(getSpecification().getFullName());
-			final List<ObjectAdapter> allInstancesAdapter = getRuntimeContext().allMatchingQuery(query);
+            Query query = new QueryFindAllInstances(getSpecification().getFullName());
+			final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
             for (ObjectAdapter choiceAdapter: allInstancesAdapter) {
                 parameterChoices.add(choiceAdapter);
             }
@@ -216,9 +221,9 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
         return parameterChoices.toArray(new ObjectAdapter[0]);
     }
 
-    protected static void checkChoicesType(RuntimeContext runtimeContext, Object[] objects, ObjectSpecification paramSpec) {
+    protected static void checkChoicesType(SpecificationLookup specificationLookup, Object[] objects, ObjectSpecification paramSpec) {
         for (Object object : objects) {
-            ObjectSpecification componentSpec = runtimeContext.getSpecificationLoader().loadSpecification(object.getClass());
+            ObjectSpecification componentSpec = specificationLookup.loadSpecification(object.getClass());
             if (!componentSpec.isOfType(paramSpec)) {
                 throw new ModelException("Choice type incompatible with parameter type; expected " + paramSpec.getFullName() + ", but was " + componentSpec.getFullName());
             }
@@ -240,22 +245,36 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
             	// is unable to return a default.
             	return null;
             }
-			return getRuntimeContext().adapterFor(dflt);
+			return getAdapterMap().adapterFor(dflt);
         }
         return null;
     }
     
-    
-    // /////////////////////////////////////////////////////////////
-    // Dependencies (from context)
-    // /////////////////////////////////////////////////////////////
-
-    protected RuntimeContext getRuntimeContext() {
-        return parentAction.getRuntimeContext();
-    }
 
     protected AuthenticationSession getAuthenticationSession() {
-        return getRuntimeContext().getAuthenticationSession();
+        return getAuthenticationSessionProvider().getAuthenticationSession();
     }
+
+    // /////////////////////////////////////////////////////////////
+    // Dependencies (from parent)
+    // /////////////////////////////////////////////////////////////
+
+    protected SpecificationLookup getSpecificationLookup() {
+        return parentAction.getSpecificationLookup();
+    }
+
+    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return parentAction.getAuthenticationSessionProvider();
+    }
+
+    protected AdapterMap getAdapterMap() {
+        return parentAction.getAdapterMap();
+    }
+
+    protected QuerySubmitter getQuerySubmitter() {
+        return parentAction.getQuerySubmitter();
+    }
+
+    
 
 }

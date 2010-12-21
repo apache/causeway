@@ -21,15 +21,18 @@
 package org.apache.isis.core.progmodel.facets.object.encodeable;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 
 public class EncodableFacetFromConfiguration extends EncodableFacetAbstract {
 
     public EncodableFacetFromConfiguration(
     		final String candidateEncoderDecoderName, 
-    		final FacetHolder holder, RuntimeContext runtimeContext) {
-        super(candidateEncoderDecoderName, null, holder, runtimeContext);
+    		final FacetHolder holder, 
+    		final AdapterMap adapterManager, 
+    		final DependencyInjector dependencyInjector) {
+        super(candidateEncoderDecoderName, null, holder, adapterManager, dependencyInjector );
 
     }
 }

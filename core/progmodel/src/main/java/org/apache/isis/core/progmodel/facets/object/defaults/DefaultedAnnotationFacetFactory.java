@@ -32,16 +32,19 @@ import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
-public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, RuntimeContextAware {
+public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, DependencyInjectorAware, AdapterMapAware {
 
     private IsisConfiguration configuration;
-    private RuntimeContext runtimeContext;
+    private DependencyInjector dependencyInjector;
+    private AdapterMap adapterMap;
 
 	public DefaultedAnnotationFacetFactory() {
         super(ObjectFeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
@@ -53,11 +56,11 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     private DefaultedFacetAbstract create(final Class<?> cls, final FacetHolder holder) {
-        final Defaulted annotation = (Defaulted) getAnnotation(cls, Defaulted.class);
+        final Defaulted annotation = getAnnotation(cls, Defaulted.class);
 
         // create from annotation, if present
         if (annotation != null) {
-            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getIsisConfiguration(), holder, runtimeContext);
+            final DefaultedFacetAbstract facet = new DefaultedFacetAnnotation(cls, getIsisConfiguration(), holder, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -67,7 +70,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
         final String providerName = DefaultsProviderUtil.defaultsProviderNameFromConfiguration(cls,
                 getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(providerName)) {
-            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, runtimeContext);
+            final DefaultedFacetFromConfiguration facet = new DefaultedFacetFromConfiguration(providerName, holder, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -93,7 +96,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
         final DefaultedFacet returnTypeDefaultedFacet = getDefaultedFacet(returnType);
         if (returnTypeDefaultedFacet != null) {
             final PropertyDefaultFacetDerivedFromDefaultedFacet propertyFacet = new PropertyDefaultFacetDerivedFromDefaultedFacet(
-                    returnTypeDefaultedFacet, holder, getRuntimeContext());
+                    returnTypeDefaultedFacet, holder, getAdapterMap());
             return FacetUtil.addFacet(propertyFacet);
         }
         return false;
@@ -126,7 +129,8 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     private DefaultedFacet getDefaultedFacet(final Class<?> paramType) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(paramType);
+        final ObjectSpecification paramTypeSpec = 
+            getSpecificationLookup().loadSpecification(paramType);
         return paramTypeSpec.getFacet(DefaultedFacet.class);
     }
 
@@ -137,16 +141,27 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
     public IsisConfiguration getIsisConfiguration() {
         return configuration;
     }
+    @Override
     public void setIsisConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
-	}
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
+    }
+    
+    @Override
+    public void setDependencyInjector(DependencyInjector dependencyInjector) {
+        this.dependencyInjector = dependencyInjector;
+    }
 
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+    
+    @Override
+    public void setAdapterMap(AdapterMap adapterMap) {
+        this.adapterMap = adapterMap;
+    }
 
 }

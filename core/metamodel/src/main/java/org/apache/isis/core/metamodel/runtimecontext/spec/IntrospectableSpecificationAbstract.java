@@ -49,7 +49,9 @@ import org.apache.isis.core.metamodel.interactions.InteractionContext;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.IntrospectableSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -69,8 +71,11 @@ public abstract class IntrospectableSpecificationAbstract
 		extends FacetHolderImpl
 		implements ObjectSpecification, IntrospectableSpecification {
 
-	private boolean introspected = false;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+    private final ServicesProvider servicesProvider;
+    private final ObjectInstantiator objectInstantiator;
 
+	private boolean introspected = false;
 
     protected String fullName;
     protected List<ObjectAssociation> fields;
@@ -78,15 +83,18 @@ public abstract class IntrospectableSpecificationAbstract
     protected ObjectSpecification superClassSpecification;
     protected Identifier identifier;
 
-	private final RuntimeContext runtimeContext;
 
     // //////////////////////////////////////////////////////////////////////
     // Constructor
     // //////////////////////////////////////////////////////////////////////
 
     public IntrospectableSpecificationAbstract(
-    		final RuntimeContext runtimeContext) {
-    	this.runtimeContext = runtimeContext;
+    		final AuthenticationSessionProvider authenticationSessionProvider,
+    		final ServicesProvider servicesProvider,
+    		final ObjectInstantiator objectInstantiator) {
+    	this.authenticationSessionProvider = authenticationSessionProvider;
+    	this.servicesProvider = servicesProvider;
+    	this.objectInstantiator = objectInstantiator;
     }
 
     // //////////////////////////////////////////////////////////////////////
@@ -296,7 +304,7 @@ public abstract class IntrospectableSpecificationAbstract
 
     @Override
     public List<ObjectAction> getServiceActionsFor(final ObjectActionType... types) {
-        final List<ObjectAdapter> services = getRuntimeContext().getServices();
+        final List<ObjectAdapter> services = getServicesProvider().getServices();
         final List<ObjectAction> relatedActions = new ArrayList<ObjectAction>();
             for (ObjectAdapter serviceAdapter : services) {
                 final List<ObjectAction> matchingActions = new ArrayList<ObjectAction>();
@@ -318,8 +326,7 @@ public abstract class IntrospectableSpecificationAbstract
                 }
             }
             if (matchingActions.size() > 0) {
-                final ObjectActionSet set = new ObjectActionSet("id", serviceAdapter.titleString(), matchingActions,
-                        runtimeContext);
+                final ObjectActionSet set = new ObjectActionSet("id", serviceAdapter.titleString(), matchingActions);
                 relatedActions.add(set);
             }
         }
@@ -381,7 +388,7 @@ public abstract class IntrospectableSpecificationAbstract
         if (isService()) {
             return Collections.emptyList();
         }
-        final List<ObjectAdapter> services = getRuntimeContext().getServices();
+        final List<ObjectAdapter> services = getServicesProvider().getServices();
 
         // will populate an ActionSet with all actions contributed by each service
         final List<ObjectAction> serviceActionSets = Lists.newArrayList();
@@ -408,7 +415,7 @@ public abstract class IntrospectableSpecificationAbstract
             // only add if there are matching subactions.
             if (matchingServiceActions.size() > 0) {
                 final ObjectActionSet objectActionSet = new ObjectActionSet("id", serviceAdapter.titleString(),
-                    matchingServiceActions, runtimeContext);
+                    matchingServiceActions);
                 serviceActionSets.add(objectActionSet);
             }
 
@@ -534,21 +541,26 @@ public abstract class IntrospectableSpecificationAbstract
         return str.toString();
     }
 
+    protected final AuthenticationSession getAuthenticationSession() {
+        return getAuthenticationSessionProvider().getAuthenticationSession();
+    }
+
+
     // //////////////////////////////////////////////////////////////////////
     // Dependencies (injected in constructor)
     // //////////////////////////////////////////////////////////////////////
 
-    public RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
     }
 
-    /**
-     * Derived from {@link #getRuntimeContext() runtime context}.
-     */
-    protected final AuthenticationSession getAuthenticationSession() {
-        return getRuntimeContext().getAuthenticationSession();
+    public ServicesProvider getServicesProvider() {
+        return servicesProvider;
     }
 
-
+    public ObjectInstantiator getObjectInstantiator() {
+        return objectInstantiator;
+    }
+    
 }
 

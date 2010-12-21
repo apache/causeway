@@ -25,45 +25,42 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 public class BooleanWrapperValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract {
 
-    private static final Object DEFAULT_PROVIDER = Boolean.FALSE;
-
-    static final Class<?> adaptedClass() {
-        return Boolean.class;
-    }
+    private static final Boolean DEFAULT_PROVIDER = Boolean.FALSE;
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public BooleanWrapperValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public BooleanWrapperValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, adaptedClass(), DEFAULT_PROVIDER, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, Boolean.class, DEFAULT_PROVIDER, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
     // BooleanValueFacet impl
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public void reset(final ObjectAdapter adapter) {
         adapter.replacePojo(Boolean.FALSE);
     }
 
+    @Override
     public void set(final ObjectAdapter adapter) {
         adapter.replacePojo(Boolean.TRUE);
     }
 
+    @Override
     public void toggle(final ObjectAdapter adapter) {
         final Object currentObj = adapter.getObject();
         if (currentObj == null) {

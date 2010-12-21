@@ -32,11 +32,11 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.value.TestClock;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.JavaSqlDateValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -55,7 +55,7 @@ public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProvide
         TestClock.initialize();
         date = new Date(0);
         holder = new FacetHolderImpl();
-        setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext) {
+        setValue(adapter = new JavaSqlDateValueSemanticsProvider(holder, mockConfiguration, mockContext) {
             @Override
             protected String defaultFormat() {
                 return "iso";

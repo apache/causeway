@@ -44,8 +44,9 @@ import org.apache.isis.applib.annotation.Value;
  * 
  * <p>
  * Whatever the class that implements this interface, it must also expose either a <tt>public</tt> no-arg constructor,
- * or (for implementations that also are <tt>Facet</tt>s) a <tt>public</tt> constructor that accepts a single
- * <tt>FacetHolder</tt>. This constructor allows the framework to instantiate the object reflectively.
+ * or (for implementations that also are <tt>Facet</tt>s) a <tt>public</tt> constructor that accepts a 
+ * <tt>FacetHolder</tt>, and <tt>IsisConfiguration</tt> and a <tt>ValueSemanticsProviderContext</tt>. 
+ * This constructor is then used by the framework to instantiate the object reflectively.
  * 
  * @see Parser
  * @see EncoderDecoder

@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.apache.isis.applib.events.CollectionMethodEvent;
 import org.apache.isis.applib.events.InteractionEvent;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 
@@ -42,9 +41,8 @@ abstract class AbstractCollectionInvocationHandler<T, C> extends DelegatingInvoc
             final C collectionOrMapToProxy,
             final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
-            final RuntimeContext runtimeContext,
             final OneToManyAssociation otma) {
-        super(collectionOrMapToProxy, handler.getHeadlessViewer(), handler.getExecutionMode(), runtimeContext);
+        super(collectionOrMapToProxy, handler.getHeadlessViewer(), handler.getExecutionMode());
         this.collectionName = collectionName;
         this.oneToManyAssociation = otma;
         this.domainObject = handler.getDelegate();

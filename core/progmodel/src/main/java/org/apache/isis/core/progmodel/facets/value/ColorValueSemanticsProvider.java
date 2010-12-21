@@ -30,34 +30,32 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class ColorValueSemanticsProvider extends ValueSemanticsProviderAbstract implements ColorValueFacet {
+public class ColorValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Color> implements ColorValueFacet {
 
     public static Class<? extends Facet> type() {
         return ColorValueFacet.class;
     }
 
+    private static final Color DEFAULT_VALUE = Color.BLACK;
     private static final int TYPICAL_LENGTH = 4;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = false;
-    private static final Object DEFAULT_VALUE = Color.BLACK;
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public ColorValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public ColorValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, Color.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, Color.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -65,7 +63,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAbstract 
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String text) {
+    protected Color doParse(final Object context, final String text) {
         try {
             if (text.startsWith("0x")) {
                 return new Color(Integer.parseInt(text.substring(2), 16));
@@ -85,6 +83,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAbstract 
         return color.title();
     }
     
+    @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
         final Color color = (Color) object;
         return titleString(new DecimalFormat(usingMask), color.intValue());
@@ -101,7 +100,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAbstract 
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Color doRestore(final String data) {
         return new Color(Integer.parseInt(data, 16));
     }
 
@@ -109,6 +108,7 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAbstract 
     // ColorValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public int colorValue(final ObjectAdapter object) {
         if (object == null) {
             return 0;
@@ -117,9 +117,10 @@ public class ColorValueSemanticsProvider extends ValueSemanticsProviderAbstract 
         return color.intValue();
     }
 
+    @Override
     public ObjectAdapter createValue(final ObjectAdapter object, final int colorAsInt) {
         final Color color = new Color(colorAsInt);
-        return getRuntimeContext().adapterFor(color);
+        return getAdapterMap().adapterFor(color);
     }
 
     @Override

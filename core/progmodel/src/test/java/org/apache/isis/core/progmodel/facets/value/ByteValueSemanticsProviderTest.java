@@ -28,11 +28,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.ByteValueSemanticsProviderAbstract;
-import org.apache.isis.core.progmodel.facets.value.ByteWrapperValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -53,7 +52,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         	will(returnValue(null));
         }});
 
-        setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(value = new ByteWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test
@@ -65,7 +64,7 @@ public class ByteValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     @Test
     public void testParseInvalidString() throws Exception {
         try {
-            value.parseTextEntry(mockAdapter, "xs21z4xxx23");
+            value.parseTextEntry(null, "xs21z4xxx23");
             fail();
         } catch (final TextEntryParseException expected) {}
     }

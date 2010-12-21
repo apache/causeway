@@ -25,7 +25,9 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.metamodel.util.ClassUtil;
 
 
@@ -36,23 +38,19 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
     // to delegate to
     private final ParseableFacetUsingParser parseableFacetUsingParser;
 
-	private final RuntimeContext runtimeContext;
-
     public ParseableFacetAbstract(
     		final String candidateParserName, 
     		final Class<?> candidateParserClass, 
     		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
+    		final AuthenticationSessionProvider authenticationSessionProvider,
+    		final DependencyInjector dependencyInjector,
+    		final AdapterMap adapterManager) {
         super(ParseableFacet.class, holder, false);
         
-        this.runtimeContext = runtimeContext;
-        
-
         this.parserClass = ParserUtil.parserOrNull(candidateParserClass, candidateParserName);
         if (isValid()) {
             Parser parser = (Parser) ClassUtil.newInstance(parserClass, FacetHolder.class, holder);
-            this.parseableFacetUsingParser = new ParseableFacetUsingParser(parser,
-                    holder, runtimeContext);
+            this.parseableFacetUsingParser = new ParseableFacetUsingParser(parser, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
         } else {
             this.parseableFacetUsingParser = null;
         }
@@ -77,18 +75,14 @@ public abstract class ParseableFacetAbstract extends FacetAbstract implements Pa
         return parserClass.getName();
     }
 
+    @Override
     public ObjectAdapter parseTextEntry(final ObjectAdapter original, final String entryText) {
         return parseableFacetUsingParser.parseTextEntry(original, entryText);
     }
 
+    @Override
     public String parseableTitle(final ObjectAdapter existing) {
         return parseableFacetUsingParser.parseableTitle(existing);
     }
-    
-    
-    public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
 }
 

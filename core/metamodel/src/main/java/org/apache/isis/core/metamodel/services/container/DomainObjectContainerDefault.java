@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.services.container;
 
 import java.util.ArrayList;
@@ -35,30 +34,51 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAware;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAware;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookupAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.IsisUtils;
 
+public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware,
+    DomainObjectServicesAware, ObjectPersistorAware, SpecificationLookupAware, AuthenticationSessionProviderAware, AdapterMapAware {
 
-public class DomainObjectContainerDefault implements DomainObjectContainer, RuntimeContextAware {
-	
-	private RuntimeContext runtimeContext;
+    private ObjectDirtier objectDirtier;
+    private ObjectPersistor objectPersistor;
+    private QuerySubmitter querySubmitter;
+    private SpecificationLookup specificationLookup;
+    private DomainObjectServices domainObjectServices;
+    private AuthenticationSessionProvider authenticationSessionProvider;
+    private AdapterMap adapterMap;
 
+    public DomainObjectContainerDefault() {
 
-    ////////////////////////////////////////////////////////////////////
+    }
+
+    // //////////////////////////////////////////////////////////////////
     // newInstance, disposeInstance
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
-	/**
+    /**
      * @see #doCreateTransientInstance(ObjectSpecification)
      */
     @Override
     @SuppressWarnings("unchecked")
     public <T> T newTransientInstance(final Class<T> ofClass) {
-        final ObjectSpecification spec = getRuntimeContext().getSpecificationLoader().loadSpecification(ofClass);
+        final ObjectSpecification spec = getSpecificationLookup().loadSpecification(ofClass);
         final ObjectAdapter adapter = doCreateTransientInstance(spec);
         return (T) adapter.getObject();
     }
@@ -89,7 +109,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
      * Factored out as a potential hook method for subclasses.
      */
     protected ObjectAdapter doCreateTransientInstance(final ObjectSpecification spec) {
-    	return getRuntimeContext().createTransientInstance(spec);
+        return getDomainObjectServices().createTransientInstance(spec);
     }
 
     @Override
@@ -97,14 +117,14 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         if (persistentObject == null) {
             throw new IllegalArgumentException("Must specify a reference for disposing an object");
         }
-        final ObjectAdapter adapter = getRuntimeContext().getAdapterFor(persistentObject);
+        final ObjectAdapter adapter = getAdapterMap().getAdapterFor(persistentObject);
         if (!isPersistent(persistentObject)) {
             throw new RepositoryException("Object not persistent: " + adapter);
         }
-        
-        getRuntimeContext().remove(adapter);
+
+        getObjectPersistor().remove(adapter);
     }
-    
+
     @Override
     public void removeIfNotAlready(final Object object) {
         if (!isPersistent(object)) {
@@ -113,77 +133,74 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         remove(object);
     }
 
-
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // resolve, objectChanged
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
     @Override
     public void resolve(final Object parent) {
-    	runtimeContext.resolve(parent);
+        getDomainObjectServices().resolve(parent);
     }
 
     @Override
     public void resolve(final Object parent, final Object field) {
-    	runtimeContext.resolve(parent, field);
+        getDomainObjectServices().resolve(parent, field);
     }
 
     @Override
     public void objectChanged(final Object object) {
-    	runtimeContext.objectChanged(object);
+        getObjectDirtier().objectChanged(object);
     }
 
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // flush, commit
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
     @Override
     public boolean flush() {
-    	return runtimeContext.flush();
+        return getDomainObjectServices().flush();
     }
 
     @Override
     public void commit() {
-    	runtimeContext.commit();
+        getDomainObjectServices().commit();
     }
 
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // isValid, validate
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
-
-	@Override
+    @Override
     public boolean isValid(final Object domainObject) {
-		return validate(domainObject) == null;
-	}
+        return validate(domainObject) == null;
+    }
 
-	@Override
+    @Override
     public String validate(final Object domainObject) {
-		final ObjectAdapter adapter = getRuntimeContext().adapterFor(domainObject);
-		InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
-		return validityResult.getReason();
-	}
+        final ObjectAdapter adapter = getAdapterMap().adapterFor(domainObject);
+        InteractionResult validityResult = adapter.getSpecification().isValidResult(adapter);
+        return validityResult.getReason();
+    }
 
-
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // persistence
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
     @Override
     public boolean isPersistent(final Object domainObject) {
-        final ObjectAdapter adapter = getRuntimeContext().adapterFor(domainObject);
+        final ObjectAdapter adapter = getAdapterMap().adapterFor(domainObject);
         return adapter.isPersistent();
     }
 
     @Override
     public void persist(final Object transientObject) {
-        final ObjectAdapter adapter = getRuntimeContext().getAdapterFor(transientObject);
+        final ObjectAdapter adapter = getAdapterMap().getAdapterFor(transientObject);
         if (isPersistent(transientObject)) {
             throw new PersistFailedException("Object already persistent: " + adapter);
         }
-        getRuntimeContext().makePersistent(adapter);
+        getObjectPersistor().makePersistent(adapter);
     }
-    
+
     @Override
     public void persistIfNotAlready(final Object object) {
         if (isPersistent(object)) {
@@ -192,13 +209,13 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         persist(object);
     }
 
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // security
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
     @Override
     public UserMemento getUser() {
-        final AuthenticationSession session = getRuntimeContext().getAuthenticationSession();
+        final AuthenticationSession session = getAuthenticationSessionProvider().getAuthenticationSession();
 
         final String name = session.getUserName();
         final List<RoleMemento> roleMementos = asRoleMementos(session.getRoles());
@@ -210,20 +227,20 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
     private List<RoleMemento> asRoleMementos(List<String> roles) {
         List<RoleMemento> mementos = new ArrayList<RoleMemento>();
         if (roles != null) {
-            for(String role: roles) {
+            for (String role : roles) {
                 mementos.add(new RoleMemento(role));
             }
         }
         return mementos;
     }
 
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // properties
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
     @Override
     public String getProperty(String name) {
-        return runtimeContext.getProperty(name) ;
+        return getDomainObjectServices().getProperty(name);
     }
 
     @Override
@@ -231,54 +248,53 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         String value = getProperty(name);
         return value == null ? defaultValue : value;
     }
-    
+
     @Override
     public List<String> getPropertyNames() {
-        return runtimeContext.getPropertyNames() ;
+        return getDomainObjectServices().getPropertyNames();
     }
-    
-    ////////////////////////////////////////////////////////////////////
+
+    // //////////////////////////////////////////////////////////////////
     // info, warn, error messages
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
     @Override
     public void informUser(final String message) {
-        getRuntimeContext().informUser(message);
+        getDomainObjectServices().informUser(message);
     }
 
     @Override
     public void raiseError(final String message) {
-    	getRuntimeContext().raiseError(message);
+        getDomainObjectServices().raiseError(message);
     }
 
     @Override
     public void warnUser(final String message) {
-    	getRuntimeContext().warnUser(message);
+        getDomainObjectServices().warnUser(message);
     }
 
-    
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // allInstances, allMatches
-    ////////////////////////////////////////////////////////////////////
-    
-	@Override
+    // //////////////////////////////////////////////////////////////////
+
+    @Override
     public <T> List<T> allInstances(final Class<T> type) {
         return allMatches(new QueryFindAllInstances<T>(type));
     }
 
-	@Override
+    @Override
     public <T> List<T> allMatches(final Class<T> cls, final Filter<T> filter) {
-		final List<T> allInstances = allInstances(cls);
-		final List<T> filtered = new ArrayList<T>();
-		for (T instance: allInstances) {
-			if (filter.accept(instance)) {
-				filtered.add(instance);
-			}
-		}
-		return filtered;
-	}
+        final List<T> allInstances = allInstances(cls);
+        final List<T> filtered = new ArrayList<T>();
+        for (T instance : allInstances) {
+            if (filter.accept(instance)) {
+                filtered.add(instance);
+            }
+        }
+        return filtered;
+    }
 
-	@Override
+    @Override
     public <T> List<T> allMatches(final Class<T> type, final T pattern) {
         Assert.assertTrue("pattern not compatible with type", type.isAssignableFrom(pattern.getClass()));
         return allMatches(new QueryFindByPattern<T>(type, pattern));
@@ -291,25 +307,25 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
 
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
-        List<ObjectAdapter> allMatching = getRuntimeContext().allMatchingQuery(query);
-		return IsisUtils.unwrap(allMatching);
+        List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
+        return IsisUtils.unwrap(allMatching);
     }
 
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // firstMatch
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
-	@Override
+    @Override
     public <T> T firstMatch(final Class<T> cls, final Filter<T> filter) {
-		final List<T> allInstances = allInstances(cls);
-		for (T instance: allInstances) {
-			if (filter.accept(instance)) {
-				return instance;
-			}
-		}
-		return null;
-	}
-    
+        final List<T> allInstances = allInstances(cls);
+        for (T instance : allInstances) {
+            if (filter.accept(instance)) {
+                return instance;
+            }
+        }
+        return null;
+    }
+
     @Override
     public <T> T firstMatch(final Class<T> type, final T pattern) {
         final List<T> instances = allMatches(type, pattern);
@@ -324,24 +340,23 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
 
     @Override
     @SuppressWarnings("unchecked")
-	public <T> T firstMatch(final Query<T> query) {
-        ObjectAdapter firstMatching = getRuntimeContext().firstMatchingQuery(query);
+    public <T> T firstMatch(final Query<T> query) {
+        ObjectAdapter firstMatching = getQuerySubmitter().firstMatchingQuery(query);
         return (T) IsisUtils.unwrap(firstMatching);
     }
 
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
     // uniqueMatch
-    ////////////////////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////////////////////
 
-	@Override
+    @Override
     public <T> T uniqueMatch(final Class<T> type, final Filter<T> filter) {
-		final List<T> instances = allMatches(type, filter);
-		if (instances.size() > 1) {
-			throw new RepositoryException(
-					"Found more than one instance of " + type + " matching filter " + filter);
-		}
-		return firstInstanceElseNull(instances);
-	}
+        final List<T> instances = allMatches(type, filter);
+        if (instances.size() > 1) {
+            throw new RepositoryException("Found more than one instance of " + type + " matching filter " + filter);
+        }
+        return firstInstanceElseNull(instances);
+    }
 
     @Override
     public <T> T uniqueMatch(final Class<T> type, final T pattern) {
@@ -374,29 +389,70 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Runt
         return instances.size() == 0 ? null : instances.get(0);
     }
 
+    // //////////////////////////////////////////////////////////////////
+    // Dependencies
+    // //////////////////////////////////////////////////////////////////
 
-    
-    ////////////////////////////////////////////////////////////////////
-    // Dependencies (due to being RuntimeContextAware)
-    ////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * The {@link RuntimeContext}, as provided by the constructor.
-	 * 
-	 * <p>
-	 * Not API.
-	 */
-	public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    protected QuerySubmitter getQuerySubmitter() {
+        return querySubmitter;
+    }
 
-	@Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
-		runtimeContext.setContainer(this);
-	}
-	
+    @Override
+    public void setQuerySubmitter(QuerySubmitter querySubmitter) {
+        this.querySubmitter = querySubmitter;
+    }
 
+    protected DomainObjectServices getDomainObjectServices() {
+        return domainObjectServices;
+    }
 
+    @Override
+    public void setDomainObjectServices(DomainObjectServices domainObjectServices) {
+        this.domainObjectServices = domainObjectServices;
+    }
 
+    protected SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
+    }
+
+    @Override
+    public void setSpecificationLookup(SpecificationLookup specificationLookup) {
+        this.specificationLookup = specificationLookup;
+    }
+
+    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
+    }
+
+    @Override
+    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+        this.authenticationSessionProvider = authenticationSessionProvider;
+    }
+
+    protected AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterMap = adapterManager;
+    }
+
+    protected ObjectDirtier getObjectDirtier() {
+        return objectDirtier;
+    }
+
+    @Override
+    public void setObjectDirtier(ObjectDirtier objectDirtier) {
+        this.objectDirtier = objectDirtier;
+    }
+
+    protected ObjectPersistor getObjectPersistor() {
+        return objectPersistor;
+    }
+
+    @Override
+    public void setObjectPersistor(ObjectPersistor objectPersistor) {
+        this.objectPersistor = objectPersistor;
+    }
 }

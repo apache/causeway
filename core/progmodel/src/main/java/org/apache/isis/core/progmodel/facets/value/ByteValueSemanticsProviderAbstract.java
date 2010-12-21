@@ -29,15 +29,16 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements ByteValueFacet {
+public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Byte> implements ByteValueFacet {
 
     private static Class<? extends Facet> type() {
         return ByteValueFacet.class;
     }
+
+    private static final Byte DEFAULT_VALUE = Byte.valueOf((byte) 0);
 
     private static final int TYPICAL_LENGTH = 4;
     private static final boolean IMMUTABLE = true;
@@ -47,12 +48,10 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
 
     public ByteValueSemanticsProviderAbstract(
     		final FacetHolder holder,
-    		final Class<?> adaptedClass,
-    		final Object defaultValue,
+    		final Class<Byte> adaptedClass,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.byte");
     }
 
@@ -61,7 +60,7 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected Byte doParse(final Object context, final String entry) {
         try {
             return Byte.valueOf(format.parse(entry).byteValue());
         } catch (final ParseException e) {
@@ -84,7 +83,7 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Byte doRestore(final String data) {
         return new Byte(data);
     }
 
@@ -97,12 +96,14 @@ public abstract class ByteValueSemanticsProviderAbstract extends ValueSemanticsP
     // ByteValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Byte byteValue(final ObjectAdapter object) {
         return (Byte) object.getObject();
     }
 
+    @Override
     public ObjectAdapter createValue(final Byte value) {
-        return getRuntimeContext().adapterFor(value);
+        return getAdapterMap().adapterFor(value);
     }
 
     // ///// toString ///////

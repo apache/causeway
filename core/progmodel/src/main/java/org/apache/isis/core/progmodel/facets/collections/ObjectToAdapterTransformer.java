@@ -21,8 +21,9 @@
 package org.apache.isis.core.progmodel.facets.collections;
 
 import org.apache.commons.collections.Transformer;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 /**
  * Uses the Commons Collection API to transform {@link Object}s into
@@ -31,23 +32,24 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
  */
 public final class ObjectToAdapterTransformer implements Transformer {
 	
-	private final RuntimeContext runtimeContext;
+	private final AdapterMap adapterMap;
 
-	public ObjectToAdapterTransformer(final RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
+	public ObjectToAdapterTransformer(final AdapterMap adapterManager) {
+		this.adapterMap = adapterManager;
 	}
     
+    @Override
     public Object transform(Object object) {
-        return getRuntimeContext().adapterFor(object);
+        return getAdapterMap().adapterFor(object);
     }
     
     // //////////////////////////////////////////////////////////////////
-    // Dependencies (from context)
+    // Dependencies (from constructor)
     // //////////////////////////////////////////////////////////////////
 
-    public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 
 
 }

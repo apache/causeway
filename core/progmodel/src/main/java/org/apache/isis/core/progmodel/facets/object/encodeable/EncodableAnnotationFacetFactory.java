@@ -29,15 +29,19 @@ import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
-public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, RuntimeContextAware {
+public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, DependencyInjectorAware, AdapterMapAware {
 
     private IsisConfiguration configuration;
-	private RuntimeContext runtimeContext;
+
+    private AdapterMap adapterManager;
+    private DependencyInjector dependencyInjector;
 
     public EncodableAnnotationFacetFactory() {
         super(ObjectFeatureType.OBJECTS_ONLY);
@@ -56,7 +60,7 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
         // create from annotation, if present
         final Encodable annotation = getAnnotation(cls, Encodable.class);
         if (annotation != null) {
-            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, getIsisConfiguration(), holder, getRuntimeContext());
+            final EncodableFacetAnnotation facet = new EncodableFacetAnnotation(cls, getIsisConfiguration(), holder, adapterManager, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -66,7 +70,7 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
         final String encoderDecoderName = EncoderDecoderUtil.encoderDecoderNameFromConfiguration(cls,
                 getIsisConfiguration());
         if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
-            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, getRuntimeContext());
+            final EncodableFacetFromConfiguration facet = new EncodableFacetFromConfiguration(encoderDecoderName, holder, adapterManager, dependencyInjector);
             if (facet.isValid()) {
                 return facet;
             }
@@ -83,16 +87,19 @@ public class EncodableAnnotationFacetFactory extends AnnotationBasedFacetFactory
     public IsisConfiguration getIsisConfiguration() {
         return configuration;
     }
+    @Override
     public void setIsisConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterManager = adapterManager;
+    }
     
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-	public void setRuntimeContext(final RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
-	}
+    @Override
+    public void setDependencyInjector(DependencyInjector dependencyInjector) {
+        this.dependencyInjector = dependencyInjector;
+    }
 
 }

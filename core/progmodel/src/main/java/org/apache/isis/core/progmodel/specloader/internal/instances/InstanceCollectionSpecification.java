@@ -27,7 +27,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
 import org.apache.isis.core.metamodel.runtimecontext.spec.IntrospectableSpecificationAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -43,11 +45,12 @@ public class InstanceCollectionSpecification extends IntrospectableSpecification
 
 	public InstanceCollectionSpecification(
     		final SpecificationLoader specificationLoader,
-    		final RuntimeContext runtimeContext) {
-		super(runtimeContext);
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final ServicesProvider servicesProvider,
+            final ObjectInstantiator objectInstantiator) {
+		super(authenticationSessionProvider, servicesProvider, objectInstantiator);
 		this.specificationLoader = specificationLoader;
 	}
-
 
 	@Override
     public void markAsService() {}

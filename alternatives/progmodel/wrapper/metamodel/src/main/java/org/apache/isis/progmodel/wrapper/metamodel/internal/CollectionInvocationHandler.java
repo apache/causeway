@@ -25,7 +25,6 @@ import static org.apache.isis.core.commons.lang.MethodUtils.getMethod;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 
 
@@ -35,9 +34,8 @@ class CollectionInvocationHandler<T, R> extends AbstractCollectionInvocationHand
             final R collectionToProxy,
             final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
-            final RuntimeContext runtimeContext,
             final OneToManyAssociation otma) {
-        super(collectionToProxy, collectionName, handler, runtimeContext, otma);
+        super(collectionToProxy, collectionName, handler, otma);
 
         try {
             intercept(getMethod(collectionToProxy, "contains", Object.class));

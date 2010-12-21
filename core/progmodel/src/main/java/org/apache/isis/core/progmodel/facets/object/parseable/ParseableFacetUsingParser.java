@@ -32,7 +32,9 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ParseValueContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.IsisUtils;
 
@@ -44,24 +46,31 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
     @SuppressWarnings("unchecked")
 	private final Parser parser;
-	private final RuntimeContext runtimeContext;
+    private final DependencyInjector dependencyInjector;
+    private final AdapterMap adapterMap;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
 
     public ParseableFacetUsingParser(
     	    @SuppressWarnings("unchecked")
     		final Parser parser, 
     		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
+    		final AuthenticationSessionProvider authenticationSessionProvider,
+    		final DependencyInjector dependencyInjector,
+    		final AdapterMap adapterManager) {
         super(ParseableFacet.class, holder, false);
         this.parser = parser;
-        this.runtimeContext = runtimeContext;
+        this.authenticationSessionProvider = authenticationSessionProvider;
+        this.dependencyInjector = dependencyInjector;
+        this.adapterMap = adapterManager;
     }
 
     @Override
     protected String toStringValues() {
-		runtimeContext.injectDependenciesInto(parser);
+        dependencyInjector.injectDependenciesInto(parser);
         return parser.toString();
     }
 
+    @Override
     public ObjectAdapter parseTextEntry(final ObjectAdapter contextAdapter, final String entry) {
 		if (entry == null) {
             throw new IllegalArgumentException("An entry must be provided");
@@ -70,14 +79,14 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 		// check string is valid
 		// (eg pick up any @RegEx on value type)
 		if (getFacetHolder().containsFacet(ValueFacet.class)) {
-			ObjectAdapter entryAdapter = getRuntimeContext().adapterFor(entry);
-			ParseValueContext parseValueContext = new ParseValueContext(getRuntimeContext().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
+			ObjectAdapter entryAdapter = getAdapterMap().adapterFor(entry);
+			ParseValueContext parseValueContext = new ParseValueContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, contextAdapter, getIdentified().getIdentifier(), entryAdapter);
 			validate(parseValueContext);
 		}
 
         Object context = IsisUtils.unwrap(contextAdapter);
 
-        getRuntimeContext().injectDependenciesInto(parser);
+        getDependencyInjector().injectDependenciesInto(parser);
 
         @SuppressWarnings("unchecked")
 		final Object parsed = parser.parseTextEntry(context, entry);
@@ -87,9 +96,10 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
         
         // check resultant object is also valid
         // (eg pick up any validate() methods on it)
-		ObjectAdapter adapter = getRuntimeContext().adapterFor(parsed);
+		ObjectAdapter adapter = getAdapterMap().adapterFor(parsed);
 		ObjectSpecification specification = adapter.getSpecification();
-		ObjectValidityContext validateContext = specification.createValidityInteractionContext(getRuntimeContext().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
+		ObjectValidityContext validateContext = 
+		    specification.createValidityInteractionContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
 		validate(validateContext);
 		
 		return adapter;
@@ -103,11 +113,12 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 		}
 	}
 
+    @Override
     @SuppressWarnings("unchecked")
 	public String parseableTitle(final ObjectAdapter contextAdapter) {
         Object pojo = IsisUtils.unwrap(contextAdapter);
         
-        getRuntimeContext().injectDependenciesInto(parser);
+        getDependencyInjector().injectDependenciesInto(parser);
 		return parser.parseableTitleOf(pojo);
 	}
 
@@ -117,9 +128,25 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     // Dependencies (from constructor)
     ///////////////////////////////////////////////////////////
 
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    /**
+     * @return the dependencyInjector
+     */
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
     }
 
+    /**
+     * @return the authenticationSessionProvider
+     */
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
+    }
+    
+    /**
+     * @return the adapterManager
+     */
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 }
 

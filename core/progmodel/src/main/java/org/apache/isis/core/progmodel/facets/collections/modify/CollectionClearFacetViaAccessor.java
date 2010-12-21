@@ -29,32 +29,38 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
 import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 
 
 public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-	private final RuntimeContext runtimeContext;
+	private final AdapterMap adapterMap;
+    private final ObjectDirtier objectDirtier;
 
     public CollectionClearFacetViaAccessor(
     		final Method method, 
-    		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
+    		final FacetHolder holder,
+    		final AdapterMap adapterManager,
+    		final ObjectDirtier objectDirtier) {
         super(holder);
         this.method = method;
-        this.runtimeContext = runtimeContext;
+        this.adapterMap = adapterManager;
+        this.objectDirtier = objectDirtier;
     }
 
     /**
      * Returns a singleton list of the {@link Method} provided in the constructor. 
      */
+    @Override
     public List<Method> getMethods() {
     	return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
+	@Override
+    public boolean impliesResolve() {
 		return true;
 	}
 
@@ -62,15 +68,17 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
 	 * Bytecode cannot automatically call {@link DomainObjectContainer#objectChanged(Object)}
 	 * because cannot distinguish whether interacting with accessor to read it or to modify its contents.
 	 */
-	public boolean impliesObjectChanged() {
+	@Override
+    public boolean impliesObjectChanged() {
 		return false;
 	}
 
+    @Override
     public void clear(final ObjectAdapter owningAdapter) {
         final Collection<?> collection = (Collection<?>) ObjectInvokeUtils.invoke(method, owningAdapter);
         collection.clear();
-        final ObjectAdapter adapter = getRuntimeContext().getAdapterFor(owningAdapter);
-        getRuntimeContext().objectChanged(adapter);
+        final ObjectAdapter adapter = getAdapterMap().getAdapterFor(owningAdapter);
+        getObjectDirtier().objectChanged(adapter);
     }
 
 	@Override
@@ -83,10 +91,13 @@ public class CollectionClearFacetViaAccessor extends CollectionClearFacetAbstrac
     // Dependencies (from constructor)
     ///////////////////////////////////////////////////////////
 
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
+	protected AdapterMap getAdapterMap() {
+	    return adapterMap;
 	}
-
+	
+    protected ObjectDirtier getObjectDirtier() {
+        return objectDirtier;
+    }
     
 }
 

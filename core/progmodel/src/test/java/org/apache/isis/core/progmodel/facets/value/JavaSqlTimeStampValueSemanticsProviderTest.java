@@ -20,6 +20,9 @@
 
 package org.apache.isis.core.progmodel.facets.value;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import java.sql.Timestamp;
 
 import org.jmock.Expectations;
@@ -27,13 +30,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.value.TestClock;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.JavaSqlTimeStampValueSemanticsProvider;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 @RunWith(JMock.class)
 public class JavaSqlTimeStampValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -52,7 +52,7 @@ public class JavaSqlTimeStampValueSemanticsProviderTest extends ValueSemanticsPr
         TestClock.initialize();
         timestamp = new Timestamp(0);
         holder = new FacetHolderImpl();
-        setValue(adapter = new JavaSqlTimeStampValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(adapter = new JavaSqlTimeStampValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Override

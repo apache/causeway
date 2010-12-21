@@ -42,7 +42,10 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -53,13 +56,17 @@ import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 public class OneToManyAssociationImpl extends ObjectAssociationAbstract implements OneToManyAssociation {
 
     private final ObjectMemberPeer reflectiveAdapter;
-
+    
     public OneToManyAssociationImpl(
-    		final ObjectMemberPeer association, 
-    		final RuntimeContext runtimeContext) {
-        super(association.getIdentifier().getMemberName(), association.getSpecification(runtimeContext.getSpecificationLoader()), FeatureType.COLLECTION, association, runtimeContext);
+    		final ObjectMemberPeer association,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+    		final SpecificationLookup specificationLookup,
+    		final AdapterMap adapterManager,
+            final QuerySubmitter querySubmitter) {
+        super(association.getIdentifier().getMemberName(), getSpecification(specificationLookup, association.getType()), FeatureType.COLLECTION, association, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
         this.reflectiveAdapter = association;
     }
+
 
     public ObjectMemberPeer getAssociationPeer(){
     	return reflectiveAdapter;
@@ -163,8 +170,9 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         if (collection == null) {
             return null;
         }
-        return getRuntimeContext().adapterFor(collection, ownerAdapter, this);
+        return getAdapterMap().adapterFor(collection, ownerAdapter, this);
     }
+
 
 
 

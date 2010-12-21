@@ -26,11 +26,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class StringValueSemanticsProvider extends ValueSemanticsProviderAbstract implements StringValueFacet {
+public class StringValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<String> implements StringValueFacet {
 
     public static Class<? extends Facet> type() {
         return StringValueFacet.class;
@@ -39,21 +38,20 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAbstract
     private static final int TYPICAL_LENGTH = 25;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
-    private static final Object DEFAULT_VALUE = null; // no default
+    private static final String DEFAULT_VALUE = null; // no default
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public StringValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public StringValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, String.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, String.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -61,7 +59,7 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAbstract
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected String doParse(final Object context, final String entry) {
         if (entry.trim().equals("")) {
             return null;
         } else {
@@ -75,6 +73,7 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAbstract
         return string;
     }
 
+    @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
         return titleString(object);
     }
@@ -94,7 +93,7 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAbstract
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected String doRestore(final String data) {
         if (isEscaped(data)) {
             return data.substring(1);
         } else {
@@ -114,12 +113,14 @@ public class StringValueSemanticsProvider extends ValueSemanticsProviderAbstract
     // StringValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public String stringValue(final ObjectAdapter object) {
         return object == null ? "" : (String) object.getObject();
     }
 
+    @Override
     public ObjectAdapter createValue(final String value) {
-        return getRuntimeContext().adapterFor(value);
+        return getAdapterMap().adapterFor(value);
     }
 
 

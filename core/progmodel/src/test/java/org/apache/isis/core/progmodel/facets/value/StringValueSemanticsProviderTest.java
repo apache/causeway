@@ -26,9 +26,9 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.StringValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -43,7 +43,7 @@ public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     public void setUpObjects() throws Exception {
         string = "text entry";
         holder = new FacetHolderImpl();
-        setValue(value = new StringValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(value = new StringValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

@@ -24,20 +24,20 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import com.google.inject.internal.Maps;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import com.google.inject.internal.Maps;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract {
+public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract<org.apache.isis.applib.value.Time> {
+    
     private static final Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
@@ -49,15 +49,14 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public TimeValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public TimeValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, org.apache.isis.applib.value.Time.class, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, org.apache.isis.applib.value.Time.class, configuration, context);
     }
 
     @Override
@@ -71,14 +70,14 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
     }
 
     @Override
-    protected Object add(
-            final Object original,
+    protected Time add(
+            final Time original,
             final int years,
             final int months,
             final int days,
             final int hours,
             final int minutes) {
-        Time time = (Time) original;
+        Time time = original;
         time = time.add(hours, minutes);
         return time;
     }
@@ -90,12 +89,12 @@ public class TimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstra
     }
 
     @Override
-    protected Object now() {
+    protected Time now() {
         return new Time();
     }
 
     @Override
-    protected Object setDate(final Date date) {
+    protected Time setDate(final Date date) {
         return new Time(date);
     }
 

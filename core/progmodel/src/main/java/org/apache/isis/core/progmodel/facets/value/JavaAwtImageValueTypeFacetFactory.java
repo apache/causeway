@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class JavaAwtImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class JavaAwtImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<java.awt.Image> {
 
     public JavaAwtImageValueTypeFacetFactory() {
         super(ImageValueFacet.class);
@@ -35,7 +35,7 @@ public class JavaAwtImageValueTypeFacetFactory extends ValueUsingValueSemanticsP
         if (type != java.awt.Image.class) {
             return false;
         }
-        addFacets(new JavaAwtImageValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new JavaAwtImageValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

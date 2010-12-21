@@ -76,10 +76,10 @@ public interface Parser<T> {
      * Note that here the implementing class is acting as a factory for itself.
      * 
      * @param context
-     *            - the context in which the text is being parsed. For example +3 might mean add 3 to the current
-     *            number.
+     *            - the context domain object for which the text is being parsed. 
+     *            For example +3 might mean add 3 to the current number.
      */
-    T parseTextEntry(T context, String entry);
+    T parseTextEntry(Object contextPojo, String entry);
 
     /**
      * The typical length of objects that can be parsed.

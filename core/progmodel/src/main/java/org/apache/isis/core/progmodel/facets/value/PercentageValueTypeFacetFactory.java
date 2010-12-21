@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class PercentageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class PercentageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Percentage> {
 
     public PercentageValueTypeFacetFactory() {
         super(FloatingPointValueFacet.class);
@@ -35,7 +35,8 @@ public class PercentageValueTypeFacetFactory extends ValueUsingValueSemanticsPro
         if (type != org.apache.isis.applib.value.Percentage.class) {
             return false;
         }
-        addFacets(new PercentageValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new PercentageValueSemanticsProvider(holder, getConfiguration(), getContext()
+            ));
         return true;
     }
 

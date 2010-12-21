@@ -90,7 +90,7 @@ public class DescribedAsAnnotationFacetFactory extends AnnotationBasedFacetFacto
     }
 
     private DescribedAsFacet getDescribedAsFacet(final Class<?> type) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
+        final ObjectSpecification paramTypeSpec = getSpecificationLookup().loadSpecification(type);
         return paramTypeSpec.getFacet(DescribedAsFacet.class);
     }
 

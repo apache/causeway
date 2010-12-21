@@ -159,13 +159,14 @@ public class FacetProcessor implements RuntimeContextAware {
      * (eg in <tt>JavaIntrospector</tt>).
      *
      * <p>
-     * See bug-517.
+     * See NOF bug-517.
      */
 	public void injectDependenciesInto(final FacetFactory factory) {
 		getCollectionTypeRepository().injectInto(factory);
-        getSpecificationLoader().injectInto(factory);
-        getRuntimeContext().injectInto(factory);
         getIsisConfiguration().injectInto(factory);
+		
+        // cascades all the subcomponents also
+        getRuntimeContext().injectInto(factory); 
 	}
 
 	public FacetFactory getFactoryByFactoryType(final Class<? extends FacetFactory> factoryType) {

@@ -28,6 +28,8 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
@@ -43,7 +45,6 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerExt
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactory;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
-import org.apache.log4j.Logger;
 
 /**
  * An abstract implementation of {@link PersistenceMechanismInstaller} that will lookup the {@link AdapterFactory} and

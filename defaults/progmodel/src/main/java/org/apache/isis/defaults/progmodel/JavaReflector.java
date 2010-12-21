@@ -23,6 +23,7 @@ package org.apache.isis.defaults.progmodel;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
@@ -61,14 +62,24 @@ public class JavaReflector extends ObjectReflectorAbstract {
 	 * Overridable method for language-specific subclass to create the
 	 * appropriate type of {@link ObjectSpecification}.
 	 */
-	protected ObjectSpecification createSpecification(final Class<?> cls) {
+	@Override
+    protected ObjectSpecification createSpecification(final Class<?> cls) {
 
 		if (ObjectList.class.isAssignableFrom(cls)) {
 			return new InstanceCollectionSpecification(this,
-					getRuntimeContext());
+					getRuntimeContext().getAuthenticationSessionProvider(),
+					getRuntimeContext().getServicesProvider(),
+					getRuntimeContext().getObjectInstantiator());
 		}
 
-		return new JavaSpecification(cls, this, getRuntimeContext());
+		return new JavaSpecification(cls, this, 
+		    getRuntimeContext().getAuthenticationSessionProvider(), 
+		    getRuntimeContext().getSpecificationLookup(),
+		    getRuntimeContext().getServicesProvider(),
+		    getRuntimeContext().getAdapterMap(), 
+		    getRuntimeContext().getObjectInstantiator(),
+		    getRuntimeContext().getDependencyInjector(),
+		    getRuntimeContext().getQuerySubmitter());
 	}
 
 

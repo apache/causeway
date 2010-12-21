@@ -17,34 +17,32 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionParameterChoicesFacetAbstract;
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetDerivedFromChoicesFacet(FacetHolder holder, final RuntimeContext runtimeContext) {
-        super(holder, runtimeContext);
+    public ActionParameterChoicesFacetDerivedFromChoicesFacet(FacetHolder holder,
+        final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+        super(holder, specificationLookup, adapterManager);
     }
 
     @Override
     public Object[] getChoices(ObjectAdapter adapter) {
         FacetHolder facetHolder = getFacetHolder();
-        final SpecificationLoader specificationLoader = getRuntimeContext().getSpecificationLoader();
         TypedHolder paramPeer = (TypedHolder) facetHolder;
-        ObjectSpecification noSpec = paramPeer.getSpecification(specificationLoader);
+        ObjectSpecification noSpec = getSpecification(paramPeer.getType());
         ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null)
             return new Object[0];
         return choicesFacet.getChoices(adapter);
     }
-
 
 }

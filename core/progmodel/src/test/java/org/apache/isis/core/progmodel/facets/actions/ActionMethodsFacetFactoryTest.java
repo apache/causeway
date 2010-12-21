@@ -41,8 +41,8 @@ import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetViaMethod;
@@ -77,7 +77,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         super.setUp();
 
         facetFactory = new ActionMethodsFacetFactory();
-        facetFactory.setSpecificationLoader(reflector);
+        facetFactory.setSpecificationLookup(reflector);
     }
 
     @Override

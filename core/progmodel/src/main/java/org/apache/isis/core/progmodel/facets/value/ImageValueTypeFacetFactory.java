@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class ImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class ImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Image> {
 
     public ImageValueTypeFacetFactory() {
         super(ImageValueFacet.class);
@@ -35,7 +35,7 @@ public class ImageValueTypeFacetFactory extends ValueUsingValueSemanticsProvider
         if (type != org.apache.isis.applib.value.Image.class) {
             return false;
         }
-        addFacets(new ImageValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new ImageValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

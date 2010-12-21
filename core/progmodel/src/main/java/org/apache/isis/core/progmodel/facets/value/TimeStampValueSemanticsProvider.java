@@ -20,8 +20,13 @@
 
 package org.apache.isis.core.progmodel.facets.value;
 
+import java.text.DateFormat;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.Map;
+
+import com.google.inject.internal.Maps;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -30,19 +35,16 @@ import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract {
+public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<TimeStamp> {
 
     public static final boolean isAPropertyDefaultFacet() {
         return PropertyDefaultFacet.class.isAssignableFrom(TimeStampValueSemanticsProvider.class);
     }
 
-    private static Hashtable formats = new Hashtable();
+    private static Map<String,DateFormat> formats = Maps.newHashMap();
 
     static {
         initFormats(formats);
@@ -53,15 +55,14 @@ public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProv
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public TimeStampValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public TimeStampValueSemanticsProvider(
             final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, TimeStamp.class, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -74,17 +75,17 @@ public class TimeStampValueSemanticsProvider extends TimeStampValueSemanticsProv
     }
 
     @Override
-    protected Hashtable formats() {
+    protected Map<String, DateFormat> formats() {
         return formats;
     }
 
     @Override
-    protected Object now() {
+    protected TimeStamp now() {
         throw new InvalidEntryException("Can't change a timestamp.");
     }
 
     @Override
-    protected Object setDate(final Date date) {
+    protected TimeStamp setDate(final Date date) {
         return new TimeStamp(date.getTime());
     }
 

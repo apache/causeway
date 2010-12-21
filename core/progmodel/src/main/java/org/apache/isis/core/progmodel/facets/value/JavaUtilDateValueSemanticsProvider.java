@@ -23,15 +23,14 @@ package org.apache.isis.core.progmodel.facets.value;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 /**
@@ -40,7 +39,7 @@ import edu.umd.cs.findbugs.annotations.SuppressWarnings;
  * @see JavaSqlDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
  */
-public class JavaUtilDateValueSemanticsProvider extends JavaUtilDateValueSemanticsProviderAbstract {
+public class JavaUtilDateValueSemanticsProvider extends DateAndTimeValueSemanticsProviderAbstract<java.util.Date> {
 
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
@@ -50,15 +49,14 @@ public class JavaUtilDateValueSemanticsProvider extends JavaUtilDateValueSemanti
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaUtilDateValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public JavaUtilDateValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, context);
     }
 
     @Override
@@ -67,14 +65,14 @@ public class JavaUtilDateValueSemanticsProvider extends JavaUtilDateValueSemanti
     }
 
     @Override
-    protected Object add(
-            final Object original,
+    protected Date add(
+            final Date original,
             final int years,
             final int months,
             final int days,
             final int hours,
             final int minutes) {
-        final Date date = (Date) original;
+        final Date date = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.SECOND, 0);
@@ -90,12 +88,12 @@ public class JavaUtilDateValueSemanticsProvider extends JavaUtilDateValueSemanti
     }
 
     @Override
-    protected Object now() {
+    protected Date now() {
         return new Date(Clock.getTime());
     }
 
     @Override
-    protected Object setDate(final Date date) {
+    protected Date setDate(final Date date) {
         return date;
     }
 }

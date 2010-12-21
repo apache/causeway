@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class FloatWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class FloatWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Float> {
 
     public FloatWrapperValueTypeFacetFactory() {
         super(FloatingPointValueFacet.class);
@@ -32,10 +32,10 @@ public class FloatWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsP
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != FloatWrapperValueSemanticsProvider.adaptedClass()) {
+        if (type != Float.class) {
             return false;
         }
-        addFacets(new FloatWrapperValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new FloatWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

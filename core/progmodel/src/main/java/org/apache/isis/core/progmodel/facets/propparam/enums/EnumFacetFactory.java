@@ -17,34 +17,34 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.enums;
 
-
+import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
 
-public class EnumFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class EnumFacetFactory<T extends Enum<T>> extends ValueUsingValueSemanticsProviderFacetFactory<T> {
 
-  public EnumFacetFactory() {
-    super(ChoicesFacet.class);
-  }
-  
-  @Override
-  public boolean process(
-      Class<?> cls, MethodRemover methodRemover,
-      FacetHolder holder) {
-    
-    if (!cls.isEnum()) {
-      return false;
+    public EnumFacetFactory() {
+        super(ChoicesFacet.class);
     }
-    
-    addFacets(new EnumValueSemanticsProvider(holder, cls, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
-    FacetUtil.addFacet(new ChoicesFacetEnum(holder, cls.getEnumConstants()));
-    return true;
-  }
 
-  
+    @Override
+    public boolean process(Class<?> cls, MethodRemover methodRemover, FacetHolder holder) {
+
+        if (!cls.isEnum()) {
+            return false;
+        }
+
+        addFacets(new EnumValueSemanticsProvider<T>(holder, asT(cls), getConfiguration(), getContext()));
+        FacetUtil.addFacet(new ChoicesFacetEnum(holder, cls.getEnumConstants()));
+        return true;
+    }
+
+    protected Class<T> asT(Class<?> cls) {
+        return CastUtils.cast(cls);
+    }
+
 }

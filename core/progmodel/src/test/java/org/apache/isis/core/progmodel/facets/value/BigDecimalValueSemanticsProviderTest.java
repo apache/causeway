@@ -30,10 +30,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.BigDecimalValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -53,7 +53,7 @@ public class BigDecimalValueSemanticsProviderTest extends ValueSemanticsProvider
         allowMockAdapterToReturn(bigDecimal);
         holder = new FacetHolderImpl();
 
-        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(value = new BigDecimalValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

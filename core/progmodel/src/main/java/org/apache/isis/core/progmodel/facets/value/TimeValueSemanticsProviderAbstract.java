@@ -27,11 +27,10 @@ import java.util.Map;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class TimeValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstractTemporal {
+public abstract class TimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 6;
@@ -49,18 +48,18 @@ public abstract class TimeValueSemanticsProviderAbstract extends ValueSemanticsP
         formats.put("short", DateFormat.getTimeInstance(DateFormat.SHORT));
     }
 
+    @SuppressWarnings("unchecked")
     public TimeValueSemanticsProviderAbstract(
             final FacetHolder holder,
-            final Class<?> adaptedClass,
+            final Class<T> adaptedClass,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super("time", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
-                specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super("time", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T) DEFAULT_VALUE, configuration,
+                context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.time");
         if (formatRequired == null) {
-            format = (DateFormat) formats().get(defaultFormat());
+            format = formats().get(defaultFormat());
         } else {
             setMask(formatRequired);
         }

@@ -26,15 +26,14 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends
-    FacetFactoryAbstract implements RuntimeContextAware {
+    FacetFactoryAbstract implements AdapterMapAware {
 
-
-    private RuntimeContext runtimeContext;
+    private AdapterMap adapterMap;
 
     public PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory() {
         super(ObjectFeatureType.PROPERTIES_AND_PARAMETERS);
@@ -50,7 +49,7 @@ public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory
             return false;
         }
         
-        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(holder));
+        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(holder, getSpecificationLookup()));
         return true;
     }
     
@@ -62,7 +61,7 @@ public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory
             return false;
         }
         
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(holder, runtimeContext));
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(holder, getSpecificationLookup(), getAdapterMap()));
         return true;
     }
 
@@ -70,13 +69,13 @@ public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory
     ///////////////////////////////////////////////
     // Injected
     ///////////////////////////////////////////////
-    
-    /**
-     * Injected since {@link RuntimeContextAware}.
-     */
-    @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
-    }
 
+    protected AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+    
+    @Override
+    public void setAdapterMap(AdapterMap adapterMap) {
+        this.adapterMap = adapterMap;
+    }
 }

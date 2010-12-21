@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.actcoll.typeof;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 
 
 public class TypeOfFacetInferredFromArray extends TypeOfFacetAbstract {
@@ -29,8 +29,8 @@ public class TypeOfFacetInferredFromArray extends TypeOfFacetAbstract {
     public TypeOfFacetInferredFromArray(
             final Class<?> type, 
             final FacetHolder holder, 
-            final SpecificationLoader specificationLoader) {
-        super(type, holder, specificationLoader);
+            final SpecificationLookup specificationLookup) {
+        super(type, holder, specificationLookup);
     }
 
 

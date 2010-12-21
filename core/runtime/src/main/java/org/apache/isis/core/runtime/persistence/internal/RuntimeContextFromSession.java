@@ -25,10 +25,27 @@ import java.util.List;
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiatorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
@@ -50,139 +67,211 @@ import org.apache.isis.core.runtime.transaction.updatenotifier.UpdateNotifier;
 public class RuntimeContextFromSession extends RuntimeContextAbstract {
 
 
-    ////////////////////////////////////////////////////////////////////
-	// AuthenticationSession
-    ////////////////////////////////////////////////////////////////////
-
-	public AuthenticationSession getAuthenticationSession() {
-		return IsisContext.getAuthenticationSession();
-	}
-
-    ////////////////////////////////////////////////////////////////////
-	// getAdapterFor, adapterFor
-    ////////////////////////////////////////////////////////////////////
-
-	public ObjectAdapter getAdapterFor(Object pojo) {
-		return getAdapterManager().getAdapterFor(pojo);
-	}
-
-	public ObjectAdapter getAdapterFor(Oid oid) {
-		return getAdapterManager().getAdapterFor(oid);
-	}
-
-	public ObjectAdapter adapterFor(Object pojo) {
-		return getAdapterManager().adapterFor(pojo);
-	}
-
-	public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
-		return getAdapterManager().adapterFor(pojo, ownerAdapter, identified);
-	}
-
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+    private final AdapterMap adapterManager;
+    private final ObjectDirtier objectDirtier;
+    private final ObjectInstantiator objectInstantiator;
+    private final ObjectPersistor objectPersistor;
+    private final ServicesProvider servicesProvider;
+    private final DependencyInjector dependencyInjector;
+    private final QuerySubmitter querySubmitter;
+    private final DomainObjectServices domainObjectServices;
 
     ////////////////////////////////////////////////////////////////////
-	// createTransientInstance, instantiate
-    ////////////////////////////////////////////////////////////////////
-	
-	public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
-        return getPersistenceSession().createInstance(spec);
-	}
-
-	public Object instantiate(Class<?> cls) throws ObjectInstantiationException {
-		return getPersistenceSession().getObjectFactory().instantiate(cls);
-	}
-
-	
-    ////////////////////////////////////////////////////////////////////
-	// resolve, objectChanged
+    // Constructor
     ////////////////////////////////////////////////////////////////////
 
-	public void resolve(Object parent) {
-        new DomainObjectContainerResolve().resolve(parent);
-	}
+    public RuntimeContextFromSession() {
+        this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
+            
+            @Override
+            public AuthenticationSession getAuthenticationSession() {
+                return IsisContext.getAuthenticationSession();
+            }
+        };
+        this.adapterManager = new AdapterMapAbstract() {
+            
+            @Override
+            public ObjectAdapter getAdapterFor(Object pojo) {
+                return getRuntimeAdapterManager().getAdapterFor(pojo);
+            }
 
-	public void resolve(Object parent, Object field) {
-        new DomainObjectContainerResolve().resolve(parent, field);
-	}
+            @Override
+            public ObjectAdapter adapterFor(Object pojo) {
+                return getRuntimeAdapterManager().adapterFor(pojo);
+            }
 
-	public void objectChanged(ObjectAdapter adapter) {
-		getPersistenceSession().objectChanged(adapter);
-	}
+            @Override
+            public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
+                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, identified);
+            }
+        };
+        this.objectInstantiator = new ObjectInstantiatorAbstract() {
+            
+            @Override
+            public Object instantiate(Class<?> cls) throws ObjectInstantiationException {
+                return getPersistenceSession().getObjectFactory().instantiate(cls);
+            }
+        };
 
-	public void objectChanged(Object object) {
-        new DomainObjectContainerObjectChanged().objectChanged(object);
-	}
+        this.objectDirtier = new ObjectDirtierAbstract() {
+            
+            @Override
+            public void objectChanged(ObjectAdapter adapter) {
+                getPersistenceSession().objectChanged(adapter);
+            }
+
+            @Override
+            public void objectChanged(Object object) {
+                new DomainObjectContainerObjectChanged().objectChanged(object);
+            }
+        };
+        this.objectPersistor = new ObjectPersistorAbstract() {
+            @Override
+            public void makePersistent(ObjectAdapter adapter) {
+                getPersistenceSession().makePersistent(adapter);
+            }
+
+            @Override
+            public void remove(ObjectAdapter adapter) {
+                getUpdateNotifier().addDisposedObject(adapter);
+                getPersistenceSession().destroyObject(adapter);
+            }
+        };
+        this.servicesProvider = new ServicesProviderAbstract(){
+            @Override
+            public List<ObjectAdapter> getServices() {
+                return getPersistenceSession().getServices();
+            }
+        };
+        this.domainObjectServices = new DomainObjectServicesAbstract() {
+
+            @Override
+            public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
+                return getPersistenceSession().createInstance(spec);
+            }
+
+            @Override
+            public void resolve(Object parent) {
+                new DomainObjectContainerResolve().resolve(parent);
+            }
+
+            @Override
+            public void resolve(Object parent, Object field) {
+                new DomainObjectContainerResolve().resolve(parent, field);
+            }
+
+            @Override
+            public boolean flush() {
+                return getTransactionManager().flushTransaction();
+            }
+
+            @Override
+            public void commit() {
+                getTransactionManager().endTransaction();
+            }
+
+            @Override
+            public void informUser(String message) {
+                getMessageBroker().addMessage(message);     
+            }
+
+            @Override
+            public void warnUser(String message) {
+                getMessageBroker().addWarning(message);
+            }
+            
+            @Override
+            public void raiseError(String message) {
+                throw new ApplicationException(message);
+            }
+
+            @Override
+            public String getProperty(String name) {
+                return RuntimeContextFromSession.this.getProperty(name);
+            }
+
+            @Override
+            public List<String> getPropertyNames() {
+                return RuntimeContextFromSession.this.getPropertyNames();
+            }
+
+        };
+        this.querySubmitter = new QuerySubmitterAbstract() {
+            
+            @Override
+            public <T> List<ObjectAdapter> allMatchingQuery(Query<T> query) {
+                ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.MULTIPLE);
+                return CollectionFacetUtils.convertToAdapterList(instances);
+            }
+            
+            @Override
+            public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
+                ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.SINGLE);
+                List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
+                return list.size() > 0? list.get(0): null;
+            }
+        };
+        this.dependencyInjector = new DependencyInjectorAbstract() {
+            
+            @Override
+            public void injectDependenciesInto(Object object) {
+                getPersistenceSession().getServicesInjector().injectDependencies(object);
+            }
+        };
+    }
+    
 
     ////////////////////////////////////////////////////////////////////
-	// makePersistent, remove
+	// Components
     ////////////////////////////////////////////////////////////////////
 
-	public void makePersistent(ObjectAdapter adapter) {
-		getPersistenceSession().makePersistent(adapter);
-	}
+    @Override
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
+    }
 
-	public void remove(ObjectAdapter adapter) {
-        getUpdateNotifier().addDisposedObject(adapter);
-        getPersistenceSession().destroyObject(adapter);
-	}
+    @Override
+    public AdapterMap getAdapterMap() {
+        return adapterManager;
+    }
 
-	
-    ////////////////////////////////////////////////////////////////////
-	// flush, commit
-    ////////////////////////////////////////////////////////////////////
+    @Override
+    public ObjectInstantiator getObjectInstantiator() {
+        return objectInstantiator;
+    }
 
-	public boolean flush() {
-        return getTransactionManager().flushTransaction();
-	}
+    @Override
+    public DomainObjectServices getDomainObjectServices() {
+        return domainObjectServices;
+    }
 
-	public void commit() {
-		getTransactionManager().endTransaction();
-	}
-	
+    @Override
+    public ServicesProvider getServicesProvider() {
+        return servicesProvider;
+    }
 
-    ////////////////////////////////////////////////////////////////////
-	// allInstances, allMatching*, *MatchingQuery
-    ////////////////////////////////////////////////////////////////////
+    @Override
+    public ObjectDirtier getObjectDirtier() {
+        return objectDirtier;
+    }
 
-	public <T> List<ObjectAdapter> allMatchingQuery(Query<T> query) {
-		ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.MULTIPLE);
-		return CollectionFacetUtils.convertToAdapterList(instances);
-	}
+    @Override
+    public ObjectPersistor getObjectPersistor() {
+        return objectPersistor;
+    }
 
-	public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
-		ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.SINGLE);
-		List<ObjectAdapter> list = CollectionFacetUtils.convertToAdapterList(instances);
-		return list.size() > 0? list.get(0): null;
-	}
+    @Override
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
+    }
+    
+    @Override
+    public QuerySubmitter getQuerySubmitter() {
+        return querySubmitter;
+    }
+    
 
-
-    ////////////////////////////////////////////////////////////////////
-    // info, warn, error messages
-    ////////////////////////////////////////////////////////////////////
-
-	public void informUser(String message) {
-		getMessageBroker().addMessage(message);		
-	}
-
-	public void warnUser(String message) {
-		getMessageBroker().addWarning(message);
-	}
-	
-	public void raiseError(String message) {
-		throw new ApplicationException(message);
-	}
-
-
-	/////////////////////////////////////////////
-	// getServices, injectDependenciesInto
-	/////////////////////////////////////////////
-	
-	public List<ObjectAdapter> getServices() {
-		return getPersistenceSession().getServices();
-	}
-
-	public void injectDependenciesInto(Object object) {
-		getPersistenceSession().getServicesInjector().injectDependencies(object);
-	}
 
 	/////////////////////////////////////////////
 	// Dependencies (from context)
@@ -192,7 +281,7 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
 		return IsisContext.getPersistenceSession();
 	}
 
-	private static AdapterManager getAdapterManager() {
+	private static AdapterManager getRuntimeAdapterManager() {
 		return getPersistenceSession().getAdapterManager();
 	}
 
@@ -207,7 +296,6 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
     private static MessageBroker getMessageBroker() {
         return IsisContext.getMessageBroker();
     }
-
 
 
 }

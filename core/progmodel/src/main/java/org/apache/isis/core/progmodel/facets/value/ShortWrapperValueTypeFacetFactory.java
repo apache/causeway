@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class ShortWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class ShortWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Short> {
 
     public ShortWrapperValueTypeFacetFactory() {
         super(ShortValueFacet.class);
@@ -32,10 +32,10 @@ public class ShortWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsP
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != ShortWrapperValueSemanticsProvider.adaptedClass()) {
+        if (type != Short.class) {
             return false;
         }
-        addFacets(new ShortWrapperValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new ShortWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

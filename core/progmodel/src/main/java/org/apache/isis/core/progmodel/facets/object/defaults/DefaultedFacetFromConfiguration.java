@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 
 public class DefaultedFacetFromConfiguration extends DefaultedFacetAbstract {
@@ -29,8 +29,8 @@ public class DefaultedFacetFromConfiguration extends DefaultedFacetAbstract {
     public DefaultedFacetFromConfiguration(
     		final String candidateProviderName, 
     		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
-        super(candidateProviderName, null, holder, runtimeContext);
+    		final DependencyInjector dependencyInjector) {
+        super(candidateProviderName, null, holder, dependencyInjector);
 
     }
 }

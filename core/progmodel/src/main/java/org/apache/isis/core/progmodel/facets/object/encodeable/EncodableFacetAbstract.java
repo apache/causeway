@@ -25,7 +25,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.metamodel.util.ClassUtil;
 
 
@@ -36,21 +37,25 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
     // to delegate to
     private final EncodableFacetUsingEncoderDecoder encodeableFacetUsingEncoderDecoder;
 
-	private final RuntimeContext runtimeContext;
+    private AdapterMap adapterMap;
+    private DependencyInjector dependencyInjector;
 
     public EncodableFacetAbstract(
             final String candidateEncoderDecoderName,
             final Class<?> candidateEncoderDecoderClass,
-            final FacetHolder holder, RuntimeContext runtimeContext) {
+            final FacetHolder holder, 
+            final AdapterMap adapterManager,
+            final DependencyInjector dependencyInjector) {
         super(EncodableFacet.class, holder, false);
-        this.runtimeContext = runtimeContext;
+        this.adapterMap = adapterManager;
+        this.dependencyInjector = dependencyInjector;
 
         this.encoderDecoderClass = EncoderDecoderUtil.encoderDecoderOrNull(candidateEncoderDecoderClass,
                 candidateEncoderDecoderName);
         if (isValid()) {
             EncoderDecoder encoderDecoder = 
                 (EncoderDecoder<?>) ClassUtil.newInstance(encoderDecoderClass, FacetHolder.class, holder);
-            this.encodeableFacetUsingEncoderDecoder = new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getRuntimeContext());
+            this.encodeableFacetUsingEncoderDecoder = new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterMap(), getDependencyInjector());
         } else {
             this.encodeableFacetUsingEncoderDecoder = null;
         }
@@ -75,19 +80,24 @@ public abstract class EncodableFacetAbstract extends FacetAbstract implements En
         return encoderDecoderClass.getName();
     }
 
+    @Override
     public ObjectAdapter fromEncodedString(final String encodedData) {
         return encodeableFacetUsingEncoderDecoder.fromEncodedString(encodedData);
     }
 
+    @Override
     public String toEncodedString(final ObjectAdapter object) {
         return encodeableFacetUsingEncoderDecoder.toEncodedString(object);
     }
 
-    
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
 
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
+    }
+    
 
 }
 

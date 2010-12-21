@@ -485,7 +485,7 @@ public class JavaIntrospector {
     }
 
     private List<TypedHolder> getParamPeersFor(final Method actionMethod) {
-        return Util.getParamPeers(actionMethod, getSpecificationLoader());
+        return Util.getParamPeers(actionMethod);
     }
 
     private boolean representsAction(final MethodScope methodScope, RecognisedHelpersStrategy skipRecognisedHelpers, final Method actionMethod) {

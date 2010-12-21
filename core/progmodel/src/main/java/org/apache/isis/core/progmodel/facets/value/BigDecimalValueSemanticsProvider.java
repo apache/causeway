@@ -32,21 +32,19 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAbstract implements BigDecimalValueFacet {
-
-    private static final int TYPICAL_LENGTH = 19;
+public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<BigDecimal> implements BigDecimalValueFacet {
 
     private static Class<? extends Facet> type() {
         return BigDecimalValueFacet.class;
     }
 
+    private static final int TYPICAL_LENGTH = 19;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
-    private static final Object DEFAULT_VALUE = new BigDecimal(0);
+    private static final BigDecimal DEFAULT_VALUE = new BigDecimal(0);
 
     private final NumberFormat format;
 
@@ -54,15 +52,14 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAbst
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public BigDecimalValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public BigDecimalValueSemanticsProvider(
     		final FacetHolder holder, 
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, BigDecimal.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.decimal");
     }
 
@@ -77,7 +74,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAbst
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected BigDecimal doParse(final Object context, final String entry) {
         try {
             return new BigDecimal(entry);
         } catch (final NumberFormatException e) {
@@ -116,7 +113,7 @@ public class BigDecimalValueSemanticsProvider extends ValueSemanticsProviderAbst
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected BigDecimal doRestore(final String data) {
         return new BigDecimal(data);
     }
 

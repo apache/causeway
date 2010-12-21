@@ -53,7 +53,11 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -77,7 +81,9 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     	return type;
     }
 
+    private final ServicesProvider servicesProvider;
     private final ObjectMemberPeer memberPeer;
+    
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
      */
@@ -101,9 +107,14 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     public ObjectActionImpl(
     		final String methodId, 
     		final ObjectMemberPeer memberPeer, 
-    		final RuntimeContext runtimeContext) {
-        super(methodId, memberPeer, FeatureType.ACTION, runtimeContext);
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final SpecificationLookup specificationLookup, 
+            final AdapterMap adapterManager,
+            final ServicesProvider servicesProvider,
+            final QuerySubmitter querySubmitter) {
+        super(methodId, memberPeer, FeatureType.ACTION, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
         this.memberPeer = memberPeer;
+        this.servicesProvider = servicesProvider;
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -232,7 +243,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             final List<TypedHolder> paramPeers = memberPeer.getChildren();
             for (int i = 0; i < parameterCount; i++) {
                 TypedHolder paramPeer = paramPeers.get(i);
-                final ObjectSpecification specification = paramPeer.getSpecification(getSpecificationLoader());
+                final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLookup(), paramPeer.getType());
                 if (specification.isParseable()) {
                     parameters.add(new ObjectActionParameterParseable(i, this, paramPeer));
                 } else if (specification.isNotCollection()) {
@@ -397,7 +408,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     private ObjectAdapter findService() {
-        final List<ObjectAdapter> services = getRuntimeContext().getServices();
+        final List<ObjectAdapter> services = getServicesProvider().getServices();
         for (ObjectAdapter serviceAdapter : services) {
             if (serviceAdapter.getSpecification() == getOnType()) {
                 return serviceAdapter;
@@ -439,7 +450,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             } 
             for (int i = 0; i < parameterCount; i++) {
                 if (parameterDefaultPojos[i] != null) {
-                     ObjectSpecification componentSpec = getRuntimeContext().getSpecificationLoader().loadSpecification(
+                     ObjectSpecification componentSpec = getSpecificationLookup().loadSpecification(
                             parameterDefaultPojos[i].getClass());
                     ObjectSpecification parameterSpec = parameters.get(i).getSpecification();
                     if (!componentSpec.isOfType(parameterSpec)) {
@@ -481,7 +492,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     private ObjectAdapter adapterFor(final Object pojo) {
-        return pojo == null ? null : getRuntimeContext().adapterFor(pojo);
+        return pojo == null ? null : getAdapterMap().adapterFor(pojo);
     }
 
 
@@ -530,14 +541,14 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
             final ObjectSpecification paramSpec = parameters.get(i).getSpecification();
 
             if (parameterChoicesPojos[i] != null && parameterChoicesPojos[i].length > 0) {
-                ObjectActionParameterAbstract.checkChoicesType(getRuntimeContext(), parameterChoicesPojos[i], paramSpec);
+                ObjectActionParameterAbstract.checkChoicesType(getSpecificationLookup(), parameterChoicesPojos[i], paramSpec);
                 parameterChoicesAdapters[i] = new ObjectAdapter[parameterChoicesPojos[i].length];
                 for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);
                 }
             } else if (SpecificationFacets.isBoundedSet(paramSpec)) {
                 QueryFindAllInstances query = new QueryFindAllInstances(paramSpec.getFullName());
-				final List<ObjectAdapter> allInstancesAdapter = getRuntimeContext().allMatchingQuery(query);
+				final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
                 parameterChoicesAdapters[i] = new ObjectAdapter[allInstancesAdapter.size()];
                 int j = 0;
                 for(ObjectAdapter adapter: allInstancesAdapter) {
@@ -589,9 +600,13 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         return sb.toString();
     }
 
-
-
-
-
-
+    
+    //////////////////////////////////////////////////////
+    // Dependencies (from constructor)
+    //////////////////////////////////////////////////////
+    
+    public ServicesProvider getServicesProvider() {
+        return servicesProvider;
+    }
+    
 }

@@ -47,7 +47,10 @@ import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
@@ -61,8 +64,11 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
 
     public OneToOneAssociationImpl(
     		final ObjectMemberPeer association, 
-    		final RuntimeContext runtimeContext) {
-        super(association.getIdentifier().getMemberName(), association.getSpecification(runtimeContext.getSpecificationLoader()), FeatureType.PROPERTY, association, runtimeContext);
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final SpecificationLookup specificationLookup,
+            final AdapterMap adapterManager,
+            final QuerySubmitter querySubmitter) {
+        super(association.getIdentifier().getMemberName(), getSpecification(specificationLookup, association.getType()), FeatureType.PROPERTY, association, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
         this.associationPeer = association;
     }
 
@@ -143,7 +149,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             return null;
         }
         
-        return getRuntimeContext().adapterFor(referencedPojo, ownerAdapter, this);
+        return getAdapterMap().adapterFor(referencedPojo, ownerAdapter, this);
     }
 
 
@@ -245,17 +251,17 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter ownerAdapter) {
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
-        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLoader());
+        final Object[] pojoOptions = propertyChoicesFacet == null ? null : propertyChoicesFacet.getChoices(ownerAdapter, getSpecificationLookup());
         if (pojoOptions != null) {
             final ObjectAdapter[] options = new ObjectAdapter[pojoOptions.length];
             for (int i = 0; i < options.length; i++) {
-                options[i] = getRuntimeContext().adapterFor(pojoOptions[i]);
+                options[i] = getAdapterMap().adapterFor(pojoOptions[i]);
             }
             return options;
         } else if (SpecificationFacets.isBoundedSet(getSpecification())) {
         	
             QueryFindAllInstances query = new QueryFindAllInstances(getSpecification().getFullName());
-			final List<ObjectAdapter> allInstancesAdapter = getRuntimeContext().allMatchingQuery(query);
+			final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
         	final ObjectAdapter[] options = new ObjectAdapter[allInstancesAdapter.size()];
         	int j = 0;
             for (ObjectAdapter adapter: allInstancesAdapter) {

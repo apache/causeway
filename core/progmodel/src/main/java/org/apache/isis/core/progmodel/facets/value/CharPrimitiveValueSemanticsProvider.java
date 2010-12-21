@@ -26,37 +26,30 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 public class CharPrimitiveValueSemanticsProvider extends CharValueSemanticsProviderAbstract implements PropertyDefaultFacet {
-
-    private static final Object DEFAULT_VALUE = Character.valueOf((char) 0);
-
-    static final Class<?> adaptedClass() {
-        return char.class;
-    }
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public CharPrimitiveValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public CharPrimitiveValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, adaptedClass(), DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, char.class, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
     // PropertyDefaultFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         return createAdapter(char.class, Character.valueOf(' '));
     }

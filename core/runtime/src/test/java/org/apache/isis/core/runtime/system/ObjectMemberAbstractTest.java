@@ -29,6 +29,7 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
@@ -39,8 +40,6 @@ import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -91,6 +90,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testAvailableForUser() throws Exception {
         testMember.addFacet(new DisableForSessionFacetAbstract(testMember) {
+            @Override
             public String disabledReason(final AuthenticationSession session) {
                 return null;
             }
@@ -104,6 +104,7 @@ public class ObjectMemberAbstractTest {
     public void testVisibleWhenHiddenFacetSetToAlways() {
         testMember.addFacet(new HideForContextFacetNone(testMember));
         testMember.addFacet(new HiddenFacetAbstract(When.ALWAYS, testMember) {
+            @Override
             public String hiddenReason(final ObjectAdapter target) {
                 return null;
             }
@@ -156,6 +157,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleForSession() {
         testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
+            @Override
             public String hiddenReason(final AuthenticationSession session) {
                 return "Hidden";
             }
@@ -166,6 +168,7 @@ public class ObjectMemberAbstractTest {
     @Test
     public void testVisibleForSessionFails() {
         testMember.addFacet(new HideForSessionFacetAbstract(testMember) {
+            @Override
             public String hiddenReason(final AuthenticationSession session) {
                 return "hidden";
             }
@@ -191,14 +194,11 @@ public class ObjectMemberAbstractTest {
 class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
 
     protected ObjectMemberAbstractImpl(final String id) {
-        super(id, new IdentifiedImpl(), FeatureType.PROPERTY, new RuntimeContextNoRuntime());
-    }
-
-    protected ObjectMemberAbstractImpl(final String id, final RuntimeContext runtimeContext) {
-        super(id, new IdentifiedImpl(), FeatureType.PROPERTY, runtimeContext);
+        super(id, new IdentifiedImpl(), FeatureType.PROPERTY, null, null, null, null);
     }
 
 
+    @Override
     public String debugData() {
         return null;
     }
@@ -207,10 +207,12 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         return null;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return null;
     }
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -218,6 +220,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
         return new PropertyUsabilityContext(session, invocationMethod, target, getIdentifier());
     }
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -229,6 +232,7 @@ class ObjectMemberAbstractImpl extends ObjectMemberAbstract {
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         return null;
     }

@@ -22,15 +22,15 @@ package org.apache.isis.core.metamodel.util;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public final class ObjectAdapterUtils {
     private ObjectAdapterUtils() {}
 
-    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, RuntimeContext runtimeContext) {
-        final ObjectAdapter collection = runtimeContext.adapterFor(option);
+    public static Object[] getCollectionAsObjectArray(final Object option, final ObjectSpecification spec, AdapterMap adapterManager) {
+        final ObjectAdapter collection = adapterManager.adapterFor(option);
         final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
     	final Object[] optionArray = new Object[facet.size(collection)];
     	int j = 0;

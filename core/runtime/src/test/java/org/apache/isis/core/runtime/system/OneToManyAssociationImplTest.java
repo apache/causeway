@@ -17,79 +17,170 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.runtime.system;
 
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
-import org.apache.isis.core.runtime.system.specpeer.DummyCollectionPeer;
-import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
+import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
+@RunWith(JMock.class)
+public class OneToManyAssociationImplTest {
 
+    private static final String COLLECTION_ID = "orders";
 
-public class OneToManyAssociationImplTest extends ProxyJunit3TestCase {
+    public static class Customer {
+    }
+    public static class Order {
+    }
 
-//    private static final String FIELD_ID = "members";
-//    private static final String FIELD_NAME = "Members";
-    private ObjectAdapter adapter;
-//    private ObjectAdapter associate;
+    
+    private static final Class<?> COLLECTION_TYPE = Order.class;
+
+    private Mockery context = new JUnit4Mockery();
+
+    private ObjectAdapter mockOwnerAdapter;
+    private ObjectAdapter mockAssociatedAdapter;
     private OneToManyAssociation association;
-//    private TestSpecification type;
-    private DummyCollectionPeer associationDelegate;
-	private RuntimeContext runtimeContext;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+    private ObjectMemberPeer mockPeer;
 
-        adapter = system.createPersistentTestObject();
-//        associate = system.createPersistentTestObject();
-        runtimeContext = new RuntimeContextNoRuntime();
+    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    private SpecificationLoader mockSpecificationLoader;
+    private AdapterMap mockAdapterManager;
+    private QuerySubmitter mockQuerySubmitter;
 
-        associationDelegate = new DummyCollectionPeer(system.getSpecification(String.class));
-        association = new OneToManyAssociationImpl(associationDelegate, runtimeContext);
+    private NamedFacet mockNamedFacet;
+    private CollectionAddToFacet mockCollectionAddToFacet;
+
+
+    @Before
+    public void setUp() {
+
+        mockOwnerAdapter = context.mock(ObjectAdapter.class, "owner");
+        mockAssociatedAdapter = context.mock(ObjectAdapter.class, "associated");
+        
+        mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
+        mockSpecificationLoader = context.mock(SpecificationLoader.class);
+        mockAdapterManager = context.mock(AdapterMap.class);
+        mockQuerySubmitter = context.mock(QuerySubmitter.class);
+        mockPeer = context.mock(ObjectMemberPeer.class);
+
+        mockNamedFacet = context.mock(NamedFacet.class);
+        mockCollectionAddToFacet = context.mock(CollectionAddToFacet.class);
+        
+        allowingPeerToReturnCollectionType();
+        allowingPeerToReturnIdentifier();
+        allowingSpecLoaderToReturnSpecs();
+        association = new OneToManyAssociationImpl(mockPeer, mockAuthenticationSessionProvider, mockSpecificationLoader, mockAdapterManager, mockQuerySubmitter);
     }
 
-//    public void xxxtestType() {
-//        assertEquals(type, association.getSpecification());
-//    }
-//
-//    public void xxxtestSet() {
-//        association.addElement(adapter, associate);
-//        associationDelegate.assertAction(0, "add " + adapter);
-//        associationDelegate.assertAction(1, "add " + associate);
-//    }
-//
-//    public void xxxtestClear() {
-//        association.removeElement(adapter, associate);
-//        associationDelegate.assertAction(0, "remove " + adapter);
-//        associationDelegate.assertAction(1, "remove " + associate);
-//    }
-
-    public void testClearWithNull() {
-        try {
-            association.removeElement(adapter, null);
-            fail();
-        } catch (final IllegalArgumentException expected) {}
-        associationDelegate.assertActions(0);
+    private void allowingSpecLoaderToReturnSpecs() {
+        context.checking(new Expectations() {
+            {
+                allowing(mockSpecificationLoader).loadSpecification(Order.class);
+            }
+        });
     }
 
-    public void testSetWithNull() {
-        try {
-            association.addElement(adapter, null);
-            fail();
-        } catch (final IllegalArgumentException expected) {}
-        associationDelegate.assertActions(0);
+    @Test
+    public void id() {
+        assertThat(association.getId(), is(equalTo(COLLECTION_ID)));
     }
 
-//    public void xxxtestName() {
-//        assertEquals(FIELD_NAME, association.getId());
-//    }
-//
-//    public void xxxtestLabel() {
-//        assertEquals(FIELD_NAME, association.getName());
-//    }
+    @Test
+    public void name() {
+        expectPeerToReturnNamedFacet();
+        assertThat(association.getName(), is(equalTo("My name")));
+    }
+
+
+    @Test
+    public void delegatesToUnderlying() {
+        ObjectSpecification spec = association.getSpecification();
+    }
+
+    @Test
+    public void canAddPersistable() {
+        context.checking(new Expectations() {
+            {
+                one(mockPeer).containsFacet(NotPersistedFacet.class);
+                will(returnValue(false));
+                
+                one(mockOwnerAdapter).isPersistent();
+                will(returnValue(true));
+
+                one(mockAssociatedAdapter).isTransient();
+                will(returnValue(false));
+                
+                one(mockPeer).getFacet(CollectionAddToFacet.class);
+                will(returnValue(mockCollectionAddToFacet));
+                
+                one(mockCollectionAddToFacet).add(mockOwnerAdapter, mockAssociatedAdapter);
+            }
+        });
+        association.addElement(mockOwnerAdapter, mockAssociatedAdapter);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cannotRemoveNull() {
+        association.removeElement(mockOwnerAdapter, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void cannotAddNull() {
+        association.addElement(mockOwnerAdapter, null);
+    }
+
+    private void allowingPeerToReturnCollectionType() {
+        context.checking(new Expectations() {
+            {
+                allowing(mockPeer).getType();
+                will(returnValue(COLLECTION_TYPE));
+            }
+        });
+    }
+
+    private void allowingPeerToReturnIdentifier() {
+        context.checking(new Expectations() {
+            {
+                one(mockPeer).getIdentifier();
+                will(returnValue(Identifier.propertyOrCollectionIdentifier(Customer.class, COLLECTION_ID)));
+            }
+        });
+    }
+
+    private void expectPeerToReturnNamedFacet() {
+        context.checking(new Expectations() {
+            {
+                one(mockPeer).getFacet(NamedFacet.class);
+                will(returnValue(mockNamedFacet));
+                
+                one(mockNamedFacet).value();
+                will(returnValue("My name"));
+            }
+        });
+    }
+
 }

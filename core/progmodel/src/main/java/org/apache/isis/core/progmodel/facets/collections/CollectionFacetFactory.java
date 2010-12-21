@@ -24,8 +24,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
@@ -34,10 +34,10 @@ import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredF
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 
 
-public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, RuntimeContextAware {
+public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, AdapterMapAware {
 
     private CollectionTypeRegistry collectionTypeRegistry;
-	private RuntimeContext runtimeContext;
+	private AdapterMap adapterMap;
 
     public CollectionFacetFactory() {
         super(ObjectFeatureType.OBJECTS_ONLY);
@@ -51,16 +51,16 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
             if (typeOfFacet == null) {
                 Class<?> collectionElementType = collectionElementType(cls);
                 holder.addFacet(collectionElementType != Object.class ? new TypeOfFacetInferredFromGenerics(
-                        collectionElementType, holder, getSpecificationLoader()) : new TypeOfFacetDefaultToObject(holder, getSpecificationLoader()));
+                        collectionElementType, holder, getSpecificationLookup()) : new TypeOfFacetDefaultToObject(holder, getSpecificationLookup()));
             } else {
                 // nothing
             }
-            holder.addFacet(new JavaCollectionFacet(holder, getRuntimeContext()));
+            holder.addFacet(new JavaCollectionFacet(holder, getAdapterMap()));
             return true;
         }
         if (collectionTypeRegistry.isArrayType(cls)) {
-            holder.addFacet(new JavaArrayFacet(holder, getRuntimeContext()));
-            holder.addFacet(new TypeOfFacetInferredFromArray(cls.getComponentType(), holder, getSpecificationLoader()));
+            holder.addFacet(new JavaArrayFacet(holder, getAdapterMap()));
+            holder.addFacet(new TypeOfFacetInferredFromArray(cls.getComponentType(), holder, getSpecificationLookup()));
             return true;
         }
 
@@ -79,24 +79,18 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
     /**
      * Injected since {@link CollectionTypeRegistryAware}.
      */
+    @Override
     public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
         this.collectionTypeRegistry = collectionTypeRegistry;
     }
 
-
-    /**
-     * As per {@link #setRuntimeContext(RuntimeContext)}
-     */
-    public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
-    /**
-     * Injected since {@link RuntimeContextAware}.
-     */
-	public void setRuntimeContext(final RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
-	}
-
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+    
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterMap = adapterManager;
+    }
 
 }

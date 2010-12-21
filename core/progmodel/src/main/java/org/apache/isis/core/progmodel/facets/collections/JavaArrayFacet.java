@@ -25,22 +25,23 @@ import java.util.Collection;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionFacetAbstract;
 
 
 public class JavaArrayFacet extends CollectionFacetAbstract {
 
-    private final RuntimeContext runtimeContext;
+    private final AdapterMap adapterMap;
 
-    public JavaArrayFacet(final FacetHolder holder, final RuntimeContext runtimeContext) {
+    public JavaArrayFacet(final FacetHolder holder, final AdapterMap adapterManager) {
         super(holder);
-        this.runtimeContext = runtimeContext;
+        this.adapterMap = adapterManager;
     }
 
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
+    @Override
     public void init(final ObjectAdapter collectionAdapter, final ObjectAdapter[] initData) {
         int length = initData.length;
         Object[] array = new Object[length];
@@ -53,11 +54,12 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
+    @Override
     public Collection<ObjectAdapter> collection(ObjectAdapter collectionAdapter) {
         final Object[] array = array(collectionAdapter);
         ArrayList<ObjectAdapter> objectCollection = new ArrayList<ObjectAdapter>(array.length);
         for (int i = 0; i < array.length; i++) {
-            ObjectAdapter element = getAdapterManager().getAdapterFor(array[i]);
+            ObjectAdapter element = getAdapterMap().getAdapterFor(array[i]);
             objectCollection.add(element);
         }
         return objectCollection;
@@ -66,14 +68,16 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
+    @Override
     public ObjectAdapter firstElement(final ObjectAdapter collectionAdapter) {
         final Object[] array = array(collectionAdapter);
-        return array.length > 0 ? getAdapterManager().getAdapterFor(array[0]) : null;
+        return array.length > 0 ? getAdapterMap().getAdapterFor(array[0]) : null;
     }
 
     /**
      * Expected to be called with a {@link ObjectAdapter} wrapping an array.
      */
+    @Override
     public int size(final ObjectAdapter collectionAdapter) {
         return array(collectionAdapter).length;
     }
@@ -86,8 +90,8 @@ public class JavaArrayFacet extends CollectionFacetAbstract {
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////
 
-    private RuntimeContext getAdapterManager() {
-        return runtimeContext;
+    private AdapterMap getAdapterMap() {
+        return adapterMap;
     }
 
 }

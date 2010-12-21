@@ -28,10 +28,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.DoubleWrapperValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -49,7 +49,7 @@ public class DoubleValueSemanticsProviderTest extends ValueSemanticsProviderAbst
     	}});
 
         holder = new FacetHolderImpl();
-        setValue(new DoubleWrapperValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(new DoubleWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
 
         doubleObj = new Double(32.5d);
         allowMockAdapterToReturn(doubleObj);

@@ -19,15 +19,18 @@
 
 package org.apache.isis.alternatives.objectstore.nosql;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+
+import com.google.common.collect.Maps;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapDelegator;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
@@ -47,7 +50,7 @@ public class TrialObjects {
     private AdapterFactory factory;
     private JavaReflector reflector;
 
-    private final Map<Object, ObjectAdapter> adapters = new HashMap<Object, ObjectAdapter>();
+    private final Map<Object, ObjectAdapter> adapters = Maps.newHashMap();
 
     public TrialObjects() {
 
@@ -58,20 +61,25 @@ public class TrialObjects {
                 new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
                 new MetaModelValidatorNoop());
         reflector.setRuntimeContext(new RuntimeContextNoRuntime() {
-            @Override
-            public ObjectAdapter adapterFor(Object pattern) {
-                return adapters.get(pattern);
-            }
 
             @Override
-            public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
-                if (adapters.get(pojo) != null) {
-                    return adapters.get(pojo);
-                } else {
-                    return factory.createAdapter(pojo, null);
-                }
-            }
+            public AdapterMap getAdapterMap() {
+                return new AdapterMapDelegator(super.getAdapterMap()) {
+                    @Override
+                    public ObjectAdapter adapterFor(Object pattern) {
+                        return adapters.get(pattern);
+                    }
 
+                    @Override
+                    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
+                        if (adapters.get(pojo) != null) {
+                            return adapters.get(pojo);
+                        } else {
+                            return factory.createAdapter(pojo, null);
+                        }
+                    }
+                };
+            }
         });
         reflector.init();
 

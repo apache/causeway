@@ -149,7 +149,7 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
     public ObjectAdapter get(ObjectAdapter owner) {
         MutableProposedHolder proposedHolder = getProposedHolder(owner);
         Object proposed = proposedHolder.getProposed();
-        return getRuntimeContext().adapterFor(proposed);
+        return getAdapterMap().adapterFor(proposed);
     }
 
     /**

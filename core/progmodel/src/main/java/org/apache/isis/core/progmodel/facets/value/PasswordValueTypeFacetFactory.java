@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class PasswordValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class PasswordValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Password> {
 
     public PasswordValueTypeFacetFactory() {
         super(PasswordValueFacet.class);
@@ -35,7 +35,7 @@ public class PasswordValueTypeFacetFactory extends ValueUsingValueSemanticsProvi
         if (type != org.apache.isis.applib.value.Password.class) {
             return false;
         }
-        addFacets(new PasswordValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new PasswordValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

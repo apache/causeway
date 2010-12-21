@@ -29,22 +29,6 @@ import static org.junit.Assert.assertThat;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuItem;
-import org.apache.isis.viewer.wicket.ui.components.widgets.cssmenu.CssMenuLinkFactory;
-import org.apache.isis.viewer.wicket.ui.fixtures.ActionFixtures;
-import org.apache.isis.viewer.wicket.ui.fixtures.AdapterFixtures;
-import org.apache.isis.viewer.wicket.ui.fixtures.Customers;
-import org.apache.isis.viewer.wicket.ui.fixtures.SpecFixtures;
-import org.apache.isis.viewer.wicket.ui.fixtures.SystemFixtures;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.util.tester.WicketTester;
 import org.jmock.Mockery;
@@ -58,6 +42,21 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Lists;
+
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
+import org.apache.isis.viewer.wicket.ui.fixtures.ActionFixtures;
+import org.apache.isis.viewer.wicket.ui.fixtures.AdapterFixtures;
+import org.apache.isis.viewer.wicket.ui.fixtures.Customers;
+import org.apache.isis.viewer.wicket.ui.fixtures.SpecFixtures;
+import org.apache.isis.viewer.wicket.ui.fixtures.SystemFixtures;
 
 @RunWith(JMock.class)
 public class CssMenuUtilsTest {
@@ -142,7 +141,7 @@ public class CssMenuUtilsTest {
 	@Test
 	public void whenSetActionWithNoChildrenThenNoMenuItem() throws Exception {
 
-		setAction = new ObjectActionSet("customers", "Customers", Lists.<ObjectAction>newArrayList(), mockRuntimeContext);
+		setAction = new ObjectActionSet("customers", "Customers", Lists.<ObjectAction>newArrayList());
 
 		new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, setAction, fakeLink);
 
@@ -160,7 +159,7 @@ public class CssMenuUtilsTest {
 	@Test
 	public void whenSetActionWithOneChildThenMenuItemForSetActionAndMenuItemUnderneath() throws Exception {
 
-		setAction = new ObjectActionSet("customers", "Customers", Collections.singletonList(mockUserAction), mockRuntimeContext);
+		setAction = new ObjectActionSet("customers", "Customers", Collections.singletonList(mockUserAction));
 
 		new AdapterFixtures(context).getOid(mockAdapter, mockOid);
 

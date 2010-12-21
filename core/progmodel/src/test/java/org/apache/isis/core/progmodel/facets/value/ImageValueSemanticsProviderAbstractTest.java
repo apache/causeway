@@ -29,10 +29,10 @@ import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.progmodel.facets.value.ImageValueSemanticsProviderAbstract;
 
 @RunWith(JMock.class)
 public class ImageValueSemanticsProviderAbstractTest {
@@ -43,10 +43,10 @@ public class ImageValueSemanticsProviderAbstractTest {
     public void testImageData() throws Exception {
     	RuntimeContext mockRuntimeContext = mockery.mock(RuntimeContext.class);
     	FacetHolder mockFacetHolder = mockery.mock(FacetHolder.class);
-    	final TestImageSemanticsProvider adapter = new TestImageSemanticsProvider(mockFacetHolder , mockRuntimeContext);
+    	final TestImageSemanticsProvider adapter = new TestImageSemanticsProvider(mockFacetHolder);
 
     	String data = adapter.toEncodedString(null);
-        int[][] array = (int[][]) adapter.doRestore(data);
+        int[][] array = adapter.doRestore(data);
         
         assertEquals(0xFF000000, array[0][0]);
         assertEquals(0xFF3F218A, array[0][1]);
@@ -57,11 +57,10 @@ public class ImageValueSemanticsProviderAbstractTest {
     }
 }
 
-class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract {
+class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract<int[][]> {
 
-    TestImageSemanticsProvider(final FacetHolder holder, final RuntimeContext runtimeContext) {
-        
-		super(holder, null, null, null, runtimeContext);
+    TestImageSemanticsProvider(final FacetHolder holder) {
+		super(holder, null, null, null);
 	}
 
 	@Override
@@ -76,18 +75,21 @@ class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract {
     }
 
     @Override
-    protected Object setPixels(final int[][] pixels) {
+    protected int[][] setPixels(final int[][] pixels) {
         return pixels;
     }
 
+    @Override
     public int getHeight(final ObjectAdapter object) {
         return 0;
     }
 
+    @Override
     public Image getImage(final ObjectAdapter object) {
         return null;
     }
 
+    @Override
     public int getWidth(final ObjectAdapter object) {
         return 0;
     }
@@ -96,10 +98,12 @@ class TestImageSemanticsProvider extends ImageValueSemanticsProviderAbstract {
         return null;
     }
 
+    @Override
     public boolean isNoop() {
         return false;
     }
 
+    @Override
     public ObjectAdapter createValue(Image image) {
         return null;
     }

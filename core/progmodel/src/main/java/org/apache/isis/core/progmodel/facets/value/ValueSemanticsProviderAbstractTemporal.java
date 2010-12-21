@@ -30,6 +30,8 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TimeZone;
 
+import com.google.inject.internal.Maps;
+
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
@@ -37,13 +39,10 @@ import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import com.google.inject.internal.Maps;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemanticsProviderAbstract implements DateValueFacet {
+public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements DateValueFacet {
 
     /**
      * Introduced to allow BDD tests to provide a different format string
@@ -97,16 +96,15 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     public ValueSemanticsProviderAbstractTemporal(
             final String propertyName,
             final FacetHolder holder,
-            final Class<?> adaptedClass,
+            final Class<T> adaptedClass,
             final int typicalLength,
             final boolean immutable,
             final boolean equalByContent,
-            final Object defaultValue,
+            final T defaultValue,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
+            final ValueSemanticsProviderContext context) {
         this(propertyName, type(), holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration,
-                specificationLoader, runtimeContext);
+                context);
     }
 
     /**
@@ -116,16 +114,15 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
             final String propertyType,
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
-            final Class<?> adaptedClass,
+            final Class<T> adaptedClass,
             final int typicalLength,
             final boolean immutable,
             final boolean equalByContent,
-            final Object defaultValue,
+            final T defaultValue,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
+            final ValueSemanticsProviderContext context) {
         super(facetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue, configuration,
-                specificationLoader, runtimeContext);
+                context);
         configureFormats();
         
         this.propertyType = propertyType;
@@ -171,22 +168,22 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected T doParse(final Object context, final String entry) {
         buildDefaultFormatIfRequired();
         final String dateString = entry.trim();
         final String str = dateString.toLowerCase();
         if (str.equals("today") || str.equals("now")) {
             return now();
         } else if (dateString.startsWith("+")) {
-            return relativeDate(original == null ? now() : original, dateString, true);
+            return relativeDate(context == null ? now() : context, dateString, true);
         } else if (dateString.startsWith("-")) {
-            return relativeDate(original == null ? now() : original, dateString, false);
+            return relativeDate(context == null ? now() : context, dateString, false);
         } else {
-            return parseDate(dateString, original == null ? now() : original);
+            return parseDate(dateString, context == null ? now() : context);
         }
     }
 
-    private Object parseDate(final String dateString, final Object original) {
+    private T parseDate(final String dateString, final Object original) {
         try {
             return setDate(format.parse(dateString));
         } catch (final ParseException e) {
@@ -209,21 +206,25 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
         }
     }
 
-    private Object relativeDate(final Object original, final String str, final boolean add) {
+    private T relativeDate(final Object object, final String str, final boolean add) {
         if (str.equals("")) {
             return now();
         }
 
-        Object date = original;
-        final StringTokenizer st = new StringTokenizer(str.substring(1), " ");
-        while (st.hasMoreTokens()) {
-            final String token = st.nextToken();
-            date = relativeDate2(date, token, add);
+        try {
+            T date = (T) object;
+            final StringTokenizer st = new StringTokenizer(str.substring(1), " ");
+            while (st.hasMoreTokens()) {
+                final String token = st.nextToken();
+                date = relativeDate2(date, token, add);
+            }
+            return date;
+        } catch (Exception e) {
+            return now();
         }
-        return date;
     }
 
-    private Object relativeDate2(final Object original, String str, final boolean add) {
+    private T relativeDate2(final T original, String str, final boolean add) {
         int hours = 0;
         int minutes = 0;
         int days = 0;
@@ -297,7 +298,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected T doRestore(final String data) {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeZone(UTC_TIME_ZONE);
         
@@ -332,7 +333,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
 
     @Override
     public final ObjectAdapter createValue(final Date date) {
-        return getRuntimeContext().adapterFor(setDate(date));
+        return getAdapterMap().adapterFor(setDate(date));
     }
 
     /**
@@ -345,7 +346,7 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
     // temporal-specific stuff
     // //////////////////////////////////////////////////////////////////
 
-    protected abstract Object add(Object original, int years, int months, int days, int hours, int minutes);
+    protected abstract T add(T original, int years, int months, int days, int hours, int minutes);
 
     protected void clearFields(final Calendar cal) {}
 
@@ -359,9 +360,9 @@ public abstract class ValueSemanticsProviderAbstractTemporal extends ValueSemant
         return false;
     }
 
-    protected abstract Object now();
+    protected abstract T now();
 
-    protected abstract Object setDate(Date date);
+    protected abstract T setDate(Date date);
 
     public void setMask(final String mask) {
         format = new SimpleDateFormat(mask);

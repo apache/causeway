@@ -26,37 +26,30 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 public class FloatPrimitiveValueSemanticsProvider extends FloatValueSemanticsProviderAbstract implements PropertyDefaultFacet {
-
-    private static final Object DEFAULT_VALUE = new Float(0.0f);
-
-    static final Class<?> adaptedClass() {
-        return float.class;
-    }
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public FloatPrimitiveValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public FloatPrimitiveValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(holder, adaptedClass(), DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, float.class, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
     // PropertyDefaultFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         return createAdapter(float.class, new Float(0.0f));
     }

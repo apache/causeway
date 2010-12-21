@@ -28,44 +28,48 @@ import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 
 
 public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-	private final SpecificationLoader specificationLoader;
-	private final RuntimeContext runtimeContext;
+	private final SpecificationLookup specificationLookup;
+	private final AdapterMap adapterMap;
 
     public PropertyDefaultFacetViaMethod(
     		final Method method, 
     		final FacetHolder holder, 
-    		final SpecificationLoader specificationLoader, 
-    		final RuntimeContext runtimeContext) {
+    		final SpecificationLookup specificationLookup, 
+    		final AdapterMap adapterManager) {
         super(holder);
         this.method = method;
-        this.specificationLoader = specificationLoader;
-        this.runtimeContext = runtimeContext;
+        this.specificationLookup = specificationLookup;
+        this.adapterMap = adapterManager;
     }
 
     /**
      * Returns a singleton list of the {@link Method} provided in the constructor. 
      */
+    @Override
     public List<Method> getMethods() {
     	return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
+	@Override
+    public boolean impliesResolve() {
 		return true;
 	}
 
-	public boolean impliesObjectChanged() {
+	@Override
+    public boolean impliesObjectChanged() {
 		return false;
 	}
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter owningAdapter) {
         final Object result = ObjectInvokeUtils.invoke(method, owningAdapter);
         return createAdapter(method.getReturnType(), result);
@@ -73,9 +77,9 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     
     private ObjectAdapter createAdapter(final Class<?> type, final Object object) {
-	    final ObjectSpecification specification = getSpecificationLoader().loadSpecification(type);
+	    final ObjectSpecification specification = getSpecificationLookup().loadSpecification(type);
 	    if (specification.isNotCollection()) {
-	        return getRuntimeContext().adapterFor(object);
+	        return getAdapterMap().adapterFor(object);
 	    } else {
 	        throw new UnknownTypeException("not an object, is this a collection?");
 	    }
@@ -93,12 +97,12 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
     // //////////////////////////////////////////////////////////////////
 
 
-    private SpecificationLoader getSpecificationLoader() {
-		return specificationLoader;
+    private SpecificationLookup getSpecificationLookup() {
+		return specificationLookup;
 	}
 
-    protected RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    protected AdapterMap getAdapterMap() {
+        return adapterMap;
     }
     
 

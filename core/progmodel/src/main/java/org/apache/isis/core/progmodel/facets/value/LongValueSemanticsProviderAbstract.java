@@ -29,16 +29,16 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements LongValueFacet {
+public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Long> implements LongValueFacet {
 
     public static Class<? extends Facet> type() {
         return LongValueFacet.class;
     }
 
+    private static final Long DEFAULT_VALUE = Long.valueOf(0L);
     private static final int TYPICAL_LENGTH = 18;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
@@ -46,11 +46,11 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     private NumberFormat format;
 
     public LongValueSemanticsProviderAbstract(
-    		final FacetHolder holder, final Class<?> adaptedClass, final Object defaultValue,
+    		final FacetHolder holder, 
+    		final Class<Long> adaptedClass, 
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.long");
     }
 
@@ -59,7 +59,7 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected Long doParse(final Object context, final String entry) {
         try {
             return Long.valueOf(format.parse(entry).longValue());
         } catch (final ParseException e) {
@@ -87,7 +87,7 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Long doRestore(final String data) {
         return new Long(data);
     }
 
@@ -95,12 +95,14 @@ public abstract class LongValueSemanticsProviderAbstract extends ValueSemanticsP
     // LongValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Long longValue(final ObjectAdapter object) {
         return (Long) (object == null ? null : object.getObject());
     }
 
+    @Override
     public ObjectAdapter createValue(final Long value) {
-        return value == null ? null : getRuntimeContext().adapterFor(value);
+        return value == null ? null : getAdapterMap().adapterFor(value);
     }
 
     // // ///// toString ///////

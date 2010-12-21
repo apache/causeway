@@ -21,27 +21,29 @@
 package org.apache.isis.core.progmodel.facets.value;
 
 import java.sql.Time;
+import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.Map;
+
+import com.google.inject.internal.Maps;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 /**
  * Treats {@link java.sql.Time} as a time-only value type.
  *
  */
-public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract {
-    private static Hashtable formats = new Hashtable();
+public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProviderAbstract<java.sql.Time> {
+    private static Map<String, DateFormat> formats = Maps.newHashMap();
 
     static {
         initFormats(formats);
@@ -52,20 +54,19 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaSqlTimeValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public JavaSqlTimeValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, java.sql.Time.class, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, java.sql.Time.class, configuration, context);
     }
 
     @Override
-    public Object add(final Object original, final int years, final int months, final int days, final int hours, final int minutes) {
-        final java.sql.Time time = (Time) original;
+    public Time add(final Time original, final int years, final int months, final int days, final int hours, final int minutes) {
+        final java.sql.Time time = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(time);
         cal.set(Calendar.YEAR, 0);
@@ -86,17 +87,17 @@ public class JavaSqlTimeValueSemanticsProvider extends TimeValueSemanticsProvide
     }
 
     @Override
-    protected Hashtable formats() {
+    protected Map<String, DateFormat> formats() {
         return formats;
     }
 
     @Override
-    protected Object now() {
+    protected Time now() {
         return new java.sql.Time(Clock.getTime());
     }
 
     @Override
-    protected Object setDate(final Date date) {
+    protected Time setDate(final Date date) {
         return new java.sql.Time(date.getTime());
     }
 

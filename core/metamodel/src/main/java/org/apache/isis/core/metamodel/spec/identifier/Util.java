@@ -21,7 +21,6 @@ import java.util.List;
 
 import com.google.inject.internal.Lists;
 
-import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
@@ -30,7 +29,7 @@ import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolderImpl;
 
 public class Util {
 
-    public static List<TypedHolder> getParamPeers(final Method actionMethod, SpecificationLoader specificationLoader) {
+    public static List<TypedHolder> getParamPeers(final Method actionMethod) {
         final Class<?>[] parameterTypes = actionMethod.getParameterTypes();
         final int numParameters = parameterTypes.length;
         final List<TypedHolder> actionParams = Lists.newArrayList();

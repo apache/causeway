@@ -33,11 +33,11 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class ImageValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements ImageValueFacet {
+public abstract class ImageValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements ImageValueFacet {
+    
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
     private static final Object DEFAULT_VALUE = null; // no default
@@ -61,14 +61,12 @@ public abstract class ImageValueSemanticsProviderAbstract extends ValueSemantics
 
     private FacetHolder facetHolder;
 
- //   private final RuntimeContext runtimeContext;
-
+    @SuppressWarnings("unchecked")
     public ImageValueSemanticsProviderAbstract(final FacetHolder holder,
-            final Class<?> adaptedClass,
+            final Class<T> adaptedClass,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(ImageValueFacet.class, holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T)DEFAULT_VALUE, configuration, context);
     }
     
 
@@ -76,12 +74,12 @@ public abstract class ImageValueSemanticsProviderAbstract extends ValueSemantics
      * Returns null to indicate that this value does not parse entry strings
      */
     @Override
-    public Parser getParser() {
+    public Parser<T> getParser() {
         return null;
     }
 
     @Override
-    protected Object doParse(Object original, String entry) {
+    protected T doParse(Object original, String entry) {
         throw new UnexpectedCallException();
     }
 
@@ -107,10 +105,12 @@ public abstract class ImageValueSemanticsProviderAbstract extends ValueSemantics
         return value;
     }
 
+    @Override
     public boolean alwaysReplace() {
         return false;
     }
 
+    @Override
     public Facet getUnderlyingFacet() {
         return null;
     }
@@ -118,15 +118,17 @@ public abstract class ImageValueSemanticsProviderAbstract extends ValueSemantics
     /**
      * Not required because {@link #alwaysReplace()} is <tt>false</tt>.
      */
+    @Override
     public void setUnderlyingFacet(Facet underlyingFacet) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean isDerived() {
         return false;
     }
 
-    public Object restoreFromByteArray(final byte[] byteArray) {
+    public T restoreFromByteArray(final byte[] byteArray) {
         final int[] flatIntArray = new int[byteArray.length / 4];
         for (int i = 0; i < flatIntArray.length; i++) {
             flatIntArray[i] = byteArrayToInt(byteArray, i * 4);
@@ -163,6 +165,7 @@ public abstract class ImageValueSemanticsProviderAbstract extends ValueSemantics
         return newImage;
     }
 
+    @Override
     protected String doEncode(Object object) {
         final int[][] image = getPixels(object);
         final int lines = image.length;
@@ -252,7 +255,8 @@ public abstract class ImageValueSemanticsProviderAbstract extends ValueSemantics
         }
     }
 
-    protected Object doRestore(final String data) {
+    @Override
+    protected T doRestore(final String data) {
         final int lines = decodePixel(data, 0);
         final int width = decodePixel(data, 1);
         final int[][] imageData = new int[lines][width];
@@ -263,26 +267,30 @@ public abstract class ImageValueSemanticsProviderAbstract extends ValueSemantics
                 imageData[line][pixel] =imageData[line][pixel] | 0xFF000000; 
             }
         }
-        final Object image = setPixels(imageData);
+        final T image = setPixels(imageData);
         return image;
    }
 
-    protected abstract Object setPixels(int[][] pixels);
+    protected abstract T setPixels(int[][] pixels);
 
     public void setMask(final String mask) {}
 
+    @Override
     public String titleString(final Object value) {
         return "image";
     }
 
+    @Override
     public String titleStringWithMask(Object value, String usingMask) {
         return "image";
     }
     
+    @Override
     public FacetHolder getFacetHolder() {
         return facetHolder;
     }
 
+    @Override
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.facetHolder = facetHolder;
     }

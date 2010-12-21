@@ -24,13 +24,14 @@ import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 
 public class EncodableFacetAnnotation extends EncodableFacetAbstract {
 
     private static String encoderDecoderName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
-        final Encodable annotation = (Encodable) annotatedClass.getAnnotation(Encodable.class);
+        final Encodable annotation = annotatedClass.getAnnotation(Encodable.class);
         final String encoderDecoderName = annotation.encoderDecoderName();
         if (!StringUtils.isNullOrEmpty(encoderDecoderName)) {
             return encoderDecoderName;
@@ -39,7 +40,7 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
     }
 
     private static Class<?> encoderDecoderClass(final Class<?> annotatedClass) {
-        final Encodable annotation = (Encodable) annotatedClass.getAnnotation(Encodable.class);
+        final Encodable annotation = annotatedClass.getAnnotation(Encodable.class);
         return annotation.encoderDecoderClass();
     }
 
@@ -47,16 +48,18 @@ public class EncodableFacetAnnotation extends EncodableFacetAbstract {
             final Class<?> annotatedClass,
             final IsisConfiguration configuration,
             final FacetHolder holder, 
-            final RuntimeContext runtimeContext) {
-        this(encoderDecoderName(annotatedClass, configuration), encoderDecoderClass(annotatedClass), holder, runtimeContext);
+            final AdapterMap adapterManager, 
+            final DependencyInjector dependencyInjector) {
+        this(encoderDecoderName(annotatedClass, configuration), encoderDecoderClass(annotatedClass), holder, adapterManager, dependencyInjector);
     }
 
     private EncodableFacetAnnotation(
             final String candidateEncoderDecoderName,
             final Class<?> candidateEncoderDecoderClass,
             final FacetHolder holder, 
-            final RuntimeContext runtimeContext) {
-        super(candidateEncoderDecoderName, candidateEncoderDecoderClass, holder, runtimeContext);
+            final AdapterMap adapterManager, 
+            final DependencyInjector dependencyInjector) {
+        super(candidateEncoderDecoderName, candidateEncoderDecoderClass, holder, adapterManager, dependencyInjector );
     }
 
 }

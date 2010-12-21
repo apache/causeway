@@ -42,20 +42,30 @@ import org.apache.isis.applib.events.PropertyAccessEvent;
 import org.apache.isis.applib.events.PropertyModifyEvent;
 import org.apache.isis.applib.events.PropertyUsabilityEvent;
 import org.apache.isis.applib.events.PropertyVisibilityEvent;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookupAware;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
+import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
 
-public class WrapperFactoryDefault implements WrapperFactory {
+public class WrapperFactoryDefault implements WrapperFactory, AuthenticationSessionProviderAware, SpecificationLookupAware, AdapterMapAware, ObjectPersistorAware {
 
     private final List<InteractionListener> listeners = new ArrayList<InteractionListener>();
     private final Map<Class<? extends InteractionEvent>, InteractionEventDispatcher> dispatchersByEventClass = new HashMap<Class<? extends InteractionEvent>, InteractionEventDispatcher>();
+    
+    private AuthenticationSessionProvider authenticationSessionProvider; 
+    private SpecificationLookup specificationLookup; 
+    private AdapterMap adapterManager;
+    private ObjectPersistor objectPersistor;
+    
 
-	private final RuntimeContext runtimeContext;
-
-    public WrapperFactoryDefault(final RuntimeContext runtimeContext) {
-    	this.runtimeContext = runtimeContext;
+    public WrapperFactoryDefault() {
         dispatchersByEventClass.put(ObjectTitleEvent.class, new InteractionEventDispatcherTypeSafe<ObjectTitleEvent>() {
             @Override
             public void dispatchTypeSafe(final ObjectTitleEvent interactionEvent) {
@@ -195,17 +205,20 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // Views
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public <T> T wrap(final T domainObject) {
         return wrap(domainObject, ExecutionMode.EXECUTE);
     }
 
+    @Override
     public <T> T wrap(final T domainObject, ExecutionMode mode) {
         if (isWrapper(domainObject)) {
             return domainObject;
         }
-        return Proxy.proxy(domainObject, this, mode, runtimeContext);
+        return Proxy.proxy(domainObject, this, mode, authenticationSessionProvider, specificationLookup, adapterManager, objectPersistor);
     }
 
+    @Override
     public boolean isWrapper(final Object possibleWrapper) {
         return possibleWrapper instanceof WrapperObject;
     }
@@ -214,18 +227,22 @@ public class WrapperFactoryDefault implements WrapperFactory {
     // Listeners
     // /////////////////////////////////////////////////////////////
 
+    @Override
     public List<InteractionListener> getListeners() {
         return listeners;
     }
 
+    @Override
     public boolean addInteractionListener(final InteractionListener listener) {
         return listeners.add(listener);
     }
 
+    @Override
     public boolean removeInteractionListener(final InteractionListener listener) {
         return listeners.remove(listener);
     }
 
+    @Override
     public void notifyListeners(final InteractionEvent interactionEvent) {
         final InteractionEventDispatcher dispatcher = dispatchersByEventClass.get(interactionEvent.getClass());
         if (dispatcher == null) {
@@ -235,4 +252,28 @@ public class WrapperFactoryDefault implements WrapperFactory {
     }
 
 
+    // /////////////////////////////////////////////////////////////
+    // Listeners
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+        this.authenticationSessionProvider = authenticationSessionProvider;
+    }
+    
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterManager = adapterManager;
+    }
+    
+    @Override
+    public void setSpecificationLookup(SpecificationLookup specificationLookup) {
+        this.specificationLookup = specificationLookup;
+    }
+
+    @Override
+    public void setObjectPersistor(ObjectPersistor objectPersistor) {
+        this.objectPersistor = objectPersistor;
+    }
+    
 }

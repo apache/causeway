@@ -22,17 +22,10 @@ package org.apache.isis.core.runtime.system.specpeer;
 
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public class DummyActionParamPeer extends FacetHolderImpl implements TypedHolder {
-
-    @Override
-    public ObjectSpecification getSpecification(SpecificationLoader specificationLoader) {
-        return null;
-    }
 
     @Override
     public Class<?> getType() {

@@ -21,17 +21,20 @@
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 
 public class ParseableFacetFromConfiguration extends ParseableFacetAbstract {
 
     public ParseableFacetFromConfiguration(
     		final String candidateParserName, 
-    		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
-        super(candidateParserName, null, holder, runtimeContext);
-
+    		final FacetHolder holder,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final DependencyInjector dependencyInjector,
+            final AdapterMap adapterManager) {
+        super(candidateParserName, null, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 }
 

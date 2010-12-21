@@ -43,7 +43,7 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         reflector.setLoadSpecificationStringReturn(customerNoSpec);
         facetFactory = new MaskAnnotationFacetFactory();
-        facetFactory.setSpecificationLoader(reflector);
+        facetFactory.setSpecificationLookup(reflector);
     }
 
     @Override

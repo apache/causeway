@@ -28,12 +28,12 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.value.TestClock;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.TimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -53,7 +53,7 @@ public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
         setupSpecification(Time.class);
         time = new Time(8, 13);
         holder = new FacetHolderImpl();
-        setValue(adapter = new TimeValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(adapter = new TimeValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

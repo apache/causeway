@@ -23,19 +23,15 @@ package org.apache.isis.core.metamodel.specloader;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
-public interface SpecificationLoader extends ApplicationScopedComponent, Injectable, DebugInfo {
+public interface SpecificationLoader extends ApplicationScopedComponent, DebugInfo, SpecificationLookup {
 
     ObjectSpecification[] allSpecifications();
 
-    /**
-     * @see #loadSpecification(String)
-     */
-    ObjectSpecification loadSpecification(Class<?> cls);
 
     /**
      * Return the specification for the specified class of object.

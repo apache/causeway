@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class ColorValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class ColorValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Color> {
 
     public ColorValueTypeFacetFactory() {
         super(ColorValueFacet.class);
@@ -36,7 +36,7 @@ public class ColorValueTypeFacetFactory extends ValueUsingValueSemanticsProvider
         if (type != Color.class) {
             return false;
         }
-        addFacets(new ColorValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new ColorValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

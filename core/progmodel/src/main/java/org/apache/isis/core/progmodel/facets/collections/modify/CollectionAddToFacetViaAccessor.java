@@ -29,7 +29,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
 import org.apache.isis.core.metamodel.util.IsisUtils;
 import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 
@@ -37,25 +37,27 @@ import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstract implements ImperativeFacet {
 
     private final Method method;
-	private final RuntimeContext runtimeContext;
+	private final ObjectDirtier objectDirtier;
 
     public CollectionAddToFacetViaAccessor(
     		final Method method, 
     		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
+    		final ObjectDirtier objectDirtier) {
         super(holder);
         this.method = method;
-        this.runtimeContext = runtimeContext;
+        this.objectDirtier = objectDirtier;
     }
 
     /**
      * Returns a singleton list of the {@link Method} provided in the constructor. 
      */
+    @Override
     public List<Method> getMethods() {
     	return Collections.singletonList(method);
     }
 
-	public boolean impliesResolve() {
+	@Override
+    public boolean impliesResolve() {
 		return true;
 	}
 
@@ -63,15 +65,17 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
 	 * Bytecode cannot automatically call {@link DomainObjectContainer#objectChanged(Object)}
 	 * because cannot distinguish whether interacting with accessor to read it or to modify its contents.
 	 */
-	public boolean impliesObjectChanged() {
+	@Override
+    public boolean impliesObjectChanged() {
 		return false;
 	}
 	
 
+    @Override
     public void add(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
         final Collection collection = (Collection) ObjectInvokeUtils.invoke(method, owningAdapter);
         collection.add(IsisUtils.unwrap(elementAdapter));
-        getRuntimeContext().objectChanged(owningAdapter);
+        getObjectDirtier().objectChanged(owningAdapter);
     }
 
     @Override
@@ -80,10 +84,12 @@ public class CollectionAddToFacetViaAccessor extends CollectionAddToFacetAbstrac
     }
 
     
-	private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
-
+    ///////////////////////////////////////////////////////
+    // Dependencies
+    ///////////////////////////////////////////////////////
+    
+    protected ObjectDirtier getObjectDirtier() {
+        return objectDirtier;
+    }
 }
 

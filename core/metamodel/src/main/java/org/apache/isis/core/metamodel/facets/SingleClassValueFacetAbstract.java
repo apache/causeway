@@ -20,25 +20,26 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public abstract class SingleClassValueFacetAbstract extends FacetAbstract implements SingleClassValueFacet {
 
     private final Class<?> value;
-    private final SpecificationLoader specificationLoader;
+    private final SpecificationLookup specificationLookup;
 
     public SingleClassValueFacetAbstract(
             final Class<? extends Facet> facetType,
             final FacetHolder holder,
             final Class<?> value,
-            final SpecificationLoader specificationLoader) {
+            final SpecificationLookup specificationLookup) {
         super(facetType, holder, false);
         this.value = value;
-        this.specificationLoader = specificationLoader;
+        this.specificationLookup = specificationLookup;
     }
 
+    @Override
     public Class<?> value() {
         return value;
     }
@@ -46,13 +47,14 @@ public abstract class SingleClassValueFacetAbstract extends FacetAbstract implem
     /**
      * The {@link ObjectSpecification} of the {@link #value()}.
      */
+    @Override
     public ObjectSpecification valueSpec() {
         final Class<?> valueType = value();
-        return valueType != null ? getSpecificationLoader().loadSpecification(valueType) : null;
+        return valueType != null ? getSpecificationLookup().loadSpecification(valueType) : null;
     }
 
-    private SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+    private SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
     }
 
 }

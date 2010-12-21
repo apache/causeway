@@ -25,13 +25,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
@@ -51,7 +52,7 @@ import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFac
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
 
 
-public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements RuntimeContextAware {
+public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements AdapterMapAware {
 
     private static final Logger LOG = Logger.getLogger(PropertyMethodsFacetFactory.class);
 
@@ -64,7 +65,7 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
 
     private static final String[] PREFIXES = { CLEAR_PREFIX, IS_PREFIX, GET_PREFIX, MODIFY_PREFIX, SET_PREFIX, OPTIONAL_PREFIX, };
 
-	private RuntimeContext runtimeContext;
+    private AdapterMap adapterMap;
 
     public PropertyMethodsFacetFactory() {
         super(PREFIXES, ObjectFeatureType.PROPERTIES_ONLY);
@@ -229,7 +230,7 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
         if (method == null) {
             return;
         }
-        propertyFacets.add(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLoader(), getRuntimeContext()));
+        propertyFacets.add(new PropertyDefaultFacetViaMethod(method, property, getSpecificationLookup(), getAdapterMap()));
     }
 
     private void findAndRemoveChoicesMethod(
@@ -244,14 +245,15 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
             return;
         }
         methodRemover.removeMethod(method);
-        propertyFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, property, getRuntimeContext()));
+        propertyFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, property, getSpecificationLookup(), getAdapterMap()));
     }
 
     // ///////////////////////////////////////////////////////////////
     // PropertyOrCollectionIdentifyingFacetFactory impl.
     // ///////////////////////////////////////////////////////////////
 
-	public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
+	@Override
+    public boolean isPropertyOrCollectionAccessorCandidate(final Method method) {
         final String methodName = method.getName();
         if (methodName.startsWith(GET_PREFIX)) {
             return true;
@@ -266,10 +268,12 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
      * The method way well represent a collection, but this facet factory does not have any opinion on the
      * matter.
      */
+    @Override
     public boolean isCollectionAccessor(final Method method) {
         return false;
     }
 
+    @Override
     public boolean isPropertyAccessor(final Method method) {
         if (!isPropertyOrCollectionAccessorCandidate(method)) {
             return false;
@@ -278,6 +282,7 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
         return isCollectionOrArray(methodReturnType);
     }
 
+    @Override
     public void findAndRemovePropertyAccessors(final MethodRemover methodRemover, final List<Method> methodListToAppendTo) {
         final List<Method> isMethodList = methodRemover.removeMethods(MethodScope.OBJECT, IS_PREFIX, boolean.class, false, 0);
         methodListToAppendTo.addAll(isMethodList);
@@ -285,29 +290,26 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
         methodListToAppendTo.addAll(getMethodList);
     }
 
+    @Override
     public void findAndRemoveCollectionAccessors(
     		final MethodRemover methodRemover, 
     		final List<Method> methodListToAppendTo) {
     // does nothing
     }
 
-    
     /////////////////////////////////////////////////////////
     // Dependencies (injected)
     /////////////////////////////////////////////////////////
     
-    /**
-     * as per {@link #setRuntimeContext(RuntimeContext)}.
-     */
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
-    /**
-     * Injected because {@link RuntimeContextAware}.
-     */
-    public void setRuntimeContext(final RuntimeContext runtimeContext) {
-    	this.runtimeContext = runtimeContext;
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterMap = adapterManager;
     }
+
+    protected AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+    
+    
 
 }

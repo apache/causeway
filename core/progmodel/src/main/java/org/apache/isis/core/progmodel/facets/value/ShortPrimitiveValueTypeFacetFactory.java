@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class ShortPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class ShortPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Short> {
 
     public ShortPrimitiveValueTypeFacetFactory() {
         super(ShortValueFacet.class);
@@ -32,10 +32,10 @@ public class ShortPrimitiveValueTypeFacetFactory extends ValueUsingValueSemantic
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != ShortPrimitiveValueSemanticsProvider.adaptedClass()) {
+        if (type != short.class) {
             return false;
         }
-        addFacets(new ShortPrimitiveValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new ShortPrimitiveValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

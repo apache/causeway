@@ -38,7 +38,10 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -58,27 +61,43 @@ import org.apache.isis.progmodel.wrapper.metamodel.internal.util.MethodPrefixFin
 
 public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandlerDefault<T> {
 
+
+    private final Map<Method, Collection<?>> collectionViewObjectsByMethod = new HashMap<Method, Collection<?>>();
+    private final Map<Method, Map<?, ?>> mapViewObjectsByMethod = new HashMap<Method, Map<?, ?>>();
+
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+    private final SpecificationLookup specificationLookup;
+    private final AdapterMap adapterManager;
+    private final ObjectPersistor objectPersistor;
+
     /**
      * The <tt>title()</tt> method; may be <tt>null</tt>.
      */
     protected Method titleMethod;
-
+    
     /**
      * The <tt>save()</tt> method from {@link WrapperObject#save()}.
      */
     protected Method saveMethod;
-
+    
     /**
      * The <tt>underlying()</tt> method from {@link WrapperObject#wrapped()}.
      */
     protected Method wrappedMethod;
 
-    private final Map<Method, Collection<?>> collectionViewObjectsByMethod = new HashMap<Method, Collection<?>>();
-    private final Map<Method, Map<?, ?>> mapViewObjectsByMethod = new HashMap<Method, Map<?, ?>>();
-
     public DomainObjectInvocationHandler(final T delegate, final WrapperFactory embeddedViewer,
-        final ExecutionMode mode, final RuntimeContext runtimeContext) {
-        super(delegate, embeddedViewer, mode, runtimeContext);
+            final ExecutionMode mode,
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final SpecificationLookup specificationLookup,
+            final AdapterMap adapterManager,
+            final ObjectPersistor objectPersistor) {
+        super(delegate, embeddedViewer, mode);
+
+        this.authenticationSessionProvider = authenticationSessionProvider;
+        this.specificationLookup = specificationLookup;
+        this.adapterManager = adapterManager;
+        this.objectPersistor = objectPersistor;
+
         try {
             titleMethod = delegate.getClass().getMethod("title", new Class[] {});
             saveMethod = WrapperObject.class.getMethod("save", new Class[] {});
@@ -94,7 +113,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             return delegate(method, args);
         }
 
-        final ObjectAdapter targetAdapter = getRuntimeContext().getAdapterFor(getDelegate());
+        final ObjectAdapter targetAdapter = getAdapterManager().getAdapterFor(getDelegate());
 
         if (isTitleMethod(method)) {
             return handleTitleMethod(method, args, targetAdapter);
@@ -213,7 +232,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
             if (targetAdapter.isTransient()) {
-                getRuntimeContext().makePersistent(targetAdapter);
+                getObjectPersistor().makePersistent(targetAdapter);
             }
         }
         return null;
@@ -253,7 +272,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final Object argumentObj = underlying(args[0]);
-        final ObjectAdapter argumentNO = argumentObj != null ? getRuntimeContext().adapterFor(argumentObj) : null;
+        final ObjectAdapter argumentNO = argumentObj != null ? getAdapterManager().adapterFor(argumentObj) : null;
 
         final InteractionResult interactionResult =
             otoa.isAssociationValid(targetAdapter, argumentNO).getInteractionResult();
@@ -314,7 +333,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             if (collectionToLookup instanceof WrapperObject) {
                 collectionViewObject = collectionToLookup;
             } else {
-                collectionViewObject = Proxy.proxy(collectionToLookup, memberName, this, getRuntimeContext(), otma);
+                collectionViewObject = Proxy.proxy(collectionToLookup, memberName, this, otma);
             }
             collectionViewObjectsByMethod.put(method, collectionViewObject);
         }
@@ -328,7 +347,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
             if (mapToLookup instanceof WrapperObject) {
                 mapViewObject = mapToLookup;
             } else {
-                mapViewObject = Proxy.proxy(mapToLookup, memberName, this, getRuntimeContext(), otma);
+                mapViewObject = Proxy.proxy(mapToLookup, memberName, this, otma);
             }
             mapViewObjectsByMethod.put(method, mapViewObject);
         }
@@ -352,7 +371,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (argumentObj == null) {
             throw new IllegalArgumentException("Must provide a non-null object to add");
         }
-        final ObjectAdapter argumentNO = getRuntimeContext().adapterFor(argumentObj);
+        final ObjectAdapter argumentNO = getAdapterManager().adapterFor(argumentObj);
 
         final InteractionResult interactionResult = otma.isValidToAdd(targetAdapter, argumentNO).getInteractionResult();
         notifyListenersAndVetoIfRequired(interactionResult);
@@ -382,7 +401,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         if (argumentObj == null) {
             throw new IllegalArgumentException("Must provide a non-null object to remove");
         }
-        final ObjectAdapter argumentAdapter = getRuntimeContext().adapterFor(argumentObj);
+        final ObjectAdapter argumentAdapter = getAdapterManager().adapterFor(argumentObj);
 
         final InteractionResult interactionResult =
             otma.isValidToRemove(targetAdapter, argumentAdapter).getInteractionResult();
@@ -413,7 +432,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         final ObjectAdapter[] argAdapters = new ObjectAdapter[underlyingArgs.length];
         int j = 0;
         for (final Object underlyingArg : underlyingArgs) {
-            argAdapters[j++] = underlyingArg != null ? getRuntimeContext().adapterFor(underlyingArg) : null;
+            argAdapters[j++] = underlyingArg != null ? getAdapterManager().adapterFor(underlyingArg) : null;
         }
 
         final InteractionResult interactionResult =
@@ -584,8 +603,33 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     }
 
     private ObjectSpecification getSpecification(final Class<?> type) {
-        final ObjectSpecification nos = getSpecificationLoader().loadSpecification(type);
+        final ObjectSpecification nos = getSpecificationLookup().loadSpecification(type);
         return nos;
+    }
+
+    
+    // /////////////////////////////////////////////////////////////////
+    // Dependencies
+    // /////////////////////////////////////////////////////////////////
+
+    protected SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
+    }
+
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
+    }
+    
+    protected AuthenticationSession getAuthenticationSession() {
+        return getAuthenticationSessionProvider().getAuthenticationSession();
+    }
+    
+    protected AdapterMap getAdapterManager() {
+        return adapterManager;
+    }
+
+    protected ObjectPersistor getObjectPersistor() {
+        return objectPersistor;
     }
 
 }

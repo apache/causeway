@@ -86,7 +86,7 @@ public class MaskAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstr
         }
         FacetUtil.addFacet(maskFacet);
 
-        ObjectSpecification type = getSpecificationLoader().loadSpecification(cls);
+        ObjectSpecification type = getSpecificationLookup().loadSpecification(cls);
         final TitleFacet underlyingTitleFacet = type.getFacet(TitleFacet.class);
         if (underlyingTitleFacet != null) {
             final TitleFacet titleFacet = new TitleFacetBasedOnMask(maskFacet, underlyingTitleFacet);

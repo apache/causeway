@@ -28,9 +28,9 @@ import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 
@@ -39,17 +39,19 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
     private final Method method;
     private final Class<?> choicesClass;
-	private final RuntimeContext runtimeContext;
+
+    private final AdapterMap adapterMap; 
 
     public PropertyChoicesFacetViaMethod(
     		final Method method, 
     		final Class<?> choicesClass, 
-    		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
-        super(holder);
+    		final FacetHolder holder,
+    		final SpecificationLookup specificationLookup,
+    		final AdapterMap adapterManager) {
+        super(holder, specificationLookup);
         this.method = method;
         this.choicesClass = choicesClass;
-        this.runtimeContext = runtimeContext;
+        this.adapterMap = adapterManager;
     }
 
     /**
@@ -71,7 +73,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 	}
 
 	@Override
-    public Object[] getChoices(final ObjectAdapter owningAdapter, final SpecificationLoader specificationLoader) {
+    public Object[] getChoices(final ObjectAdapter owningAdapter, final SpecificationLookup specificationLookup) {
         final Object options = ObjectInvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
             return null;
@@ -79,8 +81,8 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
         if (options.getClass().isArray()) {
             return ArrayUtils.getObjectAsObjectArray(options);
         }
-        final ObjectSpecification specification = specificationLoader.loadSpecification(choicesClass);
-        return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getRuntimeContext());
+        final ObjectSpecification specification = specificationLookup.loadSpecification(choicesClass);
+        return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
     }
 
 	@Override
@@ -88,14 +90,13 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
         return "method=" + method + ",class=" + choicesClass;
     }
 
-
-	//////////////////////////////////////////////////////////
-	// Dependencies (from constructor)
-	//////////////////////////////////////////////////////////
+	//////////////////////////////////////////////
+	// Dependencies
+    //////////////////////////////////////////////
 	
-	private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    protected AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 
 }
 

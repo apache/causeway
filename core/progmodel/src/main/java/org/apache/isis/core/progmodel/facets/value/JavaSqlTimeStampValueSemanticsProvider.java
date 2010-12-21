@@ -21,8 +21,13 @@
 package org.apache.isis.core.progmodel.facets.value;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.util.Date;
-import java.util.Hashtable;
+import java.util.Map;
+
+import com.google.inject.internal.Maps;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -30,19 +35,16 @@ import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract {
+public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemanticsProviderAbstract<java.sql.Timestamp> {
 
     public static final boolean isAPropertyDefaultFacet() {
         return PropertyDefaultFacet.class.isAssignableFrom(JavaSqlTimeStampValueSemanticsProvider.class);
     }
 
-    private static Hashtable formats = new Hashtable();
+    private static Map<String,DateFormat> formats = Maps.newHashMap();
 
     static {
         initFormats(formats);
@@ -53,15 +55,14 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaSqlTimeStampValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public JavaSqlTimeStampValueSemanticsProvider(
             final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, java.sql.Timestamp.class, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -74,17 +75,17 @@ public class JavaSqlTimeStampValueSemanticsProvider extends TimeStampValueSemant
     }
 
     @Override
-    protected Hashtable formats() {
+    protected Map<String, DateFormat> formats() {
         return formats;
     }
 
     @Override
-    protected Object now() {
+    protected Timestamp now() {
         throw new InvalidEntryException("Can't change a timestamp.");
     }
 
     @Override
-    protected Object setDate(final Date date) {
+    protected Timestamp setDate(final Date date) {
         return new Timestamp(date.getTime());
     }
 

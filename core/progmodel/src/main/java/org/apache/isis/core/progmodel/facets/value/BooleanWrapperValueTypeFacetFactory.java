@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class BooleanWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class BooleanWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Boolean> {
 
     public BooleanWrapperValueTypeFacetFactory() {
         super(BooleanValueFacet.class);
@@ -32,10 +32,10 @@ public class BooleanWrapperValueTypeFacetFactory extends ValueUsingValueSemantic
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != BooleanWrapperValueSemanticsProvider.adaptedClass()) {
+        if (type != Boolean.class) {
             return false;
         }
-        addFacets(new BooleanWrapperValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new BooleanWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

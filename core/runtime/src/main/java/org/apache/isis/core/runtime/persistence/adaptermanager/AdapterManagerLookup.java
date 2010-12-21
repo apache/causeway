@@ -39,14 +39,6 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
  */
 public interface AdapterManagerLookup extends Injectable {
 
-    
-    /**
-     * Gets the {@link ObjectAdapter adapter} for the specified domain object if it exists in the identity map.
-     * 
-     * @param pojo - must not be <tt>null</tt>
-     * @return adapter, or <tt>null</tt> if doesn't exist.
-     */
-    ObjectAdapter getAdapterFor(Object pojo);
 
     /**
      * Gets the {@link ObjectAdapter adapter} for the {@link Oid} if it exists in the identity map.

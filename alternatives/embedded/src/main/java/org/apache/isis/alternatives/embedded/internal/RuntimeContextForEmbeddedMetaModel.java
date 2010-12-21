@@ -25,17 +25,31 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.alternatives.embedded.EmbeddedContext;
-import org.apache.isis.alternatives.embedded.internal.PersistenceState;
-import org.apache.isis.alternatives.embedded.internal.ServiceAdapter;
-import org.apache.isis.alternatives.embedded.internal.StandaloneAdapter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiatorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -53,12 +67,161 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	private final List<Object> services;
 	private List<ObjectAdapter> serviceAdapters;
 	private ServicesInjector servicesInjector;
-
+    private final AdapterMap adapterMap;
+    private final ObjectInstantiator objectInstantiator;
+    private final ObjectDirtier objectDirtier;
+    private final ObjectPersistor objectPersistor;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+    private final ServicesProvider servicesProvider;
+    private final DomainObjectServices domainObjectServices;
+    private final QuerySubmitter querySubmitter;
+    private final DependencyInjector dependencyInjector;
+    
 	public RuntimeContextForEmbeddedMetaModel(
 			final EmbeddedContext context, 
 			final List<Object> services) {
 		this.context = context;
 		this.services = services;
+		this.authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
+		    @Override
+		    public AuthenticationSession getAuthenticationSession() {
+		        return context.getAuthenticationSession();
+		    }
+        };
+        this.querySubmitter = new QuerySubmitterAbstract() {
+            @Override
+            public List<ObjectAdapter> allMatchingQuery(Query query) {
+                return wrap(context.allMatchingQuery(query));
+            }
+            @Override
+            public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
+                return getAdapterMap().adapterFor(context.firstMatchingQuery(query));
+            }
+
+        };
+		this.adapterMap = new AdapterMapAbstract() {
+	        @Override
+	        public ObjectAdapter adapterFor(Object domainObject) {
+	            ObjectSpecification domainObjectSpec = getSpecificationLookup().loadSpecification(domainObject.getClass());
+	            PersistenceState persistenceState = context.getPersistenceState(domainObject);
+	            return new StandaloneAdapter(domainObjectSpec, domainObject, persistenceState);
+	        }
+
+	        @Override
+	        public ObjectAdapter adapterFor(Object domainObject, ObjectAdapter ownerAdapter, Identified identified) {
+	            return adapterFor(domainObject);
+	        }
+
+	        @Override
+	        public ObjectAdapter getAdapterFor(Object domainObject) {
+	            return adapterFor(domainObject);
+	        }
+	    };
+        this.objectInstantiator = new ObjectInstantiatorAbstract() {
+            
+            @Override
+            public Object instantiate(Class<?> type) throws ObjectInstantiationException {
+                return context.instantiate(type);
+            }
+        };
+        
+        this.objectPersistor = new ObjectPersistorAbstract() {
+            
+            @Override
+            public void makePersistent(ObjectAdapter adapter) {
+                context.makePersistent(adapter.getObject());
+            }
+
+            @Override
+            public void remove(ObjectAdapter adapter) {
+                context.remove(adapter.getObject());
+            }
+            
+        };
+		this.objectDirtier = new ObjectDirtierAbstract(){
+
+	        @Override
+	        public void objectChanged(ObjectAdapter adapter) {
+	            context.objectChanged(adapter.getObject());
+	        }
+
+	        @Override
+	        public void objectChanged(Object object) {
+	            context.objectChanged(object);
+	        }
+	        
+	    };
+
+        this.servicesProvider = new ServicesProviderAbstract() {
+            @Override
+            public List<ObjectAdapter> getServices() {
+                return serviceAdapters;
+            }
+        };
+
+
+	    this.domainObjectServices = new DomainObjectServicesAbstract() {
+
+	        @Override
+	        public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
+	            Object domainObject = spec.createObject(CreationMode.INITIALIZE);
+	            return adapterMap.adapterFor(domainObject);
+	        }
+
+	        @Override
+	        public void resolve(Object parent) {
+	            context.resolve(parent);
+	        }
+
+	        @Override
+	        public void resolve(Object parent, Object field) {
+	            context.resolve(parent, field);
+	        }
+
+	        @Override
+	        public boolean flush() {
+	            return context.flush();
+	        }
+	        
+	        @Override
+	        public void commit() {
+	            context.commit();
+	        }
+
+	        @Override
+            public String getProperty(String name) {
+                return RuntimeContextForEmbeddedMetaModel.this.getProperty(name);
+            }
+
+            @Override
+            public List<String> getPropertyNames() {
+                return RuntimeContextForEmbeddedMetaModel.this.getPropertyNames();
+            }
+
+            @Override
+            public void informUser(String message) {
+                context.informUser(message);
+            }
+
+            @Override
+            public void warnUser(String message) {
+                context.warnUser(message);
+            }
+
+            @Override
+            public void raiseError(String message) {
+                context.raiseError(message);
+            }
+        };
+        this.dependencyInjector = new DependencyInjectorAbstract() {
+            @Override
+            public void injectDependenciesInto(Object domainObject) {
+                if (servicesInjector == null) {
+                    throw new IllegalStateException("must setContainer before using this method");
+                }
+                servicesInjector.injectDependencies(domainObject);
+            }
+        };
 	}
 
 
@@ -66,7 +229,8 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	// init, shutdown
 	/////////////////////////////////////////////
 
-	public void init() {
+	@Override
+    public void init() {
 		this.serviceAdapters = adaptersFor(services);
 		
 		servicesInjector = new ServicesInjectorDefault();
@@ -75,7 +239,8 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	}
 	
 
-	public void shutdown() {
+	@Override
+    public void shutdown() {
 		// does nothing
 	}
 
@@ -83,171 +248,83 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	private List<ObjectAdapter> adaptersFor(List<Object> services) {
 		List<ObjectAdapter> serviceAdapters = new ArrayList<ObjectAdapter>();
 		for(Object service: services) {
-			ObjectSpecification spec = getSpecificationLoader().loadSpecification(service.getClass());
+			ObjectSpecification spec = getSpecificationLookup().loadSpecification(service.getClass());
 			serviceAdapters.add(new ServiceAdapter(spec, service));
 		}
 		return Collections.unmodifiableList(serviceAdapters);
 	}
 
-
-	/////////////////////////////////////////////
-	// AuthenticationSession
-	/////////////////////////////////////////////
-	
-	public AuthenticationSession getAuthenticationSession() {
-		return context.getAuthenticationSession();
-	}
-
-
-
-	/////////////////////////////////////////////
-	// getAdapterFor, adapterFor
-	/////////////////////////////////////////////
-
-	
-	public ObjectAdapter adapterFor(Object domainObject) {
-		ObjectSpecification domainObjectSpec = getSpecificationLoader().loadSpecification(domainObject.getClass());
-		PersistenceState persistenceState = context.getPersistenceState(domainObject);
-		return new StandaloneAdapter(domainObjectSpec, domainObject, persistenceState);
-	}
-
-	public ObjectAdapter adapterFor(Object domainObject, ObjectAdapter ownerAdapter, Identified identified) {
-		return adapterFor(domainObject);
-	}
-
-	public ObjectAdapter getAdapterFor(Object domainObject) {
-		return adapterFor(domainObject);
-	}
-
-	public ObjectAdapter getAdapterFor(Oid oid) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-	
 	
 	/////////////////////////////////////////////
-	// createTransientInstance, instantiate
+	// Components
 	/////////////////////////////////////////////
+
+	@Override
+	public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+	    return authenticationSessionProvider;
+	}
 	
-	public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
-		Object domainObject = spec.createObject(CreationMode.INITIALIZE);
-		return adapterFor(domainObject);
-	}
+    @Override
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 
-	public Object instantiate(Class<?> type) throws ObjectInstantiationException {
-		return context.instantiate(type);
-	}
+    @Override
+    public ObjectInstantiator getObjectInstantiator() {
+        return objectInstantiator;
+    }
+    
+    @Override
+    public ObjectDirtier getObjectDirtier() {
+        return objectDirtier;
+    }
 
+    @Override
+    public ServicesProvider getServicesProvider() {
+        return servicesProvider;
+    }
+
+    @Override
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
+    }
+
+    @Override
+    public DomainObjectServices getDomainObjectServices() {
+        return domainObjectServices;
+    }
+
+    @Override
+    public QuerySubmitter getQuerySubmitter() {
+        return querySubmitter;
+    }
 	
-	/////////////////////////////////////////////
-	// resolve, objectChanged
-	/////////////////////////////////////////////
 
-	public void resolve(Object parent) {
-		context.resolve(parent);
-	}
-
-	public void resolve(Object parent, Object field) {
-		context.resolve(parent, field);
-	}
-
-	public void objectChanged(ObjectAdapter adapter) {
-		context.objectChanged(adapter.getObject());
-	}
-
-	public void objectChanged(Object object) {
-		context.objectChanged(object);
-	}
+    @Override
+    public ObjectPersistor getObjectPersistor() {
+        return objectPersistor;
+    }
 
 	
 	/////////////////////////////////////////////
-	// makePersistent, remove
+	// firstMatchingQuery
 	/////////////////////////////////////////////
-
-
-	public void makePersistent(ObjectAdapter adapter) {
-		context.makePersistent(adapter.getObject());
-	}
-
-	public void remove(ObjectAdapter adapter) {
-		context.remove(adapter.getObject());
-	}
-	
-	
-	/////////////////////////////////////////////
-	// flush, commit
-	/////////////////////////////////////////////
-
-	public boolean flush() {
-		return context.flush();
-	}
-	
-	public void commit() {
-		context.commit();
-	}
-
-	
-	/////////////////////////////////////////////
-	// allMatchingQuery, firstMatchingQuery
-	/////////////////////////////////////////////
-
-	public <T> List<ObjectAdapter> allMatchingQuery(Query<T> query) {
-		return wrap(context.allMatchingQuery(query));
-	}
-
-	public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
-		return adapterFor(context.firstMatchingQuery(query));
-	}
 
 	private List<ObjectAdapter> wrap(List<?> pojos) {
 		List<ObjectAdapter> adapters = new ArrayList<ObjectAdapter>();
 		for(Object pojo: pojos) {
-			adapters.add(adapterFor(pojo));
+			adapters.add(getAdapterMap().adapterFor(pojo));
 		}
 		return adapters;
 	}
 
 
-    ////////////////////////////////////////////////////////////////////
-    // info, warn, error messages
-    ////////////////////////////////////////////////////////////////////
-
-	public void informUser(String message) {
-		context.informUser(message);
-	}
-
-	public void warnUser(String message) {
-		context.warnUser(message);
-	}
-
-	public void raiseError(String message) {
-		context.raiseError(message);
-	}
-	
-
 	/////////////////////////////////////////////
-	// getServices, injectDependenciesInto
+	// getServices
 	/////////////////////////////////////////////
-	
-	/**
-	 * Unmodifiable. 
-	 */
-	public List<ObjectAdapter> getServices() {
-		return serviceAdapters;
-	}
-
-	public void injectDependenciesInto(Object domainObject) {
-		if (servicesInjector == null) {
-			throw new IllegalStateException("must setContainer before using this method");
-		}
-		servicesInjector.injectDependencies(domainObject);
-	}
-
 
 	public ServicesInjector getServicesInjector() {
 		return servicesInjector;
 	}
-
-
 
 }

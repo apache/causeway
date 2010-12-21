@@ -20,17 +20,9 @@
 
 package org.apache.isis.core.metamodel.runtimecontext;
 
-import java.util.List;
-
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 /**
  * Decouples the metamodel from a runtime.
@@ -38,186 +30,44 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
  */
 public interface RuntimeContext extends Injectable {
 
+	public SpecificationLookup getSpecificationLookup();
 
-	/////////////////////////////////////////////
-	// SpecificationLoader
-	/////////////////////////////////////////////
+	public AdapterMap getAdapterMap();
 
-	public SpecificationLoader getSpecificationLoader();
+	public ObjectDirtier getObjectDirtier();
 
-
-	/////////////////////////////////////////////
-	// AuthenticationSession
-	/////////////////////////////////////////////
-
-	/**
-	 * Provided by <tt>AuthenticationManager</tt> when used by framework.
-	 */
-	AuthenticationSession getAuthenticationSession();
-
+	public ObjectPersistor getObjectPersistor();
 	
+	public QuerySubmitter getQuerySubmitter();
 	
-	/////////////////////////////////////////////
-	// getAdapterFor, adapterFor
-	/////////////////////////////////////////////
+    public DomainObjectServices getDomainObjectServices();
 
-	/**
-	 * Provided by the <tt>AdapterManager</tt> when used by framework.
-	 */
-	ObjectAdapter getAdapterFor(Oid oid);
+    
+    /**
+     * A mechanism for returning the <tt>current</tt> {@link AuthenticationSession}.
+     * 
+     * <p>
+     * Note that the scope of {@link RuntimeContext} is global,
+     * whereas {@link AuthenticationSession} may change over time.
+     */
+    AuthenticationSessionProvider getAuthenticationSessionProvider();
+    
+	ObjectInstantiator getObjectInstantiator();
 
-	/**
-	 * Provided by the <tt>AdapterManager</tt> when used by framework.
-	 */
-	ObjectAdapter getAdapterFor(Object domainObject);
+    ServicesProvider getServicesProvider();
 
-	/**
-	 * Provided by the <tt>AdapterManager</tt> when used by framework.
-	 */
-	ObjectAdapter adapterFor(Object domainObject);
-
-	/**
-	 * Provided by the <tt>AdapterManager</tt> when used by framework.
-	 */
-	ObjectAdapter adapterFor(Object domainObject, ObjectAdapter ownerAdapter, Identified identified);
-
-
-	/////////////////////////////////////////////
-	// createTransientInstance, instantiate
-	/////////////////////////////////////////////
-	
-	/**
-	 * Provided by the <tt>PersistenceSession</tt> when used by framework.
-	 */
-	ObjectAdapter createTransientInstance(ObjectSpecification spec);
-	
-	/**
-	 * Provided by the <tt>ObjectFactory</tt> when used by framework.
-	 */
-	Object instantiate(Class<?> cls) throws ObjectInstantiationException;
-	
-
-	/////////////////////////////////////////////
-	// resolve, objectChanged
-	/////////////////////////////////////////////
-
-	/**
-	 * Provided by <tt>PersistenceSession</tt> when used by framework.
-	 */
-	void resolve(Object parent);
-
-	/**
-	 * Provided by <tt>PersistenceSession</tt> when used by framework.
-	 */
-	void resolve(Object parent, Object field);
-
-	/**
-	 * Provided by <tt>PersistenceSession</tt> when used by framework.
-	 */
-	void objectChanged(ObjectAdapter adapter);
-
-	/**
-	 * TODO: combined with {@link #objectChanged(ObjectAdapter)}.
-	 */
-	void objectChanged(Object object);
+    DependencyInjector getDependencyInjector();
 
 	
 	/////////////////////////////////////////////
-	// makePersistent, remove
+	// container
 	/////////////////////////////////////////////
 
-	/**
-	 * Provided by the <tt>PersistenceSession</tt> when used by framework.
-	 */
-	void makePersistent(ObjectAdapter adapter);
-
-	/**
-	 * Provided by <tt>UpdateNotifier</tt> and <tt>PersistenceSession</tt>
-	 * when used by framework.
-	 */
-	void remove(ObjectAdapter adapter);
-
-
-	/////////////////////////////////////////////
-	// flush, commit
-	/////////////////////////////////////////////
-
-	/**
-	 * Provided by <tt>TransactionManager</tt> when used by framework.
-	 */
-	boolean flush();
-
-	/**
-	 * Provided by <tt>TransactionManager</tt> when used by framework.
-	 */
-	void commit();
-
-
-
-	/////////////////////////////////////////////
-	// *MatchingQuery
-	/////////////////////////////////////////////
-
-	/**
-	 * Provided by <tt>PersistenceSession</tt> when used by framework.
-	 */
-	public <T> List<ObjectAdapter> allMatchingQuery(Query<T> query);
-
-
-	/**
-	 * Provided by <tt>PersistenceSession</tt> when used by framework.
-	 */
-	public <T> ObjectAdapter firstMatchingQuery(Query<T> query);
-	
-
-    ////////////////////////////////////////////////////////////////////
-    // info, warn, error messages
-    ////////////////////////////////////////////////////////////////////
-	
-	/**
-	 * Provided by <tt>MessageBroker</tt> when used by framework.
-	 */
-	void informUser(String message);
-
-	/**
-	 * Provided by <tt>MessageBroker</tt> when used by framework.
-	 */
-	void warnUser(String message);
-
-	void raiseError(String message);
-
-	
-	
-	/////////////////////////////////////////////
-	// getServices, injectDependenciesInto
-	/////////////////////////////////////////////
-
-	/**
-	 * Provided by <tt>PersistenceSession</tt> when used by framework.
-	 */
-	List<ObjectAdapter> getServices();
-
-	/**
-	 * Provided by the <tt>ServicesInjectorDefault</tt> when used by framework.
-	 */
-	void injectDependenciesInto(final Object domainObject);
-
-
+    /**
+     * Called in multiple places.
+     */
 	void setContainer(DomainObjectContainer container);
 
 
-    ////////////////////////////////////////////////////////////////////
-    // properties
-    ////////////////////////////////////////////////////////////////////
-	
-    String getProperty(String name);
-
-
-    List<String> getPropertyNames();
-
-
-
-
-
-
+    
 }

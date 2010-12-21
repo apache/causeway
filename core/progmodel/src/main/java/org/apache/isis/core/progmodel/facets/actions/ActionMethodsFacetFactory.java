@@ -33,8 +33,8 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
@@ -57,7 +57,7 @@ import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetInferred;
  * <p>
  * TODO: should be more fine-grained?
  */
-public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements RuntimeContextAware {
+public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbstract implements AdapterMapAware {
 
     private static final String EXPLORATION_PREFIX = "Exploration";
     private static final String DEBUG_PREFIX = "Debug";
@@ -74,7 +74,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             PARAMETER_NAMES_PREFIX, PARAMETER_DESCRIPTIONS_PREFIX, PARAMETER_OPTIONAL_PREFIX, PARAMETER_DEFAULTS_PREFIX,
             PARAMETER_CHOICES_PREFIX, };
     
-	private RuntimeContext runtimeContext;
+    private AdapterMap adapterMap;
 
     /**
      * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
@@ -96,10 +96,10 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
 
         final List<Facet> facets = new ArrayList<Facet>();
 
-        final ObjectSpecification typeSpec = getSpecificationLoader().loadSpecification(cls);
-        final ObjectSpecification returnSpec = getSpecificationLoader().loadSpecification(returnType.getName());
+        final ObjectSpecification typeSpec = getSpecificationLookup().loadSpecification(cls);
+        final ObjectSpecification returnSpec = getSpecificationLookup().loadSpecification(returnType);
         if (returnSpec != null) {
-            facets.add(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getRuntimeContext()));
+            facets.add(new ActionInvocationFacetViaMethod(actionMethod, typeSpec, returnSpec, holder, getAdapterMap()));
             checkForDebugPrefix(facets, capitalizedName, holder);
             checkForExplorationPrefix(facets, capitalizedName, holder);
             checkForExecutionLocationPrefix(facets, capitalizedName, holder);
@@ -285,7 +285,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             return false;
         }
 
-        actionFacets.add(new ActionChoicesFacetViaMethod(method, returnType, action, getSpecificationLoader(), getRuntimeContext()));
+        actionFacets.add(new ActionChoicesFacetViaMethod(method, returnType, action, getSpecificationLookup(), adapterMap));
         return true;
     }
 
@@ -369,7 +369,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
                 removeMethod(methodRemover, method);
 
                 // add facets directly to parameters, not to actions
-                FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(method, returnType, parameters.get(i), getRuntimeContext()));
+                FacetUtil.addFacet(new ActionParameterChoicesFacetViaMethod(method, returnType, parameters.get(i), getSpecificationLookup(), getAdapterMap()));
             }
         }
     }
@@ -440,25 +440,19 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
         return true;
     }
 
+
     
     /////////////////////////////////////////////////////////////////
     // Dependencies
     /////////////////////////////////////////////////////////////////
     
-    /**
-     * @see #setRuntimeContext(RuntimeContext)
-     * @return
-     */
-    public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterMap = adapterManager;
+    }
     
-    /**
-     * Injected because {@link RuntimeContextAware}
-     */
-	@Override
-    public void setRuntimeContext(final RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
-	}
+    private AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 
 }

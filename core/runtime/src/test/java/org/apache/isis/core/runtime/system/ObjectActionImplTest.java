@@ -33,8 +33,12 @@ import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.ObjectActionImpl;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetAbstract;
@@ -54,7 +58,12 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
 
     private ObjectActionImpl action;
     private ObjectMemberPeer mockObjectActionPeer;
-    private RuntimeContext mockRuntimeContext;
+
+    private AuthenticationSessionProvider mockAuthenticationSessionProvider;
+    private SpecificationLoader mockSpecificationLoader;
+    private AdapterMap mockAdapterManager;
+    private ServicesProvider mockServicesProvider;
+    private QuerySubmitter mockQuerySubmitter;
 
 
     @Override
@@ -63,9 +72,13 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
         super.setUp();
 
         mockObjectActionPeer = mockery.mock(ObjectMemberPeer.class);
-        mockRuntimeContext = mockery.mock(RuntimeContext.class);
-
-        action = new ObjectActionImpl("reduceheadcount", mockObjectActionPeer, mockRuntimeContext);
+        mockAuthenticationSessionProvider = mockery.mock(AuthenticationSessionProvider.class);
+        mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
+        mockAdapterManager = mockery.mock(AdapterMap.class);
+        mockServicesProvider = mockery.mock(ServicesProvider.class);
+        mockQuerySubmitter = mockery.mock(QuerySubmitter.class);
+        
+        action = new ObjectActionImpl("reduceheadcount", mockObjectActionPeer, mockAuthenticationSessionProvider, mockSpecificationLoader, mockAdapterManager, mockServicesProvider, mockQuerySubmitter);
     }
 
     @Test

@@ -27,11 +27,14 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
+import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public class ObjectAssociationNoop extends ObjectAssociationAbstract {
@@ -39,10 +42,14 @@ public class ObjectAssociationNoop extends ObjectAssociationAbstract {
     public ObjectAssociationNoop(
     		final String name, 
     		final ObjectSpecification spec, 
-    		final RuntimeContext runtimeContext) {
-        super(name, spec, FeatureType.PROPERTY, new IdentifiedImpl(), runtimeContext);
+    		final AuthenticationSessionProvider authenticationSessionProvider,
+    		final SpecificationLoader specificationLoader, 
+    		final AdapterMap adapterManager,
+            final QuerySubmitter querySubmitter) {
+        super(name, spec, FeatureType.PROPERTY, new IdentifiedImpl(), authenticationSessionProvider, specificationLoader, adapterManager, querySubmitter);
     }
 
+    @Override
     public String debugData() {
         return "";
     }
@@ -72,10 +79,12 @@ public class ObjectAssociationNoop extends ObjectAssociationAbstract {
         return false;
     }
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         return null;
     }
 
+    @Override
     public void toDefault(final ObjectAdapter target) {}
 
     @Override
@@ -83,10 +92,12 @@ public class ObjectAssociationNoop extends ObjectAssociationAbstract {
         return null;
     }
 
+    @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter object) {
         return new ObjectAdapter[] {};
     }
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -94,6 +105,7 @@ public class ObjectAssociationNoop extends ObjectAssociationAbstract {
         return null;
     }
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -105,6 +117,7 @@ public class ObjectAssociationNoop extends ObjectAssociationAbstract {
     // getInstance
     // /////////////////////////////////////////////////////////////
     
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         return null;
     }

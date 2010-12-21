@@ -29,16 +29,16 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements IntegerValueFacet {
+public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Integer> implements IntegerValueFacet {
 
     public static Class<? extends Facet> type() {
         return IntegerValueFacet.class;
     }
 
+    private static final Integer DEFAULT_VALUE = Integer.valueOf(0);
     private static final int TYPICAL_LENGTH = 9;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
@@ -46,11 +46,11 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
     private final NumberFormat format;
 
     public IntValueSemanticsProviderAbstract(
-    		final FacetHolder holder, final Class<?> adaptedClass, final Object defaultValue,
+    		final FacetHolder holder, 
+    		final Class<Integer> adaptedClass, 
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.int");
     }
 
@@ -59,7 +59,7 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected Integer doParse(final Object context, final String entry) {
         try {
             return Integer.valueOf(format.parse(entry).intValue());
         } catch (final ParseException e) {
@@ -87,7 +87,7 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Integer doRestore(final String data) {
         return new Integer(data);
     }
 
@@ -95,12 +95,14 @@ public abstract class IntValueSemanticsProviderAbstract extends ValueSemanticsPr
     // IntegerValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Integer integerValue(final ObjectAdapter object) {
         return (Integer) (object == null ? null : object.getObject());
     }
 
+    @Override
     public ObjectAdapter createValue(final Integer value) {
-        return value == null ? null : getRuntimeContext().adapterFor(value);
+        return value == null ? null : getAdapterMap().adapterFor(value);
     }
 
     // /////// toString ///////

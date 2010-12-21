@@ -27,15 +27,15 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.PercentageValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class PercentageValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
-    PercentageValueSemanticsProvider adapter;
-    private Object percentage;
+    private PercentageValueSemanticsProvider adapter;
+    private Percentage percentage;
     private FacetHolder holder;
 
     @Before
@@ -52,7 +52,7 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
         
         holder = new FacetHolderImpl();
         
-        setValue(adapter = new PercentageValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(adapter = new PercentageValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test
@@ -63,19 +63,19 @@ public class PercentageValueSemanticsProviderTest extends ValueSemanticsProvider
 
     @Test
     public void testParseTextEntryWithNumber() {
-        final Object parsed = adapter.parseTextEntry(percentage, "21%");
+        final Percentage parsed = adapter.parseTextEntry(percentage, "21%");
         assertEquals(new Percentage(0.21f), parsed);
     }
 
     @Test
     public void testParseTextEntryWithNumberAndDecimalPoint() {
-        final Object parsed = adapter.parseTextEntry(percentage, "21.4%");
+        final Percentage parsed = adapter.parseTextEntry(percentage, "21.4%");
         assertEquals(new Percentage(0.214f), parsed);
     }
 
     @Test
     public void testParseTextEntryWithBlank() {
-        final Object parsed = adapter.parseTextEntry(percentage, "");
+        final Percentage parsed = adapter.parseTextEntry(percentage, "");
         assertEquals(null, parsed);
     }
 

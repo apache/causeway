@@ -23,28 +23,29 @@ package org.apache.isis.core.progmodel.facets.object.defaults;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 
 public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implements DefaultedFacet {
 
     private final DefaultsProvider defaultsProvider;
-	private final RuntimeContext runtimeContext;
+	private final DependencyInjector dependencyInjector;
 
-    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider parser, final FacetHolder holder, final RuntimeContext runtimeContext) {
+    public DefaultedFacetUsingDefaultsProvider(final DefaultsProvider parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
         this.defaultsProvider = parser;
-        this.runtimeContext = runtimeContext;
+        this.dependencyInjector = dependencyInjector;
     }
 
     @Override
     protected String toStringValues() {
-    	getRuntimeContext().injectDependenciesInto(defaultsProvider);
+    	getDependencyInjector().injectDependenciesInto(defaultsProvider);
         return defaultsProvider.toString();
     }
 
+    @Override
     public Object getDefault() {
-    	getRuntimeContext().injectDependenciesInto(defaultsProvider);
+    	getDependencyInjector().injectDependenciesInto(defaultsProvider);
         return defaultsProvider.getDefaultValue();
     }
 
@@ -53,10 +54,10 @@ public class DefaultedFacetUsingDefaultsProvider extends FacetAbstract implement
     // Dependencies (from constructor)
     ////////////////////////////////////////////////////////
     
-
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
     }
+    
 
 }
 

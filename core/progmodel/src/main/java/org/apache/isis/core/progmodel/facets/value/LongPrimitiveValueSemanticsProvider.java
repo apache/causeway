@@ -26,37 +26,31 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 public class LongPrimitiveValueSemanticsProvider extends LongValueSemanticsProviderAbstract implements PropertyDefaultFacet {
 
-    private static final Object DEFAULT_VALUE = Long.valueOf(0L);
-
-    static final Class<?> adaptedClass() {
-        return long.class;
-    }
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public LongPrimitiveValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public LongPrimitiveValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, adaptedClass(), DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, long.class, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
     // PropertyDefaultFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         return createAdapter(long.class, Long.valueOf(0L));
     }

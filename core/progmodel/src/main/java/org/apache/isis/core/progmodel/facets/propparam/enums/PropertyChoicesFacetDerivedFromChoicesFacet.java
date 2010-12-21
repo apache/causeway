@@ -22,26 +22,31 @@ package org.apache.isis.core.progmodel.facets.propparam.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
 
-    public PropertyChoicesFacetDerivedFromChoicesFacet(FacetHolder holder) {
-        super(holder);
+    public PropertyChoicesFacetDerivedFromChoicesFacet(FacetHolder holder, SpecificationLookup specificationLookup) {
+        super(holder, specificationLookup);
     }
 
     @Override
-    public Object[] getChoices(ObjectAdapter adapter, SpecificationLoader specificationLoader) {
+    public Object[] getChoices(ObjectAdapter adapter, SpecificationLookup specificationLookup) {
         FacetHolder facetHolder = getFacetHolder();
         ObjectMemberPeer noap = (ObjectMemberPeer) facetHolder;
-        ObjectSpecification noSpec = noap.getSpecification(specificationLoader);
+        ObjectSpecification noSpec = getSpecification(noap.getType());
         ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null)
             return new Object[0];
         return choicesFacet.getChoices(adapter);
     }
+    
+    public ObjectSpecification getSpecification(Class<?> type) {
+        return type == null ? null : getSpecificationLoader().loadSpecification(type);
+    }
+
 
 }

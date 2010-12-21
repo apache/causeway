@@ -27,26 +27,26 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements CharValueFacet {
+public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Character> implements CharValueFacet {
 
     private static Class<? extends Facet> type() {
         return CharValueFacet.class;
     }
 
+    private static final Character DEFAULT_VALUE = Character.valueOf((char) 0);
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
     private static final int TYPICAL_LENGTH = 1;
 
     public CharValueSemanticsProviderAbstract(
-    		final FacetHolder holder, final Class<?> adaptedClass, final Object defaultValue,
+    		final FacetHolder holder, 
+    		final Class<Character> adaptedClass, 
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    public Object doParse(final Object original, final String entry) {
+    public Character doParse(final Object context, final String entry) {
         if (entry.length() > 1) {
             throw new InvalidEntryException("Only a single character is required");
         } else {
@@ -82,7 +82,7 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Character doRestore(final String data) {
         return Character.valueOf(data.charAt(0));
     }
 
@@ -90,12 +90,14 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     // CharValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Character charValue(final ObjectAdapter object) {
         return object == null ? null : (Character) object.getObject();
     }
 
+    @Override
     public ObjectAdapter createValue(final Character value) {
-        return getRuntimeContext().adapterFor(value);
+        return getAdapterMap().adapterFor(value);
     }
 
 
@@ -105,6 +107,5 @@ public abstract class CharValueSemanticsProviderAbstract extends ValueSemanticsP
     public String toString() {
         return "CharacterValueSemanticsProvider";
     }
-
 
 }

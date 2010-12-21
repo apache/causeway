@@ -122,7 +122,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 	// init, shutdown
 	/////////////////////////////////////////////////////////
 
-	public void init() {
+	@Override
+    public void init() {
 		ensureNotInitialized();
 		reflector = new JavaReflector(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
 
@@ -148,10 +149,11 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 		}
 		state = State.INITIALIZED;
 
-		viewer = new WrapperFactoryDefault(runtimeContext);
+		viewer = new WrapperFactoryDefault();
 	}
 
-	public void shutdown() {
+	@Override
+    public void shutdown() {
 		ensureInitialized();
 		state = State.SHUTDOWN;
 	}

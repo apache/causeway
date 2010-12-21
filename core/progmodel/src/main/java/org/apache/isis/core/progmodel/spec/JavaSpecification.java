@@ -53,8 +53,14 @@ import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
 import org.apache.isis.core.metamodel.java5.ImperativeFacetUtils;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.runtimecontext.spec.IntrospectableSpecificationAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -105,10 +111,6 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
             return !classes.isEmpty();
         }
 
-        public ObjectSpecification[] toArray() {
-            return classes.toArray(new ObjectSpecification[0]);
-        }
-
         /**
          * @return
          */
@@ -119,6 +121,11 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
 
     private final SubclassList subclasses;
     private final ObjectReflectorAbstract reflector;
+
+    private final SpecificationLookup specificationLookup;
+    private final AdapterMap adapterMap;
+    private final DependencyInjector dependencyInjector;
+    private final QuerySubmitter querySubmitter;
 
     private JavaIntrospector introspector;
 
@@ -154,12 +161,23 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
     public JavaSpecification(
     		final Class<?> cls,
     		final ObjectReflectorAbstract reflector,
-    		final RuntimeContext runtimeContext) {
-    	super(runtimeContext);
+    		final AuthenticationSessionProvider authenticationSessionProvider,
+    		final SpecificationLookup specificationLookup,
+    		final ServicesProvider servicesProvider,
+    		final AdapterMap adapterManager,
+    		final ObjectInstantiator objectInstantiator,
+    		final DependencyInjector dependencyInjector, 
+    		final QuerySubmitter querySubmitter) {
+    	super(authenticationSessionProvider, servicesProvider, objectInstantiator);
         this.introspector = new JavaIntrospector(cls, this, reflector);
         this.subclasses = new SubclassList();
         this.identifier = Identifier.classIdentifier(cls);
         this.reflector = reflector;
+        
+        this.specificationLookup = specificationLookup;
+        this.adapterMap = adapterManager;
+        this.dependencyInjector = dependencyInjector;
+        this.querySubmitter = querySubmitter;
     }
 
 
@@ -582,12 +600,18 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
                 final ObjectMemberPeerImpl memberPeer = (ObjectMemberPeerImpl) element;
                 if(memberPeer.getFeatureType().isAction()) {
                     final String actionId = memberPeer.getIdentifier().getMemberName();
-                    final ObjectAction objectAction = new ObjectActionImpl(actionId, memberPeer, getRuntimeContext());
+                    final ObjectAction objectAction = 
+                        new ObjectActionImpl(actionId, memberPeer, 
+                            getAuthenticationSessionProvider(), 
+                            getSpecificationLookup(),
+                            getAdapterMap(),
+                            getServicesProvider(), 
+                            getQuerySubmitter());
                     actions.add(objectAction);
                 }
             } else if (element instanceof OrderSet) {
                 final OrderSet set = ((OrderSet) element);
-                actions.add(new ObjectActionSet("", set.getGroupFullName(), orderActions(set), getRuntimeContext()));
+                actions.add(new ObjectActionSet("", set.getGroupFullName(), orderActions(set)));
             } else {
                 throw new UnknownTypeException(element);
             }
@@ -598,10 +622,10 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
 
     private ObjectAssociation createObjectAssociation(final ObjectMemberPeer peer) {
         if (peer.getFeatureType().isCollection()) {
-            return new OneToManyAssociationImpl(peer, getRuntimeContext());
+            return new OneToManyAssociationImpl(peer, getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterMap(), getQuerySubmitter());
 
         } else {
-            return new OneToOneAssociationImpl(peer, getRuntimeContext());
+            return new OneToOneAssociationImpl(peer, getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterMap(), getQuerySubmitter());
         }
     }
 
@@ -686,17 +710,17 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         }
 
         try {
-            Object object = getRuntimeContext().instantiate(cls);
+            Object object = getObjectInstantiator().instantiate(cls);
 
             if (creationMode == CreationMode.INITIALIZE) {
-                final ObjectAdapter adapter = getRuntimeContext().adapterFor(object);
+                final ObjectAdapter adapter = getAdapterMap().adapterFor(object);
 
                 // initialize new object
                 final List<ObjectAssociation> fields = adapter.getSpecification().getAssociations();
         		for (int i = 0; i < fields.size(); i++) {
         		    fields.get(i).toDefault(adapter);
         		}
-        		getRuntimeContext().injectDependenciesInto(object);
+        		getDependencyInjector().injectDependenciesInto(object);
 
         		CallbackUtils.callCallback(adapter, CreatedCallbackFacet.class);
             }
@@ -705,6 +729,8 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
             throw new IsisException("Failed to create instance of type " + cls.getName(), e);
         }
     }
+
+
 
     @Override
     public boolean isDirty(final ObjectAdapter object) {
@@ -813,8 +839,19 @@ public class JavaSpecification extends IntrospectableSpecificationAbstract imple
         return reflector.getClassSubstitutor();
     }
 
+    public SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
+    }
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 
+    protected DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
+    }
 
-
-
+    protected QuerySubmitter getQuerySubmitter() {
+        return querySubmitter;
+    }
+    
 }

@@ -25,20 +25,19 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract {
+public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
     public ImageValueSemanticsProvider(
             final FacetHolder holder,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(holder, Image.class, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, Image.class, configuration, context);
     }
 
+    @Override
     public int getHeight(final ObjectAdapter object) {
         return image(object).getHeight();
     }
@@ -47,6 +46,7 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
         return (Image) object.getObject();
     }
 
+    @Override
     public java.awt.Image getImage(final ObjectAdapter object) {
         return createImage(image(object).getImage());
     }
@@ -60,15 +60,17 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
         return Image.class;
     }
 
+    @Override
     public int getWidth(final ObjectAdapter object) {
         return image(object).getWidth();
     }
 
     @Override
-    protected Object setPixels(final int[][] pixels) {
+    protected Image setPixels(final int[][] pixels) {
         return new Image(pixels);
     }
 
+    @Override
     public Facet getUnderlyingFacet() {
         return null;
     }
@@ -76,14 +78,17 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
     /**
      * Not required because {@link #alwaysReplace()} is <tt>false</tt>.
      */
+    @Override
     public void setUnderlyingFacet(Facet underlyingFacet) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean alwaysReplace() {
         return false;
     }
 
+    @Override
     public boolean isNoop() {
         return false;
     }
@@ -93,8 +98,9 @@ public class ImageValueSemanticsProvider extends ImageValueSemanticsProviderAbst
         return "ImageValueSemanticsProvider: ";
     }
 
+    @Override
     public ObjectAdapter createValue(final java.awt.Image image) {
-        return getRuntimeContext().adapterFor(new Image(grabPixels(image)));
+        return getAdapterMap().adapterFor(new Image(grabPixels(image)));
    }
 
 }

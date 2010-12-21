@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class LongPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class LongPrimitiveValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Long> {
 
     public LongPrimitiveValueTypeFacetFactory() {
         super(LongValueFacet.class);
@@ -32,10 +32,10 @@ public class LongPrimitiveValueTypeFacetFactory extends ValueUsingValueSemantics
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != LongPrimitiveValueSemanticsProvider.adaptedClass()) {
+        if (type != long.class) {
             return false;
         }
-        addFacets(new LongPrimitiveValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new LongPrimitiveValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

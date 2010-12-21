@@ -22,18 +22,19 @@ package org.apache.isis.core.progmodel.facets.value;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.Hashtable;
+import java.util.Map;
+
+import com.google.inject.internal.Maps;
 
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class DateValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstractTemporal {
+public abstract class DateValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
-    private static Hashtable<String,DateFormat> formats = new Hashtable<String,DateFormat>();
+    private static Map<String,DateFormat> formats = Maps.newHashMap();
 
     static {
         formats.put("iso", createDateFormat("yyyy-MM-dd"));
@@ -45,18 +46,17 @@ public abstract class DateValueSemanticsProviderAbstract extends ValueSemanticsP
 
     public DateValueSemanticsProviderAbstract(
             final FacetHolder holder,
-            final Class<?> adaptedClass,
+            final Class<T> adaptedClass,
             final boolean immutable,
             final boolean equalByContent,
-            final Object defaultValue,
+            final T defaultValue,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super("date", holder, adaptedClass, 12, immutable, equalByContent, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super("date", holder, adaptedClass, 12, immutable, equalByContent, defaultValue, configuration, context);
 
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.date");
         if (formatRequired == null) {
-            format = (DateFormat) formats().get(defaultFormat());
+            format = formats().get(defaultFormat());
         } else {
             setMask(formatRequired);
         }
@@ -96,7 +96,7 @@ public abstract class DateValueSemanticsProviderAbstract extends ValueSemanticsP
     }
 
     @Override
-    protected Hashtable<String,DateFormat> formats() {
+    protected Map<String, DateFormat> formats() {
         return formats;
     }
 

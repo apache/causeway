@@ -25,7 +25,10 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
@@ -41,8 +44,11 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
             final ObjectSpecification specification,
             final FeatureType memberType,
             final Identified facetHolder, 
-            final RuntimeContext runtimeContext) {
-        super(associationId, facetHolder, memberType, runtimeContext);
+            final AuthenticationSessionProvider authenticationSessionProvider,
+            final SpecificationLookup specificationLookup,
+            final AdapterMap adapterManager,
+            final QuerySubmitter querySubmitter) {
+        super(associationId, facetHolder, memberType, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + associationId + "' must exist");
         }

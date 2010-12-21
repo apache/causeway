@@ -24,28 +24,29 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 
 public class TypicalLengthFacetUsingParser extends FacetAbstract implements TypicalLengthFacet {
 
     private final Parser parser;
-	private final RuntimeContext runtimeContext;
-
-    public TypicalLengthFacetUsingParser(final Parser parser, final FacetHolder holder, final RuntimeContext runtimeContext) {
+	private final DependencyInjector dependencyInjector;
+	
+    public TypicalLengthFacetUsingParser(final Parser parser, final FacetHolder holder, final DependencyInjector dependencyInjector) {
         super(TypicalLengthFacet.class, holder, false);
         this.parser = parser;
-        this.runtimeContext = runtimeContext;
+        this.dependencyInjector = dependencyInjector;
     }
 
     @Override
     protected String toStringValues() {
-    	getRuntimeContext().injectDependenciesInto(parser);
+    	getDependencyInjector().injectDependenciesInto(parser);
         return parser.toString();
     }
 
+    @Override
     public int value() {
-    	getRuntimeContext().injectDependenciesInto(parser);
+    	getDependencyInjector().injectDependenciesInto(parser);
         return parser.typicalLength();
     }
 
@@ -60,8 +61,11 @@ public class TypicalLengthFacetUsingParser extends FacetAbstract implements Typi
     ////////////////////////////////////////////////////////
     
 
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    /**
+     * @return the dependencyInjector
+     */
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
     }
 
 }

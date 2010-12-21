@@ -26,37 +26,30 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 public class ShortPrimitiveValueSemanticsProvider extends ShortValueSemanticsProviderAbstract implements PropertyDefaultFacet {
-
-    private static final Object DEFAULT_VALUE = Short.valueOf((short) 0);
-
-    static final Class<?> adaptedClass() {
-        return short.class;
-    }
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public ShortPrimitiveValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public ShortPrimitiveValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, adaptedClass(), DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, short.class, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
     // PropertyDefaultFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         return createAdapter(short.class, Short.valueOf((short) 0));
     }

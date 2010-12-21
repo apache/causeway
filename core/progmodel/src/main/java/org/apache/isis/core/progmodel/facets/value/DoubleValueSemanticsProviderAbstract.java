@@ -29,17 +29,17 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements
+public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Double> implements
         DoubleFloatingPointValueFacet {
 
     private static Class<? extends Facet> type() {
         return DoubleFloatingPointValueFacet.class;
     }
 
+    private static final Double DEFAULT_VALUE = new Double(0.0d);
     private static final int TYPICAL_LENGTH = 22;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
@@ -47,11 +47,11 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     private final NumberFormat format;
 
     public DoubleValueSemanticsProviderAbstract(
-    		final FacetHolder holder, final Class<?> adaptedClass, final Object defaultValue,
+    		final FacetHolder holder, 
+    		final Class<Double> adaptedClass, 
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.double");
     }
 
@@ -60,7 +60,7 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected Double doParse(final Object context, final String entry) {
         try {
             return new Double(format.parse(entry).doubleValue());
         } catch (final ParseException e) {
@@ -92,7 +92,7 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Double doRestore(final String data) {
         return new Double(data);
     }
 
@@ -100,12 +100,14 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     // DoubleValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Double doubleValue(final ObjectAdapter object) {
         return (Double) (object == null ? null : object.getObject());
     }
 
+    @Override
     public ObjectAdapter createValue(final Double value) {
-        return getRuntimeContext().adapterFor(value);
+        return getAdapterMap().adapterFor(value);
     }
 
     // /////// toString ///////
@@ -113,8 +115,5 @@ public abstract class DoubleValueSemanticsProviderAbstract extends ValueSemantic
     public String toString() {
         return "DoubleValueSemanticsProvider: " + format;
     }
-    
-
-
 
 }

@@ -24,15 +24,16 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
-import org.apache.log4j.Logger;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {
 
@@ -43,16 +44,16 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final ObjectSpecification onType;
     private final ObjectSpecification returnType;
 
-    private final RuntimeContext runtimeContext;
+    private final AdapterMap adapterMap;
 
     public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType,
-        final ObjectSpecification returnType, final FacetHolder holder, final RuntimeContext runtimeContext) {
+        final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterManager) {
         super(holder);
         this.method = method;
         this.paramCount = method.getParameterTypes().length;
         this.onType = onType;
         this.returnType = returnType;
-        this.runtimeContext = runtimeContext;
+        this.adapterMap = adapterManager;
     }
 
     /**
@@ -92,7 +93,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
                 return null;
             }
 
-            final ObjectAdapter adapter = getRuntimeContext().adapterFor(result);
+            final ObjectAdapter adapter = getAdapterMap().adapterFor(result);
             final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
             adapter.setTypeOfFacet(typeOfFacet);
             return adapter;
@@ -135,8 +136,8 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     // Dependencies (from constructor)
     // /////////////////////////////////////////////////////////
 
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    private AdapterMap getAdapterMap() {
+        return adapterMap;
     }
 
 }

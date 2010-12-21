@@ -28,11 +28,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.IntValueSemanticsProviderAbstract;
-import org.apache.isis.core.progmodel.facets.value.IntWrapperValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -52,7 +51,7 @@ public class IntValueSemanticsProviderTest extends ValueSemanticsProviderAbstrac
         }});
 
         holder = new FacetHolderImpl();
-        setValue(value = new IntWrapperValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(value = new IntWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

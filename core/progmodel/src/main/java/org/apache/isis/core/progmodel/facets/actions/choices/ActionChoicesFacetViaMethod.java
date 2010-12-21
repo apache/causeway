@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.actions.choices;
 
 import java.lang.reflect.Method;
@@ -29,55 +28,53 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.exceptions.ModelException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
-
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 
     private final Method method;
     private final Class<?> choicesType;
-	private final RuntimeContext runtimeContext;
-	private final SpecificationLoader specificationLoader;
+    private final SpecificationLookup specificationLookup;
+    private final AdapterMap adapterMap;
 
-    public ActionChoicesFacetViaMethod(
-    		final Method method, 
-    		final Class<?> choicesType, 
-    		final FacetHolder holder, 
-    		final SpecificationLoader specificationLoader, 
-    		final RuntimeContext runtimeContext) {
+    public ActionChoicesFacetViaMethod(final Method method, final Class<?> choicesType, final FacetHolder holder,
+        final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(holder);
         this.method = method;
         this.choicesType = choicesType;
-        this.specificationLoader = specificationLoader;
-        this.runtimeContext = runtimeContext;
+        this.specificationLookup = specificationLookup;
+        this.adapterMap = adapterManager;
     }
 
     /**
-     * Returns a singleton list of the {@link Method} provided in the constructor. 
+     * Returns a singleton list of the {@link Method} provided in the constructor.
      */
+    @Override
     public List<Method> getMethods() {
-    	return Collections.singletonList(method);
+        return Collections.singletonList(method);
     }
 
+    @Override
     public boolean impliesResolve() {
-    	return true;
+        return true;
     }
-    
-    public boolean impliesObjectChanged() {
-    	return false;
-    }
-    
 
+    @Override
+    public boolean impliesObjectChanged() {
+        return false;
+    }
+
+    @Override
     public Object[][] getChoices(final ObjectAdapter owningAdapter) {
         Object invoke = ObjectInvokeUtils.invoke(method, owningAdapter);
         if (!(invoke instanceof Object[])) {
             throw new ModelException(
-                    "Expected an array of collections (Object[]) containing choices for all parameters, but got " + invoke
-                            + " instead. Perhaps the parameter number is missing!");
+                "Expected an array of collections (Object[]) containing choices for all parameters, but got " + invoke
+                    + " instead. Perhaps the parameter number is missing!");
         }
         final Object[] options = (Object[]) invoke;
         final Object[][] results = new Object[options.length][];
@@ -87,26 +84,29 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             } else if (options[i].getClass().isArray()) {
                 results[i] = ArrayUtils.getObjectAsObjectArray(options[i]);
             } else {
-                final ObjectSpecification specification = getSpecificationLoader().loadSpecification(choicesType);
-                results[i] = ObjectAdapterUtils.getCollectionAsObjectArray(options[i], specification, getRuntimeContext());
+                final ObjectSpecification specification = getSpecificationLookup().loadSpecification(choicesType);
+                results[i] =
+                    ObjectAdapterUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());
             }
         }
         return results;
     }
 
-    private SpecificationLoader getSpecificationLoader() {
-    	return specificationLoader;
-    }
-    
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
-	@Override
+    @Override
     protected String toStringValues() {
         return "method=" + method + ",type=" + choicesType;
     }
 
+    // ///////////////////////////////////////////////////////
+    // Dependencies
+    // ///////////////////////////////////////////////////////
+
+    private SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
+    }
+
+    private AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 
 }
-

@@ -29,16 +29,16 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements FloatingPointValueFacet {
+public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Float> implements FloatingPointValueFacet {
 
     public static Class<? extends Facet> type() {
         return FloatingPointValueFacet.class;
     }
 
+    private static final Float DEFAULT_VALUE = new Float(0.0f);
     private static final int TYPICAL_LENGTH = 12;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
@@ -46,11 +46,11 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     private final NumberFormat format;
 
     public FloatValueSemanticsProviderAbstract(
-    		final FacetHolder holder, final Class<?> adaptedClass, final Object defaultValue,
+    		final FacetHolder holder, 
+    		final Class<Float> adaptedClass,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.float");
     }
 
@@ -59,7 +59,7 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected Float doParse(final Object context, final String entry) {
         try {
             return new Float(format.parse(entry).floatValue());
         } catch (final ParseException e) {
@@ -87,7 +87,7 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Float doRestore(final String data) {
         return new Float(data);
     }
 
@@ -95,12 +95,14 @@ public class FloatValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     // FloatingPointValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public Float floatValue(final ObjectAdapter object) {
         return object == null ? null : (Float) object.getObject();
     }
 
+    @Override
     public ObjectAdapter createValue(final Float value) {
-        return getRuntimeContext().adapterFor(value);
+        return getAdapterMap().adapterFor(value);
     }
 
     // /////// toString ///////

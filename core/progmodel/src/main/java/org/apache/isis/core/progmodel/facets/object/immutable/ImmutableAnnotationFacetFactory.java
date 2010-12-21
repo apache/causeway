@@ -47,7 +47,7 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
 
     @Override
     public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-    	ObjectSpecification spec = getSpecificationLoader().loadSpecification(method.getDeclaringClass());
+    	ObjectSpecification spec = getSpecificationLookup().loadSpecification(method.getDeclaringClass());
         final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
         if (immutableFacet != null && !immutableFacet.isNoop()) {
             return FacetUtil.addFacet(new DisabledFacetDerivedFromImmutable(immutableFacet, holder));

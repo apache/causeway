@@ -30,11 +30,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.applib.value.TestClock;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.JavaSqlTimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -68,7 +67,7 @@ public class JavaSqlTimeValueSemanticsProviderTest extends ValueSemanticsProvide
         twoOClockNO = createAdapter(twoOClock);
 
         holder = new FacetHolderImpl();
-        setValue(value = new JavaSqlTimeValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(value = new JavaSqlTimeValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

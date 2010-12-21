@@ -24,13 +24,13 @@ import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 
 public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
 
     private static String providerName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
-        final Defaulted annotation = (Defaulted) annotatedClass.getAnnotation(Defaulted.class);
+        final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         final String providerName = annotation.defaultsProviderName();
         if (!StringUtils.isNullOrEmpty(providerName)) {
             return providerName;
@@ -39,7 +39,7 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
     }
 
     private static Class<?> providerClass(final Class<?> annotatedClass) {
-        final Defaulted annotation = (Defaulted) annotatedClass.getAnnotation(Defaulted.class);
+        final Defaulted annotation = annotatedClass.getAnnotation(Defaulted.class);
         return annotation.defaultsProviderClass();
     }
 
@@ -47,16 +47,16 @@ public class DefaultedFacetAnnotation extends DefaultedFacetAbstract {
             final Class<?> annotatedClass,
             final IsisConfiguration configuration,
             final FacetHolder holder, 
-            final RuntimeContext runtimeContext) {
-        this(providerName(annotatedClass, configuration), providerClass(annotatedClass), holder, runtimeContext);
+            final DependencyInjector dependencyInjector) {
+        this(providerName(annotatedClass, configuration), providerClass(annotatedClass), holder, dependencyInjector);
     }
 
     private DefaultedFacetAnnotation(
             final String candidateProviderName,
             final Class<?> candidateProviderClass,
             final FacetHolder holder, 
-            final RuntimeContext runtimeContext) {
-        super(candidateProviderName, candidateProviderClass, holder, runtimeContext);
+            final DependencyInjector dependencyInjector) {
+        super(candidateProviderName, candidateProviderClass, holder, dependencyInjector);
     }
 
 }

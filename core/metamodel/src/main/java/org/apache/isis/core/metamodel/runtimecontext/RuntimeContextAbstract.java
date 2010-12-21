@@ -32,30 +32,45 @@ import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 
 
 public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderAware, DomainObjectContainerAware {
-	private SpecificationLoader specificationLoader;
+    
+	private SpecificationLookupDelegator specificationLookupDelegator;
 	private DomainObjectContainer container;
 	private Properties properties;
 
 	public RuntimeContextAbstract() {
+	    this.specificationLookupDelegator = new SpecificationLookupDelegator();
 	}
 
-	public void injectInto(Object candidate) {
+	@Override
+    public void injectInto(Object candidate) {
         if (RuntimeContextAware.class.isAssignableFrom(candidate.getClass())) {
         	RuntimeContextAware cast = RuntimeContextAware.class.cast(candidate);
             cast.setRuntimeContext(this);
         }
+        getAdapterMap().injectInto(candidate);
+        getAuthenticationSessionProvider().injectInto(candidate);
+        getDependencyInjector().injectInto(candidate);
+        getDomainObjectServices().injectInto(candidate);
+        getObjectInstantiator().injectInto(candidate);
+        getObjectDirtier().injectInto(candidate);
+        getObjectPersistor().injectInto(candidate);
+        getQuerySubmitter().injectInto(candidate);
+        getServicesProvider().injectInto(candidate);
+        getSpecificationLookup().injectInto(candidate);
 	}
 
 	
-	public SpecificationLoader getSpecificationLoader() {
-		return specificationLoader;
+	@Override
+    public SpecificationLookup getSpecificationLookup() {
+		return specificationLookupDelegator;
 	}
 	
 	/**
 	 * Is injected into when the reflector is {@link ObjectReflectorAbstract#init() initialized}.
 	 */
-	public void setSpecificationLoader(SpecificationLoader specificationLoader) {
-		this.specificationLoader = specificationLoader;
+	@Override
+    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
+		this.specificationLookupDelegator.setDelegate(specificationLoader);
 	}
 	
 	
@@ -66,19 +81,20 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
 	/**
 	 * So that {@link #injectDependenciesInto(Object)} can also inject the {@link DomainObjectContainer}.
 	 */
-	public void setContainer(DomainObjectContainer container) {
+	@Override
+    public void setContainer(DomainObjectContainer container) {
 		this.container = container;
 	}
 	
 	public void setProperties(Properties properties) {
         this.properties = properties;
     }
-	
-	public String getProperty(String name) {
+
+    public String getProperty(String name) {
 	    return properties.getProperty(name);
 	}
 	
-	public List<String> getPropertyNames() {
+    public List<String> getPropertyNames() {
 	    List<String> list= new ArrayList<String>();
 	    for (Object key : properties.keySet()) {
 	        list.add((String) key);

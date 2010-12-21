@@ -33,8 +33,10 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.util.NameUtils;
@@ -53,7 +55,7 @@ import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesF
 
 
 public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract implements
-        RuntimeContextAware {
+        AdapterMapAware, ObjectDirtierAware {
 
     private static final Logger LOG = Logger.getLogger(CollectionFieldMethodsFacetFactory.class);
 
@@ -74,7 +76,8 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
     private static final String[] PREFIXES = { REMOVE_FROM_PREFIX, ADD_TO_PREFIX, CLEAR_PREFIX, GET_PREFIX, MODIFY_PREFIX,
             SET_PREFIX, OPTIONAL_PREFIX, VALIDATE_ADD_TO_PREFIX, VALIDATE_REMOVE_FROM_PREFIX, };
 
-    private RuntimeContext runtimeContext;
+    private AdapterMap adapterMap;
+    private ObjectDirtier objectDirtier;
 
     public CollectionFieldMethodsFacetFactory() {
         super(PREFIXES, ObjectFeatureType.COLLECTIONS_ONLY);
@@ -137,7 +140,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
             collectionFacets.add(new CollectionAddToFacetViaMethod(method, collection));
         } else {
             // TODO need to distinguish between Java collections, arrays and other collections!
-            collectionFacets.add(new CollectionAddToFacetViaAccessor(getMethod, collection, getRuntimeContext()));
+            collectionFacets.add(new CollectionAddToFacetViaAccessor(getMethod, collection, getObjectDirtier()));
         }
         return addType;
     }
@@ -158,7 +161,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
             collectionFacets.add(new CollectionRemoveFromFacetViaMethod(method, collection));
         } else {
             // TODO need to distinguish between Java collections, arrays and other collections!
-            collectionFacets.add(new CollectionRemoveFromFacetViaAccessor(getMethod, collection, getRuntimeContext()));
+            collectionFacets.add(new CollectionRemoveFromFacetViaAccessor(getMethod, collection, getObjectDirtier()));
         }
         return removeType;
     }
@@ -175,7 +178,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
         if (method != null) {
             collectionFacets.add(new CollectionClearFacetViaMethod(method, collection));
         } else {
-            collectionFacets.add(new CollectionClearFacetViaAccessor(getMethod, collection, getRuntimeContext()));
+            collectionFacets.add(new CollectionClearFacetViaAccessor(getMethod, collection, getAdapterMap(), getObjectDirtier()));
         }
     }
 
@@ -196,7 +199,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
 
         type = addType != null ? addType : removeType;
         if (type != null) {
-            collectionFacets.add(new TypeOfFacetInferredFromSupportingMethods(type, collection, getSpecificationLoader()));
+            collectionFacets.add(new TypeOfFacetInferredFromSupportingMethods(type, collection, getSpecificationLookup()));
         }
         return type;
     }
@@ -256,7 +259,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
         if (method == null) {
             return;
         }
-        collectionFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, collection, getRuntimeContext()));
+        collectionFacets.add(new PropertyChoicesFacetViaMethod(method, returnType, collection, getSpecificationLookup(), getAdapterMap()));
     }
 
     // ///////////////////////////////////////////////////////////////
@@ -313,19 +316,22 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
     // Dependencies (injected)
     // ///////////////////////////////////////////////////////
 
-    /**
-     * @see #setRuntimeContext(RuntimeContext)
-     */
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    protected AdapterMap getAdapterMap() {
+        return adapterMap;
     }
 
-    /**
-     * Injected because {@link RuntimeContextAware}
-     */
     @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
+    public void setAdapterMap(AdapterMap adapterMap) {
+        this.adapterMap = adapterMap;
     }
 
+    protected ObjectDirtier getObjectDirtier() {
+        return objectDirtier;
+    }
+    
+    @Override
+    public void setObjectDirtier(ObjectDirtier objectDirtier) {
+        this.objectDirtier = objectDirtier;
+    }
+    
 }

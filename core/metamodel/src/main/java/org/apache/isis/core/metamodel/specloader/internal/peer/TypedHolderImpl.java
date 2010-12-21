@@ -18,8 +18,6 @@ package org.apache.isis.core.metamodel.specloader.internal.peer;
 
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 public class TypedHolderImpl extends FacetHolderImpl implements TypedHolder {
 
@@ -39,11 +37,6 @@ public class TypedHolderImpl extends FacetHolderImpl implements TypedHolder {
     @Override
     public Class<?> getType() {
         return type;
-    }
-
-    @Override
-    public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
-        return getType() == null ? null : specificationLoader.loadSpecification(getType());
     }
 
     @Override

@@ -25,6 +25,8 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Currency;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.Money;
@@ -35,13 +37,10 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract implements MoneyValueFacet {
+public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Money> implements MoneyValueFacet {
 
     private static Class<? extends Facet> type() {
         return MoneyValueFacet.class;
@@ -53,7 +52,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
     private static final int TYPICAL_LENGTH = 18;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
-    private static final Object DEFAULT_VALUE = null; // no default
+    private static final Money DEFAULT_VALUE = null; // no default
 
     private String defaultCurrencyCode;
 
@@ -83,16 +82,14 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public MoneyValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public MoneyValueSemanticsProvider(
             final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, Money.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
-                specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, Money.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
 
         final String property = ConfigurationConstants.ROOT + "value.money.currency";
         defaultCurrencyCode = configuration.getString(property, LOCAL_CURRENCY_CODE);
@@ -103,7 +100,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String text) {
+    protected Money doParse(final Object context, final String text) {
         final String entry = text.trim();
         final int pos = entry.lastIndexOf(' ');
         if (endsWithCurrencyCode(entry, pos)) {
@@ -111,7 +108,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
             final String code = entry.substring(pos + 1);
             return parseNumberAndCurrencyCode(value, code);
         } else {
-            return parseDerivedValue(original, entry);
+            return parseDerivedValue(context, entry);
         }
     }
 
@@ -122,7 +119,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
         return isCurrencyCode;
     }
 
-    private Object parseDerivedValue(final Object original, final String entry) {
+    private Money parseDerivedValue(final Object original, final String entry) {
         Money money = (Money) original;
         if (money == null || money.getCurrency().equals(LOCAL_CURRENCY_CODE)) {
             try {
@@ -142,7 +139,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
         }
     }
 
-    private Object parseNumberAndCurrencyCode(final String amount, final String code) {
+    private Money parseNumberAndCurrencyCode(final String amount, final String code) {
         final String currencyCode = code.toUpperCase();
         try {
             Currency.getInstance(currencyCode.toUpperCase());
@@ -172,6 +169,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
         }
     }
 
+    @Override
     public String titleStringWithMask(final Object value, final String usingMask) {
         if (value == null) {
             return "";
@@ -192,7 +190,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Money doRestore(final String data) {
         final String dataString = data;
         final int pos = dataString.indexOf(' ');
         final String amount = dataString.substring(0, pos);
@@ -204,6 +202,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
     // MoneyValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public float getAmount(final ObjectAdapter object) {
         final Money money = (Money) object.getObject();
         if (money == null) {
@@ -213,6 +212,7 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
         }
     }
 
+    @Override
     public String getCurrencyCode(final ObjectAdapter object) {
         final Money money = (Money) object.getObject();
         if (money == null) {
@@ -222,8 +222,9 @@ public class MoneyValueSemanticsProvider extends ValueSemanticsProviderAbstract 
         }
     }
 
+    @Override
     public ObjectAdapter createValue(final float amount, final String currencyCode) {
-        return getRuntimeContext().adapterFor(new Money(amount, currencyCode));
+        return getAdapterMap().adapterFor(new Money(amount, currencyCode));
     }
 
     // /////// toString ///////

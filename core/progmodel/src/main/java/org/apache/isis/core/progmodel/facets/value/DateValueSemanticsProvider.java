@@ -22,21 +22,20 @@ package org.apache.isis.core.progmodel.facets.value;
 
 import java.util.Date;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstract {
+public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstract<org.apache.isis.applib.value.Date> {
 
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
-    private static final Object DEFAULT_VALUE = null; // new org.apache.isis.applib.value.Date(2007,1,1);
+    private static final org.apache.isis.applib.value.Date DEFAULT_VALUE = null; // new org.apache.isis.applib.value.Date(2007,1,1);
 
     // // no default
 
@@ -45,26 +44,25 @@ public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstra
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public DateValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public DateValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, org.apache.isis.applib.value.Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, org.apache.isis.applib.value.Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     @Override
-    protected Object add(
-            final Object original,
+    protected org.apache.isis.applib.value.Date add(
+            final org.apache.isis.applib.value.Date original,
             final int years,
             final int months,
             final int days,
             final int hours,
             final int minutes) {
-        final org.apache.isis.applib.value.Date date = (org.apache.isis.applib.value.Date) original;
+        final org.apache.isis.applib.value.Date date = original;
         return date.add(years, months, days);
     }
 
@@ -79,7 +77,7 @@ public class DateValueSemanticsProvider extends DateValueSemanticsProviderAbstra
     }
 
     @Override
-    protected Object setDate(final Date date) {
+    protected org.apache.isis.applib.value.Date setDate(final Date date) {
         return new org.apache.isis.applib.value.Date(date);
     }
 }

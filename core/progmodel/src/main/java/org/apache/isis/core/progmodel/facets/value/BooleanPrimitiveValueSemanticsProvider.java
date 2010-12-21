@@ -26,37 +26,32 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemanticsProviderAbstract implements PropertyDefaultFacet {
 
-    private static final Object DEFAULT_VALUE = Boolean.FALSE;
-
-    static final Class<?> adaptedClass() {
-        return boolean.class;
-    }
+    private static final Boolean DEFAULT_VALUE = Boolean.FALSE;
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public BooleanPrimitiveValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public BooleanPrimitiveValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(holder, adaptedClass(), DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, boolean.class, DEFAULT_VALUE, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
     // PropertyDefault
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         return createAdapter(boolean.class, Boolean.FALSE);
     }
@@ -65,14 +60,17 @@ public class BooleanPrimitiveValueSemanticsProvider extends BooleanValueSemantic
     // BooleanValueFacet impl
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public void reset(final ObjectAdapter object) {
         object.replacePojo(Boolean.FALSE);
     }
 
+    @Override
     public void set(final ObjectAdapter object) {
         object.replacePojo(Boolean.TRUE);
     }
 
+    @Override
     public void toggle(final ObjectAdapter object) {
         final boolean current = ((Boolean) object.getObject()).booleanValue();
         final boolean toggled = !current;

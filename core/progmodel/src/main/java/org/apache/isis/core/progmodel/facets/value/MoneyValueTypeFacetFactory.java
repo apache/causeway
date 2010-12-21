@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class MoneyValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class MoneyValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Money> {
 
     public MoneyValueTypeFacetFactory() {
         super(MoneyValueFacet.class);
@@ -35,7 +35,7 @@ public class MoneyValueTypeFacetFactory extends ValueUsingValueSemanticsProvider
         if (type != org.apache.isis.applib.value.Money.class) {
             return false;
         }
-        addFacets(new MoneyValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new MoneyValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

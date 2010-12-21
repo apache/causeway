@@ -24,38 +24,43 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.collections.CollectionUtils;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionFacetAbstract;
 
 
 public class JavaCollectionFacet extends CollectionFacetAbstract {
 
-    private final RuntimeContext runtimeContext;
+    private final AdapterMap adapterMap;
 
 	public JavaCollectionFacet(
 			final FacetHolder holder, 
-			final RuntimeContext runtimeContext) {
+			final AdapterMap adapterManager) {
         super(holder);
-        this.runtimeContext = runtimeContext;
+        this.adapterMap = adapterManager;
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public Collection<ObjectAdapter> collection(ObjectAdapter wrappedCollection) {
         Collection<?> collectionOfUnderlying = collectionOfUnderlying(wrappedCollection);
-        return CollectionUtils.collect(collectionOfUnderlying, new ObjectToAdapterTransformer(getRuntimeContext()));
+        return CollectionUtils.collect(collectionOfUnderlying, new ObjectToAdapterTransformer(getAdapterMap()));
     }
 
-	public ObjectAdapter firstElement(final ObjectAdapter collection) {
+	@Override
+    public ObjectAdapter firstElement(final ObjectAdapter collection) {
         final Iterator<ObjectAdapter> iterator = iterator(collection);
         return iterator.hasNext() ? iterator.next() : null;
     }
 
+    @Override
     public int size(final ObjectAdapter collection) {
         return collectionOfUnderlying(collection).size();
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public void init(final ObjectAdapter collection, final ObjectAdapter[] initData) {
         final Collection javaCollection = collectionOfUnderlying(collection);
@@ -78,10 +83,9 @@ public class JavaCollectionFacet extends CollectionFacetAbstract {
     // Dependencies (from constructor)
     ////////////////////////////////////////////////////////////////////////
     
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
+    private AdapterMap getAdapterMap() {
+		return adapterMap;
 	}
-
 
 }
 

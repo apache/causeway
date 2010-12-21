@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class BigDecimalValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class BigDecimalValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<BigDecimal> {
 
 
 	public BigDecimalValueTypeFacetFactory() {
@@ -38,7 +38,7 @@ public class BigDecimalValueTypeFacetFactory extends ValueUsingValueSemanticsPro
         if (type != BigDecimal.class) {
             return false;
         }
-        addFacets(new BigDecimalValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new BigDecimalValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

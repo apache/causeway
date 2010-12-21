@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class LongWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class LongWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Long> {
 
     public LongWrapperValueTypeFacetFactory() {
         super(LongValueFacet.class);
@@ -32,10 +32,10 @@ public class LongWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsPr
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != LongWrapperValueSemanticsProvider.adaptedClass()) {
+        if (type != Long.class) {
             return false;
         }
-        addFacets(new LongWrapperValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new LongWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

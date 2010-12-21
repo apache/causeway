@@ -30,10 +30,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.BigIntegerValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -53,7 +53,7 @@ public class BigIntValueSemanticsProviderTest extends ValueSemanticsProviderAbst
 
 
         holder = new FacetHolderImpl();
-        setValue(new BigIntegerValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(new BigIntegerValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

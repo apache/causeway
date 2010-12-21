@@ -29,16 +29,16 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements ShortValueFacet {
+public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Short> implements ShortValueFacet {
 
     public static Class<? extends Facet> type() {
         return ShortValueFacet.class;
     }
 
+    private static final Short DEFAULT_VALUE = Short.valueOf((short) 0);
     private static final int TYPICAL_LENGTH = 6;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
@@ -46,11 +46,11 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     private final NumberFormat format;
 
     public ShortValueSemanticsProviderAbstract(
-    		final FacetHolder holder, final Class<?> adaptedClass, final Object defaultValue,
+    		final FacetHolder holder, 
+    		final Class<Short> adaptedClass, 
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
         format = determineNumberFormat("value.format.short");
     }
 
@@ -59,7 +59,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected Short doParse(final Object context, final String entry) {
         try {
             return Short.valueOf(format.parse(entry).shortValue());
         } catch (final ParseException e) {
@@ -87,7 +87,7 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Short doRestore(final String data) {
         return new Short(data);
     }
 
@@ -95,10 +95,12 @@ public class ShortValueSemanticsProviderAbstract extends ValueSemanticsProviderA
     // ShortValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter createValue(final Short value) {
-        return getRuntimeContext().adapterFor(value);
+        return getAdapterMap().adapterFor(value);
     }
 
+    @Override
     public Short shortValue(final ObjectAdapter object) {
         return (Short) (object == null ? null : object.getObject());
     }

@@ -25,24 +25,35 @@ import org.apache.isis.core.metamodel.config.IsisConfigurationAware;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAware;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.object.value.ValueFacetUsingSemanticsProvider;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class ValueUsingValueSemanticsProviderFacetFactory extends FacetFactoryAbstract implements RuntimeContextAware,
-        IsisConfigurationAware {
+public abstract class ValueUsingValueSemanticsProviderFacetFactory<T> extends FacetFactoryAbstract implements 
+        IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware  {
 
-    private RuntimeContext runtimeContext;
     private IsisConfiguration configuration;
+    private AuthenticationSessionProvider authenticationSessionProvider;
+    private AdapterMap adapterManager;
+    private DependencyInjector dependencyInjector;
+    /**
+     * Lazily created.
+     */
+    private ValueSemanticsProviderContext context;
 
     protected ValueUsingValueSemanticsProviderFacetFactory(final Class<? extends Facet> adapterFacetType) {
         super(ObjectFeatureType.OBJECTS_ONLY);
     }
 
-    protected void addFacets(final ValueSemanticsProviderAbstract adapter) {
-        ValueFacetUsingSemanticsProvider facet = new ValueFacetUsingSemanticsProvider(adapter, adapter, getRuntimeContext());
+    protected void addFacets(final ValueSemanticsProviderAndFacetAbstract<T> adapter) {
+        ValueFacetUsingSemanticsProvider facet = new ValueFacetUsingSemanticsProvider(adapter, adapter, getContext());
         FacetUtil.addFacet(facet);
     }
 
@@ -50,20 +61,35 @@ public abstract class ValueUsingValueSemanticsProviderFacetFactory extends Facet
     // Dependencies (injected via setter)
     // ////////////////////////////////////////////////////
 
-    protected RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    public IsisConfiguration getConfiguration() {
+        return configuration;
     }
 
-    public void setRuntimeContext(final RuntimeContext runtimeContext) {
-        this.runtimeContext = runtimeContext;
+    public ValueSemanticsProviderContext getContext() {
+        if(context == null) {
+            context = new ValueSemanticsProviderContext(authenticationSessionProvider, getSpecificationLookup(), adapterManager, dependencyInjector);
+        }
+        return context;
     }
 
+    @Override
     public void setIsisConfiguration(IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    public IsisConfiguration getConfiguration() {
-        return configuration;
+    @Override
+    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+        this.authenticationSessionProvider = authenticationSessionProvider;
+    }
+
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterManager = adapterManager;
+    }
+
+    @Override
+    public void setDependencyInjector(DependencyInjector dependencyInjector) {
+        this.dependencyInjector = dependencyInjector;
     }
 
 }

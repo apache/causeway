@@ -23,6 +23,14 @@ package org.apache.isis.core.metamodel.runtimecontext.spec.feature;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
@@ -34,16 +42,8 @@ import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesF
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 
 @RunWith(JMock.class)
@@ -58,26 +58,32 @@ public class ObjectAssociationAbstractTest {
     public void setup() {
         facetHolder = new IdentifiedImpl();
         objectAssociation = new ObjectAssociationAbstract("id", new TestProxySpecification("test"),
-                FeatureType.PROPERTY, facetHolder, null) {
+                FeatureType.PROPERTY, facetHolder, null, null, null, null) {
 
+            @Override
             public ObjectAdapter get(ObjectAdapter fromObject) {
                 return null;
             }
 
+            @Override
             public boolean isEmpty(ObjectAdapter adapter) {
                 return false;
             }
 
+            @Override
             public ObjectAdapter[] getChoices(ObjectAdapter object) {
                 return null;
             }
 
+            @Override
             public ObjectAdapter getDefault(ObjectAdapter adapter) {
                 return null;
             }
 
+            @Override
             public void toDefault(ObjectAdapter target) {}
 
+            @Override
             public UsabilityContext<?> createUsableInteractionContext(
                     AuthenticationSession session,
                     InteractionInvocationMethod invocationMethod,
@@ -85,6 +91,7 @@ public class ObjectAssociationAbstractTest {
                 return null;
             }
 
+            @Override
             public VisibilityContext<?> createVisibleInteractionContext(
                     AuthenticationSession session,
                     InteractionInvocationMethod invocationMethod,
@@ -92,10 +99,12 @@ public class ObjectAssociationAbstractTest {
                 return null;
             }
 
+            @Override
             public String debugData() {
                 return null;
             }
 
+            @Override
             public Instance getInstance(ObjectAdapter adapter) {
                 return null;
             }

@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class JavaSqlDateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class JavaSqlDateValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Date> {
 
     public JavaSqlDateValueTypeFacetFactory() {
         super(DateValueFacet.class); // as per inherited TimeValueSemanticsProvider#facetType (inherited)
@@ -37,7 +37,7 @@ public class JavaSqlDateValueTypeFacetFactory extends ValueUsingValueSemanticsPr
         if (type != Date.class) {
             return false;
         }
-        addFacets(new JavaSqlDateValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new JavaSqlDateValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

@@ -23,7 +23,6 @@ package org.apache.isis.core.metamodel.specloader.internal.peer;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 /**
@@ -46,11 +45,6 @@ public interface TypedHolder extends FacetHolder {
      */
     public void setType(Class<?> type);
 
-    /**
-     * The {@link ObjectSpecification} corresponding to {@link #getType()}
-     * (or null if not yet {@link #setType(Class)}).
-     */
-    ObjectSpecification getSpecification(SpecificationLoader specificationLoader);
 
     /**
      * @return

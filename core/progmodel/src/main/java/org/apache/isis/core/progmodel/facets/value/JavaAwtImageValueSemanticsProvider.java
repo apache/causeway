@@ -25,21 +25,20 @@ import java.awt.Image;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract {
+public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProviderAbstract<Image> {
 
     public JavaAwtImageValueSemanticsProvider(
             final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, Image.class, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, Image.class, configuration, context);
     }
 
-	public int getHeight(final ObjectAdapter object) {
+	@Override
+    public int getHeight(final ObjectAdapter object) {
         return image(object).getHeight(null);
     }
 
@@ -47,6 +46,7 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
         return (Image) object.getObject();
     }
 
+    @Override
     public Image getImage(final ObjectAdapter object) {
         return image(object);
     }
@@ -60,17 +60,18 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
         return Image.class;
     }
 
+    @Override
     public int getWidth(final ObjectAdapter object) {
         return image(object).getWidth(null);
     }
 
     @Override
-    protected Object setPixels(final int[][] pixels) {
-        final Image image = createImage(pixels);
-        return getRuntimeContext().adapterFor(image);
+    protected Image setPixels(final int[][] pixels) {
+        return createImage(pixels);
     }
 
 
+    @Override
     public boolean isNoop() {
         return false;
     }
@@ -80,8 +81,9 @@ public class JavaAwtImageValueSemanticsProvider extends ImageValueSemanticsProvi
         return "JavaAwtImageValueSemanticsProvider: ";
     }
 
+    @Override
     public ObjectAdapter createValue(final Image image) {
-        return getRuntimeContext().adapterFor(image);
+        return getAdapterMap().adapterFor(image);
    }
     
 }

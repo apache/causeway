@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleClassValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 
 
 public abstract class TypeOfFacetAbstract extends SingleClassValueFacetAbstract implements TypeOfFacet {
@@ -36,8 +36,8 @@ public abstract class TypeOfFacetAbstract extends SingleClassValueFacetAbstract 
     public TypeOfFacetAbstract(
             final Class<?> type,
             final FacetHolder holder,
-            final SpecificationLoader specificationLoader) {
-        super(type(), holder, type, specificationLoader);
+            final SpecificationLookup specificationLookup) {
+        super(type(), holder, type, specificationLookup);
     }
 
     @Override

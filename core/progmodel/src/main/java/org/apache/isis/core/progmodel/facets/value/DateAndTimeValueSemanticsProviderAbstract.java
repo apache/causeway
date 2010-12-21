@@ -21,22 +21,20 @@
 package org.apache.isis.core.progmodel.facets.value;
 
 import java.text.DateFormat;
-import java.util.Hashtable;
+import java.util.Map;
+
+import com.google.inject.internal.Maps;
 
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class JavaUtilDateValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstractTemporal {
+public abstract class DateAndTimeValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
-    private static final Object DEFAULT_VALUE = null; // no default
-
-    private static Hashtable formats = new Hashtable();
-    private static final int TYPICAL_LENGTH = 18;
-
+    private static Map<String,DateFormat> formats = Maps.newHashMap();
+    
     static {
         formats.put("iso", createDateFormat("yyyy-MM-dd HH:mm"));
         formats.put("iso_short", createDateFormat("yyyyMMdd'T'HHmm"));
@@ -51,20 +49,24 @@ public abstract class JavaUtilDateValueSemanticsProviderAbstract extends ValueSe
         formats.put("custom1", createDateFormat("dd-MMM-yyyy HH:mm"));
     }
 
-    public JavaUtilDateValueSemanticsProviderAbstract(
+    private static final Object DEFAULT_VALUE = null; // no default
+    private static final int TYPICAL_LENGTH = 18;
+
+
+    @SuppressWarnings("unchecked")
+    public DateAndTimeValueSemanticsProviderAbstract(
             final FacetHolder holder,
-            final Class<?> adaptedClass,
+            final Class<T> adaptedClass,
             final boolean immutable,
             final boolean equalByContent,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutable, equalByContent, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super("datetime", holder, adaptedClass, TYPICAL_LENGTH, immutable, equalByContent, (T) DEFAULT_VALUE, configuration, context);
 
         final String formatRequired = configuration.getString(
                 ConfigurationConstants.ROOT + "value.format.datetime");
         if (formatRequired == null) {
-            format = (DateFormat) formats().get(defaultFormat());
+            format = formats().get(defaultFormat());
         } else {
             setMask(formatRequired);
         }
@@ -89,7 +91,7 @@ public abstract class JavaUtilDateValueSemanticsProviderAbstract extends ValueSe
     }
 
     @Override
-    protected Hashtable formats() {
+    protected Map<String, DateFormat> formats() {
         return formats;
     }
 

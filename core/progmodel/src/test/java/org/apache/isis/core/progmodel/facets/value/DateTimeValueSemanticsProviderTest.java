@@ -28,11 +28,11 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.applib.value.TestClock;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.DateTimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -49,7 +49,7 @@ public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAb
 
         TestClock.initialize();
         holder = new FacetHolderImpl();
-        setValue(adapter = new DateTimeValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(adapter = new DateTimeValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

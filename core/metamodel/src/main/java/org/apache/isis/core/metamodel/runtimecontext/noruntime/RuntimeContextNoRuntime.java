@@ -20,126 +20,94 @@
 
 package org.apache.isis.core.metamodel.runtimecontext.noruntime;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
+import org.apache.isis.core.metamodel.runtimecontext.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
-	public RuntimeContextNoRuntime() {
+	private DependencyInjector dependencyInjector;
+
+    public RuntimeContextNoRuntime() {
+        dependencyInjector = new DependencyInjectorAbstract() {
+            
+            /**
+             * Unlike most of the methods in this implementation, does nothing (because
+             * this will always be called, even in a no-runtime context).
+             */
+            @Override
+            public void injectDependenciesInto(Object domainObject) {
+                
+            }
+        };
 	}
-	
+
 
 	/////////////////////////////////////////////
-	// AuthenticationSession
+	// Components
 	/////////////////////////////////////////////
 
-	public AuthenticationSession getAuthenticationSession() {
-		return new AuthenticationSessionNoRuntime();
-	}
+    @Override
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        throw new UnsupportedOperationException(
+        "Not supported by this implementation of RuntimeContext");
+    }
+    
+    @Override
+    public AdapterMap getAdapterMap() {
+        throw new UnsupportedOperationException(
+        "Not supported by this implementation of RuntimeContext");
+    }
 
-	/////////////////////////////////////////////
-	// getAdapterFor, adapterFor
-	/////////////////////////////////////////////
+    @Override
+    public ObjectInstantiator getObjectInstantiator() {
+        throw new UnsupportedOperationException(
+        "Not supported by this implementation of RuntimeContext");
+    }
+    
+    @Override
+    public ObjectDirtier getObjectDirtier() {
+        throw new UnsupportedOperationException(
+        "Not supported by this implementation of RuntimeContext");
+    }
 
-	public ObjectAdapter getAdapterFor(Object pojo) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-	
-	public ObjectAdapter getAdapterFor(Oid oid) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-	
-	public ObjectAdapter adapterFor(Object pattern) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-	
-	public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter,
-			Identified identified) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
+    @Override
+    public ObjectPersistor getObjectPersistor() {
+        throw new UnsupportedOperationException(
+        "Not supported by this implementation of RuntimeContext");
+    }
 
-	
-	/////////////////////////////////////////////
-	// createTransientInstance, instantiate
-	/////////////////////////////////////////////
+    @Override
+    public DomainObjectServices getDomainObjectServices() {
+        throw new UnsupportedOperationException(
+        "Not supported by this implementation of RuntimeContext");
+    }
 
-	public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
+    @Override
+    public QuerySubmitter getQuerySubmitter() {
+        throw new UnsupportedOperationException(
+        "Not supported by this implementation of RuntimeContext");
+    }
 
-	public Object instantiate(Class<?> cls) throws ObjectInstantiationException {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-
-	
-	/////////////////////////////////////////////
-	// resolve, objectChanged
-	/////////////////////////////////////////////
-
-	public void resolve(Object parent) {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
-
-	public void resolve(Object parent, Object field) {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
-
-	public void objectChanged(ObjectAdapter inObject) {
-		throw new UnsupportedOperationException(
-				"Not supported by this implementation of RuntimeContext");
-	}
-
-	public void objectChanged(Object object) {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
-
-	
-	/////////////////////////////////////////////
-	// makePersistent, remove
-	/////////////////////////////////////////////
-	
-	public void makePersistent(ObjectAdapter adapter) {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
-
-	public void remove(ObjectAdapter adapter) {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
-
-	/////////////////////////////////////////////
-	// flush, commit
-	/////////////////////////////////////////////
-	
-	public boolean flush() {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-
-	public void commit() {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
-
+    @Override
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
+    }
+    
 	
 	/////////////////////////////////////////////
 	// allInstances, allMatching*
@@ -150,56 +118,25 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 		"Not supported by this implementation of RuntimeContext");
 	}
 
-	public <T> List<ObjectAdapter> allMatchingQuery(Query<T> query) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-
-	public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-
-    ////////////////////////////////////////////////////////////////////
-    // info, warn, error messages
-    ////////////////////////////////////////////////////////////////////
-
-
-	public void informUser(String message) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-
-	public void warnUser(String message) {
-		throw new UnsupportedOperationException(
-			"Not supported by this implementation of RuntimeContext");
-	}
-
-	public void raiseError(String message) {
-		throw new UnsupportedOperationException(
-		"Not supported by this implementation of RuntimeContext");
-	}
-
 	
 	/////////////////////////////////////////////
 	// getServices, injectDependenciesInto
 	/////////////////////////////////////////////
 
-	/**
-	 * Just returns an empty array.
-	 */
-	public List<ObjectAdapter> getServices() {
-		return new ArrayList<ObjectAdapter>();
+	@Override
+    public ServicesProvider getServicesProvider() {
+	    return new ServicesProviderAbstract() {
+	        /**
+	         * Just returns an empty array.
+	         */
+	        @Override
+            public List<ObjectAdapter> getServices() {
+	            return Collections.emptyList();
+	        }
+	    };
 	}
 
 
-	/**
-	 * Unlike most of the methods in this implementation, does nothing (because
-	 * this will always be called, even in a no-runtime context).
-	 */
-	public void injectDependenciesInto(Object object) {
-		// does nothing.
-	}
 
 
 

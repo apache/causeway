@@ -26,21 +26,25 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 
 public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements EncodableFacet {
 
     private final EncoderDecoder encoderDecoder;
-	private final RuntimeContext runtimeContext;
+    private final DependencyInjector dependencyInjector;
+    private final AdapterMap adapterManager;
 
     public EncodableFacetUsingEncoderDecoder(
     		final EncoderDecoder encoderDecoder, 
-    		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
+    		final FacetHolder holder,
+    		final AdapterMap adapterManager,
+    		final DependencyInjector dependencyInjector) {
         super(EncodableFacet.class, holder, false);
         this.encoderDecoder = encoderDecoder;
-        this.runtimeContext = runtimeContext;
+        this.dependencyInjector = dependencyInjector;
+        this.adapterManager = adapterManager;
     }
 
     // TODO: is this safe? really?
@@ -48,24 +52,26 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
 
     @Override
     protected String toStringValues() {
-    	getRuntimeContext().injectDependenciesInto(encoderDecoder);
+    	getDependencyInjector().injectDependenciesInto(encoderDecoder);
         return encoderDecoder.toString();
     }
 
+    @Override
     public ObjectAdapter fromEncodedString(final String encodedData) {
         Assert.assertNotNull(encodedData);
         if (ENCODED_NULL.equals(encodedData)) {
             return null;
         } else {
-        	getRuntimeContext().injectDependenciesInto(encoderDecoder);
+        	getDependencyInjector().injectDependenciesInto(encoderDecoder);
             Object decodedObject = encoderDecoder.fromEncodedString(encodedData);
-			return getRuntimeContext().adapterFor(decodedObject);
+			return getAdapterManager().adapterFor(decodedObject);
         }
 
     }
 
+    @Override
     public String toEncodedString(final ObjectAdapter object) {
-    	getRuntimeContext().injectDependenciesInto(encoderDecoder);
+    	getDependencyInjector().injectDependenciesInto(encoderDecoder);
         return object == null ? ENCODED_NULL : encoderDecoder.toEncodedString(object.getObject());
     }
 
@@ -76,9 +82,13 @@ public class EncodableFacetUsingEncoderDecoder extends FacetAbstract implements 
     ////////////////////////////////////////////////////////
     
 
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
     }
 
+    public AdapterMap getAdapterManager() {
+        return adapterManager;
+    }
+    
 }
 

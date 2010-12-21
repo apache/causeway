@@ -17,8 +17,9 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.progmodel.facets.propparam.enums;
+
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
@@ -26,82 +27,78 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstract;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
+import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAndFacetAbstract;
 
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+public class EnumValueSemanticsProvider<T extends Enum<T>> extends ValueSemanticsProviderAndFacetAbstract<T> implements EnumFacet {
 
-public class EnumValueSemanticsProvider extends ValueSemanticsProviderAbstract implements EnumFacet {
+    private static final boolean IMMUTABLE = true;
+    private static final boolean EQUAL_BY_CONTENT = true;
+    private static final int TYPICAL_LENGTH = 8;
 
-  private static final boolean IMMUTABLE = true;
-  private static final boolean EQUAL_BY_CONTENT = true;
-  private static final int TYPICAL_LENGTH = 8;
-
-  private static Class<? extends Facet> type() {
-    return EnumFacet.class;
-}
-
-  /**
-   * Required because {@link Parser} and {@link EncoderDecoder}.
-   */
-  @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
-  public EnumValueSemanticsProvider() {
-      this(null, null, null, null, null);
-  }
-
-  public EnumValueSemanticsProvider(
-      FacetHolder holder,
-      Class<?> adaptedClass,
-      IsisConfiguration configuration, SpecificationLoader specificationLoader, RuntimeContext runtimeContext) {
-    this(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, adaptedClass.getEnumConstants()[0], configuration, specificationLoader, runtimeContext);
-  }
-
-  private EnumValueSemanticsProvider(
-      Class<? extends Facet> adapterFacetType,
-      FacetHolder holder,
-      Class<?> adaptedClass,
-      int typicalLength,
-      boolean immutable,
-      boolean equalByContent,
-      Object defaultValue,
-      IsisConfiguration configuration,
-      SpecificationLoader specificationLoader,
-      RuntimeContext runtimeContext) {
-    super(adapterFacetType, holder, adaptedClass, typicalLength, immutable,
-        equalByContent, defaultValue, configuration, specificationLoader,
-        runtimeContext);
-  }
-
-
-  @Override
-  protected Object doParse(Object original, String entry) {
-    Object[] enumConstants=getAdaptedClass().getEnumConstants();
-    for (Object enumConstant : enumConstants) {
-      if (enumConstant.toString().equals(entry))
-        return enumConstant;
+    private static Class<? extends Facet> type() {
+        return EnumFacet.class;
     }
-    throw new TextEntryParseException("Unknown enum constant '" + entry + "'");
-  }
 
-  @Override
-  protected String doEncode(Object object) {
-    return titleString(object);
-  }
+    /**
+     * Required because {@link Parser} and {@link EncoderDecoder}.
+     */
+    @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
+    public EnumValueSemanticsProvider() {
+        this(null, null, null, null);
+    }
 
-  @Override
-  protected Object doRestore(String data) {
-    return doParse(null, data);
-  }
+    public EnumValueSemanticsProvider(
+            FacetHolder holder, 
+            Class<T> adaptedClass, 
+            IsisConfiguration configuration,
+            ValueSemanticsProviderContext context) {
+        this(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT,
+            adaptedClass.getEnumConstants()[0], configuration, context);
+    }
 
-  @Override
-  protected String titleString(Object object) {
-    return object.toString();
-  }
+    private EnumValueSemanticsProvider(
+            Class<? extends Facet> adapterFacetType, 
+            FacetHolder holder,
+            Class<T> adaptedClass, 
+            int typicalLength, 
+            boolean immutable, 
+            boolean equalByContent, 
+            T defaultValue,
+            IsisConfiguration configuration, 
+            ValueSemanticsProviderContext context) {
+        super(adapterFacetType, holder, adaptedClass, typicalLength, immutable, equalByContent, defaultValue,
+            configuration, context);
+    }
 
-  @Override
-  public String titleStringWithMask(Object value, String usingMask) {
-    return titleString(value);
-  }
+    @Override
+    protected T doParse(final Object context, final String entry) {
+        T[] enumConstants = getAdaptedClass().getEnumConstants();
+        for (T enumConstant : enumConstants) {
+            if (enumConstant.toString().equals(entry))
+                return enumConstant;
+        }
+        throw new TextEntryParseException("Unknown enum constant '" + entry + "'");
+    }
+
+    @Override
+    protected String doEncode(Object object) {
+        return titleString(object);
+    }
+
+    @Override
+    protected T doRestore(String data) {
+        return doParse(null, data);
+    }
+
+    @Override
+    protected String titleString(Object object) {
+        return object.toString();
+    }
+
+    @Override
+    public String titleStringWithMask(Object value, String usingMask) {
+        return titleString(value);
+    }
 
 }

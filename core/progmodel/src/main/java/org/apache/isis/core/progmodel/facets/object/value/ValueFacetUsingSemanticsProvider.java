@@ -23,13 +23,16 @@ package org.apache.isis.core.progmodel.facets.object.value;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 
 
 public class ValueFacetUsingSemanticsProvider extends ValueFacetAbstract {
 
-    public ValueFacetUsingSemanticsProvider(final ValueSemanticsProvider<?> adapter, final Facet underlyingValueTypeFacet, RuntimeContext runtimeContext) {
-        super(adapter, true, underlyingValueTypeFacet.getFacetHolder(), runtimeContext);
+    public ValueFacetUsingSemanticsProvider(
+            final ValueSemanticsProvider<?> adapter, 
+            final Facet underlyingValueTypeFacet, 
+            final ValueSemanticsProviderContext context 
+            ) {
+        super(adapter, AddFacetsIfInvalidStrategy.DO_ADD, underlyingValueTypeFacet.getFacetHolder(), context);
 
         // add the adapter in as its own facet (eg StringFacet).
         // This facet is almost certainly superfluous; there is nothing in the

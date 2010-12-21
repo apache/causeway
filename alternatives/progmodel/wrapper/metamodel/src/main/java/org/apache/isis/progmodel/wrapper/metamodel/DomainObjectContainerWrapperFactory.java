@@ -23,7 +23,10 @@ import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.applib.events.InteractionEvent;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.listeners.InteractionListener;
@@ -34,8 +37,13 @@ import org.apache.isis.progmodel.wrapper.metamodel.internal.WrapperFactoryDefaul
  */
 public class DomainObjectContainerWrapperFactory extends DomainObjectContainerDefault implements WrapperFactory {
 
-    private WrapperFactory wrapperFactoryDelegate;
+    private final WrapperFactoryDefault wrapperFactoryDelegate;
 
+    public DomainObjectContainerWrapperFactory() {
+        this.wrapperFactoryDelegate = new WrapperFactoryDefault();
+    }
+    
+    
     // /////////////////////////////////////////////////////////////
     // Views
     // /////////////////////////////////////////////////////////////
@@ -79,17 +87,32 @@ public class DomainObjectContainerWrapperFactory extends DomainObjectContainerDe
         wrapperFactoryDelegate.notifyListeners(interactionEvent);
     }
 
+    
     // /////////////////////////////////////////////////////////////
-    // Dependencies (due to *Aware)
+    // Dependencies
     // /////////////////////////////////////////////////////////////
 
-    /**
-     * As per superclass, but also initializes the delegate {@link WrapperFactory}.
-     */
     @Override
-    public void setRuntimeContext(RuntimeContext runtimeContext) {
-        super.setRuntimeContext(runtimeContext);
-        wrapperFactoryDelegate = new WrapperFactoryDefault(runtimeContext);
+    public void setSpecificationLookup(SpecificationLookup specificationLookup) {
+        super.setSpecificationLookup(specificationLookup);
+        wrapperFactoryDelegate.setSpecificationLookup(specificationLookup);
     }
 
+    @Override
+    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+        super.setAuthenticationSessionProvider(authenticationSessionProvider);
+        wrapperFactoryDelegate.setAuthenticationSessionProvider(authenticationSessionProvider);
+    }
+    
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        super.setAdapterMap(adapterManager);
+        wrapperFactoryDelegate.setAdapterMap(adapterManager);
+    }
+
+    @Override
+    public void setObjectPersistor(ObjectPersistor objectPersistor) {
+        super.setObjectPersistor(objectPersistor);
+        wrapperFactoryDelegate.setObjectPersistor(objectPersistor);
+    }
 }

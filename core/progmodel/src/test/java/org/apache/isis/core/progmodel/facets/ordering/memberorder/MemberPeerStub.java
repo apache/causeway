@@ -31,8 +31,6 @@ import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.NamedAndDescribedFacetHolderImpl;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
@@ -102,11 +100,6 @@ final class MemberPeerStub extends NamedAndDescribedFacetHolderImpl implements O
 
     @Override
     public void setType(Class<?> type) {
-    }
-
-    @Override
-    public ObjectSpecification getSpecification(final SpecificationLoader specificationLoader) {
-        return null;
     }
 
     @Override

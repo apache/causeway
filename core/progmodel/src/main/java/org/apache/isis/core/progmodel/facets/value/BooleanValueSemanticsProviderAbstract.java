@@ -26,12 +26,11 @@ import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.IsisUtils;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstract implements BooleanValueFacet {
+public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanticsProviderAndFacetAbstract<Boolean> implements BooleanValueFacet {
 
     private static Class<? extends Facet> type() {
         return BooleanValueFacet.class;
@@ -43,12 +42,11 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
 
     public BooleanValueSemanticsProviderAbstract(
     		final FacetHolder holder, 
-    		final Class<?> adaptedClass, 
-    		final Object defaultValue,
+    		final Class<Boolean> adaptedClass, 
+    		final Boolean defaultValue,
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
-        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(type(), holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, defaultValue, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -56,7 +54,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String entry) {
+    protected Boolean doParse(final Object context, final String entry) {
         String compareTo = entry.trim().toLowerCase();
         if ("true".equals(compareTo)) {
             return Boolean.TRUE;
@@ -87,7 +85,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Boolean doRestore(final String data) {
         if (data.length() != 1) {
             throw new IsisException("Invalid data for logical, expected 1 byte, got " + data.length());
         }
@@ -109,6 +107,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
     // BooleanValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isSet(final ObjectAdapter adapter) {
         if (!IsisUtils.exists(adapter)) {
             return false;

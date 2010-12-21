@@ -24,14 +24,12 @@ import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public class ValueFacetAnnotation extends ValueFacetAbstract {
 
     private static String semanticsProviderName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
-        final Value annotation = (Value) annotatedClass.getAnnotation(Value.class);
+        final Value annotation = annotatedClass.getAnnotation(Value.class);
         final String semanticsProviderName = annotation.semanticsProviderName();
         if (!StringUtils.isNullOrEmpty(semanticsProviderName)) {
             return semanticsProviderName;
@@ -40,7 +38,7 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     }
 
     private static Class<?> semanticsProviderClass(final Class<?> annotatedClass) {
-        final Value annotation = (Value) annotatedClass.getAnnotation(Value.class);
+        final Value annotation = annotatedClass.getAnnotation(Value.class);
         return annotation.semanticsProviderClass();
     }
 
@@ -48,9 +46,8 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
     		final Class<?> annotatedClass, 
     		final FacetHolder holder, 
     		final IsisConfiguration configuration, 
-    		final SpecificationLoader specificationLoader, 
-    		final RuntimeContext runtimeContext) {
-        this(semanticsProviderName(annotatedClass, configuration), semanticsProviderClass(annotatedClass), holder, configuration, specificationLoader, runtimeContext);
+    		final ValueSemanticsProviderContext context) {
+        this(semanticsProviderName(annotatedClass, configuration), semanticsProviderClass(annotatedClass), holder, configuration, context);
     }
 
     private ValueFacetAnnotation(
@@ -58,10 +55,9 @@ public class ValueFacetAnnotation extends ValueFacetAbstract {
             final Class<?> candidateSemanticsProviderClass,
             final FacetHolder holder, 
     		final IsisConfiguration configuration, 
-    		final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
+            final ValueSemanticsProviderContext context) {
         super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(candidateSemanticsProviderClass,
-                candidateSemanticsProviderName), true, holder, configuration, specificationLoader, runtimeContext);
+                candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DO_ADD, holder, configuration, context);
     }
 
     /**

@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class StringValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class StringValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<String> {
 
     public StringValueTypeFacetFactory() {
         super(StringValueFacet.class);
@@ -35,7 +35,7 @@ public class StringValueTypeFacetFactory extends ValueUsingValueSemanticsProvide
         if (type != String.class) {
             return false;
         }
-        addFacets(new StringValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new StringValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

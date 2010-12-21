@@ -27,34 +27,32 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAbstract implements PasswordValueFacet {
+public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAndFacetAbstract<Password> implements PasswordValueFacet {
 
     public static Class<? extends Facet> type() {
         return PasswordValueFacet.class;
     }
 
+    private static final Password DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 12;
     private static final boolean IMMUTABLE = true;
     private static final boolean EQUAL_BY_CONTENT = true;
-    private static final Object DEFAULT_VALUE = null; // no default
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public PasswordValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public PasswordValueSemanticsProvider(
     		final FacetHolder holder,
     		final IsisConfiguration configuration,
-    		final SpecificationLoader specificationLoader,
-    		final RuntimeContext runtimeContext) {
-        super(type(), holder, Password.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+    		final ValueSemanticsProviderContext context) {
+        super(type(), holder, Password.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -62,7 +60,7 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAbstra
     // //////////////////////////////////////////////////////////////////
 
     @Override
-    protected Object doParse(final Object original, final String text) {
+    protected Password doParse(final Object context, final String text) {
         return new Password(text);
     }
 
@@ -71,6 +69,7 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAbstra
         return object == null ? "" : password(object).toString();
     }
 
+    @Override
     public String titleStringWithMask(final Object object, final String usingMask) {
         return titleString(object);
     }
@@ -85,7 +84,7 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAbstra
     }
 
     @Override
-    protected Object doRestore(final String data) {
+    protected Password doRestore(final String data) {
         return new Password(data);
     }
 
@@ -93,16 +92,19 @@ public class PasswordValueSemanticsProvider extends ValueSemanticsProviderAbstra
     // PasswordValueFacet
     // //////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean checkPassword(final ObjectAdapter object, final String password) {
         return password(object.getObject()).checkPassword(password);
     }
 
+    @Override
     public String getEditText(final ObjectAdapter object) {
         return object == null ? "" : password(object).getPassword();
     }
 
+    @Override
     public ObjectAdapter createValue(final String password) {
-        return getRuntimeContext().adapterFor(new Password(password));
+        return getAdapterMap().adapterFor(new Password(password));
     }
 
     private Password password(final Object object) {

@@ -32,11 +32,11 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.value.TestClock;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.JavaUtilDateValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -55,7 +55,7 @@ public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProvid
         date = new java.util.Date(0);
 
         holder = new FacetHolderImpl();
-        setValue(new JavaUtilDateValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext) {
+        setValue(new JavaUtilDateValueSemanticsProvider(holder, mockConfiguration, mockContext) {
             @Override
             protected String defaultFormat() {
                 return "iso";

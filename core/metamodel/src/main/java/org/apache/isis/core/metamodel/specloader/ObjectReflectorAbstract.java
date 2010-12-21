@@ -321,9 +321,8 @@ public abstract class ObjectReflectorAbstract implements
 
 	private ObjectSpecification internalLoadSpecification(final Class<?> type) {
 		Class<?> substitutedType = getClassSubstitutor().getClass(type);
-		ObjectSpecification objectSpecification = substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType)
+		return substitutedType != null ? loadSpecificationForSubstitutedClass(substitutedType)
 				: null;
-		return objectSpecification;
 	}
 
 	private ObjectSpecification loadSpecificationForSubstitutedClass(

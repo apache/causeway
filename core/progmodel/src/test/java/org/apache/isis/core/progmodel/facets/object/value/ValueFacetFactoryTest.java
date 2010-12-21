@@ -33,7 +33,6 @@ import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
@@ -52,10 +51,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
         facetFactory = new ValueFacetFactory();
         propertiesConfiguration = new PropertiesConfiguration();
-        runtimeContext = new RuntimeContextNoRuntime();
         facetFactory.setIsisConfiguration(propertiesConfiguration);
-        facetFactory.setRuntimeContext(runtimeContext);
-
     }
 
     @Override
@@ -210,7 +206,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
         @Override
         public MyValueSemanticsProviderThatIsAParser parseTextEntry(
-            final MyValueSemanticsProviderThatIsAParser context, final String entry) {
+            final Object context, final String entry) {
             return null;
         }
 
@@ -433,7 +429,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
         @Override
         public MyValueWithSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
-            final MyValueWithSemanticsProviderSpecifiedUsingConfiguration context, final String entry) {
+            final Object context, final String entry) {
             return null;
         }
 
@@ -482,7 +478,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
         @Override
         public NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration parseTextEntry(
-            final NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration context, final String entry) {
+            final Object context, final String entry) {
             return null;
         }
 

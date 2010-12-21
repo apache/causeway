@@ -17,7 +17,6 @@
  *  under the License.
  */
 
-
 package org.apache.isis.core.metamodel.runtimecontext.spec;
 
 import java.util.Collections;
@@ -32,7 +31,8 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -40,17 +40,16 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.util.NameUtils;
 
-
 /**
- * A simple implementation used for objects that have no members (fields or actions). Used for primitives and
- * as a fall-back if no specification can be otherwise generated.
+ * A simple implementation used for objects that have no members (fields or actions). Used for primitives and as a
+ * fall-back if no specification can be otherwise generated.
  */
 public class ObjectSpecificationNoMember extends IntrospectableSpecificationAbstract {
     private final String name;
 
-    public ObjectSpecificationNoMember(
-    		final String className, final RuntimeContext runtimeContext) {
-    	super(runtimeContext);
+    public ObjectSpecificationNoMember(final String className,
+        final AuthenticationSessionProvider authenticationSessionProvider, final ObjectInstantiator objectInstantiator) {
+        super(authenticationSessionProvider, null, objectInstantiator);
         this.fullName = className;
         this.name = NameUtils.simpleName(className.substring(className.lastIndexOf('.') + 1));
         identifier = Identifier.classIdentifier(className);
@@ -60,13 +59,14 @@ public class ObjectSpecificationNoMember extends IntrospectableSpecificationAbst
     }
 
     @Override
-    public void markAsService() {}
+    public void markAsService() {
+    }
 
     @Override
     public void introspect(final FacetDecoratorSet decorator) {
         fields = Collections.emptyList();
         superClassSpecification = null;
-        
+
         setIntrospected(true);
     }
 
@@ -106,10 +106,8 @@ public class ObjectSpecificationNoMember extends IntrospectableSpecificationAbst
     }
 
     @Override
-    public ObjectAction getObjectAction(
-            final ObjectActionType type,
-            final String id,
-            final List<ObjectSpecification> parameters) {
+    public ObjectAction getObjectAction(final ObjectActionType type, final String id,
+        final List<ObjectSpecification> parameters) {
         return null;
     }
 
@@ -139,10 +137,8 @@ public class ObjectSpecificationNoMember extends IntrospectableSpecificationAbst
     /**
      * Does nothing, but should never be called.
      */
-    public InteractionContext createPersistInteractionContext(
-            final AuthenticationSession session,
-            final boolean programmatic,
-            final ObjectAdapter targetObjectAdapter) {
+    public InteractionContext createPersistInteractionContext(final AuthenticationSession session,
+        final boolean programmatic, final ObjectAdapter targetObjectAdapter) {
         return null;
     }
 

@@ -4384,6 +4384,14 @@ Persistable: User Persistable</screen>
       </sect1>
 
       <sect1>
+        <title>FacetedMethod</title>
+
+        <para>aka ObjectMemberPeer</para>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
         <title>Similarity between Properties and Parameters</title>
 
         <para></para>
@@ -4452,6 +4460,12 @@ Persistable: User Persistable</screen>
 
           <para></para>
         </sect2>
+      </sect1>
+
+      <sect1>
+        <title>RuntimeContext</title>
+
+        <para></para>
       </sect1>
 
       <sect1>

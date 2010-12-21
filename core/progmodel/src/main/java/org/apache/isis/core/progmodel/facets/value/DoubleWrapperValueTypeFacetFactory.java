@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class DoubleWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class DoubleWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Double> {
 
     public DoubleWrapperValueTypeFacetFactory() {
         super(DoubleFloatingPointValueFacet.class);
@@ -32,10 +32,10 @@ public class DoubleWrapperValueTypeFacetFactory extends ValueUsingValueSemantics
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != DoubleWrapperValueSemanticsProvider.adaptedClass()) {
+        if (type != Double.class) {
             return false;
         }
-        addFacets(new DoubleWrapperValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new DoubleWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

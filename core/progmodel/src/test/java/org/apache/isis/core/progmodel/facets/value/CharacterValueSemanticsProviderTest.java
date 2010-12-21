@@ -27,12 +27,11 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.CharValueSemanticsProviderAbstract;
-import org.apache.isis.core.progmodel.facets.value.CharWrapperValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -49,7 +48,7 @@ public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderA
         character = Character.valueOf('r');
         characterNO = createAdapter(character);
         holder = new FacetHolderImpl();
-        setValue(value = new CharWrapperValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(value = new CharWrapperValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
     @Test

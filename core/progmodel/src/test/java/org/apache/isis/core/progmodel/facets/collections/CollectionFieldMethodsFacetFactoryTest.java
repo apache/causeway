@@ -71,7 +71,7 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
         super.setUp();
 
         facetFactory = new CollectionFieldMethodsFacetFactory();
-        facetFactory.setSpecificationLoader(reflector);
+        facetFactory.setSpecificationLookup(reflector);
     }
 
     @Override

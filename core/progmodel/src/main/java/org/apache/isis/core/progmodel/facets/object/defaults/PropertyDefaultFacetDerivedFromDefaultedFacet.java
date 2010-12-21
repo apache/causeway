@@ -24,23 +24,24 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 
 public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract implements PropertyDefaultFacet {
 
     private final DefaultedFacet typeFacet;
-	private final RuntimeContext runtimeContext;
-
+    private final AdapterMap adapterMap;
+    
     public PropertyDefaultFacetDerivedFromDefaultedFacet(
     		final DefaultedFacet typeFacet, 
-    		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
+    		final FacetHolder holder,
+    		final AdapterMap adapterManager) {
         super(PropertyDefaultFacet.class, holder, false);
         this.typeFacet = typeFacet;
-        this.runtimeContext = runtimeContext;
+        this.adapterMap = adapterManager;
     }
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter inObject) {
         if (getIdentified() == null) {
 			return null;
@@ -49,7 +50,7 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
 		if (typeFacetDefault == null) {
 			return null;
 		}
-		return getRuntimeContext().adapterFor(typeFacetDefault);
+		return getAdapterMap().adapterFor(typeFacetDefault);
     }
 
 
@@ -57,9 +58,9 @@ public class PropertyDefaultFacetDerivedFromDefaultedFacet extends FacetAbstract
     // Dependencies (from constructor)
     ///////////////////////////////////////////////////////
 
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
 
 }
 

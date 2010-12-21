@@ -22,18 +22,16 @@ package org.apache.isis.core.progmodel.facets.value;
 
 import java.text.DateFormat;
 import java.util.Date;
-import java.util.Hashtable;
 import java.util.Map;
 
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class TimeStampValueSemanticsProviderAbstract extends ValueSemanticsProviderAbstractTemporal {
+public abstract class TimeStampValueSemanticsProviderAbstract<T> extends ValueSemanticsProviderAbstractTemporal<T> {
 
     private static final Object DEFAULT_VALUE = null; // no default
     private static final int TYPICAL_LENGTH = 12;
@@ -48,16 +46,17 @@ public abstract class TimeStampValueSemanticsProviderAbstract extends ValueSeman
         formats.put("short", DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.LONG));
     }
 
+    @SuppressWarnings("unchecked")
     public TimeStampValueSemanticsProviderAbstract(
             final FacetHolder holder,
+            final Class<T> adaptedClass,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super("timestamp", holder, TimeStamp.class, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration,
-                specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super("timestamp", holder, adaptedClass, TYPICAL_LENGTH, IMMUTABLE, EQUAL_BY_CONTENT, (T)DEFAULT_VALUE, configuration,
+                context);
         final String formatRequired = configuration.getString(ConfigurationConstants.ROOT + "value.format.timestamp");
         if (formatRequired == null) {
-            format = (DateFormat) formats().get(defaultFormat());
+            format = formats().get(defaultFormat());
         } else {
             setMask(formatRequired);
         }
@@ -69,8 +68,8 @@ public abstract class TimeStampValueSemanticsProviderAbstract extends ValueSeman
     }
 
     @Override
-    protected Object add(
-            final Object original,
+    protected T add(
+            final T original,
             final int years,
             final int months,
             final int days,

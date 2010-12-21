@@ -58,7 +58,7 @@ public class TypicalLengthDerivedFromTypeFacetFactory extends FacetFactoryAbstra
     }
 
     private TypicalLengthFacet getTypicalLengthFacet(final Class<?> type) {
-        final ObjectSpecification paramTypeSpec = getSpecificationLoader().loadSpecification(type);
+        final ObjectSpecification paramTypeSpec = getSpecificationLookup().loadSpecification(type);
         return paramTypeSpec.getFacet(TypicalLengthFacet.class);
     }
 

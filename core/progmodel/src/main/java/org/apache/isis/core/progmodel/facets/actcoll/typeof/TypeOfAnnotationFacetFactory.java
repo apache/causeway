@@ -55,12 +55,12 @@ public class TypeOfAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
         final Class<?> returnType = method.getReturnType();
         if (returnType.isArray()) {
             final Class<?> componentType = returnType.getComponentType();
-            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, holder, getSpecificationLoader()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, holder, getSpecificationLookup()));
             return false;
         }
 
         if (annotation != null) {
-            return FacetUtil.addFacet(new TypeOfFacetViaAnnotation(annotation.value(), holder, getSpecificationLoader()));
+            return FacetUtil.addFacet(new TypeOfFacetViaAnnotation(annotation.value(), holder, getSpecificationLookup()));
         }
 
         final Type type = method.getGenericReturnType();
@@ -77,7 +77,7 @@ public class TypeOfAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
         final Object actualTypeArgument = actualTypeArguments[0];
         if (actualTypeArgument instanceof Class) {
             final Class<?> actualType = (Class<?>) actualTypeArgument;
-            return FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, holder, getSpecificationLoader()));
+            return FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, holder, getSpecificationLookup()));
         }
 
         if (actualTypeArgument instanceof TypeVariable) {
@@ -89,6 +89,7 @@ public class TypeOfAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
         return false;
     }
 
+    @Override
     public void setCollectionTypeRegistry(final CollectionTypeRegistry collectionTypeRegistry) {
         this.collectionTypeRegistry = collectionTypeRegistry;
     }

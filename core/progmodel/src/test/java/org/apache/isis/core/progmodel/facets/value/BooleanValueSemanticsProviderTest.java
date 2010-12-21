@@ -27,11 +27,10 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.BooleanValueSemanticsProviderAbstract;
-import org.apache.isis.core.progmodel.facets.value.BooleanWrapperValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -45,7 +44,7 @@ public class BooleanValueSemanticsProviderTest extends ValueSemanticsProviderAbs
     public void setUpObjects() throws Exception {
         booleanObj = Boolean.valueOf(true);
         facetHolder = new FacetHolderImpl();
-        setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(value = new BooleanWrapperValueSemanticsProvider(facetHolder, mockConfiguration, mockContext));
     }
 
     @Test

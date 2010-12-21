@@ -20,11 +20,12 @@
 
 package org.apache.isis.core.progmodel.facets.value;
 
+import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class TimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class TimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<TimeStamp> {
 
     public TimeStampValueTypeFacetFactory() {
         super(DateValueFacet.class); // as per inherited DateTimeValueSemanticsProvider#facetType
@@ -36,7 +37,7 @@ public class TimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProv
         if (type != org.apache.isis.applib.value.TimeStamp.class) {
             return false;
         }
-        addFacets(new TimeStampValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new TimeStampValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

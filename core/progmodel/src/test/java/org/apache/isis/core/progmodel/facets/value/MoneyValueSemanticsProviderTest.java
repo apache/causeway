@@ -29,11 +29,11 @@ import org.jmock.integration.junit4.JMock;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.progmodel.facets.value.MoneyValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -41,7 +41,7 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
     private static final String POUND_SYMBOL = "\u00A3";
     private static final String EURO_SYMBOL = "\u20AC";
     private MoneyValueSemanticsProvider adapter;
-    private Object originalMoney;
+    private Money originalMoney;
     private FacetHolder holder;
 
     @Before
@@ -50,10 +50,10 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
         setupSpecification(Money.class);
       //  originalMoney = new Money(10.5, "gbp");
         holder = new FacetHolderImpl();
-        setValue(adapter = new MoneyValueSemanticsProvider(holder, mockConfiguration, mockSpecificationLoader, mockRuntimeContext));
+        setValue(adapter = new MoneyValueSemanticsProvider(holder, mockConfiguration, mockContext));
     }
 
-    private Object createMoney(final double amount, final String currency) {
+    private Money createMoney(final double amount, final String currency) {
         return new Money(amount, currency);
     }
 
@@ -94,8 +94,8 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testUserEntryWithCurrency() {
-        final Object money = createMoney(10.5, "gbp");
-        final Object parsed = adapter.parseTextEntry(money, "22.45 USD");
+        final Money money = createMoney(10.5, "gbp");
+        final Money parsed = adapter.parseTextEntry(money, "22.45 USD");
         assertEquals(new Money(22.45, "usd"), parsed);
     }
 
@@ -144,13 +144,13 @@ public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstr
 
     @Test
     public void testNewValueDefaultsToLocalCurrency() throws Exception {
-        final Object parsed = adapter.parseTextEntry(originalMoney, "3021.50");
+        final Money parsed = adapter.parseTextEntry(originalMoney, "3021.50");
         assertEquals(POUND_SYMBOL + "3,021.50", adapter.displayTitleOf(parsed));
     }
 
     @Test
     public void testUnrelatedCurrencySymbolIsRejected() throws Exception {
-        final Object money = createMoney(1, "eur");
+        final Money money = createMoney(1, "eur");
         try {
             adapter.parseTextEntry(money, "$3021.50");
             fail("invalid code accepted " + adapter);

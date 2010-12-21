@@ -40,6 +40,13 @@ public class DeweyOrderSetTest extends TestCase {
         junit.textui.TestRunner.run(new TestSuite(DeweyOrderSetTest.class));
     }
 
+    public static class Customer {
+        private String lastName;
+        public String getLastName() {
+            return lastName;
+        }
+    }
+    
     private final ObjectMemberPeer lastNameMember = MemberPeerStub.createProperty("LastName");
     private final ObjectMemberPeer firstNameMember = MemberPeerStub.createProperty("FirstName");
     private final ObjectMemberPeer houseNumberMember = MemberPeerStub.createProperty("HouseNumber");

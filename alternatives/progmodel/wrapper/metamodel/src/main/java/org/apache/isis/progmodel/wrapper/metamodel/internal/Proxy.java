@@ -23,7 +23,10 @@ package org.apache.isis.progmodel.wrapper.metamodel.internal;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
@@ -32,12 +35,15 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
 public class Proxy {
 
     public static <T> T proxy(
-            final T toProxy,
+            final T domainObject,
             final WrapperFactory embeddedViewer,
-            final ExecutionMode mode,
-            final RuntimeContext runtimeContext) {
+            final ExecutionMode mode, 
+            final AuthenticationSessionProvider authenticationSessionProvider, 
+            final SpecificationLookup specificationLookup, 
+            final AdapterMap adapterManager,
+            final ObjectPersistor objectPersistor) {
         final DomainObjectInvocationHandler<T> invocationHandler = 
-        	new DomainObjectInvocationHandler<T>(toProxy, embeddedViewer, mode, runtimeContext);
+        	new DomainObjectInvocationHandler<T>(domainObject, embeddedViewer, mode, authenticationSessionProvider, specificationLookup, adapterManager, objectPersistor);
 
         final CgLibProxy<T> cglibProxy = new CgLibProxy<T>(invocationHandler);
         return cglibProxy.proxy();
@@ -50,12 +56,11 @@ public class Proxy {
             final Collection<E> collectionToProxy,
             final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
-            final RuntimeContext runtimeContext,
             final OneToManyAssociation otma) {
 
         final CollectionInvocationHandler<T, Collection<E>> collectionInvocationHandler = 
         	new CollectionInvocationHandler<T, Collection<E>>(
-                collectionToProxy, collectionName, handler, runtimeContext, otma);
+                collectionToProxy, collectionName, handler, otma);
         collectionInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         final CgLibProxy<Collection<E>> cglibProxy = new CgLibProxy<Collection<E>>(collectionInvocationHandler);
@@ -69,11 +74,10 @@ public class Proxy {
             final Map<P, Q> collectionToProxy,
             final String collectionName,
             final DomainObjectInvocationHandler<T> handler,
-            final RuntimeContext runtimeContext,
             final OneToManyAssociation otma) {
 
         final MapInvocationHandler<T, Map<P, Q>> mapInvocationHandler = new MapInvocationHandler<T, Map<P, Q>>(collectionToProxy,
-                collectionName, handler, runtimeContext, otma);
+                collectionName, handler, otma);
         mapInvocationHandler.setResolveObjectChangedEnabled(handler.isResolveObjectChangedEnabled());
 
         final CgLibProxy<Map<P, Q>> cglibProxy = new CgLibProxy<Map<P, Q>>(mapInvocationHandler);

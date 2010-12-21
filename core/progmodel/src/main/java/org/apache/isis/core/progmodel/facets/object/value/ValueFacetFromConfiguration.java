@@ -22,8 +22,6 @@ package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public class ValueFacetFromConfiguration extends ValueFacetAbstract {
@@ -32,9 +30,8 @@ public class ValueFacetFromConfiguration extends ValueFacetAbstract {
     		final String candidateSemanticsProviderName, 
     		final FacetHolder holder, 
     		final IsisConfiguration configuration, 
-    		final SpecificationLoader specificationLoader, 
-    		final RuntimeContext runtimeContext) {
-        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), false, holder, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(ValueSemanticsProviderUtil.valueSemanticsProviderOrNull(null, candidateSemanticsProviderName), AddFacetsIfInvalidStrategy.DONT_ADD, holder, configuration, context);
     }
 
 }

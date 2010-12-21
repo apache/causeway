@@ -40,19 +40,22 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public abstract class ValueSemanticsProviderAbstract extends FacetAbstract implements ValueSemanticsProvider, EncoderDecoder,
-        Parser, DefaultsProvider {
+public abstract class ValueSemanticsProviderAndFacetAbstract<T> extends FacetAbstract implements ValueSemanticsProvider<T>, EncoderDecoder<T>,
+        Parser<T>, DefaultsProvider<T> {
 
-    private final Class<?> adaptedClass;
+    private final Class<T> adaptedClass;
     private final int typicalLength;
     private final boolean immutable;
     private final boolean equalByContent;
-    private final Object defaultValue;
+    private final T defaultValue;
 
     /**
      * Lazily looked up per {@link #getSpecification()}.
@@ -60,20 +63,18 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     private ObjectSpecification specification;
     
 	private final IsisConfiguration configuration;
-	private final SpecificationLoader specificationLoader;
-	private final RuntimeContext runtimeContext;
+	private final ValueSemanticsProviderContext context;
 
-    public ValueSemanticsProviderAbstract(
+    public ValueSemanticsProviderAndFacetAbstract(
             final Class<? extends Facet> adapterFacetType,
             final FacetHolder holder,
-            final Class<?> adaptedClass,
+            final Class<T> adaptedClass,
             final int typicalLength,
             final boolean immutable,
             final boolean equalByContent,
-            final Object defaultValue, 
+            final T defaultValue, 
             final IsisConfiguration configuration, 
-            final SpecificationLoader specificationLoader, 
-            final RuntimeContext runtimeContext) {
+            final ValueSemanticsProviderContext context) {
         super(adapterFacetType, holder, false);
         this.adaptedClass = adaptedClass;
         this.typicalLength = typicalLength;
@@ -82,13 +83,12 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
         this.defaultValue = defaultValue;
         
         this.configuration = configuration;
-        this.specificationLoader = specificationLoader;
-        this.runtimeContext = runtimeContext;
+        this.context = context;
     }
 
     public ObjectSpecification getSpecification() {
         if (specification == null) {
-            specification = getSpecificationLoader().loadSpecification(getAdaptedClass());
+            specification = getSpecificationLookup().loadSpecification(getAdaptedClass());
         }
         return specification;
     }
@@ -101,7 +101,7 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
      * Used to determine whether an empty string can be parsed, (for primitive types a non-null entry is
      * required, see {@link #mustHaveEntry()}), and potentially useful for debugging.
      */
-    public final Class<?> getAdaptedClass() {
+    public final Class<T> getAdaptedClass() {
         return adaptedClass;
     }
 
@@ -120,22 +120,27 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     // ValueSemanticsProvider implementation
     // ///////////////////////////////////////////////////////////////////////////
 
-    public EncoderDecoder getEncoderDecoder() {
+    @Override
+    public EncoderDecoder<T> getEncoderDecoder() {
         return this;
     }
 
-    public Parser getParser() {
+    @Override
+    public Parser<T> getParser() {
         return this;
     }
 
-    public DefaultsProvider getDefaultsProvider() {
+    @Override
+    public DefaultsProvider<T> getDefaultsProvider() {
         return this;
     }
 
+    @Override
     public boolean isEqualByContent() {
         return equalByContent;
     }
 
+    @Override
     public boolean isImmutable() {
         return immutable;
     }
@@ -144,7 +149,8 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     // Parser implementation
     // ///////////////////////////////////////////////////////////////////////////
 
-    public Object parseTextEntry(final Object context, final String entry) {
+    @Override
+    public T parseTextEntry(final Object context, final String entry) {
         if (entry == null) {
             throw new IllegalArgumentException();
         }
@@ -159,12 +165,12 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     }
 
     /**
-     * @param original
+     * @param context
      *            - the underlying object, or <tt>null</tt>.
      * @param entry
      *            - the proposed new object, as a string representation to be parsed
      */
-    protected abstract Object doParse(Object original, String entry);
+    protected abstract T doParse(Object context, String entry);
 
     /**
      * Whether a non-null entry is required, used by parsing.
@@ -176,6 +182,7 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
         return adaptedClass.isPrimitive();
     }
 
+    @Override
     public String displayTitleOf(final Object object) {
         if (object == null) {
             return "";
@@ -183,6 +190,7 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
         return titleString(object);
     }
 
+    @Override
     public String displayTitleOf(final Object object, final String usingMask) {
         if (object == null) {
             return "";
@@ -193,6 +201,7 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     /**
      * Defaults to {@link #displayTitleOf(Object)}.
      */
+    @Override
     public String parseableTitleOf(final Object existing) {
         return displayTitleOf(existing);
     }
@@ -208,6 +217,7 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
 
     public abstract String titleStringWithMask(final Object value, final String usingMask);
 
+    @Override
     public final int typicalLength() {
         return this.typicalLength;
     }
@@ -216,7 +226,8 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     // DefaultsProvider implementation
     // ///////////////////////////////////////////////////////////////////////////
 
-    public Object getDefaultValue() {
+    @Override
+    public T getDefaultValue() {
         return this.defaultValue;
     }
 
@@ -224,11 +235,13 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     // EncoderDecoder implementation
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public String toEncodedString(final Object object) {
         return doEncode(object);
     }
 
-    public Object fromEncodedString(final String data) {
+    @Override
+    public T fromEncodedString(final String data) {
         return doRestore(data);
     }
 
@@ -240,7 +253,7 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     /**
      * Hook method to perform the actual restoring.
      */
-    protected abstract Object doRestore(String data);
+    protected abstract T doRestore(String data);
     
 
     
@@ -272,9 +285,9 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
     ////////////////////////////////////////////////////////////
 
     protected ObjectAdapter createAdapter(final Class<?> type, final Object object) {
-	    final ObjectSpecification specification = getSpecificationLoader().loadSpecification(type);
+	    final ObjectSpecification specification = getSpecificationLookup().loadSpecification(type);
 	    if (specification.isNotCollection()) {
-	        return getRuntimeContext().adapterFor(object);
+	        return getAdapterMap().adapterFor(object);
 	    } else {
 	        throw new UnknownTypeException("not an object, is this a collection?");
 	    }
@@ -289,14 +302,37 @@ public abstract class ValueSemanticsProviderAbstract extends FacetAbstract imple
         return configuration;
     }
 
-    protected SpecificationLoader getSpecificationLoader() {
-        return specificationLoader;
+    protected ValueSemanticsProviderContext getContext() {
+        return context;
+    }
+    
+    /**
+     * From {@link #getContext() context.}
+     */
+    protected AdapterMap getAdapterMap() {
+        return context.getAdapterMap();
     }
 
-    protected RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    /**
+     * From {@link #getContext() context.}
+     */
+    protected SpecificationLookup getSpecificationLookup() {
+        return context.getSpecificationLookup();
     }
 
+    /**
+     * From {@link #getContext() context.}
+     */
+    protected DependencyInjector getDependencyInjector() {
+        return context.getDependencyInjector();
+    }
+    
+    /**
+     * From {@link #getContext() context.}
+     */
+    protected AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return context.getAuthenticationSessionProvider();
+    }
     ////////////////////////////////////////////////////////////
     // Dependencies (from singleton)
     ////////////////////////////////////////////////////////////

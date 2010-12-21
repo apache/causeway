@@ -23,15 +23,14 @@ package org.apache.isis.core.progmodel.facets.value;
 import java.sql.Date;
 import java.util.Calendar;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.clock.Clock;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 /**
@@ -40,37 +39,36 @@ import edu.umd.cs.findbugs.annotations.SuppressWarnings;
  * @see JavaUtilDateValueSemanticsProvider
  * @see JavaSqlTimeValueSemanticsProvider
  */
-public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProviderAbstract {
+public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProviderAbstract<Date> {
 
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
-    private static final Object DEFAULT_VALUE = null; // no default
+    private static final Date DEFAULT_VALUE = null; // no default
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public JavaSqlDateValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public JavaSqlDateValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, Date.class, IMMUTABLE, EQUAL_BY_CONTENT, DEFAULT_VALUE, configuration, context);
     }
 
     @Override
-    protected Object add(
-            final Object original,
+    protected Date add(
+            final Date original,
             final int years,
             final int months,
             final int days,
             final int hours,
             final int minutes) {
-        final Date date = (Date) original;
+        final Date date = original;
         final Calendar cal = Calendar.getInstance();
         cal.setTime(date);
         cal.set(Calendar.HOUR, 0);
@@ -93,12 +91,12 @@ public class JavaSqlDateValueSemanticsProvider extends DateValueSemanticsProvide
     }
 
     @Override
-    protected Object setDate(final java.util.Date date) {
+    protected Date setDate(final java.util.Date date) {
         return new Date(date.getTime());
     }
 
     @Override
-    protected Object now() {
+    protected Date now() {
         return new Date(Clock.getTime());
     }
 

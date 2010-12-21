@@ -37,7 +37,6 @@ import org.apache.isis.core.metamodel.facets.MultiTypedFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -50,17 +49,14 @@ public class ObjectActionSet implements ObjectAction {
     private final String name;
     private final String id;
     private final List<ObjectAction> actions;
-	private final RuntimeContext runtimeContext;
 	
     public ObjectActionSet(
     		final String id, 
     		final String name, 
-    		final List<ObjectAction> actions, 
-    		final RuntimeContext runtimeContext) {
+    		final List<ObjectAction> actions) {
         this.id = id;
         this.name = name;
         this.actions = actions;
-        this.runtimeContext = runtimeContext;
     }
 
     @Override
@@ -369,15 +365,5 @@ public class ObjectActionSet implements ObjectAction {
         ObjectAction specification = this;
         return adapter.getInstance(specification);
     }
-
-    
-    // /////////////////////////////////////////////////////////////
-    // RuntimeContext
-    // /////////////////////////////////////////////////////////////
-
-	public RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-
 
 }

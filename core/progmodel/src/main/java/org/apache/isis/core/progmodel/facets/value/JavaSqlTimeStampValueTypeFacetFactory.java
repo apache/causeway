@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class JavaSqlTimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class JavaSqlTimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<java.sql.Timestamp> {
 
     public JavaSqlTimeStampValueTypeFacetFactory() {
         super(DateValueFacet.class); // as per inherited DateTimeValueSemanticsProvider#facetType
@@ -36,7 +36,7 @@ public class JavaSqlTimeStampValueTypeFacetFactory extends ValueUsingValueSemant
         if (type != java.sql.Timestamp.class) {
             return false;
         }
-        addFacets(new JavaSqlTimeStampValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new JavaSqlTimeStampValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

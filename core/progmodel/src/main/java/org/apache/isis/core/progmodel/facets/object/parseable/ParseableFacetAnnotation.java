@@ -24,13 +24,15 @@ import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 
 public class ParseableFacetAnnotation extends ParseableFacetAbstract {
 
     private static String parserName(final Class<?> annotatedClass, final IsisConfiguration configuration) {
-        final Parseable annotation = (Parseable) annotatedClass.getAnnotation(Parseable.class);
+        final Parseable annotation = annotatedClass.getAnnotation(Parseable.class);
         final String parserName = annotation.parserName();
         if (!StringUtils.isNullOrEmpty(parserName)) {
             return parserName;
@@ -39,24 +41,28 @@ public class ParseableFacetAnnotation extends ParseableFacetAbstract {
     }
 
     private static Class<?> parserClass(final Class<?> annotatedClass) {
-        final Parseable annotation = (Parseable) annotatedClass.getAnnotation(Parseable.class);
+        final Parseable annotation = annotatedClass.getAnnotation(Parseable.class);
         return annotation.parserClass();
     }
 
     public ParseableFacetAnnotation(
             final Class<?> annotatedClass,
             final IsisConfiguration configuration,
-            final FacetHolder holder, 
-            final RuntimeContext runtimeContext) {
-        this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder, runtimeContext);
+            final FacetHolder holder,
+            final AuthenticationSessionProvider authenticationSessionProvider, 
+            final AdapterMap adapterManager, 
+            final DependencyInjector dependencyInjector) {
+        this(parserName(annotatedClass, configuration), parserClass(annotatedClass), holder, authenticationSessionProvider, adapterManager, dependencyInjector);
     }
 
     private ParseableFacetAnnotation(
     		final String candidateParserName, 
     		final Class<?> candidateParserClass, 
-    		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
-        super(candidateParserName, candidateParserClass, holder, runtimeContext);
+    		final FacetHolder holder,
+            final AuthenticationSessionProvider authenticationSessionProvider, 
+            final AdapterMap adapterManager, 
+            final DependencyInjector dependencyInjector) {
+        super(candidateParserName, candidateParserClass, holder, authenticationSessionProvider, dependencyInjector, adapterManager);
     }
 
 }

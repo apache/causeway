@@ -25,9 +25,6 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.events.InteractionEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
@@ -38,9 +35,8 @@ import org.apache.isis.progmodel.wrapper.applib.WrapperFactory.ExecutionMode;
 public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocationHandler<T> {
 
     private final T delegate;
-    protected final WrapperFactory headlessViewer;
+    protected final WrapperFactory wrapperFactory;
     private final ExecutionMode executionMode;
-    private final RuntimeContext runtimeContext;
 
     protected final Method equalsMethod;
     protected final Method hashCodeMethod;
@@ -54,15 +50,13 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     public DelegatingInvocationHandlerDefault(
             final T delegate,
             final WrapperFactory headlessViewer,
-            final ExecutionMode executionMode,
-            final RuntimeContext runtimeContext) {
+            final ExecutionMode executionMode) {
         if (delegate == null) {
             throw new IllegalArgumentException("delegate must not be null");
         }
         this.delegate = delegate;
-        this.headlessViewer = headlessViewer;
+        this.wrapperFactory = headlessViewer;
         this.executionMode = executionMode;
-        this.runtimeContext = runtimeContext;
 
         this.domainObjectContainerResolve = new DomainObjectContainerResolve();
         this.domainObjectContainerObjectChanged = new DomainObjectContainerObjectChanged();
@@ -78,9 +72,11 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         }
     }
 
-	public boolean isResolveObjectChangedEnabled() {
+	@Override
+    public boolean isResolveObjectChangedEnabled() {
 		return resolveObjectChangedEnabled;
 	}
+    @Override
     public void setResolveObjectChangedEnabled(boolean resolveObjectChangedEnabled) {
     	this.resolveObjectChangedEnabled = resolveObjectChangedEnabled;
     }
@@ -107,9 +103,10 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
 
 
     public WrapperFactory getHeadlessViewer() {
-        return headlessViewer;
+        return wrapperFactory;
     }
 
+    @Override
     public T getDelegate() {
         return delegate;
     }
@@ -121,12 +118,6 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
     protected Object delegate(final Method method, final Object[] args) throws IllegalArgumentException, IllegalAccessException,
             InvocationTargetException {
 
-    	
-        // commented out, hoping isn't needed...
-//        if (method.equals(getHandlerMethod)) {
-//            return this;
-//        }
-
         return method.invoke(getDelegate(), args);
     }
 
@@ -134,41 +125,17 @@ public class DelegatingInvocationHandlerDefault<T> implements DelegatingInvocati
         return toStringMethod.equals(method) || hashCodeMethod.equals(method) || equalsMethod.equals(method);
     }
 
-    // commented out, hoping isn't needed...
-//    protected boolean isObjectAdapterTestViewHandlerMethod(final Method method) {
-//        return getHandlerMethod.equals(method);
-//    }
 
+    @Override
     public Object invoke(final Object object, final Method method, final Object[] args) throws Throwable {
-
         return method.invoke(object, args);
     }
 
     protected InteractionEvent notifyListeners(final InteractionEvent interactionEvent) {
-        headlessViewer.notifyListeners(interactionEvent);
+        wrapperFactory.notifyListeners(interactionEvent);
         return interactionEvent;
     }
 
     
-    // /////////////////////////////////////////////////////////////////
-    // Dependencies (from constructor)
-    // /////////////////////////////////////////////////////////////////
 
-    protected RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-    
-
-    // /////////////////////////////////////////////////////////////////
-    // Dependencies (from runtime context)
-    // /////////////////////////////////////////////////////////////////
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return runtimeContext.getSpecificationLoader();
-    }
-
-    protected AuthenticationSession getAuthenticationSession() {
-        return runtimeContext.getAuthenticationSession();
-    }
-    
 }

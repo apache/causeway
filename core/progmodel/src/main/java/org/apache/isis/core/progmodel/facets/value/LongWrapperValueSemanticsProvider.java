@@ -24,31 +24,23 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
 public class LongWrapperValueSemanticsProvider extends LongValueSemanticsProviderAbstract {
-
-    private static final Object DEFAULT_VALUE = Long.valueOf(0L);
-
-    static final Class<?> adaptedClass() {
-        return Long.class;
-    }
 
     /**
      * Required because implementation of {@link Parser} and {@link EncoderDecoder}.
      */
     public LongWrapperValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public LongWrapperValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, adaptedClass(), DEFAULT_VALUE, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, Long.class, configuration, context);
     }
 
 }

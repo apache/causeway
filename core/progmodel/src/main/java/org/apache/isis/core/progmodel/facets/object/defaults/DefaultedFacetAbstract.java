@@ -24,7 +24,7 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.util.ClassUtil;
 
 
@@ -34,25 +34,27 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
 
     // to delegate to
     private final DefaultedFacetUsingDefaultsProvider defaultedFacetUsingDefaultsProvider;
-    private final RuntimeContext runtimeContext;
+
+    private final DependencyInjector dependencyInjector;
 
     public DefaultedFacetAbstract(
             final String candidateEncoderDecoderName,
             final Class<?> candidateEncoderDecoderClass,
             final FacetHolder holder, 
-            final RuntimeContext runtimeContext) {
+            final DependencyInjector dependencyInjector) {
         super(DefaultedFacet.class, holder, false);
 
         this.defaultsProviderClass = DefaultsProviderUtil.defaultsProviderOrNull(candidateEncoderDecoderClass,
                 candidateEncoderDecoderName);
-        this.runtimeContext = runtimeContext;
+        this.dependencyInjector = dependencyInjector;
         if (isValid()) {
             DefaultsProvider defaultsProvider = (DefaultsProvider) ClassUtil.newInstance(defaultsProviderClass, FacetHolder.class, holder);
-            this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getRuntimeContext());
+            this.defaultedFacetUsingDefaultsProvider = new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector());
         } else {
             this.defaultedFacetUsingDefaultsProvider = null;
         }
     }
+
 
     /**
      * Discover whether either of the candidate defaults provider name or class is valid.
@@ -68,6 +70,7 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
         return defaultsProviderClass;
     }
 
+    @Override
     public Object getDefault() {
         return defaultedFacetUsingDefaultsProvider.getDefault();
     }
@@ -81,9 +84,8 @@ public abstract class DefaultedFacetAbstract extends FacetAbstract implements De
     // Dependencies (from constructor)
     ////////////////////////////////////////////////////////
     
-
-    private RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    private DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
     }
 
 }

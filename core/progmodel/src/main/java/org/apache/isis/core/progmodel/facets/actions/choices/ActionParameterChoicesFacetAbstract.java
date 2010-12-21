@@ -24,7 +24,9 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 
 public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract implements ActionParameterChoicesFacet {
@@ -33,18 +35,33 @@ public abstract class ActionParameterChoicesFacetAbstract extends FacetAbstract 
         return ActionParameterChoicesFacet.class;
     }
 
-    private final RuntimeContext runtimeContext;
-    
-    public ActionParameterChoicesFacetAbstract(final FacetHolder holder, final RuntimeContext runtimeContext) {
+    private final SpecificationLookup specificationLookup;
+    private final AdapterMap adapterMap;
+
+    public ActionParameterChoicesFacetAbstract(
+        final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
         super(type(), holder, false);
-        this.runtimeContext = runtimeContext;
+        this.specificationLookup = specificationLookup;
+        this.adapterMap = adapterManager;
     }
 
-    protected RuntimeContext getRuntimeContext() {
-        return runtimeContext;
+    protected ObjectSpecification getSpecification(Class<?> type) {
+        return type != null? getSpecificationLookup().loadSpecification(type): null;
     }
-
-
+    
+    
+    ///////////////////////////////////////////////////////////
+    // Dependencies
+    ///////////////////////////////////////////////////////////
+    
+    protected SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
+    }
+    
+    protected AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+    
 }
 
 

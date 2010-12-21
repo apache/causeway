@@ -34,8 +34,12 @@ import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAware;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.object.ebc.EqualByContentFacet;
 import org.apache.isis.core.progmodel.facets.object.ident.icon.IconFacet;
@@ -66,11 +70,14 @@ import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
  * <p>
  * Note that {@link AggregatedFacet} is <i>not</i> installed.
  */
-public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, RuntimeContextAware {
+public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, AuthenticationSessionProviderAware, AdapterMapAware, DependencyInjectorAware {
 
 	
     private IsisConfiguration configuration;
-	private RuntimeContext runtimeContext;
+	private AuthenticationSessionProvider authenticationSessionProvider;
+	private AdapterMap adapterManager;
+	private DependencyInjector dependencyInjector;
+	
 
     public ValueFacetFactory() {
         super(ObjectFeatureType.OBJECTS_ONLY);
@@ -89,7 +96,7 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
         // create from annotation, if present
         final Value annotation = getAnnotation(cls, Value.class);
         if (annotation != null) {
-            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, getIsisConfiguration(), getSpecificationLoader(), getRuntimeContext());
+            final ValueFacetAnnotation facet = new ValueFacetAnnotation(cls, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {
                 return facet;
             }
@@ -99,7 +106,7 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
         final String semanticsProviderName = ValueSemanticsProviderUtil.semanticsProviderNameFromConfiguration(cls,
                 configuration);
         if (!StringUtils.isNullOrEmpty(semanticsProviderName)) {
-            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getIsisConfiguration(), getSpecificationLoader(), getRuntimeContext());
+            final ValueFacetFromConfiguration facet = new ValueFacetFromConfiguration(semanticsProviderName, holder, getIsisConfiguration(), createValueSemanticsProviderContext());
             if (facet.isValid()) {
                 return facet;
             }
@@ -109,6 +116,10 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
         return null;
     }
 
+    protected ValueSemanticsProviderContext createValueSemanticsProviderContext() {
+        return new ValueSemanticsProviderContext(getAuthenticationSessionProvider(), getSpecificationLookup(), getAdapterManager(), getDependencyInjector());
+    }
+
 	// ////////////////////////////////////////////////////////////////////
     // Injected
     // ////////////////////////////////////////////////////////////////////
@@ -116,17 +127,34 @@ public class ValueFacetFactory extends AnnotationBasedFacetFactoryAbstract imple
     public IsisConfiguration getIsisConfiguration() {
         return configuration;
     }
+    @Override
     public void setIsisConfiguration(final IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 
-    
-    private RuntimeContext getRuntimeContext() {
-		return runtimeContext;
-	}
-	public void setRuntimeContext(final RuntimeContext runtimeContext) {
-		this.runtimeContext = runtimeContext;
-	}
 
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
+    }
+    @Override
+    public void setAuthenticationSessionProvider(AuthenticationSessionProvider authenticationSessionProvider) {
+        this.authenticationSessionProvider = authenticationSessionProvider;
+    }
+
+    public AdapterMap getAdapterManager() {
+        return adapterManager;
+    }
+    @Override
+    public void setAdapterMap(AdapterMap adapterManager) {
+        this.adapterManager = adapterManager;
+    }
+
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
+    }
+    @Override
+    public void setDependencyInjector(DependencyInjector dependencyInjector) {
+        this.dependencyInjector = dependencyInjector;
+    }
 
 }

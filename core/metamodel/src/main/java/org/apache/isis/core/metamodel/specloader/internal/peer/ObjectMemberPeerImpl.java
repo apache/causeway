@@ -47,7 +47,7 @@ public class ObjectMemberPeerImpl extends TypedHolderImpl implements ObjectMembe
 
     public static ObjectMemberPeer createActionPeer(Class<?> type, Method method, Class<?> returnType,
         SpecificationLoader specificationLoader) {
-        return new ObjectMemberPeerImpl(FeatureType.ACTION, type, method, actionIdentifierFor(type, method), returnType, Util.getParamPeers(method, specificationLoader), specificationLoader);
+        return new ObjectMemberPeerImpl(FeatureType.ACTION, type, method, actionIdentifierFor(type, method), returnType, Util.getParamPeers(method), specificationLoader);
     }
 
 

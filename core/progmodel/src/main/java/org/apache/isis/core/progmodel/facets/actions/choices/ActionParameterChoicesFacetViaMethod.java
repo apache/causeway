@@ -28,7 +28,8 @@ import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
 import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
@@ -44,8 +45,9 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     		final Method method, 
     		final Class<?> choicesType, 
     		final FacetHolder holder, 
-    		final RuntimeContext runtimeContext) {
-        super(holder, runtimeContext);
+    		final SpecificationLookup specificationLookup,
+    		final AdapterMap adapterManager) {
+        super(holder, specificationLookup, adapterManager);
         this.method = method;
         this.choicesType = choicesType;
     }
@@ -79,8 +81,8 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
             return ArrayUtils.getObjectAsObjectArray(options);
         }
         else {
-            final ObjectSpecification specification = getRuntimeContext().getSpecificationLoader().loadSpecification(choicesType);
-            return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getRuntimeContext());
+            final ObjectSpecification specification = getSpecification(choicesType);
+            return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
         }
     }
 
@@ -88,10 +90,6 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
     protected String toStringValues() {
         return "method=" + method + ",type=" + choicesType;
     }
-
-
-	
-
 
 }
 

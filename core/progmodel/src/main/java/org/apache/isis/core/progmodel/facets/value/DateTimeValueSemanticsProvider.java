@@ -22,18 +22,17 @@ package org.apache.isis.core.progmodel.facets.value;
 
 import java.util.Date;
 
+import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-
-import edu.umd.cs.findbugs.annotations.SuppressWarnings;
+import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
-public class DateTimeValueSemanticsProvider extends JavaUtilDateValueSemanticsProviderAbstract {
+public class DateTimeValueSemanticsProvider extends DateAndTimeValueSemanticsProviderAbstract<DateTime> {
     private static final boolean IMMUTABLE = false;
     private static final boolean EQUAL_BY_CONTENT = false;
 
@@ -42,15 +41,14 @@ public class DateTimeValueSemanticsProvider extends JavaUtilDateValueSemanticsPr
      */
     @SuppressWarnings("NP_NULL_PARAM_DEREF_NONVIRTUAL")
     public DateTimeValueSemanticsProvider() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     public DateTimeValueSemanticsProvider(
     		final FacetHolder holder,
             final IsisConfiguration configuration,
-            final SpecificationLoader specificationLoader,
-            final RuntimeContext runtimeContext) {
-        super(holder, DateTime.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, specificationLoader, runtimeContext);
+            final ValueSemanticsProviderContext context) {
+        super(holder, DateTime.class, IMMUTABLE, EQUAL_BY_CONTENT, configuration, context);
     }
 
     @Override
@@ -60,25 +58,25 @@ public class DateTimeValueSemanticsProvider extends JavaUtilDateValueSemanticsPr
     }
 
     @Override
-    protected Object add(
-            final Object original,
+    protected DateTime add(
+            final DateTime original,
             final int years,
             final int months,
             final int days,
             final int hours,
             final int minutes) {
-        DateTime date = (DateTime) original;
+        DateTime date = original;
         date = date.add(years, months, days, hours, minutes);
         return date;
     }
 
     @Override
-    protected Object now() {
+    protected DateTime now() {
         return new DateTime();
     }
 
     @Override
-    protected Object setDate(final Date date) {
+    protected DateTime setDate(final Date date) {
         return new DateTime(date);
     }
 

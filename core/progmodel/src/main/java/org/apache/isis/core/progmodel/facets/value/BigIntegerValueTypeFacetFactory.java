@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<BigInteger> {
 
     public BigIntegerValueTypeFacetFactory() {
         super(BigIntegerValueFacet.class);
@@ -37,7 +37,7 @@ public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsPro
         if (type != BigInteger.class) {
             return false;
         }
-        addFacets(new BigIntegerValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new BigIntegerValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 

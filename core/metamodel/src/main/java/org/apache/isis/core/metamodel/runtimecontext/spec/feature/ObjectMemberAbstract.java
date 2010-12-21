@@ -38,26 +38,39 @@ import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
+import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.identifier.Identified;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.util.NameUtils;
 
 
 public abstract class ObjectMemberAbstract implements ObjectMember {
 
+    public static ObjectSpecification getSpecification(final SpecificationLookup specificationLookup, final Class<?> type) {
+        return type == null ? null : specificationLookup.loadSpecification(type);
+    }
+
     protected final String defaultName;
     private final String id;
     private final Identified facetHolder;
     private final FeatureType featureType;
-	private RuntimeContext runtimeContext;
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+    private final SpecificationLookup specificationLookup;
+    private final AdapterMap adapterMap;
+    private final QuerySubmitter querySubmitter;
 
     protected ObjectMemberAbstract(
     		final String id, 
     		final Identified facetHolder, 
     		final FeatureType memberType, 
-    		final RuntimeContext runtimeContext) {
+            final AuthenticationSessionProvider authenticationSessionProvider,
+    		final SpecificationLookup specificationLookup,
+            final AdapterMap adapterManager,
+            final QuerySubmitter querySubmitter) {
         if (id == null) {
             throw new IllegalArgumentException("Name must always be set");
         }
@@ -65,7 +78,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.defaultName = NameUtils.naturalName(id);
         this.facetHolder = facetHolder;
         this.featureType = memberType;
-        this.runtimeContext = runtimeContext;
+        this.authenticationSessionProvider = authenticationSessionProvider;
+        this.specificationLookup = specificationLookup;
+        this.adapterMap = adapterManager;
+        this.querySubmitter = querySubmitter;
     }
 
 
@@ -238,6 +254,18 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         return featureType.isProperty();
     }
 
+    // //////////////////////////////////////////////////////////////////
+    // Convenience
+    // //////////////////////////////////////////////////////////////////
+
+    /**
+     * The current {@link AuthenticationSession} (can change over time so
+     * do not cache).
+     */
+    protected AuthenticationSession getAuthenticationSession() {
+        return authenticationSessionProvider.getAuthenticationSession();
+    }
+
 
     // //////////////////////////////////////////////////////////////////
     // toString
@@ -247,23 +275,26 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     public String toString() {
         return String.format("id=%s,name='%s'", getId(), getName());
     }
-    
+
+
     // //////////////////////////////////////////////////////////////////
     // Dependencies
     // //////////////////////////////////////////////////////////////////
 
-    public RuntimeContext getRuntimeContext() {
-    	return runtimeContext;
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
     }
     
-    protected AuthenticationSession getAuthenticationSession() {
-        return getRuntimeContext().getAuthenticationSession();
+    public SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
     }
-
-    protected SpecificationLoader getSpecificationLoader() {
-        return getRuntimeContext().getSpecificationLoader();
-    }
-
     
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+
+    public QuerySubmitter getQuerySubmitter() {
+        return querySubmitter;
+    }
 
 }

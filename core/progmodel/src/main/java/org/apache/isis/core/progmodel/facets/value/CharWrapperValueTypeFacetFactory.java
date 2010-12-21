@@ -24,7 +24,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 
 
-public class CharWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory {
+public class CharWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Character> {
 
     public CharWrapperValueTypeFacetFactory() {
         super(CharValueFacet.class);
@@ -32,10 +32,10 @@ public class CharWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsPr
 
     @Override
     public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (type != CharWrapperValueSemanticsProvider.adaptedClass()) {
+        if (type != Character.class) {
             return false;
         }
-        addFacets(new CharWrapperValueSemanticsProvider(holder, getConfiguration(), getSpecificationLoader(), getRuntimeContext()));
+        addFacets(new CharWrapperValueSemanticsProvider(holder, getConfiguration(), getContext()));
         return true;
     }
 
