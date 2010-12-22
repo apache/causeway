@@ -28,13 +28,13 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class BoundedMarkerInterfaceFacetFactory extends FacetFactoryAbstract {
 
     public BoundedMarkerInterfaceFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override

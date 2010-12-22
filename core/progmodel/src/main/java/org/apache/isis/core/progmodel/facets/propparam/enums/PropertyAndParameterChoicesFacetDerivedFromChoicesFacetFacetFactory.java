@@ -22,13 +22,13 @@ package org.apache.isis.core.progmodel.facets.propparam.enums;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAware;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends
     FacetFactoryAbstract implements AdapterMapAware {
@@ -36,7 +36,7 @@ public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory
     private AdapterMap adapterMap;
 
     public PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory() {
-        super(ObjectFeatureType.PROPERTIES_AND_PARAMETERS);
+        super(FeatureType.PROPERTIES_AND_PARAMETERS);
     }
 
     @Override

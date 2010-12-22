@@ -27,7 +27,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Locale;
 
-import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskEvaluator;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

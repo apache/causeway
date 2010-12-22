@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -37,7 +37,7 @@ public class PluralMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
     private static final String[] PREFIXES = { PLURAL_NAME, };
 
     public PluralMethodFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.OBJECTS_ONLY);
+        super(PREFIXES, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

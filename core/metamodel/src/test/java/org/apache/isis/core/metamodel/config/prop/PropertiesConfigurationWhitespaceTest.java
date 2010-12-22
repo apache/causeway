@@ -27,6 +27,7 @@ import junit.framework.TestCase;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
+
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 
 

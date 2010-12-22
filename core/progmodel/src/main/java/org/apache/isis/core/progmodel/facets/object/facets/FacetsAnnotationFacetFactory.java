@@ -21,17 +21,18 @@
 package org.apache.isis.core.progmodel.facets.object.facets;
 
 import org.apache.isis.applib.annotation.Facets;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class FacetsAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public FacetsAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override

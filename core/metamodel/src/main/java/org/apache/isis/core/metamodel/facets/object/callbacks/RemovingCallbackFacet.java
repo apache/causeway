@@ -19,8 +19,6 @@
 
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
-import org.apache.isis.core.metamodel.facets.object.callbacks.CallbackFacet;
-import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
 
 /**
  * Represents the mechanism to inform the object that it about to be deleted.

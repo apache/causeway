@@ -25,10 +25,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
 
 public class CreatedCallbackFacetViaMethod extends CreatedCallbackFacetAbstract implements ImperativeFacet {
@@ -60,7 +60,7 @@ public class CreatedCallbackFacetViaMethod extends CreatedCallbackFacetAbstract 
 
     @Override
     public void invoke(final ObjectAdapter adapter) {
-        ObjectInvokeUtils.invoke(methods, adapter);
+        AdapterInvokeUtils.invoke(methods, adapter);
     }
 
     @Override

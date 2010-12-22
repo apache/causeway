@@ -27,34 +27,34 @@ import java.util.List;
 import org.apache.isis.alternatives.embedded.EmbeddedContext;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAbstract;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
+import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAbstract;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProviderAbstract;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiatorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorDefault;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 /**
  * Acts as a bridge between the {@link RuntimeContext} (as used internally
@@ -108,7 +108,7 @@ public class RuntimeContextForEmbeddedMetaModel extends RuntimeContextAbstract i
 	        }
 
 	        @Override
-	        public ObjectAdapter adapterFor(Object domainObject, ObjectAdapter ownerAdapter, Identified identified) {
+	        public ObjectAdapter adapterFor(Object domainObject, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
 	            return adapterFor(domainObject);
 	        }
 

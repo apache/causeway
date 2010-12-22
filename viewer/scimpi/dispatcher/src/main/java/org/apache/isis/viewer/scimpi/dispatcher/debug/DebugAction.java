@@ -120,7 +120,7 @@ public class DebugAction implements Action {
         view.appendRow("ID", spec.getIdentifier());
         view.appendRow("Full name", spec.getFullName());
         view.appendRow("Short name", spec.getShortName());
-        view.appendRow("Singular name", spec.getSingularName());
+        view.appendRow("Singular name", spec.getName());
         view.appendRow("Plural name", spec.getPluralName());
         view.appendRow("Description", spec.getDescription());
 
@@ -263,7 +263,7 @@ public class DebugAction implements Action {
         view.divider("Specifications");
         for (int j = 0; j < names.length; j++) {
             ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(names[j]);
-            String name = spec.getSingularName();
+            String name = spec.getName();
             view.appendRow(name, specificationLink(spec));
         }
     }

@@ -23,20 +23,20 @@ package org.apache.isis.core.progmodel.facets.object.immutable;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Immutable;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public ImmutableAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_PROPERTIES_AND_COLLECTIONS);
+        super(FeatureType.OBJECTS_PROPERTIES_AND_COLLECTIONS);
     }
 
     @Override

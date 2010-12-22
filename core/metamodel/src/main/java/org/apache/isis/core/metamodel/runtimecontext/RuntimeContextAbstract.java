@@ -26,9 +26,11 @@ import java.util.Properties;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerAware;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLookupDelegator;
 
 
 public abstract class RuntimeContextAbstract implements RuntimeContext, SpecificationLoaderAware, DomainObjectContainerAware {
@@ -69,10 +71,20 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
 	 * Is injected into when the reflector is {@link ObjectReflectorAbstract#init() initialized}.
 	 */
 	@Override
-    public void setSpecificationLoader(SpecificationLoader specificationLoader) {
-		this.specificationLookupDelegator.setDelegate(specificationLoader);
+    public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
+		this.specificationLookupDelegator.setDelegate(new SpecificationLookup() {
+            
+            @Override
+            public void injectInto(Object candidate) {
+                specificationLoader.injectInto(candidate);
+            }
+            
+            @Override
+            public ObjectSpecification loadSpecification(Class<?> cls) {
+                return specificationLoader.loadSpecification(cls);
+            }
+        });
 	}
-	
 	
 
 	protected DomainObjectContainer getContainer() {

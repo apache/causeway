@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.core.progmodel.facets.collections.CollectionFacetFactory;
@@ -41,7 +41,7 @@ import org.apache.isis.core.progmodel.facets.collections.CollectionFacetFactory;
 public class AggregatedIfCollectionFacetFactory extends FacetFactoryAbstract {
 
     public AggregatedIfCollectionFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override

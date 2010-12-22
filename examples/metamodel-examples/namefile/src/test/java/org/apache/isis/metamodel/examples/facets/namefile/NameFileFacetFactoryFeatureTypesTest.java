@@ -30,7 +30,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 
@@ -50,32 +50,32 @@ public class NameFileFacetFactoryFeatureTypesTest {
 
     @Test
     public void featureTypesLength() {
-        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
+        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertThat(featureTypes.size(), is(4));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingObject() {
-        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItem(ObjectFeatureType.OBJECT));
+        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(FeatureType.OBJECT));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingProperty() {
-        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItem(ObjectFeatureType.PROPERTY));
+        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(FeatureType.PROPERTY));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingCollection() {
-        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItem(ObjectFeatureType.COLLECTION));
+        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(FeatureType.COLLECTION));
     }
 
     @Test
     public void featureTypesContainsTypeRepresentingAction() {
-        List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertThat(featureTypes, hasItem(ObjectFeatureType.ACTION));
+        List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertThat(featureTypes, hasItem(FeatureType.ACTION));
     }
 
 }

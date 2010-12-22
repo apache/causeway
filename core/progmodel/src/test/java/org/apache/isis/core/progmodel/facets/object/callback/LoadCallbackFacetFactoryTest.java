@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.callbacks.LoadCallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.LoadedCallbackFacetViaMethod;
@@ -52,12 +52,12 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
 

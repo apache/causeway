@@ -44,8 +44,8 @@ import org.apache.isis.alternatives.remoting.common.exchange.ExecuteServerAction
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.testsystem.TestProxySystem;
 
@@ -54,7 +54,7 @@ public class ProxyAction_ExecuteRemotelyTest {
     //private Mockery mockery = new JUnit4Mockery();
 
     private ActionInvocationFacetWrapProxy proxy;
-    private ObjectMemberPeer mockObjectActionPeer;
+    private FacetedMethod mockObjectActionPeer;
     private ObjectEncoderDecoder mockEncoder;
     private ServerFacade mockDistribution;
     private ObjectAdapter target;

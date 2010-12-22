@@ -20,24 +20,38 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
 
 
 /**
- * In effect the SPI for {@link ObjectSpecification}.
+ * Discovers what attributes and behaviour the type specified by this 
+ * specification (in effect the SPI for {@link ObjectSpecification}).
+ * 
+ * <p>
+ * As specifications are cyclic (specifically a class will reference its 
+ * subclasses, which in turn reference their superclass) they need be created 
+ * first, and then later work out its internals.  Hence we create 
+ * {@link ObjectSpecification}s as we need them, and then introspect them later.
  */
-public interface IntrospectableSpecification {
+public interface IntrospectableSpecification extends ObjectSpecification {
 
     /**
-     * Discovers what attributes and behaviour the type specified by this specification. 
+     * Builds actions and associations.
      * 
      * <p>
-     * As specifications are cyclic (specifically a class will reference its subclasses, which in turn reference their superclass)
-     * they need be created first, and then later work out its internals. This allows for cyclic references to
-     * the be accommodated as there should always a specification available even though it might not be
-     * complete.
+     * Is called prior to running the <tt>FacetDecoratorSet</tt>
      */
-    public void introspect(FacetDecoratorSet decorator);
+    public void introspectTypeHierarchyAndMembers();
+
+    /**
+     * Is called after to running the <tt>FacetDecoratorSet</tt>.
+     * 
+     * <p>
+     * TODO: it's possible that this could be merged with {@link #introspectTypeHierarchyAndMembers()};
+     * need to check though, because this would cause facets to be decorated at the end of
+     * introspection, rather than midway as is currently.
+     * 
+     */
+    public void completeIntrospection();
 
     public void markAsService();
 

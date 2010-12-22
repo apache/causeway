@@ -27,11 +27,11 @@ import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.core.metamodel.util.IsisUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
@@ -152,7 +152,7 @@ public class ObjectFieldBuilder extends AbstractViewBuilder {
                         }
                     }
                 } else {
-                    if (IsisUtils.exists(value) && !IsisUtils.wrappedEqual(value, existing)) {
+                    if (AdapterUtils.exists(value) && !AdapterUtils.wrappedEqual(value, existing)) {
                         final View fieldView = createFieldView(view, axes, object, i, field);
                         view.replaceView(subview, decorateSubview(axes, fieldView));
                     } else {

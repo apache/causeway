@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.progmodel.facets.actions.DescribedAsFacetViaMethod;
@@ -82,12 +82,12 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertFalse(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {

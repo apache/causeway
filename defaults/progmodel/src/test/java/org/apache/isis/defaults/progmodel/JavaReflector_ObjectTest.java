@@ -27,20 +27,20 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
-import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
-import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacet;
 import org.apache.isis.core.runtime.system.TestDomainObject;
-import org.apache.isis.defaults.progmodel.JavaReflector;
 
 
 
 public class JavaReflector_ObjectTest extends JavaReflectorTestAbstract {
 
     @Override
-    protected ObjectSpecification loadSpecification(final JavaReflector reflector) {
+    protected ObjectSpecification loadSpecification(final ObjectReflectorDefault reflector) {
         return reflector.loadSpecification(TestDomainObject.class);
     }
 

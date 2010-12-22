@@ -21,17 +21,18 @@
 package org.apache.isis.core.metamodel.runtimecontext.spec.feature;
 
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 
 // TODO need to pull up the common methods. like getName(), from subclasses
@@ -42,13 +43,13 @@ public abstract class ObjectAssociationAbstract extends ObjectMemberAbstract imp
     public ObjectAssociationAbstract(
             final String associationId,
             final ObjectSpecification specification,
-            final FeatureType memberType,
-            final Identified facetHolder, 
+            final FeatureType featureType,
+            final IdentifiedHolder facetHolder, 
             final AuthenticationSessionProvider authenticationSessionProvider,
             final SpecificationLookup specificationLookup,
             final AdapterMap adapterManager,
             final QuerySubmitter querySubmitter) {
-        super(associationId, facetHolder, memberType, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
+        super(associationId, facetHolder, featureType, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
         if (specification == null) {
             throw new IllegalArgumentException("field type for '" + associationId + "' must exist");
         }

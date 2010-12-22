@@ -20,12 +20,12 @@
 
 package org.apache.isis.defaults.progmodel;
 
-import org.apache.isis.core.metamodel.java5.RemoveGetClassMethodFacetFactory;
-import org.apache.isis.core.metamodel.java5.RemoveInitMethodFacetFactory;
-import org.apache.isis.core.metamodel.java5.RemoveJavaLangObjectMethodsFacetFactory;
-import org.apache.isis.core.metamodel.java5.RemoveSetDomainObjectContainerMethodFacetFactory;
-import org.apache.isis.core.metamodel.java5.RemoveStaticGettersAndSettersFacetFactory;
-import org.apache.isis.core.metamodel.java5.RemoveSuperclassMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.isis.RemoveSetDomainObjectContainerMethodFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.isis.RemoveStaticGettersAndSettersFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.java5.RemoveGetClassMethodFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.java5.RemoveInitMethodFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.java5.RemoveJavaLangObjectMethodsFacetFactory;
+import org.apache.isis.core.metamodel.facets.object.java5.RemoveSuperclassMethodsFacetFactory;
 import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsAbstract;
 import org.apache.isis.core.progmodel.facets.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfAnnotationFacetFactory;

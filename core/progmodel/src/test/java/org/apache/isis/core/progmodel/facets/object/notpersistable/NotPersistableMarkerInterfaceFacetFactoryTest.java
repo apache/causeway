@@ -25,7 +25,8 @@ import java.util.List;
 import org.apache.isis.applib.marker.NonPersistable;
 import org.apache.isis.applib.marker.ProgramPersistable;
 import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 
@@ -48,12 +49,12 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testProgramPersistableMeansNotPersistableByUser() {
@@ -65,8 +66,8 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetMarkerInterface);
         final NotPersistableFacetMarkerInterface notPersistableFacetMarkerInterface = (NotPersistableFacetMarkerInterface) facet;
-        final org.apache.isis.core.progmodel.facets.object.notpersistable.InitiatedBy value = notPersistableFacetMarkerInterface.value();
-        assertEquals(org.apache.isis.core.progmodel.facets.object.notpersistable.InitiatedBy.USER, value);
+        final org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy value = notPersistableFacetMarkerInterface.value();
+        assertEquals(org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy.USER, value);
 
         assertNoMethodsRemoved();
     }
@@ -80,8 +81,8 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetMarkerInterface);
         final NotPersistableFacetMarkerInterface notPersistableFacetMarkerInterface = (NotPersistableFacetMarkerInterface) facet;
-        final org.apache.isis.core.progmodel.facets.object.notpersistable.InitiatedBy value = notPersistableFacetMarkerInterface.value();
-        assertEquals(org.apache.isis.core.progmodel.facets.object.notpersistable.InitiatedBy.USER_OR_PROGRAM, value);
+        final org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy value = notPersistableFacetMarkerInterface.value();
+        assertEquals(org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy.USER_OR_PROGRAM, value);
 
         assertNoMethodsRemoved();
     }

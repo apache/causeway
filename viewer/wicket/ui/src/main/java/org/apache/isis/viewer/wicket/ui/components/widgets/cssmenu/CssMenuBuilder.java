@@ -147,7 +147,7 @@ public class CssMenuBuilder  {
 
 	/**
 	 * It's a bit hokey to have to do this, but the
-	 * {@link ObjectSpecification#getServiceActionsFor(ObjectActionType...)
+	 * {@link ObjectSpecification#getServiceActionsReturning(ObjectActionType...)
 	 * method we call} on {@link ObjectSpecification}, while nicely
 	 * traversing the services for us, unfortunately does not pass us back the
 	 * service adapters also.

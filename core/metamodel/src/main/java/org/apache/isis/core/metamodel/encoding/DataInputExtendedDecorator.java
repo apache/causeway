@@ -20,7 +20,6 @@
 
 package org.apache.isis.core.metamodel.encoding;
 
-import java.io.Closeable;
 import java.io.DataInputStream;
 import java.io.IOException;
 

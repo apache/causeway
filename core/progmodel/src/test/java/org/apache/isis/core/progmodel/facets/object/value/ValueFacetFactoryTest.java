@@ -28,16 +28,16 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
 import org.apache.isis.core.progmodel.facets.object.ebc.EqualByContentFacet;
-import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
 
 public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -62,12 +62,12 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyParseableUsingParserName2")

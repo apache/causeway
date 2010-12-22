@@ -23,17 +23,18 @@ package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.MemberOrder;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class MemberOrderAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MemberOrderAnnotationFacetFactory() {
-        super(ObjectFeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS);
+        super(FeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS);
     }
 
     @Override

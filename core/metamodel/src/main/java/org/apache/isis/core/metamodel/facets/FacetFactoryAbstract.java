@@ -26,23 +26,23 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookupAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 
 
 public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLookupAware {
 
-    private final List<ObjectFeatureType> featureTypes;
+    private final List<FeatureType> featureTypes;
     
     private SpecificationLookup specificationLookup;
 
-    public FacetFactoryAbstract(final List<ObjectFeatureType> featureTypes) {
+    public FacetFactoryAbstract(final List<FeatureType> featureTypes) {
         this.featureTypes = ImmutableList.copyOf(featureTypes);
     }
 
     @Override
-    public List<ObjectFeatureType> getFeatureTypes() {
+    public List<FeatureType> getFeatureTypes() {
         return featureTypes;
     }
 

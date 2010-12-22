@@ -60,11 +60,11 @@ public class Members extends AbstractElementProcessor {
         
         ObjectSpecification specification = field == null ? object.getSpecification() : field.getSpecification();
         
-        request.appendHtml(specification.getSingularName() + " (" + specification.getFullName() + ") \n");
+        request.appendHtml(specification.getName() + " (" + specification.getFullName() + ") \n");
         List<ObjectAssociation> fields = specification.getAssociations();
         for (ObjectAssociation fld : fields) {
             if (!fld.isAlwaysHidden()) {
-                request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "+  fld.getSpecification().getSingularName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n" );
+                request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "+  fld.getSpecification().getName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n" );
             }
         }
         request.appendHtml("   --------------\n");
@@ -76,12 +76,12 @@ public class Members extends AbstractElementProcessor {
                 if (!first) {
                     request.appendHtml(", ");
                 }
-                request.appendHtml(parameter.getSpecification().getSingularName());
+                request.appendHtml(parameter.getSpecification().getName());
                 first = false;
             }
             request.appendHtml(")"  + " - '" + action.getName() + "'");
             if (action.getSpecification() != null) {
-                request.appendHtml(" -> " + action.getSpecification().getSingularName() + ")" );
+                request.appendHtml(" -> " + action.getSpecification().getName() + ")" );
             }
             request.appendHtml("\n" );
         }

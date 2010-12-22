@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 
 public abstract class SingleClassValueFacetAbstract extends FacetAbstract implements SingleClassValueFacet {

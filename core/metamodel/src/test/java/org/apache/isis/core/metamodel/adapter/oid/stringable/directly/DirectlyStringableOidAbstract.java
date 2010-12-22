@@ -21,7 +21,6 @@
 package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 
 public abstract class DirectlyStringableOidAbstract implements DirectlyStringableOid {

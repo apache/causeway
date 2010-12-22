@@ -26,6 +26,9 @@ import junit.framework.TestSuite;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
+import org.apache.isis.core.metamodel.facets.ordering.MemberOrderComparator;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
+
 
 public class MemberOrderComparatorTest extends TestCase {
 
@@ -35,8 +38,14 @@ public class MemberOrderComparatorTest extends TestCase {
 
     private MemberOrderComparator comparator, laxComparator;
 
-    private final MemberPeerStub m1 = MemberPeerStub.createProperty("abc");
-    private final MemberPeerStub m2 = MemberPeerStub.createProperty("abc");
+    public static class Customer {
+        private String abc;
+        public String getAbc() {
+            return abc;
+        }
+    }
+    private final FacetedMethod m1 = FacetedMethod.createProperty(Customer.class, "abc");
+    private final FacetedMethod m2 = FacetedMethod.createProperty(Customer.class, "abc");
 
     @Override
     protected void setUp() {

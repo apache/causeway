@@ -22,11 +22,12 @@ package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 /**
  * Base interface for elements of the metamodel.
@@ -40,9 +41,11 @@ import org.apache.isis.core.metamodel.spec.identifier.Identified;
  * Introduces so that viewers can deal with abstract Instances of said.
  * 
  */
-public interface Specification extends Identified {
+public interface Specification extends IdentifiedHolder, NamedAndDescribed {
 
     
+    FeatureType getFeatureType();
+
     /**
      * Return an {@link Instance} of this {@link Specification} with respect
      * to the provided {@link ObjectAdapter}.

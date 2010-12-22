@@ -22,6 +22,7 @@ package org.apache.isis.viewer.html.task;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.consent.Consent;
@@ -34,7 +35,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.util.IsisUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.html.component.Page;
@@ -96,7 +96,7 @@ public class EditTask extends Task {
         }
 
         final boolean isNew = object.getResolveState() == ResolveState.TRANSIENT;
-        newType = isNew ? getTarget(context).getSpecification().getSingularName() : null;
+        newType = isNew ? getTarget(context).getSpecification().getName() : null;
     }
 
     @Override
@@ -172,14 +172,14 @@ public class EditTask extends Task {
             
             if (fld.isOneToOneAssociation()) {
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) fld);
-                final Object entryPojo = IsisUtils.unwrap(entryAdapter);
+                final Object entryPojo = AdapterUtils.unwrap(entryAdapter);
                 if (entryPojo == null) {
                     if (oneToOneAssociation.get(targetAdapter) != null) {
                         oneToOneAssociation.clearAssociation(targetAdapter);
                     }
                 } else {
                     final ObjectAdapter currentAdapter = oneToOneAssociation.get(targetAdapter);
-                    final Object currentPojo = IsisUtils.unwrap(currentAdapter);
+                    final Object currentPojo = AdapterUtils.unwrap(currentAdapter);
                     if (currentAdapter == null || currentPojo == null || !currentPojo.equals(entryPojo)) {
                         oneToOneAssociation.setAssociation(targetAdapter, entryAdapter);
                     }

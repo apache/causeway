@@ -22,9 +22,9 @@ package org.apache.isis.core.progmodel.facets.object.ident.icon;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 
 
 public class IconFacetViaMethod extends IconFacetAbstract {
@@ -38,7 +38,7 @@ public class IconFacetViaMethod extends IconFacetAbstract {
 
     public String iconName(final ObjectAdapter owningAdapter) {
         try {
-			return (String) ObjectInvokeUtils.invoke(method, owningAdapter);
+			return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
 		} catch (RuntimeException ex) {
 			return null;
 		}

@@ -24,10 +24,10 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
 
 public class PropertyClearFacetViaSetterMethod extends PropertyClearFacetAbstract implements ImperativeFacet {
@@ -57,7 +57,7 @@ public class PropertyClearFacetViaSetterMethod extends PropertyClearFacetAbstrac
 	}
 
     public void clearProperty(final ObjectAdapter owningAdapter) {
-        ObjectInvokeUtils.invoke(method, owningAdapter);
+        AdapterInvokeUtils.invoke(method, owningAdapter);
     }
 
     @Override

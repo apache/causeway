@@ -7,7 +7,7 @@ import java.util.TreeSet;
 import net.sf.isiscontrib.bdd.fitnesse.internal.AbstractSubsetFixture;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.choices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 /**
  * Provides a set of choices for a property.

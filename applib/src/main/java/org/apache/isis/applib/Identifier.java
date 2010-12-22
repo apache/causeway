@@ -94,12 +94,12 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public static Identifier actionIdentifier(final Class<?> declaringClass, final String actionName,
-        final Class<?>[] parameterClasses) {
+        final Class<?>... parameterClasses) {
         return actionIdentifier(declaringClass.getCanonicalName(), actionName, toParameterStringArray(parameterClasses));
     }
 
     public static Identifier actionIdentifier(final String declaringClassName, final String actionName,
-        final Class<?>[] parameterClasses) {
+        final Class<?>... parameterClasses) {
         return actionIdentifier(declaringClassName, actionName, toParameterStringArray(parameterClasses));
     }
 

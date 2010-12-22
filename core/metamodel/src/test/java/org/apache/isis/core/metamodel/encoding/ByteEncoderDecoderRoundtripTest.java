@@ -33,11 +33,6 @@ import java.io.PipedOutputStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
-import org.apache.isis.core.metamodel.encoding.Encodable;
 
 
 public class ByteEncoderDecoderRoundtripTest {

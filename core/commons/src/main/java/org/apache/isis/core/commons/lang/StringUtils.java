@@ -102,6 +102,10 @@ public final class StringUtils {
         return b.toString();
     }
 
+    public static String pascal(String name) {
+        return capitalize(camel(name));
+    }
+
     public static String memberIdFor(final String member) {
         return lowerLeading(camel(member));
     }

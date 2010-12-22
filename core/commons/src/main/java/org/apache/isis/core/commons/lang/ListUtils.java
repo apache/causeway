@@ -32,10 +32,17 @@ public final class ListUtils {
 
 	private ListUtils() {}
 
+	public static <T> List<T> combine(final List<T> list, final List<T> list2) {
+	    final List<T> combinedList = new ArrayList<T>();
+	    combinedList.addAll(list);
+	    combinedList.addAll(list2);
+	    return combinedList;
+	}
+	
     /**
      * Returns list1 with everything in list2, ignoring duplicates.
      */
-    public static <T> List<T> combine(final List<T> list1, final List<T> list2) {
+    public static <T> List<T> merge(final List<T> list1, final List<T> list2) {
         for (final Iterator<T> iter = list2.iterator(); iter.hasNext();) {
             final T obj = iter.next();
             if (!(list1.contains(obj))) {
@@ -45,7 +52,8 @@ public final class ListUtils {
         return list1;
     }
 
-    public static List<String> combine(final String[] array1, final String[] array2) {
+    
+    public static List<String> merge(final String[] array1, final String[] array2) {
         final List<String> prefixes = new ArrayList<String>();
         addNoDuplicates(array1, prefixes);
         addNoDuplicates(array2, prefixes);
@@ -137,6 +145,7 @@ public final class ListUtils {
 		list.addAll(Arrays.asList(optionValues));
 		return list;
 	}
+
 
 }
 

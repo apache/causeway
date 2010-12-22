@@ -759,7 +759,7 @@ public abstract class AbstractView implements View {
         }
 
         if (getContent() instanceof RootObject || getContent() instanceof RootCollection) {
-            options.add(new UserActionAbstract("Use as default view for " + getContent().getSpecification().getSingularName(), ObjectActionType.USER) {
+            options.add(new UserActionAbstract("Use as default view for " + getContent().getSpecification().getName(), ObjectActionType.USER) {
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Options viewOptions = Properties.getViewConfigurationOptions(getSpecification());
                     getView().saveOptions(viewOptions);

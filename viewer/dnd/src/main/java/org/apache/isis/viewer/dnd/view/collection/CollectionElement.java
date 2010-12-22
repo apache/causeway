@@ -69,7 +69,7 @@ public class CollectionElement extends AbstractObjectContent {
     }
 
     public String getDescription() {
-        return getSpecification().getSingularName() + ": " + getObject().titleString() + " "
+        return getSpecification().getName() + ": " + getObject().titleString() + " "
                 + getSpecification().getDescription();
     }
 

@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.config;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderResourceStreams;
-import org.apache.isis.core.metamodel.config.NotFoundPolicy;
 import org.junit.Test;
 
 public class ConfigurationBuilderResourceStreamsConfigResourceAndPolicyTest {

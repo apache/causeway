@@ -21,18 +21,18 @@
 package org.apache.isis.core.progmodel.facets.object.aggregated;
 
 import org.apache.isis.applib.annotation.Aggregated;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class AggregatedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public AggregatedAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override

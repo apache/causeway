@@ -26,14 +26,14 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.runtime.testsystem.TestPojo;
-import org.apache.isis.defaults.progmodel.JavaReflector;
 
 
 public class JavaReflector_ArrayTest extends JavaReflectorTestAbstract {
 
     @Override
-    protected ObjectSpecification loadSpecification(final JavaReflector reflector) {
+    protected ObjectSpecification loadSpecification(final ObjectReflectorDefault reflector) {
         return reflector.loadSpecification(TestPojo[].class);
     }
 

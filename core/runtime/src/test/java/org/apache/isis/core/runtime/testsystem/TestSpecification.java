@@ -37,10 +37,9 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.FacetHolderNoop;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
-import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -65,20 +64,21 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     private final String name;
     private List<ObjectSpecification> subclasses = Collections.emptyList();
     private String title;
-	private RuntimeContext runtimeContext;
 
     public TestSpecification() {
         this((String) null);
-        this.runtimeContext = new RuntimeContextNoRuntime();
     }
+
+    @Override
+    public FeatureType getFeatureType() {
+        return FeatureType.OBJECT;
+    }
+    
 
     public TestSpecification(final String name) {
         this.name = name == null ? "DummyObjectSpecification#" + id : name;
         title = "";
     }
-
-    @Override
-    public void addSubclass(final ObjectSpecification specification) {}
 
     @Override
     public void clearDirty(final ObjectAdapter object) {}
@@ -89,7 +89,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getServiceActionsFor(final ObjectActionType... type) {
+    public List<ObjectAction> getServiceActionsReturning(final ObjectActionType... type) {
         return null;
     }
 
@@ -194,13 +194,13 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public String getSingularName() {
+    public String getName() {
         return name + " (singular)";
     }
 
     @Override
     public String getDescription() {
-        return getSingularName();
+        return getName();
     }
 
     @Override
@@ -319,7 +319,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public boolean isCollection() {
         return false;
     }
-
+    
     @Override
     public boolean isNotCollection() {
         return !isCollection();

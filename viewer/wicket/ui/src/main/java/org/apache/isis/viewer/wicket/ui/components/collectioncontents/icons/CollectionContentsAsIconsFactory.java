@@ -20,8 +20,8 @@
 
 package org.apache.isis.viewer.wicket.ui.components.collectioncontents.icons;
 
+import org.apache.isis.core.metamodel.facets.object.ident.icon.IconFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.progmodel.facets.object.ident.icon.IconFacet;
 import org.apache.isis.viewer.wicket.model.models.EntityCollectionModel;
 import org.apache.isis.viewer.wicket.ui.ComponentFactory;
 import org.apache.isis.viewer.wicket.ui.ComponentFactoryAbstract;

@@ -37,14 +37,14 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
+import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
-import org.apache.isis.core.metamodel.java5.MethodPrefixBasedFacetFactory;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 
@@ -111,7 +111,7 @@ public class FacetProcessor implements RuntimeContextAware {
      * Lazily initialized, then cached. The lists remain in the same order that the factories were
      * {@link #registerFactory(FacetFactory) registered}.
      */
-    private Map<ObjectFeatureType, List<FacetFactory>> factoryListByFeatureType = null;
+    private Map<FeatureType, List<FacetFactory>> factoryListByFeatureType = null;
 
     
     public FacetProcessor(
@@ -264,7 +264,7 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * Attaches all facets applicable to the provided {@link ObjectFeatureType#OBJECT object}) to the
+     * Attaches all facets applicable to the provided {@link FeatureType#OBJECT object}) to the
      * supplied {@link FacetHolder}.
      * 
      * <p>
@@ -281,7 +281,7 @@ public class FacetProcessor implements RuntimeContextAware {
      */
     public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
         boolean facetsAdded = false;
-        final List<FacetFactory> factoryList = getFactoryListByFeatureType(ObjectFeatureType.OBJECT);
+        final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
         for (final FacetFactory facetFactory : factoryList) {
             facetsAdded = facetFactory.process(cls, removerElseNullRemover(methodRemover), facetHolder) | facetsAdded;
         }
@@ -289,7 +289,7 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * Attaches all facets applicable to the provided {@link ObjectFeatureType type of feature} to the
+     * Attaches all facets applicable to the provided {@link FeatureType type of feature} to the
      * supplied {@link FacetHolder}.
      * 
      * <p>
@@ -313,7 +313,7 @@ public class FacetProcessor implements RuntimeContextAware {
             final Method method,
             final MethodRemover methodRemover,
             final FacetHolder facetHolder,
-            final ObjectFeatureType featureType) {
+            final FeatureType featureType) {
         boolean facetsAdded = false;
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
         for (final FacetFactory facetFactory : factoryList) {
@@ -323,7 +323,7 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * Attaches all facets applicable to the provided {@link ObjectFeatureType#ACTION_PARAMETER
+     * Attaches all facets applicable to the provided {@link FeatureType#ACTION_PARAMETER
      * parameter}), to the supplied {@link FacetHolder}.
      * 
      * <p>
@@ -342,14 +342,14 @@ public class FacetProcessor implements RuntimeContextAware {
      */
     public boolean processParams(final Method method, final int paramNum, final FacetHolder facetHolder) {
         boolean facetsAdded = false;
-        final List<FacetFactory> factoryList = getFactoryListByFeatureType(ObjectFeatureType.ACTION_PARAMETER);
+        final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
         for (final FacetFactory facetFactory : factoryList) {
             facetsAdded = facetFactory.processParams(method, paramNum, facetHolder) | facetsAdded;
         }
         return facetsAdded;
     }
 
-    private List<FacetFactory> getFactoryListByFeatureType(final ObjectFeatureType featureType) {
+    private List<FacetFactory> getFactoryListByFeatureType(final FeatureType featureType) {
         cacheByFeatureTypeIfRequired();
         return factoryListByFeatureType.get(featureType);
     }
@@ -365,10 +365,10 @@ public class FacetProcessor implements RuntimeContextAware {
         if (factoryListByFeatureType != null) {
             return;
         }
-        factoryListByFeatureType = new HashMap<ObjectFeatureType, List<FacetFactory>>();
+        factoryListByFeatureType = new HashMap<FeatureType, List<FacetFactory>>();
         for (final FacetFactory factory : factories) {
-            final List<ObjectFeatureType> featureTypes = factory.getFeatureTypes();
-            for (ObjectFeatureType featureType: featureTypes) {
+            final List<FeatureType> featureTypes = factory.getFeatureTypes();
+            for (FeatureType featureType: featureTypes) {
                 final List<FacetFactory> factoryList = getList(factoryListByFeatureType, featureType);
                 factoryList.add(factory);
             }
@@ -383,7 +383,7 @@ public class FacetProcessor implements RuntimeContextAware {
         for (final FacetFactory facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
                 final MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
-                ListUtils.combine(cachedMethodPrefixes, methodPrefixBasedFacetFactory.getPrefixes());
+                ListUtils.merge(cachedMethodPrefixes, methodPrefixBasedFacetFactory.getPrefixes());
             }
         }
     }

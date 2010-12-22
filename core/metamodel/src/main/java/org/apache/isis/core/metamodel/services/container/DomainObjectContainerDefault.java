@@ -31,27 +31,27 @@ import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.applib.security.RoleMemento;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.ensure.Assert;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.AdapterUtils;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAware;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistorAware;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAware;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProviderAware;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAware;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAware;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAware;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAware;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAware;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookupAware;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.IsisUtils;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 
 public class DomainObjectContainerDefault implements DomainObjectContainer, QuerySubmitterAware, ObjectDirtierAware,
     DomainObjectServicesAware, ObjectPersistorAware, SpecificationLookupAware, AuthenticationSessionProviderAware, AdapterMapAware {
@@ -308,7 +308,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @Override
     public <T> List<T> allMatches(final Query<T> query) {
         List<ObjectAdapter> allMatching = getQuerySubmitter().allMatchingQuery(query);
-        return IsisUtils.unwrap(allMatching);
+        return AdapterUtils.unwrap(allMatching);
     }
 
     // //////////////////////////////////////////////////////////////////
@@ -342,7 +342,7 @@ public class DomainObjectContainerDefault implements DomainObjectContainer, Quer
     @SuppressWarnings("unchecked")
     public <T> T firstMatch(final Query<T> query) {
         ObjectAdapter firstMatching = getQuerySubmitter().firstMatchingQuery(query);
-        return (T) IsisUtils.unwrap(firstMatching);
+        return (T) AdapterUtils.unwrap(firstMatching);
     }
 
     // //////////////////////////////////////////////////////////////////

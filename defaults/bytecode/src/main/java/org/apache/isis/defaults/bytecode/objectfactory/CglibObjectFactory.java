@@ -19,7 +19,7 @@
 
 package org.apache.isis.defaults.bytecode.objectfactory;
 
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerObjectChanged;
 import org.apache.isis.core.runtime.persistence.container.DomainObjectContainerResolve;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;

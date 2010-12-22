@@ -23,17 +23,17 @@ package org.apache.isis.core.progmodel.facets.actions.notinservicemenu;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.NotInServiceMenu;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class NotInServiceMenuAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public NotInServiceMenuAnnotationFacetFactory() {
-        super(ObjectFeatureType.ACTIONS_ONLY);
+        super(FeatureType.ACTIONS_ONLY);
     }
 
     @Override

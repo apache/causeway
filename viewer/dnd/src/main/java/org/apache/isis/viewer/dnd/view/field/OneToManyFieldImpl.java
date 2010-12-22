@@ -66,7 +66,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
             if (!specification.isOfType(elementSpecification)) {
                 // TODO: move logic into Facet
                 return new Veto(String.format("Only objects of type %s are allowed in this collection", elementSpecification
-                        .getSingularName()));
+                        .getName()));
             }
             if (parentAdapter.isPersistent() && sourceAdapter.isTransient()) {
                 // TODO: move logic into Facet
@@ -113,7 +113,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
     @Override
     public String getDescription() {
         final String name = getFieldName();
-        String type = getField().getSpecification().getSingularName();
+        String type = getField().getSpecification().getName();
         type = name.indexOf(type) == -1 ? " (" + type + ")" : "";
         final String description = getOneToManyAssociation().getDescription();
         return name + type + " " + description;

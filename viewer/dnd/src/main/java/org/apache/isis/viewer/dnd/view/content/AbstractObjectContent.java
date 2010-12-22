@@ -182,7 +182,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         }
         // TODO: use Facet for this test instead
         return new Veto(String.format("No empty field accepting object of type %s in %s", sourceAdapter.getSpecification()
-                .getSingularName(), title()));
+                .getName(), title()));
     }
 
     @Override

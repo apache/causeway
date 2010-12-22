@@ -27,12 +27,13 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
+
 import org.apache.isis.alternatives.objectstore.sql.SqlPersistorInstaller;
 import org.apache.isis.alternatives.objectstore.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -97,7 +98,7 @@ public class TestProxySystemIII {
         javaReflectorInstaller.setConfiguration(configuration);
         mockSpecificationLoader = javaReflectorInstaller.createReflector();
 
-        ((ObjectReflectorAbstract) mockSpecificationLoader).setRuntimeContext(new RuntimeContextFromSession());
+        ((ObjectReflectorDefault) mockSpecificationLoader).setRuntimeContext(new RuntimeContextFromSession());
 
         if (configuration.getString("isis.persistence.sql.jdbc.driver") == null){
         	if (configuration.getString("isis.persistence") == "in-memory"){

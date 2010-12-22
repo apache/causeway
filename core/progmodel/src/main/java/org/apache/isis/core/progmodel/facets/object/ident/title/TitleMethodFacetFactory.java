@@ -26,7 +26,7 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
@@ -39,7 +39,7 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
     private static final String[] PREFIXES = { TO_STRING, TITLE, };
 
     public TitleMethodFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.OBJECTS_ONLY);
+        super(PREFIXES, FeatureType.OBJECTS_ONLY);
     }
 
     /**

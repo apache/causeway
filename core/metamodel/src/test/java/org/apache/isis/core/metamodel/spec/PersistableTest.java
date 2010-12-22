@@ -20,8 +20,6 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.metamodel.spec.Persistability;
-
 import junit.framework.TestCase;
 
 

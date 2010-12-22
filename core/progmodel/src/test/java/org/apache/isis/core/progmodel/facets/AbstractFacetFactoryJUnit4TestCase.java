@@ -28,10 +28,11 @@ import org.jmock.integration.junit4.JUnit4Mockery;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -81,7 +82,7 @@ public abstract class AbstractFacetFactoryJUnit4TestCase {
     	return Utils.contains(types, type);
     }
 
-    protected boolean contains(final ObjectFeatureType[] featureTypes, final ObjectFeatureType featureType) {
+    protected boolean contains(final FeatureType[] featureTypes, final FeatureType featureType) {
     	return Utils.contains(featureTypes, featureType);
     }
 

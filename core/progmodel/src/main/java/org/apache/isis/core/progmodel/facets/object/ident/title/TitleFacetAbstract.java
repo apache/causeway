@@ -23,6 +23,7 @@ package org.apache.isis.core.progmodel.facets.object.ident.title;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 
 
 public abstract class TitleFacetAbstract extends FacetAbstract implements TitleFacet {

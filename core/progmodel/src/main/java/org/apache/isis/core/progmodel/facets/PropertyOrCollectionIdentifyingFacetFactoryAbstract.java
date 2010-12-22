@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 
@@ -36,7 +36,7 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(
             final String[] prefixes,
-            final List<ObjectFeatureType> featureTypes) {
+            final List<FeatureType> featureTypes) {
         super(prefixes, featureTypes);
     }
 

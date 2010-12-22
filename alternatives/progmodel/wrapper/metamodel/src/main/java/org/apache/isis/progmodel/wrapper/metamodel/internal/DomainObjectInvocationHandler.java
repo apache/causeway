@@ -33,22 +33,22 @@ import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.java5.JavaSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.util.IsisUtils;
-import org.apache.isis.core.progmodel.spec.JavaSpecification;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InteractionException;
@@ -251,7 +251,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final ObjectAdapter currentReferencedAdapter = otoa.get(targetAdapter);
-        final Object currentReferencedObj = IsisUtils.unwrap(currentReferencedAdapter);
+        final Object currentReferencedObj = AdapterUtils.unwrap(currentReferencedAdapter);
 
         final PropertyAccessEvent ev =
             new PropertyAccessEvent(getDelegate(), otoa.getIdentifier(), currentReferencedObj);
@@ -304,7 +304,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
         resolveIfRequired(targetAdapter);
 
         final ObjectAdapter currentReferencedAdapter = otma.get(targetAdapter);
-        final Object currentReferencedObj = IsisUtils.unwrap(currentReferencedAdapter);
+        final Object currentReferencedObj = AdapterUtils.unwrap(currentReferencedAdapter);
 
         final CollectionAccessEvent ev = new CollectionAccessEvent(getDelegate(), otma.getIdentifier());
 
@@ -441,7 +441,7 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
 
         if (getExecutionMode() == ExecutionMode.EXECUTE) {
             final ObjectAdapter actionReturnNO = noa.execute(targetAdapter, argAdapters);
-            return IsisUtils.unwrap(actionReturnNO);
+            return AdapterUtils.unwrap(actionReturnNO);
         }
 
         objectChangedIfRequired(targetAdapter);

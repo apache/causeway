@@ -23,6 +23,8 @@ package org.apache.isis.core.progmodel.facets.object.notpersistable;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 
 
 public abstract class NotPersistableFacetAbstract extends SingleValueFacetAbstract implements NotPersistableFacet {

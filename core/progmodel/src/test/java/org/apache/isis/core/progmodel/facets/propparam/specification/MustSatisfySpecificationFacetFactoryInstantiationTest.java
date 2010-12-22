@@ -20,7 +20,6 @@
 
 package org.apache.isis.core.progmodel.facets.propparam.specification;
 
-import org.apache.isis.core.progmodel.facets.propparam.specification.MustSatisfySpecificationFacetFactory;
 import org.junit.Test;
 
 

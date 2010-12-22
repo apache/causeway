@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
@@ -58,7 +59,7 @@ public class ObjectAssociationAbstractTest {
     public void setup() {
         facetHolder = new IdentifiedImpl();
         objectAssociation = new ObjectAssociationAbstract("id", new TestProxySpecification("test"),
-                FeatureType.PROPERTY, facetHolder, null, null, null, null) {
+            FeatureType.PROPERTY, facetHolder, null, null, null, null) {
 
             @Override
             public ObjectAdapter get(ObjectAdapter fromObject) {

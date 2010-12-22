@@ -20,9 +20,10 @@
 
 package org.apache.isis.core.metamodel.java5;
 
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.apache.isis.core.commons.matchers.IsisMatchers.*;
 
 import java.lang.reflect.Method;
 
@@ -34,11 +35,12 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.java5.ImperativeFacetUtils;
-import org.apache.isis.core.metamodel.java5.ImperativeFacetUtils.ImperativeFacetFlags;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 @RunWith(JMock.class)

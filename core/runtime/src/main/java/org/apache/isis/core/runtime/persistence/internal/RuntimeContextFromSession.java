@@ -24,32 +24,32 @@ import java.util.List;
 
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.applib.query.Query;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAbstract;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
+import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProviderAbstract;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProviderAbstract;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServices;
-import org.apache.isis.core.metamodel.runtimecontext.DomainObjectServicesAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiator;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiatorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistor;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectPersistorAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
-import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
@@ -102,8 +102,8 @@ public class RuntimeContextFromSession extends RuntimeContextAbstract {
             }
 
             @Override
-            public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
-                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, identified);
+            public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+                return getRuntimeAdapterManager().adapterFor(pojo, ownerAdapter, identifiedHolder);
             }
         };
         this.objectInstantiator = new ObjectInstantiatorAbstract() {

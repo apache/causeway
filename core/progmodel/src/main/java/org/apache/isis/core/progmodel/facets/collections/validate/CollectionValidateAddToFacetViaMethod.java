@@ -24,10 +24,10 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
 
 public class CollectionValidateAddToFacetViaMethod extends CollectionValidateAddToFacetAbstract implements ImperativeFacet {
@@ -57,7 +57,7 @@ public class CollectionValidateAddToFacetViaMethod extends CollectionValidateAdd
 	}
 
     public String invalidReason(final ObjectAdapter owningAdapter, final ObjectAdapter proposedAdapter) {
-        return (String) ObjectInvokeUtils.invoke(method, owningAdapter, proposedAdapter);
+        return (String) AdapterInvokeUtils.invoke(method, owningAdapter, proposedAdapter);
     }
 
     @Override

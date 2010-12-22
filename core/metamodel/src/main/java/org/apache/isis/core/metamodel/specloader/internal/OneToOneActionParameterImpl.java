@@ -23,9 +23,9 @@ package org.apache.isis.core.metamodel.specloader.internal;
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
-import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public class OneToOneActionParameterImpl extends ObjectActionParameterAbstract implements OneToOneActionParameter {

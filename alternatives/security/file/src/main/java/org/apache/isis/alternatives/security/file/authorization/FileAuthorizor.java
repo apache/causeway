@@ -32,17 +32,18 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.StringTokenizer;
-import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.spec.identifier.IdentifierFactory;
+import org.apache.isis.core.metamodel.peer.IdentifierUtils;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 
 
@@ -102,6 +103,7 @@ public class FileAuthorizor extends AuthorizorAbstract {
     // init, shutdown
     ////////////////////////////////////////////////////////////////
     
+    @Override
     public void init() {
         
         // initialize
@@ -146,7 +148,7 @@ public class FileAuthorizor extends AuthorizorAbstract {
     }
 
     private Identifier memberFromString(final String identifier) {
-    	return IdentifierFactory.fromIdentityString(identifier);
+    	return IdentifierUtils.fromIdentityString(identifier);
     }
 
     private List<String> tokenizeRoles(final String allRoles) {
@@ -160,6 +162,7 @@ public class FileAuthorizor extends AuthorizorAbstract {
         return roles;
     }
 
+    @Override
     public void shutdown() {
         if (learn) {
             writeMap();
@@ -171,10 +174,12 @@ public class FileAuthorizor extends AuthorizorAbstract {
     // API
     ////////////////////////////////////////////////////////////////
 
+    @Override
     public boolean isUsableInRole(final String role, final Identifier member) {
         return isAuthorized(role, member, new String[] { NONE, RW });
     }
 
+    @Override
     public boolean isVisibleInRole(final String role, final Identifier member) {
         return isAuthorized(role, member, new String[] { NONE, RO, RW });
     }
@@ -227,7 +232,7 @@ public class FileAuthorizor extends AuthorizorAbstract {
     private boolean learn(final String role, final Identifier member) {
         String identityString = member.toIdentityString(Identifier.CLASS_MEMBERNAME_PARMS);
         if (whiteListMap.containsKey(identityString)) {
-            final List<String> roles = (List<String>) whiteListMap.get(identityString);
+            final List<String> roles = whiteListMap.get(identityString);
             if (!roles.contains(role)) {
                 roles.add(role);
             }

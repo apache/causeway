@@ -36,8 +36,8 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
 
@@ -56,10 +56,10 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
     }
 
     public Facet decorate(final Facet facet, FacetHolder requiredHolder) {
-    	if (!(requiredHolder instanceof Identified)) {
+    	if (!(requiredHolder instanceof IdentifiedHolder)) {
             return null;
         }
-        Identified identified = (Identified) requiredHolder;
+        IdentifiedHolder identifiedHolder = (IdentifiedHolder) requiredHolder;
 
         final Class<? extends Facet> facetType = facet.facetType();
 
@@ -67,7 +67,7 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             final PropertySetterFacet propertySetterFacet = (PropertySetterFacet) facet;
             PropertySetterFacetWrapProxy decoratingFacet = new PropertySetterFacetWrapProxy(
             		propertySetterFacet, serverFacade, encoderDecoder,
-            		identified.getIdentifier().getMemberName());
+            		identifiedHolder.getIdentifier().getMemberName());
             return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
         }
 
@@ -75,7 +75,7 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             final PropertyClearFacet propertyClearFacet = (PropertyClearFacet) facet;
             PropertyClearFacetWrapProxy decoratingFacet = new PropertyClearFacetWrapProxy(
             		propertyClearFacet, serverFacade, encoderDecoder,
-            		identified.getIdentifier().getMemberName());
+            		identifiedHolder.getIdentifier().getMemberName());
             return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
         }
 
@@ -83,7 +83,7 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             final CollectionAddToFacet collectionAddToFacet = (CollectionAddToFacet) facet;
             CollectionAddToFacetWrapProxy decoratingFacet = new CollectionAddToFacetWrapProxy(
             		collectionAddToFacet, serverFacade, encoderDecoder,
-            		identified.getIdentifier().getMemberName());
+            		identifiedHolder.getIdentifier().getMemberName());
             return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
         }
 
@@ -91,7 +91,7 @@ public class ProxyFacetDecorator  extends FacetDecoratorAbstract {
             final CollectionRemoveFromFacet collectionRemoveFromFacet = (CollectionRemoveFromFacet) facet;
             CollectionRemoveFromFacetWrapProxy decoratingFacet = new CollectionRemoveFromFacetWrapProxy(
             		collectionRemoveFromFacet, serverFacade, encoderDecoder,
-            		identified.getIdentifier().getMemberName());
+            		identifiedHolder.getIdentifier().getMemberName());
             return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
         }
 

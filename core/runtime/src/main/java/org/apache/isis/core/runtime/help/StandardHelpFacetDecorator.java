@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 
 
 public class StandardHelpFacetDecorator  extends FacetDecoratorAbstract implements HelpFacetDecorator {
@@ -36,12 +36,12 @@ public class StandardHelpFacetDecorator  extends FacetDecoratorAbstract implemen
     }
 
     public Facet decorate(final Facet facet, FacetHolder requiredHolder) {
-    	if (!(requiredHolder instanceof Identified)) {
+    	if (!(requiredHolder instanceof IdentifiedHolder)) {
     		return null;
     	} 
 
-    	Identified identified = (Identified) requiredHolder;
-		final Identifier identifier = identified.getIdentifier();
+    	IdentifiedHolder identifiedHolder = (IdentifiedHolder) requiredHolder;
+		final Identifier identifier = identifiedHolder.getIdentifier();
 		
         if (facet.facetType() == HelpFacet.class) {
             final String lookupHelp = helpManager.help(identifier);

@@ -20,9 +20,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.spec.Target;
-
 import junit.framework.TestCase;
+
+import org.apache.isis.core.metamodel.spec.Target;
 
 
 public class ActionTypeTest extends TestCase {

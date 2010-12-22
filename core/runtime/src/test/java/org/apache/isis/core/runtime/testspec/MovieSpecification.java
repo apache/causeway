@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.InteractionContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
@@ -108,8 +108,7 @@ class MovieDirectorField extends OneToOneAssociationTest {
      */
     @Override
     public FeatureType getFeatureType() {
-        // TODO Auto-generated method stub
-        return null;
+        return FeatureType.PROPERTY;
     }
 
 }
@@ -234,7 +233,7 @@ public class MovieSpecification extends TestProxySpecification {
     }
 
     @Override
-    public String getSingularName() {
+    public String getName() {
         return "Movie";
     }
 

@@ -38,6 +38,7 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
@@ -77,7 +78,9 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public void addSubclass(final ObjectSpecification specification) {}
+    public FeatureType getFeatureType() {
+        return FeatureType.OBJECT;
+    }
 
     @Override
     public void clearDirty(final ObjectAdapter object) {}
@@ -105,7 +108,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public List<ObjectAction> getServiceActionsFor(final ObjectActionType... type) {
+    public List<ObjectAction> getServiceActionsReturning(final ObjectActionType... type) {
         return null;
     }
 
@@ -211,13 +214,13 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public String getSingularName() {
+    public String getName() {
         return name + " (singular)";
     }
 
     @Override
     public String getDescription() {
-        return getSingularName();
+        return getName();
     }
 
     @Override

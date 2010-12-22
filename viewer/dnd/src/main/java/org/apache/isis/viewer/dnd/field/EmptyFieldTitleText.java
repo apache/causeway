@@ -39,7 +39,7 @@ class EmptyFieldTitleText extends TitleText {
 
     @Override
     protected String title() {
-        return ((ObjectContent) content).getSpecification().getSingularName();
+        return ((ObjectContent) content).getSpecification().getName();
     }
 
 }

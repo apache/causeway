@@ -96,16 +96,7 @@ public final class ArrayUtils {
 	    return combinedList.toArray(arrays[0]); // using 1st element of arrays to specify the type
 	}
 
-    public static <T> List<T> combine(final List<T>... lists) {
-        final List<T> combinedList = new ArrayList<T>();
-        for (final List<T> list : lists) {
-            combinedList.addAll(list);
-        }
-        return combinedList;
-    }
-
-
-	/**
+    /**
 	 * Creates a mutable copy of the provided array.
 	 */
 	public static <T> List<T> asList(final T[] items) {

@@ -21,17 +21,18 @@
 package org.apache.isis.core.progmodel.facets.object.ident.plural;
 
 import org.apache.isis.applib.annotation.Plural;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class PluralAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public PluralAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override

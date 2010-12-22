@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.object.ident.singular;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
 
 
 public class NamedFacetViaMethod extends NamedFacetAbstract {

@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.runtime.i18n.resourcebundle.facets.DescribedAsFacetWrapI18n;
 import org.apache.isis.core.runtime.i18n.resourcebundle.facets.HelpFacetWrapI18n;
 import org.apache.isis.core.runtime.i18n.resourcebundle.facets.NamedFacetWrapI18n;
@@ -41,12 +41,12 @@ public class I18nFacetDecorator extends FacetDecoratorAbstract {
     }
 
     public Facet decorate(final Facet facet, FacetHolder requiredHolder) {
-    	if (!(requiredHolder instanceof Identified)) {
+    	if (!(requiredHolder instanceof IdentifiedHolder)) {
             return null;
         }
         
-        Identified identified = (Identified) requiredHolder;
-        final Identifier identifier = identified.getIdentifier();
+        IdentifiedHolder identifiedHolder = (IdentifiedHolder) requiredHolder;
+        final Identifier identifier = identifiedHolder.getIdentifier();
 
         final Class<?> facetType = facet.facetType();
         if (facetType == NamedFacet.class) {

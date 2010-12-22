@@ -25,14 +25,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.ChoicesUtils;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 
 
@@ -73,7 +73,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
 
     @Override
     public Object[] getChoices(final ObjectAdapter owningAdapter) {
-        final Object options = ObjectInvokeUtils.invoke(method, owningAdapter);
+        final Object options = AdapterInvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
             return new Object[0];
         }
@@ -82,7 +82,7 @@ public class ActionParameterChoicesFacetViaMethod extends ActionParameterChoices
         }
         else {
             final ObjectSpecification specification = getSpecification(choicesType);
-            return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
+            return ChoicesUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
         }
     }
 

@@ -20,18 +20,18 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 
 
 public abstract class FacetAbstract implements Facet {
@@ -44,12 +44,12 @@ public abstract class FacetAbstract implements Facet {
     
     /**
      * Populated in {@link #setFacetHolder(FacetHolder)} if the provided holder
-     * implements {@link Identified}.
+     * implements {@link IdentifiedHolder}.
      * 
      * <p>
      * Otherwise is <tt>null</tt>.
      */
-    private Identified identified;
+    private IdentifiedHolder identifiedHolder;
     
     @SuppressWarnings("unchecked")
     public FacetAbstract(
@@ -61,31 +61,36 @@ public abstract class FacetAbstract implements Facet {
         this.derived = derived;
     }
 
+    @Override
     public final Class<? extends Facet> facetType() {
         return facetType;
     }
 
+    @Override
     public FacetHolder getFacetHolder() {
         return holder;
     }
     
+    @Override
     public boolean isDerived() {
     	return derived;
     }
 
     /**
      * Convenience method that returns {@link #getFacetHolder()} downcast to
-     * {@link Identified} if the implementation does indeed inherit from
-     * {@link Identified}, otherwise <tt>null</tt>. 
+     * {@link IdentifiedHolder} if the implementation does indeed inherit from
+     * {@link IdentifiedHolder}, otherwise <tt>null</tt>. 
      */
-    public Identified getIdentified() {
-        return identified;
+    public IdentifiedHolder getIdentified() {
+        return identifiedHolder;
     }
 
-	public Facet getUnderlyingFacet() {
+	@Override
+    public Facet getUnderlyingFacet() {
 		return underlyingFacet;
 	}
-	public void setUnderlyingFacet(Facet underlyingFacet) {
+	@Override
+    public void setUnderlyingFacet(Facet underlyingFacet) {
 		Ensure.ensureThatArg(underlyingFacet.facetType(), IsisMatchers.classEqualTo(facetType));
 		this.underlyingFacet = underlyingFacet;
 	}
@@ -96,6 +101,7 @@ public abstract class FacetAbstract implements Facet {
      * <p>
      * No-op implementations should override and return <tt>true</tt>.
      */
+    @Override
     public boolean isNoop() {
         return false;
     }
@@ -108,41 +114,15 @@ public abstract class FacetAbstract implements Facet {
      * Implementations that don't wish to replace none no-op implementations should override and return
      * <tt>false</tt>.
      */
+    @Override
     public boolean alwaysReplace() {
         return true;
     }
 
+    @Override
     public void setFacetHolder(final FacetHolder facetHolder) {
         this.holder = facetHolder;
-        this.identified = holder instanceof Identified? (Identified)holder: null;
-    }
-
-    @Override
-    public String toString() {
-        String details = "";
-        if (ValidatingInteractionAdvisor.class.isAssignableFrom(getClass())) {
-            details += "Validating";
-        }
-        if (DisablingInteractionAdvisor.class.isAssignableFrom(getClass())) {
-            details += (details.length() > 0 ? ";" : "") + "Disabling";
-        }
-        if (HidingInteractionAdvisor.class.isAssignableFrom(getClass())) {
-            details += (details.length() > 0 ? ";" : "") + "Hiding";
-        }
-        if (!"".equals(details)) {
-            details = "interaction=" + details + ",";
-        }
-
-        final String className = getClass().getName();
-        final String stringValues = toStringValues();
-        if (getClass() != facetType()) {
-            final String facetType = facetType().getName();
-            details += "type=" + facetType.substring(facetType.lastIndexOf('.') + 1);
-        }
-        if (!"".equals(stringValues)) {
-        	details += ",";
-        }
-        return className.substring(className.lastIndexOf('.') + 1) + "[" + details + stringValues + "]";
+        this.identifiedHolder = holder instanceof IdentifiedHolder? (IdentifiedHolder)holder: null;
     }
 
     /**
@@ -174,4 +154,33 @@ public abstract class FacetAbstract implements Facet {
     protected String toStringValues() {
         return "";
     }
+
+    @Override
+    public String toString() {
+        String details = "";
+        if (ValidatingInteractionAdvisor.class.isAssignableFrom(getClass())) {
+            details += "Validating";
+        }
+        if (DisablingInteractionAdvisor.class.isAssignableFrom(getClass())) {
+            details += (details.length() > 0 ? ";" : "") + "Disabling";
+        }
+        if (HidingInteractionAdvisor.class.isAssignableFrom(getClass())) {
+            details += (details.length() > 0 ? ";" : "") + "Hiding";
+        }
+        if (!"".equals(details)) {
+            details = "interaction=" + details + ",";
+        }
+
+        final String className = getClass().getName();
+        final String stringValues = toStringValues();
+        if (getClass() != facetType()) {
+            final String facetType = facetType().getName();
+            details += "type=" + facetType.substring(facetType.lastIndexOf('.') + 1);
+        }
+        if (!"".equals(stringValues)) {
+        	details += ",";
+        }
+        return className.substring(className.lastIndexOf('.') + 1) + "[" + details + stringValues + "]";
+    }
+
 }

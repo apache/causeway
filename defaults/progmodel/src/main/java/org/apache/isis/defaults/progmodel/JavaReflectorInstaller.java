@@ -32,6 +32,7 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.metamodel.specloader.ReflectorConstants;
@@ -83,7 +84,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     /**
      * Should call {@link #addFacetDecoratorInstaller(ReflectorDecoratorInstaller)} prior to calling this.
      */
-    public JavaReflector createReflector() {
+    public ObjectReflectorDefault createReflector() {
         final ClassSubstitutor classSubstitutor = createClassSubstitutor(getConfiguration());
         final CollectionTypeRegistry collectionTypeRegistry = createCollectionTypeRegistry(getConfiguration());
         final SpecificationTraverser specificationTraverser = createSpecificationTraverser(getConfiguration());
@@ -91,7 +92,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
         final Set<FacetDecorator> facetDecorators = createFacetDecorators(getConfiguration());
         final MetaModelValidator metaModelValidator = createMetaModelValidator(getConfiguration());
 
-		final JavaReflector reflector = doCreateReflector(getConfiguration(), classSubstitutor, collectionTypeRegistry,
+		final ObjectReflectorDefault reflector = doCreateReflector(getConfiguration(), classSubstitutor, collectionTypeRegistry,
                 specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
 
         return reflector;
@@ -280,9 +281,9 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     }
 
     /**
-     * Hook method to allow for other implementations (still based on {@link JavaReflector}).
+     * Hook method to allow for other implementations (still based on {@link ObjectReflectorDefault}).
      */
-    protected JavaReflector doCreateReflector(
+    protected ObjectReflectorDefault doCreateReflector(
             final IsisConfiguration configuration,
             final ClassSubstitutor classSubstitutor,
             final CollectionTypeRegistry collectionTypeRegistry,
@@ -290,7 +291,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
             final ProgrammingModelFacets programmingModelFacets, 
             final Set<FacetDecorator> facetDecorators, 
             final MetaModelValidator metaModelValidator) {
-        return new JavaReflector(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
+        return new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
     }
 
     // /////////////////////////////////////////////////////

@@ -594,7 +594,7 @@ public final class XmlSnapshot {
 
         LOG.debug("objectToElement(NO): create element and nof:title");
         final Element element = schema.createElement(getXmlDocument(), nos.getShortName(), nos.getFullName(), nos
-                .getSingularName(), nos.getPluralName());
+                .getName(), nos.getPluralName());
         nofMeta.appendNofTitle(element, object.titleString());
 
         LOG.debug("objectToElement(NO): create XS element for NOF class");

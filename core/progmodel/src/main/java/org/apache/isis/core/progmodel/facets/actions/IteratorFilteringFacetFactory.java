@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodScope;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 /**
@@ -40,7 +40,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 public class IteratorFilteringFacetFactory extends FacetFactoryAbstract implements MethodFilteringFacetFactory {
 
     public IteratorFilteringFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override

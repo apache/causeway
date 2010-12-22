@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 
@@ -34,7 +34,7 @@ import org.apache.isis.core.runtime.context.IsisContext;
 public class AuthorizationFacetFactoryImpl extends FacetFactoryAbstract {
 
 	public AuthorizationFacetFactoryImpl() {
-        super(ObjectFeatureType.EVERYTHING_BUT_PARAMETERS);
+        super(FeatureType.EVERYTHING_BUT_PARAMETERS);
     }
     
     @Override

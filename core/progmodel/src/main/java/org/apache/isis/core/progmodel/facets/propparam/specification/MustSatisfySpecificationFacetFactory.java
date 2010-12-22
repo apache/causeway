@@ -26,16 +26,16 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.MustSatisfy;
 import org.apache.isis.applib.spec.Specification;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 public class MustSatisfySpecificationFacetFactory  extends AnnotationBasedFacetFactoryAbstract {
 
     public MustSatisfySpecificationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
+        super(FeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
     }
 
     @Override

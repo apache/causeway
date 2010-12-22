@@ -75,7 +75,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
 
         if (!spec.isOfType(targetType)) {
             // TODO: move logic into Facet
-            return new Veto(String.format("Can only drop objects of type %s", targetType.getSingularName()));
+            return new Veto(String.format("Can only drop objects of type %s", targetType.getName()));
         }
 
         if (getParent().isPersistent() && adapter.isTransient()) {
@@ -189,7 +189,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
 
     public String getDescription() {
         final String name = getFieldName();
-        String type = getField().getSpecification().getSingularName();
+        String type = getField().getSpecification().getName();
         type = name.indexOf(type) == -1 ? " (" + type + ")" : "";
         final String description = getOneToOneAssociation().getDescription();
         return name + type + " " + description;

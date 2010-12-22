@@ -74,7 +74,7 @@ public class PersistentObjectMapping implements ObjectMapping {
 
     @Override
     public String toString() {
-        return (specification == null ? "null" : specification.getSingularName()) + " : " + oid + " : " + version;
+        return (specification == null ? "null" : specification.getName()) + " : " + oid + " : " + version;
     }
 
     public Version getVersion() {

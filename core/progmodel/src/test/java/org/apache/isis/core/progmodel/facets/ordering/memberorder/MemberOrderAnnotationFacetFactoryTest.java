@@ -26,7 +26,8 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 
@@ -49,12 +50,12 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertFalse(contains(featureTypes, FeatureType.OBJECT));
+        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
+        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
+        assertTrue(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testMemberOrderAnnotationPickedUpOnProperty() {

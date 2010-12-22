@@ -36,11 +36,12 @@ import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facets.When;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.PropertyUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.PropertyVisibilityContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
@@ -52,7 +53,6 @@ import org.apache.isis.core.progmodel.facets.hide.HiddenFacetNever;
 import org.apache.isis.core.progmodel.facets.hide.HideForContextFacetNone;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetAbstract;
 import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
-import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
 import org.apache.isis.core.runtime.testsystem.TestProxySystem;
 
 

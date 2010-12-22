@@ -23,9 +23,6 @@ package org.apache.isis.core.metamodel.specloader.classsubstitutor;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAware;
-
 import com.google.common.collect.Lists;
 
 public class ClassSubstitutorComposite implements ClassSubstitutor {

@@ -29,9 +29,9 @@ import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.MethodPrefixBasedFacetFactory;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.progmodel.facets.actions.DescribedAsFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.NamedFacetViaMethod;
@@ -69,9 +69,9 @@ public abstract class MethodPrefixBasedFacetFactoryAbstract extends FacetFactory
 
     private final List<String> prefixes;
 
-    public MethodPrefixBasedFacetFactoryAbstract(final String[] prefixes, final List<ObjectFeatureType> featureTypes) {
+    public MethodPrefixBasedFacetFactoryAbstract(final String[] prefixes, final List<FeatureType> featureTypes) {
         super(featureTypes);
-        this.prefixes = ListUtils.combine(prefixes, PREFIXES);
+        this.prefixes = ListUtils.merge(prefixes, PREFIXES);
     }
 
     @Override

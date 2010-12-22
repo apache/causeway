@@ -49,7 +49,7 @@ public class ElementType extends AbstractElementProcessor {
         }
         
         TypeOfFacet facet =  (TypeOfFacet) collection.getTypeOfFacet();
-        String name = facet.valueSpec().getSingularName();
+        String name = facet.valueSpec().getName();
         
         request.appendHtml(name);
     }

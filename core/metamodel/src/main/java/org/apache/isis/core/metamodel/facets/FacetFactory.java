@@ -24,19 +24,20 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+
 
 
 public interface FacetFactory {
 
     /**
-     * The {@link ObjectFeatureType feature type}s that this facet factory can create {@link Facet}s for.
+     * The {@link FeatureType feature type}s that this facet factory can create {@link Facet}s for.
      * 
      * <p>
      * Used by the Java5 Reflector's <tt>ProgrammingModel</tt> to reduce the number of {@link FacetFactory factory}s that are
      * queried when building up the meta-model.
      */
-    List<ObjectFeatureType> getFeatureTypes();
+    List<FeatureType> getFeatureTypes();
 
     /**
      * Process the class, and return the correctly setup annotation if present.

@@ -21,7 +21,6 @@
 package org.apache.isis.core.metamodel.encoding;
 
 import java.io.IOException;
-import java.io.OutputStream;
 
 import org.apache.log4j.Logger;
 

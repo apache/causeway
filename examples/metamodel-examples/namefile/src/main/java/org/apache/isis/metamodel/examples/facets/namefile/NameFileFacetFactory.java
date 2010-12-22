@@ -28,8 +28,8 @@ import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 
 
 public class NameFileFacetFactory implements FacetFactory {
@@ -46,8 +46,8 @@ public class NameFileFacetFactory implements FacetFactory {
     }
 
     @Override
-    public List<ObjectFeatureType> getFeatureTypes() {
-        return ObjectFeatureType.EVERYTHING_BUT_PARAMETERS;
+    public List<FeatureType> getFeatureTypes() {
+        return FeatureType.EVERYTHING_BUT_PARAMETERS;
     }
 
     
@@ -69,10 +69,10 @@ public class NameFileFacetFactory implements FacetFactory {
      */
     @Override
     public boolean process(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-    	if (!(holder instanceof Identified)) {
+    	if (!(holder instanceof IdentifiedHolder)) {
     		return false;
     	}
-		Identified identifiedHolder = (Identified) holder;
+		IdentifiedHolder identifiedHolder = (IdentifiedHolder) holder;
         Class<?> declaringClass = method.getDeclaringClass();
         String memberName = identifiedHolder.getIdentifier().getMemberName();
         return FacetUtil.addFacet(create(declaringClass, memberName, holder));

@@ -8,7 +8,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodScope;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 public class RemoveGroovyMethodsFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
 	
@@ -18,7 +18,7 @@ public class RemoveGroovyMethodsFacetFactory extends FacetFactoryAbstract implem
 	private IsisConfiguration configuration;
 
 	public RemoveGroovyMethodsFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 	
 	static class MethodSpec {

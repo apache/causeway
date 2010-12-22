@@ -24,18 +24,18 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Optional;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class OptionalAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public OptionalAnnotationFacetFactory() {
-        super(ObjectFeatureType.PROPERTIES_AND_PARAMETERS);
+        super(FeatureType.PROPERTIES_AND_PARAMETERS);
     }
 
     @Override

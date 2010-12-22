@@ -21,7 +21,10 @@
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
@@ -32,11 +35,8 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ParseValueContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.IsisUtils;
 
 
 /**
@@ -84,7 +84,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 			validate(parseValueContext);
 		}
 
-        Object context = IsisUtils.unwrap(contextAdapter);
+        Object context = AdapterUtils.unwrap(contextAdapter);
 
         getDependencyInjector().injectDependenciesInto(parser);
 
@@ -116,7 +116,7 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
     @Override
     @SuppressWarnings("unchecked")
 	public String parseableTitle(final ObjectAdapter contextAdapter) {
-        Object pojo = IsisUtils.unwrap(contextAdapter);
+        Object pojo = AdapterUtils.unwrap(contextAdapter);
         
         getDependencyInjector().injectDependenciesInto(parser);
 		return parser.parseableTitleOf(pojo);

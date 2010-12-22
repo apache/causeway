@@ -20,16 +20,16 @@
 
 package org.apache.isis.core.progmodel.facets.collections;
 
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAware;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
-import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 
@@ -40,7 +40,7 @@ public class CollectionFacetFactory extends FacetFactoryAbstract implements Coll
 	private AdapterMap adapterMap;
 
     public CollectionFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
 

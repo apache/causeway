@@ -39,13 +39,13 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactoryAware;
@@ -207,7 +207,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
     }
 
     @Override
-    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, Identified identified) {
+    public ObjectAdapter adapterFor(final Object pojo, final ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
 
         // attempt to locate adapter for the pojo
         final ObjectAdapter adapter = getAdapterFor(pojo);
@@ -227,9 +227,9 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         // the reference to them are aggregated.
         //
         // can only do this if have been given an ownerAdapter & identified arguments to act as context.
-        if (ownerAdapter != null && identified != null) {
-            if (specIsAggregated(noSpec) || referenceIsAggregated(identified)) {
-                ObjectAdapter newAdapter = createAggregatedAdapter(pojo, ownerAdapter, identified);
+        if (ownerAdapter != null && identifiedHolder != null) {
+            if (specIsAggregated(noSpec) || referenceIsAggregated(identifiedHolder)) {
+                ObjectAdapter newAdapter = createAggregatedAdapter(pojo, ownerAdapter, identifiedHolder);
                 return mapAndInjectServices(newAdapter);
             }
         }
@@ -242,8 +242,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         return noSpec.containsFacet(AggregatedFacet.class);
     }
 
-    private boolean referenceIsAggregated(Identified identified) {
-        return identified.containsFacet(AggregatedFacet.class);
+    private boolean referenceIsAggregated(IdentifiedHolder identifiedHolder) {
+        return identifiedHolder.containsFacet(AggregatedFacet.class);
     }
 
     @Override
@@ -494,9 +494,9 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
      * (specifically, the XML object store at time of writing) do not support aggregated Oids for anything other than
      * collections.
      */
-    protected ObjectAdapter createAggregatedAdapter(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
+    protected ObjectAdapter createAggregatedAdapter(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
 
-        Identifier identifier = identified.getIdentifier();
+        Identifier identifier = identifiedHolder.getIdentifier();
         ensureMapsConsistent(ownerAdapter);
         Assert.assertNotNull(pojo);
 
@@ -507,7 +507,7 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         // we copy over the type onto the adapter itself
         // [not sure why this is really needed, surely we have enough info in the adapter
         // to look this up on the fly?]
-        aggregatedAdapter.setTypeOfFacet(identified.getFacet(TypeOfFacet.class));
+        aggregatedAdapter.setTypeOfFacet(identifiedHolder.getFacet(TypeOfFacet.class));
 
         // same locking as parent
         aggregatedAdapter.setOptimisticLock(ownerAdapter.getVersion());

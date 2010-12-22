@@ -69,7 +69,7 @@ public class ServiceObject extends AbstractContent {
 
     @Override
     public String getDescription() {
-        final String specName = getSpecification().getSingularName();
+        final String specName = getSpecification().getName();
         final String objectTitle = getObject().titleString();
         return specName + (specName.equalsIgnoreCase(objectTitle) ? "" : ": " + objectTitle) + " "
                 + getSpecification().getDescription();
@@ -130,7 +130,7 @@ public class ServiceObject extends AbstractContent {
 
     @Override
     public String windowTitle() {
-        return (isTransient() ? "UNSAVED " : "") + getSpecification().getSingularName();
+        return (isTransient() ? "UNSAVED " : "") + getSpecification().getName();
     }
 
     @Override

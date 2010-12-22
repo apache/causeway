@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
@@ -42,7 +42,7 @@ public class DeleteCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private static final String[] PREFIXES = { DELETED_PREFIX, DELETING_PREFIX, };
 
     public DeleteCallbackFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.OBJECTS_ONLY);
+        super(PREFIXES, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

@@ -23,19 +23,19 @@ package org.apache.isis.core.progmodel.facets.propparam.validate.mask;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Mask;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
 
 
 public class MaskAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MaskAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
+        super(FeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
     }
 
     /**

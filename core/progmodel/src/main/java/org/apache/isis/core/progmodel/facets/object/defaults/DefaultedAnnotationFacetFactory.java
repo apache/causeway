@@ -24,20 +24,20 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAware;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.config.IsisConfigurationAware;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract implements IsisConfigurationAware, DependencyInjectorAware, AdapterMapAware {
@@ -47,7 +47,7 @@ public class DefaultedAnnotationFacetFactory extends AnnotationBasedFacetFactory
     private AdapterMap adapterMap;
 
 	public DefaultedAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
+        super(FeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
     }
 
     @Override

@@ -39,10 +39,10 @@ import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFace
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetViaMethod;
@@ -62,7 +62,6 @@ import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAbstract;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacet;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
-import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
 
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -88,12 +87,12 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertFalse(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        assertTrue(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
@@ -649,13 +648,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method default0Method = findMethod(Customer.class, "default0SomeAction", new Class[] {});
         Method default1Method = findMethod(Customer.class, "default1SomeAction", new Class[] {});
 
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(Customer.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(Customer.class, actionMethod);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
 
-        final Facet facet0 = facetHolderWithParms.getChildren().get(0).getFacet(ActionParameterDefaultsFacet.class);
+        final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod0 = (ActionParameterDefaultsFacetViaMethod) facet0;
@@ -663,7 +662,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(default0Method));
 
-        final Facet facet1 = facetHolderWithParms.getChildren().get(1).getFacet(ActionParameterDefaultsFacet.class);
+        final Facet facet1 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterDefaultsFacet.class);
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterDefaultsFacetViaMethod);
         final ActionParameterDefaultsFacetViaMethod actionDefaultFacetViaMethod1 = (ActionParameterDefaultsFacetViaMethod) facet1;
@@ -696,13 +695,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method choices0Method = findMethod(Customer.class, "choices0SomeAction", new Class[] {});
         Method choices1Method = findMethod(Customer.class, "choices1SomeAction", new Class[] {});
 
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(Customer.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(Customer.class, actionMethod);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
 
-        final Facet facet0 = facetHolderWithParms.getChildren().get(0).getFacet(ActionParameterChoicesFacet.class);
+        final Facet facet0 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet0);
         assertTrue(facet0 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet0;
@@ -710,7 +709,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(choices0Method));
 
-        final Facet facet1 = facetHolderWithParms.getChildren().get(1).getFacet(ActionParameterChoicesFacet.class);
+        final Facet facet1 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet1;
@@ -734,7 +733,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method actionMethod = findMethod(CustomerEx.class, "someAction", new Class[] { int.class, long.class });
 
 
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(CustomerEx.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(CustomerEx.class, actionMethod);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
@@ -782,7 +781,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         Method disableMethod = findMethod(CustomerEx.class, "disableSomeAction", new Class[] {});
 
 
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(CustomerEx.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(CustomerEx.class, actionMethod);
 
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
@@ -791,13 +790,13 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         final Facet facet0 = facetHolderWithParms.getFacet(ActionInvocationFacet.class);
         assertNotNull(facet0);
 
-        final Facet facet1 = facetHolderWithParms.getChildren().get(0).getFacet(ActionParameterChoicesFacet.class);
+        final Facet facet1 = facetHolderWithParms.getParameters().get(0).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet1);
         assertTrue(facet1 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod0 = (ActionParameterChoicesFacetViaMethod) facet1;
         assertEquals(choices0Method, actionChoicesFacetViaMethod0.getMethods().get(0));
 
-        final Facet facet2 = facetHolderWithParms.getChildren().get(1).getFacet(ActionParameterChoicesFacet.class);
+        final Facet facet2 = facetHolderWithParms.getParameters().get(1).getFacet(ActionParameterChoicesFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof ActionParameterChoicesFacetViaMethod);
         final ActionParameterChoicesFacetViaMethod actionChoicesFacetViaMethod1 = (ActionParameterChoicesFacetViaMethod) facet2;
@@ -837,7 +836,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(Customer.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(Customer.class, actionMethod);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {
@@ -871,7 +870,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(Customer.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(Customer.class, actionMethod);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {
@@ -905,7 +904,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(Customer.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(Customer.class, actionMethod);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {
@@ -939,7 +938,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class, long.class });
-        ObjectMemberPeer facetHolderWithParms = ObjectMemberPeerImpl.createActionPeer(Customer.class, actionMethod, void.class, reflector);
+        FacetedMethod facetHolderWithParms = FacetedMethod.createActionPeer(Customer.class, actionMethod);
         reflector.setLoadSpecificationStringReturn(voidNoSpec);
 
         try {

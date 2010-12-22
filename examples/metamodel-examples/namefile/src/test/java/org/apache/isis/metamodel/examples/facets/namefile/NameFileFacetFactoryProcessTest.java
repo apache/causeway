@@ -34,7 +34,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 
 import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
 
@@ -51,7 +51,7 @@ public class NameFileFacetFactoryProcessTest {
     
     private NameFileFacetFactory facetFactory;
     private MethodRemover mockMethodRemover;
-    private Identified mockFacetHolder;
+    private IdentifiedHolder mockFacetHolder;
 
     private Class<DomainObjectWithNameFileEntry> domainObjectWithNameFileEntryClass;
     private Method domainObjectWithNameFileEntryMethod;
@@ -63,7 +63,7 @@ public class NameFileFacetFactoryProcessTest {
     public void setUp() throws Exception {
         facetFactory = new NameFileFacetFactory();
         mockMethodRemover = mockery.mock(MethodRemover.class);
-        mockFacetHolder = mockery.mock(Identified.class);
+        mockFacetHolder = mockery.mock(IdentifiedHolder.class);
         
         domainObjectWithNameFileEntryClass = DomainObjectWithNameFileEntry.class;
         domainObjectWithNameFileEntryMethod = domainObjectWithNameFileEntryClass.getMethod("getLastName");

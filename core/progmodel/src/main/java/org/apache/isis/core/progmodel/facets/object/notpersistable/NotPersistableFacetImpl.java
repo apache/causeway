@@ -22,6 +22,7 @@ package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 

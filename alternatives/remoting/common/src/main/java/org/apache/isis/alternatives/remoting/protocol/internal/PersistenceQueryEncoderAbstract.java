@@ -28,7 +28,7 @@ import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecode
 import org.apache.isis.alternatives.remoting.common.protocol.PersistenceQueryEncoder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 

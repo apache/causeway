@@ -22,9 +22,6 @@ package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MultiTypedFacet;
 
 
 /**

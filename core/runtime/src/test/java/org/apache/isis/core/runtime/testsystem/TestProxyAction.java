@@ -31,12 +31,12 @@ import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facets.FacetHolderNoop;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -259,9 +259,6 @@ public class TestProxyAction extends FacetHolderNoop implements ObjectAction {
 		return runtimeContext;
 	}
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
-     */
     @Override
     public FeatureType getFeatureType() {
         return FeatureType.ACTION;

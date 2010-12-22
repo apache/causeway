@@ -20,9 +20,6 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.DESTROYED;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.GHOST;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.NEW;
@@ -37,12 +34,13 @@ import static org.apache.isis.core.metamodel.adapter.ResolveState.SERIALIZING_TR
 import static org.apache.isis.core.metamodel.adapter.ResolveState.TRANSIENT;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.UPDATING;
 import static org.apache.isis.core.metamodel.adapter.ResolveState.VALUE;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.apache.isis.core.metamodel.adapter.ResolveException;
-import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;

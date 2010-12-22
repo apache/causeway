@@ -23,18 +23,18 @@ package org.apache.isis.core.progmodel.facets.propparam.validate.maxlength;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.MaxLength;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class MaxLengthAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public MaxLengthAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
+        super(FeatureType.OBJECTS_PROPERTIES_AND_PARAMETERS);
     }
 
     /**

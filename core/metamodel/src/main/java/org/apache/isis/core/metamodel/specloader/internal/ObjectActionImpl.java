@@ -32,13 +32,18 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.exceptions.ModelException;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
@@ -46,6 +51,7 @@ import org.apache.isis.core.metamodel.facets.actions.defaults.ActionParameterDef
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
@@ -53,21 +59,16 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
+import org.apache.isis.core.metamodel.peer.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectMemberAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectAction {
@@ -82,7 +83,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     }
 
     private final ServicesProvider servicesProvider;
-    private final ObjectMemberPeer memberPeer;
+    private final FacetedMethod memberPeer;
     
     /**
      * Lazily initialized by {@link #getParameters()} (so don't use directly!)
@@ -105,14 +106,13 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
     // //////////////////////////////////////////////////////////////////
 
     public ObjectActionImpl(
-    		final String methodId, 
-    		final ObjectMemberPeer memberPeer, 
+    		final FacetedMethod memberPeer, 
             final AuthenticationSessionProvider authenticationSessionProvider,
             final SpecificationLookup specificationLookup, 
             final AdapterMap adapterManager,
             final ServicesProvider servicesProvider,
             final QuerySubmitter querySubmitter) {
-        super(methodId, memberPeer, FeatureType.ACTION, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
+        super(memberPeer.getIdentifier().getMemberName(), memberPeer, FeatureType.ACTION, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
         this.memberPeer = memberPeer;
         this.servicesProvider = servicesProvider;
     }
@@ -215,7 +215,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public int getParameterCount() {
-        return memberPeer.getChildren().size();
+        return memberPeer.getParameters().size();
     }
 
     @Override
@@ -240,7 +240,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
         if (this.parameters == null) {
             final int parameterCount = getParameterCount();
             final List<ObjectActionParameter> parameters = Lists.newArrayList();
-            final List<TypedHolder> paramPeers = memberPeer.getChildren();
+            final List<FacetedMethodParameter> paramPeers = memberPeer.getParameters();
             for (int i = 0; i < parameterCount; i++) {
                 TypedHolder paramPeer = paramPeers.get(i);
                 final ObjectSpecification specification = ObjectMemberAbstract.getSpecification(getSpecificationLookup(), paramPeer.getType());

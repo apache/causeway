@@ -24,10 +24,10 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
 
 public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements ImperativeFacet {
@@ -58,7 +58,7 @@ public class TitleFacetViaTitleMethod extends TitleFacetAbstract implements Impe
 
     public String title(final ObjectAdapter owningAdapter) {
         try {
-			return (String) ObjectInvokeUtils.invoke(method, owningAdapter);
+			return (String) AdapterInvokeUtils.invoke(method, owningAdapter);
 		} catch (RuntimeException ex) {
 			return null;
 		}

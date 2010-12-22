@@ -22,8 +22,11 @@ package org.apache.isis.core.metamodel.runtimecontext.spec.feature;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -33,18 +36,16 @@ import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.core.metamodel.util.NameUtils;
 
 
@@ -56,7 +57,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     protected final String defaultName;
     private final String id;
-    private final Identified facetHolder;
+    private final IdentifiedHolder facetHolder;
     private final FeatureType featureType;
     private final AuthenticationSessionProvider authenticationSessionProvider;
     private final SpecificationLookup specificationLookup;
@@ -65,8 +66,8 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
 
     protected ObjectMemberAbstract(
     		final String id, 
-    		final Identified facetHolder, 
-    		final FeatureType memberType, 
+    		final IdentifiedHolder facetHolder, 
+    		final FeatureType featureType, 
             final AuthenticationSessionProvider authenticationSessionProvider,
     		final SpecificationLookup specificationLookup,
             final AdapterMap adapterManager,
@@ -77,7 +78,7 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.id = id;
         this.defaultName = NameUtils.naturalName(id);
         this.facetHolder = facetHolder;
-        this.featureType = memberType;
+        this.featureType = featureType;
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterMap = adapterManager;

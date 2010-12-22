@@ -27,14 +27,14 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 
 
 public class TypicalLengthDerivedFromTypeFacetFactory extends FacetFactoryAbstract {
 
     public TypicalLengthDerivedFromTypeFacetFactory() {
-        super(ObjectFeatureType.PROPERTIES_AND_PARAMETERS);
+        super(FeatureType.PROPERTIES_AND_PARAMETERS);
     }
 
     @Override

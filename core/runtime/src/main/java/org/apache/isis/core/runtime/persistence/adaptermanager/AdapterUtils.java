@@ -23,9 +23,9 @@ package org.apache.isis.core.runtime.persistence.adaptermanager;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 
 
 public final class AdapterUtils {

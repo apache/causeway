@@ -45,7 +45,7 @@ public class Type extends AbstractElementProcessor {
         request.appendDebug(" for " + object); 
         
         ObjectSpecification specification = object.getSpecification();
-        String name = showPlural != null ? specification.getPluralName() : specification.getSingularName();
+        String name = showPlural != null ? specification.getPluralName() : specification.getName();
         
         request.appendHtml(name);
     }

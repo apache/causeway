@@ -34,11 +34,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
-import org.apache.isis.core.progmodel.facets.propparam.specification.MustSatisfySpecificationFacet;
 
 
 @RunWith(JMock.class)
@@ -61,7 +61,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
     
     @Before
     public void setUp() throws Exception {
-        mockHolder = mockery.mock(Identified.class);
+        mockHolder = mockery.mock(IdentifiedHolder.class);
         requiresFirstLetterToBeUpperCase = new SpecificationRequiresFirstLetterToBeUpperCase();
         
         facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), mockHolder);

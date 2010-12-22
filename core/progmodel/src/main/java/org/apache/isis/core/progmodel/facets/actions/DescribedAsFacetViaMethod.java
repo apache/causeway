@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
 
 

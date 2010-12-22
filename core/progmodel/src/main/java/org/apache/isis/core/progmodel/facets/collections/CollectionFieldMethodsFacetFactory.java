@@ -28,17 +28,17 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAware;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtierAware;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtierAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
@@ -80,7 +80,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
     private ObjectDirtier objectDirtier;
 
     public CollectionFieldMethodsFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.COLLECTIONS_ONLY);
+        super(PREFIXES, FeatureType.COLLECTIONS_ONLY);
     }
 
     @Override
@@ -253,7 +253,7 @@ public class CollectionFieldMethodsFacetFactory extends PropertyOrCollectionIden
             final Class<?> cls,
             final String capitalizedName,
             final Class<?> returnType,
-            final ObjectMemberPeerImpl collection) {
+            final FacetedMethod collection) {
         final Method method = findMethod(cls, OBJECT, CHOICES_PREFIX + capitalizedName, Object[].class, NO_PARAMETERS_TYPES);
         removeMethod(methodRemover, method);
         if (method == null) {

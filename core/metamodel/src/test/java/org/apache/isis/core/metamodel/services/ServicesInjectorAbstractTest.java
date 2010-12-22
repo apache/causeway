@@ -30,8 +30,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.metamodel.services.ServicesInjectorAbstract;
 
 @RunWith(JMock.class)
 public class ServicesInjectorAbstractTest {

@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.google.inject.internal.Lists;
 
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectActionSet;
+import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 

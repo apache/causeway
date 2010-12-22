@@ -21,7 +21,7 @@
 package org.apache.isis.core.runtime.persistence.objectfactory;
 
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectInstantiationException;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 
 
 public interface ObjectFactory extends SessionScopedComponent {

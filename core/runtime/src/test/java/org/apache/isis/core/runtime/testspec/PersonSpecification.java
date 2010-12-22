@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
@@ -144,7 +144,7 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public String getSingularName() {
+    public String getName() {
         return "Person";
     }
 

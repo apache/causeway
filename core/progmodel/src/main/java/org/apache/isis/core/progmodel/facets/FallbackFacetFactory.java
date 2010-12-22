@@ -30,9 +30,9 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeerImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetNone;
 import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFacetNone;
 import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedFacetAtDefault;
@@ -71,7 +71,7 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     };
 
     public FallbackFacetFactory() {
-        super(ObjectFeatureType.EVERYTHING);
+        super(FeatureType.EVERYTHING);
     }
 
     public boolean recognizes(final Method method) {
@@ -91,17 +91,18 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
         final FacetHolder holder) {
         final List<Facet> facets = new ArrayList<Facet>();
 
-        if (holder instanceof ObjectMemberPeerImpl) {
+        if (holder instanceof FacetedMethod) {
             facets.add(new NamedFacetNone(holder));
             facets.add(new DescribedAsFacetNone(holder));
             facets.add(new HelpFacetNone(holder));
             
-            ObjectMemberPeerImpl objectMemberPeer = (ObjectMemberPeerImpl) holder;
-            if (objectMemberPeer.getFeatureType().isProperty()) {
+            FacetedMethod facetedMethod = (FacetedMethod) holder;
+            final FeatureType featureType = facetedMethod.getFeatureType();
+            if (featureType.isProperty()) {
                 facets.add(new MaxLengthFacetUnlimited(holder));
                 facets.add(new MultiLineFacetNone(true, holder));
             }
-            if (objectMemberPeer.getFeatureType().isAction()) {
+            if (featureType.isAction()) {
                 facets.add(new ExecutedFacetAtDefault(holder));
                 facets.add(new ActionDefaultsFacetNone(holder));
                 facets.add(new ActionChoicesFacetNone(holder));

@@ -23,9 +23,9 @@ package org.apache.isis.viewer.dnd.view.content;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
-import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.viewer.dnd.drawing.Image;
 
 

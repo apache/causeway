@@ -61,7 +61,7 @@ public class CollectionIcon implements Component {
         writer.print("><img src=\"");
         writer.print(ImageLookup.image(elementSpecification));
         writer.print("\" alt=\"");
-        final String singularName = elementSpecification.getSingularName();
+        final String singularName = elementSpecification.getName();
         writer.print(singularName);
         writer.print(" collection\" />");
         writer.print(collection.titleString());

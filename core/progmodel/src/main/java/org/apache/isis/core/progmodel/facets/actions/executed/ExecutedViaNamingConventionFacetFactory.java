@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.actions.ActionMethodsFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.ExecutedFacetViaNamingConvention;
-import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetInferred;
 
 
 /**
@@ -45,7 +45,7 @@ public class ExecutedViaNamingConventionFacetFactory extends FacetFactoryAbstrac
     private static final String LOCAL_PREFIX = "Local";
 
     public ExecutedViaNamingConventionFacetFactory() {
-        super(ObjectFeatureType.ACTIONS_ONLY);
+        super(FeatureType.ACTIONS_ONLY);
     }
 
     @Override

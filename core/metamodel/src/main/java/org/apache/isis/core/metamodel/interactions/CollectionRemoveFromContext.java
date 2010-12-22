@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.interactions;
 
-import static org.apache.isis.core.metamodel.util.IsisUtils.unwrap;
+import static org.apache.isis.core.metamodel.adapter.AdapterUtils.unwrap;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.events.CollectionRemoveFromEvent;

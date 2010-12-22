@@ -26,7 +26,7 @@ import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 
@@ -49,12 +49,12 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
+        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testImmutableAnnotationPickedUpOnClassAndDefaultsToAlways() {

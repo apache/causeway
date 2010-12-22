@@ -37,7 +37,7 @@ public class OptionFactory {
     public static void addCreateOptions(final ObjectSpecification specification, final UserActionSet options) {
         // TODO do the same as addObjectMenuOptions and collect together all the
         // actions for all the types
-        List<ObjectAction> actions = specification.getServiceActionsFor(ObjectActionType.USER, ObjectActionType.EXPLORATION,
+        List<ObjectAction> actions = specification.getServiceActionsReturning(ObjectActionType.USER, ObjectActionType.EXPLORATION,
                 ObjectActionType.PROTOTYPE, ObjectActionType.DEBUG);
         menuOptions(actions, null, options);
     }

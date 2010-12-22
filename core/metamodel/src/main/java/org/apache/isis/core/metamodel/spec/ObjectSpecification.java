@@ -74,14 +74,14 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
     String getShortName();
 
     /**
+     * Returns the (singular) name for objects of this specification.
+     */
+    String getName();
+    
+    /**
      * Returns the description, if any, of the specification.
      */
     String getDescription();
-
-    /**
-     * Returns the singular name for objects of this specification.
-     */
-    String getSingularName();
 
     /**
      * Returns the title string for the specified object.

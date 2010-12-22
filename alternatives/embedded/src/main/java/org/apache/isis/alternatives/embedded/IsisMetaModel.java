@@ -43,8 +43,8 @@ import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
 import org.apache.isis.core.metamodel.spec.IntrospectableSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.ObjectReflectorAbstract;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
@@ -53,7 +53,6 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
-import org.apache.isis.defaults.progmodel.JavaReflector;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
@@ -75,7 +74,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 	private final List<Class<?>> serviceTypes = new ArrayList<Class<?>>();
 	private State state = State.NOT_INITIALIZED;
 
-	private ObjectReflectorAbstract reflector;
+	private ObjectReflectorDefault reflector;
 	private RuntimeContextForEmbeddedMetaModel runtimeContext;
 
 	private IsisConfiguration configuration;
@@ -125,7 +124,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 	@Override
     public void init() {
 		ensureNotInitialized();
-		reflector = new JavaReflector(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
+		reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
 
 		services = createServices(serviceTypes);
 		runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);

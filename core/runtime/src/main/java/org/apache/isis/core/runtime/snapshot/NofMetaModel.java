@@ -22,7 +22,8 @@ package org.apache.isis.core.runtime.snapshot;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 

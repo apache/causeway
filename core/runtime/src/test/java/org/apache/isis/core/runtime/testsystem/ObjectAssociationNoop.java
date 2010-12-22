@@ -21,20 +21,20 @@
 package org.apache.isis.core.runtime.testsystem;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 
 
 public class ObjectAssociationNoop extends ObjectAssociationAbstract {
@@ -43,10 +43,10 @@ public class ObjectAssociationNoop extends ObjectAssociationAbstract {
     		final String name, 
     		final ObjectSpecification spec, 
     		final AuthenticationSessionProvider authenticationSessionProvider,
-    		final SpecificationLoader specificationLoader, 
+    		final SpecificationLookup specificationLookup, 
     		final AdapterMap adapterManager,
             final QuerySubmitter querySubmitter) {
-        super(name, spec, FeatureType.PROPERTY, new IdentifiedImpl(), authenticationSessionProvider, specificationLoader, adapterManager, querySubmitter);
+        super(name, spec, FeatureType.PROPERTY, new IdentifiedImpl(), authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
     }
 
     @Override

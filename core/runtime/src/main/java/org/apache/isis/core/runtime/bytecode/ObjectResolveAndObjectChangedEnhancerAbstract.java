@@ -26,10 +26,10 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.java5.JavaSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.progmodel.spec.JavaSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
 

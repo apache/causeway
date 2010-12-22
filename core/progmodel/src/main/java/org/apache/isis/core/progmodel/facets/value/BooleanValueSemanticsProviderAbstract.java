@@ -21,12 +21,12 @@
 package org.apache.isis.core.progmodel.facets.value;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
+import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.util.IsisUtils;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 
 
@@ -109,7 +109,7 @@ public abstract class BooleanValueSemanticsProviderAbstract extends ValueSemanti
 
     @Override
     public boolean isSet(final ObjectAdapter adapter) {
-        if (!IsisUtils.exists(adapter)) {
+        if (!AdapterUtils.exists(adapter)) {
             return false;
         }
         final Object object = adapter.getObject();

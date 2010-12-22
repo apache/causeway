@@ -22,8 +22,8 @@ package org.apache.isis.core.progmodel.facets.collections;
 
 import org.apache.commons.collections.Transformer;
 
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
 
 /**
  * Uses the Commons Collection API to transform {@link Object}s into

@@ -65,7 +65,7 @@ public class EditAction implements Action {
             Version formVersion = context.getVersion(version);
             if (formVersion != null && adapterVersion.different(formVersion)) {
                 
-                IsisContext.getMessageBroker().addMessage("The " + adapter.getSpecification().getSingularName() + " was edited " +
+                IsisContext.getMessageBroker().addMessage("The " + adapter.getSpecification().getName() + " was edited " +
                 		"by another user (" + adapterVersion.getUser() +  "). Please  make your changes based on their changes.");
 
                 String view = context.getParameter(ERRORS);

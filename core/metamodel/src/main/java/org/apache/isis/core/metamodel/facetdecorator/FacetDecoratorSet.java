@@ -34,7 +34,10 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.exceptions.ReflectionException;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.spec.IntrospectableSpecificationAbstract;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
+import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
+import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 public class FacetDecoratorSet implements ApplicationScopedComponent {
 
@@ -45,10 +48,12 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 	// init, shutdown
 	// ////////////////////////////////////////////////////////////
 
-	public void init() {
+	@Override
+    public void init() {
 	}
 
-	public void shutdown() {
+	@Override
+    public void shutdown() {
 	}
 
 	// ////////////////////////////////////////////////////////////
@@ -95,7 +100,24 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 	// decorate
 	// ////////////////////////////////////////////////////////////
 
-	public void decorateAllFacets(final FacetHolder holder) {
+    /**
+     * @param holder
+     */
+    public void decorate(IntrospectableSpecificationAbstract holder) {
+        decorateAllFacets(holder);
+        for (ObjectAssociation objectAssociation : holder.getAssociations()) {
+            this.decorateAllFacets(objectAssociation);
+        }
+        for (ObjectAction objectAction : holder.getObjectActionsAll()) {
+            decorateAllFacets(objectAction);
+            final List<ObjectActionParameter> parameters = objectAction.getParameters();
+            for (ObjectActionParameter parameter : parameters) {
+                this.decorateAllFacets(parameter);
+            }
+        }
+    }
+
+	private void decorateAllFacets(final FacetHolder holder) {
 		if (isEmpty()) {
 			return;
 		}
@@ -174,6 +196,8 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 		}
 		str.unindent();
 	}
+
+
 
 }
 

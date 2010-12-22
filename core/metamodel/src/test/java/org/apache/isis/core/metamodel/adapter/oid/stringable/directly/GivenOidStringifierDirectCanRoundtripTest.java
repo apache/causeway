@@ -28,9 +28,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
-import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
 
 public class GivenOidStringifierDirectCanRoundtripTest {
 	

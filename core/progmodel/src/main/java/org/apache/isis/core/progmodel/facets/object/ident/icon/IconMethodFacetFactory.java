@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
@@ -36,7 +36,7 @@ public class IconMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstrac
     private static final String[] PREFIXES = { ICON_NAME_PREFIX, };
 
     public IconMethodFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.OBJECTS_ONLY);
+        super(PREFIXES, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

@@ -24,16 +24,17 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapDelegator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapDelegator;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
@@ -42,13 +43,12 @@ import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactoryAbs
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 import org.apache.isis.core.runtime.testsystem.TestClassSubstitutor;
 import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
-import org.apache.isis.defaults.progmodel.JavaReflector;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 
 public class TrialObjects {
 
     private AdapterFactory factory;
-    private JavaReflector reflector;
+    private ObjectReflectorDefault reflector;
 
     private final Map<Object, ObjectAdapter> adapters = Maps.newHashMap();
 
@@ -57,7 +57,7 @@ public class TrialObjects {
         PropertiesConfiguration configuration = new PropertiesConfiguration();
 
         reflector =
-            new JavaReflector(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
+            new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
                 new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
                 new MetaModelValidatorNoop());
         reflector.setRuntimeContext(new RuntimeContextNoRuntime() {
@@ -71,7 +71,7 @@ public class TrialObjects {
                     }
 
                     @Override
-                    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
+                    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
                         if (adapters.get(pojo) != null) {
                             return adapters.get(pojo);
                         } else {

@@ -25,13 +25,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 
 public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract implements ImperativeFacet {
@@ -71,7 +71,7 @@ public class PropertyDefaultFacetViaMethod extends PropertyDefaultFacetAbstract 
 
     @Override
     public ObjectAdapter getDefault(final ObjectAdapter owningAdapter) {
-        final Object result = ObjectInvokeUtils.invoke(method, owningAdapter);
+        final Object result = AdapterInvokeUtils.invoke(method, owningAdapter);
         return createAdapter(method.getReturnType(), result);
     }
 

@@ -30,8 +30,9 @@ import org.apache.log4j.LogManager;
 
 import com.google.common.collect.ImmutableList;
 
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
-import org.apache.isis.core.progmodel.facets.ordering.OrderSet;
+import org.apache.isis.core.metamodel.facets.ordering.DeweyOrderSet;
+import org.apache.isis.core.metamodel.facets.ordering.OrderSet;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 
 
 public class DeweyOrderSetTest extends TestCase {
@@ -42,20 +43,36 @@ public class DeweyOrderSetTest extends TestCase {
 
     public static class Customer {
         private String lastName;
+        private String firstName;
+        private String houseNumber;
+        private String streetName;
+        private String postalTown;
         public String getLastName() {
             return lastName;
         }
+        public String getFirstName() {
+            return firstName;
+        }
+        public String getHouseNumber() {
+            return houseNumber;
+        }
+        public String getStreetName() {
+            return streetName;
+        }
+        public String getPostalTown() {
+            return postalTown;
+        }
     }
     
-    private final ObjectMemberPeer lastNameMember = MemberPeerStub.createProperty("LastName");
-    private final ObjectMemberPeer firstNameMember = MemberPeerStub.createProperty("FirstName");
-    private final ObjectMemberPeer houseNumberMember = MemberPeerStub.createProperty("HouseNumber");
-    private final ObjectMemberPeer streetNameMember = MemberPeerStub.createProperty("StreetName");
-    private final ObjectMemberPeer postalTownMember = MemberPeerStub.createProperty("PostalTown");
-    private final List<ObjectMemberPeer> lastNameAndFirstName = ImmutableList.of( lastNameMember, firstNameMember );
-    private final List<ObjectMemberPeer> nameAndAddressMembers = ImmutableList.of( lastNameMember, firstNameMember,
+    private final FacetedMethod lastNameMember = FacetedMethod.createProperty(Customer.class,"Last Name");
+    private final FacetedMethod firstNameMember = FacetedMethod.createProperty(Customer.class,"First Name");
+    private final FacetedMethod houseNumberMember = FacetedMethod.createProperty(Customer.class,"House Number");
+    private final FacetedMethod streetNameMember = FacetedMethod.createProperty(Customer.class,"Street Name");
+    private final FacetedMethod postalTownMember = FacetedMethod.createProperty(Customer.class,"Postal Town");
+    private final List<FacetedMethod> lastNameAndFirstName = ImmutableList.of( lastNameMember, firstNameMember );
+    private final List<FacetedMethod> nameAndAddressMembers = ImmutableList.of( lastNameMember, firstNameMember,
             houseNumberMember, streetNameMember, postalTownMember );
-    private final List<ObjectMemberPeer> lastNameFirstNameAndPostalTown = ImmutableList.of( lastNameMember,
+    private final List<FacetedMethod> lastNameFirstNameAndPostalTown = ImmutableList.of( lastNameMember,
             firstNameMember, postalTownMember );
 
     @Override

@@ -20,16 +20,16 @@
 
 package org.apache.isis.core.progmodel.facets.actions.choices;
 
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 
 public class ActionParameterChoicesFacetNone extends ActionParameterChoicesFacetAbstract {
 
-    public ActionParameterChoicesFacetNone(final FacetHolder holder, final SpecificationLoader specificationLoader, final AdapterMap adapterManager) {
-        super(holder, specificationLoader, adapterManager);
+    public ActionParameterChoicesFacetNone(final FacetHolder holder, final SpecificationLookup specificationLookup, final AdapterMap adapterManager) {
+        super(holder, specificationLookup, adapterManager);
     }
 
     @Override

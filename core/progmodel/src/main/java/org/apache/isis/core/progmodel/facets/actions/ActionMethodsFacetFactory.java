@@ -27,18 +27,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.applib.security.UserMemento;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAware;
 import org.apache.isis.core.metamodel.exceptions.ReflectionException;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
+import org.apache.isis.core.metamodel.peer.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
-import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -48,7 +49,6 @@ import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFace
 import org.apache.isis.core.progmodel.facets.actions.defaults.ActionParameterDefaultsFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetInferred;
 
 
 /**
@@ -80,7 +80,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
      * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
      */
     public ActionMethodsFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.ACTIONS_ONLY);
+        super(PREFIXES, FeatureType.ACTIONS_ONLY);
     }
 
     // ///////////////////////////////////////////////////////
@@ -127,8 +127,8 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
         findAndRemoveHideMethod(facets, methodRemover, cls, forClass, capitalizedName, paramTypes, holder);
         findAndRemoveDisableMethod(facets, methodRemover, cls, forClass, capitalizedName, paramTypes, holder);
 
-        if (holder instanceof ObjectMemberPeer) {
-            final ObjectMemberPeer memberPeer = (ObjectMemberPeer) holder;
+        if (holder instanceof FacetedMethod) {
+            final FacetedMethod memberPeer = (FacetedMethod) holder;
 
             if(memberPeer.getFeatureType().isAction()) {
                 // REVIEW: it may not be necessary to do this check, because properties and collections have no "children" (parameters)
@@ -140,19 +140,19 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
                 // supporting methods. However, the FacetFactory API doesn't allow for methods of the class to be
                 // removed while processing
                 // action parameters, only while processing Methods (ie actions)
-                final List<TypedHolder> children = memberPeer.getChildren();
+                final List<FacetedMethodParameter> parameters = memberPeer.getParameters();
                 
                 findAndRemoveOptionalForActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
-                    children);
+                    parameters);
                 findAndRemoveNamesForActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
-                    children);
+                    parameters);
                 findAndRemoveDescriptionsforActionParametersMethod(methodRemover, cls, capitalizedName, returnType, paramTypes,
-                    children);
+                    parameters);
                 
                 findAndRemoveChoicesForActionParametersMethod(oldChoicesOrDefaultsMethodsUsed, methodRemover, cls, capitalizedName,
-                    paramTypes, children);
+                    paramTypes, parameters);
                 findAndRemoveDefaultForActionParametersMethod(oldChoicesOrDefaultsMethodsUsed, methodRemover, cls, capitalizedName,
-                    paramTypes, children);
+                    paramTypes, parameters);
             }
             
         }
@@ -295,7 +295,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final String capitalizedName,
             final Class<?> returnType,
             final Class<?>[] params,
-            final List<TypedHolder> parameters) {
+            final List<FacetedMethodParameter> parameters) {
         if (params.length == 0) {
             return;
         }
@@ -323,7 +323,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final String capitalizedName,
             final Class<?> returnType,
             final Class<?>[] params,
-            final List<TypedHolder> parameters) {
+            final List<FacetedMethodParameter> parameters) {
         Method method = findMethodWithOrWithoutParameters(cls, CLASS, PARAMETER_NAMES_PREFIX + capitalizedName,
                 String[].class, params);
         if (method == null) {
@@ -349,7 +349,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final Class<?> cls,
             final String capitalizedName,
             final Class<?>[] params,
-            final List<TypedHolder> parameters) {
+            final List<FacetedMethodParameter> parameters) {
 
         for (int i = 0; i < params.length; i++) {
             final Class<?> returnType = (Array.newInstance(params[i], 0)).getClass();
@@ -380,7 +380,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final Class<?> cls,
             final String capitalizedName,
             final Class<?>[] params,
-            final List<TypedHolder> parameters) {
+            final List<FacetedMethodParameter> parameters) {
 
         for (int i = 0; i < params.length; i++) {
 
@@ -405,7 +405,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
             final String capitalizedName,
             final Class<?> returnType,
             final Class<?>[] params,
-            final List<TypedHolder> parameters) {
+            final List<FacetedMethodParameter> parameters) {
         final Method method = findMethodWithOrWithoutParameters(cls, CLASS, PARAMETER_DESCRIPTIONS_PREFIX + capitalizedName,
                 String[].class, params);
         if (method == null) {

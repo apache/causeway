@@ -23,18 +23,18 @@ package org.apache.isis.core.progmodel.facets.disable;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Disabled;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.When;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class DisabledAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public DisabledAnnotationFacetFactory() {
-        super(ObjectFeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS);
+        super(FeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS);
     }
 
     @Override

@@ -27,7 +27,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 /**
@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
 public class SyntheticMethodFilteringFacetFactory extends FacetFactoryAbstract implements MethodFilteringFacetFactory {
 
     public SyntheticMethodFilteringFacetFactory() {
-        super(new ArrayList<ObjectFeatureType>());
+        super(new ArrayList<FeatureType>());
     }
 
     @Override

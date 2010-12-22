@@ -20,17 +20,37 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
-import org.apache.isis.core.metamodel.spec.NamedAndDescribed;
-import org.apache.isis.core.metamodel.spec.TypedSpecification;
+import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.Specification;
 
 
 /**
- * Base interface for fields, collections, actions and action parameters.
+ * A specification representing a non-{@link FeatureType#OBJECT object}, 
+ * that therefore has an underlying type (the type of the property, collection)
  * 
+ * <p>
+ * For a property or action parameter, is the type.  For a collection is the element type.
+ * For an action it is always <tt>null</tt>.
  */
-public interface ObjectFeature extends TypedSpecification, NamedAndDescribed {
+public interface ObjectFeature extends Specification {
 
-    FeatureType getFeatureType();
+    /**
+     * The specification of the underlying type.
+     * 
+     * <p>
+     * For example:
+     * <ul>
+     * <li>for a {@link OneToOneAssociation property}, will return the {@link ObjectSpecification} 
+     *     of the type that the accessor returns.
+     * <li>for a {@link OneToManyAssociation collection} it will be the type of element
+     *     the collection holds (not the type of collection).
+     * <li>for a {@link ObjectAction action}, will always return <tt>null</tt>.  See instead {@link ObjectAction#getReturnType()} and {@link ObjectAction#getParameterTypes()}.
+     * <li>for a {@link ObjectActionParameter action}, will return the type of the parameter}.
+     * </ul>
+     */
+    ObjectSpecification getSpecification();
+
+
 
 }

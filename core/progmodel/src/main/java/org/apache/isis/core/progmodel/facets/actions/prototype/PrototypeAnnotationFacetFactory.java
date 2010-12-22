@@ -23,18 +23,18 @@ package org.apache.isis.core.progmodel.facets.actions.prototype;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Prototype;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class PrototypeAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public PrototypeAnnotationFacetFactory() {
-        super(ObjectFeatureType.ACTIONS_ONLY);
+        super(FeatureType.ACTIONS_ONLY);
     }
 
     @Override

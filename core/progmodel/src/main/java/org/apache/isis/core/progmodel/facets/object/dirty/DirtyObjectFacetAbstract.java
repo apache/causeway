@@ -23,6 +23,7 @@ package org.apache.isis.core.progmodel.facets.object.dirty;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.dirty.DirtyObjectFacet;
 
 
 public abstract class DirtyObjectFacetAbstract extends FacetAbstract implements DirtyObjectFacet {

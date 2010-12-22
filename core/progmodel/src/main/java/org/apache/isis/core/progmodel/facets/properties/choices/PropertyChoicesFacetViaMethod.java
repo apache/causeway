@@ -25,14 +25,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.facets.ChoicesUtils;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
@@ -74,7 +74,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
 
 	@Override
     public Object[] getChoices(final ObjectAdapter owningAdapter, final SpecificationLookup specificationLookup) {
-        final Object options = ObjectInvokeUtils.invoke(method, owningAdapter);
+        final Object options = AdapterInvokeUtils.invoke(method, owningAdapter);
         if (options == null) {
             return null;
         }
@@ -82,7 +82,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             return ArrayUtils.getObjectAsObjectArray(options);
         }
         final ObjectSpecification specification = specificationLookup.loadSpecification(choicesClass);
-        return ObjectAdapterUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
+        return ChoicesUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());
     }
 
 	@Override

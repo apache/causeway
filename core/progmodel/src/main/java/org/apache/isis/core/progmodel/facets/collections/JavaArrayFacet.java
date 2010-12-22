@@ -23,10 +23,10 @@ package org.apache.isis.core.progmodel.facets.collections;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.progmodel.facets.collections.modify.CollectionFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.CollectionFacetAbstract;
 
 
 public class JavaArrayFacet extends CollectionFacetAbstract {

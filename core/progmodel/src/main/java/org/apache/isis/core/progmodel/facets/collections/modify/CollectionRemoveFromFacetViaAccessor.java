@@ -26,12 +26,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.ObjectDirtier;
-import org.apache.isis.core.metamodel.util.IsisUtils;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
 
 public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFacetAbstract implements ImperativeFacet {
@@ -72,8 +72,8 @@ public class CollectionRemoveFromFacetViaAccessor extends CollectionRemoveFromFa
 
     @Override
     public void remove(final ObjectAdapter owningAdapter, final ObjectAdapter elementAdapter) {
-        final Collection collection = (Collection) ObjectInvokeUtils.invoke(method, owningAdapter);
-        collection.remove(IsisUtils.unwrap(elementAdapter));
+        final Collection collection = (Collection) AdapterInvokeUtils.invoke(method, owningAdapter);
+        collection.remove(AdapterUtils.unwrap(elementAdapter));
         getObjectDirtier().objectChanged(owningAdapter);
     }
 

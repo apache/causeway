@@ -23,6 +23,7 @@ package org.apache.isis.core.progmodel.facets.ordering.actionorder;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
+import org.apache.isis.core.metamodel.facets.ordering.actionorder.ActionOrderFacet;
 
 
 public abstract class ActionOrderFacetAbstract extends SingleStringValueFacetAbstract implements ActionOrderFacet {

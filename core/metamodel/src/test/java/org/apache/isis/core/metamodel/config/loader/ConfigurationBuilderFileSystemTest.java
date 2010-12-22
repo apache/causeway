@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;

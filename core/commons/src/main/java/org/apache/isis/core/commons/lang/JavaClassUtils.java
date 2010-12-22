@@ -59,22 +59,6 @@ public final class JavaClassUtils {
 		return builtInClasses.get(name);
 	}
     
-    public static String[] getInterfaces(final Class<?> type) {
-        final Class<?>[] interfaces = type.getInterfaces();
-        final Class<?>[] interfacesCopy = new Class[interfaces.length];
-        int validInterfaces = 0;
-        for (int i = 0; i < interfaces.length; i++) {
-            interfacesCopy[validInterfaces++] = interfaces[i];
-        }
-
-        final String[] interfaceNames = new String[validInterfaces];
-        for (int i = 0; i < validInterfaces; i++) {
-            interfaceNames[i] = interfacesCopy[i].getName();
-        }
-
-        return interfaceNames;
-    }
-
     public static String getSuperclass(final Class<?> type) {
         final Class<?> superType = type.getSuperclass();
 

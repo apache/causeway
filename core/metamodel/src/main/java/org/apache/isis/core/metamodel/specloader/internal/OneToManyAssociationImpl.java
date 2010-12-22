@@ -23,17 +23,22 @@ package org.apache.isis.core.metamodel.specloader.internal;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.CollectionAddToContext;
 import org.apache.isis.core.metamodel.interactions.CollectionRemoveFromContext;
 import org.apache.isis.core.metamodel.interactions.CollectionUsabilityContext;
@@ -42,34 +47,29 @@ import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.runtimecontext.spec.feature.ObjectAssociationAbstract;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
-import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
 
 
 public class OneToManyAssociationImpl extends ObjectAssociationAbstract implements OneToManyAssociation {
 
-    private final ObjectMemberPeer reflectiveAdapter;
+    private final FacetedMethod facetedMethod;
     
     public OneToManyAssociationImpl(
-    		final ObjectMemberPeer association,
+    		final FacetedMethod facetedMethod,
             final AuthenticationSessionProvider authenticationSessionProvider,
     		final SpecificationLookup specificationLookup,
     		final AdapterMap adapterManager,
             final QuerySubmitter querySubmitter) {
-        super(association.getIdentifier().getMemberName(), getSpecification(specificationLookup, association.getType()), FeatureType.COLLECTION, association, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
-        this.reflectiveAdapter = association;
+        super(facetedMethod.getIdentifier().getMemberName(), getSpecification(specificationLookup, facetedMethod.getType()), FeatureType.COLLECTION, facetedMethod, authenticationSessionProvider, specificationLookup, adapterManager, querySubmitter);
+        this.facetedMethod = facetedMethod;
     }
 
 
-    public ObjectMemberPeer getAssociationPeer(){
-    	return reflectiveAdapter;
+    public FacetedMethod getFacetedMethod(){
+    	return facetedMethod;
     }
 
     // /////////////////////////////////////////////////////////////
@@ -277,7 +277,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
         final DebugString debugString = new DebugString();
         debugString.indent();
         debugString.indent();
-        reflectiveAdapter.debugData(debugString);
+        facetedMethod.debugData(debugString);
         return debugString.toString();
     }
 

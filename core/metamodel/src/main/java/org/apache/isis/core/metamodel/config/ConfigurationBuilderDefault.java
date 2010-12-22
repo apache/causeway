@@ -21,6 +21,7 @@
 package org.apache.isis.core.metamodel.config;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 

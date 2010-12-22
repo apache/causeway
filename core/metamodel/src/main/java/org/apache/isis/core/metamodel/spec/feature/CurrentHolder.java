@@ -21,10 +21,9 @@
 package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.TypedSpecification;
 
 /**
- * Mix-in interface for {@link TypedSpecification}s that reference or
+ * Mix-in interface for {@link ObjectFeature}s that reference or
  * otherwise contain a 'current' value.
  * 
  * <p>

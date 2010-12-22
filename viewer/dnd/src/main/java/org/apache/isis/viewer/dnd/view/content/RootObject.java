@@ -65,7 +65,7 @@ public class RootObject extends AbstractObjectContent {
     }
 
     public String getDescription() {
-        return getSpecification().getSingularName() + ": " + getObject().titleString() + " "
+        return getSpecification().getName() + ": " + getObject().titleString() + " "
                 + getSpecification().getDescription();
     }
 
@@ -119,6 +119,6 @@ public class RootObject extends AbstractObjectContent {
 
     @Override
     public String windowTitle() {
-        return (isTransient() ? "UNSAVED " : "") + getSpecification().getSingularName();
+        return (isTransient() ? "UNSAVED " : "") + getSpecification().getName();
     }
 }

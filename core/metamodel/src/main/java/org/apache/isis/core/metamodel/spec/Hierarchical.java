@@ -24,11 +24,6 @@ import java.util.List;
 
 public interface Hierarchical {
 
-	/**
-	 * Add the class for the specified specification as a subclass of this
-	 * specification's class.
-	 */
-	void addSubclass(ObjectSpecification specification);
 
 	/**
 	 * Returns true if the <tt>subclasses()</tt> method will return an array of

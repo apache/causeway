@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 
@@ -49,12 +49,12 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertTrue(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertFalse(contains(featureTypes, FeatureType.OBJECT));
+        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testOptionalAnnotationPickedUpOnProperty() {

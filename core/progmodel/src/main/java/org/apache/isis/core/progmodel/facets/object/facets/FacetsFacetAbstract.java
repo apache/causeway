@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
 
 
 public abstract class FacetsFacetAbstract extends FacetAbstract implements FacetsFacet {

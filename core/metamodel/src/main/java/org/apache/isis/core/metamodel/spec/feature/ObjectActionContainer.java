@@ -31,7 +31,7 @@ public interface ObjectActionContainer {
     /**
      * TODO: convert to relatedResourceActions
      */
-    List<ObjectAction> getServiceActionsFor(ObjectActionType... type);
+    List<ObjectAction> getServiceActionsReturning(ObjectActionType... type);
 
     /**
      * Returns the action of the specified type with the specified signature.

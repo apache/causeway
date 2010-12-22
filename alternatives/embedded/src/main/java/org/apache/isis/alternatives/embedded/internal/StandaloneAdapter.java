@@ -117,7 +117,7 @@ public class StandaloneAdapter implements ObjectAdapter {
         if (title != null) {
         	return title;
         }
-        return "A " + specification.getSingularName().toLowerCase();
+        return "A " + specification.getName().toLowerCase();
 	}
 
 

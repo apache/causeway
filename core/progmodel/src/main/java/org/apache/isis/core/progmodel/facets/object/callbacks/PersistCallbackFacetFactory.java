@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
@@ -42,7 +42,7 @@ public class PersistCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAb
     private static final String[] PREFIXES = { PERSISTED_PREFIX, PERSISTING_PREFIX, };
 
     public PersistCallbackFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.OBJECTS_ONLY);
+        super(PREFIXES, FeatureType.OBJECTS_ONLY);
     }
 
     @Override

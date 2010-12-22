@@ -21,20 +21,20 @@
 package org.apache.isis.alternatives.objectstore.xml.internal.adapter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.spec.identifier.Identified;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 
 public class XmlAdapterManager extends AdapterManagerDefault {
 
 	@Override
 	protected ObjectAdapter createAggregatedAdapter(
-			Object pojo, ObjectAdapter ownerAdapter, Identified identified) {
-		if (identified instanceof OneToOneAssociation) {
+			Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+		if (identifiedHolder instanceof OneToOneAssociation) {
 			// do not yet support AggregatedOids for aggregated associations 
 			return adapterFor(pojo);
 		} else {
-			return super.createAggregatedAdapter(pojo, ownerAdapter, identified);
+			return super.createAggregatedAdapter(pojo, ownerAdapter, identifiedHolder);
 		}
 	}
 }

@@ -27,23 +27,24 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 @RunWith(JMock.class)
 public class OneToManyAssociationImplTest {
@@ -58,16 +59,18 @@ public class OneToManyAssociationImplTest {
     
     private static final Class<?> COLLECTION_TYPE = Order.class;
 
-    private Mockery context = new JUnit4Mockery();
+    private Mockery context = new JUnit4Mockery() {{
+        setImposteriser(ClassImposteriser.INSTANCE);
+    }};
 
     private ObjectAdapter mockOwnerAdapter;
     private ObjectAdapter mockAssociatedAdapter;
     private OneToManyAssociation association;
 
-    private ObjectMemberPeer mockPeer;
+    private FacetedMethod mockPeer;
 
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    private SpecificationLoader mockSpecificationLoader;
+    private SpecificationLookup mockSpecificationLookup;
     private AdapterMap mockAdapterManager;
     private QuerySubmitter mockQuerySubmitter;
 
@@ -82,10 +85,10 @@ public class OneToManyAssociationImplTest {
         mockAssociatedAdapter = context.mock(ObjectAdapter.class, "associated");
         
         mockAuthenticationSessionProvider = context.mock(AuthenticationSessionProvider.class);
-        mockSpecificationLoader = context.mock(SpecificationLoader.class);
+        mockSpecificationLookup = context.mock(SpecificationLookup.class);
         mockAdapterManager = context.mock(AdapterMap.class);
         mockQuerySubmitter = context.mock(QuerySubmitter.class);
-        mockPeer = context.mock(ObjectMemberPeer.class);
+        mockPeer = context.mock(FacetedMethod.class);
 
         mockNamedFacet = context.mock(NamedFacet.class);
         mockCollectionAddToFacet = context.mock(CollectionAddToFacet.class);
@@ -93,13 +96,13 @@ public class OneToManyAssociationImplTest {
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
-        association = new OneToManyAssociationImpl(mockPeer, mockAuthenticationSessionProvider, mockSpecificationLoader, mockAdapterManager, mockQuerySubmitter);
+        association = new OneToManyAssociationImpl(mockPeer, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter);
     }
 
     private void allowingSpecLoaderToReturnSpecs() {
         context.checking(new Expectations() {
             {
-                allowing(mockSpecificationLoader).loadSpecification(Order.class);
+                allowing(mockSpecificationLookup).loadSpecification(Order.class);
             }
         });
     }

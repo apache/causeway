@@ -27,7 +27,7 @@ import java.util.List;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 
@@ -50,12 +50,12 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertTrue(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertTrue(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
+        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
+        assertTrue(contains(featureTypes, FeatureType.ACTION));
+        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testDescribedAsAnnotationPickedUpOnClass() {

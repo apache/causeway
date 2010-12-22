@@ -22,9 +22,9 @@ package org.apache.isis.core.progmodel.facets.propparam.enums;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetAbstract;
 
 public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoicesFacetAbstract {
@@ -36,7 +36,7 @@ public class PropertyChoicesFacetDerivedFromChoicesFacet extends PropertyChoices
     @Override
     public Object[] getChoices(ObjectAdapter adapter, SpecificationLookup specificationLookup) {
         FacetHolder facetHolder = getFacetHolder();
-        ObjectMemberPeer noap = (ObjectMemberPeer) facetHolder;
+        FacetedMethod noap = (FacetedMethod) facetHolder;
         ObjectSpecification noSpec = getSpecification(noap.getType());
         ChoicesFacet choicesFacet = noSpec.getFacet(ChoicesFacet.class);
         if (choicesFacet == null)

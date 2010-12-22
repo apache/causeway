@@ -59,7 +59,7 @@ public class ObjectIcon implements Component {
         writer.print("\"><img src=\"");
         writer.print(ImageLookup.image(element));
         writer.print("\" alt=\"");
-        final String singularName = element.getSpecification().getSingularName();
+        final String singularName = element.getSpecification().getName();
         writer.print(singularName);
         writer.print("\"");
         writer.print("/>");

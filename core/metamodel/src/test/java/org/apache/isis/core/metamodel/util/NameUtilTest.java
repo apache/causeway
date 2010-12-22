@@ -22,8 +22,6 @@ package org.apache.isis.core.metamodel.util;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.core.metamodel.util.NameUtils;
-
 
 public class NameUtilTest extends TestCase {
 

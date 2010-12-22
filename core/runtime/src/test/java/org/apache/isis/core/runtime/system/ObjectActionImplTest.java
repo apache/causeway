@@ -26,23 +26,25 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.QuerySubmitter;
-import org.apache.isis.core.metamodel.runtimecontext.ServicesProvider;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.specloader.internal.ObjectActionImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetAbstract;
-import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetAbstract;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
 import org.apache.isis.core.runtime.testsystem.TestSpecification;
@@ -54,13 +56,15 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
         junit.textui.TestRunner.run(new TestSuite(ObjectActionImplTest.class));
     }
 
-    private final Mockery mockery = new JUnit4Mockery();
+    private final Mockery mockery = new JUnit4Mockery() {{
+        setImposteriser(ClassImposteriser.INSTANCE);
+    }};
 
     private ObjectActionImpl action;
-    private ObjectMemberPeer mockObjectActionPeer;
+    private FacetedMethod mockFacetedMethod;
 
     private AuthenticationSessionProvider mockAuthenticationSessionProvider;
-    private SpecificationLoader mockSpecificationLoader;
+    private SpecificationLookup mockSpecificationLookup;
     private AdapterMap mockAdapterManager;
     private ServicesProvider mockServicesProvider;
     private QuerySubmitter mockQuerySubmitter;
@@ -71,14 +75,21 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        mockObjectActionPeer = mockery.mock(ObjectMemberPeer.class);
+        mockFacetedMethod = mockery.mock(FacetedMethod.class);
         mockAuthenticationSessionProvider = mockery.mock(AuthenticationSessionProvider.class);
-        mockSpecificationLoader = mockery.mock(SpecificationLoader.class);
+        mockSpecificationLookup = mockery.mock(SpecificationLookup.class);
         mockAdapterManager = mockery.mock(AdapterMap.class);
         mockServicesProvider = mockery.mock(ServicesProvider.class);
         mockQuerySubmitter = mockery.mock(QuerySubmitter.class);
-        
-        action = new ObjectActionImpl("reduceheadcount", mockObjectActionPeer, mockAuthenticationSessionProvider, mockSpecificationLoader, mockAdapterManager, mockServicesProvider, mockQuerySubmitter);
+
+        mockery.checking(new Expectations() {
+            {
+                one(mockFacetedMethod).getIdentifier();
+                will(returnValue(Identifier.actionIdentifier("Customer", "reduceheadcount")));
+            }
+        });
+
+        action = new ObjectActionImpl(mockFacetedMethod, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockServicesProvider, mockQuerySubmitter);
     }
 
     @Test
@@ -88,7 +99,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
         final ObjectAdapter[] parameters = new ObjectAdapter[2];
 
         final TestProxyAdapter result = new TestProxyAdapter();
-        final ActionInvocationFacet facet = new ActionInvocationFacetAbstract(mockObjectActionPeer) {
+        final ActionInvocationFacet facet = new ActionInvocationFacetAbstract(mockFacetedMethod) {
             @Override
             public ObjectAdapter invoke(ObjectAdapter target, ObjectAdapter[] parameters) {
                 return result;
@@ -107,7 +118,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
 
         mockery.checking(new Expectations() {
             {
-                exactly(2).of(mockObjectActionPeer).getFacet(ActionInvocationFacet.class);
+                exactly(2).of(mockFacetedMethod).getFacet(ActionInvocationFacet.class);
                 will(returnValue(facet));
             }
         });
@@ -118,10 +129,10 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
 
     @Test
     public void testNameDefaultsToActionsMethodName() {
-        final NamedFacet facet = new NamedFacetAbstract("Reduceheadcount", mockObjectActionPeer) {};
+        final NamedFacet facet = new NamedFacetAbstract("Reduceheadcount", mockFacetedMethod) {};
         mockery.checking(new Expectations() {
             {
-                one(mockObjectActionPeer).getFacet(NamedFacet.class);
+                one(mockFacetedMethod).getFacet(NamedFacet.class);
                 will(returnValue(facet));
             }
         });

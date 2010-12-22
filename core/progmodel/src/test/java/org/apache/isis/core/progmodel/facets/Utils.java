@@ -23,7 +23,7 @@ package org.apache.isis.core.progmodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 class Utils {
@@ -37,7 +37,7 @@ class Utils {
         return false;
     }
 
-    protected static boolean contains(final ObjectFeatureType[] array, final ObjectFeatureType val) {
+    protected static boolean contains(final FeatureType[] array, final FeatureType val) {
         for (int i = 0; i < array.length; i++) {
             if (array[i] == val) {
                 return true;
@@ -46,7 +46,7 @@ class Utils {
         return false;
     }
 
-    protected static boolean contains(final List<ObjectFeatureType> list, final ObjectFeatureType val) {
+    protected static boolean contains(final List<FeatureType> list, final FeatureType val) {
         return list.contains(val);
     }
 

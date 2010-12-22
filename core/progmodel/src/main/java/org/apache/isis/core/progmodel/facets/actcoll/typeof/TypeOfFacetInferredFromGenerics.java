@@ -21,7 +21,8 @@
 package org.apache.isis.core.progmodel.facets.actcoll.typeof;
 
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetAbstract;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 
 public class TypeOfFacetInferredFromGenerics extends TypeOfFacetAbstract {

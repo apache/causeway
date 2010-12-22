@@ -20,8 +20,6 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
-
 import junit.framework.TestCase;
 
 

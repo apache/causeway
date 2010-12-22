@@ -24,8 +24,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.isis.core.metamodel.consent.InteractionAdvisorFacet;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

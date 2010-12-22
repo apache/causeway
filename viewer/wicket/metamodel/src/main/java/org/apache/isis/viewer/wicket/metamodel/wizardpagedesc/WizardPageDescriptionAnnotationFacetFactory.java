@@ -23,18 +23,18 @@ package org.apache.isis.viewer.wicket.metamodel.wizardpagedesc;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.viewer.wicket.applib.WizardPageDescription;
 
 
 public class WizardPageDescriptionAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public WizardPageDescriptionAnnotationFacetFactory() {
-        super(ObjectFeatureType.PROPERTIES_ONLY);
+        super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

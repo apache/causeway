@@ -25,9 +25,9 @@ package org.apache.isis.alternatives.objectstore.sql.auto;
 
 import org.apache.isis.alternatives.objectstore.sql.FieldMappingLookup;
 import org.apache.isis.alternatives.objectstore.sql.ObjectMappingLookup;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
-import org.apache.isis.core.metamodel.specloader.internal.peer.ObjectMemberPeer;
 
 /**
  * @author Kevin
@@ -49,7 +49,7 @@ public class MultiColumnCombinedCollectionMapper extends
     protected String determineColumnName(ObjectAssociation objectAssociation){
 	    if (objectAssociation instanceof OneToManyAssociationImpl){
 	    	OneToManyAssociationImpl fkAssoc = (OneToManyAssociationImpl) objectAssociation;
-	    	ObjectMemberPeer peer = fkAssoc.getAssociationPeer();
+	    	FacetedMethod peer = fkAssoc.getFacetedMethod();
 	    	String fullClassName = peer.getIdentifier().getClassName();
 	    	int lastPos = fullClassName.lastIndexOf('.');
 	    	return fullClassName.substring(lastPos+1)+"_"+fkAssoc.getId();

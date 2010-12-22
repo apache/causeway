@@ -20,16 +20,16 @@
 
 package org.apache.isis.core.metamodel.specloader.traverser;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoaderAware;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.specloader.internal.TypeExtractorMethodReturn;
 
 public class SpecificationTraverserDefault implements SpecificationTraverser, SpecificationLoaderAware {

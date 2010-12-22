@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.core.metamodel.services.ServicesInjector;
 
 public class ServicesInjectorNoop implements ServicesInjector, Noop {
 

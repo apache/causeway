@@ -30,12 +30,12 @@ import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.java5.ImperativeFacetUtils;
-import org.apache.isis.core.metamodel.java5.ImperativeFacetUtils.ImperativeFacetFlags;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;
+import org.apache.isis.core.metamodel.java5.JavaSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
-import org.apache.isis.core.progmodel.spec.JavaSpecification;
 import org.apache.isis.core.runtime.bytecode.ObjectResolveAndObjectChangedEnhancerAbstract;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;

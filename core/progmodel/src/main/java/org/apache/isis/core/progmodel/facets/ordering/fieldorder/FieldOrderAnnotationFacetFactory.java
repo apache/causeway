@@ -21,17 +21,18 @@
 package org.apache.isis.core.progmodel.facets.ordering.fieldorder;
 
 import org.apache.isis.applib.annotation.FieldOrder;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.ordering.FieldOrderFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class FieldOrderAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public FieldOrderAnnotationFacetFactory() {
-        super(ObjectFeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY);
     }
 
     @Override

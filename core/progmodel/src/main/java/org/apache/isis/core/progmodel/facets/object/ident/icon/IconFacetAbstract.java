@@ -23,6 +23,7 @@ package org.apache.isis.core.progmodel.facets.object.ident.icon;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.object.ident.icon.IconFacet;
 
 
 public abstract class IconFacetAbstract extends FacetAbstract implements IconFacet {

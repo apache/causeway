@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.mask;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacetAbstract;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacetUsingParser;
 

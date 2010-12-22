@@ -25,18 +25,18 @@ import org.apache.isis.core.metamodel.adapter.MutableProposedHolder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.runtimecontext.spec.feature.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
-import org.apache.isis.core.metamodel.specloader.internal.peer.TypedHolder;
 
 
 public class ObjectActionParameterParseable extends ObjectActionParameterAbstract implements
@@ -171,9 +171,6 @@ public class ObjectActionParameterParseable extends ObjectActionParameterAbstrac
         return proposedHolder;
     }
 
-    /* (non-Javadoc)
-     * @see org.apache.isis.core.metamodel.spec.feature.ObjectFeature#getFeatureType()
-     */
     @Override
     public FeatureType getFeatureType() {
         return FeatureType.ACTION_PARAMETER;

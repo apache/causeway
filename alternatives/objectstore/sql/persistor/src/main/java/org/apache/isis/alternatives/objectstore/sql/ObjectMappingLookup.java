@@ -51,7 +51,7 @@ public class ObjectMappingLookup implements DebugInfo {
             mapping = (ObjectMapping) objectMappingFactory.createMapper(spec.getFullName(), propertiesBase, fieldMappingLookup, this);
             add(spec, mapping, connection); 
         }
-        LOG.debug("  mapper for " + spec.getSingularName() + " -> " + mapping);
+        LOG.debug("  mapper for " + spec.getName() + " -> " + mapping);
         if (mapping == null) {
             throw new IsisException("No mapper for " + spec + " (no default mapper)");
         }

@@ -26,14 +26,14 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.AdapterMapAware;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodScope;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMapAware;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.util.InvokeUtils;
 import org.apache.isis.core.metamodel.util.NameUtils;
 import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
@@ -68,7 +68,7 @@ public class PropertyMethodsFacetFactory extends PropertyOrCollectionIdentifying
     private AdapterMap adapterMap;
 
     public PropertyMethodsFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.PROPERTIES_ONLY);
+        super(PREFIXES, FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

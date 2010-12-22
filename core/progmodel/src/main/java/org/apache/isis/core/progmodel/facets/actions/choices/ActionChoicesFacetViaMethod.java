@@ -24,15 +24,15 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.lang.ArrayUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
+import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.exceptions.ModelException;
+import org.apache.isis.core.metamodel.facets.ChoicesUtils;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.runtimecontext.AdapterMap;
-import org.apache.isis.core.metamodel.runtimecontext.SpecificationLookup;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.util.ObjectAdapterUtils;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 
@@ -70,7 +70,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
 
     @Override
     public Object[][] getChoices(final ObjectAdapter owningAdapter) {
-        Object invoke = ObjectInvokeUtils.invoke(method, owningAdapter);
+        Object invoke = AdapterInvokeUtils.invoke(method, owningAdapter);
         if (!(invoke instanceof Object[])) {
             throw new ModelException(
                 "Expected an array of collections (Object[]) containing choices for all parameters, but got " + invoke
@@ -86,7 +86,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             } else {
                 final ObjectSpecification specification = getSpecificationLookup().loadSpecification(choicesType);
                 results[i] =
-                    ObjectAdapterUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());
+                    ChoicesUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());
             }
         }
         return results;

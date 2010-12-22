@@ -38,7 +38,7 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
-import org.apache.isis.core.metamodel.specloader.SpecificationLoader;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
@@ -107,7 +107,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     protected ObjectSpecification loadSpecification() {
         ObjectSpecification specification = getReflector().loadSpecification(getObject().getClass());
-        this.defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
+        this.defaultTitle = "A" + (" " + specification.getName()).toLowerCase();
         return specification;
     }
 
@@ -322,7 +322,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             case 0:
                 return "No " + elementSpecification.getPluralName();
             case 1:
-                return "1 " + elementSpecification.getSingularName();
+                return "1 " + elementSpecification.getName();
             default:
                 return size + " " + elementSpecification.getPluralName();
             }

@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.adapter;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.core.metamodel.adapter.LifeCycleEvent;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
+import org.apache.isis.core.metamodel.facets.object.callbacks.LifeCycleEvent;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;

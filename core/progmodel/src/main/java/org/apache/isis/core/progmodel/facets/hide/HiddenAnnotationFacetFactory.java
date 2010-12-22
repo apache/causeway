@@ -23,19 +23,19 @@ package org.apache.isis.core.progmodel.facets.hide;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.java5.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class HiddenAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public HiddenAnnotationFacetFactory() {
-        super(ObjectFeatureType.EVERYTHING_BUT_PARAMETERS);
+        super(FeatureType.EVERYTHING_BUT_PARAMETERS);
     }
 
     

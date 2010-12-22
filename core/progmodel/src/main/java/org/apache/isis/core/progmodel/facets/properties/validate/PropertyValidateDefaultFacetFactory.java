@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetProcessor;
 
 
@@ -42,7 +42,7 @@ import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetPr
 public class PropertyValidateDefaultFacetFactory extends FacetFactoryAbstract {
 
     public PropertyValidateDefaultFacetFactory() {
-        super(ObjectFeatureType.PROPERTIES_ONLY);
+        super(FeatureType.PROPERTIES_ONLY);
     }
 
     @Override

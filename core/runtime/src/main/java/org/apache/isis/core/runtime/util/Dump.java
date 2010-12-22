@@ -31,6 +31,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -38,8 +39,6 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
-import org.apache.isis.core.metamodel.util.CollectionFacetUtils;
-import org.apache.isis.core.metamodel.util.SpecUtils;
 
 
 public final class Dump {
@@ -252,12 +251,12 @@ public final class Dump {
             debug.appendln("ID", specification.getIdentifier());
             debug.appendln("Full Name", specification.getFullName());
             debug.appendln("Short Name", specification.getShortName());
-            debug.appendln("Singular Name", specification.getSingularName());
+            debug.appendln("Singular Name", specification.getName());
             debug.appendln("Plural Name", specification.getPluralName());
             debug.appendln("Description", specification.getDescription());
             debug.blankLine();
             debug.appendln("Features", featureList(specification));
-            debug.appendln("Type", SpecUtils.typeNameFor(specification));
+            debug.appendln("Type", specification.isCollection() ? "Collection" : "Object");
             if (specification.superclass() != null) {
                 debug.appendln("Superclass", specification.superclass().getFullName());
             }
@@ -347,10 +346,10 @@ public final class Dump {
 
     private static void specificationServiceMethods(final ObjectSpecification specification, final DebugString debug) {
         try {
-            final List<ObjectAction> userActions = specification.getServiceActionsFor(ObjectActionType.USER);
-            final List<ObjectAction> explActions = specification.getServiceActionsFor(ObjectActionType.EXPLORATION);
-            final List<ObjectAction> prototypeActions = specification.getServiceActionsFor(ObjectActionType.PROTOTYPE);
-            final List<ObjectAction> debActions = specification.getServiceActionsFor(ObjectActionType.DEBUG);
+            final List<ObjectAction> userActions = specification.getServiceActionsReturning(ObjectActionType.USER);
+            final List<ObjectAction> explActions = specification.getServiceActionsReturning(ObjectActionType.EXPLORATION);
+            final List<ObjectAction> prototypeActions = specification.getServiceActionsReturning(ObjectActionType.PROTOTYPE);
+            final List<ObjectAction> debActions = specification.getServiceActionsReturning(ObjectActionType.DEBUG);
             specificationMethods(userActions, explActions, prototypeActions,debActions, debug);
         } catch (final RuntimeException e) {
             debug.appendException(e);

@@ -30,11 +30,12 @@ import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
-import org.apache.isis.core.progmodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
@@ -46,7 +47,6 @@ import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.testsystem.TestClassSubstitutor;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.defaults.progmodel.JavaReflector;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -96,8 +96,8 @@ public abstract class JavaReflectorTestAbstract {
             }
         });
 
-        final JavaReflector reflector =
-            new JavaReflector(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
+        final ObjectReflectorDefault reflector =
+            new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
                 new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
                 new MetaModelValidatorNoop());
         reflector.setRuntimeContext(new RuntimeContextFromSession());
@@ -115,7 +115,7 @@ public abstract class JavaReflectorTestAbstract {
         specification = loadSpecification(reflector);
     }
 
-    protected abstract ObjectSpecification loadSpecification(JavaReflector reflector);
+    protected abstract ObjectSpecification loadSpecification(ObjectReflectorDefault reflector);
 
     @Test
     public void testCollectionFacet() throws Exception {

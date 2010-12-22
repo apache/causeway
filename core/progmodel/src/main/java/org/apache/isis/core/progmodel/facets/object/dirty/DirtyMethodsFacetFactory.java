@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.FacetUtil;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
@@ -42,7 +42,7 @@ public class DirtyMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
     private static final String[] PREFIXES = { MARK_DIRTY_PREFIX, CLEAR_DIRTY_PREFIX, IS_DIRTY_PREFIX, };
 
     public DirtyMethodsFacetFactory() {
-        super(PREFIXES, ObjectFeatureType.OBJECTS_ONLY);
+        super(PREFIXES, FeatureType.OBJECTS_ONLY);
 
     }
 

@@ -25,15 +25,16 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
+
+import com.google.common.base.Objects;
+
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceComposite;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.config.internal.PropertiesReader;
-import org.apache.log4j.Logger;
-
-import com.google.common.base.Objects;
 
 /**
  * Adapter for {@link ConfigurationBuilder}, loading the specified configuration resource (file) from the given

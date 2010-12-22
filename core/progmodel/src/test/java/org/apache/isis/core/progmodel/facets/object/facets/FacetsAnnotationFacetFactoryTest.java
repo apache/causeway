@@ -27,7 +27,8 @@ import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.spec.feature.ObjectFeatureType;
+import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
+import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -49,17 +50,17 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     @Override
     public void testFeatureTypes() {
-        final List<ObjectFeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, ObjectFeatureType.OBJECT));
-        assertFalse(contains(featureTypes, ObjectFeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, ObjectFeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION));
-        assertFalse(contains(featureTypes, ObjectFeatureType.ACTION_PARAMETER));
+        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
+        assertTrue(contains(featureTypes, FeatureType.OBJECT));
+        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
+        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION));
+        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public static class CustomerFacetFactory implements FacetFactory {
         @Override
-        public List<ObjectFeatureType> getFeatureTypes() {
+        public List<FeatureType> getFeatureTypes() {
             return null;
         }
 
@@ -82,7 +83,7 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public static class CustomerFacetFactory2 implements FacetFactory {
         @Override
-        public List<ObjectFeatureType> getFeatureTypes() {
+        public List<FeatureType> getFeatureTypes() {
             return null;
         }
 

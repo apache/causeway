@@ -20,9 +20,7 @@
 
 package org.apache.isis.core.metamodel.encoding;
 
-import java.io.Closeable;
 import java.io.DataOutputStream;
-import java.io.Flushable;
 import java.io.IOException;
 
 public class DataOutputExtendedDecorator implements DataOutputExtended {

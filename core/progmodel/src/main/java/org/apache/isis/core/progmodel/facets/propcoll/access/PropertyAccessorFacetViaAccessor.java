@@ -25,10 +25,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 
 
 public class PropertyAccessorFacetViaAccessor extends PropertyAccessorFacetAbstract implements ImperativeFacet {
@@ -63,7 +63,7 @@ public class PropertyAccessorFacetViaAccessor extends PropertyAccessorFacetAbstr
 
 	@Override
     public Object getProperty(final ObjectAdapter owningAdapter) {
-        return ObjectInvokeUtils.invoke(method, owningAdapter);
+        return AdapterInvokeUtils.invoke(method, owningAdapter);
     }
 
     @Override

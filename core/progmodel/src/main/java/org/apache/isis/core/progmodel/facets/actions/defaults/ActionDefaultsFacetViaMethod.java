@@ -24,12 +24,12 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.adapter.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.java5.ImperativeFacet;
-import org.apache.isis.core.metamodel.util.ObjectInvokeUtils;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
 
 
@@ -71,7 +71,7 @@ public class ActionDefaultsFacetViaMethod extends ActionDefaultsFacetAbstract im
     
 
     public Object[] getDefaults(final ObjectAdapter owningAdapter) {
-        final Object[] defaults = (Object[]) ObjectInvokeUtils.invoke(method, owningAdapter);
+        final Object[] defaults = (Object[]) AdapterInvokeUtils.invoke(method, owningAdapter);
         return defaults;
 
         // TODO fix the setting up actionMethod so that we can check the types.
