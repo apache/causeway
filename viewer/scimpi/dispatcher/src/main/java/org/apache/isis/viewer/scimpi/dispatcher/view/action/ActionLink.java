@@ -38,14 +38,14 @@ public class ActionLink extends AbstractElementProcessor {
         String forwardResultTo = request.getOptionalProperty(VIEW);
         String forwardVoidTo = request.getOptionalProperty(VOID);
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
-        String resultOverrideSegment = resultOverride == null ? "" : "&" + RESULT_OVERRIDE + "=" + resultOverride;
+        String resultOverrideSegment = resultOverride == null ? "" : "&amp;" + RESULT_OVERRIDE + "=" + resultOverride;
         String resultName = request.getOptionalProperty(RESULT_NAME);
-        String resultNameSegment = resultName == null ? "" : "&" + RESULT_NAME + "=" + resultName;
+        String resultNameSegment = resultName == null ? "" : "&amp;" + RESULT_NAME + "=" + resultName;
         String scope = request.getOptionalProperty(SCOPE);
-        String scopeSegment = scope == null ? "" : "&" + SCOPE + "=" + scope;
+        String scopeSegment = scope == null ? "" : "&amp;" + SCOPE + "=" + scope;
         String confirm = request.getOptionalProperty(CONFIRM);
         // TODO need a mechanism for globally dealing with encoding; then use the new encode method
-        String confirmSegment = confirm == null ? "" : "&" + CONFIRM + "=" + URLEncoder.encode(confirm);
+        String confirmSegment = confirm == null ? "" : "&amp;" + CONFIRM + "=" + URLEncoder.encode(confirm);
 
         RequestContext context = request.getContext();
         ObjectAdapter object = MethodsUtils.findObject(context, objectId);
@@ -88,10 +88,10 @@ public class ActionLink extends AbstractElementProcessor {
         }
         
         String interactionParamters = context.encodedInteractionParameters();
-        String forwardResultSegment = forwardResultTo == null ? "" :  "&" + VIEW + "=" + context.fullFilePath(forwardResultTo);
+        String forwardResultSegment = forwardResultTo == null ? "" :  "&amp;" + VIEW + "=" + context.fullFilePath(forwardResultTo);
         String voidView = context.fullFilePath(forwardVoidTo == null ? context.getResourceFile() : forwardVoidTo);
-        String forwardVoidSegment = "&" + VOID + "=" + voidView;
-        request.appendHtml("<a href=\"action.app?" + OBJECT + "=" + objectId + "&" + VERSION + "=" + version + "&" + METHOD + "=" + method
+        String forwardVoidSegment = "&amp;" + VOID + "=" + voidView;
+        request.appendHtml("<a href=\"action.app?" + OBJECT + "=" + objectId + "&amp;" + VERSION + "=" + version + "&amp;" + METHOD + "=" + method
                 + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + interactionParamters + "\">");
         request.appendHtml(text);
         request.appendHtml("</a>");

@@ -42,7 +42,8 @@ public class LongFormView extends AbstractFormView {
             List<ObjectAssociation> fields = facet.valueSpec().getAssociations(
                     ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
             boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
-            TableView.write(request, object, field, collection, fields, isFieldEditable);
+            String summary = "Table of elements in " + field.getName();
+            TableView.write(request, summary, object, field, collection, fields, isFieldEditable);
         } else {
             FieldValue.write(request, object, field, linkedObject, null, true, 0);
         }

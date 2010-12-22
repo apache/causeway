@@ -53,14 +53,14 @@ public class InputForm {
                 continue;
             }
             request.appendHtml("  <input type=\"hidden\" name=\"" + hiddenField.getName() + "\" value=\"" + hiddenField.getValue()
-                    + "\">\n");
+                    + "\" />\n");
         }
         request.appendHtml(request.getContext().interactionFields());
         for (int i = 0; i < fields.length; i++) {
             InputField fld = fields[i];
             if (fld.isHidden()) {
                 request.appendHtml("  <input type=\"hidden\" name=\"" + fld.getName() + "\" value=\"" + fld.getValue()
-                        + "\">\n");
+                        + "\" />\n");
             } else {
                 String errorSegment = fld.getErrorText() == null ? "" : "<span class=\"error\">" + fld.getErrorText() + "</span>";
                 String fieldSegment = createField(fld);
@@ -72,7 +72,7 @@ public class InputForm {
 
         Errors.append(request, null);
         
-        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\">\n");
+        request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" />\n");
         // TODO reinstate fieldsets when we can specify them
         //request.appendHtml("</fieldset>\n");
         request.appendHtml("</form>\n");
@@ -111,7 +111,7 @@ public class InputForm {
     private static String createObjectField(InputField field, String type) {
         String value = field.getValue();
         String valueSegment = value == null ? "" : " value=\"" + value + "\"";
-        return field.getHtml() + "\n  <input type=\"hidden\" name=\"" + field.getName() + "\"" + valueSegment + ">";
+        return field.getHtml() + "\n  <input type=\"hidden\" name=\"" + field.getName() + "\"" + valueSegment + " />";
     }
 
     private static String createTextArea(InputField field) {
@@ -137,18 +137,18 @@ public class InputForm {
         String value = field.getValue();
         String valueSegment = value == null ? "" : " value=\"" + value + "\"";
         String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
-        String maxLengthSegment = field.getMaxLength() == 0 ? "" : " value=\"" + field.getMaxLength() + "\"";
+        String maxLengthSegment = field.getMaxLength() == 0 ? "" : " maxlength=\"" + field.getMaxLength() + "\"";
         String requiredSegment = !field.isRequired() ? "" : " <span class=\"required\">*</span>";
         String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
         return "<input type=\"" + type + "\" name=\"" + field.getName() + "\"" + valueSegment + lengthSegment + 
-            maxLengthSegment + disabled + ">" + requiredSegment;
+            maxLengthSegment + disabled + " />" + requiredSegment;
     }
 
     private static String createCheckbox(InputField field) {
         String entryText = field.getValue();
         String valueSegment = entryText != null && entryText.toLowerCase().equals("true") ? " checked=\"checked\"" : "";
         String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        return "<input type=\"checkbox\" value=\"TRUE\" name=\"" + field.getName() + "\"" + valueSegment + disabled + ">";
+        return "<input type=\"checkbox\" name=\"" + field.getName() + "\"" + valueSegment + disabled + " />";
     }
 
     private static String createOptions(InputField field) {
@@ -169,7 +169,7 @@ public class InputForm {
         if (field.getType()  == InputField.TEXT) {
             String lengthSegment = field.getWidth() == 0 ? "" : " size=\"" + field.getWidth() + "\"";
             String hideSegment = " style=\"display: none;\" "; // TODO only hide when JS enabled
-            str.append("  <input type=\"text\" name=\"" + field.getName() + "-other\"" + hideSegment + lengthSegment + disabled + "/>");
+            str.append("  <input type=\"text\" name=\"" + field.getName() + "-other\"" + hideSegment + lengthSegment + disabled + " />");
         }
         str.append("\n");
         return str.toString();

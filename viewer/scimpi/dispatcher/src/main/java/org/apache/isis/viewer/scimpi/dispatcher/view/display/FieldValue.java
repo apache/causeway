@@ -97,7 +97,7 @@ public class FieldValue extends AbstractElementProcessor {
                 boolean flag = facet.isSet(fieldReference);
                 String valueSegment =  flag ? " checked=\"checked\"" : "";
                 String disabled = " disabled=\"disabled\"";
-                value =  "<input type=\"checkbox\"" + valueSegment + disabled + ">";
+                value =  "<input type=\"checkbox\"" + valueSegment + disabled + " />";
             }
             
             request.appendHtml(value);

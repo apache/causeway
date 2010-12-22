@@ -33,7 +33,7 @@ public class FormEntry extends AbstractElementProcessor {
         boolean isHidden =  request.isRequested(HIDDEN, true);
         block.exclude(field);
         // TODO this is replaced because the field is marked as hidden!
-        String content = "refernce <input type=\"" + (isHidden ? "hidden" : "text") + "\" disabled=\"disabled\" name=\"" + field + "\" value=\"" + value + "\" />";
+        String content = "reference <input type=\"" + (isHidden ? "hidden" : "text") + "\" disabled=\"disabled\" name=\"" + field + "\" value=\"" + value + "\" />";
         block.replaceContent(field, content);
     }
 

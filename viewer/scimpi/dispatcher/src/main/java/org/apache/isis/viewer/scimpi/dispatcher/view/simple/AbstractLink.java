@@ -70,7 +70,7 @@ public abstract class AbstractLink extends AbstractElementProcessor {
             String classSegment = " class=\"" + cls + "\"";
             String titleSegment = title == null ? "" : (" title=\"" + title + "\"");
             String additionalSegment = additionalParameters(request);
-            additionalSegment = additionalSegment == null ? "" : "&" + additionalSegment;
+            additionalSegment = additionalSegment == null ? "" : "&amp;" + additionalSegment;
             request.appendHtml("<a" + classSegment + titleSegment + " href=\"" + view + "?" + variableSegment + context.encodedInteractionParameters()
                     + additionalSegment + "\">");
             request.pushNewBuffer();

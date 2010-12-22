@@ -123,7 +123,7 @@ public class Selector extends AbstractElementProcessor {
         String elementId = context.mapObject(element, Scope.INTERACTION);
         buffer.append("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(element)
                 + "\" alt=\"" + element.getSpecification().getShortName() + "\"/>" + element.titleString() + "\n");
-        buffer.append("<input type=\"hidden\" name=\"" + field + "\" value=\"" + elementId + "\"" + "/>\n");
+        buffer.append("<input type=\"hidden\" name=\"" + field + "\" value=\"" + elementId + "\" />\n");
         return buffer.toString();
     }
 

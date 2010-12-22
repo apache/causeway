@@ -104,8 +104,8 @@ public class TableView extends AbstractTableView {
         @Override
         public void writeElement(Request request, RequestContext context, ObjectAdapter element) {
             String rowId = context.mapObject(element, Scope.INTERACTION);
-            String scope = linkRow == null ? "" : "&" + SCOPE + "=" + linkRow.getScope();
-            String result = ""; // linkRow.getVariable().equals("_result") ? "" : "&" +
+            String scope = linkRow == null ? "" : "&amp;" + SCOPE + "=" + linkRow.getScope();
+            String result = ""; // linkRow.getVariable().equals("_result") ? "" : "&amp;" +
                                 // RequestContext.RESULT + "=" + context.mapObject(collection,
                                 // Scope.REQUEST);
             result = context.encodedInteractionParameters();
@@ -232,6 +232,7 @@ public class TableView extends AbstractTableView {
 
     public static void write(
             Request request,
+            String summary,
             ObjectAdapter object,
             ObjectAssociation field,
             ObjectAdapter collection,
@@ -245,7 +246,7 @@ public class TableView extends AbstractTableView {
         }
         RequestContext context = request.getContext();
         TableContentWriter rowBuilder = rowBuilder(request, context, context.mapObject(object, Scope.REQUEST), field.getId(), fields);
-        write(request, collection, rowBuilder, null);
+        write(request, collection, summary, rowBuilder, null);
     }
 
     @Override

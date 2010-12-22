@@ -97,18 +97,16 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             } else {
                 cls = " class=\"field " + (evenRowClass == null ? EVEN_ROW_CLASS : evenRowClass) + "\"";
             }
-            request.appendHtml("<div " + cls + description + "><span class=\"label\">");
-            request.appendHtml(field.getName());
-            request.appendHtml(":</span><span class=\"value\">");
+            request.appendHtml("<div " + cls + description + "><span class=\"label\">" + field.getName() + ":</span>");
             LinkedObject linkedObject = linkFields[i];
             addField(request, object, field, linkedObject);
-            request.appendHtml("</span></div>");
+            request.appendHtml("</div>");
         }
         request.appendHtml("</div>");
     }
 
     protected void addField(Request request, ObjectAdapter object, ObjectAssociation field, LinkedObject linkedObject) {
-        FieldValue.write(request, object, field, linkedObject, null, true, 0);
+        FieldValue.write(request, object, field, linkedObject, "value", true, 0);
     }
 
     protected boolean ignoreField(ObjectAssociation objectField) {

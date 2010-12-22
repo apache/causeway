@@ -68,6 +68,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             facet = collection.getTypeOfFacet();
         }
 
+        String summary = request.getOptionalProperty("summary");
         String rowClassesList = request.getOptionalProperty(ROW_CLASSES, ODD_ROW_CLASS + "|" + EVEN_ROW_CLASS);
         String[] rowClasses = null;
         if (rowClassesList.length() > 0) {
@@ -77,7 +78,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
         List<ObjectAssociation> allFields = facet.valueSpec().getAssociations(
                 ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
         TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields);
-        write(request, collection, rowBuilder, rowClasses);
+        write(request, collection, summary, rowBuilder, rowClasses);
 
     }
 
@@ -87,10 +88,10 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             final String parent,
             final List<ObjectAssociation> allFields);
 
-    public static void write(Request request, ObjectAdapter collection, TableContentWriter rowBuilder, String[] rowClasses) {
+    public static void write(Request request, ObjectAdapter collection, String summary, TableContentWriter rowBuilder, String[] rowClasses) {
         RequestContext context = request.getContext();
 
-        request.appendHtml("<table>");
+        request.appendHtml("<table summary=\"" + summary + "\">");
         rowBuilder.writeHeaders(request);
 
         CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);

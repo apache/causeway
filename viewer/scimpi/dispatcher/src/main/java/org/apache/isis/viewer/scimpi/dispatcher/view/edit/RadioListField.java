@@ -56,7 +56,7 @@ public class RadioListField extends AbstractElementProcessor {
                 }
                 String title = element.titleString();
                 String checked = "";
-                buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + ">" + title
+                buffer.append("<input type=\"radio\" name=\"" + field + "\" value=\"" + elementId + "\"" + checked + " />" + title
                         + "</input><br/>\n");
             }
 

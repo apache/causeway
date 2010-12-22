@@ -88,7 +88,7 @@ public class RemoveElement extends AbstractElementProcessor {
             String objectId = request.getContext().mapObject(adapter, Scope.INTERACTION);
             String elementId = request.getContext().mapObject(element, Scope.INTERACTION);
             String action = RemoveAction.ACTION + Dispatcher.COMMAND_ROOT;
-            request.appendHtml("<form" + classSegment + " method=\"POST\" action=\"" + action + "\" >");
+            request.appendHtml("<form" + classSegment + " method=\"post\" action=\"" + action + "\" >");
             request.appendHtml("<input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + objectId + "\" />");
             request.appendHtml("<input type=\"hidden\" name=\"" + FIELD + "\" value=\"" + fieldName + "\" />");
             request.appendHtml("<input type=\"hidden\" name=\"" + ELEMENT + "\" value=\"" + elementId + "\" />");

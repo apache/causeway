@@ -35,8 +35,10 @@ public class DebugView {
     }
     
     public void header() {
+        appendln("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"http://www.w3.org/TR/html4/loose.dtd\">");
         appendln("<html>");
         appendln("<head>");
+        appendln("<title>Debug Details</title>");
         appendln("<style type=\"text/css\">");
         appendln("body { margin: 15px; }\n" +
                 "links { font-size: 80%; padding-bottom:5px; }\n" +  
@@ -54,7 +56,7 @@ public class DebugView {
 
     public void startTable() {
         writer.flush();
-        writer.println("<table class=\"debug\" width=\"100%\">");
+        writer.println("<table class=\"debug\" width=\"100%\" summary=\"Debug details\" >");
     }
 
     public void exception(Throwable e) {

@@ -124,13 +124,13 @@ public class ActionButton extends AbstractElementProcessor {
         request.appendHtml("\n<form " + idSegment + classSegment + " action=\"action.app\" method=\"post\">\n");
         if (objectId == null) {
             request.appendHtml("  <input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + 
-                    context.getVariable(RequestContext.RESULT) + "\">\n");
+                    context.getVariable(RequestContext.RESULT) + "\" />\n");
         } else {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + objectId + "\">\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + objectId + "\" />\n");
         }
-        request.appendHtml("  <input type=\"hidden\" name=\"" + VERSION + "\" value=\"" + version + "\">\n");
+        request.appendHtml("  <input type=\"hidden\" name=\"" + VERSION + "\" value=\"" + version + "\" />\n");
         if (scope != null) {
-            request.appendHtml("  <input type=\"hidden\" name=\"" + SCOPE + "\" value=\"" + scope + "\">\n");
+            request.appendHtml("  <input type=\"hidden\" name=\"" + SCOPE + "\" value=\"" + scope + "\" />\n");
         }
         request.appendHtml("  <input type=\"hidden\" name=\"" + METHOD + "\" value=\"" + action.getId() + "\" />\n");
         if (forwardResultTo != null) {
