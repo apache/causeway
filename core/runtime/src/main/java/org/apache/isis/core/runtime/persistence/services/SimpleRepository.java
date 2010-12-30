@@ -41,7 +41,7 @@ public final class SimpleRepository {
     }
 
     public String iconName() {
-        return getSpec().getShortName();
+        return getSpec().getShortIdentifier();
     }
 
     public String title() {

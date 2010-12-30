@@ -23,9 +23,9 @@ package org.apache.isis.core.progmodel.facets.ordering.actionorder;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.ActionOrder;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.ordering.actionorder.ActionOrderFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 

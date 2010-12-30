@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.actions.notinservicemenu;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Indicates that the (repository) action should not be contributed to any objects.

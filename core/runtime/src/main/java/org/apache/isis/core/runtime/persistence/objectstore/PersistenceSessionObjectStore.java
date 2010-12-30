@@ -217,7 +217,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
             resolveImmediatelyFromPersistenceLayer(adapter);
             if (LOG.isInfoEnabled()) {
                 // don't log object - its toString() may use the unresolved field, or unresolved collection
-                LOG.info("resolved: " + adapter.getSpecification().getShortName() + " " + resolveState.code() + " "
+                LOG.info("resolved: " + adapter.getSpecification().getShortIdentifier() + " " + resolveState.code() + " "
                     + adapter.getOid());
             }
         }
@@ -263,8 +263,8 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
         if (LOG.isInfoEnabled()) {
             // don't log object - it's toString() may use the unresolved field
             // or unresolved collection
-            LOG.info("resolve field " + objectAdapter.getSpecification().getShortName() + "." + field.getId() + ": "
-                + referenceAdapter.getSpecification().getShortName() + " " + referenceAdapter.getResolveState().code()
+            LOG.info("resolve field " + objectAdapter.getSpecification().getShortIdentifier() + "." + field.getId() + ": "
+                + referenceAdapter.getSpecification().getShortIdentifier() + " " + referenceAdapter.getResolveState().code()
                 + " " + referenceAdapter.getOid());
         }
         resolveFieldFromPersistenceLayer(objectAdapter, field);
@@ -513,7 +513,7 @@ public class PersistenceSessionObjectStore extends PersistenceSessionAbstract im
     @Override
     public boolean hasInstances(final ObjectSpecification specification) {
         if (LOG.isInfoEnabled()) {
-            LOG.info("hasInstances of " + specification.getShortName());
+            LOG.info("hasInstances of " + specification.getShortIdentifier());
         }
         return hasInstancesFromPersistenceLayer(specification);
     }

@@ -54,7 +54,7 @@ public class PersistenceQueryFindByTitle extends PersistenceQueryBuiltInAbstract
     @Override
     public String toString() {
         final ToString str = ToString.createAnonymous(this);
-        str.append("spec", getSpecification().getShortName());
+        str.append("spec", getSpecification().getShortIdentifier());
         str.append("title", title);
         return str.toString();
     }

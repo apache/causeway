@@ -29,7 +29,7 @@ import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecode
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.facets.DecoratingFacet;
+import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;

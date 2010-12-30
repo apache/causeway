@@ -37,7 +37,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.commons.filters.Filter;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacetUtils.ImperativeFacetFlags;

@@ -50,7 +50,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
 
     @Override
     public void execute(PersistenceCommandContext context) {
-        String specName = object.getSpecification().getFullName();
+        String specName = object.getSpecification().getFullIdentifier();
         StateWriter writer = ((NoSqlCommandContext) context).createStateWriter(specName);
         String key = keyCreator.key(object.getOid());
         writer.writeId(key);
@@ -103,7 +103,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
         if (field == null) {
             writer.writeField(association.getId(), null);
         } else {
-            String specName = field.getSpecification().getFullName();
+            String specName = field.getSpecification().getFullIdentifier();
             StateWriter aggregateWriter = writer.addAggregate(association.getId());
             writeFields(aggregateWriter, specName, field);
         }
@@ -143,7 +143,7 @@ final class WriteObjectCommand implements CreateObjectCommand, SaveObjectCommand
             List<StateWriter> elements = new ArrayList<StateWriter>();
             for (ObjectAdapter element : collectionFacet.iterable(collection)) {
                StateWriter elementWriter = writer.createElementWriter();
-               writeFields(elementWriter, element.getSpecification().getFullName(), element);
+               writeFields(elementWriter, element.getSpecification().getFullIdentifier(), element);
                elements.add(elementWriter);
             }
             writer.writeCollection(association.getId(), elements);

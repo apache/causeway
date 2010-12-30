@@ -158,7 +158,7 @@ public class IndirectObjectMapping implements ObjectMapping {
         }
         
         Map<String, Mapping> map = scopedMappings.get(scope);
-        String id = obj.getSpecification().getShortName() + "@" + nextId();
+        String id = obj.getSpecification().getShortIdentifier() + "@" + nextId();
         map.put(id, mapping);
         return id;
     }

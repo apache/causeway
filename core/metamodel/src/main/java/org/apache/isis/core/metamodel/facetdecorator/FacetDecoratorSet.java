@@ -32,9 +32,9 @@ import java.util.Set;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.exceptions.ReflectionException;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.spec.IntrospectableSpecificationAbstract;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -103,7 +103,7 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
     /**
      * @param holder
      */
-    public void decorate(IntrospectableSpecificationAbstract holder) {
+    public void decorate(ObjectSpecification holder) {
         decorateAllFacets(holder);
         for (ObjectAssociation objectAssociation : holder.getAssociations()) {
             this.decorateAllFacets(objectAssociation);

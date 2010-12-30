@@ -26,10 +26,11 @@ import java.util.Enumeration;
 
 import org.apache.log4j.Appender;
 import org.apache.log4j.Logger;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.logging.SnapshotAppender;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.View;
@@ -42,7 +43,7 @@ import org.apache.isis.viewer.dnd.view.option.UserActionAbstract;
  */
 public class DebugDumpSnapshotOption extends UserActionAbstract {
     public DebugDumpSnapshotOption() {
-        super("Dump log snapshot", ObjectActionType.DEBUG);
+        super("Dump log snapshot", ActionType.DEBUG);
     }
 
     @Override

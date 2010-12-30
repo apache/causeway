@@ -21,21 +21,21 @@
 package org.apache.isis.core.runtime.testsystem;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.consent.InteractionResultSet;
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.metamodel.feature.FeatureType;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent2.InteractionResult;
+import org.apache.isis.core.metamodel.consent2.InteractionResultSet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions2.ValidityContext;
+import org.apache.isis.core.metamodel.interactions2.VisibilityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
@@ -50,7 +50,7 @@ public class TestProxyField extends FacetHolderImpl implements ObjectAssociation
     public TestProxyField(final String name, final ObjectSpecification spec) {
         this.name = name;
         this.spec = spec;
-        identifier = Identifier.propertyOrCollectionIdentifier(spec.getFullName(), name);
+        identifier = Identifier.propertyOrCollectionIdentifier(spec.getFullIdentifier(), name);
 		runtimeContext = new RuntimeContextNoRuntime();
     }
 

@@ -26,9 +26,9 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -114,7 +114,7 @@ public class AppActionsCssMenuFactory extends ComponentFactoryAbstract {
 		ObjectSpecification serviceSpec = serviceAdapterMemento.getObjectAdapter()
 				.getSpecification();
 
-		for (final ObjectAction noAction : serviceSpec.getObjectActions(ObjectActionType.USER)) {
+		for (final ObjectAction noAction : serviceSpec.getObjectActions(ActionType.USER)) {
 
 		    // skip if annotated to not be included in repository menu
 		    if (noAction.getFacet(NotInServiceMenuFacet.class) != null) {

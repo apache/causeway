@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.ident.title;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.ident.icon.IconFacet;
 import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
 

@@ -20,9 +20,9 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.interactions2.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.HidingInteractionAdvisor;
 
 
 /**

@@ -31,7 +31,7 @@ import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.facets.DecoratingFacet;
+import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetAbstract;

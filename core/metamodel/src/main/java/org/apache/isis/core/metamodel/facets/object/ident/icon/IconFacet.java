@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.ident.icon;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /*
  * Icon for an object a class (for example, by placing an appropriately named image

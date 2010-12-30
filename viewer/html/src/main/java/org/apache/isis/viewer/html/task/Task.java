@@ -24,9 +24,9 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
+import org.apache.isis.core.metamodel.facets.SpecificationFacets;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.progmodel.facets.value.PasswordValueFacet;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.html.component.Page;
@@ -145,7 +145,7 @@ public abstract class Task {
         debug.indent();
         for (int i = 0; i < names.length; i++) {
             final String status = (readOnly[i] ? "R" : "-") + (optional[i] ? "O" : "M") + (errors[i] == null ? "-" : "E");
-            debug.appendln("    " + i + "  " + names[i] + " (" + status + "):  " + fieldSpecifications[i].getFullName() + " -> "
+            debug.appendln("    " + i + "  " + names[i] + " (" + status + "):  " + fieldSpecifications[i].getFullIdentifier() + " -> "
                     + entryText[i]);
         }
         debug.unindent();

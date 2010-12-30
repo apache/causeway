@@ -172,7 +172,7 @@ public class ObjectFixtureFilePersistor {
 
     private void saveData(PrintWriter writer, ObjectAdapter adapter, SavedObjects saved) {
         String id = saved.getId(adapter);
-        writer.println(adapter.getSpecification().getFullName() + "#" + id);
+        writer.println(adapter.getSpecification().getFullIdentifier() + "#" + id);
 
         ObjectSpecification adapterSpec = adapter.getSpecification();
         final List<ObjectAssociation> associations = adapterSpec.getAssociations();
@@ -194,7 +194,7 @@ public class ObjectFixtureFilePersistor {
                 CollectionFacet facet = associatedObject.getSpecification().getFacet(CollectionFacet.class);
                 for (ObjectAdapter element : facet.iterable(associatedObject)) {
                     String refId = saved.getId(element);
-                    String cls = element.getSpecification().getFullName();
+                    String cls = element.getSpecification().getFullIdentifier();
                     writer.print(cls + "#" + refId + " ");
                 }
                 writer.println();
@@ -205,7 +205,7 @@ public class ObjectFixtureFilePersistor {
                 writer.println(encodedValue);
             } else if (association.isOneToOneAssociation()) {
                 String refId = saved.getId(associatedObject);
-                String cls = associatedObject.getSpecification().getFullName();
+                String cls = associatedObject.getSpecification().getFullIdentifier();
                 writer.println(cls + "#" + refId);
             }
         }

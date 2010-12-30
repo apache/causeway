@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 

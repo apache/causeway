@@ -31,7 +31,8 @@ import org.apache.isis.alternatives.remoting.common.data.common.ReferenceData;
 import org.apache.isis.alternatives.remoting.common.exchange.ExecuteServerActionRequest;
 import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
 import org.apache.isis.core.metamodel.encoding.Encodable;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -48,7 +49,7 @@ public class ExecuteServerActionEncodabilityTest extends EncodabilityContractTes
 	}
 
 	protected Encodable createEncodable() {
-		return new ExecuteServerActionRequest(mockAuthSession, ObjectActionType.USER, "placeOrder", mockTargetData, new Data[0]);
+		return new ExecuteServerActionRequest(mockAuthSession, ActionType.USER, "placeOrder", mockTargetData, new Data[0]);
 	}
 	
 	

@@ -35,11 +35,11 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.viewer.wicket.model.common.NoResultsHandler;
 import org.apache.isis.viewer.wicket.model.common.SelectionHandler;
 import org.apache.isis.viewer.wicket.model.mementos.ActionMemento;
@@ -125,7 +125,7 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         ObjectSpecification actionOnTypeSpec = noAction.getOnType();
         if (actionOnTypeSpec != null) {
             PageParameterNames.ACTION_OWNING_SPEC.addTo(pageParameters,
-                    actionOnTypeSpec.getFullName());
+                    actionOnTypeSpec.getFullIdentifier());
         }
         PageParameterNames.ACTION_NAME_PARMS.addTo(pageParameters,
                 actionNameParmsId);
@@ -246,9 +246,9 @@ public class ActionModel extends ModelAbstract<ObjectAdapter> {
         return PageParameterNames.ACTION_NAME_PARMS.getFrom(pageParameters);
     }
 
-    private static ObjectActionType actionTypeFor(
+    private static ActionType actionTypeFor(
             PageParameters pageParameters) {
-        return ObjectActionType.valueOf(PageParameterNames.ACTION_TYPE
+        return ActionType.valueOf(PageParameterNames.ACTION_TYPE
                 .getFrom(pageParameters));
     }
 

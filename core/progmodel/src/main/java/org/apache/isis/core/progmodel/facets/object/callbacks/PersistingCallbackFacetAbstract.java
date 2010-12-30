@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.progmodel.facets.object.callbacks;
 
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 
 

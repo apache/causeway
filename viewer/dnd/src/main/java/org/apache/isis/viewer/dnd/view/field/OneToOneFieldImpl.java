@@ -22,8 +22,8 @@ package org.apache.isis.viewer.dnd.view.field;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -75,7 +75,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
 
         if (!spec.isOfType(targetType)) {
             // TODO: move logic into Facet
-            return new Veto(String.format("Can only drop objects of type %s", targetType.getName()));
+            return new Veto(String.format("Can only drop objects of type %s", targetType.getSingularName()));
         }
 
         if (getParent().isPersistent() && adapter.isTransient()) {
@@ -92,23 +92,28 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
         getOneToOneAssociation().clearAssociation(getParent());
     }
 
+    @Override
     public void debugDetails(final DebugString debug) {
         field.debugDetails(debug);
         debug.appendln("object", adapter);
     }
 
+    @Override
     public String getFieldName() {
         return field.getName();
     }
 
+    @Override
     public ObjectAssociation getField() {
         return field.getObjectAssociation();
     }
 
+    @Override
     public Consent isEditable() {
         return getField().isUsable(IsisContext.getAuthenticationSession(), getParent());
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return adapter;
     }
@@ -122,18 +127,22 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
         return (OneToOneAssociation) getField();
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return getOneToOneAssociation().getChoices(getParent());
     }
 
+    @Override
     public ObjectAdapter getParent() {
         return field.getParent();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return getOneToOneAssociation().getSpecification();
     }
 
+    @Override
     public boolean isMandatory() {
         return getOneToOneAssociation().isMandatory();
     }
@@ -148,10 +157,12 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
         return true;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return getOneToOneAssociation().hasChoices();
     }
 
+    @Override
     public boolean isTransient() {
         return adapter != null && adapter.isTransient();
     }
@@ -169,6 +180,7 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
         getOneToOneAssociation().setAssociation(getParent(), object);
     }
 
+    @Override
     public String title() {
         return adapter == null ? "" : adapter.titleString();
     }
@@ -183,18 +195,21 @@ public class OneToOneFieldImpl extends AbstractObjectContent implements OneToOne
         return field.getName() + " for " + field.getParent().titleString();
     }
 
+    @Override
     public String getId() {
         return getOneToOneAssociation().getName();
     }
 
+    @Override
     public String getDescription() {
         final String name = getFieldName();
-        String type = getField().getSpecification().getName();
+        String type = getField().getSpecification().getSingularName();
         type = name.indexOf(type) == -1 ? " (" + type + ")" : "";
         final String description = getOneToOneAssociation().getDescription();
         return name + type + " " + description;
     }
 
+    @Override
     public String getHelp() {
         return getOneToOneAssociation().getHelp();
     }

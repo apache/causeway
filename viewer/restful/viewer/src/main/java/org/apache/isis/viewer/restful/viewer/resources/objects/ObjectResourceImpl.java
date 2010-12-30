@@ -14,15 +14,15 @@ import nu.xom.Element;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -152,7 +152,7 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
         final ObjectSpecification noSpec = nakedObject.getSpecification();
 
         final List<ObjectAction> actions = new ArrayList<ObjectAction>();
-        for (final ObjectActionType type : ResourceAbstract.ACTION_TYPES) {
+        for (final ActionType type : ResourceAbstract.ACTION_TYPES) {
             final List<ObjectAction> actionsForType = ActionUtils.flattened(noSpec.getObjectActions(type));
             actions.addAll(actionsForType);
         }
@@ -494,15 +494,15 @@ public class ObjectResourceImpl extends ResourceAbstract implements ObjectResour
 	// TODO: this is horrid - shouldn't have to search in this way...
     private ObjectAction getObjectAction(final ObjectSpecification noSpec, final String actionId) {
         ObjectAction action = null;
-        action = noSpec.getObjectAction(ObjectActionType.USER, actionId);
+        action = noSpec.getObjectAction(ActionType.USER, actionId);
         if (action != null) {
             return action;
         }
-        action = noSpec.getObjectAction(ObjectActionType.EXPLORATION, actionId);
+        action = noSpec.getObjectAction(ActionType.EXPLORATION, actionId);
         if (action != null) {
             return action;
         }
-        action = noSpec.getObjectAction(ObjectActionType.DEBUG, actionId);
+        action = noSpec.getObjectAction(ActionType.DEBUG, actionId);
         if (action != null) {
             return action;
         }

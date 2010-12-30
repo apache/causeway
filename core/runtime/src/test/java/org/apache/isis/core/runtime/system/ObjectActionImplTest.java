@@ -32,10 +32,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
@@ -43,7 +43,8 @@ import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
 import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.specloader.internal.ObjectActionImpl;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
+import org.apache.isis.core.metamodel.specloader.internal.spec.ObjectActionImpl;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit3TestCase;
 import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
@@ -89,7 +90,7 @@ public class ObjectActionImplTest extends ProxyJunit3TestCase {
             }
         });
 
-        action = new ObjectActionImpl(mockFacetedMethod, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockServicesProvider, mockQuerySubmitter);
+        action = new ObjectActionImpl(mockFacetedMethod, new ObjectMemberContext(mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter), mockServicesProvider);
     }
 
     @Test

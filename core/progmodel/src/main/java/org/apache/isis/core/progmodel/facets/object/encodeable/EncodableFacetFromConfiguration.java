@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.progmodel.facets.object.encodeable;
 
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
 

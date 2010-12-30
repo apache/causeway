@@ -34,9 +34,9 @@ import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 
 @RunWith(JMock.class)
 public class GivenMetaModelWhenInitialize {
@@ -44,7 +44,7 @@ public class GivenMetaModelWhenInitialize {
 	private Mockery mockery = new JUnit4Mockery();
 	
 	private IsisConfiguration mockConfiguration;
-	private ProgrammingModelFacets mockProgrammingModelFacets;
+	private ProgrammingModel mockProgrammingModelFacets;
 	private FacetDecorator mockFacetDecorator;
 	private ClassSubstitutor mockClassSubstitutor;
 	private CollectionTypeRegistry mockCollectionTypeRegistry;
@@ -57,7 +57,7 @@ public class GivenMetaModelWhenInitialize {
 	public void setUp() {
 		mockContext = mockery.mock(EmbeddedContext.class);
 		mockConfiguration = mockery.mock(IsisConfiguration.class);
-		mockProgrammingModelFacets = mockery.mock(ProgrammingModelFacets.class);
+		mockProgrammingModelFacets = mockery.mock(ProgrammingModel.class);
 		mockCollectionTypeRegistry = mockery.mock(CollectionTypeRegistry.class);
 		mockFacetDecorator = mockery.mock(FacetDecorator.class);
 		mockClassSubstitutor = mockery.mock(ClassSubstitutor.class);

@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
+
 public interface SingleIntValueFacet extends Facet {
 
     public int value();

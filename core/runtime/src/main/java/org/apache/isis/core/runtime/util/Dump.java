@@ -29,14 +29,14 @@ import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facets.SpecificationFacets;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationFacets;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 
@@ -175,7 +175,7 @@ public final class Dump {
             string.appendAsHexln("Hash", adapter.hashCode());
             string.appendln("Object", adapter.getObject());
             string.appendln("Title", adapter.titleString());
-            string.appendln("Specification", adapter.getSpecification().getFullName());
+            string.appendln("Specification", adapter.getSpecification().getFullIdentifier());
 
             string.appendln();
 
@@ -249,16 +249,16 @@ public final class Dump {
             debug.appendTitle(specification.getClass().getName());
             debug.appendAsHexln("Hash code", specification.hashCode());
             debug.appendln("ID", specification.getIdentifier());
-            debug.appendln("Full Name", specification.getFullName());
-            debug.appendln("Short Name", specification.getShortName());
-            debug.appendln("Singular Name", specification.getName());
+            debug.appendln("Full Name", specification.getFullIdentifier());
+            debug.appendln("Short Name", specification.getShortIdentifier());
+            debug.appendln("Singular Name", specification.getSingularName());
             debug.appendln("Plural Name", specification.getPluralName());
             debug.appendln("Description", specification.getDescription());
             debug.blankLine();
             debug.appendln("Features", featureList(specification));
             debug.appendln("Type", specification.isCollection() ? "Collection" : "Object");
             if (specification.superclass() != null) {
-                debug.appendln("Superclass", specification.superclass().getFullName());
+                debug.appendln("Superclass", specification.superclass().getFullIdentifier());
             }
             debug.appendln("Interfaces", specificationNames(specification.interfaces()));
             debug.appendln("Subclasses", specificationNames(specification.subclasses()));
@@ -334,10 +334,10 @@ public final class Dump {
 
     private static void specificationActionMethods(final ObjectSpecification specification, final DebugString debug) {
         try {
-            final List<ObjectAction> userActions = specification.getObjectActions(ObjectActionType.USER);
-            final List<ObjectAction> explActions = specification.getObjectActions(ObjectActionType.EXPLORATION);
-            final List<ObjectAction> prototypeActions = specification.getObjectActions(ObjectActionType.PROTOTYPE);
-            final List<ObjectAction> debActions = specification.getObjectActions(ObjectActionType.DEBUG);
+            final List<ObjectAction> userActions = specification.getObjectActions(ActionType.USER);
+            final List<ObjectAction> explActions = specification.getObjectActions(ActionType.EXPLORATION);
+            final List<ObjectAction> prototypeActions = specification.getObjectActions(ActionType.PROTOTYPE);
+            final List<ObjectAction> debActions = specification.getObjectActions(ActionType.DEBUG);
             specificationMethods(userActions, explActions, prototypeActions, debActions, debug);
         } catch (final RuntimeException e) {
             debug.appendException(e);
@@ -346,10 +346,10 @@ public final class Dump {
 
     private static void specificationServiceMethods(final ObjectSpecification specification, final DebugString debug) {
         try {
-            final List<ObjectAction> userActions = specification.getServiceActionsReturning(ObjectActionType.USER);
-            final List<ObjectAction> explActions = specification.getServiceActionsReturning(ObjectActionType.EXPLORATION);
-            final List<ObjectAction> prototypeActions = specification.getServiceActionsReturning(ObjectActionType.PROTOTYPE);
-            final List<ObjectAction> debActions = specification.getServiceActionsReturning(ObjectActionType.DEBUG);
+            final List<ObjectAction> userActions = specification.getServiceActionsReturning(ActionType.USER);
+            final List<ObjectAction> explActions = specification.getServiceActionsReturning(ActionType.EXPLORATION);
+            final List<ObjectAction> prototypeActions = specification.getServiceActionsReturning(ActionType.PROTOTYPE);
+            final List<ObjectAction> debActions = specification.getServiceActionsReturning(ActionType.DEBUG);
             specificationMethods(userActions, explActions, prototypeActions,debActions, debug);
         } catch (final RuntimeException e) {
             debug.appendException(e);
@@ -402,7 +402,7 @@ public final class Dump {
                     final String type = field.isOneToManyAssociation() ? "Collection" : field.isOneToOneAssociation() ? "Object" : "Unknown";
                     debug.appendln("Type", type);
                     debug.appendln("Has identity", !field.getSpecification().isCollectionOrIsAggregated());
-                    debug.appendln("Spec", field.getSpecification().getFullName());
+                    debug.appendln("Spec", field.getSpecification().getFullIdentifier());
 
                     debug.appendln("Flags", (field.isAlwaysHidden() ? "" : "Visible ")
                             + (field.isNotPersisted() ? "Not Persisted " : " ")
@@ -508,7 +508,7 @@ public final class Dump {
                     for (int j = 0; j < parameters.size(); j++) {
                         debug.append(p.get(j).getName());
                         debug.append(" (");
-                        debug.append(parameters.get(j).getSpecification().getFullName());
+                        debug.append(parameters.get(j).getSpecification().getFullIdentifier());
                         debug.appendln(")");
                         debug.indent();
                         final Class<? extends Facet>[] parameterFacets = p.get(j).getFacetTypes();
@@ -530,7 +530,7 @@ public final class Dump {
     private static String[] specificationNames(final List<ObjectSpecification> specifications) {
         final String[] names = new String[specifications.size()];
         for (int i = 0; i < names.length; i++) {
-            names[i] = specifications.get(i).getFullName();
+            names[i] = specifications.get(i).getFullIdentifier();
         }
         return names;
     }

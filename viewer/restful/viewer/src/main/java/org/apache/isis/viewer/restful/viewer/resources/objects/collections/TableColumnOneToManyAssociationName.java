@@ -27,7 +27,7 @@ public class TableColumnOneToManyAssociationName extends TableColumnNakedObjectM
     public Element doTd(final OneToManyAssociation oneToManyAssociation) {
         final String memberName = oneToManyAssociation.getIdentifier().getMemberName();
         final String memberType = "collection";
-        final String uri = MessageFormat.format("{0}/specs/{1}/{2}/{3}", getContextPath(), getNoSpec().getFullName(), memberType,
+        final String uri = MessageFormat.format("{0}/specs/{1}/{2}/{3}", getContextPath(), getNoSpec().getFullIdentifier(), memberType,
                 memberName);
         return new Element(xhtmlRenderer.aHref(uri, oneToManyAssociation.getName(), "propertySpec", memberType,
                 HtmlClass.COLLECTION));

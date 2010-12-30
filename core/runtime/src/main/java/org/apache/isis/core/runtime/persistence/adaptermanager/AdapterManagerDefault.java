@@ -26,6 +26,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -35,11 +37,12 @@ import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.ServicesInjectorAware;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -55,7 +58,6 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.internal.PojoAdap
 import org.apache.isis.core.runtime.persistence.adaptermanager.internal.PojoAdapterMap;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGeneratorAware;
-import org.apache.log4j.Logger;
 
 public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware,
     SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebugInfo {
@@ -507,7 +509,8 @@ public class AdapterManagerDefault extends AdapterManagerAbstract implements Ada
         // we copy over the type onto the adapter itself
         // [not sure why this is really needed, surely we have enough info in the adapter
         // to look this up on the fly?]
-        aggregatedAdapter.setTypeOfFacet(identifiedHolder.getFacet(TypeOfFacet.class));
+        final TypeOfFacet facet = identifiedHolder.getFacet(TypeOfFacet.class);
+        aggregatedAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(facet));
 
         // same locking as parent
         aggregatedAdapter.setOptimisticLock(ownerAdapter.getVersion());

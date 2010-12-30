@@ -160,7 +160,7 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
     @Override
     public final IdentityData encodeIdentityData(final ObjectAdapter object) {
         Assert.assertNotNull("OID needed for reference", object, object.getOid());
-        return dataFactory.createIdentityData(object.getSpecification().getFullName(), object.getOid(),
+        return dataFactory.createIdentityData(object.getSpecification().getFullIdentifier(), object.getOid(),
             object.getVersion());
     }
 
@@ -227,7 +227,7 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
         final Data parameterData[] = new Data[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
             final ObjectAdapter parameter = parameters[i];
-            final String type = parameterTypes[i].getFullName();
+            final String type = parameterTypes[i].getFullIdentifier();
             parameterData[i] = createParameter(type, parameter, knownObjects);
         }
         return parameterData;
@@ -383,7 +383,7 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
     public Data encodeForResolveField(final ObjectAdapter adapter, final String fieldName) {
         final Oid oid = adapter.getOid();
         final ObjectSpecification specification = adapter.getSpecification();
-        final String type = specification.getFullName();
+        final String type = specification.getFullIdentifier();
         final ResolveState resolveState = adapter.getResolveState();
 
         Data[] fieldContent;
@@ -396,7 +396,7 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
             if (fields[i].getId().equals(fieldName)) {
                 final ObjectAdapter field = fields[i].get(adapter);
                 if (field == null) {
-                    fieldContent[i] = dataFactory.createNullData(fields[i].getSpecification().getFullName());
+                    fieldContent[i] = dataFactory.createNullData(fields[i].getSpecification().getFullIdentifier());
                 } else if (fields[i].getSpecification().isEncodeable()) {
                     fieldContent[i] = serializer.serializeEncodeable(field);
                 } else if (fields[i].isOneToManyAssociation()) {

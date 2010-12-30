@@ -30,20 +30,20 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.commons.filters.Filter;
-import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent2.InteractionResult;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetHolderNoop;
-import org.apache.isis.core.metamodel.feature.FeatureType;
-import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions2.ObjectTitleContext;
+import org.apache.isis.core.metamodel.interactions2.ObjectValidityContext;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -81,6 +81,16 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
+    public Class<?> getCorrespondingClass() {
+        try {
+            return Class.forName(name);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Override
     public void clearDirty(final ObjectAdapter object) {}
 
     @Override
@@ -89,7 +99,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public List<ObjectAction> getServiceActionsReturning(final ObjectActionType... type) {
+    public List<ObjectAction> getServiceActionsReturning(final ActionType... type) {
         return null;
     }
 
@@ -149,7 +159,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public String getFullName() {
+    public String getFullIdentifier() {
         return name;
     }
 
@@ -160,7 +170,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
 
     @Override
     public ObjectAction getObjectAction(
-            final ObjectActionType type,
+            final ActionType type,
             final String name,
             final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
@@ -170,12 +180,12 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public ObjectAction getObjectAction(final ObjectActionType type, final String name) {
+    public ObjectAction getObjectAction(final ActionType type, final String name) {
         return getObjectAction(type, name, ObjectSpecification.EMPTY_LIST);
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ObjectActionType... type) {
+    public List<ObjectAction> getObjectActions(final ActionType... type) {
         return null;
     }
 
@@ -189,18 +199,18 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     }
 
     @Override
-    public String getShortName() {
+    public String getShortIdentifier() {
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
     @Override
-    public String getName() {
+    public String getSingularName() {
         return name + " (singular)";
     }
 
     @Override
     public String getDescription() {
-        return getName();
+        return getSingularName();
     }
 
     @Override
@@ -257,7 +267,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public void markDirty(final ObjectAdapter object) {}
 
     public Object newInstance() {
-        throw new IsisException("Not able to create instance of " + getFullName()
+        throw new IsisException("Not able to create instance of " + getFullIdentifier()
                 + "; newInstance() method should be overridden");
     }
 
@@ -282,7 +292,7 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
 
     @Override
     public String toString() {
-        return getFullName();
+        return getFullIdentifier();
     }
 
     @Override
@@ -361,6 +371,38 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public Instance getInstance(ObjectAdapter adapter) {
         return adapter;
     }
+
+
+    // /////////////////////////////////////////////////////////////
+    // introspection
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public void introspectTypeHierarchyAndMembers() {
+    }
+
+    @Override
+    public void updateFromFacetValues() {
+    }
+
+    @Override
+    public void markAsService() {
+    }
+
+    @Override
+    public boolean isIntrospected() {
+        return false;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer#getObjectActionsAll()
+     */
+    @Override
+    public List<ObjectAction> getObjectActionsAll() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 
 
 }

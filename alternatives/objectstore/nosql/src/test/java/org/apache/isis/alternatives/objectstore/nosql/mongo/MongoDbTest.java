@@ -91,7 +91,7 @@ public class MongoDbTest {
 
     @Test
     public void hasInstances() throws Exception {
-        String specificationName = specification.getFullName();
+        String specificationName = specification.getFullIdentifier();
         assertFalse(db.hasInstances(specificationName));
         db.close();
         
@@ -108,7 +108,7 @@ public class MongoDbTest {
     public void destroyInstance() throws Exception {
         db.close();
 
-        String specificationName = specification.getFullName();      
+        String specificationName = specification.getFullIdentifier();      
         DBCollection instances = testDb.getCollection(specificationName);
         BasicDBObject dbObject = new BasicDBObject().append("test", "test");
         instances.insert(dbObject);

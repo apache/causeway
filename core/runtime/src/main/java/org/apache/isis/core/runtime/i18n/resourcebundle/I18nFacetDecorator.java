@@ -21,13 +21,13 @@
 package org.apache.isis.core.runtime.i18n.resourcebundle;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.runtime.i18n.resourcebundle.facets.DescribedAsFacetWrapI18n;
 import org.apache.isis.core.runtime.i18n.resourcebundle.facets.HelpFacetWrapI18n;
 import org.apache.isis.core.runtime.i18n.resourcebundle.facets.NamedFacetWrapI18n;

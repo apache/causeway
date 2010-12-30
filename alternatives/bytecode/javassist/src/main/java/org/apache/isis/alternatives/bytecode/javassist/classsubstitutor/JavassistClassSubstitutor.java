@@ -21,8 +21,8 @@
 package org.apache.isis.alternatives.bytecode.javassist.classsubstitutor;
 
 import org.apache.isis.alternatives.bytecode.javassist.objectfactory.internal.JavassistEnhanced;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
-import org.apache.isis.core.metamodel.util.ClassUtil;
 
 
 public class JavassistClassSubstitutor extends ClassSubstitutorAbstract {

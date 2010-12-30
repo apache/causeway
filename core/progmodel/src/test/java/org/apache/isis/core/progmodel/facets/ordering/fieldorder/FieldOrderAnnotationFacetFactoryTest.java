@@ -23,9 +23,9 @@ package org.apache.isis.core.progmodel.facets.ordering.fieldorder;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.FieldOrder;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.ordering.FieldOrderFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.layout.ordermethod.FieldOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 

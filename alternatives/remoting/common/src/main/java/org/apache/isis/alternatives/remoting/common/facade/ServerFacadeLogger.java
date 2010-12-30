@@ -70,8 +70,8 @@ import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecode
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.logging.Logger;
@@ -219,7 +219,7 @@ public class ServerFacadeLogger extends Logger implements ServerFacade {
     @Override
     public ExecuteServerActionResponse executeServerAction(final ExecuteServerActionRequest request) {
 
-        ObjectActionType actionType = request.getActionType();
+        ActionType actionType = request.getActionType();
         String actionIdentifier = request.getActionIdentifier();
         ReferenceData target = request.getTarget();
         Data[] parameters = request.getParameters();

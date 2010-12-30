@@ -68,7 +68,7 @@ public class FieldFactory {
             if (spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(boolean.class))
                     || spec.isOfType(IsisContext.getSpecificationLoader().loadSpecification(Boolean.class.getName()))) {
                 field.setType(InputField.CHECKBOX);
-            } else if (spec.getFullName().endsWith(".Password")) {
+            } else if (spec.getFullIdentifier().endsWith(".Password")) {
                 field.setType(InputField.PASSWORD);
             } else {
                 field.setType(InputField.TEXT);

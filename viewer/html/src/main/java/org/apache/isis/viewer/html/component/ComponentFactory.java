@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.html.component;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 
 
@@ -55,7 +55,7 @@ public interface ComponentFactory {
             String name,
             String description,
             String reasonDisabled,
-            ObjectActionType type,
+            ActionType type,
             boolean hasParameters,
             String targetObjectId);
 

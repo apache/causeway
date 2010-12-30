@@ -56,7 +56,7 @@ public class CollectionView implements Action {
         content.setTitle(titleString, null);
         String iconName = collection.getIconName();
         if (iconName == null) {
-            iconName = elementSpecification.getShortName();
+            iconName = elementSpecification.getShortIdentifier();
         }
         content.setIconName(iconName);
 

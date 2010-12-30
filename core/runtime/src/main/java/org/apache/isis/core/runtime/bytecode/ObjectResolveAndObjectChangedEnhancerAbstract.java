@@ -27,9 +27,9 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.java5.JavaSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
+import org.apache.isis.core.metamodel.specloader.internal.spec.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
 
@@ -58,18 +58,18 @@ public abstract class ObjectResolveAndObjectChangedEnhancerAbstract {
 	 */
 	protected abstract void createCallback();
 
-	protected JavaSpecification getJavaSpecificationOfOwningClass(final Method method) {
+	protected ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
 		return getJavaSpecification(method.getDeclaringClass());
 	}
 
-	protected JavaSpecification getJavaSpecification(final Class<?> cls) {
+	protected ObjectSpecificationDefault getJavaSpecification(final Class<?> cls) {
 		final ObjectSpecification nos = getSpecification(cls);
-		if (!(nos instanceof JavaSpecification)) {
+		if (!(nos instanceof ObjectSpecificationDefault)) {
 			throw new UnsupportedOperationException(
 					"Only Java is supported (specification is '"
 							+ nos.getClass().getCanonicalName() + "')");
 		}
-		return (JavaSpecification) nos;
+		return (ObjectSpecificationDefault) nos;
 	}
 
 	protected boolean impliesResolve(ImperativeFacet[] imperativeFacets) {

@@ -23,9 +23,9 @@ package org.apache.isis.viewer.dnd.view.action;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneActionParameter;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -76,7 +76,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
             return Allow.DEFAULT;
         } else {
             // TODO: move logic into Facet
-            return new Veto(String.format("Object must be ", getSpecification().getShortName()));
+            return new Veto(String.format("Object must be ", getSpecification().getShortIdentifier()));
         }
     }
 
@@ -160,7 +160,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         final ToString toString = new ToString(this);
         toString.append("label", getParameterName());
         toString.append("required", isRequired());
-        toString.append("spec", getSpecification().getFullName());
+        toString.append("spec", getSpecification().getFullIdentifier());
         toString.append("object", adapter == null ? "null" : adapter.titleString());
         return toString.toString();
     }
@@ -177,7 +177,7 @@ public class ObjectParameterImpl extends AbstractObjectContent implements Object
         final String title = adapter == null ? "" : ": " + adapter.titleString();
         final String name = getParameterName();
         final ObjectSpecification specification = objectActionParameter.getSpecification();
-        final String specName = specification.getShortName();
+        final String specName = specification.getShortIdentifier();
         final String type = name.indexOf(specName) == -1 ? " (" + specName + ")" : "";
         return name + type + title + " " + objectActionParameter.getDescription();
     }

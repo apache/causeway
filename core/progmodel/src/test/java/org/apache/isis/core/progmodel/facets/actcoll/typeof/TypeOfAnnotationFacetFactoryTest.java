@@ -26,9 +26,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.isis.applib.annotation.TypeOf;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 

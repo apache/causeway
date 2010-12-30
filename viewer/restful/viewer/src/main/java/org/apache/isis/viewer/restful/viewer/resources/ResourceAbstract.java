@@ -26,13 +26,13 @@ import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetFilters;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetFilters;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
@@ -54,10 +54,10 @@ import org.apache.isis.viewer.restful.viewer.xom.XhtmlRendererXom;
 
 public abstract class ResourceAbstract {
 
-    public final static ObjectActionType[] ACTION_TYPES = { 
-    	ObjectActionType.USER,
-        ObjectActionType.DEBUG, 
-        ObjectActionType.EXPLORATION,
+    public final static ActionType[] ACTION_TYPES = { 
+    	ActionType.USER,
+        ActionType.DEBUG, 
+        ActionType.EXPLORATION,
         // SET is excluded; we simply flatten contributed actions.
     };
 
@@ -198,7 +198,7 @@ public abstract class ResourceAbstract {
 
         value = xhtmlRenderer.aHref(MessageFormat.format("{0}/object/{1}", getServletRequest().getContextPath(), oidStr), oidStr, "object", "object", HtmlClass.OID);
         createRow(table, "OID", value, HtmlClass.OID);
-        final String noSpecFullName = noSpec.getFullName();
+        final String noSpecFullName = noSpec.getFullIdentifier();
 
         final String uri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), noSpecFullName);
         value = xhtmlRenderer.aHref(uri, noSpecFullName, "spec", "object", HtmlClass.SPECIFICATION);

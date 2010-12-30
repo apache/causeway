@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.ignore;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Whether the action is programmatic, and therefore should be ignored.

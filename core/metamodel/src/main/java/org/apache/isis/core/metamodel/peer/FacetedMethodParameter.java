@@ -16,8 +16,8 @@
  */
 package org.apache.isis.core.metamodel.peer;
 
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.TypedHolderDefault;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 
 public final class FacetedMethodParameter extends TypedHolderDefault {
 

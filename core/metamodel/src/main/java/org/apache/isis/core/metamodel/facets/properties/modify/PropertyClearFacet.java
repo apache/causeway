@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.properties.modify;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Mechanism for clearing a property of an object (that is, setting it to <tt>null</tt>).

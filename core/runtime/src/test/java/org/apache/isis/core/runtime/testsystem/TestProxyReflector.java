@@ -24,7 +24,6 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
@@ -34,9 +33,6 @@ import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.internal.cache.SpecificationCache;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactory;
@@ -77,7 +73,7 @@ public class TestProxyReflector implements ObjectReflector {
     public void debugData(final DebugString debug) {
         final ObjectSpecification[] list = allSpecifications();
         for (int i = 0; i < list.length; i++) {
-            debug.appendln(list[i].getFullName());
+            debug.appendln(list[i].getFullIdentifier());
         }
     }
 
@@ -100,7 +96,7 @@ public class TestProxyReflector implements ObjectReflector {
             return specificationByFullName.get(name);
         } else {
             final TestProxySpecification specification = new TestProxySpecification(name);
-            specificationByFullName.put(specification.getFullName(), specification);
+            specificationByFullName.put(specification.getFullIdentifier(), specification);
             return specification;
 
             // throw new ObjectAdapterRuntimeException("no specification for " + name);
@@ -116,7 +112,7 @@ public class TestProxyReflector implements ObjectReflector {
     }
 
     public void addSpecification(final ObjectSpecification specification) {
-        specificationByFullName.put(specification.getFullName(), specification);
+        specificationByFullName.put(specification.getFullIdentifier(), specification);
     }
 
     public ObjectFactory getObjectFactory() {
@@ -149,8 +145,7 @@ public class TestProxyReflector implements ObjectReflector {
         }
     }
 
-    @Override
-    public ClassSubstitutor getClassSubstitutor() {
+    protected ClassSubstitutor getClassSubstitutor() {
         return classSubstitutor;
     }
 
@@ -160,28 +155,18 @@ public class TestProxyReflector implements ObjectReflector {
     }
 
     @Override
-    public RuntimeContext getRuntimeContext() {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
     public void setServiceClasses(List<Class<?>> serviceClasses) {
         // ignored.
     }
 
     @Override
-    public MetaModelValidator getMetaModelValidator() {
-        throw new NotYetImplementedException();
+    public boolean loadSpecifications(List<Class<?>> typesToLoad, Class<?> typeToIgnore) {
+        return false;
     }
 
     @Override
-    public ProgrammingModelFacets getProgrammingModelFacets() {
-        throw new NotYetImplementedException();
-    }
-
-    @Override
-    public SpecificationTraverser getSpecificationTraverser() {
-        throw new NotYetImplementedException();
+    public boolean loadSpecifications(List<Class<?>> typesToLoad) {
+        return false;
     }
 
 }

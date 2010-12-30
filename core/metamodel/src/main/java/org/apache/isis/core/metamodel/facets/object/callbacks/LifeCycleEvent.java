@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.facets.object.callbacks;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 
 public enum LifeCycleEvent {

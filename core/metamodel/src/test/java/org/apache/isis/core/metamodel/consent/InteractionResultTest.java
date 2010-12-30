@@ -28,6 +28,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import org.apache.isis.core.metamodel.consent2.InteractionResult;
+import org.apache.isis.core.metamodel.interactions2.InteractionAdvisorFacet;
+
 
 public class InteractionResultTest {
 

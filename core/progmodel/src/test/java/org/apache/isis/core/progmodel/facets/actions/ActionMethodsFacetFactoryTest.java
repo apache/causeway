@@ -26,7 +26,8 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.security.UserMemento;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
@@ -38,9 +39,9 @@ import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFace
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
@@ -61,7 +62,6 @@ import org.apache.isis.core.progmodel.facets.disable.DisabledFacetAbstract;
 import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAbstract;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacet;
 import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
 
 
 public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {

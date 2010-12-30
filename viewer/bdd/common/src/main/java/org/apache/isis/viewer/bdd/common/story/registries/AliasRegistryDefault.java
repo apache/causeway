@@ -68,7 +68,7 @@ public class AliasRegistryDefault implements AliasRegistry {
     public void aliasService(final String aliasAs, final String className) throws ScenarioValueException {
         final List<ObjectAdapter> serviceAdapters = getPersistenceSession().getServices();
         for (final ObjectAdapter serviceAdapter : serviceAdapters) {
-            if (serviceAdapter.getSpecification().getFullName().equals(className)) {
+            if (serviceAdapter.getSpecification().getFullIdentifier().equals(className)) {
                 adaptersByAlias.put(aliasAs, serviceAdapter);
                 return;
             }

@@ -21,9 +21,9 @@
 package org.apache.isis.viewer.dnd.view.option;
 
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.View;
@@ -40,13 +40,13 @@ import org.apache.isis.viewer.dnd.view.Workspace;
 public abstract class UserActionAbstract implements UserAction {
     private String description;
     private String name;
-    private final ObjectActionType type;
+    private final ActionType type;
 
     public UserActionAbstract(final String name) {
-        this(name, ObjectActionType.USER);
+        this(name, ActionType.USER);
     }
 
-    public UserActionAbstract(final String name, final ObjectActionType type) {
+    public UserActionAbstract(final String name, final ActionType type) {
         this.name = name;
         this.type = type;
     }
@@ -72,7 +72,7 @@ public abstract class UserActionAbstract implements UserAction {
         return name;
     }
 
-    public ObjectActionType getType() {
+    public ActionType getType() {
         return type;
     }
 

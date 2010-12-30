@@ -20,14 +20,14 @@
 
 package org.apache.isis.alternatives.embedded.internal;
 
-import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectMetaModel;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectMetaModel;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -44,7 +44,7 @@ public class StandaloneAdapter implements ObjectAdapter {
 	private final PersistenceState persistenceState;
 	private Object domainObject;
 
-    private TypeOfFacet typeOfFacet;
+    private ElementSpecificationProvider elementSpecificationProvider;
 
 	public StandaloneAdapter(ObjectSpecification spec, Object domainObject, PersistenceState persistenceState) {
 		this.spec = spec;
@@ -117,29 +117,22 @@ public class StandaloneAdapter implements ObjectAdapter {
         if (title != null) {
         	return title;
         }
-        return "A " + specification.getName().toLowerCase();
+        return "A " + specification.getSingularName().toLowerCase();
 	}
 
 
-	/**
-	 * Returns the {@link #setTypeOfFacet(TypeOfFacet) overridden} {@link TypeOfFacet}, else
-	 * looks up from {@link #getSpecification() specification} (if any).
-	 */
-	@Override
-    public TypeOfFacet getTypeOfFacet() {
-        if (typeOfFacet == null) {
-            return getSpecification().getFacet(TypeOfFacet.class);
+    @Override
+    public ObjectSpecification getElementSpecification() {
+        if(elementSpecificationProvider==null) {
+            return null;
         }
-        return typeOfFacet;
-	}
-	
-	/**
-	 * Override (or set the) {@link TypeOfFacet}.
-	 */
-	@Override
-    public void setTypeOfFacet(TypeOfFacet typeOfFacet) {
-        this.typeOfFacet = typeOfFacet;
-	}
+        return elementSpecificationProvider.getElementType();
+    }
+
+    @Override
+    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+        this.elementSpecificationProvider = elementSpecificationProvider;
+    }
 
 
 
@@ -273,5 +266,6 @@ public class StandaloneAdapter implements ObjectAdapter {
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
 
 }

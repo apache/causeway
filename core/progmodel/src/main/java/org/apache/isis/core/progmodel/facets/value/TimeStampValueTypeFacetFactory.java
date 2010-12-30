@@ -21,8 +21,8 @@
 package org.apache.isis.core.progmodel.facets.value;
 
 import org.apache.isis.applib.value.TimeStamp;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 
 
 public class TimeStampValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<TimeStamp> {

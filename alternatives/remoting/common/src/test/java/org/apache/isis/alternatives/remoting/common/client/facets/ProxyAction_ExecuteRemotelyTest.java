@@ -45,7 +45,7 @@ import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.peer.FacetedMethod;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.testsystem.TestProxySystem;
 
@@ -126,7 +126,7 @@ public class ProxyAction_ExecuteRemotelyTest {
         ExecuteServerActionRequest request =
         	new ExecuteServerActionRequest(
         		IsisContext.getAuthenticationSession(),
-        		ObjectActionType.USER,
+        		ActionType.USER,
                 identifierString, targetData, parameterData);
 		mockDistribution.executeServerAction(request );
         final ExecuteServerActionResponse result = new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0],
@@ -151,7 +151,7 @@ public class ProxyAction_ExecuteRemotelyTest {
 
         ExecuteServerActionRequest request = new ExecuteServerActionRequest(
         		IsisContext.getAuthenticationSession(),
-        		ObjectActionType.USER,
+        		ActionType.USER,
                 identifierString, targetData, parameterData);
 		mockDistribution.executeServerAction(request);
         final ExecuteServerActionResponse result = new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0],
@@ -175,11 +175,11 @@ public class ProxyAction_ExecuteRemotelyTest {
 
         ExecuteServerActionRequest request = new ExecuteServerActionRequest(
         		IsisContext.getAuthenticationSession(),
-        		ObjectActionType.USER,
+        		ActionType.USER,
                 identifierString, targetData, parameterData);
 		mockDistribution.executeServerAction(request);
         final ReferenceData[] disposedReferenceData = new ReferenceData[] { new DummyReferenceData(object.getOid(), object
-                .getSpecification().getFullName(), null) };
+                .getSpecification().getFullIdentifier(), null) };
         final ExecuteServerActionResponse result = new ExecuteServerActionResponse(new DummyNullValue("type"), new ObjectData[0],
                 disposedReferenceData, null, new ObjectData[2], new String[0], new String[0]);
         expectLastCall().andReturn(result);

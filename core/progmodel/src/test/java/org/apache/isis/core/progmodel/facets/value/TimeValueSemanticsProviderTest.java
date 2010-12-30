@@ -32,8 +32,8 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.value.TestClock;
 import org.apache.isis.applib.value.Time;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 
 @RunWith(JMock.class)
 public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

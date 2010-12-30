@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.ident.plural;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacetAbstract;
 
 

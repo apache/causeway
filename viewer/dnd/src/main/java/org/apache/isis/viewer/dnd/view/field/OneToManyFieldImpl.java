@@ -23,8 +23,8 @@ package org.apache.isis.viewer.dnd.view.field;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -45,6 +45,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
         this.collection = object;
     }
 
+    @Override
     public Consent canDrop(final Content sourceContent) {
         if (sourceContent.getAdapter() instanceof ObjectAdapter) {
             final ObjectAdapter sourceAdapter = sourceContent.getAdapter();
@@ -66,7 +67,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
             if (!specification.isOfType(elementSpecification)) {
                 // TODO: move logic into Facet
                 return new Veto(String.format("Only objects of type %s are allowed in this collection", elementSpecification
-                        .getName()));
+                        .getSingularName()));
             }
             if (parentAdapter.isPersistent() && sourceAdapter.isTransient()) {
                 // TODO: move logic into Facet
@@ -95,6 +96,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
         super.debugDetails(debug);
     }
 
+    @Override
     public ObjectAdapter drop(final Content sourceContent) {
         final ObjectAdapter object = sourceContent.getAdapter();
         final ObjectAdapter parent = field.getParent();
@@ -113,24 +115,28 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
     @Override
     public String getDescription() {
         final String name = getFieldName();
-        String type = getField().getSpecification().getName();
+        String type = getField().getSpecification().getSingularName();
         type = name.indexOf(type) == -1 ? " (" + type + ")" : "";
         final String description = getOneToManyAssociation().getDescription();
         return name + type + " " + description;
     }
 
+    @Override
     public ObjectAssociation getField() {
         return field.getObjectAssociation();
     }
 
+    @Override
     public String getFieldName() {
         return field.getName();
     }
 
+    @Override
     public String getHelp() {
         return getOneToManyAssociation().getHelp();
     }
 
+    @Override
     public String getIconName() {
         return null;
         // return "internal-collection";
@@ -146,34 +152,42 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
         return icon;
     }
 
+    @Override
     public String getId() {
         return getOneToManyAssociation().getId();
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return collection;
     }
 
+    @Override
     public OneToManyAssociation getOneToManyAssociation() {
         return (OneToManyAssociation) field.getObjectAssociation();
     }
 
+    @Override
     public ObjectAdapter getParent() {
         return field.getParent();
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return field.getSpecification();
     }
     
+    @Override
     public Consent isEditable() {
         return getField().isUsable(IsisContext.getAuthenticationSession(), getParent());
     }
 
+    @Override
     public boolean isMandatory() {
         return getOneToManyAssociation().isMandatory();
     }
 
+    @Override
     public boolean isTransient() {
         return false;
     }
@@ -182,6 +196,7 @@ public class OneToManyFieldImpl extends AbstractCollectionContent implements One
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public final String title() {
         return field.getName();
     }

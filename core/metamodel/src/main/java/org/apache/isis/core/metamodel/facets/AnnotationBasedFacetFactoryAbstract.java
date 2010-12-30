@@ -24,7 +24,9 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.FacetFactory;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
 
 
 

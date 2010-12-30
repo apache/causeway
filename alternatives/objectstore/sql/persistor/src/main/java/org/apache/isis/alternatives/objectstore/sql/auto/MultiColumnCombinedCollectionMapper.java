@@ -27,13 +27,13 @@ import org.apache.isis.alternatives.objectstore.sql.FieldMappingLookup;
 import org.apache.isis.alternatives.objectstore.sql.ObjectMappingLookup;
 import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.internal.spec.OneToManyAssociationImpl;
 
 /**
- * @author Kevin
- * 
  * Used to map 1-to-many collections by creating, in the child table, 1 column per parent collection.
  * The column is named by combining the final part of the parent class name and the collection variable name. 
+ * 
+ * @author Kevin
  */
 public class MultiColumnCombinedCollectionMapper extends
 		CombinedCollectionMapper {
@@ -54,7 +54,7 @@ public class MultiColumnCombinedCollectionMapper extends
 	    	int lastPos = fullClassName.lastIndexOf('.');
 	    	return fullClassName.substring(lastPos+1)+"_"+fkAssoc.getId();
 	    } else {
-	    	return  objectAssociation.getSpecification().getShortName();
+	    	return  objectAssociation.getSpecification().getShortIdentifier();
 	    }
 	}
 }

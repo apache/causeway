@@ -53,7 +53,7 @@ public class Debug extends AbstractElementProcessor {
                 ObjectSpecification[] allSpecifications = IsisContext.getSpecificationLoader().allSpecifications();
                 String[] names = new String[allSpecifications.length];
                 for (int j = 0; j < allSpecifications.length; j++) {
-                    names[j] = allSpecifications[j].getFullName();
+                    names[j] = allSpecifications[j].getFullIdentifier();
                 }
                 Arrays.sort(names);
                 request.appendHtml("<h2>Specifications</h2><ol>");
@@ -70,7 +70,7 @@ public class Debug extends AbstractElementProcessor {
                 ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(value);
                 DebugString str = new DebugString();
                 Dump.specification(spec, str);
-                request.appendHtml("<h2>" + spec.getFullName() + "</h2>");
+                request.appendHtml("<h2>" + spec.getFullIdentifier() + "</h2>");
                 request.appendHtml("<pre class=\"debug\">" + str + "</pre>");
 
             } else if (type.equals("object")) {
@@ -79,7 +79,7 @@ public class Debug extends AbstractElementProcessor {
                 DebugString str = new DebugString();
                 Dump.adapter(object, str);
                 Dump.graph(object, str, IsisContext.getAuthenticationSession());
-                request.appendHtml("<h2>" + object.getSpecification().getFullName() + "</h2>");
+                request.appendHtml("<h2>" + object.getSpecification().getFullIdentifier() + "</h2>");
                 request.appendHtml("<pre class=\"debug\">" + str + "</pre>");
             }
 

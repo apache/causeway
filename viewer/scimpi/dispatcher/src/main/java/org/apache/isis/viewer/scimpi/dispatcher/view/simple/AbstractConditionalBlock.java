@@ -23,11 +23,11 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -47,7 +47,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         if (method != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             // TODO needs to work irrespective of parameters 
-            ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, ObjectSpecification.EMPTY_LIST);
+            ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, method, ObjectSpecification.EMPTY_LIST);
             Consent visible = objectAction.isVisible(IsisContext.getAuthenticationSession(), object);
             processTags(visible.isAllowed(), request);
             return;
@@ -57,7 +57,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         if (method != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
             // TODO needs to work irrespective of parameters 
-            ObjectAction objectAction = object.getSpecification().getObjectAction(ObjectActionType.USER, method, ObjectSpecification.EMPTY_LIST);
+            ObjectAction objectAction = object.getSpecification().getObjectAction(ActionType.USER, method, ObjectSpecification.EMPTY_LIST);
             Consent usable = objectAction.isUsable(IsisContext.getAuthenticationSession(), object);
             processTags(usable.isAllowed(), request);
             return;
@@ -66,7 +66,7 @@ public abstract class AbstractConditionalBlock extends AbstractElementProcessor 
         method = request.getOptionalProperty(METHOD + "-exists");
         if (method != null) {
             ObjectAdapter object = MethodsUtils.findObject(request.getContext(), id);
-            List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActions(ObjectActionType.USER);
+            List<? extends ObjectAction> objectActions = object.getSpecification().getObjectActions(ActionType.USER);
             boolean methodExists = false;
             for (ObjectAction objectAssociation : objectActions) {
                 if (objectAssociation.getId().equals(method)) {

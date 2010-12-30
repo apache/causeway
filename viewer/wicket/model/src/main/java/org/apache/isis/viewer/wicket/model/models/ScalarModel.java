@@ -26,9 +26,9 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -75,7 +75,7 @@ public class ScalarModel extends EntityModel {
 
 			@Override
 			public String getLongName(ScalarModel scalarModel) {
-				final String specShortName = scalarModel.parentObjectAdapterMemento.getSpecMemento().getSpecification().getShortName();
+				final String specShortName = scalarModel.parentObjectAdapterMemento.getSpecMemento().getSpecification().getShortIdentifier();
 				return specShortName + "-" + scalarModel.getPropertyMemento().getProperty().getId();
 			}
 
@@ -182,7 +182,7 @@ public class ScalarModel extends EntityModel {
 					// shouldn't happen
 					return null;
 				}
-				final String specShortName = adapterMemento.getSpecMemento().getSpecification().getShortName();
+				final String specShortName = adapterMemento.getSpecMemento().getSpecification().getShortIdentifier();
 				final String parmId = scalarModel.getParameterMemento().getActionParameter().getIdentifier().toNameIdentityString();
 				return specShortName + "-" + parmId + "-" + scalarModel.getParameterMemento().getNumber();
 			}
@@ -366,7 +366,7 @@ public class ScalarModel extends EntityModel {
 	}
 
 	public boolean isScalarTypeAnyOf(Class<?>... requiredClass) {
-		String fullName = getTypeOfSpecification().getFullName();
+		String fullName = getTypeOfSpecification().getFullIdentifier();
 		for (Class<?> requiredCls : requiredClass) {
 			if (fullName.equals(requiredCls.getName())) {
 				return true;
@@ -398,7 +398,7 @@ public class ScalarModel extends EntityModel {
 				ParseableFacet.class);
 		if (parseableFacet == null) {
 			throw new RuntimeException("unable to parse string for "
-					+ getTypeOfSpecification().getFullName());
+					+ getTypeOfSpecification().getFullIdentifier());
 		}
 		ObjectAdapter adapter = parseableFacet.parseTextEntry(getObject(),
 				enteredText);

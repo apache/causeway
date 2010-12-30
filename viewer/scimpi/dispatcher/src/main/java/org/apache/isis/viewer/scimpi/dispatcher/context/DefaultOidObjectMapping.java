@@ -120,7 +120,7 @@ public class DefaultOidObjectMapping implements ObjectMapping {
                 // outputStream.flush();
             }
             boolean isTransient = object.isTransient();
-            String id = (isTransient ? "T" : "P") + object.getSpecification().getFullName() + "@" + encodedOid;
+            String id = (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@" + encodedOid;
             LOG.debug("encoded " + oid + " as " + id + " ~ " + encodedOid);
             if (isTransient) {
                 TransientObjectMapping mapping = new TransientObjectMapping((ObjectAdapter) object);

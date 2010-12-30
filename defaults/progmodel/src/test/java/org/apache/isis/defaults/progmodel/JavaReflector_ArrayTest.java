@@ -22,7 +22,8 @@ package org.apache.isis.defaults.progmodel;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.apache.isis.core.metamodel.facets.Facet;
+
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -44,7 +45,7 @@ public class JavaReflector_ArrayTest extends JavaReflectorTestAbstract {
 
     @Test
     public void testName() throws Exception {
-        Assert.assertEquals(TestPojo[].class.getName(), specification.getFullName());
+        Assert.assertEquals(TestPojo[].class.getName(), specification.getFullIdentifier());
     }
 
     @Test

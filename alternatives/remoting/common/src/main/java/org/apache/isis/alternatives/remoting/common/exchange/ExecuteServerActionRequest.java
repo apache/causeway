@@ -30,18 +30,18 @@ import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.encoding.DataInputExtended;
 import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 
 public class ExecuteServerActionRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;
-    private final ObjectActionType actionType;
+    private final ActionType actionType;
     private final String actionIdentifier;
     private final ReferenceData target;
     private final Data[] parameters;
 
     public ExecuteServerActionRequest(
             final AuthenticationSession session,
-            final ObjectActionType actionType,
+            final ActionType actionType,
             final String actionIdentifier,
             final ReferenceData target,
             final Data[] parameters) {
@@ -55,7 +55,7 @@ public class ExecuteServerActionRequest extends RequestAbstract {
 
     public ExecuteServerActionRequest(final DataInputExtended input) throws IOException {
         super(input);
-        this.actionType = ObjectActionType.valueOf(input.readUTF());
+        this.actionType = ActionType.valueOf(input.readUTF());
         this.actionIdentifier = input.readUTF();
         this.target = input.readEncodable(IdentityData.class);
         this.parameters = input.readEncodables(Data.class);
@@ -80,7 +80,7 @@ public class ExecuteServerActionRequest extends RequestAbstract {
     // request data
     /////////////////////////////////////////////////////////
 
-	public ObjectActionType getActionType() {
+	public ActionType getActionType() {
 		return actionType;
 	}
 	

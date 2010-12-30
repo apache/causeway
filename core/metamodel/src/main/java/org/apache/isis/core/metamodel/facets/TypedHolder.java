@@ -20,7 +20,8 @@
 
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 

@@ -65,7 +65,7 @@ public final class ObjectSerializer {
 
     public final EncodableObjectData serializeEncodeable(final ObjectAdapter adapter) {
         final EncodableFacet facet = adapter.getSpecification().getFacet(EncodableFacet.class);
-        return this.dataFactory.createValueData(adapter.getSpecification().getFullName(),
+        return this.dataFactory.createValueData(adapter.getSpecification().getFullIdentifier(),
             facet.toEncodedString(adapter));
     }
 
@@ -78,7 +78,7 @@ public final class ObjectSerializer {
 
         if (!isTransient && (resolveState.isSerializing() || resolveState.isGhost() || graphDepth <= 0)) {
             Assert.assertNotNull("OID needed for reference", adapter, adapter.getOid());
-            return this.dataFactory.createIdentityData(adapter.getSpecification().getFullName(), adapter.getOid(),
+            return this.dataFactory.createIdentityData(adapter.getSpecification().getFullIdentifier(), adapter.getOid(),
                 adapter.getVersion());
         }
         if (isTransient && knownObjects.containsKey(adapter)) {
@@ -87,7 +87,7 @@ public final class ObjectSerializer {
 
         boolean withCompleteData = resolveState == ResolveState.TRANSIENT || resolveState == ResolveState.RESOLVED;
 
-        final String type = adapter.getSpecification().getFullName();
+        final String type = adapter.getSpecification().getFullIdentifier();
         final Oid oid = adapter.getOid();
         final ObjectData data = this.dataFactory.createObjectData(type, oid, withCompleteData, adapter.getVersion());
         if (isTransient) {
@@ -105,7 +105,7 @@ public final class ObjectSerializer {
 
             if (fields[i].getSpecification().isEncodeable()) {
                 if (field == null) {
-                    fieldContent[i] = this.dataFactory.createNullData(fields[i].getSpecification().getFullName());
+                    fieldContent[i] = this.dataFactory.createNullData(fields[i].getSpecification().getFullIdentifier());
                 } else {
                     fieldContent[i] = serializeEncodeable(field);
                 }
@@ -117,7 +117,7 @@ public final class ObjectSerializer {
                 if (field == null) {
                     fieldContent[i] =
                         !withCompleteData ? null : this.dataFactory.createNullData(fields[i].getSpecification()
-                            .getFullName());
+                            .getFullIdentifier());
                 } else {
                     fieldContent[i] = serializeObject2(field, graphDepth - 1, knownObjects);
                 }
@@ -134,7 +134,7 @@ public final class ObjectSerializer {
     public CollectionData serializeCollection(final ObjectAdapter collectionAdapter, final int graphDepth,
         final KnownObjectsRequest knownObjects) {
         final Oid oid = collectionAdapter.getOid();
-        final String collectionType = collectionAdapter.getSpecification().getFullName();
+        final String collectionType = collectionAdapter.getSpecification().getFullIdentifier();
         final TypeOfFacet typeOfFacet = collectionAdapter.getSpecification().getFacet(TypeOfFacet.class);
         if (typeOfFacet == null) {
             throw new IsisException("No type of facet for collection " + collectionAdapter);

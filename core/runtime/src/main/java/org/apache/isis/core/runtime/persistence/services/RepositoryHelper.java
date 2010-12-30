@@ -45,7 +45,7 @@ public final class RepositoryHelper {
     }
 
     public static <T> Object[] allInstances(final ObjectSpecification spec, final Class<T> cls) {
-        QueryFindAllInstances<T> query = new QueryFindAllInstances<T>(spec.getFullName());
+        QueryFindAllInstances<T> query = new QueryFindAllInstances<T>(spec.getFullIdentifier());
         final ObjectAdapter instances = getPersistenceSession().findInstances(query, QueryCardinality.MULTIPLE);
         final Object[] array = convertToArray(instances, cls);
         return array;

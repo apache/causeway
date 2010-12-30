@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.actions.exploration;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class ExplorationFacetAnnotation extends ExplorationFacetAbstract {

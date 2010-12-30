@@ -29,7 +29,7 @@ import java.io.InputStreamReader;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.BooleanValueFacet;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -120,7 +120,7 @@ public class HtmlComponentFactory implements ComponentFactory {
             final String name,
             final String description,
             final String reasonDisabled,
-            final ObjectActionType type,
+            final ActionType type,
             final boolean hasParameters,
             final String targetObjectId) {
         return new MenuItem(actionId, name, description, reasonDisabled, type, hasParameters, targetObjectId);

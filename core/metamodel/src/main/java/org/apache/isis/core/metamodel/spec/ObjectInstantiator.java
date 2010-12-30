@@ -17,6 +17,7 @@
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.commons.components.Injectable;
+import org.apache.isis.core.metamodel.specloader.internal.spec.dflt.ObjectSpecificationDefault;
 
 public interface ObjectInstantiator extends Injectable {
 
@@ -24,7 +25,7 @@ public interface ObjectInstantiator extends Injectable {
      * Provided by the <tt>ObjectFactory</tt> when used by framework.
      * 
      * <p>
-     * Called by <tt>JavaSpecification</tt>.
+     * Called by {@link ObjectSpecificationDefault}.
      */
     Object instantiate(Class<?> cls) throws ObjectInstantiationException;
 

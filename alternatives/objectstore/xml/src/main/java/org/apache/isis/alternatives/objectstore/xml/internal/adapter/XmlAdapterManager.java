@@ -21,7 +21,7 @@
 package org.apache.isis.alternatives.objectstore.xml.internal.adapter;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerDefault;
 

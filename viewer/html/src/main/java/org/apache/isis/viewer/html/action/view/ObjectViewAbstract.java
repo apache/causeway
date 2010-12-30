@@ -60,7 +60,7 @@ public abstract class ObjectViewAbstract implements Action {
 
         String iconName = adapter.getIconName();
         if (iconName == null) {
-            iconName = adapter.getSpecification().getShortName();
+            iconName = adapter.getSpecification().getShortIdentifier();
         }
 
         content.setIconName(iconName);

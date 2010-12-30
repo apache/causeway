@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.actions.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class ActionParameterDefaultsFacetNone extends ActionParameterDefaultsFacetAbstract {

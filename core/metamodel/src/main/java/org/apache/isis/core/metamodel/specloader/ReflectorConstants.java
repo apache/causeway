@@ -21,10 +21,11 @@ package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.metamodel.config.ConfigurationConstants;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -48,7 +49,14 @@ public final class ReflectorConstants {
         .getName();
 
     /**
-     * Key used to lookup implementation of {@link ProgrammingModelFacets} in {@link IsisConfiguration}.
+     * Key used to lookup implementation of {@link MemberLayoutArrangerDefault} in {@link IsisConfiguration}.
+     */
+    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.memberlayoutarranger";
+    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT = MemberLayoutArrangerDefault.class
+        .getName();
+
+    /**
+     * Key used to lookup implementation of {@link ProgrammingModel} in {@link IsisConfiguration}.
      * 
      * @see #FACET_FACTORY_INCLUDE_CLASS_NAME_LIST
      * @see #FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST

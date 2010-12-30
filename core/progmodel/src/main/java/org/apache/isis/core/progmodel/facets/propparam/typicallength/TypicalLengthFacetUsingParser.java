@@ -21,8 +21,8 @@
 package org.apache.isis.core.progmodel.facets.propparam.typicallength;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.metamodel.facets.FacetAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 

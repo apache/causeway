@@ -251,7 +251,7 @@ public class ActionForm extends AbstractElementProcessor {
                 ObjectSpecification objectSpecification = action.getParameters().get(i).getSpecification();
                 if (defaultValue != null) {
                     String html = "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
-                            + objectSpecification.getShortName() + "\"/>" + title;
+                            + objectSpecification.getShortIdentifier() + "\"/>" + title;
                     String value = context.mapObject(defaultValue, Scope.INTERACTION);
                     field.setValue(value);
                     field.setHtml(html);

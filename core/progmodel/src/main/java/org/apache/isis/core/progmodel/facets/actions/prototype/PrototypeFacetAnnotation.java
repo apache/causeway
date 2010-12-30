@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.actions.prototype;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class PrototypeFacetAnnotation extends PrototypeFacetAbstract {

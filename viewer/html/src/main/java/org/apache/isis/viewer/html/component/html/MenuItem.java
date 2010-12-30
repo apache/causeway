@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.component.html;
 
 import java.io.PrintWriter;
 
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.html.component.Component;
 
 
@@ -33,14 +33,14 @@ public class MenuItem implements Component {
     private final String actionDescription;
     private final String reasonDisabled;
     private final boolean takesParameters;
-    private final ObjectActionType type;
+    private final ActionType type;
 
     public MenuItem(
             final String actionId,
             final String actionName,
             final String actionDescription,
             final String reasonDisabled,
-            final ObjectActionType type,
+            final ActionType type,
             final boolean takesParameters,
             final String objectId) {
         this.actionId = actionId;
@@ -86,7 +86,7 @@ public class MenuItem implements Component {
         writer.print("&amp;action=");
         writer.print(actionId);
         writer.print("\">");
-        if (type == ObjectActionType.EXPLORATION) {
+        if (type == ActionType.EXPLORATION) {
             writer.print("[");
             writer.print(actionName);
             writer.print("]");

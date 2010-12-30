@@ -18,7 +18,7 @@ public class CheckSpecificationsLoadedForFitNesse extends AbstractSubsetFixture 
         final Set<ObjectSpecification> specs = new TreeSet<ObjectSpecification>(new Comparator<ObjectSpecification>() {
             @Override
             public int compare(final ObjectSpecification o1, final ObjectSpecification o2) {
-                return o1.getFullName().compareTo(o2.getFullName());
+                return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
             }
         });
 

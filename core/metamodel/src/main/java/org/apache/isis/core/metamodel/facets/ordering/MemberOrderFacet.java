@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.facets.ordering;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
 import org.apache.isis.core.metamodel.facets.ordering.actionorder.ActionOrderFacet;
+import org.apache.isis.core.metamodel.layout.ordermethod.FieldOrderFacet;
 
 /**
  * The preferred mechanism for determining the order in which the members of the object should be rendered.

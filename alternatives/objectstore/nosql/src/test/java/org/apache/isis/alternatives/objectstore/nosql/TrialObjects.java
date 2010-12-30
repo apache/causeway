@@ -24,14 +24,15 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.AdapterMapDelegator;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMapDelegator;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
+import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
@@ -58,7 +59,7 @@ public class TrialObjects {
 
         reflector =
             new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
-                new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
+                new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
                 new MetaModelValidatorNoop());
         reflector.setRuntimeContext(new RuntimeContextNoRuntime() {
 

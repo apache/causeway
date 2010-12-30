@@ -23,19 +23,21 @@ package org.apache.isis.core.runtime.persistence.adapterfactory.pojo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.adapter.Instance;
-import org.apache.isis.core.metamodel.adapter.InstanceAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.InstanceAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -43,7 +45,6 @@ import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
-import org.apache.log4j.Logger;
 
 
 
@@ -63,10 +64,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     
     private String defaultTitle;
 
-    /**
-     * Overridden {@link TypeOfFacet} (if any)
-     */
-    private TypeOfFacet typeOfFacet;
+    private ElementSpecificationProvider elementSpecificationProvider;
 
     /////////////////////////////////////////////////////////////////////
     // Constructor, finalizer
@@ -107,7 +105,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     @Override
     protected ObjectSpecification loadSpecification() {
         ObjectSpecification specification = getReflector().loadSpecification(getObject().getClass());
-        this.defaultTitle = "A" + (" " + specification.getName()).toLowerCase();
+        this.defaultTitle = "A" + (" " + specification.getSingularName()).toLowerCase();
         return specification;
     }
 
@@ -302,9 +300,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
     private String collectionTitleString(final CollectionFacet facet) {
         final int size = elementsLoaded() ? facet.size(this) : INCOMPLETE_COLLECTION;
-        final TypeOfFacet typeFacet = getTypeOfFacet();
-        final ObjectSpecification elementSpecification = typeFacet == null ? null : typeFacet.valueSpec();
-        if (elementSpecification == null || elementSpecification.getFullName().equals(Object.class.getName())) {
+        final ObjectSpecification elementSpecification = getElementSpecification();
+        if (elementSpecification == null || elementSpecification.getFullIdentifier().equals(Object.class.getName())) {
             switch (size) {
             case -1:
                 return "Objects";
@@ -322,7 +319,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
             case 0:
                 return "No " + elementSpecification.getPluralName();
             case 1:
-                return "1 " + elementSpecification.getName();
+                return "1 " + elementSpecification.getSingularName();
             default:
                 return size + " " + elementSpecification.getPluralName();
             }
@@ -359,7 +356,7 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
         if (getSpecificationNoLoad() == null) {
             str.append("class", getObject().getClass().getName());
         } else {
-            str.append("specification", getSpecification().getShortName());
+            str.append("specification", getSpecification().getShortIdentifier());
         }
         str.append("version", version == null ? null : version.sequence());
     }
@@ -379,20 +376,20 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
 
 
     /////////////////////////////////////////////////////////////////////
-    // TypeOfFacet
+    // ElementType
     /////////////////////////////////////////////////////////////////////
 
     @Override
-    public TypeOfFacet getTypeOfFacet() {
-        if (typeOfFacet == null) {
-            return getSpecification().getFacet(TypeOfFacet.class);
+    public ObjectSpecification getElementSpecification() {
+        if(elementSpecificationProvider==null) {
+            return null;
         }
-        return typeOfFacet;
+        return elementSpecificationProvider.getElementType();
     }
 
     @Override
-    public void setTypeOfFacet(final TypeOfFacet typeOfFacet) {
-        this.typeOfFacet = typeOfFacet;
+    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+        this.elementSpecificationProvider = elementSpecificationProvider;
     }
 
 
@@ -460,6 +457,8 @@ public class PojoAdapter extends InstanceAbstract implements ObjectAdapter {
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
     }
+
+
 
 
 }

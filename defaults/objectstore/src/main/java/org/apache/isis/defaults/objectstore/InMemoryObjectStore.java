@@ -104,7 +104,7 @@ public class InMemoryObjectStore implements ObjectStore {
     protected void recreateAdapters() {
         for(ObjectSpecification noSpec: persistedObjects.specifications()) {
 			if (LOG.isDebugEnabled()) {
-				LOG.debug("recreating adapters for: " + noSpec.getFullName());
+				LOG.debug("recreating adapters for: " + noSpec.getFullIdentifier());
 			}
         	recreateAdapters(persistedObjects.instancesFor(noSpec));
         }
@@ -402,7 +402,7 @@ public class InMemoryObjectStore implements ObjectStore {
     public void debugData(final DebugString debug) {
         debug.appendTitle("Domain Objects");
         for(final ObjectSpecification spec: persistedObjects.specifications()) {
-            debug.appendln(spec.getFullName());
+            debug.appendln(spec.getFullIdentifier());
             final ObjectStoreInstances instances = instancesFor(spec);
             instances.debugData(debug);
         }

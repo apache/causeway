@@ -23,11 +23,11 @@ package org.apache.isis.core.progmodel.facets.object.dirty;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 

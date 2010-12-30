@@ -33,22 +33,22 @@ import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.core.metamodel.java5.JavaSpecification;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent2.InteractionResult;
+import org.apache.isis.core.metamodel.interactions2.ObjectTitleContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
+import org.apache.isis.core.metamodel.specloader.internal.spec.dflt.ObjectSpecificationDefault;
 import org.apache.isis.progmodel.wrapper.applib.DisabledException;
 import org.apache.isis.progmodel.wrapper.applib.HiddenException;
 import org.apache.isis.progmodel.wrapper.applib.InteractionException;
@@ -530,8 +530,8 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // /////////////////////////////////////////////////////////////////
 
     private ObjectMember locateAndCheckMember(final Method method) {
-        final JavaSpecification javaSpecification = getJavaSpecificationOfOwningClass(method);
-        final ObjectMember member = javaSpecification.getMember(method);
+        final ObjectSpecificationDefault objectSpecificationDefault = getJavaSpecificationOfOwningClass(method);
+        final ObjectMember member = objectSpecificationDefault.getMember(method);
         if (member == null) {
             final String methodName = method.getName();
             throw new UnsupportedOperationException("Method '" + methodName
@@ -589,17 +589,17 @@ public class DomainObjectInvocationHandler<T> extends DelegatingInvocationHandle
     // Specification lookup
     // /////////////////////////////////////////////////////////////////
 
-    private JavaSpecification getJavaSpecificationOfOwningClass(final Method method) {
+    private ObjectSpecificationDefault getJavaSpecificationOfOwningClass(final Method method) {
         return getJavaSpecification(method.getDeclaringClass());
     }
 
-    private JavaSpecification getJavaSpecification(final Class<?> clazz) {
+    private ObjectSpecificationDefault getJavaSpecification(final Class<?> clazz) {
         final ObjectSpecification nos = getSpecification(clazz);
-        if (!(nos instanceof JavaSpecification)) {
+        if (!(nos instanceof ObjectSpecificationDefault)) {
             throw new UnsupportedOperationException("Only Java is supported (specification is '"
                 + nos.getClass().getCanonicalName() + "')");
         }
-        return (JavaSpecification) nos;
+        return (ObjectSpecificationDefault) nos;
     }
 
     private ObjectSpecification getSpecification(final Class<?> type) {

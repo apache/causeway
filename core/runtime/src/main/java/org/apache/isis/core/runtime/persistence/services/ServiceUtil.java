@@ -30,7 +30,7 @@ public class ServiceUtil {
 
     public static String id(final Object object) {
         if (object instanceof SimpleRepository) {
-            return "repository#" + ((SimpleRepository) object).getSpec().getFullName();
+            return "repository#" + ((SimpleRepository) object).getSpec().getFullIdentifier();
         }
         final Class<?> cls = object.getClass();
         try {

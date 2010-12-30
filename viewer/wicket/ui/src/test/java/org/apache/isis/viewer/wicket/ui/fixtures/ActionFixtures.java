@@ -23,11 +23,11 @@ package org.apache.isis.viewer.wicket.ui.fixtures;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.ConsentAbstract;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.consent2.ConsentAbstract;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.jmock.Expectations;
 import org.jmock.Mockery;
 
@@ -66,7 +66,7 @@ public final class ActionFixtures {
 		});
 	}
 
-	public void getType(final ObjectAction mockAction, final ObjectActionType returns) {
+	public void getType(final ObjectAction mockAction, final ActionType returns) {
 		context.checking(new Expectations() {
 			{
 				allowing(mockAction).getType();

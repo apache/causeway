@@ -88,18 +88,18 @@ public class Memento implements Serializable {
         int i = 0;
         for (ObjectAdapter ref : facet.iterable(object)) {
             String resolveStateName = ref.getResolveState().name();
-            String specName = ref.getSpecification().getFullName();
+            String specName = ref.getSpecification().getFullIdentifier();
             Oid oid = ref.getOid();
             collData[i++] = new Data(oid, resolveStateName, specName);
         }
-        String elementTypeSpecName = object.getSpecification().getFullName();
+        String elementTypeSpecName = object.getSpecification().getFullIdentifier();
         return new CollectionData(object.getOid(), object.getResolveState(), elementTypeSpecName, collData);
     }
 
     private ObjectData createObjectData(final ObjectAdapter adapter) {
         final ObjectSpecification cls = adapter.getSpecification();
         final List<ObjectAssociation> fields = cls.getAssociations();
-        final ObjectData data = new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullName());
+        final ObjectData data = new ObjectData(adapter.getOid(), adapter.getResolveState().name(), cls.getFullIdentifier());
         for (int i = 0; i < fields.size(); i++) {
             if (fields.get(i).isNotPersisted()) {
                 if (fields.get(i).isOneToManyAssociation()) {
@@ -150,7 +150,7 @@ public class Memento implements Serializable {
         }
 
         final String resolvedState = ref.getResolveState().name();
-        final String specification = ref.getSpecification().getFullName();
+        final String specification = ref.getSpecification().getFullIdentifier();
         return new Data(refOid, resolvedState, specification);
 
     }

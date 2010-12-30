@@ -71,7 +71,7 @@ public class SerialOidObjectMapping implements ObjectMapping {
 
         SerialOid oid = (SerialOid) ((ObjectAdapter) object).getOid();
         boolean isTransient = oid.isTransient();
-        String id = (isTransient ? "T" : "P") + object.getSpecification().getFullName() + "@"
+        String id = (isTransient ? "T" : "P") + object.getSpecification().getFullIdentifier() + "@"
                 + Long.toString(oid.getSerialNo(), RADIX);
         if (isTransient) {
             transients.put(id, new TransientObjectMapping((ObjectAdapter) object));

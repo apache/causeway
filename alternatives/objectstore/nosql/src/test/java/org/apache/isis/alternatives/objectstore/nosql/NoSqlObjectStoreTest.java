@@ -138,7 +138,7 @@ public class NoSqlObjectStoreTest {
     @Test
     public void hasInstances() throws Exception {
         context.checking(new Expectations() {{
-            one(db).hasInstances(specification.getFullName());
+            one(db).hasInstances(specification.getFullIdentifier());
             will(returnValue(true));
         }});
         store.hasInstances(specification);
@@ -165,7 +165,7 @@ public class NoSqlObjectStoreTest {
             one(persistenceQuery).getSpecification();
             will(returnValue(specification));
             
-            one(db).instancesOf(specification.getFullName());
+            one(db).instancesOf(specification.getFullIdentifier());
             will(returnIterator());
         }});
         
@@ -179,7 +179,7 @@ public class NoSqlObjectStoreTest {
         context.checking(new Expectations() {{
             one(keyCreator).key(SerialOid.createPersistent(3));
             will(returnValue("3"));
-            one(db).getInstance("3", specification.getFullName());
+            one(db).getInstance("3", specification.getFullIdentifier());
         }});
         object = IsisContext.getPersistenceSession().recreateAdapter(SerialOid.createPersistent(3), specification);
         assertEquals(ResolveState.GHOST, object.getResolveState());

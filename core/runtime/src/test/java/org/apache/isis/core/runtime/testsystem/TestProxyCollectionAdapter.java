@@ -29,19 +29,21 @@ import java.util.Vector;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.EnumerationUtils;
 import org.apache.commons.collections.iterators.IteratorEnumeration;
+
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -97,10 +99,6 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
         } else {
             return (ObjectAdapter) collection.elementAt(0);
         }
-    }
-
-    public ObjectSpecification getElementSpecification() {
-        return null;
     }
 
     @Override
@@ -222,12 +220,10 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
     public void fireChangedEvent() {}
 
     @Override
-    public void setTypeOfFacet(final TypeOfFacet typeOfFacet) {}
-
-    @Override
-    public TypeOfFacet getTypeOfFacet() {
+    public ObjectSpecification getElementSpecification() {
         return null;
     }
+
 
     @Override
     public ObjectAdapter getOwner() {
@@ -261,6 +257,15 @@ public class TestProxyCollectionAdapter implements ObjectAdapter {
 
     protected PersistenceSession getPersistenceSession() {
         return IsisContext.getPersistenceSession();
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.spec.ObjectMetaModel#setElementTypeProvider(org.apache.isis.core.metamodel.spec.ElementTypeProvider)
+     */
+    @Override
+    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
@@ -354,6 +359,7 @@ class TestProxyCollectionFacet implements CollectionFacet {
     public void setUnderlyingFacet(Facet underlyingFacet) {
 		throw new UnsupportedOperationException();
 	}
+
 
 
 }

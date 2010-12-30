@@ -23,7 +23,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.display;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -38,8 +38,8 @@ public class LongFormView extends AbstractFormView {
         if (field.isOneToManyAssociation()) {
             IsisContext.getPersistenceSession().resolveField(object, field);
             ObjectAdapter collection = field.get(object);
-            TypeOfFacet facet = collection.getTypeOfFacet();
-            List<ObjectAssociation> fields = facet.valueSpec().getAssociations(
+            final ObjectSpecification elementSpec = collection.getElementSpecification();
+            List<ObjectAssociation> fields = elementSpec.getAssociations(
                     ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
             boolean isFieldEditable = field.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
             String summary = "Table of elements in " + field.getName();

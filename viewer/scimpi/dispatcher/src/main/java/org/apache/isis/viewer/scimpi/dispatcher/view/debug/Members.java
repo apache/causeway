@@ -23,10 +23,10 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -60,15 +60,15 @@ public class Members extends AbstractElementProcessor {
         
         ObjectSpecification specification = field == null ? object.getSpecification() : field.getSpecification();
         
-        request.appendHtml(specification.getName() + " (" + specification.getFullName() + ") \n");
+        request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
         List<ObjectAssociation> fields = specification.getAssociations();
         for (ObjectAssociation fld : fields) {
             if (!fld.isAlwaysHidden()) {
-                request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "+  fld.getSpecification().getName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n" );
+                request.appendHtml("   " + fld.getId() + " - '" + fld.getName() + "' -> "+  fld.getSpecification().getSingularName() + (fld.isOneToManyAssociation() ? " (collection of)" : "") + "\n" );
             }
         }
         request.appendHtml("   --------------\n");
-        List<ObjectAction> actions = specification.getObjectActions(ObjectActionType.USER);;
+        List<ObjectAction> actions = specification.getObjectActions(ActionType.USER);;
         for (ObjectAction action : actions) {
             request.appendHtml("   " + action.getId() + " (");
             boolean first = true;
@@ -76,12 +76,12 @@ public class Members extends AbstractElementProcessor {
                 if (!first) {
                     request.appendHtml(", ");
                 }
-                request.appendHtml(parameter.getSpecification().getName());
+                request.appendHtml(parameter.getSpecification().getSingularName());
                 first = false;
             }
             request.appendHtml(")"  + " - '" + action.getName() + "'");
             if (action.getSpecification() != null) {
-                request.appendHtml(" -> " + action.getSpecification().getName() + ")" );
+                request.appendHtml(" -> " + action.getSpecification().getSingularName() + ")" );
             }
             request.appendHtml("\n" );
         }

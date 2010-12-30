@@ -36,7 +36,7 @@ public final class SpecFixtures {
 			final String returns) {
 		context.checking(new Expectations() {
 			{
-				allowing(mockNoSpec).getFullName();
+				allowing(mockNoSpec).getFullIdentifier();
 				will(returnValue(returns));
 			}
 		});

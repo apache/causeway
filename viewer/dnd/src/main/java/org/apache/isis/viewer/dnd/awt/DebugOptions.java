@@ -25,7 +25,7 @@ import java.io.PrintStream;
 
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.monitor.SystemPrinter;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -46,7 +46,7 @@ public class DebugOptions implements MenuOptions {
 
     public void menuOptions(final UserActionSet options) {
         final String showExplorationMenu = "Always show exploration menu " + (viewer.showExplorationMenuByDefault ? "off" : "on");
-        options.add(new UserActionAbstract(showExplorationMenu, ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract(showExplorationMenu, ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 viewer.showExplorationMenuByDefault = !viewer.showExplorationMenuByDefault;
@@ -55,7 +55,7 @@ public class DebugOptions implements MenuOptions {
         });
 
         final String repaint = "Show painting area  " + (viewer.showRepaintArea ? "off" : "on");
-        options.add(new UserActionAbstract(repaint, ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract(repaint, ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 viewer.showRepaintArea = !viewer.showRepaintArea;
@@ -64,7 +64,7 @@ public class DebugOptions implements MenuOptions {
         });
 
         final String debug = "Debug graphics " + (Toolkit.debug ? "off" : "on");
-        options.add(new UserActionAbstract(debug, ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract(debug, ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 Toolkit.debug = !Toolkit.debug;
@@ -73,7 +73,7 @@ public class DebugOptions implements MenuOptions {
         });
 
         final String action = viewer.isShowingMouseSpy() ? "Hide" : "Show";
-        options.add(new UserActionAbstract(action + " mouse spy", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract(action + " mouse spy", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 viewer.setShowMouseSpy(!viewer.isShowingMouseSpy());
@@ -89,7 +89,7 @@ public class DebugOptions implements MenuOptions {
 //            }
 //        });
         
-        options.add(new UserActionAbstract("Diagnostics...", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Diagnostics...", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
@@ -113,7 +113,7 @@ public class DebugOptions implements MenuOptions {
         });
 
 
-        options.add(new UserActionAbstract("Debug system...", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Debug system...", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
@@ -124,7 +124,7 @@ public class DebugOptions implements MenuOptions {
         });
 
 
-        options.add(new UserActionAbstract("Debug session...", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Debug session...", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
@@ -134,7 +134,7 @@ public class DebugOptions implements MenuOptions {
             }
         });
 
-        options.add(new UserActionAbstract("Debug viewer...", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Debug viewer...", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
@@ -143,7 +143,7 @@ public class DebugOptions implements MenuOptions {
             }
         });
 
-        options.add(new UserActionAbstract("Debug overlay...", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Debug overlay...", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final DebugFrame f = new OverlayDebugFrame(viewer);

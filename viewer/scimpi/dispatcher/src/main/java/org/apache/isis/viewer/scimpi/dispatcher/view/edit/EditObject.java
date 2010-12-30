@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -220,7 +220,7 @@ public class EditObject extends AbstractElementProcessor {
                 if (field.getSpecification().getFacet(ParseableFacet.class) == null) {
                     if (fieldValue != null) {
                         String entry = "<img class=\"small-icon\" src=\"" + context.imagePath(field.getSpecification())
-                                + "\" alt=\"" + field.getSpecification().getShortName() + "\"/>" + fieldValue.titleString();
+                                + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>" + fieldValue.titleString();
                         inputField.setHtml(entry);
                     } else {
                         String entry = "<em>none specified</em>";
@@ -267,7 +267,7 @@ public class EditObject extends AbstractElementProcessor {
                 ObjectSpecification objectSpecification = field.getSpecification();
                 if (defaultValue != null) {
                     String html = "<img class=\"small-icon\" src=\"" + context.imagePath(objectSpecification) + "\" alt=\""
-                            + objectSpecification.getShortName() + "\"/>" + title;
+                            + objectSpecification.getShortIdentifier() + "\"/>" + title;
                     formFields[i].setHtml(html);
                     String value = defaultValue == null ? null : context.mapObject(defaultValue, Scope.INTERACTION);
                     formFields[i].setValue(value);

@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.metamodel.facets.actions.debug;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Indicates that the action should only be available in a special <i>debug</i> mode.

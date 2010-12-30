@@ -27,8 +27,8 @@ import junit.framework.TestCase;
 
 import org.apache.log4j.BasicConfigurator;
 
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 
 public abstract class AbstractFacetFactoryTest extends TestCase {

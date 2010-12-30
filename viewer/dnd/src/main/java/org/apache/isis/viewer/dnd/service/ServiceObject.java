@@ -26,11 +26,11 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;
 import org.apache.isis.viewer.dnd.view.Content;
@@ -69,7 +69,7 @@ public class ServiceObject extends AbstractContent {
 
     @Override
     public String getDescription() {
-        final String specName = getSpecification().getName();
+        final String specName = getSpecification().getSingularName();
         final String objectTitle = getObject().titleString();
         return specName + (specName.equalsIgnoreCase(objectTitle) ? "" : ": " + objectTitle) + " "
                 + getSpecification().getDescription();
@@ -130,7 +130,7 @@ public class ServiceObject extends AbstractContent {
 
     @Override
     public String windowTitle() {
-        return (isTransient() ? "UNSAVED " : "") + getSpecification().getName();
+        return (isTransient() ? "UNSAVED " : "") + getSpecification().getSingularName();
     }
 
     @Override
@@ -148,7 +148,7 @@ public class ServiceObject extends AbstractContent {
 
     private ObjectAction actionFor(final Content sourceContent) {
         ObjectAction action;
-        action = adapter.getSpecification().getObjectAction(ObjectActionType.USER, null,
+        action = adapter.getSpecification().getObjectAction(ActionType.USER, null,
                 Arrays.asList( sourceContent.getSpecification() ));
         return action;
     }

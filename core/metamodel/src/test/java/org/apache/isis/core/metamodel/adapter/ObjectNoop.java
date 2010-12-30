@@ -22,7 +22,8 @@ package org.apache.isis.core.metamodel.adapter;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.spec.ElementSpecificationProvider;
+import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
@@ -83,12 +84,14 @@ public class ObjectNoop implements ObjectAdapter {
     }
 
     @Override
-    public TypeOfFacet getTypeOfFacet() {
+    public ObjectSpecification getElementSpecification() {
         return null;
     }
 
     @Override
-    public void setTypeOfFacet(final TypeOfFacet typeOfFacet) {}
+    public void setElementSpecificationProvider(ElementSpecificationProvider elementSpecificationProvider) {
+    }
+
 
     @Override
     public ObjectAdapter getOwner() {

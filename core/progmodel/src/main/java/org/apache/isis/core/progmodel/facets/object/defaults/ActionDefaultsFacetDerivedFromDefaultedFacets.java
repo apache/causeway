@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFacetAbstract;
 
 

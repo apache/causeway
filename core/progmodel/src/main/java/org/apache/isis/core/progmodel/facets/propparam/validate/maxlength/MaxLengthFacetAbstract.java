@@ -22,12 +22,13 @@ package org.apache.isis.core.progmodel.facets.propparam.validate.maxlength;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
-import org.apache.isis.core.metamodel.interactions.ProposedHolder;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions2.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions2.ValidityContext;
+import org.apache.isis.core.progmodel.facets.ObjectAdapterUtils;
 
 
 public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract implements MaxLengthFacet {
@@ -43,8 +44,9 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
     /**
      * Whether the provided argument exceeds the {@link #value() maximum length}.
      */
+    @Override
     public boolean exceeds(final ObjectAdapter adapter) {
-        final String str = unwrapString(adapter);
+        final String str = ObjectAdapterUtils.unwrapString(adapter);
         if (str == null) {
             return false;
         }
@@ -52,6 +54,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
         return maxLength != 0 && str.length() > maxLength;
     }
 
+    @Override
     public String invalidates(final ValidityContext<? extends ValidityEvent> context) {
         if (!(context instanceof ProposedHolder)) {
             return null;
@@ -69,4 +72,7 @@ public abstract class MaxLengthFacetAbstract extends SingleIntValueFacetAbstract
         final int val = value();
         return val == 0 ? "unlimited" : String.valueOf(val);
     }
+    
+
+
 }

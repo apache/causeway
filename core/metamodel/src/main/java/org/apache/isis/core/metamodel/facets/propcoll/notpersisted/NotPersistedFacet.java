@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.propcoll.notpersisted;
 
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.DisablingInteractionAdvisor;
 
 /**
  * Indicates that a property or a collection shouldn't be persisted.

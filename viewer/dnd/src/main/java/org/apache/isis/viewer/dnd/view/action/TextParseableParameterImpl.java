@@ -22,12 +22,12 @@ package org.apache.isis.viewer.dnd.view.action;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ParseableEntryActionParameter;
@@ -182,7 +182,7 @@ public class TextParseableParameterImpl extends AbstractTextParsableContent impl
 
     public String getDescription() {
         final String title = object == null ? "" : ": " + object.titleString();
-        final String specification = getSpecification().getShortName();
+        final String specification = getSpecification().getShortIdentifier();
         final String type = getParameterName().indexOf(specification) == -1 ? "" : " (" + specification + ")";
         return getParameterName() + type + title + " " + parameter.getDescription();
     }

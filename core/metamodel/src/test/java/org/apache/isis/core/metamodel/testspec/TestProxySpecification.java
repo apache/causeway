@@ -33,20 +33,20 @@ import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent2.InteractionResult;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
-import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions2.ObjectTitleContext;
+import org.apache.isis.core.metamodel.interactions2.ObjectValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.noruntime.RuntimeContextNoRuntime;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
@@ -69,6 +69,15 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     public TestProxySpecification(final Class<?> type) {
         this(type.getName());
 		runtimeContext = new RuntimeContextNoRuntime();
+    }
+
+    @Override
+    public Class<?> getCorrespondingClass() {
+        try {
+            return Class.forName(name);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public TestProxySpecification(final String name) {
@@ -101,14 +110,14 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     public ObjectAction getClassAction(
-            final ObjectActionType type,
+            final ActionType type,
             final String name,
             final ObjectSpecification[] parameters) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getServiceActionsReturning(final ObjectActionType... type) {
+    public List<ObjectAction> getServiceActionsReturning(final ActionType... type) {
         return null;
     }
 
@@ -172,7 +181,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public String getFullName() {
+    public String getFullIdentifier() {
         return name;
     }
 
@@ -183,7 +192,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
 
     @Override
     public ObjectAction getObjectAction(
-            final ObjectActionType type,
+            final ActionType type,
             final String name,
             final List<ObjectSpecification> parameters) {
         if (action != null && action.getId().equals(name)) {
@@ -193,13 +202,13 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public ObjectAction getObjectAction(final ObjectActionType type, final String id) {
+    public ObjectAction getObjectAction(final ActionType type, final String id) {
     	int openBracket = id.indexOf('(');
         return getObjectAction(type, id.substring(0, openBracket), null);
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ObjectActionType... types) {
+    public List<ObjectAction> getObjectActions(final ActionType... types) {
         return null;
     }
 
@@ -209,18 +218,18 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     }
 
     @Override
-    public String getShortName() {
+    public String getShortIdentifier() {
         return name.substring(name.lastIndexOf('.') + 1);
     }
 
     @Override
-    public String getName() {
+    public String getSingularName() {
         return name + " (singular)";
     }
 
     @Override
     public String getDescription() {
-        return getName();
+        return getSingularName();
     }
 
     @Override
@@ -323,7 +332,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
 
     @Override
     public String toString() {
-        return getFullName();
+        return getFullIdentifier();
     }
 
     @Override
@@ -417,6 +426,37 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
 	public RuntimeContext getRuntimeContext() {
 		return runtimeContext;
 	}
+
+	
+    // /////////////////////////////////////////////////////////////
+    // introspection
+    // /////////////////////////////////////////////////////////////
+
+    @Override
+    public void introspectTypeHierarchyAndMembers() {
+    }
+
+    @Override
+    public void updateFromFacetValues() {
+    }
+
+    @Override
+    public void markAsService() {
+    }
+
+    @Override
+    public boolean isIntrospected() {
+        return false;
+    }
+
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer#getObjectActionsAll()
+     */
+    @Override
+    public List<ObjectAction> getObjectActionsAll() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
 
 }

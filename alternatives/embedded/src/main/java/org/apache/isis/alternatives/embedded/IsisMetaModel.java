@@ -39,16 +39,17 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
+import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
-import org.apache.isis.core.metamodel.spec.IntrospectableSpecification;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
@@ -80,8 +81,9 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 	private IsisConfiguration configuration;
 	private ClassSubstitutor classSubstitutor;
 	private CollectionTypeRegistry collectionTypeRegistry;
-	private ProgrammingModelFacets programmingModelFacets;
+	private ProgrammingModel programmingModel;
 	private SpecificationTraverser specificationTraverser;
+	private MemberLayoutArranger memberLayoutArranger;
 	private Set<FacetDecorator> facetDecorators;
 	private MetaModelValidator metaModelValidator;
 
@@ -90,6 +92,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 	private List<Object> services;
 
 
+    
 	public IsisMetaModel(
 			final EmbeddedContext context,
 			final Class<?>... serviceTypes) {
@@ -99,8 +102,10 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 		setClassSubstitutor(new ClassSubstitutorIdentity());
 		setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
 		setSpecificationTraverser(new SpecificationTraverserDefault());
+		setMemberLayoutArranger(new MemberLayoutArrangerDefault());
 		setFacetDecorators(new TreeSet<FacetDecorator>());
 		setProgrammingModelFacets(new ProgrammingModelFacetsJava5());
+		
 		setMetaModelValidator(new MetaModelValidatorNoop());
 
 		this.context = context;
@@ -124,7 +129,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 	@Override
     public void init() {
 		ensureNotInitialized();
-		reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, programmingModelFacets, facetDecorators, metaModelValidator);
+		reflector = new ObjectReflectorDefault(configuration, classSubstitutor, collectionTypeRegistry, specificationTraverser, memberLayoutArranger, programmingModel, facetDecorators, metaModelValidator);
 
 		services = createServices(serviceTypes);
 		runtimeContext = new RuntimeContextForEmbeddedMetaModel(context, services);
@@ -139,12 +144,8 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 		runtimeContext.init();
 
 		for(Class<?> serviceType: serviceTypes) {
-			ObjectSpecification serviceNoSpec = reflector.loadSpecification(serviceType);
-            if (serviceNoSpec instanceof IntrospectableSpecification) {
-                IntrospectableSpecification introspectableSpecification = (IntrospectableSpecification) serviceNoSpec;
-                introspectableSpecification.markAsService();
-            }
-
+			ObjectSpecification serviceSpec = reflector.loadSpecification(serviceType);
+			serviceSpec.markAsService();
 		}
 		state = State.INITIALIZED;
 
@@ -292,25 +293,32 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 		this.specificationTraverser = specificationTraverser;
 	}
 
+    /**
+     * Optionally specify the {@link MemberLayoutArranger}.
+     */
+    public void setMemberLayoutArranger(MemberLayoutArranger memberLayoutArranger) {
+        this.memberLayoutArranger = memberLayoutArranger;
+    }
+
 	/**
-	 * The {@link ProgrammingModelFacets} in force, either defaulted or
-	 * specified {@link #setProgrammingModelFacets(ProgrammingModelFacets) explicitly}.
+	 * The {@link ProgrammingModel} in force, either defaulted or
+	 * specified {@link #setProgrammingModelFacets(ProgrammingModel) explicitly}.
 	 */
-	public ProgrammingModelFacets getProgrammingModelFacets() {
-		return programmingModelFacets;
+	public ProgrammingModel getProgrammingModelFacets() {
+		return programmingModel;
 	}
 
 	/**
-	 * Optionally specify the {@link ProgrammingModelFacets}.
+	 * Optionally specify the {@link ProgrammingModel}.
 	 *
 	 * <p>
 	 * Call prior to {@link #init()}.
 	 */
 	public void setProgrammingModelFacets(
-			ProgrammingModelFacets programmingModelFacets) {
+			ProgrammingModel programmingModel) {
 		ensureNotInitialized();
-		ensureThatArg(programmingModelFacets, is(notNullValue()));
-		this.programmingModelFacets = programmingModelFacets;
+		ensureThatArg(programmingModel, is(notNullValue()));
+		this.programmingModel = programmingModel;
 	}
 
 	/**

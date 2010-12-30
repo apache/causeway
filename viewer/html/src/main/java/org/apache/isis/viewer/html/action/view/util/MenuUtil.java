@@ -26,10 +26,10 @@ import java.util.List;
 import com.google.inject.internal.Lists;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.html.component.Component;
 import org.apache.isis.viewer.html.context.Context;
@@ -39,9 +39,9 @@ public class MenuUtil {
 
     public static Component[] menu(final ObjectAdapter target, final String targetObjectId, final Context context) {
         final ObjectSpecification specification = target.getSpecification();
-        final List<ObjectAction> actions1 = specification.getObjectActions(ObjectActionType.USER);
-        final List<ObjectAction> actions2 = specification.getObjectActions(ObjectActionType.EXPLORATION);
-        final List<ObjectAction> actions3 = specification.getObjectActions(ObjectActionType.PROTOTYPE);
+        final List<ObjectAction> actions1 = specification.getObjectActions(ActionType.USER);
+        final List<ObjectAction> actions2 = specification.getObjectActions(ActionType.EXPLORATION);
+        final List<ObjectAction> actions3 = specification.getObjectActions(ActionType.PROTOTYPE);
         final List<ObjectAction> actions = concat(concat(actions1, actions2), actions3);
         final Component[] menuItems = createMenu("Actions", target, actions, context, targetObjectId);
         return menuItems;
@@ -75,9 +75,9 @@ public class MenuUtil {
                     continue;
                 }
                 
-                if (action.getType() == ObjectActionType.USER) {
+                if (action.getType() == ActionType.USER) {
                 	// carry on, process this action
-                } else if (action.getType() == ObjectActionType.EXPLORATION) {
+                } else if (action.getType() == ActionType.EXPLORATION) {
                 	boolean isExploring = IsisContext.getDeploymentType().isExploring();
 					if (isExploring) {
                 		// carry on, process this action
@@ -85,7 +85,7 @@ public class MenuUtil {
                     	// ignore this action, skip onto next
                 		continue;
                 	}
-                } else if (action.getType() == ObjectActionType.PROTOTYPE) {
+                } else if (action.getType() == ActionType.PROTOTYPE) {
                 	boolean isPrototyping = IsisContext.getDeploymentType().isPrototyping();
 					if (isPrototyping) {
                 		// carry on, process this action
@@ -93,7 +93,7 @@ public class MenuUtil {
                     	// ignore this action, skip onto next
                 		continue;
                 	}
-                } else if (action.getType() == ObjectActionType.DEBUG) {
+                } else if (action.getType() == ActionType.DEBUG) {
                 	// TODO: show if debug "gesture" present
                 } else {
                 	// ignore this action, skip onto next

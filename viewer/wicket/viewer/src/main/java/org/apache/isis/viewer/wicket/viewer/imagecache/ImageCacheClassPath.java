@@ -47,7 +47,7 @@ public class ImageCacheClassPath implements ImageCache {
 	private Map<String, PackageResource> imagesByName = Maps.newHashMap();
 
 	public PackageResource findImage(ObjectSpecification noSpec) {
-		String specFullName = noSpec.getFullName();
+		String specFullName = noSpec.getFullIdentifier();
 		PackageResource packageResource = findImage(specFullName);
 		if (packageResource != null) {
 			return packageResource;
@@ -85,21 +85,21 @@ public class ImageCacheClassPath implements ImageCache {
 
 	private synchronized PackageResource findAndCacheImage(ObjectSpecification noSpec) {
 	    PackageResource packageResource = findImageSearchUpHierarchy(noSpec);
-		imagesByName.put(noSpec.getFullName(), packageResource);
+		imagesByName.put(noSpec.getFullIdentifier(), packageResource);
 		return packageResource;
 	}
 
 	private PackageResource findImageSearchUpHierarchy(
 			ObjectSpecification noSpec) {
 		for(String imageSuffix : IMAGE_SUFFICES) {
-			String fullName = noSpec.getFullName();
+			String fullName = noSpec.getFullIdentifier();
 			String path = buildImagePath(fullName, imageSuffix);
 			if (PackageResource.exists(Images.class, path, null, null)) {
 				return PackageResource.get(Images.class, path);
 			}
 		}
 		for (String imageSuffix : IMAGE_SUFFICES) {
-			String shortName = noSpec.getShortName();
+			String shortName = noSpec.getShortIdentifier();
 			String path = buildImagePath(shortName, imageSuffix);
 			if (PackageResource.exists(Images.class, path, null, null)) {
 				return PackageResource.get(Images.class, path);

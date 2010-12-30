@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 
 import nu.xom.Element;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.restful.viewer.html.HtmlClass;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 

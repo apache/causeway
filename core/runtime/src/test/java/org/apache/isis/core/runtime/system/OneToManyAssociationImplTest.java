@@ -33,9 +33,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
@@ -43,8 +43,9 @@ import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedF
 import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
-import org.apache.isis.core.metamodel.specloader.internal.OneToManyAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.internal.spec.OneToManyAssociationImpl;
 
 @RunWith(JMock.class)
 public class OneToManyAssociationImplTest {
@@ -96,7 +97,7 @@ public class OneToManyAssociationImplTest {
         allowingPeerToReturnCollectionType();
         allowingPeerToReturnIdentifier();
         allowingSpecLoaderToReturnSpecs();
-        association = new OneToManyAssociationImpl(mockPeer, mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter);
+        association = new OneToManyAssociationImpl(mockPeer, new ObjectMemberContext(mockAuthenticationSessionProvider, mockSpecificationLookup, mockAdapterManager, mockQuerySubmitter));
     }
 
     private void allowingSpecLoaderToReturnSpecs() {

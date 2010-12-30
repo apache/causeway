@@ -43,6 +43,7 @@ public class CollectionIcon implements Component {
         this.id = id;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         final TypeOfFacet facet = collection.getSpecification().getFacet(TypeOfFacet.class);
         final Class<?> elementType = facet.value();
@@ -61,7 +62,7 @@ public class CollectionIcon implements Component {
         writer.print("><img src=\"");
         writer.print(ImageLookup.image(elementSpecification));
         writer.print("\" alt=\"");
-        final String singularName = elementSpecification.getName();
+        final String singularName = elementSpecification.getSingularName();
         writer.print(singularName);
         writer.print(" collection\" />");
         writer.print(collection.titleString());

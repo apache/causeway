@@ -28,15 +28,15 @@ import org.apache.isis.alternatives.remoting.common.client.facets.PropertySetter
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 
 public class ProxyFacetDecorator  extends FacetDecoratorAbstract {

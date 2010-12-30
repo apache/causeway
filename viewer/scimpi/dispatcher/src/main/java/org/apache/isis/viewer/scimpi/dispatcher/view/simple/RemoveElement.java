@@ -75,10 +75,10 @@ public class RemoveElement extends AbstractElementProcessor {
     public static void write(Request request, ObjectAdapter adapter, String fieldName, ObjectAdapter element, String resultOverride, String view, String error, String title, String cssClass) {
         ObjectAssociation field = adapter.getSpecification().getAssociation(fieldName);
         if (field == null) {
-            throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullName());
+            throw new ScimpiException("No field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier());
         }
         if (field.isVisible(IsisContext.getAuthenticationSession(), adapter).isVetoed()) {
-            throw new ForbiddenException("Field " + fieldName + " in " + adapter.getSpecification().getFullName() + " is not visible");
+            throw new ForbiddenException("Field " + fieldName + " in " + adapter.getSpecification().getFullIdentifier() + " is not visible");
         }
         IsisContext.getPersistenceSession().resolveField(adapter, field);
 

@@ -26,9 +26,9 @@ import org.apache.isis.applib.marker.AlwaysImmutable;
 import org.apache.isis.applib.marker.ImmutableOncePersisted;
 import org.apache.isis.applib.marker.ImmutableUntilPersisted;
 import org.apache.isis.applib.marker.NeverImmutable;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 

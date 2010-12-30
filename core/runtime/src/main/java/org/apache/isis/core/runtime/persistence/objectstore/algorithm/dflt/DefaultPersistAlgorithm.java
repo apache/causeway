@@ -88,7 +88,7 @@ public class DefaultPersistAlgorithm extends PersistAlgorithmAbstract {
                     if (collection == null) {
                         throw new ObjectPersistenceException(
                                 "Collection " + field.getName() + 
-                                " does not exist in " + object.getSpecification().getFullName());
+                                " does not exist in " + object.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {

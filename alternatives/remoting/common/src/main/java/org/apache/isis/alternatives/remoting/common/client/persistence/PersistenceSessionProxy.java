@@ -155,7 +155,7 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
         		new TransactionalClosureWithReturnAbstract<ObjectAdapter>(){
 			public ObjectAdapter execute() {
 				// NB: I think that the auth session must be null because we may not yet have logged in if retrieving the services.
-				GetObjectRequest request = new GetObjectRequest(null, oid, specHint.getFullName());
+				GetObjectRequest request = new GetObjectRequest(null, oid, specHint.getFullIdentifier());
 				GetObjectResponse response = serverFacade.getObject(request);
 				final ObjectData data = response.getObjectData();
 				return encoderDecoder.decode(data);
@@ -436,7 +436,7 @@ public class PersistenceSessionProxy extends PersistenceSessionAbstract {
 
 	private boolean hasInstancesFromPersistenceLayer(
 			final ObjectSpecification specification) {
-		final String specFullName = specification.getFullName();
+		final String specFullName = specification.getFullIdentifier();
 		return getTransactionManager().executeWithinTransaction(
     		new TransactionalClosureWithReturnAbstract<Boolean>(){
 				public Boolean execute() {

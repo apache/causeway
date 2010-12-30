@@ -23,9 +23,9 @@ package org.apache.isis.core.progmodel.facets.object.callback;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 import org.apache.isis.core.progmodel.facets.object.callbacks.CreatedCallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.CreatedCallbackFacetViaMethod;

@@ -35,8 +35,8 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.value.TestClock;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 
 @RunWith(JMock.class)
 public class JavaUtilDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

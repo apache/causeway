@@ -24,9 +24,9 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
 
 
 public class DescribedAsFacetViaMethod extends DescribedAsFacetAbstract implements ImperativeFacet {

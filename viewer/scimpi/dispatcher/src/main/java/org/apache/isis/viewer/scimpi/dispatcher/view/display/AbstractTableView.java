@@ -26,9 +26,11 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.context.IsisContext;
+import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.ScimpiException;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
@@ -42,11 +44,11 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
     public void process(Request request) {
         RequestContext context = request.getContext();
 
-        TypeOfFacet facet;
         ObjectAdapter collection;
         String parentObjectId = null;
         boolean isFieldEditable = false;
         String field = request.getOptionalProperty(FIELD);
+        ObjectSpecification elementSpec;
         if (field != null) {
             String objectId = request.getOptionalProperty(OBJECT);
             ObjectAdapter object = context.getMappedObjectOrResult(objectId);
@@ -58,14 +60,15 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
                 throw new ScimpiException("Field " + objectField.getId() + " is not a collection");
             }
             isFieldEditable = objectField.isUsable(IsisContext.getAuthenticationSession(), object).isAllowed();
-            IsisContext.getPersistenceSession().resolveField(object, objectField);
+            getPersistenceSession().resolveField(object, objectField);
             collection = objectField.get(object);
-            facet = objectField.getFacet(TypeOfFacet.class);
+            TypeOfFacet facet = objectField.getFacet(TypeOfFacet.class);
+            elementSpec = facet.valueSpec();
             parentObjectId = objectId == null ? context.mapObject(object, Scope.REQUEST) : objectId;
         } else {
             String id = request.getOptionalProperty(COLLECTION);
             collection = context.getMappedObjectOrResult(id);
-            facet = collection.getTypeOfFacet();
+            elementSpec = collection.getElementSpecification();
         }
 
         String summary = request.getOptionalProperty("summary");
@@ -75,11 +78,15 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             rowClasses = rowClassesList.split("[,|/]");
         }
 
-        List<ObjectAssociation> allFields = facet.valueSpec().getAssociations(
+        List<ObjectAssociation> allFields = elementSpec.getAssociations(
                 ObjectAssociationFilters.STATICALLY_VISIBLE_ASSOCIATIONS);
         TableContentWriter rowBuilder = createRowBuilder(request, context, isFieldEditable ? parentObjectId : null, allFields);
         write(request, collection, summary, rowBuilder, rowClasses);
 
+    }
+
+    protected PersistenceSession getPersistenceSession() {
+        return IsisContext.getPersistenceSession();
     }
 
     protected abstract TableContentWriter createRowBuilder(

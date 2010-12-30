@@ -28,12 +28,12 @@ import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.filters.AbstractFilter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -95,7 +95,7 @@ public class DebugAction implements Action {
         DebugString str = new DebugString();
         Dump.adapter(object, str);
         Dump.graph(object, str, IsisContext.getAuthenticationSession());
-        view.divider(object.getSpecification().getFullName());
+        view.divider(object.getSpecification().getFullIdentifier());
         view.appendRow("<pre class=\"debug\">" + str + "</pre>");
     }
 
@@ -115,12 +115,12 @@ public class DebugAction implements Action {
         ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(name);
         DebugString str = new DebugString();
         Dump.specification(spec, str);
-        view.divider(spec.getFullName());
+        view.divider(spec.getFullIdentifier());
         view.appendRow("Hash code", "#" + Integer.toHexString(spec.hashCode()));
         view.appendRow("ID", spec.getIdentifier());
-        view.appendRow("Full name", spec.getFullName());
-        view.appendRow("Short name", spec.getShortName());
-        view.appendRow("Singular name", spec.getName());
+        view.appendRow("Full name", spec.getFullIdentifier());
+        view.appendRow("Short name", spec.getShortIdentifier());
+        view.appendRow("Singular name", spec.getSingularName());
         view.appendRow("Plural name", spec.getPluralName());
         view.appendRow("Description", spec.getDescription());
 
@@ -136,11 +136,11 @@ public class DebugAction implements Action {
         
         List<ObjectAssociation> fields = spec.getAssociations();
         specificationMembers(view, "Fields", fields);
-        List<ObjectAction> userActions = spec.getObjectActions(ObjectActionType.USER);
+        List<ObjectAction> userActions = spec.getObjectActions(ActionType.USER);
         specificationMembers(view, "User Actions", userActions);
-        specificationMembers(view, "Exploration Actions", spec.getObjectActions(ObjectActionType.EXPLORATION));
-        specificationMembers(view, "Prototype Actions", spec.getObjectActions(ObjectActionType.PROTOTYPE));
-        specificationMembers(view, "Debug Actions", spec.getObjectActions(ObjectActionType.DEBUG));
+        specificationMembers(view, "Exploration Actions", spec.getObjectActions(ActionType.EXPLORATION));
+        specificationMembers(view, "Prototype Actions", spec.getObjectActions(ActionType.PROTOTYPE));
+        specificationMembers(view, "Debug Actions", spec.getObjectActions(ActionType.DEBUG));
 
         
         for (int i = 0; i < fields.size(); i++) {
@@ -248,7 +248,7 @@ public class DebugAction implements Action {
         if (specification == null) {
             return "none";
         } else {
-            String name = specification.getFullName();
+            String name = specification.getFullIdentifier();
             return "<a href=\"debug.app?action=specification&name=" + name + "\">" + name + "</a>";
         }
     }
@@ -257,13 +257,13 @@ public class DebugAction implements Action {
         ObjectSpecification[] allSpecifications = IsisContext.getSpecificationLoader().allSpecifications();
         String[] names = new String[allSpecifications.length];
         for (int j = 0; j < allSpecifications.length; j++) {
-            names[j] = allSpecifications[j].getFullName();
+            names[j] = allSpecifications[j].getFullIdentifier();
         }
         Arrays.sort(names);
         view.divider("Specifications");
         for (int j = 0; j < names.length; j++) {
             ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(names[j]);
-            String name = spec.getName();
+            String name = spec.getSingularName();
             view.appendRow(name, specificationLink(spec));
         }
     }

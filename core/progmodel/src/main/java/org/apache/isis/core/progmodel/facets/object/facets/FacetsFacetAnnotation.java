@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.object.facets;
 
 import org.apache.isis.applib.annotation.Facets;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class FacetsFacetAnnotation extends FacetsFacetAbstract {

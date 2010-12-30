@@ -25,7 +25,7 @@ import java.util.Enumeration;
 import java.util.Vector;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
@@ -178,7 +178,7 @@ public class PopupMenuContainer extends AbstractView {
         final boolean withPrototype = getViewManager().isRunningAsPrototype() && includePrototype;
         
 
-        final UserActionSet optionSet = new UserActionSetImpl(withExploration, withPrototype, includeDebug, ObjectActionType.USER);
+        final UserActionSet optionSet = new UserActionSetImpl(withExploration, withPrototype, includeDebug, ActionType.USER);
         if (forView) {
             target.viewMenuOptions(optionSet);
         } else {

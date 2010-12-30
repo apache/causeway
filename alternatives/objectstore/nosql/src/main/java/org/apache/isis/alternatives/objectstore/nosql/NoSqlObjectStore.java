@@ -117,7 +117,7 @@ public class NoSqlObjectStore implements ObjectStore {
     } 
 
     private void instances(PersistenceQuery persistenceQuery, ObjectSpecification specification, List<ObjectAdapter> instances) { 
-        String specificationName = specification.getFullName(); 
+        String specificationName = specification.getFullIdentifier(); 
         Iterator<StateReader> instanceData = database.instancesOf(specificationName);
         while(instanceData.hasNext()) {
             StateReader reader = instanceData.next();
@@ -131,7 +131,7 @@ public class NoSqlObjectStore implements ObjectStore {
             instances.add(instance);
         }
         for (ObjectSpecification spec : specification.subclasses()) { 
-            specificationName = spec.getFullName(); 
+            specificationName = spec.getFullIdentifier(); 
             instances(persistenceQuery, spec, instances); 
         } 
     }
@@ -139,7 +139,7 @@ public class NoSqlObjectStore implements ObjectStore {
     @Override
     public ObjectAdapter getObject(Oid oid, ObjectSpecification hint) {
         String key = keyCreator.key(oid);
-        StateReader reader = database.getInstance(key, hint.getFullName());
+        StateReader reader = database.getInstance(key, hint.getFullIdentifier());
         return objectReader.load(reader, keyCreator, versionCreator);
     }
 
@@ -156,7 +156,7 @@ public class NoSqlObjectStore implements ObjectStore {
 
     @Override
     public boolean hasInstances(ObjectSpecification specification) {
-        return database.hasInstances(specification.getFullName());
+        return database.hasInstances(specification.getFullIdentifier());
     }
 
     @Override
@@ -187,7 +187,7 @@ public class NoSqlObjectStore implements ObjectStore {
         if (oid instanceof AggregatedOid) {
             throw new UnexpectedCallException("Aggregated objects should not need to be resolved: " + object);
         } else {
-            String specificationName = object.getSpecification().getFullName();
+            String specificationName = object.getSpecification().getFullIdentifier();
             String key = keyCreator.key(oid);
             StateReader reader = database.getInstance(key, specificationName);
             objectReader.update(reader, keyCreator, versionCreator, object);

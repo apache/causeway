@@ -27,11 +27,11 @@ public class TypeComparator implements Comparator {
     private String type;
 
     public void init(final ObjectAdapter element) {
-        type = element.getSpecification().getShortName();
+        type = element.getSpecification().getShortIdentifier();
     }
 
     public int compare(final ObjectAdapter sortedElement) {
-        final String sortedType = sortedElement.getSpecification().getShortName();
+        final String sortedType = sortedElement.getSpecification().getShortIdentifier();
         return sortedType.compareTo(type);
     }
 

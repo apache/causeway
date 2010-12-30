@@ -85,13 +85,13 @@ public class PersistenceSessionLogger extends Logger implements PersistenceSessi
 
     public ObjectAdapter loadObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException {
         final ObjectAdapter object = underlying.loadObject(oid, hint);
-        log("get object for " + oid + " (of type " + hint.getShortName() + ")", object.getObject());
+        log("get object for " + oid + " (of type " + hint.getShortIdentifier() + ")", object.getObject());
         return object;
     }
 
     public boolean hasInstances(final ObjectSpecification specification) {
         final boolean hasInstances = underlying.hasInstances(specification);
-        log("has instances of " + specification.getShortName(), "" + hasInstances);
+        log("has instances of " + specification.getShortIdentifier(), "" + hasInstances);
         return hasInstances;
     }
 

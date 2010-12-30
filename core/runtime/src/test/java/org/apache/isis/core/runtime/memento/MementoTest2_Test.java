@@ -82,7 +82,7 @@ public class MementoTest2_Test {
                 atLeast(1).of(rootSpecification).getAssociations();
                 will(returnValue(Arrays.asList( (ObjectAssociation)nameField)));
 
-                atLeast(1).of(rootSpecification).getFullName();
+                atLeast(1).of(rootSpecification).getFullIdentifier();
                 will(returnValue(TestObject.class.getName()));
 
                 atLeast(1).of(nameField).isNotPersisted();

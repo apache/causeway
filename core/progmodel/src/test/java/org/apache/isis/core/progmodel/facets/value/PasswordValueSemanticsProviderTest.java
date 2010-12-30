@@ -28,8 +28,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.applib.value.Password;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 
 @RunWith(JMock.class)
 public class PasswordValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

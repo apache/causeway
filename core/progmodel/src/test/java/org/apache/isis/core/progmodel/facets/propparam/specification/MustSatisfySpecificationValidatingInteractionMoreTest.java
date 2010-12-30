@@ -36,9 +36,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
-import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
+import org.apache.isis.core.metamodel.interactions2.PropertyModifyContext;
 
 
 @RunWith(JMock.class)

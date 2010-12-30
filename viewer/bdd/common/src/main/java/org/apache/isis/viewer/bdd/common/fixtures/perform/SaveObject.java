@@ -1,7 +1,7 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.bdd.common.CellBinding;

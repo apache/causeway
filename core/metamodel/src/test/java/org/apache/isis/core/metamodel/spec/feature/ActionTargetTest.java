@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
+import org.apache.isis.core.metamodel.spec.ActionType;
+
 import junit.framework.TestCase;
 
 
@@ -30,11 +32,11 @@ public class ActionTargetTest extends TestCase {
     }
 
     public void testEquals() {
-        assertTrue(ObjectActionType.EXPLORATION.equals(ObjectActionType.EXPLORATION));
+        assertTrue(ActionType.EXPLORATION.equals(ActionType.EXPLORATION));
     }
 
     public void testHashCode() {
-        assertEquals(ObjectActionType.EXPLORATION.hashCode(), ObjectActionType.EXPLORATION.hashCode());
+        assertEquals(ActionType.EXPLORATION.hashCode(), ActionType.EXPLORATION.hashCode());
     }
 
 }

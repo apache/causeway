@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Specification;
 
@@ -35,6 +35,22 @@ import org.apache.isis.core.metamodel.spec.Specification;
  */
 public interface ObjectFeature extends Specification {
 
+    /**
+     * Return the name for this member - the field or action. This is based on the name of this member.
+     * 
+     * @see #getIdentifier()
+     */
+    String getName();
+
+    /**
+     * Returns a description of how the member is used - this complements the help text.
+     * 
+     * @see #getHelp()
+     */
+    @Override
+    String getDescription();
+
+    
     /**
      * The specification of the underlying type.
      * 

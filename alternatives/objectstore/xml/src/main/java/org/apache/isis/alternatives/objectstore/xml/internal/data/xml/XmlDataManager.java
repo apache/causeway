@@ -249,7 +249,7 @@ public class XmlDataManager implements DataManager {
 		if (noSpec.isAbstract()) {
 			return;
 		}
-		xmlFile.parse(handler, noSpec.getFullName());
+		xmlFile.parse(handler, noSpec.getFullIdentifier());
 	}
 
 
@@ -378,7 +378,7 @@ public class XmlDataManager implements DataManager {
     //////////////////////////////////////////////////////////
 
     private void writeInstanceFile(final ObjectSpecification noSpec, final Vector<SerialOid> instances) {
-    	writeInstanceFile(noSpec.getFullName(), instances);
+    	writeInstanceFile(noSpec.getFullIdentifier(), instances);
     }
 
     private void writeInstanceFile(final String name, final Vector<SerialOid> instances) {

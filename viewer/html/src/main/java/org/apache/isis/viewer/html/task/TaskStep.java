@@ -156,7 +156,7 @@ public final class TaskStep implements Action {
         content.setTitle(titleString, targetAdapter.getSpecification().getDescription());
         String iconName = targetAdapter.getIconName();
         if (iconName == null) {
-            iconName = targetAdapter.getSpecification().getShortName();
+            iconName = targetAdapter.getSpecification().getShortIdentifier();
         }
         content.setIconName(iconName);
 

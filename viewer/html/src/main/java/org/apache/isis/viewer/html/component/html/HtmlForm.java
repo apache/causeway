@@ -101,7 +101,7 @@ public class HtmlForm extends ComponentComposite implements Form {
             final String selected = (value != null && value.toLowerCase().equals("true")) ? "checked " : "";
             inputField = "<input class=\"value\" type=\"checkbox\" name=\"" + field + "\"" + selected + " value=\"true\"/>";
             ignoreMandatory = true;
-        } else if (spec.getFullName().endsWith(".Password")) {
+        } else if (spec.getFullIdentifier().endsWith(".Password")) {
             final String typicalLengthStr = typicalLength == 0 ? "" : (" size=\"" + typicalLength + "\"");
             final String maxLengthStr = maxLength == 0 ? "" : (" maxlength=\"" + maxLength + "\"");
             inputField = "<input class=\"value\" type=\"password\" name=\"" + field + "\"" + typicalLengthStr + maxLengthStr

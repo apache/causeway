@@ -123,7 +123,7 @@ public class CheckListPeer extends AbstractListFixturePeer {
 
         final ObjectSpecification spec = adapter.getSpecification();
         final String requiredTypeName = typeBinding.getCurrentCell().getText();
-        final String specFullName = spec.getFullName();
+        final String specFullName = spec.getFullIdentifier();
         if (specFullName.equals(requiredTypeName)) {
             return true;
         }

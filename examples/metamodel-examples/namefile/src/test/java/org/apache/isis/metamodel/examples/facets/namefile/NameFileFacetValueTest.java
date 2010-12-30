@@ -31,7 +31,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.metamodel.examples.facets.namefile.NameFileFacet;
 
 

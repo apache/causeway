@@ -44,7 +44,7 @@ public class PersistenceQueryFindAllInstances extends PersistenceQueryBuiltInAbs
     @Override
     public String toString() {
         final ToString str = ToString.createAnonymous(this);
-        str.append("spec", getSpecification().getShortName());
+        str.append("spec", getSpecification().getShortIdentifier());
         return str.toString();
     }
 }

@@ -30,9 +30,9 @@ import org.apache.wicket.Application;
 import com.google.common.collect.Collections2;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.progmodel.facets.actions.notcontributed.NotContributedFacet;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.util.Actions;
@@ -69,16 +69,16 @@ public class CssMenuBuilder  {
 
 	private void addMenuItems(CssMenuItem parent,
 			List<ObjectAction> actions) {
-		addMenuItemsForActionsOfType(parent, actions, ObjectActionType.SET);
+		addMenuItemsForActionsOfType(parent, actions, ActionType.SET);
 		addMenuItemsForActionsOfType(parent, actions,
-				ObjectActionType.USER);
+				ActionType.USER);
 		if (isExplorationMode()) {
 			addMenuItemsForActionsOfType(parent, actions,
-					ObjectActionType.EXPLORATION);
+					ActionType.EXPLORATION);
 		}
 		if (isDebugMode()) {
 			addMenuItemsForActionsOfType(parent, actions,
-					ObjectActionType.DEBUG);
+					ActionType.DEBUG);
 		}
 	}
 
@@ -99,7 +99,7 @@ public class CssMenuBuilder  {
     }
 
     private void addMenuItemsForActionsOfType(CssMenuItem parent,
-			List<ObjectAction> actions, final ObjectActionType type) {
+			List<ObjectAction> actions, final ActionType type) {
 		Collection<ObjectAction> filterActionsOfType = Collections2.filter(actions, Actions.ofType(type));
 		for (ObjectAction action : filterActionsOfType) {
 			addMenuItem(parent, action);
@@ -111,7 +111,7 @@ public class CssMenuBuilder  {
 	}
 
 	private void addMenuItem(CssMenuItem parent, ObjectAction action) {
-		if (action.getType() == ObjectActionType.SET) {
+		if (action.getType() == ActionType.SET) {
 			addMenuItemForActionSet(parent, action);
 		} else {
 			addMenuItemForAction(parent, action);
@@ -147,7 +147,7 @@ public class CssMenuBuilder  {
 
 	/**
 	 * It's a bit hokey to have to do this, but the
-	 * {@link ObjectSpecification#getServiceActionsReturning(ObjectActionType...)
+	 * {@link ObjectSpecification#getServiceActionsReturning(ActionType...)
 	 * method we call} on {@link ObjectSpecification}, while nicely
 	 * traversing the services for us, unfortunately does not pass us back the
 	 * service adapters also.

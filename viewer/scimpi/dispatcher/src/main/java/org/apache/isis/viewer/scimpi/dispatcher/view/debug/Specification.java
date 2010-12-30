@@ -41,10 +41,10 @@ public class Specification extends AbstractElementProcessor {
             String id = request.getOptionalProperty("object");
             ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
             ObjectSpecification specification = object.getSpecification();
-            request.appendHtml(specification.getName() + " (" + specification.getFullName() + ") \n");
+            request.appendHtml(specification.getSingularName() + " (" + specification.getFullIdentifier() + ") \n");
             List<ObjectAssociation> fields = specification.getAssociations();
             for (int i = 0; i < fields.size(); i++) {
-                request.appendHtml("    " + fields.get(i).getName() + " (" + fields.get(i).getSpecification().getName() + ") \n" );
+                request.appendHtml("    " + fields.get(i).getName() + " (" + fields.get(i).getSpecification().getSingularName() + ") \n" );
                 
             }
             

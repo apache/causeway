@@ -24,7 +24,7 @@ import org.apache.isis.core.commons.filters.AbstractFilter;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
 
 
 public class ObjectAssociationFilters {

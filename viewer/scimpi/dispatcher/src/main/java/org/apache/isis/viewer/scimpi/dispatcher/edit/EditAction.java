@@ -26,8 +26,8 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -65,7 +65,7 @@ public class EditAction implements Action {
             Version formVersion = context.getVersion(version);
             if (formVersion != null && adapterVersion.different(formVersion)) {
                 
-                IsisContext.getMessageBroker().addMessage("The " + adapter.getSpecification().getName() + " was edited " +
+                IsisContext.getMessageBroker().addMessage("The " + adapter.getSpecification().getSingularName() + " was edited " +
                 		"by another user (" + adapterVersion.getUser() +  "). Please  make your changes based on their changes.");
 
                 String view = context.getParameter(ERRORS);

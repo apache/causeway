@@ -22,11 +22,11 @@ package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.applib.events.VisibilityEvent;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions2.VisibilityContext;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 
 

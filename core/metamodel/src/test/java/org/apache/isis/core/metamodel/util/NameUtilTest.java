@@ -20,6 +20,8 @@
 
 package org.apache.isis.core.metamodel.util;
 
+import org.apache.isis.core.commons.lang.NameUtils;
+
 import junit.framework.TestCase;
 
 

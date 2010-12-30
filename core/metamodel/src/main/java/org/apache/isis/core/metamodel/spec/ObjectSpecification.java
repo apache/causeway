@@ -26,68 +26,116 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent.InteractionResult;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent2.InteractionResult;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
+import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.icon.IconFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
+import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.interactions.InteractionContext;
-import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
-import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions2.InteractionContext;
+import org.apache.isis.core.metamodel.interactions2.ObjectTitleContext;
+import org.apache.isis.core.metamodel.interactions2.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 
-
+/**
+ * Represents an entity or value (cf {@link java.lang.Class}) within the 
+ * metamodel.
+ * 
+ * <p>
+ * As specifications are cyclic (specifically a class will reference its 
+ * subclasses, which in turn reference their superclass) they need be created 
+ * first, and then later work out its internals.  Hence we create 
+ * {@link ObjectSpecification}s as we need them, and then introspect them later.
+ * 
+ * <p>
+ * REVIEW: why is there no Help method for classes?
+ */
 public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical, Dirtiable, DefaultProvider {
-
-    // REVIEW why is there no Help method for classes?
 
     public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
 
 
     /**
-     * Returns the name of this specification. This will be the fully qualified name of the Class object that
+     * @return
+     */
+    Class<?> getCorrespondingClass();
+
+    /**
+     * Returns an (immutable) "full" identifier for this specification.
+     * 
+     * <p>
+     * This will be the fully qualified name of the Class object that
      * this object represents (i.e. it includes the package name).
      */
-    String getFullName();
-
+    String getFullIdentifier();
+    
     /**
-     * Returns the name of an icon to use for the specified object.
+     * Returns an (immutable) "short" identifier for this specification.
+     * 
+     * <p>
+     * This will be the class name without the package; any text up to and 
+     * including the last period is removed.
      */
-    String getIconName(ObjectAdapter object);
-
-    /**
-     * Returns the plural name for objects of this specification.
-     */
-    String getPluralName();
-
-    /**
-     * Returns the class name without the package. Removes the text up to, and including the last period
-     * (".").
-     */
-    String getShortName();
+    String getShortIdentifier();
 
     /**
      * Returns the (singular) name for objects of this specification.
+     * 
+     * <p>
+     * Corresponds to the {@link NamedFacet#value()} of {@link NamedFacet}; 
+     * is not necessarily immutable. 
      */
-    String getName();
+    String getSingularName();
+
+    /**
+     * Returns the plural name for objects of this specification.
+     * 
+     * <p>
+     * Corresponds to the {@link PluralFacet#value() value} of {@link PluralFacet}; 
+     * is not necessarily immutable. 
+     */
+    String getPluralName();
     
     /**
      * Returns the description, if any, of the specification.
+     * 
+     * <p>
+     * Corresponds to the {@link DescribedAsFacet#value()) value} of {@link DescribedAsFacet}; 
+     * is not necessarily immutable. 
      */
+    @Override
     String getDescription();
 
     /**
      * Returns the title string for the specified object.
+     * 
+     * <p>
+     * Corresponds to the {@link TitleFacet#value()) value} of {@link TitleFacet}; 
+     * is not necessarily immutable. 
      */
     String getTitle(ObjectAdapter adapter);
 
+    /**
+     * Returns the name of an icon to use for the specified object.
+     * 
+     * <p>
+     * Corresponds to the {@link IconFacet#iconName(ObjectAdapter)) icon name} 
+     * returned by the {@link IconFacet}; 
+     * is not necessarily immutable. 
+     */
+    String getIconName(ObjectAdapter object);
+    
     boolean isAbstract();
 
 
@@ -249,11 +297,35 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
 
     boolean isService();
 
+    public void markAsService();
 
 
     ////////////////////////////////////////////////////////////////
     // Introspection
     ////////////////////////////////////////////////////////////////
+
+    /**
+     * Builds actions and associations.
+     * 
+     * <p>
+     * Is called prior to running the <tt>FacetDecoratorSet</tt>
+     */
+    public void introspectTypeHierarchyAndMembers();
+
+    /**
+     * Is called after to running the <tt>FacetDecoratorSet</tt>.
+     * 
+     * <p>
+     * TODO: it's possible that this could be merged with {@link #introspectTypeHierarchyAndMembers()};
+     * need to check though, because this would cause facets to be decorated at the end of
+     * introspection, rather than midway as is currently.
+     * 
+     */
+    public void updateFromFacetValues();
+
+    public boolean isIntrospected();
+
+
 
 
 }

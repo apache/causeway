@@ -49,7 +49,7 @@ public abstract class PersistenceQueryAbstract implements PersistenceQuery, Enco
 
     public void encode(DataOutputExtended output)
     		throws IOException {
-    	output.writeUTF(specification.getFullName());
+    	output.writeUTF(specification.getFullIdentifier());
     }
     
     

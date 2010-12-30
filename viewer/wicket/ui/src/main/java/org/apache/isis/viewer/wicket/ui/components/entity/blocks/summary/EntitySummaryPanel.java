@@ -30,9 +30,9 @@ import com.google.inject.Inject;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.ident.icon.IconFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.model.models.ActionModel;
 import org.apache.isis.viewer.wicket.model.models.EntityModel;
@@ -126,7 +126,7 @@ public class EntitySummaryPanel extends PanelAbstract<EntityModel> implements
         ObjectAdapter adapter = model.getObject();
         final ObjectAdapterMemento adapterMemento = model.getObjectAdapterMemento();
         if (adapter != null) {
-            List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ObjectActionType.USER);
+            List<ObjectAction> userActions = adapter.getSpecification().getObjectActions(ActionType.USER);
 
             CssMenuBuilder cssMenuBuilder = new CssMenuBuilder(adapterMemento,
                     getServiceAdapters(), userActions, linkFactory);

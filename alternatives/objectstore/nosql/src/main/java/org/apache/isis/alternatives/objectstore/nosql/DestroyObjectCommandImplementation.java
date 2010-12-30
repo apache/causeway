@@ -40,7 +40,7 @@ final class DestroyObjectCommandImplementation implements DestroyObjectCommand {
     public void execute(final PersistenceCommandContext context) {
         String key = keyCreator.key(object.getOid());
         String version = versionCreator.versionString(object.getVersion());
-        String specificationName = object.getSpecification().getFullName();
+        String specificationName = object.getSpecification().getFullIdentifier();
 
         ((NoSqlCommandContext) context).delete(specificationName, key, version);
     }

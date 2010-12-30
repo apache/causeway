@@ -42,6 +42,7 @@ public class ObjectIcon implements Component {
         this.style = style;
     }
 
+    @Override
     public void write(final PrintWriter writer) {
         writer.print("<div class=\"");
         writer.print(style);
@@ -59,7 +60,7 @@ public class ObjectIcon implements Component {
         writer.print("\"><img src=\"");
         writer.print(ImageLookup.image(element));
         writer.print("\" alt=\"");
-        final String singularName = element.getSpecification().getName();
+        final String singularName = element.getSpecification().getSingularName();
         writer.print(singularName);
         writer.print("\"");
         writer.print("/>");

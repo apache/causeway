@@ -38,14 +38,14 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.facets.DecoratingFacet;
+import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
@@ -137,7 +137,7 @@ public final class ActionInvocationFacetWrapProxy extends ActionInvocationFacetA
             ExecuteServerActionRequest request =
             	new ExecuteServerActionRequest(
             			getAuthenticationSession(),
-            			ObjectActionType.USER,
+            			ActionType.USER,
             			objectAction.getIdentifier().toNameParmsIdentityString(),
             			targetReference,
             			parameterObjectData);

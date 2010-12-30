@@ -21,10 +21,10 @@
 package org.apache.isis.viewer.dnd.tree;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.SpecificationFacets;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.facets.SpecificationFacets;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
@@ -60,8 +60,8 @@ public class TreeDisplayRules {
                 return "This option makes the system only show collections within the trees, and not single elements";
             }
 
-            public ObjectActionType getType() {
-                return ObjectActionType.USER;
+            public ActionType getType() {
+                return ActionType.USER;
             }
 
             public String getHelp(final View view) {

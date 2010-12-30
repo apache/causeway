@@ -20,7 +20,8 @@
 
 package org.apache.isis.core.progmodel.facets.naming.describedas;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
 
 
 public class DescribedAsFacetAnnotation extends DescribedAsFacetAbstract {

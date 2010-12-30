@@ -21,8 +21,8 @@
 package org.apache.isis.core.progmodel.facets.propcoll.notpersisted;
 
 import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
 
 
 public class NotPersistedFacetAnnotation extends NotPersistedFacetAbstract {

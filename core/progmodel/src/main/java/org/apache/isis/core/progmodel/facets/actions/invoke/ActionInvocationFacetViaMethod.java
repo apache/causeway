@@ -26,14 +26,15 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actcoll.typeof.ElementSpecificationProviderFromTypeOfFacet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ReflectiveActionException;
-import org.apache.isis.core.metamodel.util.InvokeUtils;
 
 public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstract implements ImperativeFacet {
 
@@ -45,6 +46,7 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
     private final ObjectSpecification returnType;
 
     private final AdapterMap adapterMap;
+    
 
     public ActionInvocationFacetViaMethod(final Method method, final ObjectSpecification onType,
         final ObjectSpecification returnType, final FacetHolder holder, final AdapterMap adapterManager) {
@@ -88,15 +90,17 @@ public class ActionInvocationFacetViaMethod extends ActionInvocationFacetAbstrac
 
             final Object object = unwrap(inObject);
             final Object result = method.invoke(object, executionParameters);
-            LOG.debug(" action result " + result);
+            if(LOG.isDebugEnabled()) {
+                LOG.debug(" action result " + result);
+            }
             if (result == null) {
                 return null;
             }
 
-            final ObjectAdapter adapter = getAdapterMap().adapterFor(result);
+            final ObjectAdapter resultAdapter = getAdapterMap().adapterFor(result);
             final TypeOfFacet typeOfFacet = getFacetHolder().getFacet(TypeOfFacet.class);
-            adapter.setTypeOfFacet(typeOfFacet);
-            return adapter;
+            resultAdapter.setElementSpecificationProvider(ElementSpecificationProviderFromTypeOfFacet.createFrom(typeOfFacet));
+            return resultAdapter;
 
         } catch (final IllegalArgumentException e) {
             throw e;

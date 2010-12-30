@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
-import org.apache.isis.core.metamodel.facets.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
@@ -138,7 +138,7 @@ public final class XmlSnapshot {
     	return new Builder(snapshottable);
     }
     
-    private final NofMetaModel nofMeta;
+    private final IsisMetaModel nofMeta;
 
     private final Place rootPlace;
 
@@ -178,7 +178,7 @@ public final class XmlSnapshot {
 
         LOG.debug(".ctor(" + log("rootObj", rootObject) + andlog("schema", schema) + andlog("addOids", "" + true) + ")");
 
-        this.nofMeta = new NofMetaModel();
+        this.nofMeta = new IsisMetaModel();
         this.xsMeta = new XsMetaModel();
 
         this.schema = schema;
@@ -239,7 +239,7 @@ public final class XmlSnapshot {
 
         LOG.debug("appendXml(" + log("obj", object) + "')");
 
-        final String fullyQualifiedClassName = object.getSpecification().getFullName();
+        final String fullyQualifiedClassName = object.getSpecification().getFullIdentifier();
 
         schema.setUri(fullyQualifiedClassName); // derive
         // URI
@@ -593,8 +593,8 @@ public final class XmlSnapshot {
         final ObjectSpecification nos = object.getSpecification();
 
         LOG.debug("objectToElement(NO): create element and nof:title");
-        final Element element = schema.createElement(getXmlDocument(), nos.getShortName(), nos.getFullName(), nos
-                .getName(), nos.getPluralName());
+        final Element element = schema.createElement(getXmlDocument(), nos.getShortIdentifier(), nos.getFullIdentifier(), nos
+                .getSingularName(), nos.getPluralName());
         nofMeta.appendNofTitle(element, object.titleString());
 
         LOG.debug("objectToElement(NO): create XS element for NOF class");
@@ -650,7 +650,7 @@ public final class XmlSnapshot {
                 if (fieldNos == null) {
                     continue eachField;
                 }
-                if (fieldNos.getFullName() != null && fieldNos.getFullName().endsWith("XmlValue")) {
+                if (fieldNos.getFullIdentifier() != null && fieldNos.getFullIdentifier().endsWith("XmlValue")) {
                     continue eachField;
                 }
 
@@ -664,7 +664,7 @@ public final class XmlSnapshot {
                     final ObjectSpecification valueNos = value.getSpecification();
 
                     // XML
-                    nofMeta.setAttributesForValue(xmlValueElement, valueNos.getShortName());
+                    nofMeta.setAttributesForValue(xmlValueElement, valueNos.getShortIdentifier());
 
                     // return parsed string, else encoded string, else title.
                     String valueStr;
@@ -699,7 +699,7 @@ public final class XmlSnapshot {
                 LOG.debug("objectToElement(NO): " + log("field", fieldName) + " is OneToOneAssociation");
 
                 final OneToOneAssociation oneToOneAssociation = ((OneToOneAssociation) field);
-                final String fullyQualifiedClassName = nos.getFullName();
+                final String fullyQualifiedClassName = nos.getFullIdentifier();
                 final Element xmlReferenceElement = xmlFieldElement; // more meaningful locally scoped name
 
                 ObjectAdapter referencedObjectAdapter;
@@ -723,7 +723,7 @@ public final class XmlSnapshot {
 
                 // XSD
                 xsdFieldElement = schema.createXsElementForNofReference(xsElement, xmlReferenceElement, oneToOneAssociation
-                        .getSpecification().getFullName(), FacetUtil.getFacetsByType(oneToOneAssociation));
+                        .getSpecification().getFullIdentifier(), FacetUtil.getFacetsByType(oneToOneAssociation));
 
             } else if (field instanceof OneToManyAssociation) {
 
@@ -736,7 +736,7 @@ public final class XmlSnapshot {
                 try {
                     collection = oneToManyAssociation.get(object);
                     final ObjectSpecification referencedTypeNos = oneToManyAssociation.getSpecification();
-                    final String fullyQualifiedClassName = referencedTypeNos.getFullName();
+                    final String fullyQualifiedClassName = referencedTypeNos.getFullIdentifier();
 
                     // XML
                     nofMeta.setNofCollection(xmlCollectionElement, schema.getPrefix(), fullyQualifiedClassName, collection);
@@ -747,7 +747,7 @@ public final class XmlSnapshot {
 
                 // XSD
                 xsdFieldElement = schema.createXsElementForNofCollection(xsElement, xmlCollectionElement, oneToManyAssociation
-                        .getSpecification().getFullName(), FacetUtil.getFacetsByType(oneToManyAssociation));
+                        .getSpecification().getFullIdentifier(), FacetUtil.getFacetsByType(oneToManyAssociation));
 
             } else {
                 LOG.info("objectToElement(NO): " + log("field", fieldName) + " is unknown type; ignored");

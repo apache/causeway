@@ -28,14 +28,14 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.ConsentAbstract;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.ConsentAbstract;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -58,7 +58,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
     public static final class ExplorationInstances extends UserActionAbstract {
 
         public ExplorationInstances() {
-            super("Instances", ObjectActionType.EXPLORATION);
+            super("Instances", ActionType.EXPLORATION);
         }
 
         @Override
@@ -72,7 +72,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
             final ObjectAdapter object = view.getContent().getAdapter();
             final ObjectSpecification spec = object.getSpecification();
             final ObjectAdapter instances = IsisContext.getPersistenceSession().findInstances(
-                    new QueryFindAllInstances(spec.getFullName()), QueryCardinality.MULTIPLE);
+                    new QueryFindAllInstances(spec.getFullIdentifier()), QueryCardinality.MULTIPLE);
             workspace.objectActionResult(instances, new Placement(view));
         }
     }
@@ -80,7 +80,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
     public static final class ExplorationClone extends UserActionAbstract {
 
         public ExplorationClone() {
-            super("Clone", ObjectActionType.EXPLORATION);
+            super("Clone", ActionType.EXPLORATION);
         }
 
         @Override
@@ -114,7 +114,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
     public static final class DebugClearResolvedOption extends UserActionAbstract {
 
         private DebugClearResolvedOption() {
-            super("Clear resolved", ObjectActionType.DEBUG);
+            super("Clear resolved", ActionType.DEBUG);
         }
 
         @Override
@@ -182,7 +182,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
         }
         // TODO: use Facet for this test instead
         return new Veto(String.format("No empty field accepting object of type %s in %s", sourceAdapter.getSpecification()
-                .getName(), title()));
+                .getSingularName(), title()));
     }
 
     @Override
@@ -230,7 +230,7 @@ public abstract class AbstractObjectContent extends AbstractContent implements O
     }
 
     private ObjectAction dropAction(final ObjectAdapter source, final ObjectAdapter target) {
-        ObjectAction action = target.getSpecification().getObjectAction(ObjectActionType.USER, null,
+        ObjectAction action = target.getSpecification().getObjectAction(ActionType.USER, null,
                 Arrays.asList( source.getSpecification() ));
         return action;
     }

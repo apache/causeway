@@ -30,8 +30,8 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.adapter.InvalidEntryException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 
 @RunWith(JMock.class)
 public class CharacterValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

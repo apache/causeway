@@ -13,10 +13,10 @@ import javax.ws.rs.WebApplicationException;
 import nu.xom.Element;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -53,7 +53,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         final Element ul = xhtmlRenderer.ul(HtmlClass.SPECIFICATIONS);
         final ObjectSpecification[] allSpecifications = getSpecificationLoader().allSpecifications();
         for (final ObjectSpecification spec : sorted(allSpecifications)) {
-            final String specFullName = spec.getFullName();
+            final String specFullName = spec.getFullIdentifier();
             final String uri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
             ul.appendChild(xhtmlRenderer.li_a(uri, specFullName, "spec", "specs", HtmlClass.SPECIFICATION));
         }
@@ -72,7 +72,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 			@Override
             public int compare(ObjectSpecification o1,
 					ObjectSpecification o2) {
-				return o1.getFullName().compareTo(o2.getFullName());
+				return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
 			}});
 		return noSpecs;
 	}
@@ -93,7 +93,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 
         final ObjectSpecification noSpec = getSpecification(specFullName);
 
-        xhtml.appendToBody(asDivTableFacets(noSpec, noSpec.getFullName()));
+        xhtml.appendToBody(asDivTableFacets(noSpec, noSpec.getFullIdentifier()));
 
         final Element propertiesDivEl = asDivProperties(noSpec);
         xhtml.appendToBody(propertiesDivEl);
@@ -101,7 +101,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         final Element collectionsDivEl = asDivCollections(noSpec);
         xhtml.appendToBody(collectionsDivEl);
 
-        for (final ObjectActionType type : ACTION_TYPES) {
+        for (final ActionType type : ACTION_TYPES) {
             final Element actionsDivEl = asDivActions(noSpec, type);
             xhtml.appendToBody(actionsDivEl);
         }
@@ -118,7 +118,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         for (final ObjectAssociation property : properties) {
             final String propertyId = property.getIdentifier().getMemberName();
             final String path = MessageFormat.format("{0}/specs/{1}/property/{2}", getServletRequest().getContextPath(), noSpec
-                    .getFullName(), propertyId);
+                    .getFullIdentifier(), propertyId);
             final Element li = xhtmlRenderer.li_a(path, propertyId, "property", "spec", HtmlClass.PROPERTY);
             ul.appendChild(li);
         }
@@ -134,14 +134,14 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         for (final ObjectAssociation collection : collections) {
             final String collectionId = collection.getIdentifier().getMemberName();
             final String path = MessageFormat.format("{0}/specs/{1}/collection/{2}", getServletRequest().getContextPath(), noSpec
-                    .getFullName(), collectionId);
+                    .getFullIdentifier(), collectionId);
             final Element li = xhtmlRenderer.li_a(path, collectionId, "collection", "spec", HtmlClass.COLLECTION);
             ul.appendChild(li);
         }
         return div;
     }
 
-    private Element asDivActions(final ObjectSpecification noSpec, final ObjectActionType type) {
+    private Element asDivActions(final ObjectSpecification noSpec, final ActionType type) {
         final Element div = xhtmlRenderer.div_p(type.name() + " actions", HtmlClass.ACTIONS);
 
         final List<ObjectAction> actions = ActionUtils.flattened(noSpec.getObjectActions(type));
@@ -150,7 +150,7 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         for (final ObjectAction action : actions) {
             final Identifier actionIdentifier = action.getIdentifier();
             final String actionId = actionIdentifier.toNameParmsIdentityString();
-            final String noSpecFullName = noSpec.getFullName();
+            final String noSpecFullName = noSpec.getFullIdentifier();
             final String uri = MessageFormat.format("{0}/specs/{1}/action/{2}", getServletRequest().getContextPath(), noSpecFullName, actionId);
             final Element li = xhtmlRenderer.li_a(uri, actionId, "action", "spec", HtmlClass.ACTION);
             ul.appendChild(li);

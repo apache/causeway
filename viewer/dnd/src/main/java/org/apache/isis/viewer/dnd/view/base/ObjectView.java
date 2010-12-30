@@ -21,8 +21,8 @@
 package org.apache.isis.viewer.dnd.view.base;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -136,7 +136,7 @@ public abstract class ObjectView extends AbstractView {
     public void contentMenuOptions(final UserActionSet options) {
         super.contentMenuOptions(options);
 
-        options.add(new UserActionAbstract("Reload", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Reload", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final ObjectAdapter object = getContent().getAdapter();

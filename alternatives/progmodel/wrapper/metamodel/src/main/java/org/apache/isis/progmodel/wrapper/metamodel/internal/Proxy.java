@@ -23,8 +23,8 @@ package org.apache.isis.progmodel.wrapper.metamodel.internal;
 import java.util.Collection;
 import java.util.Map;
 
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;

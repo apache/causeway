@@ -30,9 +30,9 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.debug.Debuggable;
 import org.apache.isis.core.commons.lang.StringUtils;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolderDefault;
-import org.apache.isis.core.metamodel.feature.FeatureType;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
 
 
 /**
@@ -44,7 +44,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     // Factory methods
     ////////////////////////////////////////////////////
 
-    public static FacetedMethod createPropertyPeer(Class<?> declaringType, Method method) {
+    public static FacetedMethod createPropertyFacetedMethod(Class<?> declaringType, Method method) {
         return new FacetedMethod(FeatureType.PROPERTY, declaringType, method, method.getReturnType(), emptyParameterList());
     }
 
@@ -54,7 +54,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
     public static FacetedMethod createProperty(Class<?> owningClass, final String name) {
         try {
             final Method method = owningClass.getMethod("get" + StringUtils.pascal(name));
-            return FacetedMethod.createPropertyPeer(owningClass, method);
+            return FacetedMethod.createPropertyFacetedMethod(owningClass, method);
         } catch (SecurityException e) {
             throw new RuntimeException(e);
         } catch (NoSuchMethodException e) {
@@ -62,7 +62,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         }
     }
 
-    public static FacetedMethod createCollectionPeer(Class<?> declaringType, Method method) {
+    public static FacetedMethod createCollectionFacetedMethod(Class<?> declaringType, Method method) {
         return new FacetedMethod(FeatureType.COLLECTION, declaringType, method, null, emptyParameterList());
     }
 

@@ -22,16 +22,16 @@ package org.apache.isis.viewer.html.task;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.adapter.AdapterUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
+import org.apache.isis.core.metamodel.consent2.Consent;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -96,7 +96,7 @@ public class EditTask extends Task {
         }
 
         final boolean isNew = object.getResolveState() == ResolveState.TRANSIENT;
-        newType = isNew ? getTarget(context).getSpecification().getName() : null;
+        newType = isNew ? getTarget(context).getSpecification().getSingularName() : null;
     }
 
     @Override
@@ -147,7 +147,7 @@ public class EditTask extends Task {
 
         if (targetAdapter.isTransient()) {
             final ObjectAction action = 
-                targetAdapter.getSpecification().getObjectAction(ObjectActionType.USER, "save", ObjectSpecification.EMPTY_LIST);
+                targetAdapter.getSpecification().getObjectAction(ActionType.USER, "save", ObjectSpecification.EMPTY_LIST);
             if (action == null) {
                 getPersistenceSession().makePersistent(targetAdapter);
             } else {

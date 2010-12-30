@@ -20,15 +20,15 @@
 
 package org.apache.isis.core.progmodel.facets.collections.aggregated;
 
-import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetUtil;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
+import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 import org.apache.isis.core.progmodel.facets.collections.CollectionFacetFactory;
 
 
@@ -36,7 +36,7 @@ import org.apache.isis.core.progmodel.facets.collections.CollectionFacetFactory;
  * All {@link CollectionTypeRegistry collection types} are intrinsically {@link AggregatedFacet aggregeted}.
  * 
  * 
- * Must be registered in the  {@link ProgrammingModelFacets} after {@link CollectionFacetFactory}.
+ * Must be registered in the  {@link ProgrammingModel} after {@link CollectionFacetFactory}.
  */
 public class AggregatedIfCollectionFacetFactory extends FacetFactoryAbstract {
 

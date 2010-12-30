@@ -22,8 +22,8 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.interactions2.ActionArgumentContext;
 
 /**
  * Analogous to {@link ObjectAssociation}.

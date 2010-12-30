@@ -25,10 +25,11 @@ import java.util.List;
 import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.interactions.AccessContext;
-import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.interactions2.AccessContext;
+import org.apache.isis.core.metamodel.interactions2.ActionInvocationContext;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.Target;
 
@@ -70,9 +71,9 @@ public interface ObjectAction extends ObjectMember {
     // //////////////////////////////////////////////////////////////////
 
     /**
-     * Returns the {@link ObjectActionType type} of action: user, exploration, prototype or debug, or that it is a set of actions.
+     * Returns the {@link ActionType type} of action: user, exploration, prototype or debug, or that it is a set of actions.
      */
-    ObjectActionType getType();
+    ActionType getType();
 
     // //////////////////////////////////////////////////////////////////
     // ReturnType

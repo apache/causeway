@@ -49,7 +49,7 @@ public abstract class Data {
 	}
     
     public String getTypeName() {
-        return noSpec.getFullName();
+        return noSpec.getFullIdentifier();
     }
 
     @Override

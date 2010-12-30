@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.disable;
 
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class DisableForSessionFacetNone extends DisableForSessionFacetAbstract {

@@ -22,8 +22,8 @@ package org.apache.isis.viewer.wicket.model.mementos;
 
 import java.io.Serializable;
 
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 
 /**
  * {@link Serializable} represention of a {@link ObjectAction}
@@ -33,13 +33,13 @@ public class ActionMemento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private SpecMemento owningType;
-	private ObjectActionType actionType;
+	private ActionType actionType;
 	private String nameParmsId;
 
 	private transient ObjectAction action;
 	
 	public ActionMemento(SpecMemento owningType,
-			ObjectActionType actionType, String nameParmsId) {
+			ActionType actionType, String nameParmsId) {
 		this.owningType = owningType;
 		this.actionType = actionType;
 		this.nameParmsId = nameParmsId;
@@ -54,7 +54,7 @@ public class ActionMemento implements Serializable {
 		return owningType;
 	}
 
-	public ObjectActionType getActionType() {
+	public ActionType getActionType() {
 		return actionType;
 	}
 	

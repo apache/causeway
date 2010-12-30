@@ -21,12 +21,12 @@
 package org.apache.isis.core.progmodel.facets.hide;
 
 import org.apache.isis.applib.events.VisibilityEvent;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions2.VisibilityContext;
 
 
 public abstract class HiddenFacetAbstract extends SingleWhenValueFacetAbstract implements HiddenFacet {

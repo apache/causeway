@@ -20,7 +20,8 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.mandatory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.ObjectAdapterUtils;
 
 /**
  * Whether a property or a parameter is mandatory (not optional).
@@ -44,12 +45,12 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
      */
     @Override
     public boolean isRequiredButNull(final ObjectAdapter adapter) {
-        final Object object = unwrapObject(adapter);
+        final Object object = ObjectAdapterUtils.unwrapObject(adapter);
         if (object == null) {
             return true;
         }
         // special case string handling.
-        final String str = unwrapString(adapter);
+        final String str = ObjectAdapterUtils.unwrapString(adapter);
         return str != null && str.length() == 0;
     }
 
@@ -57,5 +58,6 @@ public class MandatoryFacetDefault extends MandatoryFacetAbstract {
     public boolean isInvertedSemantics() {
         return false;
     }
+
 
 }

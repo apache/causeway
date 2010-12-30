@@ -23,10 +23,10 @@ package org.apache.isis.core.progmodel.facets.object.ident.title;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
-import org.apache.isis.core.metamodel.spec.IntrospectableSpecificationAbstract;
+import org.apache.isis.core.metamodel.specloader.internal.spec.ObjectSpecificationAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 
@@ -99,7 +99,7 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     /**
-     * This change means that it will be ignored by {@link IntrospectableSpecificationAbstract#getFacet(Class)}
+     * This change means that it will be ignored by {@link ObjectSpecificationAbstract#getFacet(Class)}
      * is the superclass has a none no-op implementation.
      */
     public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() {

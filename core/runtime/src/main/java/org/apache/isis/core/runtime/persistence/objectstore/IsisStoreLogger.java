@@ -94,7 +94,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     public ObjectAdapter getObject(final Oid oid, final ObjectSpecification hint) throws ObjectNotFoundException,
             ObjectPersistenceException {
         final ObjectAdapter object = decorated.getObject(oid, hint);
-        log("Get object for " + oid + " (of type " + hint.getShortName() + ")", object.getObject());
+        log("Get object for " + oid + " (of type " + hint.getShortIdentifier() + ")", object.getObject());
         return object;
     }
 
@@ -107,7 +107,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
     public boolean hasInstances(final ObjectSpecification specification)
             throws ObjectPersistenceException {
         final boolean hasInstances = decorated.hasInstances(specification);
-        log("Has instances of " + specification.getShortName(), "" + hasInstances);
+        log("Has instances of " + specification.getShortIdentifier(), "" + hasInstances);
         return hasInstances;
     }
 

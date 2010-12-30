@@ -20,9 +20,9 @@
 
 package org.apache.isis.viewer.dnd.view.control;
 
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.view.ButtonAction;
 import org.apache.isis.viewer.dnd.view.View;
 
@@ -56,8 +56,8 @@ public abstract class AbstractButtonAction implements ButtonAction {
         return name;
     }
 
-    public ObjectActionType getType() {
-        return ObjectActionType.USER;
+    public ActionType getType() {
+        return ActionType.USER;
     }
 
     public boolean isDefault() {

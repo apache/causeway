@@ -27,13 +27,12 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.ConsentAbstract;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.ConsentAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.drawing.Image;
 import org.apache.isis.viewer.dnd.drawing.ImageFactory;
@@ -103,8 +102,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
     @Override
     public ObjectSpecification getElementSpecification() {
         final ObjectAdapter collection = getCollection();
-        final TypeOfFacet facet = collection.getTypeOfFacet();
-        return facet.valueSpec();
+        return collection.getElementSpecification();
     }
 
     @Override
@@ -129,7 +127,7 @@ public abstract class AbstractCollectionContent extends AbstractContent implemen
          * 
          * if (option != null) { options.add(option); } }
          */
-        options.add(new UserActionAbstract("Clear resolved", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Clear resolved", ActionType.DEBUG) {
             @Override
             public Consent disabled(final View component) {
                 return ConsentAbstract.allowIf(collection == null || collection.getResolveState() != ResolveState.TRANSIENT

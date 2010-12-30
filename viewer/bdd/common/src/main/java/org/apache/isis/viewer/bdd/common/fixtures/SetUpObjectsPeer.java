@@ -259,7 +259,7 @@ public class SetUpObjectsPeer extends AbstractFixturePeer {
         if (alias != null) {
             return alias;
         } else {
-            String specShortName = StringUtils.lowerLeading(spec.getShortName());
+            String specShortName = StringUtils.lowerLeading(spec.getShortIdentifier());
             return getAliasRegistry().aliasPrefixedAs(specShortName, adapter);
         }
     }

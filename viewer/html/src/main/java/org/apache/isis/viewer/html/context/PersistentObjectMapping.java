@@ -44,17 +44,20 @@ public class PersistentObjectMapping implements ObjectMapping {
         version = adapter.getVersion();
     }
 
+    @Override
     public void debug(final DebugString debug) {
-        debug.appendln(specification.getFullName());
+        debug.appendln(specification.getFullIdentifier());
         if (version != null) {
             debug.appendln(version.toString());
         }
     }
 
+    @Override
     public Oid getOid() {
         return oid;
     }
 
+    @Override
     public ObjectAdapter getObject() {
         return getPersistenceSession().loadObject(oid, specification);
     }
@@ -74,22 +77,26 @@ public class PersistentObjectMapping implements ObjectMapping {
 
     @Override
     public String toString() {
-        return (specification == null ? "null" : specification.getName()) + " : " + oid + " : " + version;
+        return (specification == null ? "null" : specification.getSingularName()) + " : " + oid + " : " + version;
     }
 
+    @Override
     public Version getVersion() {
         return version;
     }
 
+    @Override
     public void checkVersion(final ObjectAdapter object) {
         object.checkLock(getVersion());
     }
 
+    @Override
     public void updateVersion() {
         final ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         version = adapter.getVersion();
     }
 
+    @Override
     public void restoreToLoader() {
         final Oid oid = getOid();
         final ObjectAdapter adapter = getPersistenceSession().recreateAdapter(oid, specification);

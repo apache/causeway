@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facets.object.java5.RemoveGetClassMethodFa
 import org.apache.isis.core.metamodel.facets.object.java5.RemoveInitMethodFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.java5.RemoveJavaLangObjectMethodsFacetFactory;
 import org.apache.isis.core.metamodel.facets.object.java5.RemoveSuperclassMethodsFacetFactory;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacetsAbstract;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModelAbstract;
 import org.apache.isis.core.progmodel.facets.FallbackFacetFactory;
 import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfAnnotationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.ActionMethodsFacetFactory;
@@ -125,7 +125,7 @@ import org.apache.isis.core.progmodel.facets.value.TimeStampValueTypeFacetFactor
 import org.apache.isis.core.progmodel.facets.value.TimeValueTypeFacetFactory;
 
 
-public class ProgrammingModelFacetsJava5 extends ProgrammingModelFacetsAbstract {
+public class ProgrammingModelFacetsJava5 extends ProgrammingModelAbstract {
 	
 	public ProgrammingModelFacetsJava5() {
 		

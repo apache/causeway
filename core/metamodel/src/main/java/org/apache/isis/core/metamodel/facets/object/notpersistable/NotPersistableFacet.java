@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.object.notpersistable;
 
 import org.apache.isis.core.metamodel.facets.SingleValueFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.DisablingInteractionAdvisor;
 
 /**
  * Indicates that the instances of this class are not persistable either by the user (through the viewer) or at all

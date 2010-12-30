@@ -62,7 +62,7 @@ public class FieldMappingLookup {
     }
 
     public ObjectReferenceMapping createMapping(ObjectSpecification spec) {
-        return createMapping(spec.getShortName(), spec);
+        return createMapping(spec.getShortIdentifier(), spec);
     }
     
     public ObjectReferenceMapping createMapping(String columnName, ObjectSpecification spec) {

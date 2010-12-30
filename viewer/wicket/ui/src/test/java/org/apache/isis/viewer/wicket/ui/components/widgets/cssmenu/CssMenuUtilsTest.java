@@ -47,10 +47,10 @@ import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
 import org.apache.isis.viewer.wicket.ui.fixtures.ActionFixtures;
 import org.apache.isis.viewer.wicket.ui.fixtures.AdapterFixtures;
@@ -124,7 +124,7 @@ public class CssMenuUtilsTest {
 		new AdapterFixtures(context).getOid(mockAdapter, mockOid);
 		new ActionFixtures(context).getOnType(mockUserAction, mockUserActionOnTypeSpec);
 		new SpecFixtures(context).getFullName(mockUserActionOnTypeSpec, Customers.class.getName());
-		new ActionFixtures(context).getType(mockUserAction, ObjectActionType.USER);
+		new ActionFixtures(context).getType(mockUserAction, ActionType.USER);
 		new ActionFixtures(context).getIdentifier(context, mockUserAction, Identifier.actionIdentifier(Customers.class, "findCustomers", new Class[0]));
 
 		new SystemFixtures(context).newLink(mockLinkBuilder, "linkId", mockAdapterMemento, mockUserAction, fakeLink);

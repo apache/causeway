@@ -76,7 +76,7 @@ public class TopDownPersistAlgorithm extends PersistAlgorithmAbstract {
                     final ObjectAdapter collection = field.get(object);
                     if (collection == null) {
                         throw new ObjectPersistenceException("Collection " + field.getName() + " does not exist in "
-                                + object.getSpecification().getFullName());
+                                + object.getSpecification().getFullIdentifier());
                     }
                     makePersistent(collection, toPersistObjectSet);
                 } else {

@@ -23,8 +23,8 @@ package org.apache.isis.viewer.dnd.view.collection;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.viewer.dnd.view.content.AbstractObjectContent;
 
@@ -41,6 +41,7 @@ public class CollectionElement extends AbstractObjectContent {
         return true;
     }
 
+    @Override
     public boolean isOptionEnabled() {
         return false;
     }
@@ -60,19 +61,23 @@ public class CollectionElement extends AbstractObjectContent {
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public void debugDetails(final DebugString debug) {
         debug.appendln("element", adapter);
     }
 
+    @Override
     public String getId() {
         return "";
     }
 
+    @Override
     public String getDescription() {
-        return getSpecification().getName() + ": " + getObject().titleString() + " "
+        return getSpecification().getSingularName() + ": " + getObject().titleString() + " "
                 + getSpecification().getDescription();
     }
 
+    @Override
     public String getHelp() {
         return "";
     }
@@ -82,14 +87,17 @@ public class CollectionElement extends AbstractObjectContent {
         return adapter;
     }
 
+    @Override
     public ObjectAdapter getAdapter() {
         return adapter;
     }
 
+    @Override
     public ObjectSpecification getSpecification() {
         return adapter.getSpecification();
     }
 
+    @Override
     public boolean isTransient() {
         return adapter.isTransient();
     }
@@ -99,13 +107,14 @@ public class CollectionElement extends AbstractObjectContent {
         throw new IsisException("Invalid call");
     }
 
+    @Override
     public String title() {
         return adapter.titleString();
     }
 
     @Override
     public String windowTitle() {
-        return getSpecification().getShortName();
+        return getSpecification().getShortIdentifier();
     }
 
     @Override
@@ -113,6 +122,7 @@ public class CollectionElement extends AbstractObjectContent {
         return "" + adapter;
     }
 
+    @Override
     public ObjectAdapter[] getOptions() {
         return null;
     }

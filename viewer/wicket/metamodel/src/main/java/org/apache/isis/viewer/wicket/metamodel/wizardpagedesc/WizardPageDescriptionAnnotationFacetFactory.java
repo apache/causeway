@@ -23,11 +23,11 @@ package org.apache.isis.viewer.wicket.metamodel.wizardpagedesc;
 
 import java.lang.reflect.Method;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetUtil;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.viewer.wicket.applib.WizardPageDescription;
 
 

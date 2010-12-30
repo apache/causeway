@@ -43,7 +43,7 @@ public class FieldValue extends AbstractElementProcessor {
         ObjectAdapter object = request.getContext().getMappedObjectOrResult(id);
         ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
-            throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullName());
+            throw new ScimpiException("No field " + fieldName + " in " + object.getSpecification().getFullIdentifier());
         }
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
             throw new ForbiddenException("Field " + fieldName + " in " + object + " is not visible");
@@ -77,7 +77,7 @@ public class FieldValue extends AbstractElementProcessor {
 
             if (!field.getSpecification().containsFacet(ParseableFacet.class) && showIcon) {
                 request.appendHtml("<img class=\"small-icon\" src=\"" + request.getContext().imagePath(fieldReference)
-                        + "\" alt=\"" + field.getSpecification().getShortName() + "\"/>");
+                        + "\" alt=\"" + field.getSpecification().getShortIdentifier() + "\"/>");
             }
             
             if (linkedField != null) {

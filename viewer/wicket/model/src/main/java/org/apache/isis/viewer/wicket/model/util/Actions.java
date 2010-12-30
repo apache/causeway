@@ -25,16 +25,16 @@ import com.google.common.base.Predicate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 
 public final class Actions {
 
 	private Actions(){}
 	
 	public static Predicate<ObjectAction> ofType(
-			final ObjectActionType type) {
+			final ActionType type) {
 		return new Predicate<ObjectAction>(){
 			@Override
             public boolean apply(ObjectAction input) {

@@ -75,15 +75,15 @@ public abstract class ImageFactory {
     private Image findIcon(final ObjectSpecification specification, final int iconHeight, final Color tint) {
         Image loadIcon = null;       
         if (loadIcon == null) {
-            final String fullClassNameSlashes = specification.getFullName().replace(".", "/");
+            final String fullClassNameSlashes = specification.getFullIdentifier().replace(".", "/");
             loadIcon = loadIcon(fullClassNameSlashes, iconHeight, tint);
         }
         if (loadIcon == null) {
-            final String fullClassNameUnderscores = specification.getFullName().replace('.', '_');
+            final String fullClassNameUnderscores = specification.getFullIdentifier().replace('.', '_');
             loadIcon = loadIcon(fullClassNameUnderscores, iconHeight, tint);
         }
         if (loadIcon == null) {
-            final String shortClassNameUnderscores = specification.getShortName().replace('.', '_');
+            final String shortClassNameUnderscores = specification.getShortIdentifier().replace('.', '_');
             loadIcon = loadIcon(shortClassNameUnderscores, iconHeight, tint);
         }
         if (loadIcon == null) {

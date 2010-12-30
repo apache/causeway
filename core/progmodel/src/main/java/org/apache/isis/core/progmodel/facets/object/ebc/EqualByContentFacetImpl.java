@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.ebc;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class EqualByContentFacetImpl extends EqualByContentFacetAbstract {

@@ -62,7 +62,7 @@ public class DestroyObjectCommandImplementationTest {
         final NoSqlCommandContext commandContext = context.mock(NoSqlCommandContext.class);
         context.checking(new Expectations() {
             {
-                one(commandContext).delete(specification.getFullName(), key, "3");
+                one(commandContext).delete(specification.getFullIdentifier(), key, "3");
             }
         });
 

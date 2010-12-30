@@ -20,11 +20,11 @@
 
 package org.apache.isis.core.runtime.persistence;
 
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
+import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
-import static org.apache.isis.core.commons.ensure.Ensure.ensureThatState;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,24 +32,24 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.query.QueryDefault;
 import org.apache.isis.applib.query.QueryFindAllInstances;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.facets.SpecificationFacets;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByTitle;
 import org.apache.isis.core.metamodel.spec.Dirtiable;
-import org.apache.isis.core.metamodel.spec.IntrospectableSpecification;
+import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.SpecificationFacets;
-import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManagerExtended;
 import org.apache.isis.core.runtime.persistence.internal.RuntimeContextFromSession;
@@ -129,6 +129,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     // PersistenceSessionFactory
     // ///////////////////////////////////////////////////////////////////////////
     
+    @Override
     public PersistenceSessionFactory getPersistenceSessionFactory() {
         return persistenceSessionFactory;
     }
@@ -144,6 +145,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * 
      * @see #doOpen()
      */
+    @Override
     public final void open() {
         ensureNotOpened();
         
@@ -188,6 +190,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * 
      * @see #doClose()
      */
+    @Override
     public final void close() {
         if (getState() == State.CLOSED) {
             // nothing to do
@@ -241,10 +244,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         getTransactionManager().startTransaction();
         for (final Object service : servicesInjector.getRegisteredServices()) {
             ObjectSpecification serviceNoSpec = specificationLoader.loadSpecification(service.getClass());
-            if (serviceNoSpec instanceof IntrospectableSpecification) {
-                IntrospectableSpecification introspectableSpecification = (IntrospectableSpecification) serviceNoSpec;
-                introspectableSpecification.markAsService();
-            }
+            serviceNoSpec.markAsService();
             final String serviceId = ServiceUtil.id(service);
             final Oid existingOid = getOidForService(serviceId);
             ObjectAdapter adapter;
@@ -302,6 +302,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * For testing purposes only.
      */
+    @Override
     public void testReset() {
     }
     
@@ -323,6 +324,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * <p>
      * TODO: this is the same as {@link RuntimeContextFromSession#createTransientInstance(ObjectSpecification)}; could it be unified?
      */
+    @Override
     public ObjectAdapter createInstance(final ObjectSpecification specification) {
     	if (LOG.isDebugEnabled()) {
     		LOG.debug("creating transient instance of " + specification);
@@ -331,6 +333,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         return getAdapterManager().adapterFor(pojo);
     }
 
+    @Override
     public ObjectAdapter recreateAdapter(final Oid oid, final ObjectSpecification specification) {
         final ObjectAdapter adapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
         if (adapterLookedUpByOid != null) {
@@ -346,6 +349,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     }
 
 
+    @Override
     public ObjectAdapter recreateAdapter(final Oid oid, final Object pojo) {
         final ObjectAdapter adapterLookedUpByOid = getAdapterManager().getAdapterFor(oid);
         if (adapterLookedUpByOid != null) {
@@ -371,6 +375,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     // reload
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public ObjectAdapter reload(Oid oid) {
         ObjectAdapter adapter = getAdapterManager().getAdapterFor(oid);
         reload(adapter);
@@ -378,6 +383,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     }
     
 
+    @Override
     public abstract void reload(ObjectAdapter adapter);
     
     
@@ -385,6 +391,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     // findInstances, getInstances
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public <T> ObjectAdapter findInstances(Query<T> query, QueryCardinality cardinality) {
     	final PersistenceQuery persistenceQuery = createPersistenceQueryFor(query, cardinality);
         if (persistenceQuery == null) {
@@ -393,6 +400,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
         return findInstances(persistenceQuery);
     }
 
+    @Override
     public ObjectAdapter findInstances(PersistenceQuery persistenceQuery) {
         final ObjectAdapter[] instances = getInstances(persistenceQuery);
         final ObjectSpecification specification = persistenceQuery.getSpecification();
@@ -477,6 +485,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      * If {@link #isCheckObjectsForDirtyFlag() enabled}, will mark as {@link #objectChanged(ObjectAdapter) changed}
      * any {@link Dirtiable} objects that have manually been {@link Dirtiable#markDirty(ObjectAdapter) marked as dirty}. 
      */
+    @Override
     public void objectChangedAllDirty() {
         if (!dirtiableSupport) {
             return;
@@ -499,6 +508,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * Set as {@link Dirtiable#clearDirty(ObjectAdapter) clean} any {@link Dirtiable} objects.
      */
+    @Override
     public synchronized void clearAllDirty() {
         if (!isCheckObjectsForDirtyFlag()) {
             return;
@@ -534,6 +544,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
      */
     protected abstract void registerService(String name, Oid oid);
 
+    @Override
     public ObjectAdapter getService(final String id) {
         for (final Object service : servicesInjector.getRegisteredServices()) {
             // TODO this (ServiceUtil) uses reflection to access the service object; it should use the
@@ -546,6 +557,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     }
 
     // REVIEW why does this get called multiple times when starting up 
+    @Override
     public List<ObjectAdapter> getServices() {
         List<Object> services = servicesInjector.getRegisteredServices();
         List<ObjectAdapter> serviceAdapters = new ArrayList<ObjectAdapter>();
@@ -593,6 +605,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     // injectInto
     // ////////////////////////////////////////////////////////////////////
 
+    @Override
     public void injectInto(Object candidate) {
         if (PersistenceSessionAware.class.isAssignableFrom(candidate.getClass())) {
             PersistenceSessionAware cast = PersistenceSessionAware.class.cast(candidate);
@@ -609,6 +622,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     // Debugging
     // ///////////////////////////////////////////////////////////////////////////
 
+    @Override
     public void debugData(final DebugString debug) {
         debug.appendTitle(getClass().getName());
         debug.appendln("container", servicesInjector);
@@ -643,6 +657,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * Injected in constructor.
      */
+    @Override
     public final AdapterFactory getAdapterFactory() {
         return adapterFactory;
     }
@@ -650,6 +665,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * Injected in constructor.
      */
+    @Override
     public final OidGenerator getOidGenerator() {
         return oidGenerator;
     }
@@ -657,6 +673,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * Injected in constructor.
      */
+    @Override
     public final AdapterManagerExtended getAdapterManager() {
         return adapterManager;
     }
@@ -665,6 +682,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * The {@link ServicesInjector}. 
      */
+    @Override
     public ServicesInjector getServicesInjector() {
         return servicesInjector;
     }
@@ -672,6 +690,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * Obtained indirectly from the injected reflector.
      */
+    @Override
     public ObjectFactory getObjectFactory() {
         return objectFactory;
     }
@@ -689,6 +708,7 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     /**
      * Injects the {@link SpecificationLoader}
      */
+    @Override
     public void setSpecificationLoader(final SpecificationLoader specificationLoader) {
         this.specificationLoader = specificationLoader;
     }
@@ -696,10 +716,12 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
 
 
 
+    @Override
     public void setTransactionManager(final IsisTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
     }
 
+    @Override
     public IsisTransactionManager getTransactionManager() {
         return transactionManager;
     }

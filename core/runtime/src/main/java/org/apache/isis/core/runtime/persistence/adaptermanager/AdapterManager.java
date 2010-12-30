@@ -21,8 +21,8 @@
 package org.apache.isis.core.runtime.persistence.adaptermanager;
 
 import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
 

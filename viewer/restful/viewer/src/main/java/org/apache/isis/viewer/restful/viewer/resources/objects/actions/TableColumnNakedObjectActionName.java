@@ -27,7 +27,7 @@ public class TableColumnNakedObjectActionName extends TableColumnNakedObjectMemb
     public Element doTd(final ObjectAction nakedObjectAction) {
         final String actionId = nakedObjectAction.getIdentifier().toNameParmsIdentityString();
         final String memberType = "action";
-        final String uri = MessageFormat.format("{0}/specs/{1}/{2}/{3}", getContextPath(), getNoSpec().getFullName(), memberType, actionId);
+        final String uri = MessageFormat.format("{0}/specs/{1}/{2}/{3}", getContextPath(), getNoSpec().getFullIdentifier(), memberType, actionId);
         return new Element(xhtmlRenderer.aHref(uri, nakedObjectAction.getName(), "actionSpec", memberType, HtmlClass.ACTION));
     }
 

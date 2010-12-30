@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.facets.actcoll.typeof;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
 

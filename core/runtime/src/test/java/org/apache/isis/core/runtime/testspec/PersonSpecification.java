@@ -24,12 +24,12 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.testsystem.TestProxyAdapter;
@@ -111,25 +111,25 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public String getFullName() {
+    public String getFullIdentifier() {
         return Person.class.getName();
     }
 
     @Override
-    public ObjectAction getObjectAction(final ObjectActionType type, final String name) {
+    public ObjectAction getObjectAction(final ActionType type, final String name) {
         return null;
     }
 
     @Override
     public ObjectAction getObjectAction(
-            final ObjectActionType type,
+            final ActionType type,
             final String name,
             final List<ObjectSpecification> parameters) {
         return null;
     }
 
     @Override
-    public List<ObjectAction> getObjectActions(final ObjectActionType... type) {
+    public List<ObjectAction> getObjectActions(final ActionType... type) {
         return null;
     }
 
@@ -139,12 +139,12 @@ public class PersonSpecification extends TestProxySpecification {
     }
 
     @Override
-    public String getShortName() {
+    public String getShortIdentifier() {
         return "person";
     }
 
     @Override
-    public String getName() {
+    public String getSingularName() {
         return "Person";
     }
 

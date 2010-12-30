@@ -34,7 +34,7 @@ public class SerialKeyCreator implements KeyCreator {
     }
 
     public String reference(ObjectAdapter object) {
-        return object.getSpecification().getFullName() + "@" + key(object.getOid());
+        return object.getSpecification().getFullIdentifier() + "@" + key(object.getOid());
     }
     
     public SerialOid oid(String id) {

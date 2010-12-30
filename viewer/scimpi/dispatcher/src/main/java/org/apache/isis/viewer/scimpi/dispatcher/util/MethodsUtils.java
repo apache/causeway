@@ -24,9 +24,9 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
@@ -80,8 +80,8 @@ public class MethodsUtils {
             throw new ScimpiException("Object not specified when looking for " + methodName);
         }
 
-        List<ObjectAction> actions = object.getSpecification().getObjectActions(ObjectActionType.USER,
-                ObjectActionType.EXPLORATION, ObjectActionType.PROTOTYPE, ObjectActionType.DEBUG);
+        List<ObjectAction> actions = object.getSpecification().getObjectActions(ActionType.USER,
+                ActionType.EXPLORATION, ActionType.PROTOTYPE, ActionType.DEBUG);
         ObjectAction action = findAction(actions, methodName);
        /* if (action == null) {
             actions = object.getSpecification().getServiceActionsFor(ObjectActionType.USER,

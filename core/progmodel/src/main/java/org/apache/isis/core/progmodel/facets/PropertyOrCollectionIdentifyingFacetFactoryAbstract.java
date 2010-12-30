@@ -22,9 +22,9 @@ package org.apache.isis.core.progmodel.facets;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facetapi.FacetFactory;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
 

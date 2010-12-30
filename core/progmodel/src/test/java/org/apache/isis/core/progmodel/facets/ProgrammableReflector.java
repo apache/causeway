@@ -27,17 +27,14 @@ import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.internal.cache.SpecificationCache;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 
 public class ProgrammableReflector implements ObjectReflector {
 
 	
+    @Override
     public void init() {}
 
     public void installServiceSpecification(final Class<?> cls) {}
@@ -48,6 +45,7 @@ public class ProgrammableReflector implements ObjectReflector {
         this.allSpecificationsReturn = allSpecificationsReturn;
     }
 
+    @Override
     public ObjectSpecification[] allSpecifications() {
         return allSpecificationsReturn;
     }
@@ -62,6 +60,7 @@ public class ProgrammableReflector implements ObjectReflector {
         return getCollectionTypeRegistryReturn;
     }
 
+    @Override
     public ObjectSpecification loadSpecification(final Class<?> type) {
         return loadSpecification(type.getName());
     }
@@ -72,59 +71,58 @@ public class ProgrammableReflector implements ObjectReflector {
         this.loadSpecificationStringReturn = loadSpecificationStringReturn;
     }
 
+    @Override
     public ObjectSpecification loadSpecification(final String name) {
         return loadSpecificationStringReturn;
     }
 
+    @Override
     public void shutdown() {}
 
     public void setCache(SpecificationCache cache) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public boolean loaded(Class<?> cls) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public boolean loaded(String fullyQualifiedClassName) {
         throw new NotYetImplementedException();
     }
 
+    @Override
     public void injectInto(Object candidate) {}
 
-    public ClassSubstitutor getClassSubstitutor() {
-        return null;
-    }
-
-	public void setRuntimeContext(RuntimeContext runtimeContext) {
+	@Override
+    public void setRuntimeContext(RuntimeContext runtimeContext) {
         // ignored
 	}
 
-	public RuntimeContext getRuntimeContext() {
-        throw new NotYetImplementedException();
-	}
-
+    @Override
     public void debugData(DebugString debug) {}
 
+    @Override
     public String debugTitle() {
         return null;
     }
 
-	public void setServiceClasses(List<Class<?>> serviceClasses) {
+	@Override
+    public void setServiceClasses(List<Class<?>> serviceClasses) {
 		throw new NotYetImplementedException();
 	}
 
-	public MetaModelValidator getMetaModelValidator() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public boolean loadSpecifications(List<Class<?>> typesToLoad, Class<?> typeToIgnore) {
+        return false;
+    }
 
-	public ProgrammingModelFacets getProgrammingModelFacets() {
-		throw new NotYetImplementedException();
-	}
-
-	public SpecificationTraverser getSpecificationTraverser() {
-		throw new NotYetImplementedException();
-	}
+    @Override
+    public boolean loadSpecifications(List<Class<?>> typesToLoad) {
+        return false;
+    }
 
 }
 

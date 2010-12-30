@@ -21,8 +21,8 @@
 package org.apache.isis.viewer.dnd.view;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.viewer.dnd.drawing.Color;
 
 public interface UserActionSet extends UserAction {
@@ -35,7 +35,7 @@ public interface UserActionSet extends UserAction {
     
     UserActionSet addNewActionSet(String name);
     
-    UserActionSet addNewActionSet(String name, ObjectActionType type);
+    UserActionSet addNewActionSet(String name, ActionType type);
 
     UserAction[] getUserActions();
 

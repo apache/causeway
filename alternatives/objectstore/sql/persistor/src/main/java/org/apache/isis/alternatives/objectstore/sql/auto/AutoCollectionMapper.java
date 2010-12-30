@@ -60,7 +60,7 @@ public class AutoCollectionMapper extends AbstractMapper implements CollectionMa
         idMapping = lookup.createIdMapping();
         elementMapping = lookup.createMapping(spec);
 
-        String className = specification.getShortName();
+        String className = specification.getShortIdentifier();
         String columnName = field.getId();
         tableName = Sql.sqlName(className) + "_" + asSqlName(columnName);
         tableName = Sql.identifier(tableName);

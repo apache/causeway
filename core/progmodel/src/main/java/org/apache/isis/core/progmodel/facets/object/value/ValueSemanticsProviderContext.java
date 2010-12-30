@@ -16,7 +16,7 @@
  */
 package org.apache.isis.core.progmodel.facets.object.value;
 
-import org.apache.isis.core.metamodel.adapter.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;

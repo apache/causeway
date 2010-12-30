@@ -2,7 +2,7 @@ package org.apache.isis.viewer.restful.viewer.facets;
 
 import nu.xom.Element;
 
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.viewer.restful.viewer.xom.ResourceContext;
 
 

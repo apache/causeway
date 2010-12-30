@@ -21,6 +21,7 @@ package org.apache.isis.core.metamodel.adapter;
 
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
+import org.apache.isis.core.metamodel.spec.ObjectMetaModel;
 
 /**
  * Adapters to domain objects, where the application is written in terms of domain objects and those objects are

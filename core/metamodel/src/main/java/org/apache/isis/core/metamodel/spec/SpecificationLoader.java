@@ -37,6 +37,13 @@ public interface SpecificationLoader extends ApplicationScopedComponent, DebugIn
     ObjectSpecification loadSpecification(Class<?> cls);
 
     /**
+     * Loads the specifications of the specified types except the one specified
+     * (to prevent an infinite loop).
+     */
+    public boolean loadSpecifications(List<Class<?>> typesToLoad,
+        final Class<?> typeToIgnore);
+    
+    /**
      * Return the specification for the specified class of object.
      * 
      * <p>
@@ -59,5 +66,10 @@ public interface SpecificationLoader extends ApplicationScopedComponent, DebugIn
      * Specify the classes of the services to pro-actively prime the cache.
      */
 	void setServiceClasses(List<Class<?>> serviceClasses);
+
+    /**
+     * Loads the specifications of the specified types.
+     */
+    boolean loadSpecifications(List<Class<?>> typesToLoad);
 
 }

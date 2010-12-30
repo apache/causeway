@@ -23,15 +23,16 @@ package org.apache.isis.viewer.dnd.view.base;
 import java.util.Enumeration;
 
 import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.ConsentAbstract;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.ConsentAbstract;
+import org.apache.isis.core.metamodel.consent2.Veto;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
@@ -104,6 +105,7 @@ public abstract class AbstractView implements View {
         viewRoot = this;
     }
 
+    @Override
     public void addView(final View view) {
         throw new IsisException("Can't add views to " + this);
     }
@@ -112,14 +114,17 @@ public abstract class AbstractView implements View {
         id = nextId++;
     }
 
+    @Override
     public Consent canChangeValue() {
         return Veto.DEFAULT;
     }
 
+    @Override
     public boolean canFocus() {
         return true;
     }
 
+    @Override
     public boolean contains(final View view) {
         final View[] subviews = getSubviews();
         for (int i = 0; i < subviews.length; i++) {
@@ -130,6 +135,7 @@ public abstract class AbstractView implements View {
         return false;
     }
 
+    @Override
     public boolean containsFocus() {
         if (hasFocus()) {
             return true;
@@ -144,6 +150,7 @@ public abstract class AbstractView implements View {
         return false;
     }
 
+    @Override
     public void contentMenuOptions(final UserActionSet options) {
         options.setColor(Toolkit.getColor(ColorsAndFonts.COLOR_MENU_CONTENT));
 
@@ -156,6 +163,7 @@ public abstract class AbstractView implements View {
     /**
      * Returns debug details about this view.
      */
+    @Override
     public void debug(final DebugString debug) {
         final String name = getClass().getName();
         debug.appendln("Root: " + name.substring(name.lastIndexOf('.') + 1) + getId());
@@ -219,6 +227,7 @@ public abstract class AbstractView implements View {
     
     protected void appendDebug(final DebugString debug) {}
 
+    @Override
     public void debugStructure(final DebugString b) {
         b.appendln("Content", getContent() == null ? "none" : getContent());
         b.appendln("Required size ", getRequiredSize(Size.createMax()));
@@ -238,6 +247,7 @@ public abstract class AbstractView implements View {
         b.unindent();
     }
 
+    @Override
     public void dispose() {
         View parent = getParent();
         if (parent != null) {
@@ -245,18 +255,23 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void drag(final InternalDrag drag) {}
 
+    @Override
     public void drag(final ContentDrag contentDrag) {}
 
+    @Override
     public void drag(ViewDrag drag) {
         getViewManager().getSpy().addTrace(this, "view drag", drag);
     }
     
+    @Override
     public void dragCancel(final InternalDrag drag) {
         getFeedbackManager().showDefaultCursor();
     }
 
+    @Override
     public View dragFrom(final Location location) {
         final View subview = subviewFor(location);
         if (subview != null) {
@@ -267,10 +282,13 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void dragIn(final ContentDrag drag) {}
 
+    @Override
     public void dragOut(final ContentDrag drag) {}
 
+    @Override
     public DragEvent dragStart(final DragStart drag) {
         final View subview = subviewFor(drag.getLocation());
         if (subview != null) {
@@ -281,6 +299,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void dragTo(final InternalDrag drag) {}
 
     /**
@@ -291,6 +310,7 @@ public abstract class AbstractView implements View {
         canvas.drawSolidRectangle(0, 0, bounds.getWidth(), bounds.getHeight(), color);
     }
 
+    @Override
     public void draw(final Canvas canvas) {
         if (Toolkit.debug) {
             canvas.drawDebugOutline(new Bounds(getSize()), getBaseline(), Toolkit
@@ -298,17 +318,21 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void drop(final ContentDrag drag) {}
 
     /**
      * No default behaviour, views can only be dropped on workspace
      */
+    @Override
     public void drop(final ViewDrag drag) {
         getParent().drop(drag);
     }
 
+    @Override
     public void editComplete(boolean moveFocus, boolean toNextField) {}
 
+    @Override
     public void entered() {
         final Content cont = getContent();
         if (cont != null) {
@@ -319,8 +343,10 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void exited() {}
 
+    @Override
     public void firstClick(final Click click) {
         final View subview = subviewFor(click.getLocation());
         if (subview != null) {
@@ -329,10 +355,13 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void focusLost() {}
 
+    @Override
     public void focusReceived() {}
 
+    @Override
     public Location getAbsoluteLocation() {
         View parent = getParent();
         if (parent == null) {
@@ -349,34 +378,42 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public int getBaseline() {
         return 0;
     }
 
+    @Override
     public Bounds getBounds() {
         return new Bounds(x, y, width, height);
     }
 
+    @Override
     public Content getContent() {
         return content;
     }
 
+    @Override
     public FocusManager getFocusManager() {
         return getParent() == null ? null : getParent().getFocusManager();
     }
 
+    @Override
     public int getId() {
         return id;
     }
 
+    @Override
     public Location getLocation() {
         return new Location(x, y);
     }
 
+    @Override
     public Padding getPadding() {
         return new Padding(0, 0, 0, 0);
     }
 
+    @Override
     public final View getParent() {
         // Assert.assertEquals(parent == null ? null : parent.getView(), parent);
         // return parent;
@@ -384,14 +421,17 @@ public abstract class AbstractView implements View {
         return parent == null ? null : parent.getView();
     }
 
+    @Override
     public Size getRequiredSize(final Size maximumSize) {
         return new Size(maximumSize);
     }
 
+    @Override
     public Size getSize() {
         return new Size(width, height);
     }
 
+    @Override
     public ViewSpecification getSpecification() {
         if (specification == null) {
             specification = new NonBuildingSpecification(this);
@@ -399,38 +439,47 @@ public abstract class AbstractView implements View {
         return specification;
     }
 
+    @Override
     public ViewState getState() {
         return state;
     }
 
+    @Override
     public View[] getSubviews() {
         return new View[0];
     }
 
+    @Override
     public final View getView() {
         return viewRoot;
     }
     
+    @Override
     public Axes getViewAxes() {
         return new Axes();
     }
     
+    @Override
     public Viewer getViewManager() {
         return Toolkit.getViewer();
     }
 
+    @Override
     public Feedback getFeedbackManager() {
         return Toolkit.getFeedbackManager();
     }
 
+    @Override
     public Workspace getWorkspace() {
         return getParent() == null ? null : getParent().getWorkspace();
     }
 
+    @Override
     public boolean hasFocus() {
         return getViewManager().hasFocus(getView());
     }
 
+    @Override
     public View identify(final Location location) {
         final View subview = subviewFor(location);
         if (subview == null) {
@@ -443,8 +492,10 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void invalidateContent() {}
 
+    @Override
     public void invalidateLayout() {
         View parent = getParent();
         if (parent != null) {
@@ -452,12 +503,16 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void keyPressed(final KeyboardAction key) {}
 
+    @Override
     public void keyReleased(KeyboardAction action) {}
 
+    @Override
     public void keyTyped(KeyboardAction action) {}
 
+    @Override
     public void layout() {}
 
     /**
@@ -471,6 +526,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void limitBoundsWithin(final Size size) {
         final int w = getView().getSize().getWidth();
         final int h = getView().getSize().getHeight();
@@ -495,10 +551,12 @@ public abstract class AbstractView implements View {
         getView().setLocation(new Location(x, y));
     }
 
+    @Override
     public void markDamaged() {
         markDamaged(getView().getBounds());
     }
 
+    @Override
     public void markDamaged(final Bounds bounds) {
         View parent = getParent();
         if (parent == null) {
@@ -512,6 +570,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void mouseDown(final Click click) {
         final View subview = subviewFor(click.getLocation());
         if (subview != null) {
@@ -520,6 +579,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void mouseMoved(final Location location) {
         final View subview = subviewFor(location);
         if (subview != null) {
@@ -528,6 +588,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void mouseUp(final Click click) {
         final View subview = subviewFor(click.getLocation());
         if (subview != null) {
@@ -536,6 +597,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void objectActionResult(final ObjectAdapter result, final Placement placement) {
         if (result != null) {
             final CollectionFacet facet = result.getSpecification().getFacet(CollectionFacet.class);
@@ -549,6 +611,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public View pickupContent(final Location location) {
         final View subview = subviewFor(location);
         if (subview != null) {
@@ -559,6 +622,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public View pickupView(final Location location) {
         final View subview = subviewFor(location);
         if (subview != null) {
@@ -574,20 +638,25 @@ public abstract class AbstractView implements View {
      * 
      * @see #draw(Canvas)
      */
+    @Override
     public void print(final Canvas canvas) {
         draw(canvas);
     }
 
+    @Override
     public void refresh() {}
 
+    @Override
     public void removeView(final View view) {
         throw new IsisException();
     }
 
+    @Override
     public void replaceView(final View toReplace, final View replacement) {
         throw new IsisException();
     }
 
+    @Override
     public void secondClick(final Click click) {
         final View subview = subviewFor(click.getLocation());
         if (subview != null) {
@@ -599,11 +668,13 @@ public abstract class AbstractView implements View {
     /**
      * Sets the location and size view the {@link #setLocation(Location)) and {@link #setSize(Size)) methods.
      */
+    @Override
     public void setBounds(final Bounds bounds) {
         setLocation(bounds.getLocation());
         setSize(bounds.getSize());
     }
 
+    @Override
     public void setFocusManager(final FocusManager focusManager) {
     }
 
@@ -611,11 +682,13 @@ public abstract class AbstractView implements View {
         this.content = content;
     }
 
+    @Override
     public void setLocation(final Location location) {
         x = location.getX();
         y = location.getY();
     }
 
+    @Override
     public final void setParent(final View parentView) {
         LOG.debug("set parent " + parentView + " for " + this);
         parent = parentView.getView();
@@ -623,6 +696,7 @@ public abstract class AbstractView implements View {
 
     public void setMaximumSize(final Size size) {}
 
+    @Override
     public void setSize(final Size size) {
         width = size.getWidth();
         height = size.getHeight();
@@ -632,6 +706,7 @@ public abstract class AbstractView implements View {
         this.specification = specification;
     }
 
+    @Override
     public final void setView(final View view) {
         this.viewRoot = view;
     }
@@ -641,10 +716,12 @@ public abstract class AbstractView implements View {
        // this.viewAxis = viewAxis;
     }
 
+    @Override
     public View subviewFor(final Location location) {
         return null;
     }
 
+    @Override
     public void thirdClick(final Click click) {
         final View subview = subviewFor(click.getLocation());
         if (subview != null) {
@@ -659,10 +736,13 @@ public abstract class AbstractView implements View {
         return name.substring(name.lastIndexOf('.') + 1) + getId() + ":" + getState() + ":" + getContent();
     }
 
+    @Override
     public void update(final ObjectAdapter object) {}
 
+    @Override
     public void updateView() {}
 
+    @Override
     public ViewAreaType viewAreaType(final Location location) {
         final View subview = subviewFor(location);
         if (subview != null) {
@@ -673,6 +753,7 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void viewMenuOptions(final UserActionSet options) {
         options.setColor(Toolkit.getColor(ColorsAndFonts.COLOR_MENU_VIEW));
 
@@ -696,6 +777,7 @@ public abstract class AbstractView implements View {
                     };
                 }
 
+                @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     undoStack.undoLastCommand();
                 }
@@ -704,19 +786,22 @@ public abstract class AbstractView implements View {
     }
 
     private void addViewDebugMenuItems(final UserActionSet options) {
-        options.add(new UserActionAbstract("Refresh view", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Refresh view", ActionType.DEBUG) {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 refresh();
             }
         });
 
-        options.add(new UserActionAbstract("Invalidate content", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Invalidate content", ActionType.DEBUG) {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 invalidateContent();
             }
         });
 
-        options.add(new UserActionAbstract("Invalidate layout", ObjectActionType.DEBUG) {
+        options.add(new UserActionAbstract("Invalidate layout", ActionType.DEBUG) {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 invalidateLayout();
             }
@@ -725,7 +810,8 @@ public abstract class AbstractView implements View {
 
     private void addNewViewMenuItems(final UserActionSet options, final Content content) {
         if (getContent() instanceof ObjectContent) {
-            options.add(new UserActionAbstract("Use as default view for objects", ObjectActionType.USER) {
+            options.add(new UserActionAbstract("Use as default view for objects", ActionType.USER) {
+                @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Properties.setStringOption("view.object-default", getSpecification().getName());
                     /*
@@ -736,7 +822,8 @@ public abstract class AbstractView implements View {
             });
         }
         if (getContent() instanceof CollectionContent) {
-            options.add(new UserActionAbstract("Use as default view for collection", ObjectActionType.USER) {
+            options.add(new UserActionAbstract("Use as default view for collection", ActionType.USER) {
+                @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Properties.setStringOption("view.collection-default", getSpecification().getName());
                     /*
@@ -747,7 +834,8 @@ public abstract class AbstractView implements View {
             });
         }
         if (getContent() instanceof ObjectContent && !getSpecification().isOpen()) {
-            options.add(new UserActionAbstract("Use as default view for icon", ObjectActionType.USER) {
+            options.add(new UserActionAbstract("Use as default view for icon", ActionType.USER) {
+                @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Properties.setStringOption("view.icon-default", getSpecification().getName());
                     /*
@@ -759,7 +847,8 @@ public abstract class AbstractView implements View {
         }
 
         if (getContent() instanceof RootObject || getContent() instanceof RootCollection) {
-            options.add(new UserActionAbstract("Use as default view for " + getContent().getSpecification().getName(), ObjectActionType.USER) {
+            options.add(new UserActionAbstract("Use as default view for " + getContent().getSpecification().getSingularName(), ActionType.USER) {
+                @Override
                 public void execute(final Workspace workspace, final View view, final Location at) {
                     Options viewOptions = Properties.getViewConfigurationOptions(getSpecification());
                     getView().saveOptions(viewOptions);
@@ -786,7 +875,8 @@ public abstract class AbstractView implements View {
             }
         });
         */
-        options.add(new UserActionAbstract("Save specification", ObjectActionType.USER) {
+        options.add(new UserActionAbstract("Save specification", ActionType.USER) {
+            @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 Options viewOptions = Properties.getViewConfigurationOptions(getSpecification());
                 getView().saveOptions(viewOptions);
@@ -819,7 +909,8 @@ public abstract class AbstractView implements View {
             UserActionSet submenu = options.addNewActionSet("Create view from");
             while (possibleViews.hasMoreElements()) {
                 final ViewSpecification specification = (ViewSpecification) possibleViews.nextElement();
-                final UserActionAbstract viewAs = new UserActionAbstract(specification.getName(), ObjectActionType.USER) {
+                final UserActionAbstract viewAs = new UserActionAbstract(specification.getName(), ActionType.USER) {
+                    @Override
                     public void execute(final Workspace workspace, final View view, final Location at) {
                         ViewSpecification newSpec;
                         try {
@@ -859,8 +950,10 @@ public abstract class AbstractView implements View {
         }
     }
 
+    @Override
     public void loadOptions(Options viewOptions) {}
 
+    @Override
     public void saveOptions(Options viewOptions) {
 //        viewOptions.addOption("spec", getSpecification().getClass().getName());
     }

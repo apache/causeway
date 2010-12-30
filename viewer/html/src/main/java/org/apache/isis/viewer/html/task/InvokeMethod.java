@@ -106,7 +106,7 @@ public final class InvokeMethod implements Action {
             } else if (result.getSpecification().isNotCollection()) {
                     forwardObjectResult(request, context, result);
             } else {
-                throw new UnknownTypeException(result.getSpecification().getFullName());
+                throw new UnknownTypeException(result.getSpecification().getFullIdentifier());
             }
         }
     }

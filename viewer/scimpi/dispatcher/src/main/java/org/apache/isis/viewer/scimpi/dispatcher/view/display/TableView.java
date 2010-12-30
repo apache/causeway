@@ -129,7 +129,7 @@ public class TableView extends AbstractTableView {
                         if (!fields.get(i).getSpecification().containsFacet(ParseableFacet.class)) {
                             request.appendHtml("<img class=\"" + "small-icon" + "\" src=\""
                                     + request.getContext().imagePath(field) + "\" alt=\""
-                                    + fields.get(i).getSpecification().getShortName() + "\"/>");
+                                    + fields.get(i).getSpecification().getShortIdentifier() + "\"/>");
                         }
                         if (linkRow != null) {
                             request.appendHtml("<a href=\"" + linkRow.getForwardView() + "?" + linkRow.getVariable() + "="

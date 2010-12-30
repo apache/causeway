@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.apache.isis.core.commons.filters.AbstractFilter;
 import org.apache.isis.core.commons.lang.CastUtils;
+import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 
 

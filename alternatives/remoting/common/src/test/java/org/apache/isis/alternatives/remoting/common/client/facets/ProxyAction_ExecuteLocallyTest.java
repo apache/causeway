@@ -27,7 +27,7 @@ import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.runtime.testsystem.TestProxySystem;

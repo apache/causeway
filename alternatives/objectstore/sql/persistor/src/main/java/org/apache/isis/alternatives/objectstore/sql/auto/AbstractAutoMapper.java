@@ -58,7 +58,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     protected AbstractAutoMapper(final String className, final String parameterBase, FieldMappingLookup lookup, ObjectMappingLookup objectMapperLookup) {
         specification = IsisContext.getSpecificationLoader().loadSpecification(className);
         if (specification.getProperties() == null || specification.getProperties().size() == 0) {
-            throw new SqlObjectStoreException(specification.getFullName() + " has no fields: " + specification);
+            throw new SqlObjectStoreException(specification.getFullIdentifier() + " has no fields: " + specification);
         }
         setUpFieldMappers(lookup, objectMapperLookup, className, parameterBase);
     }
@@ -239,7 +239,7 @@ public abstract class AbstractAutoMapper extends AbstractMapper {
     @Override
     public String toString() {
         return "AbstractAutoMapper [table=" + table + ",noColumns=" + fieldMappings.size() + ",specification="
-                + specification.getFullName() + "]";
+                + specification.getFullIdentifier() + "]";
     }
 
     protected String values(DatabaseConnector connector, final ObjectAdapter object) {

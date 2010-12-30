@@ -27,7 +27,7 @@ public abstract class PersistenceQueryDataAbstract implements PersistenceQueryDa
     private final String specification;
 
     public PersistenceQueryDataAbstract(ObjectSpecification noSpec) {
-        specification = noSpec.getFullName();
+        specification = noSpec.getFullIdentifier();
     }
 
     public String getType() {

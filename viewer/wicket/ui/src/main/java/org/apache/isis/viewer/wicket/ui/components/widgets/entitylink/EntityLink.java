@@ -40,9 +40,9 @@ import com.google.common.collect.Lists;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.ident.icon.IconFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -394,16 +394,16 @@ public class EntityLink extends FormComponentPanelAbstract<ObjectAdapter>
     private static List<ObjectAction> findServiceActionsFor(
             ObjectSpecification scalarTypeSpec) {
         List<ObjectAction> actionList = Lists.newArrayList();
-        addServiceActionsFor(scalarTypeSpec, ObjectActionType.USER, actionList);
+        addServiceActionsFor(scalarTypeSpec, ActionType.USER, actionList);
         if (IsisContext.getDeploymentType() == DeploymentType.EXPLORATION) {
             addServiceActionsFor(scalarTypeSpec,
-                    ObjectActionType.EXPLORATION, actionList);
+                    ActionType.EXPLORATION, actionList);
         }
         return actionList;
     }
 
     private static void addServiceActionsFor(ObjectSpecification noSpec,
-            ObjectActionType actionType, List<ObjectAction> actionList) {
+            ActionType actionType, List<ObjectAction> actionList) {
         final List<ObjectAction> serviceActionsFor = noSpec
                 .getServiceActionsReturning(actionType);
         actionList.addAll(serviceActionsFor);

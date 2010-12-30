@@ -21,31 +21,10 @@
 package org.apache.isis.core.metamodel.specloader;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
-import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
-import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
-public interface ObjectReflector extends SpecificationLoader, SpecificationLookup,
+public interface ObjectReflector extends SpecificationLoader, 
 		ApplicationScopedComponent, RuntimeContextAware {
 
-	/**
-	 * The configured {@link ClassSubstitutor}.
-	 */
-	ClassSubstitutor getClassSubstitutor();
-
-	/**
-	 * The configured {@link RuntimeContext}.
-	 */
-	RuntimeContext getRuntimeContext();
-
-	SpecificationTraverser getSpecificationTraverser();
-
-	MetaModelValidator getMetaModelValidator();
-
-	ProgrammingModelFacets getProgrammingModelFacets();
 }

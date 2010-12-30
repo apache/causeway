@@ -20,18 +20,18 @@
 
 package org.apache.isis.metamodel.examples.facets.namefile;
 
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
+import org.apache.isis.core.metamodel.facetapi.FacetFactory;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 
 
 /**
- * Implementation of {@link ProgrammingModelFacets} that additionally just installs support for
+ * Implementation of {@link ProgrammingModel} that additionally just installs support for
  * {@link NameFileFacet name files}.
  * 
  * <p>
  * This implementation is really provided only as an example. Typically you would provide your own
- * {@link ProgrammingModelFacets} implementation that installs other additional {@link FacetFactory facet
+ * {@link ProgrammingModel} implementation that installs other additional {@link FacetFactory facet
  * factories} ass required for your programming model.
  */
 public class NameFileProgModelFacets extends ProgrammingModelFacetsJava5 {

@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.facets.naming.named;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public class NamedFacetInferred extends NamedFacetAbstract {

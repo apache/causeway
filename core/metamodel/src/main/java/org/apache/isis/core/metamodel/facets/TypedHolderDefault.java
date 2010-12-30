@@ -16,7 +16,8 @@
  */
 package org.apache.isis.core.metamodel.facets;
 
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 
 
 public class TypedHolderDefault extends FacetHolderImpl implements TypedHolder {
@@ -39,6 +40,10 @@ public class TypedHolderDefault extends FacetHolderImpl implements TypedHolder {
         return type;
     }
 
+    /**
+     * For {@link FeatureType#COLLECTION collection}s,
+     * represents the element type.
+     */
     @Override
     public void setType(Class<?> type) {
         this.type = type;

@@ -95,7 +95,7 @@ public class MementoTest3_Test {
                 atLeast(1).of(rootSpecification).isCollection();
                 will(returnValue(true));
 
-                atLeast(1).of(rootSpecification).getFullName();
+                atLeast(1).of(rootSpecification).getFullIdentifier();
                 will(returnValue(TestObject[].class.getName()));
 
                 atLeast(1).of(rootSpecification).getFacet(CollectionFacet.class);
@@ -103,7 +103,7 @@ public class MementoTest3_Test {
 
 
 
-                atLeast(0).of(emptySpecification).getFullName();
+                atLeast(0).of(emptySpecification).getFullIdentifier();
                 will(returnValue(TestObject.class.getName()));
 
 

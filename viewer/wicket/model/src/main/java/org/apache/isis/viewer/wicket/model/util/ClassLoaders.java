@@ -41,7 +41,7 @@ public final class ClassLoaders {
 	}
 	
 	public static Class<?> forName(ObjectSpecification noSpec) {
-		String fullName = noSpec.getFullName();
+		String fullName = noSpec.getFullIdentifier();
 		return forName(fullName);
 	}
 

@@ -23,11 +23,11 @@ package org.apache.isis.core.progmodel.facets.actions.notcontributed;
 import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.NotContributed;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetUtil;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class NotContributedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {

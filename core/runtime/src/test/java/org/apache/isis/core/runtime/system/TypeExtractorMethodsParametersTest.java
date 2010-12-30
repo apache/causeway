@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.junit.Test;
 import org.apache.isis.core.commons.matchers.IsisMatchers;
-import org.apache.isis.core.metamodel.specloader.internal.TypeExtractorMethodParameters;
+import org.apache.isis.core.metamodel.specloader.traverser.TypeExtractorMethodParameters;
 
 public class TypeExtractorMethodsParametersTest {
 

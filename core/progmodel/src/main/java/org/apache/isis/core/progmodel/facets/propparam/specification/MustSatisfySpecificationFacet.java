@@ -26,12 +26,12 @@ import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.applib.util.ReasonBuffer;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.interactions.ProposedHolder;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.interactions2.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.ValidityContext;
 
 public class MustSatisfySpecificationFacet extends FacetAbstract implements ValidatingInteractionAdvisor {
 

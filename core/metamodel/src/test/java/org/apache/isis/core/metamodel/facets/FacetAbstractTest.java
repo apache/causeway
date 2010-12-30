@@ -22,8 +22,10 @@ package org.apache.isis.core.metamodel.facets;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectNoop;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 
 
 public class FacetAbstractTest extends TestCase {
@@ -75,49 +77,6 @@ public class FacetAbstractTest extends TestCase {
 
     public void testToString() {
         assertEquals("FacetAbstractTest$ConcreteFacet[type=FacetAbstractTest$FooFacet]", fooFacet.toString());
-    }
-
-    public void testUnwrapObjectWhenNull() {
-        assertNull(fooFacet.unwrapObject(null));
-    }
-
-    public void testUnwrapObjectWhenNotNull() {
-        final Object underlyingDomainObject = new Object();
-        final ObjectAdapter adapter = new ObjectNoop() {
-            @Override
-            public Object getObject() {
-                return underlyingDomainObject;
-            }
-
-        };
-
-        assertEquals(underlyingDomainObject, fooFacet.unwrapObject(adapter));
-    }
-
-    public void testUnwrapStringWhenNull() {
-        assertNull(fooFacet.unwrapString(null));
-    }
-
-    public void testUnwrapStringWhenNotNullButNotString() {
-        final Object underlyingDomainObject = new Object();
-        final ObjectAdapter adapter = new ObjectNoop() {
-            @Override
-            public Object getObject() {
-                return underlyingDomainObject;
-            }
-        };
-        assertNull(fooFacet.unwrapString(adapter));
-    }
-
-    public void testUnwrapStringWhenNotNullAndString() {
-        final String underlyingDomainObject = "huzzah";
-        final ObjectAdapter adapter = new ObjectNoop() {
-            @Override
-            public Object getObject() {
-                return underlyingDomainObject;
-            }
-        };
-        assertEquals("huzzah", fooFacet.unwrapString(adapter));
     }
 
 }

@@ -22,7 +22,7 @@ public final class TableColumnNakedObjectActionReturnType extends TableColumnNak
 
     @Override
     public Element doTd(final ObjectAction action) {
-        final String returnTypeFullName = action.getReturnType().getFullName();
+        final String returnTypeFullName = action.getReturnType().getFullIdentifier();
         final String uri = MessageFormat.format("{0}/specs/{1}", getContextPath(), returnTypeFullName);
         return xhtmlRenderer.aHref(uri, returnTypeFullName, "actionReturnTypeSpec", "action", HtmlClass.ACTION);
     }

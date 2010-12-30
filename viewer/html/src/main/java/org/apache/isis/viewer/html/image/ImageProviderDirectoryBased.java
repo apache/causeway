@@ -79,7 +79,7 @@ public class ImageProviderDirectoryBased implements ImageProvider {
     }
 
     private String findImage(final ObjectSpecification specification) {
-        final String name = specification.getShortName();
+        final String name = specification.getShortIdentifier();
         final String fileName = imageFile(name);
         if (fileName != null) {
             images.put(name, fileName);
@@ -111,7 +111,7 @@ public class ImageProviderDirectoryBased implements ImageProvider {
     }
 
     public String image(final ObjectSpecification specification) {
-        final String name = specification.getShortName();
+        final String name = specification.getShortIdentifier();
         final String imageName = (String) images.get(name);
         if (imageName != null) {
             return imageName;

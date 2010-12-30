@@ -43,7 +43,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceFactory;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -279,7 +279,7 @@ public class Dispatcher {
             ObjectSpecification specification,
             String name,
             String extension) {
-        String className = specification.getShortName();
+        String className = specification.getShortIdentifier();
         String fileName = context.findFile("/" + className + "/" + name + "." + extension);
         if (fileName == null) {
             List<ObjectSpecification> interfaces = specification.interfaces();

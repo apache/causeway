@@ -26,14 +26,14 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.runtime.authentication.standard.exploration.MultiUserExplorationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
@@ -373,7 +373,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
 
         menuForChangingUsers(options);
         
-        options.add(new UserActionAbstract("Save User Profile", ObjectActionType.USER) {
+        options.add(new UserActionAbstract("Save User Profile", ActionType.USER) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 Feedback feedbackManager = getFeedbackManager();
@@ -386,7 +386,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
     }
 
     private void menuForChangingLook(UserActionSet options) {
-        final UserActionSet set = options.addNewActionSet("Change Look", ObjectActionType.USER);
+        final UserActionSet set = options.addNewActionSet("Change Look", ActionType.USER);
         for (Look look : LookFactory.getAvailableLooks()) {
             menuOptionForChangingLook(set, look, look.getName());
         }
@@ -415,7 +415,7 @@ public final class ApplicationWorkspace extends CompositeViewUsingBuilder implem
             MultiUserExplorationSession session = (MultiUserExplorationSession) getAuthenticationSession();
 
             Set<String> users = session.getUserNames();
-            final UserActionSet set = options.addNewActionSet("Change user", ObjectActionType.EXPLORATION);
+            final UserActionSet set = options.addNewActionSet("Change user", ActionType.EXPLORATION);
             for (String user : users) {
                 menuOptionForChangingUser(set, user, session.getUserName());
             }

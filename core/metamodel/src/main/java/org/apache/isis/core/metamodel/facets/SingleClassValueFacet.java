@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 

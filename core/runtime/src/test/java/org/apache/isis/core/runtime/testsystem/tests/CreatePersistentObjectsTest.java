@@ -57,7 +57,7 @@ public class CreatePersistentObjectsTest extends ProxyJunit3TestCase {
 
     public void testSpecification() {
         assertNotNull(adapter.getSpecification());
-        assertNotNull(TestPojo.class.getName(), adapter.getSpecification().getFullName());
+        assertNotNull(TestPojo.class.getName(), adapter.getSpecification().getFullIdentifier());
     }
 
     public void test2ndPersistentCreationHasDifferentOid() {

@@ -23,11 +23,11 @@ package org.apache.isis.viewer.dnd.view.action;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.adapter.ObjectList;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ActionType;
+import org.apache.isis.core.metamodel.spec.ObjectList;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.viewer.dnd.view.UserAction;
 import org.apache.isis.viewer.dnd.view.UserActionSet;
 import org.apache.isis.viewer.dnd.view.option.DisposeObjectOption;
@@ -37,8 +37,8 @@ public class OptionFactory {
     public static void addCreateOptions(final ObjectSpecification specification, final UserActionSet options) {
         // TODO do the same as addObjectMenuOptions and collect together all the
         // actions for all the types
-        List<ObjectAction> actions = specification.getServiceActionsReturning(ObjectActionType.USER, ObjectActionType.EXPLORATION,
-                ObjectActionType.PROTOTYPE, ObjectActionType.DEBUG);
+        List<ObjectAction> actions = specification.getServiceActionsReturning(ActionType.USER, ActionType.EXPLORATION,
+                ActionType.PROTOTYPE, ActionType.DEBUG);
         menuOptions(actions, null, options);
     }
 
@@ -48,8 +48,8 @@ public class OptionFactory {
         }
 
         ObjectSpecification noSpec = adapter.getSpecification();
-        menuOptions(noSpec.getObjectActions(ObjectActionType.USER, ObjectActionType.EXPLORATION,
-        		ObjectActionType.PROTOTYPE, ObjectActionType.DEBUG), adapter, options);
+        menuOptions(noSpec.getObjectActions(ActionType.USER, ActionType.EXPLORATION,
+        		ActionType.PROTOTYPE, ActionType.DEBUG), adapter, options);
 
         // TODO: this looks like a bit of a hack; can we improve it by looking at the facets?
         if (adapter.getObject() instanceof ObjectList) {

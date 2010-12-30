@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.dnd.view.border;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
@@ -753,7 +753,7 @@ public class ScrollBorder extends AbstractViewDecorator {
     @Override
     public void viewMenuOptions(final UserActionSet menuOptions) {
         super.viewMenuOptions(menuOptions);
-        menuOptions.add(new UserActionAbstract("Reset scroll border", ObjectActionType.DEBUG) {
+        menuOptions.add(new UserActionAbstract("Reset scroll border", ActionType.DEBUG) {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 reset();

@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.value;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableFacetImpl;
 

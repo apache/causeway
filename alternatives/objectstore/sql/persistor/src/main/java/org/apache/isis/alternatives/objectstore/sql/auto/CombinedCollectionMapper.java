@@ -59,7 +59,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
             String parameterBase,
             FieldMappingLookup lookup, 
             ObjectMappingLookup objectMapperLookup) {
-        super(objectAssociation.getSpecification().getFullName(), parameterBase, lookup, objectMapperLookup);
+        super(objectAssociation.getSpecification().getFullIdentifier(), parameterBase, lookup, objectMapperLookup);
         this.field = objectAssociation;
 		
         objectMapperLookup2 = objectMapperLookup;
@@ -77,7 +77,7 @@ public class CombinedCollectionMapper extends AbstractAutoMapper implements Coll
     }
 
 	protected String determineColumnName(ObjectAssociation objectAssociation){
-    	return  objectAssociation.getSpecification().getShortName();
+    	return  objectAssociation.getSpecification().getShortIdentifier();
 	}
 	
     public String getColumnName() {

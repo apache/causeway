@@ -89,15 +89,15 @@ import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.peer.IdentifierUtils;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.metamodel.specloader.internal.ObjectActionImpl;
+import org.apache.isis.core.metamodel.specloader.internal.spec.ObjectActionImpl;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -182,7 +182,7 @@ public class ServerFacadeImpl implements ServerFacade {
 
     private ObjectMember getActionElseThrowException(final Identifier id, final ObjectSpecification specification) {
         ObjectMember member =
-            specification.getObjectAction(ObjectActionType.USER, id.getMemberName(),
+            specification.getObjectAction(ActionType.USER, id.getMemberName(),
                 getMemberParameterSpecifications(id));
         if (member == null) {
             throw new IsisException("No user action found for id " + id);
@@ -467,7 +467,7 @@ public class ServerFacadeImpl implements ServerFacade {
     public ExecuteServerActionResponse executeServerAction(ExecuteServerActionRequest request) {
 
         AuthenticationSession session = request.getSession();
-        ObjectActionType actionType = request.getActionType();
+        ActionType actionType = request.getActionType();
         String actionIdentifier = request.getActionIdentifier();
         ReferenceData targetData = request.getTarget();
         Data[] parameterData = request.getParameters();
@@ -538,7 +538,7 @@ public class ServerFacadeImpl implements ServerFacade {
             parameterSpecs.add(getSpecification(parameterData[i].getType()));
         }
 
-        final ObjectActionType type = ObjectActionImpl.getType(actionType);
+        final ActionType type = ObjectActionImpl.getType(actionType);
 
         final int pos = actionIdentifier.indexOf('#');
 
@@ -731,7 +731,7 @@ public class ServerFacadeImpl implements ServerFacade {
     private ObjectAdapter restoreLeafObject(final String encodedObject, final ObjectSpecification specification) {
         final EncodableFacet encoder = specification.getFacet(EncodableFacet.class);
         if (encoder == null) {
-            throw new IsisException("No encoder for " + specification.getFullName());
+            throw new IsisException("No encoder for " + specification.getFullIdentifier());
         }
         final ObjectAdapter object = encoder.fromEncodedString(encodedObject);
         return object;

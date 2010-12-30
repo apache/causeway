@@ -40,7 +40,7 @@ public class JavaReflector_ValueTest extends JavaReflectorTestAbstract {
 
     @Test
     public void testName() throws Exception {
-        Assert.assertEquals(String.class.getName(), specification.getFullName());
+        Assert.assertEquals(String.class.getName(), specification.getFullIdentifier());
     }
 
 }

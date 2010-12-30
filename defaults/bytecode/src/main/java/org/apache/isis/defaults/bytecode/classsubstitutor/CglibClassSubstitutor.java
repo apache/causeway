@@ -20,8 +20,8 @@
 
 package org.apache.isis.defaults.bytecode.classsubstitutor;
 
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
-import org.apache.isis.core.metamodel.util.ClassUtil;
 import org.apache.isis.defaults.bytecode.objectfactory.internal.CglibEnhanced;
 
 

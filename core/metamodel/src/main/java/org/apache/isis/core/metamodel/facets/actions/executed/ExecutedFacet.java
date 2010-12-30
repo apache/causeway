@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.facets.actions.executed;
 
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.EnumerationAbstract;
-import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.spec.Target;
 
 /**

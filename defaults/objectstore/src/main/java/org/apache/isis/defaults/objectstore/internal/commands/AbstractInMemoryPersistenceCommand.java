@@ -42,7 +42,7 @@ public abstract class AbstractInMemoryPersistenceCommand extends PersistenceComm
 	protected void save(final ObjectAdapter adapter) throws ObjectPersistenceException {
         final ObjectSpecification specification = adapter.getSpecification();
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("   saving object " + adapter + " as instance of " + specification.getShortName());
+        	LOG.debug("   saving object " + adapter + " as instance of " + specification.getShortIdentifier());
         }
         final ObjectStoreInstances ins = instancesFor(specification);
         ins.save(adapter); // also sets the version
@@ -51,7 +51,7 @@ public abstract class AbstractInMemoryPersistenceCommand extends PersistenceComm
     protected void destroy(final ObjectAdapter adapter) {
         final ObjectSpecification specification = adapter.getSpecification();
         if (LOG.isDebugEnabled()) {
-        	LOG.debug("   destroy object " + adapter + " as instance of " + specification.getShortName());
+        	LOG.debug("   destroy object " + adapter + " as instance of " + specification.getShortIdentifier());
         }
         final ObjectStoreInstances ins = instancesFor(specification);
         ins.remove(adapter.getOid());

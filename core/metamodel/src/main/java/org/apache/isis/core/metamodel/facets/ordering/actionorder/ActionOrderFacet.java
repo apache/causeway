@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.ordering.actionorder;
 
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
-import org.apache.isis.core.metamodel.facets.ordering.FieldOrderFacet;
 import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
+import org.apache.isis.core.metamodel.layout.ordermethod.FieldOrderFacet;
 
 /**
  * (One of the) mechanism(s) for determining the order in which the actions of the object should be rendered.

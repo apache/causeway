@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.actions.choices;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * Obtain choices for each of the parameters of the action.

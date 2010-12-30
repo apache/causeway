@@ -377,7 +377,7 @@ public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
 	public String toString() {
 		return "AutoMapper [table=" + table + ",id=" + idMapping
 				+ ",noColumns=" + fieldMappings.size() + ",specification="
-				+ specification.getFullName() + "]";
+				+ specification.getFullIdentifier() + "]";
 	}
 
 	@Override

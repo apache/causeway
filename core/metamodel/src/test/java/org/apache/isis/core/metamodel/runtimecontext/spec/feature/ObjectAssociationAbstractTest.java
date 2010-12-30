@@ -27,23 +27,26 @@ import org.jmock.Expectations;
 import org.jmock.Mockery;
 import org.jmock.integration.junit4.JMock;
 import org.jmock.integration.junit4.JUnit4Mockery;
+import org.jmock.lib.legacy.ClassImposteriser;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions.VisibilityContext;
-import org.apache.isis.core.metamodel.spec.identifier.IdentifiedImpl;
+import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions2.VisibilityContext;
+import org.apache.isis.core.metamodel.peer.FacetedMethod;
+import org.apache.isis.core.metamodel.peer.ObjectAssociationAbstract;
+import org.apache.isis.core.metamodel.spec.Instance;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 
 
@@ -51,15 +54,23 @@ import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 public class ObjectAssociationAbstractTest {
 
     private ObjectAssociationAbstract objectAssociation;
-    private IdentifiedImpl facetHolder;
+    private FacetedMethod facetedMethod;
     
-    private Mockery context = new JUnit4Mockery();
+    private Mockery context = new JUnit4Mockery() {{
+        setImposteriser(ClassImposteriser.INSTANCE);
+    }};
 
+    public static class Customer {
+        private String firstName;
+        public String getFirstName() {
+            return firstName;
+        }
+    }
     @Before
     public void setup() {
-        facetHolder = new IdentifiedImpl();
-        objectAssociation = new ObjectAssociationAbstract("id", new TestProxySpecification("test"),
-            FeatureType.PROPERTY, facetHolder, null, null, null, null) {
+        facetedMethod = FacetedMethod.createProperty(Customer.class, "firstName");
+        objectAssociation = new ObjectAssociationAbstract(facetedMethod, FeatureType.PROPERTY,
+            new TestProxySpecification("test"), new ObjectMemberContext(null, null, null, null)) {
 
             @Override
             public ObjectAdapter get(ObjectAdapter fromObject) {
@@ -116,14 +127,14 @@ public class ObjectAssociationAbstractTest {
     public void notPersistedWhenDerived() throws Exception {
     	// TODO: ISIS-5, need to reinstate DerivedFacet
         final NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
-		facetHolder.addFacet(mockFacet);
+		facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
     @Test
     public void notPersistedWhenFlaggedAsNotPersisted() throws Exception {
     	NotPersistedFacet mockFacet = mockFacetIgnoring(NotPersistedFacet.class);
-        facetHolder.addFacet(mockFacet);
+        facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isNotPersisted());
     }
 
@@ -140,7 +151,7 @@ public class ObjectAssociationAbstractTest {
     @Test
     public void hidden() throws Exception {
     	HiddenFacet mockFacet = mockFacetIgnoring(HiddenFacet.class);
-        facetHolder.addFacet(mockFacet);
+        facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isAlwaysHidden());
     }
 
@@ -152,7 +163,7 @@ public class ObjectAssociationAbstractTest {
     @Test
     public void mandatory() throws Exception {
     	MandatoryFacet mockFacet = mockFacetIgnoring(MandatoryFacet.class);
-        facetHolder.addFacet(mockFacet);
+        facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.isMandatory());
     }
 
@@ -164,7 +175,7 @@ public class ObjectAssociationAbstractTest {
     @Test
     public void hasChoices() throws Exception {
     	PropertyChoicesFacet mockFacet = mockFacetIgnoring(PropertyChoicesFacet.class);
-        facetHolder.addFacet(mockFacet);
+        facetedMethod.addFacet(mockFacet);
         assertTrue(objectAssociation.hasChoices());
     }
 

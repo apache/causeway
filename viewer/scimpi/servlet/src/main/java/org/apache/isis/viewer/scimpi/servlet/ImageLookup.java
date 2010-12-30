@@ -104,7 +104,7 @@ public class ImageLookup {
     }
 
     private static String findImageFor(ObjectSpecification specification, String contextPath) {
-        String name = specification.getShortName();
+        String name = specification.getShortIdentifier();
         String fileName = imageFile(name, contextPath);
         if (fileName != null) {
             images.put(name, fileName);
@@ -143,7 +143,7 @@ public class ImageLookup {
     }
 */
     public static String imagePath(ObjectSpecification specification, String contextPath) {
-        String name = specification.getShortName();
+        String name = specification.getShortIdentifier();
         String imageName = (String) images.get(name);
         if (imageName != null) {
             return (String) imageName;

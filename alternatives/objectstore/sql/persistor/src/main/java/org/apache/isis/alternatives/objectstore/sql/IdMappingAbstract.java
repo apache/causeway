@@ -101,7 +101,7 @@ public class IdMappingAbstract {
 			int id = ((Integer) object).intValue();
 			key = new IntegerPrimaryKey(id);
 		}
-		Oid oid = new SqlOid(specification.getFullName(), key, State.PERSISTENT);
+		Oid oid = new SqlOid(specification.getFullIdentifier(), key, State.PERSISTENT);
 		return oid;
 	}
 

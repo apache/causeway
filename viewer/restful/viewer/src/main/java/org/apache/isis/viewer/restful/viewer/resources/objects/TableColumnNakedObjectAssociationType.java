@@ -23,7 +23,7 @@ public final class TableColumnNakedObjectAssociationType<T extends ObjectAssocia
 
     @Override
     public Element doTd(final T association) {
-        final String assocTypeFullName = association.getSpecification().getFullName();
+        final String assocTypeFullName = association.getSpecification().getFullIdentifier();
         final String uri = MessageFormat.format("{0}/specs/{1}", getContextPath(), assocTypeFullName);
         return xhtmlRenderer.aHref(uri, assocTypeFullName, "propertyTypeSpec", "property", HtmlClass.PROPERTY);
     }

@@ -21,12 +21,12 @@
 package org.apache.isis.core.progmodel.facets.object.bounded;
 
 import org.apache.isis.applib.annotation.Bounded;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetUtil;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.facets.FacetUtil;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 
 
 public class BoundedAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {

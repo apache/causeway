@@ -59,7 +59,7 @@ public abstract class ImageProviderAbstract implements ImageProvider {
             return image((String)null);
         }
         
-        final String specShortName = specification.getShortName();
+        final String specShortName = specification.getShortIdentifier();
         final String imageName = image(specShortName);
         if (imageName != null) {
             return imageName;

@@ -21,10 +21,10 @@
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
-import org.apache.isis.core.metamodel.util.ClassUtil;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
 public final class ParserUtil {

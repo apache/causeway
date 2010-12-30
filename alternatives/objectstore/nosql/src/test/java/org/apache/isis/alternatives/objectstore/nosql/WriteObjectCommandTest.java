@@ -108,14 +108,14 @@ public class WriteObjectCommandTest {
         
         
         context.checking(new Expectations(){{
-            one(commandContext).createStateWriter(specification.getFullName());
+            one(commandContext).createStateWriter(specification.getFullIdentifier());
             will(returnValue(writer));
             
             one(keyCreator).key(SerialOid.createPersistent(3));
             will(returnValue("3"));
 
             one(writer).writeId("3");
-            one(writer).writeType(specification.getFullName());
+            one(writer).writeType(specification.getFullIdentifier());
             one(writer).writeField("name", "Fred Smith");
             one(writer).writeField("size", "108");
             one(writer).writeField("nullable", null);
@@ -137,7 +137,7 @@ public class WriteObjectCommandTest {
     public void objectWithReferences() throws Exception {
      
         context.checking(new Expectations(){{
-            one(commandContext).createStateWriter(object3.getSpecification().getFullName());
+            one(commandContext).createStateWriter(object3.getSpecification().getFullIdentifier());
             will(returnValue(writer));
             
             one(keyCreator).key(SerialOid.createPersistent(5));
@@ -146,7 +146,7 @@ public class WriteObjectCommandTest {
             will(returnValue("ref@3"));
             
             one(writer).writeId("5");
-            one(writer).writeType(object3.getSpecification().getFullName());
+            one(writer).writeType(object3.getSpecification().getFullIdentifier());
             one(writer).writeField("reference1", "ref@3");
             one(writer).writeField("reference2", null);
             one(writer).writeVersion(null, "2");
@@ -167,13 +167,13 @@ public class WriteObjectCommandTest {
     public void objectWithCollections() throws Exception {
         
         context.checking(new Expectations(){{
-            one(commandContext).createStateWriter(object4.getSpecification().getFullName());
+            one(commandContext).createStateWriter(object4.getSpecification().getFullIdentifier());
             will(returnValue(writer));
 
             one(keyCreator).key(SerialOid.createPersistent(6));
             will(returnValue("6"));
             one(writer).writeId("6");
-            one(writer).writeType(object4.getSpecification().getFullName());
+            one(writer).writeType(object4.getSpecification().getFullIdentifier());
 
             one(keyCreator).reference(object1);
             will(returnValue("ref@3"));

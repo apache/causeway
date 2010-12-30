@@ -24,8 +24,8 @@ import java.util.List;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
-import org.apache.isis.core.metamodel.feature.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {

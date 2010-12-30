@@ -20,10 +20,9 @@
 
 package org.apache.isis.core.metamodel.spec;
 
-import org.apache.isis.core.metamodel.adapter.Instance;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.feature.FeatureType;
-import org.apache.isis.core.metamodel.feature.IdentifiedHolder;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
@@ -41,10 +40,17 @@ import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
  * Introduces so that viewers can deal with abstract Instances of said.
  * 
  */
-public interface Specification extends IdentifiedHolder, NamedAndDescribed {
-
+public interface Specification extends IdentifiedHolder {
     
+
     FeatureType getFeatureType();
+
+    /**
+     * Returns a description of how the member is used - this complements the help text.
+     * 
+     * @see #getHelp()
+     */
+    String getDescription();
 
     /**
      * Return an {@link Instance} of this {@link Specification} with respect

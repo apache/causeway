@@ -20,10 +20,10 @@
 package org.apache.isis.core.metamodel.facets.propparam.validate.mandatory;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
 
 /**
  * Whether a property or a parameter is mandatory (not optional).

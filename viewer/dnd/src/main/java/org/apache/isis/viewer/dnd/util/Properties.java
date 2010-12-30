@@ -129,9 +129,9 @@ public class Properties {
         Options settingsOptions = getOptions("views.type-default");
         String name;
         if (specification.isCollection()) {
-            name = "collection:" + specification.getFacet(TypeOfFacet.class).valueSpec().getFullName();
+            name = "collection:" + specification.getFacet(TypeOfFacet.class).valueSpec().getFullIdentifier();
         } else {
-            name = specification.getFullName();
+            name = specification.getFullIdentifier();
         }
         Options viewOptions = settingsOptions.getOptions(name);
         return viewOptions;

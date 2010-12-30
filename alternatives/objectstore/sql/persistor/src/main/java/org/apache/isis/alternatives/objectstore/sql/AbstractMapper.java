@@ -66,7 +66,7 @@ public abstract class AbstractMapper {
                 key = new IntegerPrimaryKey(id);
             }
         }
-        Oid oid = new SqlOid(cls.getFullName(), key, State.PERSISTENT);
+        Oid oid = new SqlOid(cls.getFullIdentifier(), key, State.PERSISTENT);
         return oid;
     }
 

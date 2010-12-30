@@ -20,9 +20,9 @@
 
 package org.apache.isis.viewer.dnd.view.window;
 
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.UserAction;
@@ -54,8 +54,8 @@ public class ResizeWindowControl extends WindowControl {
                 return "";
             }
 
-            public ObjectActionType getType() {
-                return ObjectActionType.USER;
+            public ActionType getType() {
+                return ActionType.USER;
             }
 
             public String getName(final View view) {

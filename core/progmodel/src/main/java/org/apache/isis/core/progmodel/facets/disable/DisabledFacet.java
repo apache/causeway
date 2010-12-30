@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.disable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.DisablingInteractionAdvisor;
 
 /**
  * Disable a property, collection or action.

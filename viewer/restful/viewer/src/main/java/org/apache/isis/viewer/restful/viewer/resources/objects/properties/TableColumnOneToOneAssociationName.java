@@ -27,7 +27,7 @@ public class TableColumnOneToOneAssociationName extends TableColumnNakedObjectMe
     public Element doTd(final OneToOneAssociation oneToOneAssociation) {
         final String memberName = oneToOneAssociation.getIdentifier().getMemberName();
         final String memberType = "property";
-        final String uri = MessageFormat.format("{0}/specs/{1}/{2}/{3}", getContextPath(), getNoSpec().getFullName(), memberType,
+        final String uri = MessageFormat.format("{0}/specs/{1}/{2}/{3}", getContextPath(), getNoSpec().getFullIdentifier(), memberType,
                 memberName);
         return new Element(xhtmlRenderer.aHref(uri, oneToOneAssociation.getName(), "propertySpec", memberType, HtmlClass.PROPERTY));
     }

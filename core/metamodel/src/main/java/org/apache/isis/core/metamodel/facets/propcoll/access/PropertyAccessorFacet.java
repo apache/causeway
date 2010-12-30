@@ -20,7 +20,7 @@
 package org.apache.isis.core.metamodel.facets.propcoll.access;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 
 /**
  * The mechanism by which the value of the property can be accessed.

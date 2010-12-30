@@ -34,26 +34,26 @@ import java.util.Set;
 
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetFactory;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
-import org.apache.isis.core.metamodel.facets.MethodRemover;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.progmodelfacets.ProgrammingModelFacets;
 
 
 public class FacetProcessor implements RuntimeContextAware {
 
     private final IsisConfiguration configuration;
     private final CollectionTypeRegistry collectionTypeRegistry;
-    private final ProgrammingModelFacets programmingModelFacets;
+    private final ProgrammingModel programmingModel;
     
     private final SpecificationLoader specificationLoader;
 	private RuntimeContext runtimeContext;
@@ -118,15 +118,15 @@ public class FacetProcessor implements RuntimeContextAware {
     		final IsisConfiguration configuration, 
     		final SpecificationLoader specificationLoader, 
     		final CollectionTypeRegistry collectionTypeRegistry, 
-    		final ProgrammingModelFacets programmingModelFacets) {
+    		final ProgrammingModel programmingModel) {
         ensureThatState(configuration, is(notNullValue()));
         ensureThatState(collectionTypeRegistry, is(notNullValue()));
-        ensureThatState(programmingModelFacets, is(notNullValue()));
+        ensureThatState(programmingModel, is(notNullValue()));
         ensureThatState(specificationLoader, is(notNullValue()));
     	
     	this.configuration = configuration;
     	this.specificationLoader = specificationLoader;
-    	this.programmingModelFacets = programmingModelFacets;
+    	this.programmingModel = programmingModel;
     	this.collectionTypeRegistry = collectionTypeRegistry;
     }
     
@@ -136,8 +136,8 @@ public class FacetProcessor implements RuntimeContextAware {
     
     public void init() {
         ensureThatState(runtimeContext, is(notNullValue()));
-        programmingModelFacets.init();
-        final List<FacetFactory> facetFactoryList = programmingModelFacets.getList();
+        programmingModel.init();
+        final List<FacetFactory> facetFactoryList = programmingModel.getList();
         for (final FacetFactory facetFactory : facetFactoryList) {
             registerFactory(facetFactory);
         }
@@ -155,8 +155,7 @@ public class FacetProcessor implements RuntimeContextAware {
     }
 
     /**
-     * This is <tt>public</tt> so that can be used for <tt>@Facets</tt> processing 
-     * (eg in <tt>JavaIntrospector</tt>).
+     * This is <tt>public</tt> so that can be used for <tt>@Facets</tt> processing. 
      *
      * <p>
      * See NOF bug-517.
@@ -180,7 +179,7 @@ public class FacetProcessor implements RuntimeContextAware {
      * <p>
      * Delegates to all known {@link PropertyOrCollectionIdentifyingFacetFactory}s.
      */
-    public Set<Method> findPropertyOrCollectionCandidateAccessors(final List<Method> methods, final Set<Method> candidates) {
+    public Set<Method> findAssociationCandidateAccessors(final List<Method> methods, final Set<Method> candidates) {
         cachePropertyOrCollectionIdentifyingFacetFactoriesIfRequired();
         for (Method method: methods) {
             if (method == null) {

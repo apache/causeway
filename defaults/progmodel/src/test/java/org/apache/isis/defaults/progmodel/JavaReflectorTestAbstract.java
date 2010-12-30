@@ -23,14 +23,26 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+import org.jmock.Expectations;
+import org.jmock.Mockery;
+import org.jmock.integration.junit4.JMock;
+import org.jmock.integration.junit4.JUnit4Mockery;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
-import org.apache.isis.core.metamodel.facets.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
+import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
@@ -47,17 +59,6 @@ import org.apache.isis.core.runtime.session.IsisSessionFactoryDefault;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.testsystem.TestClassSubstitutor;
 import org.apache.isis.core.runtime.userprofile.UserProfileLoader;
-import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
-import org.jmock.Expectations;
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 
 @RunWith(JMock.class)
 public abstract class JavaReflectorTestAbstract {
@@ -98,7 +99,7 @@ public abstract class JavaReflectorTestAbstract {
 
         final ObjectReflectorDefault reflector =
             new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
-                new SpecificationTraverserDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
+                new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
                 new MetaModelValidatorNoop());
         reflector.setRuntimeContext(new RuntimeContextFromSession());
         reflector.init();

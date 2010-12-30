@@ -22,11 +22,11 @@ package org.apache.isis.core.metamodel.spec.feature;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.interactions.AccessContext;
-import org.apache.isis.core.metamodel.interactions.InteractionContext;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.interactions2.AccessContext;
+import org.apache.isis.core.metamodel.interactions2.InteractionContext;
+import org.apache.isis.core.metamodel.interactions2.ValidityContext;
 
 
 public interface OneToManyAssociation extends ObjectAssociation, OneToManyFeature {

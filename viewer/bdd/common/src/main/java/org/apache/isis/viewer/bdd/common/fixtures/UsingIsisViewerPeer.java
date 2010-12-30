@@ -10,11 +10,11 @@ import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectActionSet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.viewer.bdd.common.AliasRegistry;
@@ -226,9 +226,9 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         objectMembers.addAll(spec.getAssociations());
 
         // see if action (of any type)
-        objectMembers.addAll(spec.getObjectActions(ObjectActionType.USER));
-        objectMembers.addAll(spec.getObjectActions(ObjectActionType.EXPLORATION));
-        objectMembers.addAll(spec.getObjectActions(ObjectActionType.DEBUG));
+        objectMembers.addAll(spec.getObjectActions(ActionType.USER));
+        objectMembers.addAll(spec.getObjectActions(ActionType.EXPLORATION));
+        objectMembers.addAll(spec.getObjectActions(ActionType.DEBUG));
         for (final ObjectMember member : objectMembers) {
             if (matchesId(member, memberId)) {
                 return member;

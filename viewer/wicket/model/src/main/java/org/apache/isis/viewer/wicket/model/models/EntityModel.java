@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Consent;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.viewer.wicket.model.mementos.ObjectAdapterMemento;
@@ -70,7 +70,7 @@ public class EntityModel extends ModelAbstract<ObjectAdapter> {
 
 			PageParameterNames.OBJECT_OID.addTo(pageParameters, oidStr);
 			PageParameterNames.OBJECT_SPEC.addTo(pageParameters, noSpec
-					.getFullName());
+					.getFullIdentifier());
 		} else {
 			// don't do anything; instead the page should be redirected back to
 			// an EntityPage so that the underlying EntityModel that contains the

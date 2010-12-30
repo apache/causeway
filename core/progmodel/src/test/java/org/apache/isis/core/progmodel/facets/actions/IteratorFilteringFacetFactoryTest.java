@@ -24,7 +24,7 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.feature.FeatureType;
+import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 

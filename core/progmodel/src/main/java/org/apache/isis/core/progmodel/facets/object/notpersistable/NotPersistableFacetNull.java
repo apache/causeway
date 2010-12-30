@@ -21,9 +21,10 @@
 package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacetAbstract;
+import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
 import org.apache.isis.core.progmodel.facets.FallbackFacetFactory;
 
 

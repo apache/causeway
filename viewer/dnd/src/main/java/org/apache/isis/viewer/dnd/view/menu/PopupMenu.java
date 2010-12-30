@@ -26,10 +26,10 @@ import java.util.Vector;
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.consent.Veto;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent2.Veto;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
@@ -228,7 +228,7 @@ public class PopupMenu extends AbstractView {
             final UserAction[] options,
             final int len,
             final Vector list,
-            final ObjectActionType type) {
+            final ActionType type) {
         final int initialSize = list.size();
         for (int i = 0; i < len; i++) {
             if (options[i].getType() == type) {
@@ -556,10 +556,10 @@ public class PopupMenu extends AbstractView {
             items = new Item[] { Item.createNoOption() };
         } else {
             final Vector list = new Vector();
-            addItems(target, options, len, list, ObjectActionType.USER);
-            addItems(target, options, len, list, ObjectActionType.EXPLORATION);
-            addItems(target, options, len, list, ObjectActionType.PROTOTYPE);
-            addItems(target, options, len, list, ObjectActionType.DEBUG);
+            addItems(target, options, len, list, ActionType.USER);
+            addItems(target, options, len, list, ActionType.EXPLORATION);
+            addItems(target, options, len, list, ActionType.PROTOTYPE);
+            addItems(target, options, len, list, ActionType.DEBUG);
             items = new Item[list.size()];
             list.copyInto(items);
         }

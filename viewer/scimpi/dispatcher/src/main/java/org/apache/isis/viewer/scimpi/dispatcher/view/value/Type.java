@@ -30,13 +30,14 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Type extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         RequestContext context = request.getContext();
         String showPlural = request.getOptionalProperty(PLURAL);
         String id = request.getOptionalProperty(OBJECT);
         String objectId = id != null ? id : (String) context.getVariable(RequestContext.RESULT);
         
-        ObjectAdapter object = (ObjectAdapter) context.getMappedObjectOrResult(objectId);
+        ObjectAdapter object = context.getMappedObjectOrResult(objectId);
         String field = request.getOptionalProperty(FIELD);
         if (field != null) {
             ObjectAssociation objectField = object.getSpecification().getAssociation(field);
@@ -45,11 +46,12 @@ public class Type extends AbstractElementProcessor {
         request.appendDebug(" for " + object); 
         
         ObjectSpecification specification = object.getSpecification();
-        String name = showPlural != null ? specification.getPluralName() : specification.getName();
+        String name = showPlural != null ? specification.getPluralName() : specification.getSingularName();
         
         request.appendHtml(name);
     }
 
+    @Override
     public String getName() {
         return "type";
     }

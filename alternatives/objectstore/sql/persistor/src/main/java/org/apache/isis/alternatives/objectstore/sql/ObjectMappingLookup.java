@@ -24,6 +24,8 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -34,7 +36,6 @@ import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
-import org.apache.log4j.Logger;
 
 
 public class ObjectMappingLookup implements DebugInfo {
@@ -48,10 +49,10 @@ public class ObjectMappingLookup implements DebugInfo {
         ObjectMapping mapping = mappings.get(spec);
         if (mapping == null) {
             String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper.default";
-            mapping = (ObjectMapping) objectMappingFactory.createMapper(spec.getFullName(), propertiesBase, fieldMappingLookup, this);
+            mapping = objectMappingFactory.createMapper(spec.getFullIdentifier(), propertiesBase, fieldMappingLookup, this);
             add(spec, mapping, connection); 
         }
-        LOG.debug("  mapper for " + spec.getName() + " -> " + mapping);
+        LOG.debug("  mapper for " + spec.getSingularName() + " -> " + mapping);
         if (mapping == null) {
             throw new IsisException("No mapper for " + spec + " (no default mapper)");
         }
@@ -78,7 +79,7 @@ public class ObjectMappingLookup implements DebugInfo {
     private void add(final String className, final ObjectMapping mapper) {
         ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(className);
         if (spec.getProperties().size() == 0) {
-            throw new SqlObjectStoreException(spec.getFullName() + " has no fields to persist: " + spec);
+            throw new SqlObjectStoreException(spec.getFullIdentifier() + " has no fields to persist: " + spec);
         }
         add(spec, mapper, null);
     }
@@ -100,7 +101,7 @@ public class ObjectMappingLookup implements DebugInfo {
         IsisConfiguration subset = IsisContext.getConfiguration().createSubset(prefix);
         Enumeration<String> e = subset.propertyNames();
         while (e.hasMoreElements()) {
-            String className = (String) e.nextElement();
+            String className = e.nextElement();
             String value = subset.getString(className);
 
             if (value.startsWith("auto.")) {
@@ -131,13 +132,14 @@ public class ObjectMappingLookup implements DebugInfo {
         }
     }
 
+    @Override
     public void debugData(DebugString debug) {
         debug.appendln("field mapping lookup", fieldMappingLookup);
         debug.appendln("object mapping factory", objectMappingFactory);
         debug.appendTitle("Mappings");
         int i = 1;
         for (ObjectSpecification specification : mappings.keySet()) {
-            debug.appendln(i++ + ". " + specification.getShortName());
+            debug.appendln(i++ + ". " + specification.getShortIdentifier());
            ObjectMapping mapper = mappings.get(specification);
            debug.indent();
            debug.append(mapper);
@@ -145,6 +147,7 @@ public class ObjectMappingLookup implements DebugInfo {
          }
     }
 
+    @Override
     public String debugTitle() {
         return "Object Mapping Lookup";
     }

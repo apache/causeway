@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.object.immutable;
 
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.DisablingInteractionAdvisor;
 
 /**
  * Indicates that the instances of this class are immutable and so may not be modified either through the viewer or

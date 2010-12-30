@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.propparam.typicallength;
 
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 

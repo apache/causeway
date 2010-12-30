@@ -36,8 +36,8 @@ import org.apache.isis.alternatives.remoting.common.facade.impl.ServerFacadeImpl
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -142,7 +142,7 @@ public class ServerFacadeImpl_RemoteActionTest {
 
         IsisContext.getTransactionManager().startTransaction();
         ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ObjectActionType.USER, 
+                ActionType.USER, 
                 "action()", 
                 targetData, 
                 parameterData);
@@ -180,7 +180,7 @@ public class ServerFacadeImpl_RemoteActionTest {
 
         IsisContext.getUpdateNotifier().addDisposedObject(adapter);
         ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ObjectActionType.USER, 
+                ActionType.USER, 
                 "action()", 
                 targetData, 
                 parameterData);
@@ -219,7 +219,7 @@ public class ServerFacadeImpl_RemoteActionTest {
         IsisContext.getUpdateNotifier().addChangedObject(adapter);
         
         ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ObjectActionType.USER, 
+                ActionType.USER, 
                 "action()", 
                 targetData, 
                 parameterData);
@@ -258,7 +258,7 @@ public class ServerFacadeImpl_RemoteActionTest {
 
 
         ExecuteServerActionRequest request = new ExecuteServerActionRequest(new TestProxySession(), 
-                ObjectActionType.USER, 
+                ActionType.USER, 
                 "action()", 
                 targetData, 
                 parameterData);

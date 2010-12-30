@@ -20,8 +20,8 @@
 package org.apache.isis.core.metamodel.facets.object.bounded;
 
 import org.apache.isis.core.metamodel.facets.MarkerFacet;
-import org.apache.isis.core.metamodel.interactions.DisablingInteractionAdvisor;
-import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.DisablingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
 
 /**
  * Whether the number of instances of this class is bounded.

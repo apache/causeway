@@ -22,11 +22,11 @@ package org.apache.isis.core.progmodel.facets.propparam.validate.mask;
 
 import org.apache.isis.applib.events.ValidityEvent;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.Facet;
-import org.apache.isis.core.metamodel.facets.FacetHolder;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacetAbstract;
-import org.apache.isis.core.metamodel.interactions.ProposedHolder;
-import org.apache.isis.core.metamodel.interactions.ValidityContext;
+import org.apache.isis.core.metamodel.interactions2.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions2.ValidityContext;
 
 
 public abstract class MaskFacetAbstract extends SingleStringValueFacetAbstract implements MaskFacet {

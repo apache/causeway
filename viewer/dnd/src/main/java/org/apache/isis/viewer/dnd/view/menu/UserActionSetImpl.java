@@ -24,10 +24,10 @@ import java.util.Vector;
 
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.consent.Allow;
-import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent2.Allow;
+import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
-import org.apache.isis.core.metamodel.spec.feature.ObjectActionType;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -48,9 +48,9 @@ public class UserActionSetImpl implements UserActionSet {
     private final boolean includeExploration;
     private final boolean includePrototype;
     private final Vector options = new Vector();
-    private final ObjectActionType type;
+    private final ActionType type;
 
-    public UserActionSetImpl(final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final ObjectActionType type) {
+    public UserActionSetImpl(final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final ActionType type) {
     	this("", type, includeExploration, includePrototype, includeDebug, Toolkit.getColor(ColorsAndFonts.COLOR_DEBUG_BASELINE)); 
     }
 
@@ -58,11 +58,11 @@ public class UserActionSetImpl implements UserActionSet {
     	this(groupName, parent, parent.getType());
     }
 
-    private UserActionSetImpl(final String groupName, final UserActionSetImpl parent, final ObjectActionType type) {
+    private UserActionSetImpl(final String groupName, final UserActionSetImpl parent, final ActionType type) {
     	this(groupName, type, parent.includeExploration, parent.includePrototype, parent.includeDebug, parent.getColor());
     }
 
-    private UserActionSetImpl(final String groupName, final ObjectActionType type, final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final Color backgroundColor) {
+    private UserActionSetImpl(final String groupName, final ActionType type, final boolean includeExploration, final boolean includePrototype, final boolean includeDebug, final Color backgroundColor) {
         this.groupName = groupName;
         this.type = type;
         this.includeExploration = includeExploration;
@@ -77,7 +77,7 @@ public class UserActionSetImpl implements UserActionSet {
         return set;
     }
 
-    public UserActionSet addNewActionSet(String name, ObjectActionType type) {
+    public UserActionSet addNewActionSet(String name, ActionType type) {
         UserActionSetImpl set = new UserActionSetImpl(name, this, type);
         add(set);
         return set;
@@ -87,11 +87,11 @@ public class UserActionSetImpl implements UserActionSet {
      * Add the specified option if it is of the right type for this menu.
      */
     public void add(final UserAction option) {
-        final ObjectActionType section = option.getType();
-        if (section == ObjectActionType.USER || 
-        	(includeExploration && section == ObjectActionType.EXPLORATION) || 
-        	(includePrototype && section == ObjectActionType.PROTOTYPE) || 
-        	(includeDebug && section == ObjectActionType.DEBUG)) {
+        final ActionType section = option.getType();
+        if (section == ActionType.USER || 
+        	(includeExploration && section == ActionType.EXPLORATION) || 
+        	(includePrototype && section == ActionType.PROTOTYPE) || 
+        	(includeDebug && section == ActionType.DEBUG)) {
             options.addElement(option);
         }
     }
@@ -129,7 +129,7 @@ public class UserActionSetImpl implements UserActionSet {
         return groupName;
     }
 
-    public ObjectActionType getType() {
+    public ActionType getType() {
         return type;
     }
 
