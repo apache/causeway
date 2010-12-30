@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.propparam.validate.mask;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleStringValueFacet;
-import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.progmodel.facets.propparam.validate.regex.RegExFacet;
 
 /**

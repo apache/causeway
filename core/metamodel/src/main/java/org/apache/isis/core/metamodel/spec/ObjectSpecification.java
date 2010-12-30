@@ -22,13 +22,16 @@ package org.apache.isis.core.metamodel.spec;
 
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import com.google.common.base.Function;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.consent2.Consent;
-import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent2.InteractionResult;
+import org.apache.isis.core.metamodel.consent.Consent;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
@@ -42,9 +45,9 @@ import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.interactions2.InteractionContext;
-import org.apache.isis.core.metamodel.interactions2.ObjectTitleContext;
-import org.apache.isis.core.metamodel.interactions2.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionContext;
+import org.apache.isis.core.metamodel.interactions.ObjectTitleContext;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionContainer;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 
@@ -64,6 +67,25 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationContainer;
 public interface ObjectSpecification extends Specification, ObjectActionContainer, ObjectAssociationContainer, Hierarchical, Dirtiable, DefaultProvider {
 
     public final static List<ObjectSpecification> EMPTY_LIST = Collections.emptyList();
+    
+    public final static Function<ObjectSpecification,String> FUNCTION_FULLY_QUALIFIED_CLASS_NAME = new Function<ObjectSpecification,String>(){
+        @Override
+        public String apply(ObjectSpecification from) {
+            return from.getFullIdentifier();
+        }};
+    public final static Comparator<ObjectSpecification> COMPARATOR_FULLY_QUALIFIED_CLASS_NAME = new Comparator<ObjectSpecification>() {
+    @Override
+    public int compare(ObjectSpecification o1,
+            ObjectSpecification o2) {
+        return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
+    }};
+    public final static Comparator<ObjectSpecification> COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE = new Comparator<ObjectSpecification>() {
+        @Override
+        public int compare(final ObjectSpecification s1,
+            final ObjectSpecification s2) {
+            return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
+        }
+    };
 
 
     /**

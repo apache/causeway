@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions2.ObjectValidityContext;
-import org.apache.isis.core.metamodel.interactions2.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class ValidateObjectFacetAbstract extends FacetAbstract implements ValidateObjectFacet {

@@ -3,14 +3,16 @@ package org.apache.isis.viewer.restful.viewer.resources.specs;
 import java.beans.IntrospectionException;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.ws.rs.Path;
 import javax.ws.rs.WebApplicationException;
 
 import nu.xom.Element;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.spec.ActionType;
@@ -35,10 +37,6 @@ import org.apache.isis.viewer.restful.viewer.util.ActionUtils;
 @Path("/specs")
 public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource {
 
-    // /////////////////////////////////////////////////////////////////////
-    // specs
-    // /////////////////////////////////////////////////////////////////////
-
     @Override
     public String specs() {
         init();
@@ -51,8 +49,10 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
         final Element div = xhtmlRenderer.div_p("Specifications", HtmlClass.SECTION);
 
         final Element ul = xhtmlRenderer.ul(HtmlClass.SPECIFICATIONS);
-        final ObjectSpecification[] allSpecifications = getSpecificationLoader().allSpecifications();
-        for (final ObjectSpecification spec : sorted(allSpecifications)) {
+        final ArrayList<ObjectSpecification> allSpecs = Lists.newArrayList(getSpecificationLoader().allSpecifications());
+        Collections.sort(allSpecs, ObjectSpecification.COMPARATOR_FULLY_QUALIFIED_CLASS_NAME);
+        final List<ObjectSpecification> sorted = allSpecs;
+        for (final ObjectSpecification spec : sorted) {
             final String specFullName = spec.getFullIdentifier();
             final String uri = MessageFormat.format("{0}/specs/{1}", getServletRequest().getContextPath(), specFullName);
             ul.appendChild(xhtmlRenderer.li_a(uri, specFullName, "spec", "specs", HtmlClass.SPECIFICATION));
@@ -64,18 +64,6 @@ public class SpecsResourceImpl extends ResourceAbstract implements SpecsResource
 		return xhtml.toXML();
     }
 
-	private ObjectSpecification[] sorted(
-			final ObjectSpecification[] noSpecs) {
-		Arrays.sort(
-				noSpecs, 
-				new Comparator<ObjectSpecification>() {
-			@Override
-            public int compare(ObjectSpecification o1,
-					ObjectSpecification o2) {
-				return o1.getFullIdentifier().compareTo(o2.getFullIdentifier());
-			}});
-		return noSpecs;
-	}
 
     private SpecificationLoader getSpecificationLoader() {
         return IsisContext.getSpecificationLoader();

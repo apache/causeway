@@ -30,9 +30,9 @@ import org.apache.log4j.LogManager;
 
 import com.google.common.collect.ImmutableList;
 
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
 
 
 public class DeweyOrderSetTest extends TestCase {

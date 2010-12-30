@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.OrderSet;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MemberLayoutArrangerUsingMemberOrderFacet implements MemberLayoutArranger {

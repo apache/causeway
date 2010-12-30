@@ -25,7 +25,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
-import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;

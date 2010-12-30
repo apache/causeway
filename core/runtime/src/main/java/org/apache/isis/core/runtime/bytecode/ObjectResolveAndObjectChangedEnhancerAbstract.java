@@ -29,7 +29,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
-import org.apache.isis.core.metamodel.specloader.internal.spec.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectChanger;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectResolver;
 

@@ -31,16 +31,16 @@ import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
-import org.apache.isis.core.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetInferred;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
-import org.apache.isis.core.metamodel.peer.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetViaMethod;
@@ -334,7 +334,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
         final Object[] parameterObjects = new Object[method.getParameterTypes().length];
         final String[] names = (String[]) InvokeUtils.invokeStatic(method, parameterObjects);
         if (names.length != parameters.size()) {
-            throw new ReflectionException("Invalid number of parameter names, expected " + parameters.size() + ", but got "
+            throw new MetaModelException("Invalid number of parameter names, expected " + parameters.size() + ", but got "
                     + names.length + ", on " + method);
         }
         for (int i = 0; i < names.length; i++) {
@@ -363,7 +363,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
 
             if (method != null) {
                 if (oldChoicesOrDefaultsMethodsUsed) {
-                    throw new ReflectionException(cls + " uses both old and new choices/default syntax - must use one or other");
+                    throw new MetaModelException(cls + " uses both old and new choices/default syntax - must use one or other");
                 }
 
                 removeMethod(methodRemover, method);
@@ -389,7 +389,7 @@ public class ActionMethodsFacetFactory extends MethodPrefixBasedFacetFactoryAbst
 
             if (method != null) {
                 if (oldChoicesOrDefaultsMethodsUsed) {
-                    throw new ReflectionException(cls + " uses both old and new choices/default syntax - must use one or other");
+                    throw new MetaModelException(cls + " uses both old and new choices/default syntax - must use one or other");
                 }
 
                 removeMethod(methodRemover, method);

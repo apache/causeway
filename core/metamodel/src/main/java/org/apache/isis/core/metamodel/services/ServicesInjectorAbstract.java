@@ -37,7 +37,7 @@ import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 
 
 public abstract class ServicesInjectorAbstract implements ServicesInjector {
@@ -164,19 +164,19 @@ public abstract class ServicesInjectorAbstract implements ServicesInjector {
         try {
             method.invoke(target, parameters);
         } catch (final SecurityException e) {
-            throw new ReflectionException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass()
+            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass()
                     .getName()));
         } catch (final IllegalArgumentException e1) {
-            throw new ReflectionException(e1);
+            throw new MetaModelException(e1);
         } catch (final IllegalAccessException e1) {
-            throw new ReflectionException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass()
+            throw new MetaModelException(String.format("Cannot access the %s method in %s", method.getName(), target.getClass()
                     .getName()));
         } catch (final InvocationTargetException e) {
             final Throwable targetException = e.getTargetException();
             if (targetException instanceof RuntimeException) {
                 throw (RuntimeException) targetException;
             } else {
-                throw new ReflectionException(targetException);
+                throw new MetaModelException(targetException);
             }
         }
     }

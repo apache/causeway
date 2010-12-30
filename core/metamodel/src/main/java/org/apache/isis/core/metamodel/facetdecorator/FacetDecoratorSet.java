@@ -31,7 +31,7 @@ import java.util.Set;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.metamodel.exceptions.ReflectionException;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -157,7 +157,7 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 			Facet decoratingFacet, Class<? extends Facet> facetType,
 			FacetHolder originalFacetHolder) {
 		if (decoratingFacet.facetType() != facetType) {
-			throw new ReflectionException(
+			throw new MetaModelException(
 					MessageFormat
 							.format(
 									"Problem with facet decorator '{0}'; inconsistent decorating facetType() for {1}; was {2} but expectected facetType() of {3}",
@@ -169,7 +169,7 @@ public class FacetDecoratorSet implements ApplicationScopedComponent {
 		Facet facetForFacetType = originalFacetHolder.getFacet(decoratingFacet
 				.facetType());
 		if (facetForFacetType != decoratingFacet) {
-			throw new ReflectionException(
+			throw new MetaModelException(
 					MessageFormat
 							.format(
 									"Problem with facet decorator '{0}'; has not replaced original facet for facetType() of {1}",

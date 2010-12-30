@@ -26,7 +26,7 @@ import java.util.List;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
-import org.apache.isis.core.metamodel.specloader.internal.spec.ObjectSpecificationAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 

@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetProcessor;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 
 /**

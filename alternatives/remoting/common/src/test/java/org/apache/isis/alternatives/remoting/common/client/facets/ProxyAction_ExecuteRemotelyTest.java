@@ -44,7 +44,7 @@ import org.apache.isis.alternatives.remoting.common.exchange.ExecuteServerAction
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.testsystem.TestProxySystem;

@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.adapter;
 
-import org.apache.isis.core.metamodel.interactions2.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
 import org.apache.isis.core.metamodel.spec.Instance;
 import org.apache.isis.core.metamodel.spec.Specification;
 

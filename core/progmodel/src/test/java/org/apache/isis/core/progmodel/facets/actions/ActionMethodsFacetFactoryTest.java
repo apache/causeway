@@ -28,6 +28,7 @@ import org.apache.isis.applib.annotation.Named;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
@@ -42,7 +43,6 @@ import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
@@ -842,7 +842,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         try {
             facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
             fail("exception expected");
-        } catch (org.apache.isis.core.metamodel.exceptions.ReflectionException expected) {
+        } catch (org.apache.isis.core.metamodel.exceptions.MetaModelException expected) {
 
         }
     }
@@ -876,7 +876,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         try {
             facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
             fail("exception expected");
-        } catch (org.apache.isis.core.metamodel.exceptions.ReflectionException expected) {
+        } catch (org.apache.isis.core.metamodel.exceptions.MetaModelException expected) {
 
         }
     }
@@ -910,7 +910,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         try {
             facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
             fail("exception expected");
-        } catch (org.apache.isis.core.metamodel.exceptions.ReflectionException expected) {
+        } catch (org.apache.isis.core.metamodel.exceptions.MetaModelException expected) {
 
         }
     }
@@ -944,7 +944,7 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         try {
             facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolderWithParms);
             fail("exception expected");
-        } catch (org.apache.isis.core.metamodel.exceptions.ReflectionException expected) {
+        } catch (org.apache.isis.core.metamodel.exceptions.MetaModelException expected) {
 
         }
     }

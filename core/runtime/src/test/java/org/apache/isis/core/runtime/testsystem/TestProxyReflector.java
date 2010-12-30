@@ -19,9 +19,12 @@
 
 package org.apache.isis.core.runtime.testsystem;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+
+import com.google.inject.internal.Maps;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,15 +35,15 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoaderAware;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
-import org.apache.isis.core.metamodel.specloader.internal.cache.SpecificationCache;
+import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.objectfactory.ObjectFactory;
 
 public class TestProxyReflector implements ObjectReflector {
 
-    private final Hashtable<String, ObjectSpecification> specificationByFullName =
-        new Hashtable<String, ObjectSpecification>();
+    private final Map<String, ObjectSpecification> specificationByFullName =
+        Maps.newHashMap();
 
     private final ObjectFactory objectFactory = new TestObjectFactory();
     private final ClassSubstitutor classSubstitutor = new TestClassSubstitutor();
@@ -58,22 +61,15 @@ public class TestProxyReflector implements ObjectReflector {
     }
 
     @Override
-    public ObjectSpecification[] allSpecifications() {
-        ObjectSpecification[] specsArray;
-        specsArray = new ObjectSpecification[specificationByFullName.size()];
-        int i = 0;
-        final Enumeration<ObjectSpecification> e = specificationByFullName.elements();
-        while (e.hasMoreElements()) {
-            specsArray[i++] = e.nextElement();
-        }
-        return specsArray;
+    public Collection<ObjectSpecification> allSpecifications() {
+        return Collections.unmodifiableCollection(specificationByFullName.values());
     }
 
     @Override
     public void debugData(final DebugString debug) {
-        final ObjectSpecification[] list = allSpecifications();
-        for (int i = 0; i < list.length; i++) {
-            debug.appendln(list[i].getFullIdentifier());
+        final Collection<ObjectSpecification> list = allSpecifications();
+        for (ObjectSpecification objectSpecification : list) {
+            debug.appendln(objectSpecification.getFullIdentifier());
         }
     }
 

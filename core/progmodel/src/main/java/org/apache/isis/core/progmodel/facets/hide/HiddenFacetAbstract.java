@@ -26,7 +26,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.interactions2.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
 public abstract class HiddenFacetAbstract extends SingleWhenValueFacetAbstract implements HiddenFacet {

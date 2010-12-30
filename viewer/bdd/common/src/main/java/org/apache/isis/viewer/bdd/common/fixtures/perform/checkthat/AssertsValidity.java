@@ -1,6 +1,6 @@
 package org.apache.isis.viewer.bdd.common.fixtures.perform.checkthat;
 
-import org.apache.isis.core.metamodel.consent2.Consent;
+import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.viewer.bdd.common.CellBinding;
 
 /**

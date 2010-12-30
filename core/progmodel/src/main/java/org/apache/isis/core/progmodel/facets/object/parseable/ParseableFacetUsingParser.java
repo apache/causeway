@@ -25,16 +25,16 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.consent2.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.consent2.InteractionResultSet;
+import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
+import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
-import org.apache.isis.core.metamodel.interactions2.InteractionUtils;
-import org.apache.isis.core.metamodel.interactions2.ObjectValidityContext;
-import org.apache.isis.core.metamodel.interactions2.ParseValueContext;
-import org.apache.isis.core.metamodel.interactions2.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.InteractionUtils;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions.ParseValueContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
@@ -88,7 +88,6 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
         getDependencyInjector().injectDependenciesInto(parser);
 
-        @SuppressWarnings("unchecked")
 		final Object parsed = parser.parseTextEntry(context, entry);
         if (parsed == null) {
 			return null;

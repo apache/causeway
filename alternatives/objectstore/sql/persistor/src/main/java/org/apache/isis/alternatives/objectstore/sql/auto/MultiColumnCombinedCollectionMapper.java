@@ -25,9 +25,9 @@ package org.apache.isis.alternatives.objectstore.sql.auto;
 
 import org.apache.isis.alternatives.objectstore.sql.FieldMappingLookup;
 import org.apache.isis.alternatives.objectstore.sql.ObjectMappingLookup;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.metamodel.specloader.internal.spec.OneToManyAssociationImpl;
+import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
 
 /**
  * Used to map 1-to-many collections by creating, in the child table, 1 column per parent collection.

@@ -24,7 +24,7 @@ import java.io.Serializable;
 import java.util.Comparator;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
 
 
 /**

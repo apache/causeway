@@ -36,7 +36,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 import org.apache.isis.core.commons.lang.MethodUtils;
 import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.peer.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facetedmethod.MethodFinderUtils;
 
 
 @RunWith(Parameterized.class)

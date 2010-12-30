@@ -27,9 +27,9 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MarkerFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
-import org.apache.isis.core.metamodel.interactions2.ObjectValidityContext;
-import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
-import org.apache.isis.core.metamodel.interactions2.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class BoundedFacetAbstract extends MarkerFacetAbstract implements BoundedFacet {

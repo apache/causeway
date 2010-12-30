@@ -23,7 +23,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
-import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Mechanism for determining whether this object is in a valid state, for example so that it can be persisted or

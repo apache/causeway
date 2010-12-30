@@ -21,7 +21,7 @@ package org.apache.isis.core.progmodel.facets.collections.validate;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 
 /**
  * Validate that an object can be added to a collection.

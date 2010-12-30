@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.debug.DebugString;
@@ -28,7 +29,7 @@ import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.metamodel.specloader.internal.cache.SpecificationCache;
+import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
 
 
 public class ProgrammableReflector implements ObjectReflector {
@@ -39,14 +40,14 @@ public class ProgrammableReflector implements ObjectReflector {
 
     public void installServiceSpecification(final Class<?> cls) {}
 
-    private ObjectSpecification[] allSpecificationsReturn;
+    private Collection<ObjectSpecification> allSpecificationsReturn;
 
-    public void setAllSpecificationsReturn(final ObjectSpecification[] allSpecificationsReturn) {
+    public void setAllSpecificationsReturn(final Collection<ObjectSpecification> allSpecificationsReturn) {
         this.allSpecificationsReturn = allSpecificationsReturn;
     }
 
     @Override
-    public ObjectSpecification[] allSpecifications() {
+    public Collection<ObjectSpecification> allSpecifications() {
         return allSpecificationsReturn;
     }
 

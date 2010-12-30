@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 
 
 public abstract class DisableForContextFacetAbstract extends FacetAbstract implements DisableForContextFacet {

@@ -26,8 +26,8 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.SingleIntValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
-import org.apache.isis.core.metamodel.interactions2.ProposedHolder;
-import org.apache.isis.core.metamodel.interactions2.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 import org.apache.isis.core.progmodel.facets.ObjectAdapterUtils;
 
 

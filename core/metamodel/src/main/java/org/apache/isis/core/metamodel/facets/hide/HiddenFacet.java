@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.hide;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.SingleWhenValueFacet;
-import org.apache.isis.core.metamodel.interactions2.HidingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 
 /**
  * Hide a property, collection or action.

@@ -28,8 +28,8 @@ import java.util.Map;
 import org.apache.isis.applib.ApplicationException;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.lang.WrapperUtils;
-import org.apache.isis.core.metamodel.exceptions.ReflectionException;
-import org.apache.isis.core.metamodel.peer.MethodFinderUtils;
+import org.apache.isis.core.metamodel.exceptions.MetaModelException;
+import org.apache.isis.core.metamodel.facetedmethod.MethodFinderUtils;
 
 /**
  * TODO: remove duplication with {@link WrapperUtils} and {@link MethodFinderUtils}.
@@ -60,7 +60,7 @@ public class InvokeUtils {
             invocationException("Exception executing " + method, e);
             return null;
         } catch (final IllegalAccessException e) {
-            throw new ReflectionException("illegal access of " + method, e);
+            throw new MetaModelException("illegal access of " + method, e);
         }
     }
 
@@ -90,7 +90,7 @@ public class InvokeUtils {
         if (targetException instanceof RuntimeException) {
             throw (RuntimeException) targetException;
         } else {
-            throw new ReflectionException(targetException);
+            throw new MetaModelException(targetException);
         }
     }
 

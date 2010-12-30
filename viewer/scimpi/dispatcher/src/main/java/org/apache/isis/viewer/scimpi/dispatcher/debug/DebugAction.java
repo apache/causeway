@@ -21,8 +21,12 @@
 package org.apache.isis.viewer.scimpi.dispatcher.debug;
 
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
@@ -32,6 +36,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -112,7 +117,7 @@ public class DebugAction implements Action {
 
     private void specification(RequestContext context, DebugView view) {
         String name = context.getParameter("name");
-        ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(name);
+        ObjectSpecification spec = getSpecificationLoader().loadSpecification(name);
         DebugString str = new DebugString();
         Dump.specification(spec, str);
         view.divider(spec.getFullIdentifier());
@@ -254,18 +259,20 @@ public class DebugAction implements Action {
     }
     
     private void listSpecifications(DebugView view) {
-        ObjectSpecification[] allSpecifications = IsisContext.getSpecificationLoader().allSpecifications();
-        String[] names = new String[allSpecifications.length];
-        for (int j = 0; j < allSpecifications.length; j++) {
-            names[j] = allSpecifications[j].getFullIdentifier();
-        }
-        Arrays.sort(names);
+        Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+        final List<String> fullIdentifierList = Lists.newArrayList(
+            Collections2.transform(allSpecifications, ObjectSpecification.FUNCTION_FULLY_QUALIFIED_CLASS_NAME));
+        Collections.sort(fullIdentifierList);
         view.divider("Specifications");
-        for (int j = 0; j < names.length; j++) {
-            ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(names[j]);
+        for (String fullIdentifier : fullIdentifierList) {
+            ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
             String name = spec.getSingularName();
             view.appendRow(name, specificationLink(spec));
         }
+    }
+
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
     }
 
     @Override

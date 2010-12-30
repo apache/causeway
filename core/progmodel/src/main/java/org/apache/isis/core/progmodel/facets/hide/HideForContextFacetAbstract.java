@@ -24,7 +24,7 @@ import org.apache.isis.applib.events.VisibilityEvent;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions2.VisibilityContext;
+import org.apache.isis.core.metamodel.interactions.VisibilityContext;
 
 
 public abstract class HideForContextFacetAbstract extends FacetAbstract implements HideForContextFacet {

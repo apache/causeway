@@ -20,7 +20,7 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.regex;
 
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
-import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.progmodel.facets.propparam.validate.mask.MaskFacet;
 
 /**

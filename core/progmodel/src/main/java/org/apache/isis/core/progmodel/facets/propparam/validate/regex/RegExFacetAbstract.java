@@ -25,8 +25,8 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
-import org.apache.isis.core.metamodel.interactions2.ProposedHolder;
-import org.apache.isis.core.metamodel.interactions2.ValidityContext;
+import org.apache.isis.core.metamodel.interactions.ProposedHolder;
+import org.apache.isis.core.metamodel.interactions.ValidityContext;
 
 
 public abstract class RegExFacetAbstract extends MultipleValueFacetAbstract implements RegExFacet {

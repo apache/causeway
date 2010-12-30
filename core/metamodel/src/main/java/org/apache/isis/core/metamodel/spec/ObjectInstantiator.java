@@ -17,7 +17,7 @@
 package org.apache.isis.core.metamodel.spec;
 
 import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.metamodel.specloader.internal.spec.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
 
 public interface ObjectInstantiator extends Injectable {
 

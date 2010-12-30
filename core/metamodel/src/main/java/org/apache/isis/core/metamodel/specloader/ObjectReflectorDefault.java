@@ -25,9 +25,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
@@ -67,15 +66,15 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectMemberContext;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
-import org.apache.isis.core.metamodel.specloader.internal.cache.SimpleSpecificationCache;
-import org.apache.isis.core.metamodel.specloader.internal.cache.SpecificationCache;
-import org.apache.isis.core.metamodel.specloader.internal.facetprocessor.FacetProcessor;
-import org.apache.isis.core.metamodel.specloader.internal.spec.CreateObjectContext;
-import org.apache.isis.core.metamodel.specloader.internal.spec.FacetedMethodsBuilderContext;
-import org.apache.isis.core.metamodel.specloader.internal.spec.IntrospectionContext;
-import org.apache.isis.core.metamodel.specloader.internal.spec.ObjectSpecificationAbstract;
-import org.apache.isis.core.metamodel.specloader.internal.spec.dflt.ObjectSpecificationDefault;
-import org.apache.isis.core.metamodel.specloader.internal.spec.objectlist.ObjectSpecificationForObjectList;
+import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
+import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCache;
+import org.apache.isis.core.metamodel.specloader.speccache.SpecificationCacheDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.CreateObjectContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.FacetedMethodsBuilderContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.IntrospectionContext;
+import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
+import org.apache.isis.core.metamodel.specloader.specimpl.dflt.ObjectSpecificationDefault;
+import org.apache.isis.core.metamodel.specloader.specimpl.objectlist.ObjectSpecificationForObjectList;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
@@ -116,7 +115,6 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 
 public class ObjectReflectorDefault implements ObjectReflector, DebugInfo {
 
-    @SuppressWarnings("unused")
     private final static Logger LOG = Logger.getLogger(ObjectReflectorDefault.class);
 
 
@@ -223,7 +221,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebugInfo {
         this.facetProcessor = new FacetProcessor(configuration, this,
                 collectionTypeRegistry, programmingModel);
         
-        this.cache = new SimpleSpecificationCache();
+        this.cache = new SpecificationCacheDefault();
     }
 
     @Override
@@ -297,7 +295,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebugInfo {
     private List<Class<?>> newlyDiscoveredClasses() {
         List<Class<?>> newlyDiscoveredClasses = new ArrayList<Class<?>>();
         
-        ObjectSpecification[] noSpecs = allSpecifications();
+        Collection<ObjectSpecification> noSpecs = allSpecifications();
         try {
             for(ObjectSpecification noSpec: noSpecs) {
                 getSpecificationTraverser().traverseReferencedClasses(noSpec, newlyDiscoveredClasses);
@@ -461,7 +459,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebugInfo {
      * Return all the loaded specifications.
      */
     @Override
-    public ObjectSpecification[] allSpecifications() {
+    public Collection<ObjectSpecification> allSpecifications() {
         return getCache().allSpecifications();
     }
 
@@ -528,33 +526,26 @@ public class ObjectReflectorDefault implements ObjectReflector, DebugInfo {
         str.appendln();
 
         str.appendTitle("Specifications");
-        final ObjectSpecification[] specs = allSpecifications();
-        Arrays.sort(specs, new Comparator<ObjectSpecification>() {
-            @Override
-            public int compare(final ObjectSpecification s1,
-                    final ObjectSpecification s2) {
-                return s1.getShortIdentifier().compareToIgnoreCase(s2.getShortIdentifier());
-            }
-        });
-        for (int i = 0; i < specs.length; i++) {
-            final ObjectSpecification specification = specs[i];
-            str.append(specification.isAbstract() ? "A" : ".");
-            str.append(specification.isService() ? "S" : ".");
-            str.append(SpecificationFacets.isBoundedSet(specification) ? "B"
-                    : ".");
-            str.append(specification.isCollection() ? "C" : ".");
-            str.append(specification.isNotCollection() ? "O" : ".");
+        final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications());
+        Collections.sort(specs, ObjectSpecification.COMPARATOR_SHORT_IDENTIFIER_IGNORE_CASE);
+        for (ObjectSpecification spec : specs) {
+            str.append(spec.isAbstract() ? "A" : ".");
+            str.append(spec.isService() ? "S" : ".");
+            str.append(SpecificationFacets.isBoundedSet(spec) ? "B"
+                : ".");
+            str.append(spec.isCollection() ? "C" : ".");
+            str.append(spec.isNotCollection() ? "O" : ".");
             str.append("."); // placeholder for future support of maps
-            str.append(specification.isParseable() ? "P" : ".");
-            str.append(specification.isEncodeable() ? "E" : ".");
-            str.append(specification.isValueOrIsAggregated() ? "A" : ".");
-            str.append(!specification.isCollectionOrIsAggregated() ? "I" : ".");
+            str.append(spec.isParseable() ? "P" : ".");
+            str.append(spec.isEncodeable() ? "E" : ".");
+            str.append(spec.isValueOrIsAggregated() ? "A" : ".");
+            str.append(!spec.isCollectionOrIsAggregated() ? "I" : ".");
             str.append("  ");
-            str.append(specification.getShortIdentifier());
+            str.append(spec.getShortIdentifier());
             str.append("  [fqc=");
-            str.append(specification.getFullIdentifier());
+            str.append(spec.getFullIdentifier());
             str.append(",type=");
-            str.append(specification.getClass().getName());
+            str.append(spec.getClass().getName());
             str.appendln("]");
         }
     }

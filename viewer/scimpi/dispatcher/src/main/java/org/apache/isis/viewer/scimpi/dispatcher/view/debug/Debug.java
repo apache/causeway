@@ -20,12 +20,18 @@
 
 package org.apache.isis.viewer.scimpi.dispatcher.view.debug;
 
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import com.google.common.collect.Collections2;
+import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
+import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.util.Dump;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
@@ -35,6 +41,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class Debug extends AbstractElementProcessor {
 
+    @Override
     public void process(Request request) {
         String type = request.getOptionalProperty("type");
         String value = request.getOptionalProperty("value");
@@ -50,15 +57,13 @@ public class Debug extends AbstractElementProcessor {
                 }
 
             } else if (type.equals("list-specifications")) {
-                ObjectSpecification[] allSpecifications = IsisContext.getSpecificationLoader().allSpecifications();
-                String[] names = new String[allSpecifications.length];
-                for (int j = 0; j < allSpecifications.length; j++) {
-                    names[j] = allSpecifications[j].getFullIdentifier();
-                }
-                Arrays.sort(names);
+                Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+                final List<String> fullIdentifierList = Lists.newArrayList(
+                    Collections2.transform(allSpecifications, ObjectSpecification.FUNCTION_FULLY_QUALIFIED_CLASS_NAME));
+                Collections.sort(fullIdentifierList);
                 request.appendHtml("<h2>Specifications</h2><ol>");
-                for (int j = 0; j < names.length; j++) {
-                    request.appendHtml("<li><a href=\"specification.shtml?spec=" + names[j] + "\">" + names[j] + "</a></p>");
+                for (String fullIdentifier : fullIdentifierList) {
+                    request.appendHtml("<li><a href=\"specification.shtml?spec=" + fullIdentifier + "\">" + fullIdentifier + "</a></p>");
                 }
                 request.appendHtml("</ol>");
                 
@@ -67,7 +72,7 @@ public class Debug extends AbstractElementProcessor {
                 request.getContext().append(request, "variables");
                 
             } else if (type.equals("specification")) {
-                ObjectSpecification spec = IsisContext.getSpecificationLoader().loadSpecification(value);
+                ObjectSpecification spec = getSpecificationLoader().loadSpecification(value);
                 DebugString str = new DebugString();
                 Dump.specification(spec, str);
                 request.appendHtml("<h2>" + spec.getFullIdentifier() + "</h2>");
@@ -131,6 +136,11 @@ public class Debug extends AbstractElementProcessor {
         }
     }
 
+    protected SpecificationLoader getSpecificationLoader() {
+        return IsisContext.getSpecificationLoader();
+    }
+
+    @Override
     public String getName() {
         return "debug";
     }

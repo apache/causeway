@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.properties.validate;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.interactions2.ValidatingInteractionAdvisor;
+import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetAbstract;
 
 /**

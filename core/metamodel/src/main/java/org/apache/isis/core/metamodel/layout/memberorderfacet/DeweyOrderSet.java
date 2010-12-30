@@ -28,9 +28,9 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.OrderSet;
-import org.apache.isis.core.metamodel.peer.FacetedMethod;
 
 
 /**

@@ -20,6 +20,7 @@
 
 package org.apache.isis.core.metamodel.spec;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
@@ -28,7 +29,7 @@ import org.apache.isis.core.commons.debug.DebugInfo;
 
 public interface SpecificationLoader extends ApplicationScopedComponent, DebugInfo, SpecificationLookup {
 
-    ObjectSpecification[] allSpecifications();
+    Collection<ObjectSpecification> allSpecifications();
 
     /**
      * @see #loadSpecification(String)

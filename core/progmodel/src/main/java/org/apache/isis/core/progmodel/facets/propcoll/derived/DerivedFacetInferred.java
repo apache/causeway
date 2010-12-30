@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.propcoll.derived;
 
 import org.apache.isis.applib.events.UsabilityEvent;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.interactions2.UsabilityContext;
+import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.progmodel.facets.propcoll.notpersisted.NotPersistedFacetAbstract;
 
 
