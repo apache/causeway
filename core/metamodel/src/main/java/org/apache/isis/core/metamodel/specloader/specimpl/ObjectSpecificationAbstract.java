@@ -170,10 +170,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
         this.identifier = Identifier.classIdentifier(introspectedClass);
 
         // dependencies
-        this.authenticationSessionProvider = specificationContext.authenticationSessionProvider;
-        this.servicesProvider = specificationContext.servicesProvider;
-        this.objectInstantiator = specificationContext.objectInstantiator;
-        this.specificationLookup = specificationContext.specificationLookup;
+        this.authenticationSessionProvider = specificationContext.getAuthenticationSessionProvider();
+        this.servicesProvider = specificationContext.getServicesProvider();
+        this.objectInstantiator = specificationContext.getObjectInstantiator();
+        this.specificationLookup = specificationContext.getSpecificationLookup();
     }
 
     // //////////////////////////////////////////////////////////////////////

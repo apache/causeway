@@ -49,6 +49,10 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         	RuntimeContextAware cast = RuntimeContextAware.class.cast(candidate);
             cast.setRuntimeContext(this);
         }
+        injectSubcomponentsInto(candidate);
+	}
+
+    protected void injectSubcomponentsInto(Object candidate) {
         getAdapterMap().injectInto(candidate);
         getAuthenticationSessionProvider().injectInto(candidate);
         getDependencyInjector().injectInto(candidate);
@@ -59,7 +63,7 @@ public abstract class RuntimeContextAbstract implements RuntimeContext, Specific
         getQuerySubmitter().injectInto(candidate);
         getServicesProvider().injectInto(candidate);
         getSpecificationLookup().injectInto(candidate);
-	}
+    }
 
 	
 	@Override

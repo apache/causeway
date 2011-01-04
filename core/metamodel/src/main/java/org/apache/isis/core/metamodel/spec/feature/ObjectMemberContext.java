@@ -21,23 +21,34 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
 
-/**
- * @version  $Rev$ $Date$
- */
 public class ObjectMemberContext {
-    public AuthenticationSessionProvider authenticationSessionProvider;
-    public SpecificationLookup specificationLookup;
-    public AdapterMap adapterManager;
-    public QuerySubmitter querySubmitter;
 
-    /**
-     * 
-     */
+    private final AuthenticationSessionProvider authenticationSessionProvider;
+    private final SpecificationLookup specificationLookup;
+    private final AdapterMap adapterManager;
+    private final QuerySubmitter querySubmitter;
+
     public ObjectMemberContext(AuthenticationSessionProvider authenticationSessionProvider,
         SpecificationLookup specificationLookup, AdapterMap adapterManager, QuerySubmitter querySubmitter) {
         this.authenticationSessionProvider = authenticationSessionProvider;
         this.specificationLookup = specificationLookup;
         this.adapterManager = adapterManager;
         this.querySubmitter = querySubmitter;
+    }
+
+    public AuthenticationSessionProvider getAuthenticationSessionProvider() {
+        return authenticationSessionProvider;
+    }
+
+    public SpecificationLookup getSpecificationLookup() {
+        return specificationLookup;
+    }
+
+    public AdapterMap getAdapterManager() {
+        return adapterManager;
+    }
+
+    public QuerySubmitter getQuerySubmitter() {
+        return querySubmitter;
     }
 }

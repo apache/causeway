@@ -20,12 +20,20 @@ import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 
 public class IntrospectionContext {
-    public final ClassSubstitutor classSubstitutor;
-    public final MemberLayoutArranger memberLayoutArranger;
+    private final ClassSubstitutor classSubstitutor;
+    private final MemberLayoutArranger memberLayoutArranger;
 
     public IntrospectionContext(ClassSubstitutor classSubstitutor,
         MemberLayoutArranger memberLayoutArranger) {
         this.classSubstitutor = classSubstitutor;
         this.memberLayoutArranger = memberLayoutArranger;
+    }
+
+    public ClassSubstitutor getClassSubstitutor() {
+        return classSubstitutor;
+    }
+
+    public MemberLayoutArranger getMemberLayoutArranger() {
+        return memberLayoutArranger;
     }
 }

@@ -78,10 +78,10 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
         this.id = id;
         this.defaultName = NameUtils.naturalName(this.id);
         
-        this.authenticationSessionProvider = objectMembercontext.authenticationSessionProvider;
-        this.specificationLookup = objectMembercontext.specificationLookup;
-        this.adapterMap = objectMembercontext.adapterManager;
-        this.querySubmitter = objectMembercontext.querySubmitter;
+        this.authenticationSessionProvider = objectMembercontext.getAuthenticationSessionProvider();
+        this.specificationLookup = objectMembercontext.getSpecificationLookup();
+        this.adapterMap = objectMembercontext.getAdapterManager();
+        this.querySubmitter = objectMembercontext.getQuerySubmitter();
     }
 
 

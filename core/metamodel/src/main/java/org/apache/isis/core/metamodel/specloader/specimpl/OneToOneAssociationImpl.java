@@ -61,7 +61,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
             final ObjectMemberContext objectMemberContext) {
         super(facetedMethod, 
             FeatureType.PROPERTY, 
-            getSpecification(objectMemberContext.specificationLookup, facetedMethod.getType()), 
+            getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), 
             objectMemberContext);
     }
 

@@ -54,7 +54,7 @@ public class OneToManyAssociationImpl extends ObjectAssociationAbstract implemen
     public OneToManyAssociationImpl(
     		final FacetedMethod facetedMethod,
             final ObjectMemberContext objectMemberContext) {
-        super(facetedMethod, FeatureType.COLLECTION, getSpecification(objectMemberContext.specificationLookup, facetedMethod.getType()), objectMemberContext);
+        super(facetedMethod, FeatureType.COLLECTION, getSpecification(objectMemberContext.getSpecificationLookup(), facetedMethod.getType()), objectMemberContext);
     }
 
     // /////////////////////////////////////////////////////////////

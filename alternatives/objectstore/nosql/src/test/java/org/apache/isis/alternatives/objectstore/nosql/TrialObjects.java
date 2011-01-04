@@ -27,7 +27,7 @@ import com.google.common.collect.Maps;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.adapter.map.AdapterMapDelegator;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
@@ -57,6 +57,28 @@ public class TrialObjects {
 
         PropertiesConfiguration configuration = new PropertiesConfiguration();
 
+        final AdapterMapAbstract adapterMap = new AdapterMapAbstract() {
+            
+            @Override
+            public ObjectAdapter getAdapterFor(Object pojo) {
+                throw new UnsupportedOperationException();
+            }
+            
+            @Override
+            public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+                if (adapters.get(pojo) != null) {
+                    return adapters.get(pojo);
+                } else {
+                    return factory.createAdapter(pojo, null);
+                }
+            }
+            
+            @Override
+            public ObjectAdapter adapterFor(Object pattern) {
+                return adapters.get(pattern);
+            }
+        };
+
         reflector =
             new ObjectReflectorDefault(configuration, new TestClassSubstitutor(), new CollectionTypeRegistryDefault(),
                 new SpecificationTraverserDefault(), new MemberLayoutArrangerDefault(), new ProgrammingModelFacetsJava5(), new HashSet<FacetDecorator>(),
@@ -65,41 +87,27 @@ public class TrialObjects {
 
             @Override
             public AdapterMap getAdapterMap() {
-                return new AdapterMapDelegator(super.getAdapterMap()) {
-                    @Override
-                    public ObjectAdapter adapterFor(Object pattern) {
-                        return adapters.get(pattern);
-                    }
-
-                    @Override
-                    public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
-                        if (adapters.get(pojo) != null) {
-                            return adapters.get(pojo);
-                        } else {
-                            return factory.createAdapter(pojo, null);
-                        }
-                    }
-                };
+                return adapterMap;
             }
         });
         reflector.init();
 
         factory = new AdapterFactoryAbstract() {
             @Override
-            public TestProxyAdapter createAdapter(Object pojo, Oid oid) {
+            public ObjectAdapter createAdapter(Object pojo, Oid oid) {
                 ObjectSpecification specification = reflector.loadSpecification(pojo.getClass());
                 ResolveState state =
                     oid == null ? ResolveState.VALUE : oid.isTransient() ? ResolveState.TRANSIENT : ResolveState.GHOST;
 
-                final TestProxyAdapter testProxyObjectAdapter = new TestProxyAdapter();
-                testProxyObjectAdapter.setupResolveState(state);
-                testProxyObjectAdapter.setupObject(pojo);
-                testProxyObjectAdapter.setupOid(oid);
-                testProxyObjectAdapter.setupSpecification(specification);
+                final TestProxyAdapter objectAdapter = new TestProxyAdapter();
+                objectAdapter.setupResolveState(state);
+                objectAdapter.setupObject(pojo);
+                objectAdapter.setupOid(oid);
+                objectAdapter.setupSpecification(specification);
 
-                adapters.put(pojo, testProxyObjectAdapter);
+                adapters.put(pojo, objectAdapter);
 
-                return testProxyObjectAdapter;
+                return objectAdapter;
             }
         };
     }

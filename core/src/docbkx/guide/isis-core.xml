@@ -4362,11 +4362,49 @@ Persistable: User Persistable</screen>
 
           <listitem>
             <para>by the core runtime, to provide the ability to provide XML
-            Snapshots (through the XmlSnapshot utility class). The metamodel
-            module does not itself define the programming model conventions;
-            that is the responsibility of the core progmodel.</para>
+            Snapshots (through the <classname>XmlSnapshot</classname> utility
+            class). The metamodel module does not itself define the
+            programming model conventions; that is the responsibility of the
+            core progmodel.</para>
           </listitem>
         </itemizedlist>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Architecture Diagram</title>
+
+        <para></para>
+
+        <para></para>
+
+        <para></para>
+
+        <para><screenshot>
+            <screeninfo>Top-level Architecture Diagram</screeninfo>
+
+            <mediaobject>
+              <imageobject>
+                <imagedata fileref="images/metamodel/architecture-diagram-top-level.png"
+                           scale="60" />
+              </imageobject>
+            </mediaobject>
+          </screenshot></para>
+
+        <para></para>
+
+        <screenshot>
+          <screeninfo>Top-level Architecture Diagram with SpecLoader
+          expanded</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/metamodel/architecture-diagram-top-level-with-specloader-expanded.png"
+                         scale="60" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
 
         <para></para>
       </sect1>

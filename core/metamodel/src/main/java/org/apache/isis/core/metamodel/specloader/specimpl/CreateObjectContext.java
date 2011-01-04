@@ -19,18 +19,20 @@ package org.apache.isis.core.metamodel.specloader.specimpl;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 
-/**
- * @version  $Rev$ $Date$
- */
 public class CreateObjectContext {
-    public AdapterMap adapterMap;
-    public DependencyInjector dependencyInjector;
+    private final AdapterMap adapterMap;
+    private final DependencyInjector dependencyInjector;
 
-    /**
-     * 
-     */
     public CreateObjectContext(AdapterMap adapterMap, DependencyInjector dependencyInjector) {
         this.adapterMap = adapterMap;
         this.dependencyInjector = dependencyInjector;
+    }
+
+    public AdapterMap getAdapterMap() {
+        return adapterMap;
+    }
+
+    public DependencyInjector getDependencyInjector() {
+        return dependencyInjector;
     }
 }

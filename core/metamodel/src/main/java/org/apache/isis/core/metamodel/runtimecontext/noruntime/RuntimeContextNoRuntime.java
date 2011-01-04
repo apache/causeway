@@ -23,24 +23,42 @@ package org.apache.isis.core.metamodel.runtimecontext.noruntime;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.applib.query.Query;
 import org.apache.isis.core.metamodel.adapter.DomainObjectServices;
+import org.apache.isis.core.metamodel.adapter.DomainObjectServicesAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ObjectDirtier;
+import org.apache.isis.core.metamodel.adapter.ObjectDirtierAbstract;
 import org.apache.isis.core.metamodel.adapter.ObjectPersistor;
+import org.apache.isis.core.metamodel.adapter.ObjectPersistorAbstract;
 import org.apache.isis.core.metamodel.adapter.QuerySubmitter;
+import org.apache.isis.core.metamodel.adapter.QuerySubmitterAbstract;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProviderAbstract;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProviderAbstract;
+import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiationException;
 import org.apache.isis.core.metamodel.spec.ObjectInstantiator;
+import org.apache.isis.core.metamodel.spec.ObjectInstantiatorAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
 	private DependencyInjector dependencyInjector;
+    private AuthenticationSessionProviderAbstract authenticationSessionProvider;
+    private AdapterMapAbstract adapterMap;
+    private ObjectInstantiatorAbstract objectInstantiator;
+    private ObjectDirtierAbstract objectDirtier;
+    private ObjectPersistorAbstract objectPersistor;
+    private DomainObjectServicesAbstract domainObjectServices;
+    private QuerySubmitterAbstract querySubmitter;
 
     public RuntimeContextNoRuntime() {
         dependencyInjector = new DependencyInjectorAbstract() {
@@ -54,6 +72,145 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
                 
             }
         };
+        authenticationSessionProvider = new AuthenticationSessionProviderAbstract() {
+            @Override
+            public AuthenticationSession getAuthenticationSession() {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+        };
+        adapterMap = new AdapterMapAbstract() {
+            
+            @Override
+            public ObjectAdapter getAdapterFor(Object pojo) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public ObjectAdapter adapterFor(Object pojo, ObjectAdapter ownerAdapter, IdentifiedHolder identifiedHolder) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public ObjectAdapter adapterFor(Object domainObject) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+        };
+        objectInstantiator = new ObjectInstantiatorAbstract() {
+            
+            @Override
+            public Object instantiate(Class<?> cls) throws ObjectInstantiationException {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+        };
+        objectDirtier = new ObjectDirtierAbstract() {
+            
+            @Override
+            public void objectChanged(Object object) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void objectChanged(ObjectAdapter adapter) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+        };
+        objectPersistor = new ObjectPersistorAbstract() {
+            
+            @Override
+            public void remove(ObjectAdapter adapter) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void makePersistent(ObjectAdapter adapter) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+        };
+        domainObjectServices = new DomainObjectServicesAbstract() {
+            
+            @Override
+            public void warnUser(String message) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void resolve(Object parent, Object field) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void resolve(Object parent) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void raiseError(String message) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void informUser(String message) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public List<String> getPropertyNames() {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public String getProperty(String name) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public boolean flush() {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public ObjectAdapter createTransientInstance(ObjectSpecification spec) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public void commit() {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+        };
+        querySubmitter = new QuerySubmitterAbstract() {
+            
+            @Override
+            public <T> ObjectAdapter firstMatchingQuery(Query<T> query) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+            
+            @Override
+            public <T> List<ObjectAdapter> allMatchingQuery(Query<T> query) {
+                throw new UnsupportedOperationException(
+                "Not supported by this implementation of RuntimeContext");
+            }
+        };
 	}
 
 
@@ -63,44 +220,37 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 
     @Override
     public AuthenticationSessionProvider getAuthenticationSessionProvider() {
-        throw new UnsupportedOperationException(
-        "Not supported by this implementation of RuntimeContext");
+        return authenticationSessionProvider;
     }
     
     @Override
     public AdapterMap getAdapterMap() {
-        throw new UnsupportedOperationException(
-        "Not supported by this implementation of RuntimeContext");
+        return adapterMap;
     }
 
     @Override
     public ObjectInstantiator getObjectInstantiator() {
-        throw new UnsupportedOperationException(
-        "Not supported by this implementation of RuntimeContext");
+        return objectInstantiator;
     }
     
     @Override
     public ObjectDirtier getObjectDirtier() {
-        throw new UnsupportedOperationException(
-        "Not supported by this implementation of RuntimeContext");
+        return objectDirtier;
     }
 
     @Override
     public ObjectPersistor getObjectPersistor() {
-        throw new UnsupportedOperationException(
-        "Not supported by this implementation of RuntimeContext");
+        return objectPersistor;
     }
 
     @Override
     public DomainObjectServices getDomainObjectServices() {
-        throw new UnsupportedOperationException(
-        "Not supported by this implementation of RuntimeContext");
+        return domainObjectServices;
     }
 
     @Override
     public QuerySubmitter getQuerySubmitter() {
-        throw new UnsupportedOperationException(
-        "Not supported by this implementation of RuntimeContext");
+        return querySubmitter;
     }
 
     @Override
@@ -135,9 +285,5 @@ public class RuntimeContextNoRuntime extends RuntimeContextAbstract {
 	        }
 	    };
 	}
-
-
-
-
 
 }

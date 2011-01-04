@@ -538,19 +538,19 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     // //////////////////////////////////////////////////////////////////
 
     protected AdapterMap getAdapterMap() {
-        return createObjectContext.adapterMap;
+        return createObjectContext.getAdapterMap();
     }
 
     protected DependencyInjector getDependencyInjector() {
-        return createObjectContext.dependencyInjector;
+        return createObjectContext.getDependencyInjector();
     }
 
     private ClassSubstitutor getClassSubstitutor() {
-        return introspectionContext.classSubstitutor;
+        return introspectionContext.getClassSubstitutor();
     }
 
     private MemberLayoutArranger getMemberLayoutArranger() {
-        return introspectionContext.memberLayoutArranger;
+        return introspectionContext.getMemberLayoutArranger();
     }
 
 }
