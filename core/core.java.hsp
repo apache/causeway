@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.3.722" flavor="j2se">
+   <property name="hide-externals" value="true" />
+   <property name="show-needs-to-compile" value="false" />
+   <property name="detail-mode" value="false" />
+   <classpath>
+      <classpathentry kind="lib" path="commons/target/classes" />
+      <classpathentry kind="lib" path="metamodel/target/classes" />
+      <classpathentry kind="lib" path="progmodel/target/classes" />
+      <classpathentry kind="lib" path="runtime/target/classes" />
+      <classpathentry kind="lib" path="webapp/target/classes" />
+      <classpathentry kind="lib" path="webserver/target/classes" />
+   </classpath>
+   <transformations>
+      <transformation in="*" out="{jar}.*" />
+   </transformations>
+   <sourcepaths>
+      <pathentry type="file" path="commons/src/main/java" />
+      <pathentry type="file" path="metamodel/src/main/java" />
+      <pathentry type="file" path="progmodel/src/main/java" />
+      <pathentry type="file" path="runtime/src/main/java" />
+      <pathentry type="file" path="webapp/src/main/java" />
+      <pathentry type="file" path="webserver/src/main/java" />
+   </sourcepaths>
+</local-project>
+
