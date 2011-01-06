@@ -38,8 +38,7 @@ public final class OptionValidatorForPersistor implements
     public Maybe<String> validate(DeploymentType deploymentType) {
         String objectPersistorName = optionHandlerPersistor
                 .getPersistorName();
-        boolean fail = StringUtils
-                .isNotEmpty(objectPersistorName)
+        boolean fail = (!StringUtils.isNullOrEmpty(objectPersistorName))
                 && !deploymentType.canSpecifyObjectStore();
         String failMsg = String
                 .format(

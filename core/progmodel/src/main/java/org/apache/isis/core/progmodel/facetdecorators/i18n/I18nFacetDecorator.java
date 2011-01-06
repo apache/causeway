@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.runtime.i18n.resourcebundle;
+package org.apache.isis.core.progmodel.facetdecorators.i18n;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -28,9 +28,9 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.runtime.i18n.resourcebundle.facets.DescribedAsFacetWrapI18n;
-import org.apache.isis.core.runtime.i18n.resourcebundle.facets.HelpFacetWrapI18n;
-import org.apache.isis.core.runtime.i18n.resourcebundle.facets.NamedFacetWrapI18n;
+import org.apache.isis.core.progmodel.facetdecorators.i18n.internal.DescribedAsFacetWrapI18n;
+import org.apache.isis.core.progmodel.facetdecorators.i18n.internal.HelpFacetWrapI18n;
+import org.apache.isis.core.progmodel.facetdecorators.i18n.internal.NamedFacetWrapI18n;
 
 
 public class I18nFacetDecorator extends FacetDecoratorAbstract {
@@ -40,6 +40,7 @@ public class I18nFacetDecorator extends FacetDecoratorAbstract {
         i18nManager = manager;
     }
 
+    @Override
     public Facet decorate(final Facet facet, FacetHolder requiredHolder) {
     	if (!(requiredHolder instanceof IdentifiedHolder)) {
             return null;
@@ -76,6 +77,7 @@ public class I18nFacetDecorator extends FacetDecoratorAbstract {
         return facet;
     }
 
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return new Class[] { NamedFacet.class, DescribedAsFacet.class, HelpFacet.class };
     }

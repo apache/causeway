@@ -37,7 +37,7 @@ public class DoesNotContain extends ThatSubcommandAbstract {
 
         final String resultTitle = resultAdapter.titleString();
 
-        if (!StringUtils.emptyString(expected)) {
+        if (!StringUtils.isNullOrEmpty(expected)) {
 
             // see if expected matches an alias
             final ObjectAdapter expectedAdapter = performContext.getPeer().getAliasRegistry().getAliased(expected);

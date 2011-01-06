@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.imageloader;
 
 import java.util.List;
 
-import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.metamodel.config.InstallerAbstract;
 
 public class TemplateImageLoaderNoopInstaller extends InstallerAbstract implements TemplateImageLoaderInstaller {
 

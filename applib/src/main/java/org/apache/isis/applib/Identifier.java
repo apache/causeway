@@ -19,9 +19,17 @@
 
 package org.apache.isis.applib;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.util.NameUtils;
 
 public class Identifier implements Comparable<Identifier> {
+
+    private static final List<String> EMPTY_LIST_OF_STRINGS = Collections.<String>emptyList();
 
     /**
      * What type of feature this identifies.
@@ -79,7 +87,7 @@ public class Identifier implements Comparable<Identifier> {
     }
 
     public static Identifier classIdentifier(final String className) {
-        return new Identifier(className, "", new String[] {}, Type.CLASS);
+        return new Identifier(className, "", EMPTY_LIST_OF_STRINGS, Type.CLASS);
     }
 
     public static Identifier propertyOrCollectionIdentifier(final Class<?> declaringClass,
@@ -89,34 +97,37 @@ public class Identifier implements Comparable<Identifier> {
 
     public static Identifier propertyOrCollectionIdentifier(final String declaringClassName,
         final String propertyOrCollectionName) {
-        return new Identifier(declaringClassName, propertyOrCollectionName, new String[] {},
+        return new Identifier(declaringClassName, propertyOrCollectionName, EMPTY_LIST_OF_STRINGS,
             Type.PROPERTY_OR_COLLECTION);
     }
 
     public static Identifier actionIdentifier(final Class<?> declaringClass, final String actionName,
         final Class<?>... parameterClasses) {
-        return actionIdentifier(declaringClass.getCanonicalName(), actionName, toParameterStringArray(parameterClasses));
+        return actionIdentifier(declaringClass.getCanonicalName(), actionName, classNamesOf(parameterClasses));
     }
 
     public static Identifier actionIdentifier(final String declaringClassName, final String actionName,
         final Class<?>... parameterClasses) {
-        return actionIdentifier(declaringClassName, actionName, toParameterStringArray(parameterClasses));
+        return actionIdentifier(declaringClassName, actionName, classNamesOf(parameterClasses));
     }
 
     public static Identifier actionIdentifier(final String declaringClassName, final String actionName,
-        final String[] parameterClassNames) {
+        final List<String> parameterClassNames) {
         return new Identifier(declaringClassName, actionName, parameterClassNames, Type.ACTION);
     }
 
     /**
      * Helper, used within contructor chaining
      */
-    private static String[] toParameterStringArray(final Class<?>[] parameterClasses) {
-        final String[] parameters = new String[parameterClasses == null ? 0 : parameterClasses.length];
-        for (int i = 0; i < parameters.length; i++) {
-            parameters[i] = parameterClasses[i].getName();
+    private static List<String> classNamesOf(final Class<?>[] parameterClasses) {
+        if (parameterClasses == null) {
+            return EMPTY_LIST_OF_STRINGS;
         }
-        return parameters;
+        final List<String> parameterClassNames = Lists.newArrayList();
+        for (Class<?> parameterClass : parameterClasses) {
+            parameterClassNames.add(parameterClass.getName());
+        }
+        return parameterClassNames;
     }
 
     // ///////////////////////////////////////////////////////////////////////////
@@ -125,7 +136,7 @@ public class Identifier implements Comparable<Identifier> {
 
     private final String className;
     private final String memberName;
-    private final String[] parameterNames;
+    private final List<String> parameterNames;
     private final Type type;
     private String identityString;
 
@@ -138,10 +149,10 @@ public class Identifier implements Comparable<Identifier> {
     // Constructor
     // ///////////////////////////////////////////////////////////////////////////
 
-    private Identifier(final String className, final String memberName, final String[] parameterNames, final Type type) {
+    private Identifier(final String className, final String memberName, final List<String> parameterNames, final Type type) {
         this.className = className;
         this.memberName = memberName;
-        this.parameterNames = parameterNames;
+        this.parameterNames = Collections.unmodifiableList(parameterNames);
         this.type = type;
     }
 
@@ -157,11 +168,11 @@ public class Identifier implements Comparable<Identifier> {
         return NameUtils.naturalName(memberName);
     }
 
-    public String[] getMemberParameterNames() {
+    public List<String> getMemberParameterNames() {
         return parameterNames;
     }
 
-    public String[] getMemberParameterNaturalNames() {
+    public List<String> getMemberParameterNaturalNames() {
         return NameUtils.naturalNames(parameterNames);
     }
 
@@ -216,16 +227,15 @@ public class Identifier implements Comparable<Identifier> {
 
     public StringBuilder toParmsIdentityString(final StringBuilder buf) {
         if (type == Type.ACTION) {
-            buf.append('(');
-            for (int i = 0; i < parameterNames.length; i++) {
-                if (i > 0) {
-                    buf.append(",");
-                }
-                buf.append(parameterNames[i]);
-            }
-            buf.append(')');
+            appendParameterNamesTo(buf);
         }
         return buf;
+    }
+
+    private void appendParameterNamesTo(final StringBuilder buf) {
+        buf.append('(');
+        Joiner.on(',').appendTo(buf, parameterNames);
+        buf.append(')');
     }
 
     public String toNameParmsIdentityString() {
@@ -290,14 +300,10 @@ public class Identifier implements Comparable<Identifier> {
             return true;
         }
 
-        if (a != null) {
-            return a.equals(b);
-        }
-
-        return false;
+        return a != null && a.equals(b);
     }
 
-    private boolean equals(final String[] a, final String[] b) {
+    private boolean equals(final List<String> a, final List<String> b) {
         if (a == null && b == null) {
             return true;
         } else if (a == null && b != null) {
@@ -305,14 +311,7 @@ public class Identifier implements Comparable<Identifier> {
         } else if (a != null && b == null) {
             return false;
         } else if (a != null && b != null) {
-            if (a.length != b.length) {
-                return false;
-            }
-            for (int i = 0; i < b.length; i++) {
-                if (!a[i].equals(b[i])) {
-                    return false;
-                }
-            }
+            return a.equals(b);
         }
         return true;
     }
@@ -333,14 +332,7 @@ public class Identifier implements Comparable<Identifier> {
             buf.append(className);
             buf.append('#');
             buf.append(memberName);
-            buf.append('(');
-            for (int i = 0; i < parameterNames.length; i++) {
-                if (i > 0) {
-                    buf.append(", ");
-                }
-                buf.append(parameterNames[i]);
-            }
-            buf.append(')');
+            appendParameterNamesTo(buf);
             asString = buf.toString();
         }
         return asString;

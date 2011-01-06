@@ -34,7 +34,7 @@ public abstract class ProposedArgumentValidityAbstract extends
 
 		final ScenarioCell arg0Cell = arg0Binding.getCurrentCell();
 		final String toValidate = arg0Cell.getText();
-		if (StringUtils.emptyString(toValidate)) {
+		if (StringUtils.isNullOrEmpty(toValidate)) {
 			throw ScenarioBoundValueException.current(arg0Binding, "(required)");
 		}
 

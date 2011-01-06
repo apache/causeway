@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.runtime.help;
+package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -28,10 +28,10 @@ import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorAbstract;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 
 
-public class StandardHelpFacetDecorator  extends FacetDecoratorAbstract implements HelpFacetDecorator {
+public class HelpFacetDecoratorUsingHelpManager  extends FacetDecoratorAbstract implements HelpFacetDecorator {
     private final HelpManager helpManager;
 
-    public StandardHelpFacetDecorator(final HelpManager manager) {
+    public HelpFacetDecoratorUsingHelpManager(final HelpManager manager) {
         helpManager = manager;
     }
 
@@ -46,7 +46,7 @@ public class StandardHelpFacetDecorator  extends FacetDecoratorAbstract implemen
         if (facet.facetType() == HelpFacet.class) {
             final String lookupHelp = helpManager.help(identifier);
             if (lookupHelp != null) {
-                HelpFacetLookup decoratingFacet = new HelpFacetLookup(lookupHelp, facet.getFacetHolder());
+                HelpFacetLookedUpViaHelpManager decoratingFacet = new HelpFacetLookedUpViaHelpManager(lookupHelp, facet.getFacetHolder());
 				return replaceFacetWithDecoratingFacet(facet, decoratingFacet, requiredHolder);
             }
         }

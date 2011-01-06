@@ -24,9 +24,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.ensure.Ensure;
@@ -55,7 +56,7 @@ public final class IdentifierUtils {
             name = asString.substring(indexOfHash + 1);
             return Identifier.propertyOrCollectionIdentifier(className, name);
         }
-        List<String> parmList = new ArrayList<String>();
+        List<String> parmList = Lists.newArrayList();
         name = asString.substring(indexOfHash + 1, indexOfOpenBracket);
         final String allParms = asString.substring(indexOfOpenBracket + 1, indexOfCloseBracket).trim();
         if (allParms.length() > 0) {
@@ -66,7 +67,7 @@ public final class IdentifierUtils {
                 parmList.add(nextParam);
             }
         }
-        return Identifier.actionIdentifier(className, name, parmList.toArray(new String[]{}));
+        return Identifier.actionIdentifier(className, name, parmList);
     }
 
 

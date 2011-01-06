@@ -183,7 +183,7 @@ public class ServerFacadeImpl implements ServerFacade {
     private ObjectMember getActionElseThrowException(final Identifier id, final ObjectSpecification specification) {
         ObjectMember member =
             specification.getObjectAction(ActionType.USER, id.getMemberName(),
-                getMemberParameterSpecifications(id));
+                loadParameterSpecifications(id));
         if (member == null) {
             throw new IsisException("No user action found for id " + id);
         }
@@ -198,11 +198,11 @@ public class ServerFacadeImpl implements ServerFacade {
         return member;
     }
 
-    private List<ObjectSpecification> getMemberParameterSpecifications(final Identifier id) {
-        final String[] parameters = id.getMemberParameterNames();
+    private static List<ObjectSpecification> loadParameterSpecifications(final Identifier id) {
+        final List<String> parameters = id.getMemberParameterNames();
         final List<ObjectSpecification> specifications = Lists.newArrayList();
-        for (int i = 0; i < parameters.length; i++) {
-            specifications.add(getSpecificationLoader().loadSpecification(parameters[i]));
+        for (String parameter : parameters) {
+            specifications.add(getSpecificationLoader().loadSpecification(parameter));
         }
         return specifications;
     }

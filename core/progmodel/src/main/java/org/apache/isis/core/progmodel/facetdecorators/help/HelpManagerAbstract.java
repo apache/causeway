@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.runtime.help;
+package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.applib.Identifier;
 

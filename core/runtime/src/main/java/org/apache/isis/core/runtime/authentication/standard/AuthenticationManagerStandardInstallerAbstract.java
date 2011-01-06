@@ -22,10 +22,10 @@ package org.apache.isis.core.runtime.authentication.standard;
 
 import java.util.List;
 
+import org.apache.isis.core.metamodel.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
-import org.apache.isis.core.runtime.installers.InstallerAbstract;
 
 
 public abstract class AuthenticationManagerStandardInstallerAbstract extends InstallerAbstract implements

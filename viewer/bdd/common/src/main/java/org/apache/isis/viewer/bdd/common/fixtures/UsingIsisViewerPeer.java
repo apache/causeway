@@ -210,7 +210,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
         final ScenarioCell onMemberCell = onMemberBinding.getCurrentCell();
         final String onMember = onMemberCell.getText();
 
-        if (StringUtils.emptyString(onMember)) {
+        if (StringUtils.isNullOrEmpty(onMember)) {
             throw ScenarioBoundValueException.current(onMemberBinding, "(required)");
         }
 
@@ -279,7 +279,7 @@ public class UsingIsisViewerPeer extends AbstractFixturePeer {
     }
 
     private void aliasResultFromPerformCommand(Perform performCommand, String aliasAs) throws ScenarioBoundValueException {
-        if (StringUtils.emptyString(aliasAs)) {
+        if (StringUtils.isNullOrEmpty(aliasAs)) {
             return;
         }
         final ObjectAdapter resultAdapter = performCommand.getResult();

@@ -24,18 +24,13 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
-import org.jmock.Mockery;
-import org.jmock.integration.junit4.JMock;
-import org.jmock.integration.junit4.JUnit4Mockery;
+import java.math.BigDecimal;
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
-@RunWith(JMock.class)
 public class IdentifierTests {
-
-    @SuppressWarnings("unused")
-    private final Mockery mockery = new JUnit4Mockery();
 
     private Identifier identifier;
 
@@ -55,6 +50,20 @@ public class IdentifierTests {
         final String domainClassFullyQualifiedName = domainClass.getCanonicalName();
         identifier = Identifier.classIdentifier(domainClass);
         assertThat(identifier.getClassName(), is(domainClassFullyQualifiedName));
+    }
+
+    @Test
+    public void memberParameterNames() {
+        final Class<?> domainClass = SomeDomainClass.class;
+        identifier = Identifier.actionIdentifier(domainClass, "placeOrder", int.class, String.class);
+        assertThat(identifier.getMemberParameterNames(), is(Arrays.asList("int", "java.lang.String")));
+    }
+
+    @Test
+    public void paramsIdentityString() {
+        final Class<?> domainClass = SomeDomainClass.class;
+        identifier = Identifier.actionIdentifier(domainClass, "placeOrder", int.class, String.class, BigDecimal.class);
+        assertThat(identifier.toParmsIdentityString(), is("(int,java.lang.String,java.math.BigDecimal)"));
     }
 
 }

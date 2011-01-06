@@ -20,6 +20,7 @@
 package org.apache.isis.applib.events;
 
 import java.util.EventObject;
+import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.applib.util.NameUtils;
@@ -104,14 +105,14 @@ public abstract class InteractionEvent extends EventObject {
      * Convenience method that returns the {@link Identifier#getClassName() class name} of the {@link #getIdentifier()
      * identifier}.
      */
-    public String[] getMemberParameterNames() {
+    public List<String> getMemberParameterNames() {
         return identifier.getMemberParameterNames();
     }
 
     /**
      * As per {@link #getMemberParameterName()}, but naturalized.
      */
-    public String[] getMemberParameterNaturalNames() {
+    public List<String> getMemberParameterNaturalNames() {
         return NameUtils.naturalNames(getMemberParameterNames());
     }
 

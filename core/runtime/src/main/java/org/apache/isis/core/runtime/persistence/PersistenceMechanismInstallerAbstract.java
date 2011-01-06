@@ -32,10 +32,10 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.DomainObjectContainer;
 import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.metamodel.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
-import org.apache.isis.core.runtime.installers.InstallerAbstract;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupAware;
 import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;

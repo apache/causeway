@@ -17,40 +17,52 @@
  *  under the License.
  */
 
+package org.apache.isis.core.progmodel.facetdecorators.i18n;
 
-package org.apache.isis.core.runtime.i18n.resourcebundle;
+import java.util.List;
 
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
-
 /**
  * Authorises the user in the current session view and use members of an object.
+ * 
+ * <p>
+ * TODO: allow description and help to be found for parameters
  */
 public interface I18nManager extends ApplicationScopedComponent {
 
     /**
-     * Get the localized description for the specified identified action/property. Returns null if no
-     * description available.
-     */
-    String getDescription(Identifier identifier);
-
-    /**
-     * Get the localized name for the specified identified action/property. Returns null if no name available.
+     * Get the localized name for the specified identified action/property. 
+     * 
+     * <p>
+     * Returns null if no name available.
      */
     String getName(Identifier identifier);
 
     /**
-     * Get the localized help text for the specified identified action/property. Returns null if no help text
-     * available.
+     * Get the localized description for the specified identified action/property.
+     * 
+     * <p>
+     * Returns null if no description available.
+     */
+    String getDescription(Identifier identifier);
+
+    /**
+     * Get the localized help text for the specified identified action/property. 
+     * 
+     * <p>
+     * Returns null if no help text available.
      */
     String getHelp(Identifier identifier);
 
     /**
-     * Get the localized parameter names for the specified identified action/property. Returns null if no
-     * parameters are available. Otherwise returns an array of String objects the size of the number of
-     * parameters, where each element is the localised name for the corresponding parameter, or is null if no
+     * Get the localized parameter names for the specified identified action/property.
+     * 
+     * <p>
+     * Returns null if no parameters are available. Otherwise returns an array of String objects the size of the number
+     * of parameters, where each element is the localised name for the corresponding parameter, or is null if no
      * parameter name is available.
      */
-    String[] getParameterNames(Identifier identifier);
+    List<String> getParameterNames(Identifier identifier);
 }

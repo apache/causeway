@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.runtime.i18n.resourcebundle.facets;
+package org.apache.isis.core.progmodel.facetdecorators.i18n.internal;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;

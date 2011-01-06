@@ -18,31 +18,17 @@
  */
 
 
-package org.apache.isis.core.runtime.help;
+package org.apache.isis.core.progmodel.facetdecorators.help;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 
 
-public class HelpManagerAssist extends HelpManagerAbstract {
+public interface HelpManager extends ApplicationScopedComponent {
 
-    private HelpManager underlyingHelpManager;
-    private boolean showIdentifier = false;
-
-    public void setShowIdentifier(final boolean showIdentifier) {
-        this.showIdentifier = showIdentifier;
-    }
-
-    public void setDecorated(final HelpManager decorated) {
-        this.underlyingHelpManager = decorated;
-    }
-
-    @Override
-    public String help(final Identifier identifier) {
-        String help = "";
-        if (underlyingHelpManager != null) {
-            help = underlyingHelpManager.help(identifier);
-        }
-        return showIdentifier ? (identifier.toString() + "\n") : "" + help;
-    }
-
+    /**
+     * Returns help text for the specified identifier. If no help text is available then an empty String
+     * should be returned.
+     */
+    String help(Identifier identifier);
 }

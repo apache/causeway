@@ -19,6 +19,11 @@
 
 package org.apache.isis.applib.util;
 
+import java.util.Collections;
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.Identifier;
 
 /**
@@ -76,6 +81,14 @@ public class NameUtils {
             naturalNames[i++] = NameUtils.naturalName(name);
         }
         return naturalNames;
+    }
+
+    public static List<String> naturalNames(final List<String> names) {
+        List<String> naturalNames = Lists.newArrayList();
+        for (final String name : names) {
+            naturalNames.add(NameUtils.naturalName(name));
+        }
+        return Collections.unmodifiableList(naturalNames);
     }
 
 }

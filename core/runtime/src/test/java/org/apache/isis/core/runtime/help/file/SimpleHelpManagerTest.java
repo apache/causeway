@@ -29,7 +29,7 @@ import junit.framework.TestCase;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
-import org.apache.isis.core.runtime.help.file.FileBasedHelpManager;
+import org.apache.isis.core.progmodel.facetdecorators.help.file.internal.HelpManagerUsingFiles;
 
 
 public class SimpleHelpManagerTest extends TestCase {
@@ -138,7 +138,7 @@ public class SimpleHelpManagerTest extends TestCase {
 
     public void testMessageForFileError() {
         final Identifier identifier = Identifier.propertyOrCollectionIdentifier("cls", "fld2");
-        final FileBasedHelpManager manager = new FileBasedHelpManager(new PropertiesConfiguration()) {
+        final HelpManagerUsingFiles manager = new HelpManagerUsingFiles(new PropertiesConfiguration()) {
             @Override
             protected BufferedReader getReader() throws FileNotFoundException {
                 throw new FileNotFoundException("not found");
@@ -185,7 +185,7 @@ public class SimpleHelpManagerTest extends TestCase {
     }
 }
 
-class TestHelpManager extends FileBasedHelpManager {
+class TestHelpManager extends HelpManagerUsingFiles {
     public TestHelpManager(IsisConfiguration configuration) {
         super(configuration);
     }

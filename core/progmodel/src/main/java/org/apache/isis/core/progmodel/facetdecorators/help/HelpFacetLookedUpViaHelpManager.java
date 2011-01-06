@@ -18,12 +18,20 @@
  */
 
 
+package org.apache.isis.core.progmodel.facetdecorators.help;
+
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.help.HelpFacetAbstract;
+
+
 /**
- * Help API, utilizing the {@link org.apache.isis.core.metamodel.facetdecorator.FacetDecorator} mechanism..
- * 
- * <p>
- * Concrete implementations are in the <tt>help-xxx</tt> modules.  Note at the time of writing - unlike
- * authorisation - there is no help-proxy implementation.  Therefore for client/server deployments
- * any help content must be deployed locally.
+ * Looked up via the {@link HelpManager}.
  */
-package org.apache.isis.core.runtime.help;
+public class HelpFacetLookedUpViaHelpManager extends HelpFacetAbstract {
+
+    public HelpFacetLookedUpViaHelpManager(final String value, final FacetHolder holder) {
+        super(value, holder);
+    }
+
+}
+

@@ -130,7 +130,7 @@ public final class StringUtils {
      * Simply forces first char to be lower case.
      */
     public static String lowerFirst(final String str) {
-        if (emptyString(str)) {
+        if (isNullOrEmpty(str)) {
             return str;
         }
         if (str.length() == 1) {
@@ -150,24 +150,12 @@ public final class StringUtils {
 
 
     //////////////////////////////////////////////////////////////
-    // isNullOrEmpty, isNotEmpty, emptyString, nullSafeEquals
+    // isNullOrEmpty, nullSafeEquals
     //////////////////////////////////////////////////////////////
 
-    public static boolean emptyString(final String str) {
-        return str == null || str.length() == 0;
-    }
-    
     public static boolean isNullOrEmpty(final String str) {
-        return str == null || str.length() == 0;
+        return str == null || str.isEmpty();
     }
-
-    /**
-     * Reciprocal of {@link #isNullOrEmpty(String)}.
-     */
-    public static boolean isNotEmpty(final String str) {
-        return !isNullOrEmpty(str);
-    }
-
 
     public static boolean nullSafeEquals(final String str1, final String str2) {
         if (str1 == null || str2 == null) {

@@ -18,20 +18,10 @@
  */
 
 
-package org.apache.isis.core.runtime.help;
+package org.apache.isis.core.progmodel.facetdecorators.help;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.help.HelpFacetAbstract;
+import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 
-
-/**
- * Looked up via the {@link HelpManager}.
- */
-public class HelpFacetLookup extends HelpFacetAbstract {
-
-    public HelpFacetLookup(final String value, final FacetHolder holder) {
-        super(value, holder);
-    }
+public interface HelpFacetDecorator extends FacetDecorator {
 
 }
-

@@ -18,26 +18,28 @@
  */
 
 
-package org.apache.isis.core.runtime.help.file;
+package org.apache.isis.core.progmodel.facetdecorators.help.file;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
-import org.apache.isis.core.runtime.help.StandardHelpFacetDecorator;
-import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.progmodel.facetdecorators.help.HelpFacetDecoratorUsingHelpManager;
+import org.apache.isis.core.progmodel.facetdecorators.help.file.internal.HelpManagerUsingFiles;
 
 
-public class FileBasedHelpDecoratorInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
+public class HelpFacetDecoratorUsingFilesInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 
-    public FileBasedHelpDecoratorInstaller() {
+    public HelpFacetDecoratorUsingFilesInstaller() {
 		super(FacetDecoratorInstaller.TYPE, "help-file");
 	}
 
-	public List<FacetDecorator> createDecorators() {
-        final FileBasedHelpManager manager = new FileBasedHelpManager(getConfiguration());
-        return Arrays.<FacetDecorator>asList(new StandardHelpFacetDecorator(manager));
+	@Override
+    public List<FacetDecorator> createDecorators() {
+        final HelpManagerUsingFiles manager = new HelpManagerUsingFiles(getConfiguration());
+        return Arrays.<FacetDecorator>asList(new HelpFacetDecoratorUsingHelpManager(manager));
     }
 
 	@Override

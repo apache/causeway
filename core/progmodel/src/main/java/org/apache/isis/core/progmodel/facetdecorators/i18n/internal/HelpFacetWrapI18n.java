@@ -18,10 +18,17 @@
  */
 
 
-package org.apache.isis.core.runtime.help;
+package org.apache.isis.core.progmodel.facetdecorators.i18n.internal;
 
-import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.help.HelpFacetAbstract;
 
-public interface HelpFacetDecorator extends FacetDecorator {
+
+public class HelpFacetWrapI18n extends HelpFacetAbstract {
+
+    public HelpFacetWrapI18n(final String value, final FacetHolder holder) {
+        super(value, holder);
+    }
 
 }
+

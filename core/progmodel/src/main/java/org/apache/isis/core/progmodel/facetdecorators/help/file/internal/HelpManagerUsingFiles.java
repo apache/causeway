@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.runtime.help.file;
+package org.apache.isis.core.progmodel.facetdecorators.help.file.internal;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,12 +29,12 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.runtime.help.HelpManagerAbstract;
+import org.apache.isis.core.progmodel.facetdecorators.help.HelpManagerAbstract;
 
 
-public class FileBasedHelpManager extends HelpManagerAbstract {
+public class HelpManagerUsingFiles extends HelpManagerAbstract {
 
-    private static final Logger LOG = Logger.getLogger(FileBasedHelpManager.class);
+    private static final Logger LOG = Logger.getLogger(HelpManagerUsingFiles.class);
 
     /**
      * The name of the file used unless overridden with {@link #setFileName(String)}.
@@ -48,7 +48,7 @@ public class FileBasedHelpManager extends HelpManagerAbstract {
     @SuppressWarnings("unused")
     private final IsisConfiguration configuration;
 
-    public FileBasedHelpManager(IsisConfiguration configuration) {
+    public HelpManagerUsingFiles(IsisConfiguration configuration) {
         this.configuration = configuration;
     }
 

@@ -147,7 +147,7 @@ public class SetUpObjectsForFitNesse extends AbstractFixture<SetUpObjectsPeer> {
             final Parse aliasCell = FitnesseUtil.cell(row, aliasColumn);
             if (aliasCell != null) {
                 String alias = aliasCell.text();
-                if (StringUtils.emptyString(alias)) {
+                if (StringUtils.isNullOrEmpty(alias)) {
                     alias = getPeer().aliasFor(adapter);
                     FitnesseUtil.setBody(aliasCell, Fixture.gray(alias));
                 } else {

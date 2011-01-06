@@ -36,7 +36,7 @@ public class Contains extends ThatSubcommandAbstract {
 
         // see if matches null
         if (resultAdapter == null) {
-            if (StringUtils.emptyString(expected)) {
+            if (StringUtils.isNullOrEmpty(expected)) {
                 return resultAdapter;
             }
             throw ScenarioBoundValueException.current(arg0Binding, "(is null)");
@@ -44,7 +44,7 @@ public class Contains extends ThatSubcommandAbstract {
 
         final String resultTitle = resultAdapter.titleString();
 
-        if (!StringUtils.emptyString(expected)) {
+        if (!StringUtils.isNullOrEmpty(expected)) {
 
             // see if expected matches an alias
             final ObjectAdapter expectedAdapter = performContext.getPeer().getAliasRegistry().getAliased(expected);

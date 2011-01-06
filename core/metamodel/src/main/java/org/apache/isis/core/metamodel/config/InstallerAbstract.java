@@ -18,20 +18,16 @@
  */
 
 
-package org.apache.isis.core.runtime.installers;
+package org.apache.isis.core.metamodel.config;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderAware;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
-
 import com.google.inject.Module;
 import com.google.inject.internal.Lists;
 import com.google.inject.util.Modules;
+
+import org.apache.isis.core.commons.components.Installer;
 
 public abstract class InstallerAbstract implements Installer,
 		ConfigurationBuilderAware {
@@ -47,9 +43,9 @@ public abstract class InstallerAbstract implements Installer,
 	 * subinterface of Installer.
 	 * 
 	 * <p>
-	 * For example, {@link PersistenceMechanismInstaller} has a constant
-	 * {@link PersistenceMechanismInstaller#TYPE}. Any implementation of
-	 * {@link PersistenceMechanismInstaller} should pass this constant value up
+	 * For example, <tt>PersistenceMechanismInstaller</tt> has a constant
+	 * <tt>PersistenceMechanismInstaller#TYPE</tt>. Any implementation of
+	 * <tt>PersistenceMechanismInstaller</tt> should pass this constant value up
 	 * to this constructor.
 	 */
 	public InstallerAbstract(final String type, final String name) {
@@ -57,12 +53,14 @@ public abstract class InstallerAbstract implements Installer,
 		this.name = name;
 	}
 
-	public String getType() {
+	@Override
+    public String getType() {
 		return type;
 	}
 
 	
-	public String getName() {
+	@Override
+    public String getName() {
 		return name;
 	}
 
@@ -75,7 +73,8 @@ public abstract class InstallerAbstract implements Installer,
 	 * @see #getType()
 	 * @see #getName()
 	 */
-	public List<String> getConfigurationResources() {
+	@Override
+    public List<String> getConfigurationResources() {
 		List<String> resourceList = Lists.newArrayList();
 		String componentFile = getType() + ".properties";
 		resourceList.add(componentFile);
@@ -98,14 +97,16 @@ public abstract class InstallerAbstract implements Installer,
 	/**
 	 * Default implementation does nothing.
 	 */
-	public void init() {
+	@Override
+    public void init() {
 		// no-op implementation, subclasses may override!
 	}
 
 	/**
 	 * Default implementation does nothing.
 	 */
-	public void shutdown() {
+	@Override
+    public void shutdown() {
 		// no-op implementation, subclasses may override!
 	}
 
@@ -118,7 +119,8 @@ public abstract class InstallerAbstract implements Installer,
 	 * If a {@link #setConfiguration(IsisConfiguration) configuration}
 	 * has already been provided, then throws {@link IllegalStateException}.
 	 */
-	public void setConfigurationBuilder(
+	@Override
+    public void setConfigurationBuilder(
 			ConfigurationBuilder configurationBuilder) {
 		if (configuration != null) {
 			throw new IllegalStateException(

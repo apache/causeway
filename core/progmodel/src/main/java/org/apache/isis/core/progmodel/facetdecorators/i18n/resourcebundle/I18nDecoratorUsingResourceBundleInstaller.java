@@ -18,24 +18,27 @@
  */
 
 
-package org.apache.isis.core.runtime.i18n.resourcebundle;
+package org.apache.isis.core.progmodel.facetdecorators.i18n.resourcebundle;
 
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
-import org.apache.isis.core.runtime.installers.InstallerAbstract;
+import org.apache.isis.core.progmodel.facetdecorators.i18n.I18nFacetDecorator;
+import org.apache.isis.core.progmodel.facetdecorators.i18n.resourcebundle.internal.I18nManagerUsingResourceBundle;
 
 
-public class ResourceBasedI18nDecoratorInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
+public class I18nDecoratorUsingResourceBundleInstaller extends InstallerAbstract implements FacetDecoratorInstaller {
 
-    public ResourceBasedI18nDecoratorInstaller() {
+    public I18nDecoratorUsingResourceBundleInstaller() {
 		super(FacetDecoratorInstaller.TYPE, "resource-i18n");
 	}
     
-	public List<FacetDecorator> createDecorators() {
-        final ResourceBasedI18nManager manager = new ResourceBasedI18nManager(getConfiguration());
+	@Override
+    public List<FacetDecorator> createDecorators() {
+        final I18nManagerUsingResourceBundle manager = new I18nManagerUsingResourceBundle(getConfiguration());
         manager.init();
         return Arrays.<FacetDecorator>asList(new I18nFacetDecorator(manager));
     }

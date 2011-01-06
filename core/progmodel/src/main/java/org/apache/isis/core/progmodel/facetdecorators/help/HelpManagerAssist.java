@@ -18,17 +18,31 @@
  */
 
 
-package org.apache.isis.core.runtime.i18n.resourcebundle.facets;
+package org.apache.isis.core.progmodel.facetdecorators.help;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.help.HelpFacetAbstract;
+import org.apache.isis.applib.Identifier;
 
 
-public class HelpFacetWrapI18n extends HelpFacetAbstract {
+public class HelpManagerAssist extends HelpManagerAbstract {
 
-    public HelpFacetWrapI18n(final String value, final FacetHolder holder) {
-        super(value, holder);
+    private HelpManager underlyingHelpManager;
+    private boolean showIdentifier = false;
+
+    public void setShowIdentifier(final boolean showIdentifier) {
+        this.showIdentifier = showIdentifier;
+    }
+
+    public void setDecorated(final HelpManager decorated) {
+        this.underlyingHelpManager = decorated;
+    }
+
+    @Override
+    public String help(final Identifier identifier) {
+        String help = "";
+        if (underlyingHelpManager != null) {
+            help = underlyingHelpManager.help(identifier);
+        }
+        return showIdentifier ? (identifier.toString() + "\n") : "" + help;
     }
 
 }
-
