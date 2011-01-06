@@ -131,7 +131,7 @@ public class EditObject extends AbstractElementProcessor {
             AuthenticationSession session = IsisContext.getAuthenticationSession();
             if (field.isVisible(session, object).isAllowed() && (includeUnusableFields || field.isUsable(session, object).isAllowed())) {
                 ObjectAdapter[] options = field.getChoices(object);
-                FieldFactory.initializeField(context, object, field, options, !field.isMandatory(), includeUnusableFields, formField);
+                FieldFactory.initializeField(context, object, field, options, field.isMandatory(), includeUnusableFields, formField);
                 
                 Consent usable = field.isUsable(session, object);
                 boolean isEditable = true;

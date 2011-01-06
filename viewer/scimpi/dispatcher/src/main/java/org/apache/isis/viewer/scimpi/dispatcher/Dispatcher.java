@@ -108,6 +108,8 @@ public class Dispatcher {
                 IsisContext.getPersistenceSession().getTransactionManager().endTransaction();
             }
         } catch (Throwable e) {
+           LOG.error(e.getMessage(), e);
+            
             DebugString error = new DebugString();
             
             List<String> messages =  IsisContext.getMessageBroker().getMessages();

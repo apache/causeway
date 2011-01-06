@@ -28,18 +28,25 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 public class Diagnostics extends AbstractElementProcessor {
 
     public void process(Request request) {
-        if (request.getContext().getDebug() == RequestContext.Debug.ON) {
+        boolean isForced = request.isRequested("force");
+        boolean isExcludeVariables = request.isRequested("exclude-variables");
+        boolean isExcludeProcessing = request.isRequested("exclude-processing");
+        if (isForced || request.getContext().getDebug() == RequestContext.Debug.ON) {
             RequestContext context = request.getContext();
             request.appendHtml("<div class=\"debug\">");
-            request.appendHtml("<a class=\"option\" target=\"debug\" href=\"debug.app\">Object</a>");
             request.appendHtml("<pre>");  
             request.appendHtml("URI:  " + context.getUri());
             request.appendHtml("\n");
             request.appendHtml("File: " + context.fullFilePath(context.getResourceFile()));
-            request.appendHtml("\n\n");
-            context.append(request, "variables");
-            request.appendHtml("\n\n"); 
-            request.appendHtml(request.getContext().getDebugTrace());      
+            if (!isExcludeVariables) {
+                request.appendHtml("\n\n");
+                request.appendHtml("<a class=\"option\" target=\"debug\" href=\"debug.app\">Object</a>");
+                context.append(request, "variables");
+            }
+            if (!isExcludeProcessing) {
+                request.appendHtml("\n\n"); 
+                request.appendHtml(request.getContext().getDebugTrace());      
+            }
             request.appendHtml("</pre>");
             request.appendHtml("</div>");
         }

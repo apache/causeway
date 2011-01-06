@@ -39,13 +39,13 @@ public class FieldFactory {
         ObjectAdapter object,
         ObjectFeature param,
         ObjectAdapter[] optionsForParameter,
-        boolean isOptional,
+        boolean isRequired,
         boolean includeUnusableFields,
         InputField field) {
 
         field.setLabel(param.getName());
         field.setDescription(param.getDescription());
-        field.setRequired(!isOptional);
+        field.setRequired(isRequired);
         field.setHidden(false);
 
         if (param.getSpecification().getFacet(ParseableFacet.class) != null) {
