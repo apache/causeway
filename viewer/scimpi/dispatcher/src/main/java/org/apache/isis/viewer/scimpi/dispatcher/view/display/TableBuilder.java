@@ -55,7 +55,9 @@ public class TableBuilder extends AbstractTableView {
 
             @Override
             public void writeHeaders(PageWriter writer) {
+                writer.appendHtml("<thead>");
                 writer.appendHtml(headers);
+                writer.appendHtml("</thead>");
             }
 
             @Override
