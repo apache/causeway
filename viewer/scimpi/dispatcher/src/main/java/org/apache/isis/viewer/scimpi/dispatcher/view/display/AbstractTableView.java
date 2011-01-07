@@ -100,7 +100,9 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
 
         request.appendHtml("<table summary=\"" + summary + "\">");
         rowBuilder.writeHeaders(request);
+        rowBuilder.writeFooters(request);
 
+        request.appendHtml("<tbody>");
         CollectionFacet facet = collection.getSpecification().getFacet(CollectionFacet.class);
         Iterator<ObjectAdapter> iterator = facet.iterator(collection);
         int row = 1;
@@ -117,7 +119,7 @@ public abstract class AbstractTableView extends AbstractElementProcessor {
             request.appendHtml("</tr>");
             row++;
         }
-        rowBuilder.writeFooters(request);
+        request.appendHtml("</tbody>");
         request.appendHtml("</table>");
     }
 

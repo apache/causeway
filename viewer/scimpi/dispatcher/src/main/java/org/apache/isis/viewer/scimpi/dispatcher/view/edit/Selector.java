@@ -69,8 +69,8 @@ public class Selector extends AbstractElementProcessor {
                 CreateFormParameter parameters = new CreateFormParameter();
                 parameters.objectId = objectId;
                 parameters.methodName = methodName;
-                parameters.buttonTitle = request.getOptionalProperty(TITLE, "Search");
-                parameters.legend = request.getOptionalProperty(LEGEND);
+                parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE, "Search");
+                parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
                 parameters.className = request.getOptionalProperty(CLASS, "selector");
                 parameters.id = request.getOptionalProperty(ID);
     

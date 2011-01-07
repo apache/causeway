@@ -41,6 +41,7 @@ public class TableView extends AbstractTableView {
         private final String parent;
         private final boolean includeHeading;
         private final boolean includeFooting;
+        private final String title;
         private final String[] headers;
         private final List<ObjectAssociation> fields;
         private final boolean showSelectOption;
@@ -54,6 +55,7 @@ public class TableView extends AbstractTableView {
                 String parent,
                 boolean includeHeading,
                 boolean includeFooting,
+                String title,
                 String[] headers,
                 List<ObjectAssociation> fields,
                 boolean showSelectOption,
@@ -65,6 +67,7 @@ public class TableView extends AbstractTableView {
             this.parent = parent;
             this.includeHeading = includeHeading;
             this.includeFooting = includeFooting;
+            this.title = title;
             this.headers = headers;
             this.fields = fields;
             this.showSelectOption = showSelectOption;
@@ -78,27 +81,40 @@ public class TableView extends AbstractTableView {
         @Override
         public void writeFooters(PageWriter writer) {
             if (includeFooting) {
+                writer.appendHtml("<tfooter>");
                 headerRow(writer, headers);
+                writer.appendHtml("</tfooter>");
             }
         }
 
         @Override
         public void writeHeaders(PageWriter writer) {
             if (includeHeading) {
+                writer.appendHtml("<theader>");
+                titleRow(writer);
                 headerRow(writer, headers);
+                writer.appendHtml("</theader>");
             }
         }
 
-        private void headerRow(final PageWriter request, final String[] headers) {
-            request.appendHtml("<tr>");
+        private void titleRow(final PageWriter writer) {
+            if (title != null) {
+                writer.appendHtml("<tr colspan=\"" + fields.size() +"\">");
+                writer.appendHtml("<th class=\"title\">" + title + "</th>");
+                writer.appendHtml("</tr>");
+            }
+        }
+
+        private void headerRow(final PageWriter writer, final String[] headers) {
+            writer.appendHtml("<tr>");
             String[] columnHeaders = headers;
             for (int i = 0; i < columnHeaders.length; i++) {
                 if (columnHeaders[i] != null) {
-                    request.appendHtml("<th>" + columnHeaders[i] + "</th>");
+                    writer.appendHtml("<th>" + columnHeaders[i] + "</th>");
                 }
             }
-            request.appendHtml("<th>" + "</th>");
-            request.appendHtml("</tr>");
+            writer.appendHtml("<th>" + "</th>");
+            writer.appendHtml("</tr>");
         }
 
         @Override
@@ -195,7 +211,8 @@ public class TableView extends AbstractTableView {
                 context.fullUriPath(linkRowView));
         final boolean includeHeading = request.isRequested(HEADING, true);
         final boolean includeFooting = request.isRequested(FOOTING, false);
-
+        final String title = request.getOptionalProperty(FORM_TITLE);
+        
         boolean linkFields = request.isRequested("link-fields", true);
         final boolean showSelectOption = request.isRequested(SHOW_SELECT, true);
         final boolean showEditOption = request.isRequested(SHOW_EDIT, true);
@@ -226,7 +243,7 @@ public class TableView extends AbstractTableView {
 
         request.popBlockContent();
         
-        return new SimpleTableBuilder(object, includeHeading, includeFooting, headers, fields, showSelectOption, showDeleteOption,
+        return new SimpleTableBuilder(object, includeHeading, includeFooting, title, headers, fields, showSelectOption, showDeleteOption,
                 showEditOption, fieldName, linkedFields, linkRow);
     }
 

@@ -34,11 +34,12 @@ public class SelectedObject extends AbstractElementProcessor {
         String name = request.getOptionalProperty(NAME, "selected");
         String objectId = request.getRequiredProperty(OBJECT);
         String equalsId = request.getOptionalProperty("equals");
-        String title = request.getOptionalProperty(TITLE);
+        String title = request.getOptionalProperty(BUTTON_TITLE);
         
         ObjectAdapter object = request.getContext().getMappedObjectOrResult(objectId);
         ObjectAdapter other = request.getContext().getMappedObjectOrResult(equalsId);
         if (object == other || object.equals(title)) {
+            // TODO title is not being used!
             request.getContext().addVariable(ID, " id=\"" + name + "\" ", Scope.INTERACTION);
         } else {
             request.getContext().addVariable(ID, "", Scope.INTERACTION);

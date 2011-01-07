@@ -133,7 +133,7 @@ public class Methods extends AbstractElementProcessor {
                     params.methodName = action.getId();
                     params.forwardResultTo = "_generic." + Dispatcher.EXTENSION;
                     params.buttonTitle = "OK";
-                    params.legend = action.getName();
+                    params.formTitle = action.getName();
                   //  parameters.resultName = request.getOptionalProperty(RESULT_NAME);
                    // parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
                   //  parameters.scope = request.getOptionalProperty(SCOPE);

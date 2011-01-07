@@ -44,7 +44,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
     public void process(Request request, ObjectAdapter object) {
         String cls = request.getOptionalProperty(CLASS, "form");
         String classString = " class=\"" + cls + "\"";
-        String title = request.getOptionalProperty(TITLE);
+        String title = request.getOptionalProperty(FORM_TITLE);
         String oddRowClass = request.getOptionalProperty(ODD_ROW_CLASS);
         String evenRowClass = request.getOptionalProperty(EVEN_ROW_CLASS);;
 

@@ -39,45 +39,5 @@ public abstract class AbstractElementProcessor implements ElementProcessor, Name
         }
         return cls;
     }
-    /*
-    protected static final String COLLECTION = "collection";
-    protected static final String CONFIRM = "confirm";
-    protected static final String CLASS = "class";
-    protected static final String DEFAULT = "default";
-    protected static final String ELEMENT_NAME = "element-name";
-    protected static final String EVEN_ROW_CLASS = "even-row";
-    protected static final String ERRORS = "error";
-    protected static final String FIELD = "field";
-    protected static final String FIELD_NAME = "field-name";
-    protected static final String FORMS = "show-forms";
-    protected static final String HEADING = "heading";
-    protected static final String ICON_CLASS = "icon";
-    protected static final String HIDDEN = "hidden";
-    protected static final String HEADER_LEVEL = "header";
-    protected static final String ID = "id";
-    protected static final String LEGEND = "legend";
-    protected static final String LINK = "link";
-    protected static final String METHOD = "method";
-    protected static final String NAME = "name";
-    protected static final String ODD_ROW_CLASS = "odd-row";
-    protected static final String OBJECT = "object";
-    protected static final String PARAMETER_NUMBER = "number";
-    protected static final String PLURAL = "plural";
-    protected static final String REFERENCE_NAME = "reference-name";
-    protected static final String RESULT_NAME = "result-name";
-    protected static final String RESULT_OVERRIDE = "result-override";
-    protected static final String SCOPE = "scope";
-    protected static final String SHOW_ICON = "icon";
-    protected static final String SHOW_SELECT = "select";
-    protected static final String SHOW_EDIT = "edit";
-    protected static final String SHOW_DELETE = "delete";
-    protected static final String TITLE = "title";
-    protected static final String TRUNCATE = "truncate";
-    protected static final String TYPE = "type";
-    protected static final String VIEW = "view";
-    protected static final String VALUE = "value";
-    protected static final String VOID = "void";
-    protected static final String WHEN = "when";
-    */
 }
 

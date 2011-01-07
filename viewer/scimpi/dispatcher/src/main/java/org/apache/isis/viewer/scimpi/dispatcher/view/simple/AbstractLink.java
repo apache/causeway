@@ -35,7 +35,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
 public abstract class AbstractLink extends AbstractElementProcessor {
 
     public void process(Request request) {
-        String title = request.getOptionalProperty(TITLE);
+        String title = request.getOptionalProperty(FORM_TITLE);
         String name = request.getOptionalProperty(NAME);
         String cls = request.getOptionalProperty(CLASS, "action");
         String object = request.getOptionalProperty(OBJECT);

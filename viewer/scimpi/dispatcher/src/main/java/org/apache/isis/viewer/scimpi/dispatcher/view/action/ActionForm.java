@@ -51,8 +51,8 @@ public class ActionForm extends AbstractElementProcessor {
         parameters.forwardResultTo = request.getOptionalProperty(VIEW);
         parameters.forwardVoidTo = request.getOptionalProperty(VOID);
         parameters.forwardErrorTo = request.getOptionalProperty(ERRORS);
-        parameters.buttonTitle = request.getOptionalProperty(TITLE, "OK");
-        parameters.legend = request.getOptionalProperty(LEGEND);
+        parameters.buttonTitle = request.getOptionalProperty(BUTTON_TITLE, "OK");
+        parameters.formTitle = request.getOptionalProperty(FORM_TITLE);
         parameters.resultName = request.getOptionalProperty(RESULT_NAME);
         parameters.resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         parameters.scope = request.getOptionalProperty(SCOPE);
@@ -132,15 +132,15 @@ public class ActionForm extends AbstractElementProcessor {
         }
         overrideWithHtml(context, containedBlock, formFields);
 
-        String legend;
-        if (parameterObject.legend == null) {
-            legend = action.getName();
+        String formTitle;
+        if (parameterObject.formTitle == null) {
+            formTitle = action.getName();
         } else {
-            legend = parameterObject.legend;
+            formTitle = parameterObject.formTitle;
         }
 
         InputForm.createForm(request, ActionAction.ACTION + ".app", parameterObject.buttonTitle, formFields, hiddenFields,
-                legend, parameterObject.className, parameterObject.id);
+                formTitle, parameterObject.className, parameterObject.id);
 
         request.popBlockContent();
     }

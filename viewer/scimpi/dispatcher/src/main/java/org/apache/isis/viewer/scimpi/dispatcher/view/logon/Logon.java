@@ -64,11 +64,11 @@ public class Logon extends AbstractElementProcessor {
    
         InputField[] fields = new InputField[] { nameField, passwordField, };
    
-        String legend = request.getOptionalProperty(LEGEND);
-        String loginButtonTitle = request.getOptionalProperty(TITLE, "Log in");
+        String formTitle = request.getOptionalProperty(FORM_TITLE);
+        String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
         String className = request.getOptionalProperty(CLASS, "login");
         String  id = request.getOptionalProperty(ID);
-        InputForm.createForm(request, "logon.app", loginButtonTitle, fields, hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), legend, className, id);
+        InputForm.createForm(request, "logon.app", loginButtonTitle, fields, hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), formTitle, className, id);
     }
 
     public String getName() {

@@ -33,15 +33,15 @@ public class InputForm {
             String buttonTitle,
             InputField[] fields,
             HiddenInputField[] hiddenFields, 
-            String legend,
+            String formTitle,
             String className,
             String id) {
 
         String classSegment = " class=\"" + className + (id == null ? "\"" : "\" id=\"" + id + "\"");
         request.appendHtml("<form " + classSegment + " action=\"" + action + "\" method=\"post\" accept-charset=\"ISO-8859-1\">\n");
-        if (legend != null && legend.trim().length() > 0) {
-            classSegment = " class=\"legend\"";
-            request.appendHtml("<div" + classSegment  +">" + legend + "</div>\n");
+        if (formTitle != null && formTitle.trim().length() > 0) {
+            classSegment = " class=\"title\"";
+            request.appendHtml("<div" + classSegment  +">" + formTitle + "</div>\n");
         }
         
         // TODO reinstate fieldsets when we can specify them

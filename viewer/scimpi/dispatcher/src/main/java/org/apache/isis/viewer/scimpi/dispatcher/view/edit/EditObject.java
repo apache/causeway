@@ -52,8 +52,8 @@ public class EditObject extends AbstractElementProcessor {
         String forwardEditedTo = request.getOptionalProperty(VIEW);
         String forwardErrorTo = request.getOptionalProperty(ERRORS);
         boolean hideNonEditableFields = request.isRequested("hide-uneditable", false);
-        String buttonTitle = request.getOptionalProperty(TITLE, "Save");
-        String legend = request.getOptionalProperty(LEGEND);
+        String buttonTitle = request.getOptionalProperty(BUTTON_TITLE, "Save");
+        String formTitle = request.getOptionalProperty(FORM_TITLE);
         String variable = request.getOptionalProperty(RESULT_NAME);
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         String scope = request.getOptionalProperty(SCOPE);
@@ -99,7 +99,7 @@ public class EditObject extends AbstractElementProcessor {
                 resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride),
                 scope == null ? null : new HiddenInputField(SCOPE, scope) };
 
-        InputForm.createForm(request, EditAction.ACTION + ".app", buttonTitle, formFields, hiddenFields, legend, className, id);
+        InputForm.createForm(request, EditAction.ACTION + ".app", buttonTitle, formFields, hiddenFields, formTitle, className, id);
         request.popBlockContent();
     }
 

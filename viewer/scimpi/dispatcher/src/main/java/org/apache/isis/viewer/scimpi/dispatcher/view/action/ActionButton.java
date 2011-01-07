@@ -44,7 +44,7 @@ public class ActionButton extends AbstractElementProcessor {
         String forwardErrorTo = request.getOptionalProperty(ERRORS);
         String variable = request.getOptionalProperty(RESULT_NAME);
         String scope = request.getOptionalProperty(SCOPE);
-        String buttonTitle = request.getOptionalProperty(TITLE);
+        String buttonTitle = request.getOptionalProperty(BUTTON_TITLE);
         String resultOverride = request.getOptionalProperty(RESULT_OVERRIDE);
         String idName = request.getOptionalProperty(ID);
         String className = request.getOptionalProperty(CLASS);
