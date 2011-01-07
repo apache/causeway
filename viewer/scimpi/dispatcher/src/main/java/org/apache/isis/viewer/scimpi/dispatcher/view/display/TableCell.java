@@ -36,7 +36,7 @@ public class TableCell extends AbstractElementProcessor {
         String id = request.getOptionalProperty(OBJECT);
         String fieldName = request.getRequiredProperty(FIELD);
         String className = request.getOptionalProperty(CLASS);
-        className = className == null ? "cell" : className;
+        className = className == null ? "" : " class=\"" + className + "\"";
         ObjectAdapter object = request.getContext().getMappedObjectOrVariable(id, ELEMENT);
         ObjectAssociation field = object.getSpecification().getAssociation(fieldName);
         if (field == null) {
@@ -45,7 +45,7 @@ public class TableCell extends AbstractElementProcessor {
         if (field.isVisible(IsisContext.getAuthenticationSession(), object).isVetoed()) {
             throw new ForbiddenException("Field " + fieldName + " in " + object + " is not visible");
         }
-        request.appendHtml("<td " + className + ">");
+        request.appendHtml("<td" + className + ">");
         ObjectAdapter fieldReference = field.get(object);
         String source = fieldReference == null ? "" : request.getContext().mapObject(fieldReference, Scope.REQUEST);
         String name = request.getOptionalProperty(RESULT_NAME, fieldName);
