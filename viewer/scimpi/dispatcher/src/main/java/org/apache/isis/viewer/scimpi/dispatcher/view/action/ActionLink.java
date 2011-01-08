@@ -28,6 +28,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
+import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
 
 public class ActionLink extends AbstractElementProcessor {
@@ -95,6 +96,7 @@ public class ActionLink extends AbstractElementProcessor {
                 + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + interactionParamters + "\">");
         request.appendHtml(text);
         request.appendHtml("</a>");
+        HelpLink.append(request, action.getHelp(), action.getDescription());
     }
 
     public String getName() {

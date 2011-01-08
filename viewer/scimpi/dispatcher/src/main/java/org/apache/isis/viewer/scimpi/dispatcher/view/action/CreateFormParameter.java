@@ -30,6 +30,8 @@ public class CreateFormParameter {
     public String resultName;
     public String scope;
     public String objectId;
+    public String description;
+    public String helpReference;
     public String className;
     public String id;
     public String resultOverride;

@@ -23,8 +23,10 @@ package org.apache.isis.viewer.scimpi.dispatcher.debug;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
@@ -65,34 +67,39 @@ public class DebugAction implements Action {
 
     @Override
     public void process(RequestContext context) throws IOException {
-        DebugView view = new DebugView(context.getWriter(), new DebugString());
-        view.header();
-        view.appendln("<div class=\"links\">");
-        view.appendln("<a href=\"debug.app?action=system\">System</a>");
-        view.appendln(" | <a href=\"debug.app?action=specifications\">List specifications</a>");
-        view.appendln(" | <a href=\"debug.app?action=context\">Context</a>");
-        view.appendln(" | <a href=\"debug.app?action=dispatcher\">Dispatcher</a>");
-        view.appendln("</div>");
-        view.startTable();
-        
         String action = context.getParameter("action");
-        if ("specifications".equals(action)) {
-            listSpecifications(view);
-        } else   if ("specification".equals(action)) {
-            specification(context, view);            
-        } else   if ("object".equals(action)) {
-            object(context, view);            
-        } else   if ("system".equals(action)) {
-            system(context, view);            
-        } else   if ("context".equals(action)) {
-            context.append(view);
-        } else   if ("dispatcher".equals(action)) {
-            dispatcher.debug(view);
+        if ("i18n".equals(action)) {
+            i18n(context, null);            
+        } else {
+            DebugView view = new DebugView(context.getWriter(), new DebugString());
+            view.header();
+            view.appendln("<div class=\"links\">");
+            view.appendln("<a href=\"debug.app?action=system\">System</a>");
+            view.appendln(" | <a href=\"debug.app?action=specifications\">List specifications</a>");
+            view.appendln(" | <a href=\"debug.app?action=i18n\">I18N File</a>");
+            view.appendln(" | <a href=\"debug.app?action=context\">Context</a>");
+            view.appendln(" | <a href=\"debug.app?action=dispatcher\">Dispatcher</a>");
+            view.appendln("</div>");
+            view.startTable();
+            
+            if ("specifications".equals(action)) {
+                listSpecifications(view);
+            } else   if ("specification".equals(action)) {
+                specification(context, view);            
+            } else   if ("object".equals(action)) {
+                object(context, view);            
+            } else   if ("system".equals(action)) {
+                system(context, view);            
+            } else   if ("context".equals(action)) {
+                context.append(view);
+            } else   if ("dispatcher".equals(action)) {
+                dispatcher.debug(view);
+            }
+            
+            view.endTable();
+            view.footer();
+            context.clearRequestedPath();
         }
-        
-        view.endTable();
-        view.footer();
-        context.clearRequestedPath();
     }
 
     private void object(RequestContext context, DebugView view) {
@@ -112,6 +119,37 @@ public class DebugAction implements Action {
             debug[i].debugData(str);
             view.divider(debug[i].debugTitle());
             view.appendRow("<pre class=\"debug\">" + str + "</pre>");
+        }
+    }
+
+    private void i18n(RequestContext context, DebugView view) {
+        Collection<ObjectSpecification> allSpecifications = getSpecificationLoader().allSpecifications();
+        final List<ObjectSpecification> specs = Lists.newArrayList(allSpecifications);
+        Collections.sort(specs, new Comparator<ObjectSpecification>() {
+            public int compare(ObjectSpecification o1, ObjectSpecification o2) {
+                return o1.getShortIdentifier().compareTo(o2.getShortIdentifier());
+            }
+        });
+        Function<ObjectSpecification, String> className = ObjectSpecification.FUNCTION_FULLY_QUALIFIED_CLASS_NAME;
+        final List<String> fullIdentifierList = Lists.newArrayList(Collections2.transform(specs, className));
+        for (String fullIdentifier : fullIdentifierList) {
+            ObjectSpecification spec = getSpecificationLoader().loadSpecification(fullIdentifier);
+            if (spec.getAssociations().size() == 0 && spec.getObjectActionsAll().size() == 0) {
+                continue;
+            }
+            String name = spec.getIdentifier().toClassIdentityString();
+            context.getWriter().append("# " + spec.getShortIdentifier() +"\n");
+            for (ObjectAssociation assoc : spec.getAssociations()) {
+                context.getWriter().append("#" + name + ".property." + assoc.getId() + ".name" + "=\n");
+                context.getWriter().append("#" + name + ".property." + assoc.getId() + ".description" + "=\n");
+                context.getWriter().append("#" + name + ".property." + assoc.getId() + ".help" + "=\n");
+            }
+            for (ObjectAction action : spec.getObjectActionsAll()) {
+                context.getWriter().append("#" + name + ".action." + action.getId() + ".name" + "=\n");
+                context.getWriter().append("#" + name + ".action." + action.getId() + ".description" + "=\n");
+                context.getWriter().append("#" + name + ".action." + action.getId() + ".help" + "=\n");
+            }
+            context.getWriter().append("\n");
         }
     }
 

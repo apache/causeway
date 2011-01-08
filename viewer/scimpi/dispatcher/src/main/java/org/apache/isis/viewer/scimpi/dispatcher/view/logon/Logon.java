@@ -68,7 +68,7 @@ public class Logon extends AbstractElementProcessor {
         String loginButtonTitle = request.getOptionalProperty(BUTTON_TITLE, "Log in");
         String className = request.getOptionalProperty(CLASS, "login");
         String  id = request.getOptionalProperty(ID);
-        InputForm.createForm(request, "logon.app", loginButtonTitle, fields, hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), formTitle, className, id);
+        InputForm.createForm(request, "logon.app", loginButtonTitle, fields, hiddenFields.toArray(new HiddenInputField[hiddenFields.size()]), formTitle, null, null, className, id);
     }
 
     public String getName() {

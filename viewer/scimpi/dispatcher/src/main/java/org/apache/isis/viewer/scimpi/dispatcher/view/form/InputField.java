@@ -34,6 +34,7 @@ public class InputField {
     
     private String label;
     private String description = "";
+    private String helpReference;
     private String errorText;
     private String name;
 
@@ -64,6 +65,10 @@ public class InputField {
         return description;
     }
 
+    public String getHelpReference() {
+        return helpReference;
+    }
+    
     public String getLabel() {
         return label;
     }
@@ -126,6 +131,10 @@ public class InputField {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public void setHelpReference(String helpReference) {
+        this.helpReference = helpReference;
     }
 
     public void setLabel(String label) {

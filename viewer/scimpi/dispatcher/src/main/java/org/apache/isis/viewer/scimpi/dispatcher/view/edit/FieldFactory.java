@@ -27,6 +27,7 @@ import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLeng
 import org.apache.isis.core.metamodel.facets.propparam.validate.maxlength.MaxLengthFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectFeature;
+import org.apache.isis.core.metamodel.spec.feature.ObjectMember;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
@@ -45,6 +46,9 @@ public class FieldFactory {
 
         field.setLabel(param.getName());
         field.setDescription(param.getDescription());
+        if (param instanceof ObjectMember) {
+            field.setHelpReference(((ObjectMember) param).getHelp());
+        }
         field.setRequired(isRequired);
         field.setHidden(false);
 

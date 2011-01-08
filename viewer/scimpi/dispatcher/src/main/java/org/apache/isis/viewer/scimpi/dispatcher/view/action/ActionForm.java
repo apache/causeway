@@ -140,7 +140,7 @@ public class ActionForm extends AbstractElementProcessor {
         }
 
         InputForm.createForm(request, ActionAction.ACTION + ".app", parameterObject.buttonTitle, formFields, hiddenFields,
-                formTitle, parameterObject.className, parameterObject.id);
+                formTitle, action.getDescription(), action.getHelp(), parameterObject.className, parameterObject.id);
 
         request.popBlockContent();
     }

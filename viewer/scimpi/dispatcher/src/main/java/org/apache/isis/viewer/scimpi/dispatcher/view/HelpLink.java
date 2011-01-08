@@ -16,19 +16,26 @@
  *  specific language governing permissions and limitations
  *  under the License.
  */
+package org.apache.isis.viewer.scimpi.dispatcher.view;
 
-
-package org.apache.isis.viewer.scimpi.dispatcher.view.simple;
-
-import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext.Scope;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
-public class PageTitle extends Variable {
-    public void process(Request request) {
-        process(request, "title", null, false, Scope.REQUEST);
+public class HelpLink {
+
+    public static void append(Request request, String helpReference, String description) {
+        request.appendHtml(createHelpSegment(description, helpReference));
     }
-    
-    public String getName() {
-        return "page-title";
+
+    public static String createHelpSegment(String description, String helpReference) {
+        if (helpReference == null || helpReference.equals("No help available")) {
+            return "";
+        } else {
+            String elementClass = "help-link";
+            String link = "help/" + helpReference + ".shtml";
+            String linkText = "Help";
+            String target = "scimpi-help";
+            return "<a class=\"" + elementClass + "\" href=\"" + link + "\" target=\"" + target + "\" title=\"" + description + "\">" + linkText + "</a>";
+        }
     }
+
 }

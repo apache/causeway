@@ -30,13 +30,14 @@ public class Variable extends AbstractElementProcessor {
 
     public void process(Request request) {
         String name = request.getOptionalProperty(NAME);
+        String value = request.getOptionalProperty(VALUE);
         String scopeName = request.getOptionalProperty(SCOPE);
         boolean isClear = request.getOptionalProperty("action", "set").equals("clear");
         Scope scope = RequestContext.scope(scopeName, isClear ? Scope.SESSION : Scope.REQUEST);
-        process(request, name, isClear, scope);
+        process(request, name, value, isClear, scope);
     }
 
-    protected void process(Request request, String name, boolean isClear, Scope scope) {
+    protected void process(Request request, String name, String value, boolean isClear, Scope scope) {
         request.pushNewBuffer();
         request.processUtilCloseTag();
         String source = request.popBuffer();
@@ -44,6 +45,9 @@ public class Variable extends AbstractElementProcessor {
             request.appendDebug("variable: " + name + " ( cleared"); 
             request.getContext().clearVariable(name, scope);
         } else {
+            if (source.length() == 0 && value != null) {
+                source = value;
+            }
             if (source.length() == 0) { 
                 source = (String) request.getContext().getVariable(RequestContext.RESULT); 
             } 

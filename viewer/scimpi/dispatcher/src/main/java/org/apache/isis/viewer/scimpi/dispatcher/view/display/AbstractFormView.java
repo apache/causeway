@@ -29,6 +29,7 @@ import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.AbstractObjectProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedFieldsBlock;
 import org.apache.isis.viewer.scimpi.dispatcher.view.field.LinkedObject;
 
@@ -100,6 +101,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             request.appendHtml("<div " + cls + description + "><span class=\"label\">" + field.getName() + ":</span>");
             LinkedObject linkedObject = linkFields[i];
             addField(request, object, field, linkedObject);
+            HelpLink.append(request,field.getHelp(), field.getDescription());
             request.appendHtml("</div>");
         }
         request.appendHtml("</div>");

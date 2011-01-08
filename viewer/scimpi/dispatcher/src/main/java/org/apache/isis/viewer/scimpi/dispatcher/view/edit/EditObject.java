@@ -99,7 +99,7 @@ public class EditObject extends AbstractElementProcessor {
                 resultOverride == null ? null : new HiddenInputField(RESULT_OVERRIDE, resultOverride),
                 scope == null ? null : new HiddenInputField(SCOPE, scope) };
 
-        InputForm.createForm(request, EditAction.ACTION + ".app", buttonTitle, formFields, hiddenFields, formTitle, className, id);
+        InputForm.createForm(request, EditAction.ACTION + ".app", buttonTitle, formFields, hiddenFields, formTitle, null, null, className, id);
         request.popBlockContent();
     }
 

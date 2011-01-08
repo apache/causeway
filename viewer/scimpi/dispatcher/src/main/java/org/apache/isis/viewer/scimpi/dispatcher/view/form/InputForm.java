@@ -22,6 +22,7 @@ package org.apache.isis.viewer.scimpi.dispatcher.view.form;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
+import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 import org.apache.isis.viewer.scimpi.dispatcher.view.display.Errors;
 
 
@@ -34,6 +35,8 @@ public class InputForm {
             InputField[] fields,
             HiddenInputField[] hiddenFields, 
             String formTitle,
+            String description,
+            String helpReference,
             String className,
             String id) {
 
@@ -64,15 +67,17 @@ public class InputForm {
             } else {
                 String errorSegment = fld.getErrorText() == null ? "" : "<span class=\"error\">" + fld.getErrorText() + "</span>";
                 String fieldSegment = createField(fld);
+                String helpSegment = HelpLink.createHelpSegment(fld.getDescription(), fld.getHelpReference());
                 String title = fld.getDescription().equals("") ? "" : " title=\"" + fld.getDescription() + "\"";
                 request.appendHtml("  <div class=\"field\"><label" + title + ">" + fld.getLabel() + ":</label>" + fieldSegment
-                        + errorSegment + "</div>\n");
+                        + errorSegment + helpSegment + "</div>\n");
             }
         }
 
         Errors.append(request, null);
         
         request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" />\n");
+        HelpLink.append(request, helpReference, description);
         // TODO reinstate fieldsets when we can specify them
         //request.appendHtml("</fieldset>\n");
         request.appendHtml("</form>\n");

@@ -32,6 +32,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.AbstractElementProcessor;
 import org.apache.isis.viewer.scimpi.dispatcher.context.RequestContext;
 import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 import org.apache.isis.viewer.scimpi.dispatcher.util.MethodsUtils;
+import org.apache.isis.viewer.scimpi.dispatcher.view.HelpLink;
 
 public class ActionButton extends AbstractElementProcessor {
     private static final Logger LOG = Logger.getLogger(ActionButton.class);
@@ -159,8 +160,9 @@ public class ActionButton extends AbstractElementProcessor {
         }
         request.appendHtml(request.getContext().interactionFields());
         request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" title=\"" 
-                + action.getDescription() + "\" />\n");
-        request.appendHtml("</form>\n");
+                + action.getDescription() + "\" />");
+        HelpLink.append(request, action.getHelp(), action.getDescription());
+        request.appendHtml("\n</form>\n");
     }
 
     public String getName() {
