@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.runtime.authentication;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 
 public interface AuthenticationManager extends ApplicationScopedComponent {
 

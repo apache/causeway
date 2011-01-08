@@ -24,13 +24,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.StringUtils;
 
 
-public class MessageBrokerDefault implements MessageBroker, DebugInfo {
+public class MessageBrokerDefault implements MessageBroker, DebuggableWithTitle {
     
     private final List<String> messages = new ArrayList<String>();
     private final List<String> warnings = new ArrayList<String>();

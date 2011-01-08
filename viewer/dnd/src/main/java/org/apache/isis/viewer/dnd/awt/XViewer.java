@@ -35,7 +35,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -781,7 +781,7 @@ public class XViewer implements Viewer {
         scheduleRepaint();
     }
     
-    public void showDebugFrame(DebugInfo[] info, Location at) {
+    public void showDebugFrame(DebuggableWithTitle[] info, Location at) {
         final InfoDebugFrame f = new InfoDebugFrame();
         f.setInfo(info);
         f.show(at.getX(), at.getY());

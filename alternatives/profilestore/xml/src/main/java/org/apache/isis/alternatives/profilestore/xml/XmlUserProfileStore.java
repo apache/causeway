@@ -22,9 +22,9 @@ package org.apache.isis.alternatives.profilestore.xml;
 import org.apache.isis.alternatives.profilestore.xml.internal.UserProfileContentWriter;
 import org.apache.isis.alternatives.profilestore.xml.internal.UserProfileDataHandler;
 import org.apache.isis.alternatives.profilestore.xml.internal.XmlFileUtil;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.xml.XmlFile;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 

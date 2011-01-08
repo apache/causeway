@@ -36,12 +36,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationSession;
@@ -138,7 +139,7 @@ public class ViewUpdateNotifierTest {
         IsisSessionFactory sessionFactory = 
             new IsisSessionFactoryDefault(
                     DeploymentType.EXPLORATION, 
-                    new PropertiesConfiguration(), 
+                    new IsisConfigurationDefault(), 
                     mockTemplateImageLoader, 
                     mockSpecificationLoader, 
                     mockAuthenticationManager, 

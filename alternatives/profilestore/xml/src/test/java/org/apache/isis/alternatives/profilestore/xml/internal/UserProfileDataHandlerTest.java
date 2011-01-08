@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -67,7 +67,7 @@ public class UserProfileDataHandlerTest {
         IsisSessionFactory executionContextFactory = 
             new IsisSessionFactoryDefault(
                     DeploymentType.EXPLORATION, 
-                    new PropertiesConfiguration(), 
+                    new IsisConfigurationDefault(), 
                     mockery.mock(TemplateImageLoader.class), 
                     mockery.mock(SpecificationLoader.class), 
                     mockery.mock(AuthenticationManager.class), 

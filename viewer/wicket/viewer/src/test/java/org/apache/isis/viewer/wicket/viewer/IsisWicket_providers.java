@@ -24,7 +24,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.system.DeploymentType;
 import org.apache.isis.core.runtime.system.IsisSystem;
 import org.apache.isis.viewer.wicket.viewer.IsisWicketModule;
@@ -54,7 +54,7 @@ public class IsisWicket_providers {
 
     @Test
     public void configurationBuilder() {
-        final ConfigurationBuilder instance = injector.getInstance(ConfigurationBuilder.class);
+        final IsisConfigurationBuilder instance = injector.getInstance(IsisConfigurationBuilder.class);
         assertThat(instance, is(notNullValue()));
     }
 

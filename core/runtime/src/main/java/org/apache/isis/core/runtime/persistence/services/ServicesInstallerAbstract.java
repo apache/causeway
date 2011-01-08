@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.system.DeploymentType;
 
 

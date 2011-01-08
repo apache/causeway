@@ -20,7 +20,7 @@
 
 package org.apache.isis.alternatives.objectstore.nosql;
 
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactoryDelegating;
 import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;

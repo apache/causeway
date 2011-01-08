@@ -21,12 +21,11 @@
 package org.apache.isis.core.runtime.testspec;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
-import org.apache.isis.core.metamodel.facets.FacetHolderNoop;
 import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
 import org.apache.isis.core.metamodel.interactions.UsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ValidityContext;
@@ -49,9 +48,11 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
     	return runtimeContext;
     }
 
+    @Override
     public boolean isOneToManyAssociation() {
         return false;
     }
+    @Override
     public boolean isOneToOneAssociation() {
         return true;
     }
@@ -64,14 +65,17 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return false;
     }
 
+    @Override
     public String getDescription() {
         return "";
     }
 
+    @Override
     public String getBusinessKeyName() {
         return "";
     }
 
+    @Override
     public ObjectAdapter[] getChoices(final ObjectAdapter target) {
         return null;
     }
@@ -88,18 +92,22 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return 0;
     }
 
+    @Override
     public String getHelp() {
         return "";
     }
 
+    @Override
     public Consent isUsable(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
 
+    @Override
     public boolean isAlwaysHidden() {
         return false;
     }
     
+    @Override
     public Consent isVisible(final AuthenticationSession session, final ObjectAdapter target) {
         return Allow.DEFAULT;
     }
@@ -108,18 +116,22 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return false;
     }
 
+    @Override
     public boolean isNotPersisted() {
         return false;
     }
 
+    @Override
     public boolean isEmpty(final ObjectAdapter adapter) {
         return false;
     }
 
+    @Override
     public boolean isMandatory() {
         return false;
     }
 
+    @Override
     public boolean hasChoices() {
         return false;
     }
@@ -136,10 +148,12 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return true;
     }
 
+    @Override
     public ObjectAdapter getDefault(final ObjectAdapter adapter) {
         return null;
     }
 
+    @Override
     public void toDefault(final ObjectAdapter target) {}
 
     @Override
@@ -147,6 +161,7 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return null;
     }
 
+    @Override
     public VisibilityContext<?> createVisibleInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -154,6 +169,7 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return null;
     }
 
+    @Override
     public UsabilityContext<?> createUsableInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -161,6 +177,7 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return null;
     }
 
+    @Override
     public ValidityContext<?> createValidateInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod invocationMethod,
@@ -169,6 +186,7 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return null;
     }
 
+    @Override
     public PropertyAccessContext createAccessInteractionContext(
             final AuthenticationSession session,
             final InteractionInvocationMethod interactionMethod,
@@ -176,15 +194,18 @@ public abstract class ValueFieldTest extends FacetHolderNoop implements OneToOne
         return null;
     }
 
+    @Override
     public Instance getInstance(ObjectAdapter adapter) {
         OneToOneAssociation specification = this;
         return adapter.getInstance(specification);
     }
 
+    @Override
     public boolean isAction() {
         return false;
     }
 
+    @Override
     public boolean isPropertyOrCollection() {
         return true;
     }

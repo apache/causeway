@@ -22,12 +22,14 @@ package org.apache.isis.core.runtime.system;
 import java.io.File;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import org.apache.isis.applib.fixtures.LogonFixture;
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.commons.components.NoopUtils;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.components.Noop;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.runtime.about.AboutIsis;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -45,7 +47,6 @@ import org.apache.isis.core.runtime.system.internal.IsisLocaleInitializer;
 import org.apache.isis.core.runtime.system.internal.IsisTimeZoneInitializer;
 import org.apache.isis.core.runtime.system.internal.SplashWindow;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
-import org.apache.log4j.Logger;
 
 /**
  * 
@@ -148,7 +149,7 @@ public abstract class IsisSystemAbstract implements IsisSystem {
         }
 
         fixtureInstaller = obtainFixturesInstaller();
-        if (fixtureInstaller == null || NoopUtils.isNoop(fixtureInstaller)) {
+        if (isNoop(fixtureInstaller)) {
             return;
         }
 
@@ -163,6 +164,10 @@ public abstract class IsisSystemAbstract implements IsisSystem {
         } finally {
             IsisContext.closeSession();
         }
+    }
+
+    protected boolean isNoop(FixturesInstaller candidate) {
+        return candidate == null || (fixtureInstaller instanceof Noop);
     }
 
     private void initContext(IsisSessionFactory sessionFactory) {
@@ -317,8 +322,8 @@ public abstract class IsisSystemAbstract implements IsisSystem {
     // ///////////////////////////////////////////
 
     private void debug(final DebugString debug, final Object object) {
-        if (object instanceof DebugInfo) {
-            final DebugInfo d = (DebugInfo) object;
+        if (object instanceof DebuggableWithTitle) {
+            final DebuggableWithTitle d = (DebuggableWithTitle) object;
             debug.appendTitle(d.debugTitle());
             d.debugData(debug);
         } else {
@@ -328,7 +333,7 @@ public abstract class IsisSystemAbstract implements IsisSystem {
     }
 
     @Override
-    public DebugInfo debugSection(String selectionName) {
+    public DebuggableWithTitle debugSection(String selectionName) {
         // DebugInfo deb;
         if (selectionName.equals("Configuration")) {
             return getConfiguration();
@@ -402,7 +407,7 @@ public abstract class IsisSystemAbstract implements IsisSystem {
             debug.appendln("Authentication manager", IsisContext.getAuthenticationManager().getClass().getName());
             debug.appendln("Configuration", getConfiguration().getClass().getName());
 
-            final DebugInfo[] inf = IsisContext.debugSystem();
+            final DebuggableWithTitle[] inf = IsisContext.debugSystem();
             for (int i = 0; i < inf.length; i++) {
                 if (inf[i] != null) {
                     inf[i].debugData(debug);

@@ -27,12 +27,12 @@ import java.util.List;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -288,7 +288,7 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     public void markDirty(final ObjectAdapter object) {}
 
     public Object newInstance() {
-        return InstanceFactory.createInstance(name);
+        return InstanceUtil.createInstance(name);
     }
 
     @Override

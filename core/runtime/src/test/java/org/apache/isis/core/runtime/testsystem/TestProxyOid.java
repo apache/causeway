@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.runtime.testsystem;
 
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 
 
 public class TestProxyOid implements Oid {

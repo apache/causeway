@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.runtime.persistence.oidgenerator.simple;
 
-import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 
 public class SerialOidEncodabilityWhenPersistentWithPreviousTest extends SerialOidEncodabilityAbstractTest {

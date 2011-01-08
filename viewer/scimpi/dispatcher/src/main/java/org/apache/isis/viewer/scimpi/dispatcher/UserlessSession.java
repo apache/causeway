@@ -22,8 +22,8 @@ package org.apache.isis.viewer.scimpi.dispatcher;
 
 import java.io.IOException;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionAbstract;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
 
 public class UserlessSession extends AuthenticationSessionAbstract {
 

@@ -21,7 +21,7 @@ package org.apache.isis.alternatives.remoting.common.marshalling;
 
 import org.apache.isis.alternatives.remoting.common.protocol.ProtocolConstants;
 import org.apache.isis.alternatives.remoting.common.protocol.ProtocolInstaller;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 
 public final class MarshallingConstants {
 

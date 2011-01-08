@@ -20,10 +20,9 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.commons.filters.AbstractFilter;
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.consent.Consent;
 
 
@@ -34,7 +33,7 @@ public class ObjectAssociationFilters {
     /**
      * Filters only fields that are for properties (ie 1:1 associations)
      */
-    public final static Filter<ObjectAssociation> PROPERTIES = new AbstractFilter<ObjectAssociation>() {
+    public final static Filter<ObjectAssociation> PROPERTIES = new Filter<ObjectAssociation>() {
         @Override
         public boolean accept(final ObjectAssociation association) {
             return association.isOneToOneAssociation();
@@ -44,7 +43,7 @@ public class ObjectAssociationFilters {
     /**
      * Returns all fields (that is, filters out nothing).
      */
-    public final static Filter<ObjectAssociation> ALL = new AbstractFilter<ObjectAssociation>() {
+    public final static Filter<ObjectAssociation> ALL = new Filter<ObjectAssociation>() {
         @Override
         public boolean accept(final ObjectAssociation property) {
             return true;
@@ -54,7 +53,7 @@ public class ObjectAssociationFilters {
     /**
      * Filters only fields that are for collections (ie 1:m associations)
      */
-    public final static Filter<ObjectAssociation> COLLECTIONS = new AbstractFilter<ObjectAssociation>() {
+    public final static Filter<ObjectAssociation> COLLECTIONS = new Filter<ObjectAssociation>() {
         @Override
         public boolean accept(final ObjectAssociation property) {
             return property.isOneToManyAssociation();
@@ -65,7 +64,7 @@ public class ObjectAssociationFilters {
      * Filters only properties that are visible statically, ie have not been unconditionally hidden at compile time.  Note this list will include 
      * properties marked as hidden once persisted and until persisted, but not those marked hidden always.  
      */
-    public static final Filter<ObjectAssociation> STATICALLY_VISIBLE_ASSOCIATIONS = new AbstractFilter<ObjectAssociation>() {
+    public static final Filter<ObjectAssociation> STATICALLY_VISIBLE_ASSOCIATIONS = new Filter<ObjectAssociation>() {
         @Override
         public boolean accept(final ObjectAssociation property) {
             return !property.isAlwaysHidden();
@@ -76,7 +75,7 @@ public class ObjectAssociationFilters {
      * Filters only properties that are visible statically, ie have not been hidden at compile time.
      */
     public static Filter<ObjectAssociation> dynamicallyVisible(final AuthenticationSession session, final ObjectAdapter target) {
-        return new AbstractFilter<ObjectAssociation>() {
+        return new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(final ObjectAssociation objectAssociation) {
                 final Consent visible = objectAssociation.isVisible(session, target);

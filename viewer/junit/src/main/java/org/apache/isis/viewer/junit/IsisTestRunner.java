@@ -32,10 +32,10 @@ import org.junit.internal.runners.TestMethod;
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderDefault;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
@@ -76,11 +76,11 @@ public class IsisTestRunner extends JUnit4ClassRunner {
 
     	final Description description = methodDescription(method);
     	
-        ConfigurationBuilder configurationBuilder = new ConfigurationBuilderDefault();
-        configurationBuilder.add(SystemConstants.NOSPLASH_KEY, ""+true); // switch off splash
+        IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault();
+        isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, ""+true); // switch off splash
         
         InstallerLookupDefault installerLookup = new InstallerLookupDefault(getClass());
-        configurationBuilder.injectInto(installerLookup);
+        isisConfigurationBuilder.injectInto(installerLookup);
 		installerLookup.init();
 
 		IsisSystemUsingInstallersWithinJunit system = null;        

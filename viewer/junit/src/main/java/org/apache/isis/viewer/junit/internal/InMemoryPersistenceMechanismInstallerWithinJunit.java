@@ -21,7 +21,7 @@
 package org.apache.isis.viewer.junit.internal;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.defaults.objectstore.InMemoryPersistenceMechanismInstaller;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;
 

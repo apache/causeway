@@ -21,10 +21,10 @@
 package org.apache.isis.core.runtime.viewer;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Ensure;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderAware;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequestPassword;
@@ -49,7 +49,7 @@ public abstract class IsisViewerAbstract implements IsisViewer {
     private DeploymentType deploymentType;
 
     private InstallerLookup installerLookup;
-    private ConfigurationBuilder configurationBuilder;
+    private IsisConfigurationBuilder isisConfigurationBuilder;
     private IsisSystem system; // never written to!!!
 
     /**
@@ -65,7 +65,7 @@ public abstract class IsisViewerAbstract implements IsisViewer {
 
         ensureDependenciesInjected();
 
-        IsisConfiguration configuration = configurationBuilder.getConfiguration();
+        IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
         deploymentType = DeploymentType.lookup(configuration.getString(SystemConstants.DEPLOYMENT_TYPE_KEY));
 
         String user = configuration.getString(SystemConstants.USER_KEY);
@@ -119,7 +119,7 @@ public abstract class IsisViewerAbstract implements IsisViewer {
 
     protected void ensureDependenciesInjected() {
         Ensure.ensureThatState(installerLookup, is(not(nullValue())));
-        Ensure.ensureThatState(configurationBuilder, is(not(nullValue())));
+        Ensure.ensureThatState(isisConfigurationBuilder, is(not(nullValue())));
     }
 
     /**
@@ -129,15 +129,15 @@ public abstract class IsisViewerAbstract implements IsisViewer {
         this.installerLookup = installerLookup;
     }
 
-    protected ConfigurationBuilder getConfigurationBuilder() {
-		return configurationBuilder;
+    protected IsisConfigurationBuilder getConfigurationBuilder() {
+		return isisConfigurationBuilder;
 	}
 
     /**
-     * Injected by virtue of being {@link ConfigurationBuilderAware}.
+     * Injected by virtue of being {@link IsisConfigurationBuilderAware}.
      */
-    public void setConfigurationBuilder(final ConfigurationBuilder configurationBuilder) {
-        this.configurationBuilder = configurationBuilder;
+    public void setConfigurationBuilder(final IsisConfigurationBuilder isisConfigurationBuilder) {
+        this.isisConfigurationBuilder = isisConfigurationBuilder;
     }
 
     // ////////////////////////////////////////////////////////////////

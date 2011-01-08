@@ -30,13 +30,13 @@ import org.apache.log4j.Logger;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.applib.profiles.Perspective;
-import org.apache.isis.core.commons.debug.DebugInfo;
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.filters.AbstractFilter;
-import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.NameUtils;
@@ -80,7 +80,7 @@ import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbs
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToOneAssociationImpl;
 
-public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebugInfo, FacetHolder {
+public class ObjectSpecificationDefault extends ObjectSpecificationAbstract implements DebuggableWithTitle, FacetHolder {
 
     private final static Logger LOG = Logger.getLogger(ObjectSpecificationDefault.class);
 
@@ -475,7 +475,7 @@ public class ObjectSpecificationDefault extends ObjectSpecificationAbstract impl
     }
 
     private void cataloguePropertiesAndCollections(final Map<Method, ObjectMember> membersByMethod) {
-        Filter noop = AbstractFilter.noop(ObjectAssociation.class);
+        Filter<ObjectAssociation> noop = Filters.anyOfType(ObjectAssociation.class);
         final List<ObjectAssociation> fields = getAssociations(noop);
         for (int i = 0; i < fields.size(); i++) {
             final ObjectAssociation field = fields.get(i);

@@ -27,11 +27,12 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceContextLoaderClassPath;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderResourceStreams;
-import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
-import org.apache.isis.core.metamodel.config.NotFoundPolicy;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
@@ -83,25 +84,25 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
         loggingConfigurer.configureLogging(webInfDir, new String[0]);
 
         // will load either from WEB-INF or from the classpath.
-        final ConfigurationBuilder configurationBuilder = new ConfigurationBuilderResourceStreams(
+        final IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderResourceStreams(
                 new ResourceStreamSourceServletContext(servletContext),
                 new ResourceStreamSourceContextLoaderClassPath());
 
-        primeConfigurationBuilder(configurationBuilder, servletContext);
+        primeConfigurationBuilder(isisConfigurationBuilder, servletContext);
 
         final DeploymentType deploymentType = determineDeploymentType(
-                configurationBuilder, servletContext);
+                isisConfigurationBuilder, servletContext);
 
-        addConfigurationResourcesForWebApps(configurationBuilder);
-        addConfigurationResourcesForDeploymentType(configurationBuilder,
+        addConfigurationResourcesForWebApps(isisConfigurationBuilder);
+        addConfigurationResourcesForDeploymentType(isisConfigurationBuilder,
                 deploymentType);
-        configurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
-        configurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
+        isisConfigurationBuilder.add(WebAppConstants.WEB_APP_DIR, webappDir);
+        isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
 
         InstallerLookup installerLookup = new InstallerLookupDefault(
                 getClass());
 
-        injector = createGuiceInjector(configurationBuilder,
+        injector = createGuiceInjector(isisConfigurationBuilder,
                 deploymentType, installerLookup);
 
         IsisSystem system = injector.getInstance(IsisSystem.class);
@@ -116,28 +117,28 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     private Injector createGuiceInjector(
-            final ConfigurationBuilder configurationBuilder,
+            final IsisConfigurationBuilder isisConfigurationBuilder,
             final DeploymentType deploymentType, InstallerLookup installerLookup) {
-        IsisModule isisModule = new IsisModule(deploymentType, configurationBuilder, installerLookup);
+        IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
 
     @SuppressWarnings("unchecked")
     private void primeConfigurationBuilder(
-            ConfigurationBuilder configurationBuilder,
+            IsisConfigurationBuilder isisConfigurationBuilder,
             ServletContext servletContext) {
-        List<ConfigurationPrimer> configurationPrimers = (List<ConfigurationPrimer>) servletContext
+        List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) servletContext
                 .getAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY);
-        if (configurationPrimers == null) {
+        if (isisConfigurationBuilderPrimers == null) {
             return;
         }
-        for (ConfigurationPrimer configurationPrimer : configurationPrimers) {
-            configurationPrimer.primeConfigurationBuilder(configurationBuilder);
+        for (IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
+            isisConfigurationBuilderPrimer.primeConfigurationBuilder(isisConfigurationBuilder);
         }
     }
 
     /**
-     * Checks {@link ConfigurationBuilder configuration} for
+     * Checks {@link IsisConfigurationBuilder configuration} for
      * {@value SystemConstants#DEPLOYMENT_TYPE_KEY},
      * (that is, from the command line), but otherwise searches in the
      * {@link ServletContext}, first for
@@ -148,9 +149,9 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
      * {@value WebAppConstants#DEPLOYMENT_TYPE_DEFAULT}.
      */
     private DeploymentType determineDeploymentType(
-            ConfigurationBuilder configurationBuilder,
+            IsisConfigurationBuilder isisConfigurationBuilder,
             final ServletContext servletContext) {
-        String deploymentTypeStr = configurationBuilder.getConfiguration()
+        String deploymentTypeStr = isisConfigurationBuilder.getConfiguration()
                 .getString(SystemConstants.DEPLOYMENT_TYPE_KEY);
         if (deploymentTypeStr == null) {
             deploymentTypeStr = servletContext
@@ -167,7 +168,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     private void addConfigurationResourcesForDeploymentType(
-            final ConfigurationBuilder configurationLoader,
+            final IsisConfigurationBuilder configurationLoader,
             final DeploymentType deploymentType) {
         String type = deploymentType.name().toLowerCase();
         configurationLoader.addConfigurationResource(type + ".properties",
@@ -175,7 +176,7 @@ public class IsisWebAppBootstrapper implements ServletContextListener {
     }
 
     private void addConfigurationResourcesForWebApps(
-            final ConfigurationBuilder configurationLoader) {
+            final IsisConfigurationBuilder configurationLoader) {
         for (String config : (new String[] { "web.properties", "war.properties" })) {
             if (config != null) {
                 configurationLoader.addConfigurationResource(config,

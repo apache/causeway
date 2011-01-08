@@ -25,7 +25,8 @@ import static org.apache.isis.core.runtime.runner.Constants.NO_SPLASH_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.system.SystemConstants;
@@ -48,9 +49,9 @@ public class OptionHandlerNoSplash extends OptionHandlerAbstract {
         return true;
     }
 
-    public void primeConfigurationBuilder(ConfigurationBuilder configurationBuilder) {
+    public void primeConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
         if (noSplash) {
-            configurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
+            isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "true");
         }
  //       configurationBuilder.add(SystemConstants.NOSPLASH_KEY, noSplash ? "true" : "false");
     }

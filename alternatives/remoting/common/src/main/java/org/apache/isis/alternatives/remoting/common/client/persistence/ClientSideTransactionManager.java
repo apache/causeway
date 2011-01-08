@@ -29,11 +29,11 @@ import org.apache.isis.alternatives.remoting.common.exchange.ExecuteClientAction
 import org.apache.isis.alternatives.remoting.common.exchange.KnownObjectsRequest;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionTransactionManagement;

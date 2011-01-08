@@ -27,7 +27,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
@@ -55,8 +56,8 @@ public class OptionHandlerUser extends OptionHandlerAbstract {
 	}
 	
 	public void primeConfigurationBuilder(
-			ConfigurationBuilder configurationBuilder) {
-		configurationBuilder.add(SystemConstants.USER_KEY, userName);
+			IsisConfigurationBuilder isisConfigurationBuilder) {
+		isisConfigurationBuilder.add(SystemConstants.USER_KEY, userName);
 	}
 
 	public String getUserName() {

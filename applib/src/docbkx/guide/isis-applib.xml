@@ -3733,10 +3733,11 @@ public class Money extends Magnitude {
       </abstract>
 
       <para>Many if not all enterprise applications deal with dates and times
-      in one way or another. For example, if an Order is placed, then the
-      Customer may have 30 days to pay the Invoice, otherwise a penalty may be
-      levied. However, this can complicate automated testing: "today+30" will
-      be a different date every time the test is run.</para>
+      in one way or another. For example, if an <classname>Order</classname>
+      is placed, then the <classname>Customer</classname> may have 30 days to
+      pay the Invoice, otherwise a penalty may be levied. However, this can
+      complicate automated testing: "today+30" will be a different date every
+      time the test is run.</para>
 
       <para>A common solution is to require that domain objects do not go
       directly to the system for the current date (ie don't simply instantiate
@@ -6553,6 +6554,33 @@ public class ComplexNumber {
       <mediaobject>
         <imageobject>
           <imagedata fileref="images/Events.png" scale="30" />
+        </imageobject>
+      </mediaobject>
+    </appendix>
+
+    <appendix>
+      <title>Package Dependencies</title>
+
+      <abstract>
+        <para>The dependencies between the packages.</para>
+      </abstract>
+
+      <para>The following diagram shows that the relationship between the
+      different packages that make up the applib (note that there are no
+      cyclic dependencies between the packages):</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/composition-perspective.png" scale="70" />
+        </imageobject>
+      </mediaobject>
+
+      <para>The following diagram shows the same packages, but from a layered,
+      architecture perspective:</para>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata fileref="images/architecture-perspective.png" scale="70" />
         </imageobject>
       </mediaobject>
     </appendix>

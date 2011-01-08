@@ -29,7 +29,7 @@ import java.util.Iterator;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -60,7 +60,7 @@ import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGeneratorAware;
 
 public class AdapterManagerDefault extends AdapterManagerAbstract implements AdapterFactoryAware,
-    SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebugInfo {
+    SpecificationLoaderAware, OidGeneratorAware, ServicesInjectorAware, DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(AdapterManagerDefault.class);
 

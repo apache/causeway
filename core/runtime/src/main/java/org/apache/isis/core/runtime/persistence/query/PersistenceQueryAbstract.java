@@ -22,10 +22,10 @@ package org.apache.isis.core.runtime.persistence.query;
 
 import java.io.IOException;
 
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;

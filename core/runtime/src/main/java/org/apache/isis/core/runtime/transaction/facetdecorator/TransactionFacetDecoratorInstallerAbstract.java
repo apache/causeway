@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.runtime.transaction.facetdecorator;
 
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 
 

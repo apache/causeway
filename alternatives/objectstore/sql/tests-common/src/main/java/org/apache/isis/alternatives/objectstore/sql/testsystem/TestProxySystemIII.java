@@ -31,7 +31,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 import org.apache.isis.alternatives.objectstore.sql.SqlPersistorInstaller;
 import org.apache.isis.alternatives.objectstore.xml.XmlPersistenceMechanismInstaller;
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -54,13 +54,13 @@ import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
  */
 public class TestProxySystemIII {
     
-    private PropertiesConfiguration configuration;
-    public void setConfiguration(PropertiesConfiguration configuration) {
+    private IsisConfigurationDefault configuration;
+    public void setConfiguration(IsisConfigurationDefault configuration) {
 		this.configuration = configuration;
 	}
-    public PropertiesConfiguration getConfiguration() {
+    public IsisConfigurationDefault getConfiguration() {
         if (configuration == null){
-        	configuration = new PropertiesConfiguration();
+        	configuration = new IsisConfigurationDefault();
         }
         return configuration;
     }

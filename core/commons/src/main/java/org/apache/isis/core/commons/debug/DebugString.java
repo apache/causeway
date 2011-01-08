@@ -25,6 +25,7 @@ import java.io.PrintStream;
 
 
 public class DebugString {
+    
     private static final int COLUMN_SPACING = 25;
     private static final int INDENT_WIDTH = 3;
     private static final String LINE;
@@ -58,10 +59,10 @@ public class DebugString {
      * Append the specified object by calling it <code>toString()</code> method.
      */
     public void append(final Object object) {
-        if (object instanceof DebugInfo) {
+        if (object instanceof DebuggableWithTitle) {
             indent();
-            appendTitle(((DebugInfo) object).debugTitle());
-            ((DebugInfo) object).debugData(this);
+            appendTitle(((DebuggableWithTitle) object).debugTitle());
+            ((DebuggableWithTitle) object).debugData(this);
             unindent();
         } else {
             appendIndent();
@@ -181,12 +182,9 @@ public class DebugString {
     public void appendTitle(final String title) {
         appendln();
         final String titleString = section++ + ". " + title;
-        // string.append('\n');
         appendln(titleString);
-        // string.append('\n');
         final String underline = LINE.substring(0, Math.min(MAX_LINE_LENGTH, titleString.length()));
         appendln(underline);
-        // string.append('\n');
     }
 
     public void startSection(final String title) {
@@ -255,19 +253,19 @@ public class DebugString {
     }
 
     /**
-     * Return the <code>String</code> representation of this debug string.
-     */
-    @Override
-    public String toString() {
-        return string.toString();
-    }
-
-    /**
      * Decrease indent used when appending.
      */
     public void unindent() {
         if (indent > 0) {
             indent--;
         }
+    }
+    
+    /**
+     * Return the <code>String</code> representation of this debug string.
+     */
+    @Override
+    public String toString() {
+        return string.toString();
     }
 }

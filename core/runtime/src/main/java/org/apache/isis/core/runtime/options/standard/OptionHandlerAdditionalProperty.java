@@ -28,7 +28,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
@@ -51,12 +52,12 @@ public class OptionHandlerAdditionalProperty extends OptionHandlerAbstract {
 	}
 	
 	public void primeConfigurationBuilder(
-			ConfigurationBuilder configurationBuilder) {
-		addConfigurationProperties(configurationBuilder, additionalProperties);
+			IsisConfigurationBuilder isisConfigurationBuilder) {
+		addConfigurationProperties(isisConfigurationBuilder, additionalProperties);
 	}
 
     private void addConfigurationProperties(
-    		final ConfigurationBuilder configurationBuilder, 
+    		final IsisConfigurationBuilder isisConfigurationBuilder, 
     		final List<String> additionalProperties) {
         if (additionalProperties == null) {
         	return;
@@ -67,7 +68,7 @@ public class OptionHandlerAdditionalProperty extends OptionHandlerAbstract {
 				key = additionalProperty;
 			} else {
 				value = additionalProperty;
-				configurationBuilder.add(key, value);
+				isisConfigurationBuilder.add(key, value);
 				key = null;
 			}
 		}

@@ -34,7 +34,9 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
@@ -42,8 +44,6 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
@@ -113,7 +113,7 @@ import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
  * <tt>IsisContext</tt>.
  */
 
-public class ObjectReflectorDefault implements ObjectReflector, DebugInfo {
+public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTitle {
 
     private final static Logger LOG = Logger.getLogger(ObjectReflectorDefault.class);
 

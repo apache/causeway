@@ -26,8 +26,9 @@ import static org.junit.Assert.assertThat;
 
 import org.jmock.integration.junit4.JMock;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.core.metamodel.encoding.Encodable;
+
+import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.runtime.authentication.standard.SimpleSession;
 
 @RunWith(JMock.class)

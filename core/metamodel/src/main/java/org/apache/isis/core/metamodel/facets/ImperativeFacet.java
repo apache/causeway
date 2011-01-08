@@ -23,8 +23,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.filters.AbstractFilter;
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -68,7 +67,7 @@ public interface ImperativeFacet {
      * For use by
      * {@link FacetHolder#getFacets(org.apache.isis.core.metamodel.facetapi.progmodel.facets.org.apache.isis.nof.arch.facets.Facet.Filter)}
      */
-    public static Filter<Facet> FILTER = new AbstractFilter<Facet>() {
+    public static Filter<Facet> FILTER = new Filter<Facet>() {
         @Override
         public boolean accept(final Facet facet) {
             return ImperativeFacetUtils.isImperativeFacet(facet);

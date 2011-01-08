@@ -23,24 +23,25 @@ package org.apache.isis.core.webapp;
 import javax.servlet.ServletContext;
 
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderResourceStreams;
 import org.apache.isis.core.commons.resource.ResourceStreamSourceFileSystem;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderResourceStreams;
 
 /**
- * Convenience implementation of {@link ConfigurationBuilder} that
+ * Convenience implementation of {@link IsisConfigurationBuilder} that
  * loads configuration resource from a specified directory on the
  * filesystem.
  * 
  * @see ResourceStreamSourceFileSystem
  */
 public class ConfigurationBuilderServletContext extends
-		ConfigurationBuilderResourceStreams {
+		IsisConfigurationBuilderResourceStreams {
 
 	@SuppressWarnings("unused")
 	private static final Logger LOG = Logger
-			.getLogger(ConfigurationBuilderFileSystem.class);
+			.getLogger(IsisConfigurationBuilderFileSystem.class);
 	
 	public ConfigurationBuilderServletContext(final ServletContext servletContext) {
 		super(new ResourceStreamSourceServletContext(servletContext));

@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.configurable;
 
 import java.util.Enumeration;
 
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.userprofile.Options;
 import org.apache.isis.viewer.dnd.configurable.GridListSpecification.ElementFactory;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -72,10 +72,10 @@ public class ConfigurableCompositeViewBorder extends AbstractBorder {
                 if (elementsClass.startsWith("user:")) {
                     String name = elementsClass.substring("user:".length());
                     String wrappedSpecificationClass = Properties.getUserViewSpecificationOptions(name).getString("wrapped-specification");
-                    ViewSpecification wrappedSpectification = (ViewSpecification) InstanceFactory.createInstance(wrappedSpecificationClass);
+                    ViewSpecification wrappedSpectification = (ViewSpecification) InstanceUtil.createInstance(wrappedSpecificationClass);
                     specification = new UserViewSpecification(wrappedSpectification, name);
                 } else {
-                    specification = (ViewSpecification) InstanceFactory.createInstance(elementsClass);
+                    specification = (ViewSpecification) InstanceUtil.createInstance(elementsClass);
                 }
                 if (specification != null) {
                     getViewAxes().getAxis(ConfigurationAxis.class).setElementSpecification(specification);

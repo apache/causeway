@@ -23,8 +23,8 @@ package org.apache.isis.alternatives.remoting.common.client.authentication;
 import org.apache.isis.alternatives.remoting.common.exchange.CloseSessionRequest;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticationManagerStandard;
 
 

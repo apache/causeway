@@ -21,7 +21,7 @@
 package org.apache.isis.alternatives.bytecode.javassist.classsubstitutor;
 
 import org.apache.isis.alternatives.bytecode.javassist.objectfactory.internal.JavassistEnhanced;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 
 
@@ -38,7 +38,7 @@ public class JavassistClassSubstitutor extends ClassSubstitutorAbstract {
      */
     @Override
     public Class<?> getClass(Class<?> cls) {
-    	if (ClassUtil.directlyImplements(cls, JavassistEnhanced.class)) {
+    	if (JavaClassUtils.directlyImplements(cls, JavassistEnhanced.class)) {
     		return getClass(cls.getSuperclass());
     	}
     	return super.getClass(cls);

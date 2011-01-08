@@ -9,7 +9,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.io.IoUtils;
+import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;

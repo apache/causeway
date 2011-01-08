@@ -23,9 +23,9 @@ package org.apache.isis.core.metamodel.adapter.version;
 import java.io.IOException;
 import java.util.Date;
 
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 
 
 public class SerialNumberVersion extends VersionUserAndTimeAbstract {

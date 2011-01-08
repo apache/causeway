@@ -67,9 +67,9 @@ import org.apache.isis.alternatives.remoting.common.exchange.SetAssociationRespo
 import org.apache.isis.alternatives.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.alternatives.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;

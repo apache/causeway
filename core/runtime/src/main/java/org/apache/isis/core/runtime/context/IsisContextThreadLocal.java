@@ -22,8 +22,8 @@ package org.apache.isis.core.runtime.context;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.log4j.Logger;

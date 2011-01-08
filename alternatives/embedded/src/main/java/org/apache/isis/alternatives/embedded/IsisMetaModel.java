@@ -35,9 +35,9 @@ import java.util.TreeSet;
 import org.apache.isis.alternatives.bytecode.identity.classsubstitutor.ClassSubstitutorIdentity;
 import org.apache.isis.alternatives.embedded.internal.RuntimeContextForEmbeddedMetaModel;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
@@ -98,7 +98,7 @@ public class IsisMetaModel implements ApplicationScopedComponent {
 			final Class<?>... serviceTypes) {
 
 		this.serviceTypes.addAll(Arrays.asList(serviceTypes));
-		setConfiguration(new PropertiesConfiguration());
+		setConfiguration(new IsisConfigurationDefault());
 		setClassSubstitutor(new ClassSubstitutorIdentity());
 		setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
 		setSpecificationTraverser(new SpecificationTraverserDefault());

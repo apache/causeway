@@ -23,9 +23,9 @@ package org.apache.isis.alternatives.objectstore.xml.internal.version;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 import org.apache.isis.core.runtime.testsystem.ProxyJunit4TestCase;
 import org.jmock.Expectations;
 import org.jmock.Mockery;

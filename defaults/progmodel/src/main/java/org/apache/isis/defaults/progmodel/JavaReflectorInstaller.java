@@ -29,10 +29,10 @@ import org.apache.log4j.Logger;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
@@ -118,11 +118,11 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
         final String[] configuredClassNames = configuration
         	.getList(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_LIST);
         if(configuredClassNames == null || configuredClassNames.length == 0) {
-			return InstanceFactory.createInstance(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT, ClassSubstitutor.class);
+			return InstanceUtil.createInstance(ReflectorConstants.CLASS_SUBSTITUTOR_CLASS_NAME_DEFAULT, ClassSubstitutor.class);
         }
         List<ClassSubstitutor> substitutors = Lists.newArrayList();
         for (String className : configuredClassNames) {
-        	ClassSubstitutor substitutor = InstanceFactory.createInstance(className, ClassSubstitutor.class);
+        	ClassSubstitutor substitutor = InstanceUtil.createInstance(className, ClassSubstitutor.class);
 			substitutors.add(substitutor);
 		}
         return substitutors.size() == 1? substitutors.get(0): new ClassSubstitutorComposite(substitutors);
@@ -139,7 +139,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     protected SpecificationTraverser createSpecificationTraverser(IsisConfiguration configuration) {
         final String specificationTraverserClassName = configuration.getString(ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME,
                 ReflectorConstants.SPECIFICATION_TRAVERSER_CLASS_NAME_DEFAULT);
-        SpecificationTraverser specificationTraverser = InstanceFactory.createInstance(specificationTraverserClassName,
+        SpecificationTraverser specificationTraverser = InstanceUtil.createInstance(specificationTraverserClassName,
                 SpecificationTraverser.class);
         return specificationTraverser;
     }
@@ -155,7 +155,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     protected MemberLayoutArranger createMemberLayoutArranger(IsisConfiguration configuration) {
         final String memberLayoutArrangerClassName = configuration.getString(ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME,
             ReflectorConstants.MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT);
-            MemberLayoutArranger memberLayoutArranger = InstanceFactory.createInstance(memberLayoutArrangerClassName,
+            MemberLayoutArranger memberLayoutArranger = InstanceUtil.createInstance(memberLayoutArrangerClassName,
                 MemberLayoutArranger.class);
             return memberLayoutArranger;
     }
@@ -189,7 +189,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     private ProgrammingModel lookupAndCreateProgrammingModelFacets(final IsisConfiguration configuration) {
         final String progModelFacetsClassName = configuration.getString(ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME,
                 ReflectorConstants.PROGRAMMING_MODEL_FACETS_CLASS_NAME_DEFAULT);
-        ProgrammingModel programmingModel = InstanceFactory.createInstance(progModelFacetsClassName,
+        ProgrammingModel programmingModel = InstanceUtil.createInstance(progModelFacetsClassName,
                 ProgrammingModel.class);
         return programmingModel;
     }
@@ -206,7 +206,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
                 .getList(ReflectorConstants.FACET_FACTORY_INCLUDE_CLASS_NAME_LIST);
         if (facetFactoriesIncludeClassNames != null) {
             for (String facetFactoryClassName : facetFactoriesIncludeClassNames) {
-                Class<? extends FacetFactory> facetFactory = InstanceFactory.loadClass(facetFactoryClassName, FacetFactory.class);
+                Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
                 programmingModel.addFactory(facetFactory);
             }
         }
@@ -223,7 +223,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
         final String[] facetFactoriesExcludeClassNames = configuration
                 .getList(ReflectorConstants.FACET_FACTORY_EXCLUDE_CLASS_NAME_LIST);
         for (String facetFactoryClassName : facetFactoriesExcludeClassNames) {
-            Class<? extends FacetFactory> facetFactory = InstanceFactory.loadClass(facetFactoryClassName, FacetFactory.class);
+            Class<? extends FacetFactory> facetFactory = InstanceUtil.loadClass(facetFactoryClassName, FacetFactory.class);
             programmingModel.removeFactory(facetFactory);
         }
     }
@@ -281,7 +281,7 @@ public class JavaReflectorInstaller extends InstallerAbstract implements ObjectR
     protected MetaModelValidator createMetaModelValidator(IsisConfiguration configuration) {
         final String metaModelValidatorClassName = configuration.getString(ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME,
                 ReflectorConstants.META_MODEL_VALIDATOR_CLASS_NAME_DEFAULT);
-        MetaModelValidator metaModelValidator = InstanceFactory.createInstance(metaModelValidatorClassName,
+        MetaModelValidator metaModelValidator = InstanceUtil.createInstance(metaModelValidatorClassName,
                 MetaModelValidator.class);
         return metaModelValidator;
     }

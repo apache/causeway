@@ -23,7 +23,7 @@ package org.apache.isis.alternatives.objectstore.sql;
 import org.apache.isis.alternatives.objectstore.sql.auto.AutoMapperFactory;
 import org.apache.isis.alternatives.objectstore.sql.jdbc.JdbcConnectorFactory;
 import org.apache.isis.alternatives.objectstore.sql.jdbc.JdbcFieldMappingFactoryInstaller;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;

@@ -21,9 +21,9 @@
 package org.apache.isis.viewer.dnd.view.message;
 
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.exceptions.ExceptionHelper;
 import org.apache.isis.core.commons.exceptions.IsisApplicationException;
 import org.apache.isis.core.commons.lang.NameUtils;
+import org.apache.isis.core.commons.lang.ThrowableUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.Veto;
@@ -47,7 +47,7 @@ public class ExceptionMessageContent implements MessageContent {
         fullName = fullName.substring(fullName.lastIndexOf('.') + 1);
         name = NameUtils.naturalName(fullName);
         message = error.getMessage();
-        trace = ExceptionHelper.exceptionTraceAsString(error);
+        trace = ThrowableUtils.stackTraceFor(error);
         if (trace.indexOf("\tat") != -1) {
             trace = trace.substring(trace.indexOf("\tat"));
         }

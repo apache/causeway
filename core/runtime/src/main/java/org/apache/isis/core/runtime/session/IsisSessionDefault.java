@@ -27,12 +27,12 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
@@ -299,8 +299,8 @@ public class IsisSessionDefault implements IsisSession {
     }
 
     private void debug(final DebugString debug, final Object object) {
-        if (object instanceof DebugInfo) {
-            final DebugInfo d = (DebugInfo) object;
+        if (object instanceof DebuggableWithTitle) {
+            final DebuggableWithTitle d = (DebuggableWithTitle) object;
             debug.startSection(d.debugTitle());
             d.debugData(debug);
             debug.endSection();

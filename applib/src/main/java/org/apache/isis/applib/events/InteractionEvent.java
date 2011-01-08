@@ -23,7 +23,6 @@ import java.util.EventObject;
 import java.util.List;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.applib.util.NameUtils;
 
 /**
  * Represents an interaction with a domain object or a particular feature (property, collection, action) of a domain
@@ -68,8 +67,7 @@ public abstract class InteractionEvent extends EventObject {
     }
 
     /**
-     * Convenience method that returns the {@link Identifier#getClassName() class name} of the {@link #getIdentifier()
-     * identifier}.
+     * As per {@link #getClassName()}, but naturalized.
      * 
      * @see #getIdentifier
      */
@@ -78,10 +76,11 @@ public abstract class InteractionEvent extends EventObject {
     }
 
     /**
-     * As per {@link #getClassName()}, but {@link NameUtils#naturalName(String) naturalized}.
+     * Convenience method that returns the {@link Identifier#getClassNaturalName() natural class name} of the {@link #getIdentifier()
+     * identifier}.
      */
     public String getClassNaturalName() {
-        return NameUtils.naturalName(getClassName());
+        return identifier.getClassNaturalName();
     }
 
     /**
@@ -98,7 +97,7 @@ public abstract class InteractionEvent extends EventObject {
      * As per {@link #getMemberName()}, but naturalized.
      */
     public String getMemberNaturalName() {
-        return NameUtils.naturalName(getMemberName());
+        return identifier.getMemberNaturalName();
     }
 
     /**
@@ -113,7 +112,7 @@ public abstract class InteractionEvent extends EventObject {
      * As per {@link #getMemberParameterName()}, but naturalized.
      */
     public List<String> getMemberParameterNaturalNames() {
-        return NameUtils.naturalNames(getMemberParameterNames());
+        return identifier.getMemberParameterNaturalNames();
     }
 
     /**

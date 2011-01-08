@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.viewer.dnd.drawing.Background;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.Location;
@@ -65,7 +65,7 @@ public interface Viewer {
 
     void setOverlayView(final View view);
 
-    void showDebugFrame(DebugInfo[] info, Location at);
+    void showDebugFrame(DebuggableWithTitle[] info, Location at);
 
     void showInOverlay(Content content, Location location);
 

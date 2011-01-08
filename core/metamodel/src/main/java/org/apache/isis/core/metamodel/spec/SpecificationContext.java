@@ -16,8 +16,8 @@
  */
 package org.apache.isis.core.metamodel.spec;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 
 public class SpecificationContext {
     

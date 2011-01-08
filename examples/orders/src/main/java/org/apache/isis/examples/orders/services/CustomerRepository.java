@@ -24,9 +24,9 @@ import java.util.List;
 
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.Filter;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.examples.orders.domain.Customer;
 
 

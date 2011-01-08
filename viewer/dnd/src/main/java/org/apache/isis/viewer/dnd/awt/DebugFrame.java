@@ -45,7 +45,7 @@ import java.net.URL;
 import java.util.Vector;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.viewer.dnd.view.debug.DebugOutput;
 
@@ -210,7 +210,7 @@ public abstract class DebugFrame extends Frame {
         LOG.debug("...disposed");
     }
 
-    protected abstract DebugInfo[] getInfo();
+    protected abstract DebuggableWithTitle[] getInfo();
 
     /**
      * show the frame at the specified coordinates
@@ -230,8 +230,8 @@ public abstract class DebugFrame extends Frame {
     }
 
     private void refresh() {
-        final DebugInfo[] infos = getInfo();
-        final DebugInfo info = infos[panel];
+        final DebuggableWithTitle[] infos = getInfo();
+        final DebuggableWithTitle info = infos[panel];
         if (info != null) {
             setTitle(info.debugTitle());
             final DebugString str = new DebugString();
@@ -301,7 +301,7 @@ public abstract class DebugFrame extends Frame {
 
         @Override
         public void paint(final Graphics g) {
-            final DebugInfo[] info = getInfo();
+            final DebuggableWithTitle[] info = getInfo();
 
             if (info != null) {
                 if (tabs == null) {

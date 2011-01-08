@@ -19,8 +19,8 @@
 
 package org.apache.isis.core.metamodel.specloader;
 
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;

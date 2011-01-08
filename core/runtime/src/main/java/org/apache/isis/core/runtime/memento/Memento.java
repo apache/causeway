@@ -29,13 +29,13 @@ import org.apache.log4j.Logger;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.core.commons.debug.DebugString;
+import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
+import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;

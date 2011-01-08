@@ -29,10 +29,11 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.isis.core.commons.lang.Maybe;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderDefault;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+
+import org.apache.isis.applib.maybe.Maybe;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.logging.IsisLoggingConfigurer;
@@ -75,7 +76,7 @@ public class IsisRunner {
 
     private final List<OptionHandler> optionHandlers = Lists.newArrayList();
     private final List<OptionValidator> validators = Lists.newArrayList();
-    private ConfigurationBuilder configurationBuilder = new ConfigurationBuilderDefault();
+    private IsisConfigurationBuilder isisConfigurationBuilder = new IsisConfigurationBuilderDefault();
 
     private Injector globalInjector;
 ;
@@ -134,7 +135,7 @@ public class IsisRunner {
     }
 
     /**
-     * The default implementation is a {@link ConfigurationBuilderDefault},
+     * The default implementation is a {@link IsisConfigurationBuilderDefault},
      * which looks to the <tt>config/</tt> directory, the
      * <tt>src/main/webapp/WEB-INF</tt> directory, and then finally to the
      * classpath. However, this could be a security concern in a production
@@ -142,16 +143,16 @@ public class IsisRunner {
      * config files to disable security, for example.
      * <p>
      * This method therefore allows this system to be configured using a
-     * different {@link ConfigurationBuilder}. For example, a security-conscious
-     * subclass could return a {@link ConfigurationBuilder} that only reads from
+     * different {@link IsisConfigurationBuilder}. For example, a security-conscious
+     * subclass could return a {@link IsisConfigurationBuilder} that only reads from
      * the classpath. This would allow the application to be deployed as a
      * single sealed JAR that could not be tampered with.
      * <p>
      * An adjustment (as per GOOS book).
      */
     public void setConfigurationBuilder(
-            ConfigurationBuilder configurationBuilder) {
-        this.configurationBuilder = configurationBuilder;
+            IsisConfigurationBuilder isisConfigurationBuilder) {
+        this.isisConfigurationBuilder = isisConfigurationBuilder;
     }
 
 
@@ -221,16 +222,16 @@ public class IsisRunner {
         final DeploymentType deploymentType = optionHandlerDeploymentType
                 .getDeploymentType();
         
-        this.globalInjector = createGuiceInjector(deploymentType, configurationBuilder, installerLookup, optionHandlers);
+        this.globalInjector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup, optionHandlers);
 
         bootstrapper.bootstrap(globalInjector);
     }
 
     private Injector createGuiceInjector(DeploymentType deploymentType,
-            ConfigurationBuilder configurationBuilder,
+            IsisConfigurationBuilder isisConfigurationBuilder,
             InstallerLookup installerLookup,
             List<OptionHandler> optionHandlers) {
-        IsisModule isisModule = new IsisModule(deploymentType,configurationBuilder, installerLookup);
+        IsisModule isisModule = new IsisModule(deploymentType,isisConfigurationBuilder, installerLookup);
         isisModule.addConfigurationPrimers(optionHandlers);
         isisModule.addViewerNames(optionHandlerViewer.getViewerNames());
         return Guice.createInjector(isisModule);

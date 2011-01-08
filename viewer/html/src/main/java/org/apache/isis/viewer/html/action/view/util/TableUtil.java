@@ -25,8 +25,9 @@ import static org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilte
 
 import java.util.List;
 
+import org.apache.isis.applib.filter.Filters;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
@@ -66,7 +67,7 @@ public class TableUtil {
 
     	final CollectionFacet facet = CollectionFacetUtils.getCollectionFacetFromSpec(collection);
         final List<ObjectAssociation> columnAssociations = 
-        	elementType.getAssociations(STATICALLY_VISIBLE_ASSOCIATIONS.and(PROPERTIES));
+        	elementType.getAssociations(Filters.and(STATICALLY_VISIBLE_ASSOCIATIONS, PROPERTIES));
         
         int len = columnAssociations.size();
 

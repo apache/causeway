@@ -83,8 +83,8 @@ public class InvokeUtils {
     public static void invocationException(final String error, final InvocationTargetException e) {
         final Throwable targetException = e.getTargetException();
         if (targetException instanceof ApplicationException) {
-            // an application exception from the domain code is re-thrown as an NO exception with same
-            // semantics
+            // an application exception from the domain code is re-thrown as an 
+            // IsisException with same semantics
             throw new IsisApplicationException(targetException);
         }
         if (targetException instanceof RuntimeException) {

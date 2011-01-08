@@ -28,8 +28,8 @@ import java.io.IOException;
 
 import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
 import org.apache.isis.alternatives.remoting.common.exchange.AuthorizationRequestUsability;
-import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.jmock.integration.junit4.JMock;
 import org.junit.Ignore;
 import org.junit.Test;

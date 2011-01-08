@@ -38,7 +38,7 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 
@@ -108,7 +108,7 @@ public class DebugOutput {
         cb.setContents(ss, ss);
     }
 
-    public static void saveToFile(final DebugInfo object) {
+    public static void saveToFile(final DebuggableWithTitle object) {
         final String dateStamp = FORMAT.format(new Date());
         final String fileName = object.getClass().getName() + "-" + dateStamp + ".txt";
         final DebugString text = new DebugString();

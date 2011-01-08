@@ -20,14 +20,14 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.util.Dump;
 
 
-public class DebugObjectGraph implements DebugInfo {
+public class DebugObjectGraph implements DebuggableWithTitle {
     private final ObjectAdapter object;
 
     public DebugObjectGraph(final ObjectAdapter object) {

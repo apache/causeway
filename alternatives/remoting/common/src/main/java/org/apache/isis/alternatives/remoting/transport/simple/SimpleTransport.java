@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.apache.isis.alternatives.remoting.transport.TransportAbstract;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 /**
  * Simple implementation that simply wraps an already existing

@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.awt;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -93,7 +93,7 @@ public class DebugOptions implements MenuOptions {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
-                DebugInfo info = new DebugInfo() {
+                DebuggableWithTitle info = new DebuggableWithTitle() {
 
                     public void debugData(DebugString debug) {
                         ByteArrayOutputStream out2 = new ByteArrayOutputStream();
@@ -117,7 +117,7 @@ public class DebugOptions implements MenuOptions {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
-                final DebugInfo[] contextInfo = IsisContext.debugSystem();
+                final DebuggableWithTitle[] contextInfo = IsisContext.debugSystem();
                 f.setInfo(contextInfo);
                 f.show(at.getX() + 50, workspace.getBounds().getY() + 6);
             }
@@ -128,7 +128,7 @@ public class DebugOptions implements MenuOptions {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
-                final DebugInfo[] contextInfo = IsisContext.debugSession();
+                final DebuggableWithTitle[] contextInfo = IsisContext.debugSession();
                 f.setInfo(contextInfo);
                 f.show(at.getX() + 50, workspace.getBounds().getY() + 6);
             }
@@ -138,7 +138,7 @@ public class DebugOptions implements MenuOptions {
             @Override
             public void execute(final Workspace workspace, final View view, final Location at) {
                 final InfoDebugFrame f = new InfoDebugFrame();
-                f.setInfo(new DebugInfo[] { Toolkit.getViewFactory(), viewer.updateNotifier });
+                f.setInfo(new DebuggableWithTitle[] { Toolkit.getViewFactory(), viewer.updateNotifier });
                 f.show(at.getX() + 50, workspace.getBounds().getY() + 6);
             }
         });

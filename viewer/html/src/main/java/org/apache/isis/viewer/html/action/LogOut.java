@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.html.action;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.html.component.Page;

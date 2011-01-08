@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.disable;
 
 import org.apache.isis.applib.events.UsabilityEvent;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;

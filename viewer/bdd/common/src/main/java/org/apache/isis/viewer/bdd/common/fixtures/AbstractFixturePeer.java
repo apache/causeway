@@ -3,7 +3,7 @@ package org.apache.isis.viewer.bdd.common.fixtures;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;

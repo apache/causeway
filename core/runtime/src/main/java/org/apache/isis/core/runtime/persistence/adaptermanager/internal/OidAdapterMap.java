@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.persistence.adaptermanager.internal;
 
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 
@@ -30,7 +30,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 /**
  * A map of the objects' identities and the adapters' of the objects.
  */
-public interface OidAdapterMap extends DebugInfo, Iterable<Oid>, SessionScopedComponent, Resettable {
+public interface OidAdapterMap extends DebuggableWithTitle, Iterable<Oid>, SessionScopedComponent, Resettable {
 
     /**
      * Add an adapter for a given oid

@@ -23,7 +23,7 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
 
 
 /**
@@ -33,14 +33,17 @@ public class FacetHolderImpl implements FacetHolder {
 
     private final Map<Class<? extends Facet>, Facet> facetsByClass = new HashMap<Class<? extends Facet>, Facet>();
 
+    @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return getFacet(facetType) != null;
     }
 
+    @Override
     public void addFacet(final Facet facet) {
         addFacet(facet.facetType(), facet);
     }
 
+    @Override
     public void addFacet(final MultiTypedFacet facet) {
         final Class<? extends Facet>[] facetTypes = facet.facetTypes();
         for (int i = 0; i < facetTypes.length; i++) {
@@ -64,23 +67,28 @@ public class FacetHolderImpl implements FacetHolder {
         facetsByClass.put(facetType, facet);
     }
 
+    @Override
     public void removeFacet(final Facet facet) {
         FacetUtil.removeFacet(facetsByClass, facet);
     }
 
+    @Override
     public void removeFacet(final Class<? extends Facet> facetType) {
         FacetUtil.removeFacet(facetsByClass, facetType);
     }
 
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends Facet> T getFacet(final Class<T> facetType) {
         return (T) facetsByClass.get(facetType);
     }
 
+    @Override
     public Class<? extends Facet>[] getFacetTypes() {
         return FacetUtil.getFacetTypes(facetsByClass);
     }
 
+    @Override
     public Facet[] getFacets(final Filter<Facet> filter) {
         return FacetUtil.getFacets(facetsByClass, filter);
     }

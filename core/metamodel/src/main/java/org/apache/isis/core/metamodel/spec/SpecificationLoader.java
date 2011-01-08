@@ -24,10 +24,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 
-public interface SpecificationLoader extends ApplicationScopedComponent, DebugInfo, SpecificationLookup {
+public interface SpecificationLoader extends ApplicationScopedComponent, DebuggableWithTitle, SpecificationLookup {
 
     Collection<ObjectSpecification> allSpecifications();
 

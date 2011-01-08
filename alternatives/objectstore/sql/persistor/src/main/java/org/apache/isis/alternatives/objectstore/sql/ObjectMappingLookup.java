@@ -20,25 +20,24 @@
 
 package org.apache.isis.alternatives.objectstore.sql;
 
-import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.transaction.ObjectPersistenceException;
 
 
-public class ObjectMappingLookup implements DebugInfo {
+public class ObjectMappingLookup implements DebuggableWithTitle {
     private static final Logger LOG = Logger.getLogger(ObjectMappingLookup.class);
     private DatabaseConnectorPool connectionPool;
     private final Map<ObjectSpecification, ObjectMapping> mappings = new HashMap<ObjectSpecification, ObjectMapping>();
@@ -99,11 +98,9 @@ public class ObjectMappingLookup implements DebugInfo {
         
         String prefix = SqlObjectStore.BASE_NAME + ".mapper.";
         IsisConfiguration subset = IsisContext.getConfiguration().createSubset(prefix);
-        Enumeration<String> e = subset.propertyNames();
-        while (e.hasMoreElements()) {
-            String className = e.nextElement();
+        for (String className : subset) {
             String value = subset.getString(className);
-
+            
             if (value.startsWith("auto.")) {
                 String propertiesBase = SqlObjectStore.BASE_NAME + ".automapper." + value.substring(5) + ".";
                 add(className, objectMappingFactory.createMapper(className, propertiesBase, fieldMappingLookup, this));
@@ -112,9 +109,9 @@ public class ObjectMappingLookup implements DebugInfo {
                 add(className, objectMappingFactory.createMapper(className, propertiesBase, fieldMappingLookup, this));
             } else {
                 LOG.debug("mapper " + className + "=" + value);
-
+                
                 try {
-                    add(className, InstanceFactory.createInstance(value, ObjectMapping.class));
+                    add(className, InstanceUtil.createInstance(value, ObjectMapping.class));
                 } catch (ObjectPersistenceException ex) {
                     throw new InstanceCreationException("Failed to set up mapper for " + className, ex);
                 }

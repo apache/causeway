@@ -23,22 +23,22 @@ import java.util.List;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private DefaultedAnnotationFacetFactory facetFactory;
-    private PropertiesConfiguration propertiesConfiguration;
+    private IsisConfigurationDefault isisConfigurationDefault;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         facetFactory = new DefaultedAnnotationFacetFactory();
-        propertiesConfiguration = new PropertiesConfiguration();
-        facetFactory.setIsisConfiguration(propertiesConfiguration);
+        isisConfigurationDefault = new IsisConfigurationDefault();
+        facetFactory.setIsisConfiguration(isisConfigurationDefault);
     }
 
     @Override
@@ -200,7 +200,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testDefaultedProviderNameCanBePickedUpFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
+        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
             + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover,
             facetHolder);
@@ -227,7 +227,7 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testNonAnnotatedDefaultedCanBePickedUpFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
+        isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
             + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover,
             facetHolder);

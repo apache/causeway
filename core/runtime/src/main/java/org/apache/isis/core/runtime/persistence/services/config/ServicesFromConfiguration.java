@@ -25,13 +25,14 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.fixture.ObjectFixtureService;
 import org.apache.isis.core.runtime.persistence.services.InitialisationException;
 import org.apache.isis.core.runtime.persistence.services.ServicesInstaller;

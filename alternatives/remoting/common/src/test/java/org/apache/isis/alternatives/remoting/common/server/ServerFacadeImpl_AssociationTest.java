@@ -41,10 +41,10 @@ import org.apache.isis.alternatives.remoting.common.exchange.SetAssociationReque
 import org.apache.isis.alternatives.remoting.common.exchange.SetAssociationResponse;
 import org.apache.isis.alternatives.remoting.common.facade.impl.ServerFacadeImpl;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;

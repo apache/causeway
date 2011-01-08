@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
@@ -33,7 +33,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 
 
-public class UpdateNotifierDefault extends UpdateNotifierAbstract implements DebugInfo {
+public class UpdateNotifierDefault extends UpdateNotifierAbstract implements DebuggableWithTitle {
 	
     private static final Logger LOG = Logger.getLogger(UpdateNotifierDefault.class);
     private final List<ObjectAdapter> changes = new ArrayList<ObjectAdapter>();

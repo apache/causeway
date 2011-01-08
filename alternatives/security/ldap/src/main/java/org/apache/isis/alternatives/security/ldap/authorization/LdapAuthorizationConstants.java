@@ -21,7 +21,7 @@
 package org.apache.isis.alternatives.security.ldap.authorization;
 
 import org.apache.isis.alternatives.security.ldap.authentication.LdapAuthenticationConstants;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerInstaller;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizationConstants;
 

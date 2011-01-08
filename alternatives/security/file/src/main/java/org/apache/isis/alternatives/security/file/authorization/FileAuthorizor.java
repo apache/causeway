@@ -39,10 +39,10 @@ import java.util.StringTokenizer;
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetedmethod.IdentifierUtils;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 

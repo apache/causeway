@@ -40,7 +40,8 @@ import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.markup.repeater.RepeatingView;
 import org.apache.wicket.model.Model;
 
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -87,7 +88,7 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 	    PROPERTIES_AND_COLLECTIONS {
             @Override
             public Filter<ObjectAssociation> getFilters() {
-                return PROPERTIES_ONLY.getFilters().or(COLLECTIONS_ONLY.getFilters());
+                return Filters.or(PROPERTIES_ONLY.getFilters(),COLLECTIONS_ONLY.getFilters());
             }
         };
 
@@ -215,8 +216,8 @@ public class EntityPropertiesAndOrCollectionsPanel extends PanelAbstract<EntityM
 
 	    private Filter<ObjectAssociation> visibleAssociationFilter(
 	    		ObjectAdapter adapter) {
-	        return render.getFilters()
-	                .and(ObjectAssociationFilters.dynamicallyVisible(
+	        return Filters.and(render.getFilters(),
+	                ObjectAssociationFilters.dynamicallyVisible(
 	                        getAuthenticationSession(), adapter));
 	    }
 

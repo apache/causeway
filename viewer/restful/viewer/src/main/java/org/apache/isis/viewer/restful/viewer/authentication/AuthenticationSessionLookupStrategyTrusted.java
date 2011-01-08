@@ -3,7 +3,7 @@ package org.apache.isis.viewer.restful.viewer.authentication;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionLookupStrategyDefault;

@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.histogram;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.filters.AbstractFilter;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
@@ -39,7 +39,7 @@ public class HistogramSpecification extends CompositeViewSpecification {
 
     static List<? extends ObjectAssociation> availableFields(CollectionContent content) {
         List<? extends ObjectAssociation> associationList;
-        associationList = content.getElementSpecification().getAssociations(new AbstractFilter<ObjectAssociation>() {
+        associationList = content.getElementSpecification().getAssociations(new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(ObjectAssociation t) {
                 return NumberAdapters.contains(t);

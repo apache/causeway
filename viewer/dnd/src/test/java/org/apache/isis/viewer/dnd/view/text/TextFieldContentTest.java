@@ -35,7 +35,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -100,7 +101,7 @@ public class TextFieldContentTest {
         IsisSessionFactory sessionFactory = 
             new IsisSessionFactoryDefault(
                     DeploymentType.EXPLORATION, 
-                    new PropertiesConfiguration(), 
+                    new IsisConfigurationDefault(), 
                     mockTemplateImageLoader, 
                     mockSpecificationLoader, 
                     mockAuthenticationManager, 

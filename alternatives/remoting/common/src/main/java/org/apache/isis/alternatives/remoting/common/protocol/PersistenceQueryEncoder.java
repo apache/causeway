@@ -20,7 +20,7 @@
 package org.apache.isis.alternatives.remoting.common.protocol;
 
 import org.apache.isis.alternatives.remoting.common.data.query.PersistenceQueryData;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 
 /**

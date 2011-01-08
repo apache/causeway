@@ -23,12 +23,12 @@ package org.apache.isis.alternatives.remoting.common.data.common;
 import java.io.IOException;
 
 import org.apache.isis.alternatives.remoting.common.data.Data;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.encoding.Encodable;
 
 public class ObjectDataImpl implements ObjectData, Encodable {
 	

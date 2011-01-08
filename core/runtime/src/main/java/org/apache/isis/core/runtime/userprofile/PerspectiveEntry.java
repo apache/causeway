@@ -23,7 +23,7 @@ package org.apache.isis.core.runtime.userprofile;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -32,7 +32,7 @@ import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.persistence.services.ServiceUtil;
 
-public class PerspectiveEntry implements DebugInfo {
+public class PerspectiveEntry implements DebuggableWithTitle {
 
     private final List<Object> objects = new ArrayList<Object>();
     private final List<Object> services = new ArrayList<Object>();

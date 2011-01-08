@@ -22,8 +22,8 @@ package org.apache.isis.core.runtime.system.internal;
 
 import java.io.IOException;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionAbstract;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
 
 public final class InitialisationSession extends AuthenticationSessionAbstract {
 	

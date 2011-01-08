@@ -22,7 +22,7 @@ package org.apache.isis.viewer.wicket.model.nof;
 
 import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
 public interface AuthenticationSessionAccessor extends Serializable {
 

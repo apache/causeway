@@ -22,8 +22,8 @@ package org.apache.isis.core.runtime.authentication.standard;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
 

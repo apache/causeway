@@ -21,7 +21,7 @@
 package org.apache.isis.core.runtime.viewer;
 
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderAware;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
 import org.apache.isis.core.runtime.installers.InstallerLookupAware;
 import org.apache.isis.core.runtime.web.WebAppSpecification;
 
@@ -33,7 +33,7 @@ import org.apache.isis.core.runtime.web.WebAppSpecification;
  * The mechanism may be realized as a user interface (for example the DnD viewer or HTML viewer) but might
  * also be an abstract 'remoting' viewer of sockets or HTTP servlet requests.
  */
-public interface IsisViewer extends ApplicationScopedComponent, InstallerLookupAware, ConfigurationBuilderAware {
+public interface IsisViewer extends ApplicationScopedComponent, InstallerLookupAware, IsisConfigurationBuilderAware {
 
     /**
      * Provide requirement for running a viewer from within an embedded web container.

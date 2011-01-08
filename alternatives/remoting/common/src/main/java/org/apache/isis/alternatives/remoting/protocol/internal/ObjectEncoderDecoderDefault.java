@@ -56,14 +56,14 @@ import org.apache.isis.alternatives.remoting.common.facade.impl.ServerFacadeImpl
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.alternatives.remoting.common.protocol.PersistenceQueryEncoder;
 import org.apache.isis.alternatives.remoting.common.protocol.ProtocolConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -118,7 +118,7 @@ public class ObjectEncoderDecoderDefault implements ObjectEncoderDecoder {
         String[] encoders = configuration.getList(encoderClassNameList);
         for (int i = 0; i < encoders.length; i++) {
             final PersistenceQueryEncoder encoding =
-                InstanceFactory.createInstance(encoders[i], PersistenceQueryEncoder.class);
+                InstanceUtil.createInstance(encoders[i], PersistenceQueryEncoder.class);
             encoder.addPersistenceQueryEncoder(encoding);
         }
     }

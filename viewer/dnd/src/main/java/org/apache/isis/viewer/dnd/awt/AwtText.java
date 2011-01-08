@@ -26,7 +26,8 @@ import java.awt.Frame;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;
 import org.apache.isis.viewer.dnd.drawing.Text;

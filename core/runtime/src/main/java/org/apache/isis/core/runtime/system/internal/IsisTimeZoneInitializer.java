@@ -23,8 +23,9 @@ package org.apache.isis.core.runtime.system.internal;
 import java.util.TimeZone;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public class IsisTimeZoneInitializer {
 

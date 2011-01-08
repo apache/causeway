@@ -24,9 +24,9 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
-import org.apache.isis.core.commons.filters.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;

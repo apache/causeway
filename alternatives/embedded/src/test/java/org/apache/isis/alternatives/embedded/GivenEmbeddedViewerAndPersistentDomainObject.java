@@ -42,7 +42,7 @@ import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.alternatives.embedded.dom.employee.Employee;
 import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
 import org.apache.isis.alternatives.embedded.internal.PersistenceState;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
 
 @RunWith(JMock.class)

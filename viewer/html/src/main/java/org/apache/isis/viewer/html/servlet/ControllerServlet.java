@@ -31,8 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.html.component.Page;
 import org.apache.isis.viewer.html.component.html.HtmlComponentFactory;

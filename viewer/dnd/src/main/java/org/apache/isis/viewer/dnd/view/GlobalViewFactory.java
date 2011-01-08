@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.view;
 
 import java.util.Enumeration;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.viewer.dnd.drawing.Location;
 
 
@@ -32,7 +32,7 @@ import org.apache.isis.viewer.dnd.drawing.Location;
  * method to create the object. The only case that would be slightly different would be the DragOutline one as
  * the Axis is never used.
  */
-public interface GlobalViewFactory extends DebugInfo {
+public interface GlobalViewFactory extends DebuggableWithTitle {
     
     void addSpecification(ViewSpecification spec);
     

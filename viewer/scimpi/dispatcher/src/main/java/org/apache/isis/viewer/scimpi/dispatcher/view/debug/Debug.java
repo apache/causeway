@@ -27,7 +27,7 @@ import java.util.List;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -47,7 +47,7 @@ public class Debug extends AbstractElementProcessor {
         String value = request.getOptionalProperty("value");
         if (type != null) {
             if (type.equals("system")) {
-                DebugInfo[] debug = IsisContext.debugSystem();
+                DebuggableWithTitle[] debug = IsisContext.debugSystem();
                 request.appendHtml("<h2>System</h2>");
                 for (int i = 0; i < debug.length; i++) {
                     DebugString str = new DebugString();
@@ -100,9 +100,9 @@ public class Debug extends AbstractElementProcessor {
             String id = request.getOptionalProperty("object");
             if (id != null) {
                 ObjectAdapter object = context.getMappedObject(id);
-                if (object instanceof DebugInfo) {
+                if (object instanceof DebuggableWithTitle) {
                     DebugString debug = new DebugString();
-                    ((DebugInfo) object).debugData(debug);
+                    ((DebuggableWithTitle) object).debugData(debug);
                     request.appendHtml("<pre class=\"debug\">" + debug + "</pre>");
                 } else {
                     request.appendHtml(object.toString());

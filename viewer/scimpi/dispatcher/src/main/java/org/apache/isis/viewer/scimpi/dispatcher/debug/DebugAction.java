@@ -30,9 +30,9 @@ import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.filters.AbstractFilter;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -112,7 +112,7 @@ public class DebugAction implements Action {
     }
 
     private void system(RequestContext context, DebugView view) {
-        DebugInfo[] debug = IsisContext.debugSystem();
+        DebuggableWithTitle[] debug = IsisContext.debugSystem();
         view.divider("System");
         for (int i = 0; i < debug.length; i++) {
             DebugString str = new DebugString();
@@ -257,7 +257,7 @@ public class DebugAction implements Action {
     }
 
     private void speficationFacets(DebugView view, FacetHolder facetHolder) {
-        Facet[] facets = facetHolder.getFacets(new AbstractFilter<Facet>() {
+        Facet[] facets = facetHolder.getFacets(new Filter<Facet>() {
             @Override
             public boolean accept(Facet facet) {
                 return true;

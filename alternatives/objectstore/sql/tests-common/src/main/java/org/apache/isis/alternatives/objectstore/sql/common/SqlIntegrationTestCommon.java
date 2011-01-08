@@ -46,7 +46,8 @@ import org.apache.isis.applib.value.Password;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.applib.value.TimeStamp;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
+
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
@@ -90,7 +91,7 @@ public abstract class SqlIntegrationTestCommon extends TestCase {
 	private static SimpleClassTwo simpleClassTwoA;
 	// private static SimpleClassTwo simpleClassTwoB;
 
-	ConfigurationBuilderFileSystem loader;
+	IsisConfigurationBuilderFileSystem loader;
 
 	private SqlIntegrationTestSingleton getSingletonInstance() {
 		return SqlIntegrationTestSingleton.getInstance();

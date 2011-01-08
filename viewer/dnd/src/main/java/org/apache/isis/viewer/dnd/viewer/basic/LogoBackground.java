@@ -21,7 +21,8 @@
 package org.apache.isis.viewer.dnd.viewer.basic;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.dnd.drawing.Background;
 import org.apache.isis.viewer.dnd.drawing.Canvas;

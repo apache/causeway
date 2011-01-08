@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.commons.ensure;
 
-public class Assert {
+public final class Assert {
 
     public static void assertEquals(final Object expected, final Object actual) {
         assertEquals("", expected, actual);

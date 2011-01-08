@@ -21,9 +21,10 @@
 package org.apache.isis.core.runtime.fixturesinstaller.config;
 
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.fixture.ObjectLoaderFixture;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstallerAbstract;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstallerDelegate;
@@ -53,7 +54,7 @@ public class FixturesFromConfiguration extends FixturesInstallerAbstract {
             for (int i = 0; i < fixtureList.length; i++) {
                 String fixtureFullyQualifiedName = fixturePrefix + fixtureList[i];
                 LOG.info("  adding fixture " + fixtureFullyQualifiedName);
-				final Object fixture = InstanceFactory.createInstance(fixtureFullyQualifiedName);
+				final Object fixture = InstanceUtil.createInstance(fixtureFullyQualifiedName);
 				fixtureLoaded = true;
 				delegate.addFixture(fixture);
             }

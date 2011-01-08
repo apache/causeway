@@ -19,7 +19,7 @@
 
 package org.apache.isis.core.progmodel.facets.hide;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.interactions.HidingInteractionAdvisor;
 

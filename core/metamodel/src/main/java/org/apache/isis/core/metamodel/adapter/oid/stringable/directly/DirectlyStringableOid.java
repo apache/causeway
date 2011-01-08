@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.metamodel.adapter.oid.stringable.directly;
 
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.encoding.Encodable;
 
 /**
  * An alternative to {@link Encodable}, intended to be used for <tt>Oid</tt>s

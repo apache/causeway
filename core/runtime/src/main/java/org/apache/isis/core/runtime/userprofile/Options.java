@@ -24,11 +24,11 @@ import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.Properties;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 
 
-public class Options implements DebugInfo {
+public class Options implements DebuggableWithTitle {
     private final Properties properties = new Properties();
 
     public void addOption(String name, String value) {

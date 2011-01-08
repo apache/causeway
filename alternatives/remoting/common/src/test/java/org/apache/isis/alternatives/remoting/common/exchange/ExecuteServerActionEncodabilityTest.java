@@ -29,8 +29,8 @@ import java.io.IOException;
 import org.apache.isis.alternatives.remoting.common.data.Data;
 import org.apache.isis.alternatives.remoting.common.data.common.ReferenceData;
 import org.apache.isis.alternatives.remoting.common.exchange.ExecuteServerActionRequest;
-import org.apache.isis.core.metamodel.encoding.EncodabilityContractTest;
-import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.commons.encoding.EncodabilityContractTest;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.spec.ActionType;
 
 import org.junit.Before;

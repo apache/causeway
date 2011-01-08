@@ -72,21 +72,52 @@
     It also explains the principles of deploying an Isis application and
     describes how to do so as a standalone application or as a webapp.</para>
 
-    <para>It is divided into four parts:<itemizedlist>
+    <para>It is divided into five parts:<itemizedlist>
         <listitem>
           <para>Introduction</para>
 
-          <para>The principles and patterns of the framework, understanding
-          how an Isis application works, getting started with the quickapp
-          archetype, the process of developing Isis applications, and tips for
-          developing with an <acronym>IDE</acronym></para>
+          <para>This part of the guide discusses the principles and patterns
+          of the framework, understanding how an Isis application works,
+          getting started with the quickapp archetype, the process of
+          developing Isis applications, and tips for developing with an
+          <acronym>IDE</acronym></para>
         </listitem>
 
         <listitem>
           <para>Architecture</para>
 
-          <para>The core framework, the default implementation of APIs, and
-          alternative implementations. </para>
+          <para>This part of the guide discusses some of the main architecture
+          elements of the framework's design, distinguishing and explaining
+          the reason for the applib, the core modules, the viewers, the
+          default implementations of the main APIs exposed by the core, and
+          the alternative implementations of those APIs.</para>
+        </listitem>
+
+        <listitem>
+          <para>Core Modules</para>
+
+          <para>This part of the guide goes through each of the modules that
+          make up the core framework.</para>
+        </listitem>
+
+        <listitem>
+          <para>Default Implementations</para>
+
+          <para>This part of the guide discusses the default implementations
+          of the core APIs. (Alternative implementations have their own
+          guides).</para>
+        </listitem>
+
+        <listitem>
+          <para>(Basic) Deployment</para>
+
+          <para>This part of the guide describes the basic deployment options.
+          Alternative implementations (most notably, remoting for
+          client/server) that allow for different deployments have their own
+          guidance on deployment. The same is also true for viewers that allow
+          for different deployments (eg a viewer that supports a mobile phone
+          or Eclipse OSGi would likely have its own packaging
+          requirements).</para>
         </listitem>
       </itemizedlist></para>
 
@@ -123,18 +154,37 @@
       <sect1>
         <title>What's in this Guide</title>
 
-        <para></para>
+        <para>**</para>
+
+        <para>This guide is intended to provide a comprehensive introduction
+        to the <emphasis>Apache Isis</emphasis> framework. As such, it:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>covers the main principles that lie behind the framework
+            (such as enabling domain-driven design)</para>
+          </listitem>
+
+          <listitem>
+            <para>describes the patterns that we have adopted to fulfil those
+            principles (such as the naked objects pattern)</para>
+          </listitem>
+
+          <listitem>
+            <para>describes the high-level architecture of the framework,
+            including why there are different modules and how they fit
+            together</para>
+          </listitem>
+
+          <listitem>
+            <para></para>
+          </listitem>
+        </itemizedlist>
+
+        <para>, of writing an Isis application, describes the
+        architectura</para>
 
         <para></para>
-      </sect1>
-
-      <sect1>
-        <title>This Guide vs the Core Documentation</title>
-
-        <para>This guide assumes that you have at least the outline of a
-        running <emphasis>Apache Isis</emphasis> application, for example
-        having run the quickstart archetype. If you haven't done this, then
-        please consult the core documentation to learn how.</para>
 
         <para>You should also note that the core documentation also explains
         the wider landscape of what makes up an <emphasis>Isis</emphasis>
@@ -147,9 +197,25 @@
         core documentation for details on how to write your own programming
         model.</para>
 
-        <para>However, everything related to the specifics of writing a domain
-        object with the <emphasis>default</emphasis> programming model is
-        here.</para>
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>This Guide vs the AppLib Documentation</title>
+
+        <para>If you are starting out using <emphasis>Isis</emphasis> then
+        recommended reading is both this guide and also the documentation for
+        the applib (applicaiton library).</para>
+
+        <para>The applib guide focuses on the specifics of the programming
+        conventions of (what we call the) default programming model.</para>
+
+        <para>This guide (the core documentation) does not cover the default
+        programming model in the same sort of depth. Instead, it covers the
+        main principles and patterns of writing any Apache Isis application,
+        including the fact that there you can customize your own programming
+        model if you wish. It also goes in depth into the architecture and
+        design of the framework.</para>
       </sect1>
 
       <sect1>
@@ -163,27 +229,37 @@
       <title>Principles &amp; Patterns</title>
 
       <abstract>
-        <para>An overview of the main principles and patterns that underly the
-        <emphasis>Apache Isis</emphasis> approach.</para>
+        <para>An overview of the main principles and patterns that are the
+        basis of <emphasis>Apache Isis</emphasis>.</para>
       </abstract>
 
-      <para></para>
+      <para>There's much more to <emphasis>Apache Isis</emphasis> than being a
+      framework that automatically generates the user interface. This chapter
+      provides an overview of the main principles and patterns that are the
+      basis of the framework.</para>
 
       <sect1>
         <title>Principles</title>
 
-        <para><emphasis></emphasis></para>
-
-        <para><emphasis></emphasis><note>
-            <para>TODO: distill some of the material on the trunk site.</para>
-
-            <para></para>
-          </note></para>
-
         <sect2>
           <title>Ubiquitous Language</title>
 
-          <para></para>
+          <para>One of the more influential IT books has been <emphasis>Domain
+          Driven Design</emphasis>, by Eric Evans. In it, Evans provided a set
+          of patterns for building enterprise systems, based on the premise
+          that the domain model should be at the heart of the system, and
+          should have the most attention devoted to it.</para>
+
+          <para>One of the patterns that Evans named was the
+          <emphasis>Ubiquitous Language</emphasis>, the idea being that the
+          domain experts and the developers should work as a single team to
+          communicate through a single common set of terms. This had been
+          advocated before: it's good practice after all for a project to have
+          a glossary of terms. But Evans emphasised the fact that the team
+          (technical and non-technical alike) should <emphasis>only</emphasis>
+          use this set of terms, and if they found themselves unable to then
+          it was an indication of a concept that had not previously been
+          identified.</para>
 
           <para></para>
 
@@ -446,22 +522,22 @@
 
       <para></para>
 
-      <para>[[NAME]] creates the user interface for an application directly
-      from the definitions of the domain model. In this section we will look
-      at that relationship in more detail, with reference to the Expenses
-      Processing example application supplied as part of the download. As we
-      showed in the previous section, any domain model written for [[NAME]]
-      may be run with any of the viewers - there is no specific coding
-      required, and the domain model has no knowledge of which viewer is being
-      used. However, each viewer will have different gestures or mechanisms
-      for providing the same functionality. To illustrate this, we will show
-      the same objects being accessed through both the DND and the HTML
-      viewers, side by side.</para>
+      <para><emphasis>Apache Isis</emphasis> creates the user interface for an
+      application directly from the definitions of the domain model. In this
+      section we will look at that relationship in more detail, with reference
+      to the Expenses Processing example application supplied as part of the
+      download. As we showed in the previous section, any domain model written
+      for <emphasis>Isis</emphasis> may be run with any of the viewers - there
+      is no specific coding required, and the domain model has no knowledge of
+      which viewer is being used. However, each viewer will have different
+      gestures or mechanisms for providing the same functionality. To
+      illustrate this, we will show the same objects being accessed through
+      both the DND and the HTML viewers, side by side.</para>
 
       <para>The application code for the Expenses Processing example, like any
-      [[NAME]] application, consists of two things: domain objects and
-      services. The domain objects form the lion's share of that code, so
-      we'll look at how those work first.</para>
+      <emphasis>Isis</emphasis> application, consists of two things: domain
+      objects and services. The domain objects form the lion's share of that
+      code, so we'll look at how those work first.</para>
 
       <para>The code for examples we will be looking at can be found in the
       directory <filename>examples/expenses/expenses-dom/src</filename> in the
@@ -474,8 +550,8 @@
         the application domain: employee, claim, expense item, project code,
         currency, and so forth. In the course of using the application, a user
         will view and manipulate many instances of these domain objects. To
-        understand how [[NAME]] handles domain objects, we'll start by looking
-        at an Employee object:</para>
+        understand how Isis handles domain objects, we'll start by looking at
+        an Employee object:</para>
 
         <screenshot>
           <mediaobject>
@@ -514,9 +590,9 @@
 
         <para>Secondly, we can see that <classname>Employee</classname>
         extends <classname>AbstractDomainObject</classname> - a class provided
-        within the [[NAME]] application library. This is not a requirement:
-        your domain objects may be Plain Old Java Objects (POJOs) - they do
-        not need to extend any class in the framework. However, extending from
+        within the Isis application library. This is not a requirement: your
+        domain objects may be Plain Old Java Objects (POJOs) - they do not
+        need to extend any class in the framework. However, extending from
         <literal moreinfo="none">AbstractDomainObject</literal> will save us
         having to write a few lines of code in each case, as we'll see
         later.</para>
@@ -569,13 +645,12 @@
         that this may be over-ridden if needed.</para>
 
         <para>The <literal moreinfo="none">getName</literal> has been marked
-        up with two Java annotations, both defined in the [[NAME]] application
+        up with two Java annotations, both defined in the Isis application
         library. Annotations allow the programmer to enrich the information
-        available to the framework. On properties, any [[NAME]] Objects
-        annotations are always associated with the <literal
-        moreinfo="none">get</literal> method. However, annotations are not
-        mandatory - you can write a simple [[NAME]] application without using
-        any annotations at all.</para>
+        available to the framework. On properties, any Isis annotations are
+        always associated with the <literal moreinfo="none">get</literal>
+        method. However, annotations are not mandatory - you can write a
+        simple Isis application without using any annotations at all.</para>
 
         <para>By default, any property with both a <literal
         moreinfo="none">get</literal> and <literal
@@ -596,15 +671,16 @@
         moreinfo="none">UserName</literal>:</para>
 
         <programlisting format="linespecific">// {{ UserName field
-    private String userName;
+private String userName;
 
-    @Hidden
-    public String getUserName() {
-        return userName;
-    }
-    public void setUserName(final String variable) {
-        this.userName = variable;
-    }
+@Hidden
+public String getUserName() {
+    return userName;
+}
+
+public void setUserName(final String variable) {
+    this.userName = variable;
+}
 // }}</programlisting>
 
         <para>Note that <literal moreinfo="none">getUserName</literal> has
@@ -618,31 +694,31 @@
         moreinfo="none">EmailAddress</literal> region:</para>
 
         <programlisting format="linespecific">// {{ EmailAddress
-    private String emailAddress;
+private String emailAddress;
     
-    @MemberOrder(sequence = "2")
-    @Optional
-    @RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
-    public String getEmailAddress() {
-        return this.emailAddress;
-    }
-    public void setEmailAddress(final String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-    public void modifyEmailAddress(final String emailAddress) {
-        getRecordActionService().recordFieldChange(this, "Email Address", getEmailAddress(), emailAddress);
-        setEmailAddress(emailAddress);
-    }
-    public void clearEmailAddress() {
-        getRecordActionService().recordFieldChange(this, "Email Address", getEmailAddress(), "EMPTY");
-        setEmailAddress(null);
-    }
-    public boolean hideEmailAddress() {
-        return !employeeIsCurrentUser();
-    }
-    private boolean employeeIsCurrentUser() {
-        return getUserFinder().currentUserAsObject() == this;
-    }
+@MemberOrder(sequence = "2")
+@Optional
+@RegEx(validation = "(\\w+\\.)*\\w+@(\\w+\\.)+[A-Za-z]+")
+public String getEmailAddress() {
+    return this.emailAddress;
+}
+public void setEmailAddress(final String emailAddress) {
+    this.emailAddress = emailAddress;
+}
+public void modifyEmailAddress(final String emailAddress) {
+    getRecordActionService().recordFieldChange(this, "Email Address", getEmailAddress(), emailAddress);
+    setEmailAddress(emailAddress);
+}
+public void clearEmailAddress() {
+    getRecordActionService().recordFieldChange(this, "Email Address", getEmailAddress(), "EMPTY");
+    setEmailAddress(null);
+}
+public boolean hideEmailAddress() {
+    return !employeeIsCurrentUser();
+}
+private boolean employeeIsCurrentUser() {
+    return getUserFinder().currentUserAsObject() == this;
+}
 // }}</programlisting>
 
         <para>As well as <literal moreinfo="none">@MemberOrder</literal>, this
@@ -660,7 +736,7 @@
         annotation specifies a Regular Expression that will be used to
         validate any value that the user types into the field. In a
         conventional architecture, this functionality would typically be found
-        in the user interface code. The [[NAME]] argument is that this
+        in the user interface code. The Isis argument is that this
         functionality should apply to any user interface that might want to
         change the property, so its proper place is in the object. <literal
         moreinfo="none">@RegEx</literal> may also be used to reformat a String
@@ -687,8 +763,8 @@
         moreinfo="none">setEmailAddress</literal>, there are <literal
         moreinfo="none">modifyEmailAddress</literal>, <literal
         moreinfo="none">clearEmailAddress</literal> and <literal
-        moreinfo="none">hideEmailAddress</literal> methods. [[NAME]]
-        recognises the <literal moreinfo="none">modify</literal>, <literal
+        moreinfo="none">hideEmailAddress</literal> methods. Isis recognises
+        the <literal moreinfo="none">modify</literal>, <literal
         moreinfo="none">clear</literal> and <literal
         moreinfo="none">hide</literal> prefixes (and a few others that we
         shall see later) as specifying additional functionality relating to
@@ -760,8 +836,8 @@
         <para>The <literal moreinfo="none">NormalApprover</literal> property
         takes an object of type <literal moreinfo="none">Employee</literal>.
         Assuming that this field is not disabled, the user may specify an
-        Employee object for this field. [[NAME]] will prevent the user from
-        trying to associate the wrong type of object with this field. This is
+        Employee object for this field. Isis will prevent the user from trying
+        to associate the wrong type of object with this field. This is
         illustrated in the two screens below:</para>
 
         <screenshot>
@@ -830,9 +906,8 @@
         authorization'. Most applications can manage with 'class-based
         authorization' - in which the classes, properties and actions made
         available to a user are based on their roles. Class-based
-        authorization in [[NAME]] is administered externally to the
-        application and does not require any coding within the domain
-        objects.)</para>
+        authorization in Isis is administered externally to the application
+        and does not require any coding within the domain objects.)</para>
       </sect1>
 
       <sect1>
@@ -850,16 +925,15 @@
         <para>The <literal moreinfo="none">title</literal> method specifies
         the title for the object - which, on both the DND and HTML viewers
         appears next to the icon. The title is there to help the user identify
-        objects. [[NAME]] also provides an easy mechanism to retrieve objects
-        from the object store by their title. Other methods of
-        finding/searching may require repository methods to be written. If no
-        <literal moreinfo="none">title</literal> method is specified, [[NAME]]
-        Objects will use the object's <literal
-        moreinfo="none">toString</literal> method as a title. Titles are
-        usually based on one or more of the persisted properties - in this
-        case on the Name. When constructing a title from multiple elements,
-        the [[NAME]] application library provides a helper object:
-        <classname>TitleBuffer</classname>.</para>
+        objects. Isis also provides an easy mechanism to retrieve objects from
+        the object store by their title. Other methods of finding/searching
+        may require repository methods to be written. If no <literal
+        moreinfo="none">title</literal> method is specified, Apache Isis will
+        use the object's <literal moreinfo="none">toString</literal> method as
+        a title. Titles are usually based on one or more of the persisted
+        properties - in this case on the Name. When constructing a title from
+        multiple elements, the Isis application library provides a helper
+        object: <classname>TitleBuffer</classname>.</para>
       </sect1>
 
       <sect1>
@@ -883,9 +957,9 @@
 
         <itemizedlist>
           <listitem>
-            <para>Any methods that are recognised by [[NAME]] as having a
-            specific intent. We've seen a number of these already, including
-            <literal moreinfo="none">get</literal> and <literal
+            <para>Any methods that are recognised by Isis as having a specific
+            intent. We've seen a number of these already, including <literal
+            moreinfo="none">get</literal> and <literal
             moreinfo="none">set</literal> methods, <literal
             moreinfo="none">title</literal>, and the methods prefixed by
             <literal moreinfo="none">modify</literal>, <literal
@@ -905,8 +979,8 @@
 
         <para><literal moreinfo="none">private</literal>, <literal
         moreinfo="none">protected</literal>, and <literal
-        moreinfo="none">static</literal> methods are ignored by [[NAME]]
-        Objects.</para>
+        moreinfo="none">static</literal> methods are ignored by Apache
+        Isis.</para>
 
         <para>For example, the action 'Copy From' on the Taxi object, is
         derived from this method on the
@@ -1003,8 +1077,8 @@
         domain objects or services, with the former typically representing the
         lions share of the code. Now we'll look at the services.</para>
 
-        <para>Services perform two roles in a [[NAME]] application. First,
-        they provide a place to put functionality that cannot be placed on an
+        <para>Services perform two roles in an Isis application. First, they
+        provide a place to put functionality that cannot be placed on an
         instance of a domain object, of which the two most obvious examples
         are:</para>
 
@@ -1031,14 +1105,14 @@
         cover both requirements. There's no hard-and-fast rule about how
         services should be partitioned.</para>
 
-        <para>The second role that services perform within a [[NAME]]
-        application is to bridge domains. The following are examples of what
-        we mean by bridging domains:</para>
+        <para>The second role that services perform within an Isis application
+        is to bridge domains. The following are examples of what we mean by
+        bridging domains:</para>
 
         <itemizedlist>
           <listitem>
             <para>Linking to functionality that already exists, or has to
-            exist, outside of the [[NAME]] application, such as pre-existing
+            exist, outside of the Isis application, such as pre-existing
             services, or functionality within legacy systems.</para>
           </listitem>
 
@@ -1050,7 +1124,7 @@
 
           <listitem>
             <para>(Less commonly) Bridging between isolated modelling domains.
-            The [[NAME]] philosophy is to aim, where possible, for a single
+            The Isis philosophy is to aim, where possible, for a single
             coherent enterprise object model running within the same
             application space. Where this is not possible (e.g. for technical
             or for political reasons), then services may be used to
@@ -1132,9 +1206,9 @@
         server.</para>
 
         <para>Since there could be multiple implementations of any one service
-        within our code base, [[NAME]] needs to be informed of which services
-        it is to reference when running an application. This is done within
-        the properties files. For example, the <filename class="directory"
+        within our code base, Isis needs to be informed of which services it
+        is to reference when running an application. This is done within the
+        properties files. For example, the <filename class="directory"
         moreinfo="none">isis.properties</filename> file, which may be found
         within the <literal
         moreinfo="none">expenses.app.client\config</literal> directory,
@@ -1148,23 +1222,23 @@ isis.services=services.JavaMailSender</programlisting>
         services being referenced there also. Many of those services are
         'repositories', and though there is no technical difference between a
         repository and any other kind of service, repositories play such an
-        important role in [[NAME]] applications, that they are worth exploring
-        in more detail.</para>
+        important role in Isis applications, that they are worth exploring in
+        more detail.</para>
 
         <sect2>
           <title>Repositories</title>
 
-          <para>[[NAME]] handles the basic object lifecycle (create, read,
-          update, delete) automatically - there is no need to define your own
-          methods for saving or updating objects, or for retrieving an object
-          that you have a reference to. These mechanisms work the same way
-          irrespective of what technology you are using to persist the objects
-          - such as via Hibernate, natively to a relational database, or via
-          the 'XML Object Store'.</para>
+          <para>Isis handles the basic object lifecycle (create, read, update,
+          delete) automatically - there is no need to define your own methods
+          for saving or updating objects, or for retrieving an object that you
+          have a reference to. These mechanisms work the same way irrespective
+          of what technology you are using to persist the objects - such as
+          via Hibernate, natively to a relational database, or via the 'XML
+          Object Store'.</para>
 
-          <para>[[NAME]] even provides some simple mechanisms for searching
-          for persisted objects - that also operate the same way, irrespective
-          of the object store. However, a business application will also need
+          <para>Isis even provides some simple mechanisms for searching for
+          persisted objects - that also operate the same way, irrespective of
+          the object store. However, a business application will also need
           more complex search queries that, for reasons of efficiency, will
           need to be written specifically for the type of object store you are
           working with.</para>
@@ -1174,8 +1248,8 @@ isis.services=services.JavaMailSender</programlisting>
           the domain classes directly. That way if you change the persistent
           object store, you can just create a new implementation of the
           affected Repositories, without having to change any domain classes.
-          [[NAME]] supports this concept. Within the Expenses application you
-          will find the following three repository definitions:</para>
+          Isis supports this concept. Within the Expenses application you will
+          find the following three repository definitions:</para>
 
           <programlisting format="linespecific">org.apache.isis.example.expenses.claims.ClaimRepository
 org.apache.isis.example.expenses.employee.EmployeeRepository;
@@ -1340,15 +1414,15 @@ public ClaimStatus findClaimStatus(String title) {
           <para>A Factory is just the name we give to a kind of service that
           specialises in the creation of new objects, of one or more kinds. It
           is not necessary to use a Factory in order to create objects within
-          [[NAME]]: we may invoke the methods
+          Isis: we may invoke the methods
           <methodname>newTransientInstance</methodname> from within a method
           on a domain object or within any service.</para>
 
           <para>However, if there is a need to create a type of object from
           several different places in the application, and there are common
           steps involved, then it is good practice to delegate this to a
-          Factory. Within [[NAME]] a Factory is just another service, it
-          doesn't have any special status. For example, within the Expenses
+          Factory. Within Isis a Factory is just another service, it doesn't
+          have any special status. For example, within the Expenses
           application, new <classname>Claim</classname>s and new
           <classname>ExpenseItem</classname>s are created via the
           <classname>ClaimFactory</classname>. However, new
@@ -1363,7 +1437,7 @@ public ClaimStatus findClaimStatus(String title) {
       <sect1>
         <title>Using services</title>
 
-        <para>Services are used within [[NAME]] in three ways:</para>
+        <para>Services are used within Isis in three ways:</para>
 
         <itemizedlist>
           <listitem>
@@ -1386,8 +1460,8 @@ public ClaimStatus findClaimStatus(String title) {
 
           <para>Objects may need access to services, such as repositories for
           finding related objects, or for calling functionality from outside
-          the domain model. [[NAME]] uses the 'dependency injection' model.
-          Each object merely needs to provide a <literal
+          the domain model. Isis uses the 'dependency injection' model. Each
+          object merely needs to provide a <literal
           moreinfo="none">set</literal> method for each type of service that
           it requires. For example, within the Employee object there is a code
           region labelled <literal moreinfo="none">Injected
@@ -1423,10 +1497,10 @@ public ClaimStatus findClaimStatus(String title) {
           requires two services to be injected: a <literal
           moreinfo="none">RecordActionService</literal> and a <literal
           moreinfo="none">UserFinder</literal>. Whenever an instance of
-          Employee is created, or retrieved from the object store, [[NAME]]
-          Objects will inject the implementation that it knows about (as
-          specified in properties) for each type of service required. Note
-          that, unlike the other properties we have looked at, <literal
+          Employee is created, or retrieved from the object store, Apache Isis
+          will inject the implementation that it knows about (as specified in
+          properties) for each type of service required. Note that, unlike the
+          other properties we have looked at, <literal
           moreinfo="none">get</literal> methods may be <literal
           moreinfo="none">protected</literal>, because the property is not
           displayed. (Strictly speaking a <literal
@@ -1541,9 +1615,9 @@ private boolean employeeIsCurrentUser() {
 
           <para>This menu has a sub-menu, entitled 'Recorded Actions',
           containing, in this case, a single method 'All Recorded Actions'.
-          Sub-menus in [[NAME]] are 'contributed' by services; the actions in
-          the sub-menus are described as 'contributed actions'. In this case
-          the actions are contributed the service
+          Sub-menus in Isis are 'contributed' by services; the actions in the
+          sub-menus are described as 'contributed actions'. In this case the
+          actions are contributed the service
           <classname>RecordedActionContributedActions</classname>:</para>
 
           <programlisting format="linespecific">  @Named("Recorded Actions")
@@ -1596,11 +1670,11 @@ private boolean employeeIsCurrentUser() {
           to any object of a type that features as any of the parameters to
           that method.</para>
 
-          <para>This is a very powerful feature of [[NAME]], but it is one
-          that takes a bit of getting used to. In some respects it is a little
-          bit like Aspect Oriented Programming (AOP), in that it allows an
-          object effectively to inherit capabilities from several different
-          sources. However, this all takes place at run-time, not at compile
+          <para>This is a very powerful feature of Isis, but it is one that
+          takes a bit of getting used to. In some respects it is a little bit
+          like Aspect Oriented Programming (AOP), in that it allows an object
+          effectively to inherit capabilities from several different sources.
+          However, this all takes place at run-time, not at compile
           time.</para>
 
           <para>In a more complex application, it might well be that a domain
@@ -1616,9 +1690,9 @@ private boolean employeeIsCurrentUser() {
         <title>Fixtures</title>
 
         <para>Fixtures are used to set up objects within the code based,
-        principally for use within prototyping and or testing. [[NAME]]
-        provides specific support for using fixtures. The following code shows
-        a fixture class that sets up one claim:</para>
+        principally for use within prototyping and or testing. Isis provides
+        specific support for using fixtures. The following code shows a
+        fixture class that sets up one claim:</para>
 
         <programlisting format="linespecific">public class SvenClaim1NewStatus extends AbstractClaimFixture {
     
@@ -1642,9 +1716,9 @@ private boolean employeeIsCurrentUser() {
         <para>This inherits from <classname>AbstractClaimFixture</classname>,
         which provides the helper methods such as
         <methodname>createNewClaim</methodname>, and which inherits in turn
-        from <classname>AbstractFixture</classname>, a class in the [[NAME]]
-        Objects application library. However, there is no need to follow this
-        pattern: a fixture may be any class that has an
+        from <classname>AbstractFixture</classname>, a class in the Isis
+        application library. However, there is no need to follow this pattern:
+        a fixture may be any class that has an
         <methodname>install</methodname> method.</para>
 
         <para>Fixtures may be composite, as we can see in this example:</para>
@@ -1663,15 +1737,15 @@ private boolean employeeIsCurrentUser() {
 }</programlisting>
 
         <para>This fixture has had five other fixtures added to it. The
-        <methodname>install</methodname> method is empty: [[NAME]] will
+        <methodname>install</methodname> method is empty: Isis will
         automatically call <methodname>install</methodname> on each of the
         fixtures that has been added to this composite fixture. This pattern
         makes it easy to manage large fixtures, and multiple sets of
         (potentially overlapping) fixtures, both for prototyping and for
         testing.</para>
 
-        <para>As with services, [[NAME]] needs to be instructed which fixtures
-        it should use when running an application. This may be done in the
+        <para>As with services, Isis needs to be instructed which fixtures it
+        should use when running an application. This may be done in the
         properties files, for example:</para>
 
         <programlisting format="linespecific">isis.fixtures.prefix=org.apache.isis.example.expenses.fixtures
@@ -1707,7 +1781,7 @@ isis.fixtures=ExplorationPerspectiveFixture, RefdataFixture, EmployeeFixture,  S
 
         <para></para>
 
-        <para>Using Maven archetype plugin we can generate a new [[NAME]]
+        <para>Using Maven archetype plugin we can generate a new Isis
         application very quickly. These are multi-moduled projects with
         separate sections for the domain code, fixtures, web interfaces and so
         on.</para>
@@ -1738,11 +1812,11 @@ isis.fixtures=ExplorationPerspectiveFixture, RefdataFixture, EmployeeFixture,  S
 [INFO] Generating project in Interactive mode
 [INFO] No archetype defined. Using maven-archetype-quickstart (org.apache.maven.archetypes:maven-archetype-quickstart:1.0)
 Choose archetype:
-1: local -&gt; isis-application ([[NAME]] Application (Archetype))
-2: local -&gt; isis-icons ([[NAME]] Icons (Archetype))
-3: local -&gt; htmlviewer-war ([[NAME]] WAR (Archetype))
+1: local -&gt; isis-application (Isis Application (Archetype))
+2: local -&gt; isis-icons (Isis Icons (Archetype))
+3: local -&gt; htmlviewer-war (Isis WAR (Archetype))
 4: local -&gt; hibernate-support (Hibernate Support (Archetype))
-5: local -&gt; remoting-support ([[NAME]] Remoting Support (Archetype))
+5: local -&gt; remoting-support (Isis Remoting Support (Archetype))
 Choose a number:  (1/2/3/4/5): <emphasis role="bold">1</emphasis></screen>
 
         <para>To create a project from an archetype you must specify a
@@ -1823,13 +1897,13 @@ package: org.example.expenses
         <screen>[rcm@localhost expenses]$ <emphasis role="bold">mvn clean install</emphasis>
 [INFO] Scanning for projects...
 [INFO] Reactor build order: 
-[INFO]   [[NAME]] Application
+[INFO]   Isis Application
 [INFO]   Domain Model
 [INFO]   Services
 [INFO]   Fixtures
 [INFO]   Exploration
 [INFO] ------------------------------------------------------------------------
-[INFO] Building [[NAME]] Application
+[INFO] Building Isis Application
 [INFO]    task-segment: [clean, install]
 [INFO] ------------------------------------------------------------------------
 [INFO] [clean:clean]
@@ -1870,7 +1944,7 @@ package: org.example.expenses
 [INFO] ------------------------------------------------------------------------
 [INFO] Reactor Summary:
 [INFO] ------------------------------------------------------------------------
-[INFO] [[NAME]] Application .............................. SUCCESS [6.087s]
+[INFO] Isis Application .............................. SUCCESS [6.087s]
 [INFO] Domain Model .......................................... SUCCESS [8.711s]
 [INFO] Services .............................................. SUCCESS [2.432s]
 [INFO] Fixtures .............................................. SUCCESS [2.283s]
@@ -1923,7 +1997,7 @@ package: org.example.expenses
 
         <para>The executable version of the Expenses demo application exists
         within the <filename class="directory"
-        moreinfo="none">demos</filename> directory of the [[NAME]]
+        moreinfo="none">demos</filename> directory of the Isis
         distribution.</para>
 
         <para>Run the batch file <filename class="directory"
@@ -1939,8 +2013,8 @@ package: org.example.expenses
         <programlisting>&gt; cd demos/expenses 
 &gt; ./ExpensesDND.sh</programlisting>
 
-        <para>After seeing the [[NAME]] splash screen, you'll be presented
-        with a Login screen:</para>
+        <para>After seeing the Isis splash screen, you'll be presented with a
+        Login screen:</para>
 
         <screenshot>
           <mediaobject>
@@ -2317,9 +2391,9 @@ package: org.example.expenses
           system is built right</emphasis>.</para>
 
           <para>When writing unit tests, you have a choice. Since all the
-          business logic in [[NAME]] applications is encapsulated in domain
-          object pojos, you can just write unit tests using nothing more than
-          JUnit and perhaps also a mocking library such as <ulink
+          business logic in Isis applications is encapsulated in domain object
+          pojos, you can just write unit tests using nothing more than JUnit
+          and perhaps also a mocking library such as <ulink
           url="http://jmock.org">JMock</ulink>.</para>
 
           <para>A slightly more sophisticated approach is to use the JUnit
@@ -2671,24 +2745,24 @@ package: org.example.expenses
 
         <para></para>
 
-        <para>A [[NAME]] application is commonly developed in two stages.
-        First it is developed as standalone prototype, running on a single
-        machine, with no security, and with all the objects in memory. Then it
-        is converted into a deployable application i.e. running on a server
-        with multiple clients, with a persistence layer (most commonly in the
-        form of the Hibernate Object Store) and with full authentication and
+        <para>an Isis application is commonly developed in two stages. First
+        it is developed as standalone prototype, running on a single machine,
+        with no security, and with all the objects in memory. Then it is
+        converted into a deployable application i.e. running on a server with
+        multiple clients, with a persistence layer (most commonly in the form
+        of the Hibernate Object Store) and with full authentication and
         authorization. (Note that these two phases do not have to be
         sequential, you might prefer to develop your system feature-by-feature
         right through to a deployable version.) In this section we show you
-        how to run [[NAME]] Objects as prototype; in the next section we show
-        you how to deploy the same domain object model as the real
+        how to run Apache Isis as prototype; in the next section we show you
+        how to deploy the same domain object model as the real
         application.</para>
 
-        <para>Running a [[NAME]] application generally requires some
+        <para>Running an Isis application generally requires some
         configuration files and images. Resources are typically loaded from
         the working directory, while specific resources can be loaded from the
         class path. Assuming that we will be running from the development
-        directory the following structure is typical of a [[NAME]]
+        directory the following structure is typical of an Isis
         application.</para>
 
         <screen format="linespecific">project/
@@ -2710,12 +2784,12 @@ package: org.example.expenses
 
           <para></para>
 
-          <para>[[NAME]] loads in one or more properties files during startup.
-          The properties files must contain at least a list of services that
-          the application uses and commonly there is also a list of fixtures
-          that are to be run at startup. In addition to the core properties
-          there may be also other properties that are used by other
-          components. The file <filename class="directory"
+          <para>Isis loads in one or more properties files during startup. The
+          properties files must contain at least a list of services that the
+          application uses and commonly there is also a list of fixtures that
+          are to be run at startup. In addition to the core properties there
+          may be also other properties that are used by other components. The
+          file <filename class="directory"
           moreinfo="none">isis.properties</filename> is always loaded up,
           while other properties files relating to specific components are
           only loaded up if the component they relate to is to be is used. For
@@ -2966,7 +3040,7 @@ tsmith:pass</programlisting>
 [rcm@localhost expenses]$ <emphasis role="bold">mvn eclipse:eclipse</emphasis>
 [INFO] Scanning for projects...
 [INFO] Reactor build order: 
-[INFO]   [[NAME]] Application
+[INFO]   Isis Application
 [INFO]   Domain Model
 [INFO]   Fixtures
 [INFO]   Services
@@ -2977,7 +3051,7 @@ tsmith:pass</programlisting>
 [INFO]   Server Distribution
 [INFO] Searching repository for plugin with prefix: 'eclipse'.
 [INFO] ------------------------------------------------------------------------
-[INFO] Building [[NAME]] Application
+[INFO] Building Isis Application
 [INFO]    task-segment: [eclipse:eclipse]
 [INFO] ------------------------------------------------------------------------
 [INFO] Preparing eclipse:eclipse
@@ -3249,16 +3323,16 @@ tsmith:pass</programlisting>
 
       <para></para>
 
-      <para>There are two startup mechanisms provided with [[NAME]]: a
-      [[NAME]] container; and a web container based on Jetty. Both are run
-      from the command line and allow parameters to be specified that control
-      its behaviour, determing how logging is performed, what components are
+      <para>There are two startup mechanisms provided with Isis: an Isis
+      container; and a web container based on Jetty. Both are run from the
+      command line and allow parameters to be specified that control its
+      behaviour, determing how logging is performed, what components are
       loaded and so on.</para>
 
-      <para>The [[NAME]] container is run using the
-      <classname>Isis</classname> class from the core-runtime module.</para>
+      <para>The Isis container is run using the <classname>Isis</classname>
+      class from the core-runtime module.</para>
 
-      <para>Another way to run [[NAME]] is in a independent web container like
+      <para>Another way to run Isis is in a independent web container like
       Tomcat or WebSphere. This process is dealt with later.</para>
 
       <para></para>
@@ -3294,8 +3368,8 @@ tsmith:pass</programlisting>
 
         <para>Now the container knows what components are available a series
         of option handlers (<classname>OptionHandler</classname>) are
-        intialise, with addtional one provided by the [[NAME]] container and
-        web server subclasses. These interact with the Apache CLI library to
+        intialise, with addtional one provided by the Isis container and web
+        server subclasses. These interact with the Apache CLI library to
         provide details about the command line parameters and will lookup the
         available components so they can be listed on the command line help.
         With the handlers set up the command line is parsed using the Apache
@@ -3318,7 +3392,7 @@ tsmith:pass</programlisting>
         <para>Now that the ground has been prepared it is time for the
         bootstrapping to begin. This is done via a call to the
         <methodname>bootstrapIsis</methodname> method, which is where the
-        process differs for the [[NAME]] container and the web server.</para>
+        process differs for the Isis container and the web server.</para>
 
         <para></para>
 
@@ -3448,12 +3522,12 @@ isis.viewer.html.header</programlisting>
         <title>Logging</title>
 
         <para>Logging using Log4j is used throughout the NOF and the
-        components the [[NAME]] Group have created and it recommended that you
-        use it too. Logging allows you to look what the framework and
-        components have been when you investigate a problem and help to
-        identify what parts of the system where doing what before an problem
-        arose. Often logging alone is enough to pin point a problem, but if
-        not it help you target what to investigate.</para>
+        components the Isis Group have created and it recommended that you use
+        it too. Logging allows you to look what the framework and components
+        have been when you investigate a problem and help to identify what
+        parts of the system where doing what before an problem arose. Often
+        logging alone is enough to pin point a problem, but if not it help you
+        target what to investigate.</para>
 
         <para>Log4j allows you to log log debug messages, information about
         the system's state, warnings and errors. These events can be displayed
@@ -4033,7 +4107,7 @@ log4j.appender.Remote.layout=org.apache.log4j.HTMLLayout</programlisting>
           import to <classname>org.apache.log4j.Logger</classname>, not the
           class of the same name in the NOF or in Java itself.</para>
 
-          <programlisting format="linespecific">private final static Logger LOG = Logger.getLogger([[NAME]]Class.class);</programlisting>
+          <programlisting format="linespecific">private final static Logger LOG = Logger.getLogger(IsisClass.class);</programlisting>
 
           <para>Where you wish to add log message add a statement like the
           following, deciding first what level the event should be classified
@@ -4196,7 +4270,7 @@ Fields
     :</screen>
 
           <para>The two <methodname>object</methodname> methods detail the
-          specified <classname>[[NAME]]</classname> object as follows:-</para>
+          specified <classname>Isis</classname> object as follows:-</para>
 
           <screen format="linespecific">Specification: bom.Location
 Class: bom.Location
@@ -4211,7 +4285,7 @@ Icon: null
 Persistable: User Persistable</screen>
 
           <para>The two <methodname>graph</methodname> methods detail the
-          specified <classname>[[NAME]]</classname> object as follows, showing
+          specified <classname>Isis</classname> object as follows, showing
           each adapter, it associated objects and values:-</para>
 
           <screen format="linespecific">PojoAdapter@dada24 [PR:OID#2F,specification=Location,version=LongNumberVersion#1 20051118-025400...
@@ -4293,13 +4367,51 @@ Persistable: User Persistable</screen>
           </listitem>
 
           <listitem>
-            <para>a Filter API</para>
+            <para>a Future API</para>
           </listitem>
 
           <listitem>
-            <para>a Future API</para>
+            <para>an Encoding API</para>
+          </listitem>
+
+          <listitem>
+            <para>a Configuration Builder API</para>
+          </listitem>
+
+          <listitem>
+            <para>definition of an AuthenticationSession</para>
           </listitem>
         </itemizedlist>
+
+        <para></para>
+
+        <para></para>
+
+        <para>Package dependencies:</para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/common/composition-perspective.png"
+                       scale="60" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+
+        <para></para>
+
+        <para>Architecture layering:</para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/common/architecture-perspective.png"
+                       scale="60" />
+          </imageobject>
+        </mediaobject>
 
         <para></para>
 
@@ -4316,6 +4428,23 @@ Persistable: User Persistable</screen>
         <mediaobject>
           <imageobject>
             <imagedata fileref="images/architecture.gif" scale="30" />
+          </imageobject>
+        </mediaobject>
+
+        <para></para>
+      </sect1>
+
+      <sect1>
+        <title>Encoding</title>
+
+        <para></para>
+
+        <para></para>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata fileref="images/common/encoding-classdiagram.png"
+                       scale="30" />
           </imageobject>
         </mediaobject>
 
@@ -4381,19 +4510,6 @@ Persistable: User Persistable</screen>
 
         <para></para>
 
-        <para><screenshot>
-            <screeninfo>Top-level Architecture Diagram</screeninfo>
-
-            <mediaobject>
-              <imageobject>
-                <imagedata fileref="images/metamodel/architecture-diagram-top-level.png"
-                           scale="60" />
-              </imageobject>
-            </mediaobject>
-          </screenshot></para>
-
-        <para></para>
-
         <screenshot>
           <screeninfo>Top-level Architecture Diagram with SpecLoader
           expanded</screeninfo>
@@ -4443,7 +4559,7 @@ Persistable: User Persistable</screen>
         <para>An Oid is an object identifier, assigned by the runtime. For
         persisted objects it is value is assigned by the object store, but for
         transient objects the framework still assigns an Oid also (and will
-        update the Oid if the object is persisted). </para>
+        update the Oid if the object is persisted).</para>
 
         <para></para>
       </sect1>
@@ -4907,7 +5023,7 @@ for (int i = 0; i &lt; properties.length; i++) {
         the implementations of ObjectAdapter etc when another component ask
         the adapter for details about another object. For example For example
         the statement <code>adapter.getField(no.getFields()[0])</code> would
-        retrieve the first field in the domain object held by the [[NAME]]
+        retrieve the first field in the domain object held by the Isis
         referenced by <code>adapter</code>.</para>
 
         <sect2>
@@ -5049,7 +5165,7 @@ for (int i = 0; i &lt; properties.length; i++) {
         references to be held persistently to service objects despite the fact
         that they are singletons.</para>
 
-        <para><emphasis>[[NAME]]</emphasis></para>
+        <para><emphasis>Isis</emphasis></para>
 
         <para></para>
 
@@ -5108,7 +5224,7 @@ for (int i = 0; i &lt; properties.length; i++) {
       <sect1>
         <title>Adapters and OIDs</title>
 
-        <para>[[NAME]] wrap each domain object in the system. The rest of the
+        <para>Isis wrap each domain object in the system. The rest of the
         framework does not normally work with the domain objects directly, but
         via these proxies. The proxies provide access to the tools of the
         reflector by providing a <classname>ObjectSpecification</classname>
@@ -5293,16 +5409,16 @@ for (int i = 0; i &lt; properties.length; i++) {
 
         <para></para>
 
-        <para>The command line container runs [[NAME]] within its own
-        container and is best suited to running from the command line where
-        parameters are used to determine what components are used and how it
-        all runs.</para>
+        <para>The command line container runs Isis within its own container
+        and is best suited to running from the command line where parameters
+        are used to determine what components are used and how it all
+        runs.</para>
 
         <para>In essense we are running Java with the Isis class like
         this</para>
 
-        <para>$ java -cp &lt;classpath&gt;
-        org.apache.isis.runtime.[[NAME]]Object &lt;parameters...&gt;</para>
+        <para>$ java -cp &lt;classpath&gt; org.apache.isis.runtime.IsisObject
+        &lt;parameters...&gt;</para>
 
         <para>however we typically use a script like the one created by the
         archetype so we can run more easily, eg</para>
@@ -5336,9 +5452,9 @@ for (int i = 0; i &lt; properties.length; i++) {
 
         <para></para>
 
-        <para>If you are asked from diagnostic information then run [[NAME]]
-        Objects as follows to capture details about your machine,
-        configuration and [[NAME]].</para>
+        <para>If you are asked from diagnostic information then run Apache
+        Isis as follows to capture details about your machine, configuration
+        and Isis.</para>
 
         <programlisting>$ isis.sh --diagnostics &gt; diagnostics.txt</programlisting>
 
@@ -5348,8 +5464,8 @@ for (int i = 0; i &lt; properties.length; i++) {
 
         <para></para>
 
-        <para>A bootstrapper takes care of loading up the [[NAME]] framework
-        and application, initialising it, and running it. When it starts up it
+        <para>A bootstrapper takes care of loading up the Isis framework and
+        application, initialising it, and running it. When it starts up it
         reads in a list of components and attempts to load in each one. Any
         component that can be loaded is then available to be used and can then
         be specified on the command line if required. Requesting a component
@@ -5361,8 +5477,8 @@ for (int i = 0; i &lt; properties.length; i++) {
         of the <filename class="directory"
         moreinfo="none">runtime-4.0.jar</filename> file.</para>
 
-        <para>During start-up [[NAME]] loads in a number of configuration
-        files. The main file, <filename class="directory"
+        <para>During start-up Isis loads in a number of configuration files.
+        The main file, <filename class="directory"
         moreinfo="none">isis.properties</filename>, is always loaded and must
         be present for the framework to start up. For each of the various
         types of persistor and viewer, there is a separate configuration file.
@@ -5441,7 +5557,7 @@ for (int i = 0; i &lt; properties.length; i++) {
           <para>The amount of logging detail can be controlled from the
           command line. If no flag is specified only warnings and errors are
           output. All logging level relate to the Log4J levels, which is the
-          logging mechanism used by [[NAME]].</para>
+          logging mechanism used by Isis.</para>
 
           <screen format="linespecific">-quiet</screen>
 
@@ -5503,7 +5619,7 @@ for (int i = 0; i &lt; properties.length; i++) {
           <classname>LoginFixture</classname> is present then all clients will
           automatically be logged in as this user.</para>
 
-          <para><emphasis>server</emphasis> - Server mode runs [[NAME]] as a
+          <para><emphasis>server</emphasis> - Server mode runs Isis as a
           server for multiple clients. With this mode selected the
           <emphasis>connection</emphasis> option must also be
           specified.</para>
@@ -5615,10 +5731,9 @@ for (int i = 0; i &lt; properties.length; i++) {
 --viewer &lt;viewer&gt;</screen>
 
           <para>The viewer option allows you to choose the user interface that
-          is used to access your [[NAME]] application. The following options
-          are available with the current distribution, and if none is
-          specified then the drag and drop view will be used by
-          default.</para>
+          is used to access your Isis application. The following options are
+          available with the current distribution, and if none is specified
+          then the drag and drop view will be used by default.</para>
 
           <para><emphasis>dnd</emphasis> - Drag and Drop viewer</para>
 
@@ -6129,8 +6244,8 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
       {{{../core/metamodel/index.html}metamodel}} module, along with
       implementations to support the Java language. The
       {{{http://groovyobjects.sourceforge.net}Groovy Objects}} sister project
-      provides implementations to allow [[NAME]] to support domain objects
-      written in {{{http://groovy.codehaus.org}Groovy}}.</para>
+      provides implementations to allow Isis to support domain objects written
+      in {{{http://groovy.codehaus.org}Groovy}}.</para>
 
       <para></para>
 
@@ -6211,7 +6326,7 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
 
           <para></para>
 
-          <para>[[NAME]] also allows you to develop your domain application in
+          <para>Isis also allows you to develop your domain application in
           Groovy. This support should be considered experimental for the
           moment; although the viewers and fixtures/in-memory object store
           work fine, it has not been fully tested out with other object
@@ -6336,8 +6451,8 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
         ever loaded once as the fixture installer checks with
         <methodname>UserProfileSevice.isInitialized()</methodname> to see if
         the service is already set up. The profile fixture (which is defined
-        in the application library and is therefore not part of the [[NAME]]
-        framework) loads the profiles into [[NAME]] by passing in an
+        in the application library and is therefore not part of the Isis
+        framework) loads the profiles into Isis by passing in an
         implementation of ProfilePersistor that provides a way for the
         perspective to make requests of the framework.</para>
 
@@ -6504,7 +6619,7 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
 
       <para></para>
 
-      <para>[[NAME]] normally performs lazy loading of references and dirty
+      <para>Isis normally performs lazy loading of references and dirty
       tracking by proxying all domain objects. Two implementations are
       provided, using either cglib or javassist. The application archetype
       automatically configures the use of these proxies. However, some object
@@ -6756,8 +6871,7 @@ example.dom.Contact.property.FullName.description=Le nom complet du client</prog
       <sect1>
         <title>Running as a WebApp</title>
 
-        <para>[[NAME]] provides three different ways to run as a
-        webapp:</para>
+        <para>Isis provides three different ways to run as a webapp:</para>
 
         <sect2>
           <title>Using isis.sh</title>
@@ -6768,7 +6882,7 @@ example.dom.Contact.property.FullName.description=Le nom complet du client</prog
 2007-08-09 12:37:13.954::INFO:  Started SocketConnector @ 0.0.0.0:8080
 </screen>
 
-          <para>This command runs the [[NAME]] with the HTML viewer, allowing
+          <para>This command runs the Isis with the HTML viewer, allowing
           multiple clients to access it via a browser. As for the standalone
           version the users need to access the URL
           http://<emphasis>server/logon.app</emphasis> to access the log on
@@ -6780,7 +6894,7 @@ example.dom.Contact.property.FullName.description=Le nom complet du client</prog
 
           <para>The next mechanism uses the
           <classname>org.apache.isis.webserver.WebServer</classname> bootstrap
-          to run [[NAME]]. This loads up whatever is in the webapp project's
+          to run Isis. This loads up whatever is in the webapp project's
           <filename>web.xml</filename> file.</para>
 
           <para><remark>TODO: we don't have a webserver.sh script to show this

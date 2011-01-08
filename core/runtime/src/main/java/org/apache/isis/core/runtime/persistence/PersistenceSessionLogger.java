@@ -23,7 +23,7 @@ package org.apache.isis.core.runtime.persistence;
 import java.util.List;
 
 import org.apache.isis.applib.query.Query;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
@@ -41,7 +41,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;
 
 
-public class PersistenceSessionLogger extends Logger implements PersistenceSession, DebugInfo {
+public class PersistenceSessionLogger extends Logger implements PersistenceSession, DebuggableWithTitle {
     
     private final PersistenceSession underlying;
 

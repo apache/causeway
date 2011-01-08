@@ -36,7 +36,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.InputStream;
 
-import org.apache.isis.core.commons.io.IoUtils;
+import org.apache.isis.core.commons.lang.IoUtils;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -101,7 +102,7 @@ public class FileServerTest {
         assertFalse(file2.exists());
 
         InputStream in =
-            IoUtils.asInputStream("W\nIorg.domain.Class 1025 null 1  \n{data1}\n\nIorg.domain.Class 1026 null 1\n{data2}\n");
+            IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 null 1  \n{data1}\n\nIorg.domain.Class 1026 null 1\n{data2}\n");
         ServerConnection connection = new ServerConnection(in, out);
         server.process(connection);
         
@@ -119,7 +120,7 @@ public class FileServerTest {
         fileWriter.close();
 
         ServerConnection connection =
-            new ServerConnection(IoUtils.asInputStream("W\nUorg.domain.Class 1026 21 22 \n{data2}\n"), out);
+            new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class 1026 21 22 \n{data2}\n"), out);
         server.process(connection);
         
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n"))));
@@ -135,7 +136,7 @@ public class FileServerTest {
         fileWriter.close();
 
         ServerConnection connection =
-            new ServerConnection(IoUtils.asInputStream("W\nUorg.domain.Class 1026 19 21 \n{data2}\n"), out);
+            new ServerConnection(IoUtils.asUtf8ByteStream("W\nUorg.domain.Class 1026 19 21 \n{data2}\n"), out);
         server.process(connection);
         
         assertThat(out.toString(), is(equalTo(lineSeparated("error\n{datax}\n"))));
@@ -144,7 +145,7 @@ public class FileServerTest {
     @Test
     public void writeCreatesLogFile() throws Exception {
         ServerConnection connection =
-            new ServerConnection(IoUtils.asInputStream("W\nIorg.domain.Class 1025 6 7\n{data1}\n"), out);
+            new ServerConnection(IoUtils.asUtf8ByteStream("W\nIorg.domain.Class 1025 6 7\n{data1}\n"), out);
         server.process(connection);
 
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n"))));
@@ -157,7 +158,7 @@ public class FileServerTest {
     public void readNonExistingFileThrowsException() throws Exception {
         File file1 = new File("target/test/org.domain.Class", "2020.data");
         file1.delete();
-        ServerConnection connection = new ServerConnection(IoUtils.asInputStream("Rorg.domain.Class 2020"), out);
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2020"), out);
         server.process(connection);
 
         String string = out.toString();
@@ -172,7 +173,7 @@ public class FileServerTest {
         fileWriter.write("type 1025 1\n{data1}");
         fileWriter.close();
 
-        ServerConnection connection = new ServerConnection(IoUtils.asInputStream("Rorg.domain.Class 2025"), out);
+        ServerConnection connection = new ServerConnection(IoUtils.asUtf8ByteStream("Rorg.domain.Class 2025"), out);
         server.process(connection);
         
         assertThat(out.toString(), is(equalTo(lineSeparated("ok\n{data1}\n"))));

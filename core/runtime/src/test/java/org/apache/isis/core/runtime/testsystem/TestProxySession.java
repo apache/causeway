@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.runtime.testsystem;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
 
 
 public class TestProxySession extends AuthenticationSessionAbstract {

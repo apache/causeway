@@ -74,6 +74,9 @@ import org.apache.isis.alternatives.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
@@ -82,9 +85,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetedmethod.IdentifierUtils;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
@@ -220,10 +220,9 @@ public class ServerFacadeImpl implements ServerFacade {
         final IsisConfiguration configuration = IsisContext.getConfiguration();
         final IsisConfiguration serviceProperties =
             configuration.getProperties(ConfigurationConstants.ROOT + "services");
-        final Enumeration e = serviceProperties.propertyNames();
-        while (e.hasMoreElements()) {
-            final String name = (String) e.nextElement();
-            properties.put(name, serviceProperties.getString(name));
+        
+        for(String propertyName: serviceProperties) {
+            properties.put(propertyName, serviceProperties.getString(propertyName));
         }
 
         // pass over OID generator

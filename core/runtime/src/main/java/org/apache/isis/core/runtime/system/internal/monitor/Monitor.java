@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 
 public class Monitor {
@@ -43,7 +43,7 @@ public class Monitor {
         addEvent(category, message, null);
     }
 
-    public static void addEvent(final String category, final String message, DebugInfo[] debug) {
+    public static void addEvent(final String category, final String message, DebuggableWithTitle[] debug) {
         final MonitorEvent event = new MonitorEvent(category, message, debug);
         LOG.info(event);
         dispatchEvent(event);

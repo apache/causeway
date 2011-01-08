@@ -31,11 +31,12 @@ import java.util.Map;
 
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.webapp.WebAppContext;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.CastUtils;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.runner.IsisBootstrapper;
 import org.apache.isis.core.runtime.runner.IsisRunner;
 import org.apache.isis.core.webapp.WebAppConstants;
@@ -56,11 +57,11 @@ final class WebServerBootstrapper implements
      */
     public void bootstrap(Injector injector) {
 
-        ConfigurationBuilder configurationBuilder = injector.getInstance(ConfigurationBuilder.class);
+        IsisConfigurationBuilder isisConfigurationBuilder = injector.getInstance(IsisConfigurationBuilder.class);
 
         // we don't actually bootstrap the system here; instead we expect it to be bootstrapped
         // from the ServletContextInitializer in the web.xml
-        IsisConfiguration configuration = configurationBuilder.getConfiguration();
+        IsisConfiguration configuration = isisConfigurationBuilder.getConfiguration();
         int port = configuration.getInteger(EMBEDDED_WEB_SERVER_PORT_KEY, EMBEDDED_WEB_SERVER_PORT_DEFAULT);
         String webappContextPath = configuration.getString(EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY,
                 EMBEDDED_WEB_SERVER_RESOURCE_BASE_DEFAULT);
@@ -85,8 +86,8 @@ final class WebServerBootstrapper implements
      */
     @SuppressWarnings("unchecked")
     private void copyConfigurationPrimersIntoServletContext(WebAppContext context) {
-        List<ConfigurationPrimer> configurationPrimers = (List<ConfigurationPrimer>) (List<?>) runner.getOptionHandlers();
-        context.setAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY, configurationPrimers);
+        List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = (List<IsisConfigurationBuilderPrimer>) (List<?>) runner.getOptionHandlers();
+        context.setAttribute(WebAppConstants.CONFIGURATION_PRIMERS_KEY, isisConfigurationBuilderPrimers);
     }
 
     @SuppressWarnings("unused")

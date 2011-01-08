@@ -34,7 +34,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
@@ -78,7 +78,7 @@ public abstract class JavaReflectorTestAbstract {
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        PropertiesConfiguration configuration = new PropertiesConfiguration();
+        IsisConfigurationDefault configuration = new IsisConfigurationDefault();
 
         mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);
         mockPersistenceSessionFactory = mockery.mock(PersistenceSessionFactory.class);

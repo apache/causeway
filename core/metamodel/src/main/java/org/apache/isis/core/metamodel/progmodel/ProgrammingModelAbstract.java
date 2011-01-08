@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 
 
@@ -49,7 +49,7 @@ public abstract class ProgrammingModelAbstract implements ProgrammingModel {
     public void init() {
     	for(Class<? extends FacetFactory> factoryClass: facetFactoryClasses) {
     		FacetFactory facetFactory = 
-    			(FacetFactory) InstanceFactory.createInstance(factoryClass);
+    			(FacetFactory) InstanceUtil.createInstance(factoryClass);
     		facetFactories.add(facetFactory);
     	}
     }

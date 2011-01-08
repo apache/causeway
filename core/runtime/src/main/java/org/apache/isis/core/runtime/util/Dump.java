@@ -24,11 +24,11 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Vector;
 
-import org.apache.isis.core.commons.debug.Debug;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebugUtils;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.SpecificationFacets;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -157,9 +157,9 @@ public final class Dump {
 
     private static void graphIndent(final DebugString s, final int level) {
         for (int indent = 0; indent < level; indent++) {
-            s.append(Debug.indentString(4) + "|");
+            s.append(DebugUtils.indentString(4) + "|");
         }
-        s.append(Debug.indentString(4) + "+--");
+        s.append(DebugUtils.indentString(4) + "+--");
     }
 
     public static String adapter(final ObjectAdapter object) {
@@ -272,8 +272,8 @@ public final class Dump {
             debug.appendException(e);
         }
 
-        if (specification instanceof DebugInfo) {
-            ((DebugInfo) specification).debugData(debug);
+        if (specification instanceof DebuggableWithTitle) {
+            ((DebuggableWithTitle) specification).debugData(debug);
         }
 
         debug.blankLine();

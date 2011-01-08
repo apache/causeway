@@ -23,13 +23,13 @@ package org.apache.isis.core.runtime.userprofile;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
-public class UserProfile implements DebugInfo {
+public class UserProfile implements DebuggableWithTitle {
 	
     private final Options options = new Options();
     private final List<PerspectiveEntry> entries = new ArrayList<PerspectiveEntry>();

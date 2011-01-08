@@ -20,7 +20,7 @@
 
 package org.apache.isis.defaults.bytecode.classsubstitutor;
 
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutorAbstract;
 import org.apache.isis.defaults.bytecode.objectfactory.internal.CglibEnhanced;
 
@@ -40,7 +40,7 @@ public class CglibClassSubstitutor extends ClassSubstitutorAbstract {
      */
     @Override
     public Class<?> getClass(Class<?> cls) {
-    	if (ClassUtil.directlyImplements(cls, CglibEnhanced.class)) {
+    	if (JavaClassUtils.directlyImplements(cls, CglibEnhanced.class)) {
     		return getClass(cls.getSuperclass());
     	}
     	return super.getClass(cls);

@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.InstallerAbstract;
 
 public abstract class FixturesInstallerAbstract extends InstallerAbstract implements FixturesInstaller {
 

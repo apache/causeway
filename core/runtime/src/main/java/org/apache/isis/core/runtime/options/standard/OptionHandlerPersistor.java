@@ -24,7 +24,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.installers.InstallerRepository;
 import org.apache.isis.core.runtime.persistence.PersistenceMechanismInstaller;
 import org.apache.isis.core.runtime.runner.BootPrinter;
@@ -59,8 +60,8 @@ public class OptionHandlerPersistor extends OptionHandlerAbstract {
 	}
 	
 	public void primeConfigurationBuilder(
-			ConfigurationBuilder configurationBuilder) {
-		configurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY, persistorName);
+			IsisConfigurationBuilder isisConfigurationBuilder) {
+		isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY, persistorName);
 	}
 
 	

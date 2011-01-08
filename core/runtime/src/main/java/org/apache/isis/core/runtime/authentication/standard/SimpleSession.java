@@ -24,8 +24,8 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionAbstract;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionAbstract;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
 
 
 public final class SimpleSession extends AuthenticationSessionAbstract {

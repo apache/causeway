@@ -26,7 +26,7 @@ import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
@@ -42,7 +42,7 @@ import org.apache.isis.core.progmodel.facets.object.ebc.EqualByContentFacet;
 public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private ValueFacetFactory facetFactory;
-    private PropertiesConfiguration propertiesConfiguration;
+    private IsisConfigurationDefault isisConfigurationDefault;
     private RuntimeContext runtimeContext;
 
     @Override
@@ -50,8 +50,8 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         super.setUp();
 
         facetFactory = new ValueFacetFactory();
-        propertiesConfiguration = new PropertiesConfiguration();
-        facetFactory.setIsisConfiguration(propertiesConfiguration);
+        isisConfigurationDefault = new IsisConfigurationDefault();
+        facetFactory.setIsisConfiguration(isisConfigurationDefault);
     }
 
     @Override
@@ -457,7 +457,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testSemanticsProviderNameCanBePickedUpFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
+        isisConfigurationDefault.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
             + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
         final ValueFacetAbstract facet = (ValueFacetAbstract) facetHolder.getFacet(ValueFacet.class);
@@ -507,7 +507,7 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testNonAnnotatedValueCanPickUpSemanticsProviderFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
+        isisConfigurationDefault.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
             + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
         facetFactory.process(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover,
             facetHolder);

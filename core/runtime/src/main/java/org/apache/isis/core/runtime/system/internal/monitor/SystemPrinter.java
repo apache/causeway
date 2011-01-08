@@ -30,7 +30,7 @@ import java.util.Properties;
 import java.util.TimeZone;
 
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.io.IoUtils;
+import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.runtime.about.AboutIsis;
 
 public class SystemPrinter {

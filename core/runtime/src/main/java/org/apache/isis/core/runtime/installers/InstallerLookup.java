@@ -23,9 +23,9 @@ package org.apache.isis.core.runtime.installers;
 import org.apache.isis.core.commons.components.ApplicationScopedComponent;
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderAware;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderAware;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.authentication.AuthenticationManagerInstaller;
@@ -50,7 +50,7 @@ import org.apache.isis.core.runtime.web.EmbeddedWebServerInstaller;
  * The methods of {@link InstallerRepository} may be called without {@link #init() initializing} this class,
  * but other methods may not.
  */
-public interface InstallerLookup extends InstallerRepository, ApplicationScopedComponent, ConfigurationBuilderAware, Injectable {
+public interface InstallerLookup extends InstallerRepository, ApplicationScopedComponent, IsisConfigurationBuilderAware, Injectable {
 
     // /////////////////////////////////////////////////////////
     // metamodel
@@ -133,7 +133,7 @@ public interface InstallerLookup extends InstallerRepository, ApplicationScopedC
     /**
      * Injected.
      */
-    ConfigurationBuilder getConfigurationBuilder();
+    IsisConfigurationBuilder getConfigurationBuilder();
 
 }
 

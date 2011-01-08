@@ -25,7 +25,6 @@ import java.util.List;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 
-import org.apache.isis.applib.util.NameUtils;
 
 public class Identifier implements Comparable<Identifier> {
 
@@ -158,6 +157,10 @@ public class Identifier implements Comparable<Identifier> {
 
     public String getClassName() {
         return className;
+    }
+
+    public String getClassNaturalName() {
+        return NameUtils.naturalName(getClassName());
     }
 
     public String getMemberName() {
@@ -337,5 +340,6 @@ public class Identifier implements Comparable<Identifier> {
         }
         return asString;
     }
+
 
 }

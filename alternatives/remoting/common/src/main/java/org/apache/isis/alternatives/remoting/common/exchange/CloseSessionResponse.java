@@ -23,9 +23,9 @@ package org.apache.isis.alternatives.remoting.common.exchange;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.encoding.Encodable;
 
 public class CloseSessionResponse implements Encodable, Serializable {
 

@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd.form;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.filters.AbstractFilter;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
@@ -50,7 +50,7 @@ public class FormWithDetailSpecification implements ViewSpecification {
 
     private boolean containsEnoughFields(Content content) {
         ObjectSpecification specification = content.getSpecification();
-        List<ObjectAssociation> associations = specification.getAssociations(new AbstractFilter<ObjectAssociation>() {
+        List<ObjectAssociation> associations = specification.getAssociations(new Filter<ObjectAssociation>() {
             @Override
             public boolean accept(ObjectAssociation t) {
                 return t.isOneToManyAssociation()

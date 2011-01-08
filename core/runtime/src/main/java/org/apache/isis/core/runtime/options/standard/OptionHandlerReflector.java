@@ -27,7 +27,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.installers.InstallerRepository;
 import org.apache.isis.core.runtime.runner.BootPrinter;
@@ -59,8 +60,8 @@ public class OptionHandlerReflector extends OptionHandlerAbstract {
 	}
 	
 	public void primeConfigurationBuilder(
-			ConfigurationBuilder configurationBuilder) {
-		configurationBuilder.add(SystemConstants.REFLECTOR_KEY, reflector);
+			IsisConfigurationBuilder isisConfigurationBuilder) {
+		isisConfigurationBuilder.add(SystemConstants.REFLECTOR_KEY, reflector);
 	}
 
 

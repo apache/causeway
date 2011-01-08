@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.view.debug;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.runtime.userprofile.PerspectiveEntry;
@@ -49,7 +49,7 @@ public class DebugOption extends UserActionAbstract {
         final Content content = view.getContent();
         final ObjectAdapter object = content == null ? null : content.getAdapter();
 
-        List<DebugInfo> debug = new ArrayList<DebugInfo>();
+        List<DebuggableWithTitle> debug = new ArrayList<DebuggableWithTitle>();
         if (content instanceof PerspectiveContent) {
             PerspectiveEntry perspective = ((PerspectiveContent)content).getPerspective();
             debug.add(perspective);
@@ -66,7 +66,7 @@ public class DebugOption extends UserActionAbstract {
         debug.add(new DebugDrawing(view));
         debug.add(new DebugDrawingAbsolute(view));
         
-        DebugInfo[] info = debug.toArray(new DebugInfo[debug.size()]);
+        DebuggableWithTitle[] info = debug.toArray(new DebuggableWithTitle[debug.size()]);
         at.add(50, 6);
         //at.getX() + 50, at.getY() + 6
         Toolkit.getViewer().showDebugFrame(info, at);

@@ -20,7 +20,6 @@
 
 package org.apache.isis.viewer.html.context;
 
-import org.apache.isis.core.metamodel.adapter.ObjectActionNoop;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;

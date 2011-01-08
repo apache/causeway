@@ -24,12 +24,12 @@ import java.util.Map;
 
 import com.google.common.collect.Maps;
 
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAbstract;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
@@ -55,7 +55,7 @@ public class TrialObjects {
 
     public TrialObjects() {
 
-        PropertiesConfiguration configuration = new PropertiesConfiguration();
+        IsisConfigurationDefault configuration = new IsisConfigurationDefault();
 
         final AdapterMapAbstract adapterMap = new AdapterMapAbstract() {
             

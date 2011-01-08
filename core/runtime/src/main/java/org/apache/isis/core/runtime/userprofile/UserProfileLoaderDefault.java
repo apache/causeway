@@ -21,11 +21,11 @@ package org.apache.isis.core.runtime.userprofile;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.session.IsisSession;
@@ -34,7 +34,7 @@ import org.apache.log4j.Logger;
 /**
  * Acts like a bridge, loading the profile from the underlying store.
  */
-public class UserProfileLoaderDefault implements UserProfileLoader, DebugInfo {
+public class UserProfileLoaderDefault implements UserProfileLoader, DebuggableWithTitle {
 
     private static final String DEFAULT_PERSPECTIVE_NAME = "Apache Isis";
     private static final String EXPLORATION = " Exploration";

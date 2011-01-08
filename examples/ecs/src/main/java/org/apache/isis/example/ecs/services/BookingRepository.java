@@ -21,7 +21,7 @@
 package org.apache.isis.example.ecs.services;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.Filter;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.example.ecs.Booking;
 
 import java.util.List;

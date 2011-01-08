@@ -32,7 +32,7 @@ import org.apache.isis.alternatives.objectstore.sql.SqlObjectStoreException;
 import org.apache.isis.alternatives.objectstore.sql.TitleMapping;
 import org.apache.isis.alternatives.objectstore.sql.VersionMapping;
 import org.apache.isis.alternatives.objectstore.sql.mapping.FieldMapping;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
@@ -47,7 +47,7 @@ import org.apache.isis.core.runtime.persistence.query.PersistenceQueryFindByPatt
 import org.apache.log4j.Logger;
 
 public class AutoMapper extends AbstractAutoMapper implements ObjectMapping,
-		DebugInfo {
+		DebuggableWithTitle {
 	private static final Logger LOG = Logger.getLogger(AutoMapper.class);
 	private static final int MAX_INSTANCES = 100;
 	private final IdMapping idMapping;

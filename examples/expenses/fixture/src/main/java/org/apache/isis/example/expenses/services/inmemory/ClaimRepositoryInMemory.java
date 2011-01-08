@@ -20,8 +20,8 @@
 
 package org.apache.isis.example.expenses.services.inmemory;
 
-import org.apache.isis.applib.Filter;
 import org.apache.isis.applib.annotation.Hidden;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.example.expenses.claims.Claim;
 import org.apache.isis.example.expenses.claims.ClaimRepositoryAbstract;
 import org.apache.isis.example.expenses.claims.ClaimStatus;

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<local-project language="java" version="3.3.722" flavor="j2se">
+   <property name="hide-externals" value="true" />
+   <property name="show-needs-to-compile" value="false" />
+   <property name="detail-mode" value="false" />
+   <classpath>
+      <classpathentry kind="lib" path="D:\SVN\ai\isis\trunk\applib\target\classes" />
+   </classpath>
+   <sourcepaths>
+      <pathentry type="file" path="src/main/java" />
+   </sourcepaths>
+   <grid-set sep="." version="3.3.722">
+      <grid name="Diagram 2" enforce="true" strict="false">
+         <row>
+            <cell name="fixtures" pattern="org.apache.isis.applib.fixtures.*" vexpanded="true" visibility="public" />
+            <cell name="value" pattern="org.apache.isis.applib.value.?" vexpanded="true" visibility="public" />
+            <cell name="events" pattern="org.apache.isis.applib.events.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="profiles" pattern="org.apache.isis.applib.profiles.?" vexpanded="true" visibility="public" />
+            <cell name="clock" pattern="org.apache.isis.applib.clock.?" vexpanded="true" visibility="public" />
+            <cell name="adapters" pattern="org.apache.isis.applib.adapters.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="applib" pattern="org.apache.isis.applib.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="query" pattern="org.apache.isis.applib.query.?" vexpanded="true" visibility="public" />
+            <cell name="filter" pattern="org.apache.isis.applib.filter.?" vexpanded="true" visibility="public" />
+            <cell name="security" pattern="org.apache.isis.applib.security.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="marker" pattern="org.apache.isis.applib.marker.?" vexpanded="true" visibility="public" />
+            <cell name="annotation" pattern="org.apache.isis.applib.annotation.?" vexpanded="false" visibility="public">
+               <grid>
+                  <row>
+                     <cell name="DescribedAs" pattern="org.apache.isis.applib.annotation.DescribedAs" vexpanded="true" visibility="public" />
+                     <cell name="Bounded" pattern="org.apache.isis.applib.annotation.Bounded" vexpanded="true" visibility="public" />
+                     <cell name="Disabled" pattern="org.apache.isis.applib.annotation.Disabled" vexpanded="true" visibility="public" />
+                     <cell name="TypicalLength" pattern="org.apache.isis.applib.annotation.TypicalLength" vexpanded="true" visibility="public" />
+                     <cell name="RegEx" pattern="org.apache.isis.applib.annotation.RegEx" vexpanded="true" visibility="public" />
+                     <cell name="Facets" pattern="org.apache.isis.applib.annotation.Facets" vexpanded="true" visibility="public" />
+                     <cell name="MemberOrder" pattern="org.apache.isis.applib.annotation.MemberOrder" vexpanded="true" visibility="public" />
+                     <cell name="NotPersisted" pattern="org.apache.isis.applib.annotation.NotPersisted" vexpanded="true" visibility="public" />
+                     <cell name="Mask" pattern="org.apache.isis.applib.annotation.Mask" vexpanded="true" visibility="public" />
+                     <cell name="TypeOf" pattern="org.apache.isis.applib.annotation.TypeOf" vexpanded="true" visibility="public" />
+                     <cell name="MaxLength" pattern="org.apache.isis.applib.annotation.MaxLength" vexpanded="true" visibility="public" />
+                     <cell name="FieldOrder" pattern="org.apache.isis.applib.annotation.FieldOrder" vexpanded="true" visibility="public" />
+                     <cell name="Named" pattern="org.apache.isis.applib.annotation.Named" vexpanded="true" visibility="public" />
+                     <cell name="MultiLine" pattern="org.apache.isis.applib.annotation.MultiLine" vexpanded="true" visibility="public" />
+                     <cell name="ActionOrder" pattern="org.apache.isis.applib.annotation.ActionOrder" vexpanded="true" visibility="public" />
+                     <cell name="Value" pattern="org.apache.isis.applib.annotation.Value" vexpanded="true" visibility="public" />
+                     <cell name="Parseable" pattern="org.apache.isis.applib.annotation.Parseable" vexpanded="true" visibility="public" />
+                     <cell name="NotPersistable" pattern="org.apache.isis.applib.annotation.NotPersistable" vexpanded="true" visibility="public" />
+                     <cell name="Debug" pattern="org.apache.isis.applib.annotation.Debug" vexpanded="true" visibility="public" />
+                     <cell name="Aggregated" pattern="org.apache.isis.applib.annotation.Aggregated" vexpanded="true" visibility="public" />
+                     <cell name="MustSatisfy" pattern="org.apache.isis.applib.annotation.MustSatisfy" vexpanded="true" visibility="public" />
+                     <cell name="NotContributed" pattern="org.apache.isis.applib.annotation.NotContributed" vexpanded="true" visibility="public" />
+                     <cell name="NotInServiceMenu" pattern="org.apache.isis.applib.annotation.NotInServiceMenu" vexpanded="true" visibility="public" />
+                     <cell name="Optional" pattern="org.apache.isis.applib.annotation.Optional" vexpanded="true" visibility="public" />
+                     <cell name="EqualByContent" pattern="org.apache.isis.applib.annotation.EqualByContent" vexpanded="true" visibility="public" />
+                     <cell name="Executed" pattern="org.apache.isis.applib.annotation.Executed" vexpanded="true" visibility="public" />
+                     <cell name="Plural" pattern="org.apache.isis.applib.annotation.Plural" vexpanded="true" visibility="public" />
+                     <cell name="Hidden" pattern="org.apache.isis.applib.annotation.Hidden" vexpanded="true" visibility="public" />
+                     <cell name="Immutable" pattern="org.apache.isis.applib.annotation.Immutable" vexpanded="true" visibility="public" />
+                     <cell name="Encodable" pattern="org.apache.isis.applib.annotation.Encodable" vexpanded="true" visibility="public" />
+                     <cell name="Exploration" pattern="org.apache.isis.applib.annotation.Exploration" vexpanded="true" visibility="public" />
+                     <cell name="Defaulted" pattern="org.apache.isis.applib.annotation.Defaulted" vexpanded="true" visibility="public" />
+                     <cell name="Ignore" pattern="org.apache.isis.applib.annotation.Ignore" vexpanded="true" visibility="public" />
+                     <cell name="Prototype" pattern="org.apache.isis.applib.annotation.Prototype" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="When" pattern="org.apache.isis.applib.annotation.When" vexpanded="true" visibility="public" />
+                  </row>
+               </grid>
+            </cell>
+         </row>
+         <row>
+            <cell name="spec" pattern="org.apache.isis.applib.spec.?" vexpanded="true" visibility="public" />
+            <cell name="snapshot" pattern="org.apache.isis.applib.snapshot.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="util" pattern="org.apache.isis.applib.util.?" vexpanded="true" visibility="public" />
+         </row>
+      </grid>
+   </grid-set>
+</local-project>
+

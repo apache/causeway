@@ -22,7 +22,7 @@ package org.apache.isis.alternatives.objectstore.xml;
 
 import org.apache.isis.alternatives.objectstore.xml.internal.adapter.XmlAdapterManager;
 import org.apache.isis.alternatives.objectstore.xml.internal.clock.DefaultClock;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.persistence.PersistenceSessionFactory;
 import org.apache.isis.core.runtime.persistence.adapterfactory.AdapterFactory;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;

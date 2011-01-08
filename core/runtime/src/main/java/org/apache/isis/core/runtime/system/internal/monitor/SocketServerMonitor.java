@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URLDecoder;
 
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.system.IsisSystem;
 

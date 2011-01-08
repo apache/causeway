@@ -24,7 +24,6 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.commons.lang.ArrayUtils;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
@@ -33,6 +32,7 @@ import org.apache.isis.core.metamodel.facets.ChoicesUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.progmodel.facets.ArrayUtil;
 
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {
@@ -79,7 +79,7 @@ public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract 
             return null;
         }
         if (options.getClass().isArray()) {
-            return ArrayUtils.getObjectAsObjectArray(options);
+            return ArrayUtil.getObjectAsObjectArray(options);
         }
         final ObjectSpecification specification = specificationLookup.loadSpecification(choicesClass);
         return ChoicesUtils.getCollectionAsObjectArray(options, specification, getAdapterMap());

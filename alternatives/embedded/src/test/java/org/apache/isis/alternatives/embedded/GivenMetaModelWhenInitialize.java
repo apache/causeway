@@ -32,7 +32,7 @@ import org.apache.isis.alternatives.embedded.EmbeddedContext;
 import org.apache.isis.alternatives.embedded.IsisMetaModel;
 import org.apache.isis.alternatives.embedded.dom.claim.ClaimRepositoryImpl;
 import org.apache.isis.alternatives.embedded.dom.employee.EmployeeRepositoryImpl;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;

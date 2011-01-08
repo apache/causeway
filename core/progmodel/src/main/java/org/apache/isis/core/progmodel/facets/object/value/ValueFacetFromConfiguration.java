@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.progmodel.facets.object.value;
 
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 

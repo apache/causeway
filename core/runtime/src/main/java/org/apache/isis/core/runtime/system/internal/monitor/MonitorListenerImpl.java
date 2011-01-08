@@ -27,7 +27,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -60,7 +60,7 @@ public class MonitorListenerImpl implements MonitorListener {
 
         final StringBuffer navigation = new StringBuffer("<p>");
 //        final String[] options = target.debugSectionNames();
-        DebugInfo[] infos = IsisContext.debugSystem();
+        DebuggableWithTitle[] infos = IsisContext.debugSystem();
         for (int i = 0; i < infos.length; i++) {
             String name = infos[i].debugTitle();
             appendNavigationLink(navigation, name, i > 0);
@@ -121,7 +121,7 @@ public class MonitorListenerImpl implements MonitorListener {
 
         writer.println(sectionName);
 
-        DebugInfo[] infos = IsisContext.debugSystem();
+        DebuggableWithTitle[] infos = IsisContext.debugSystem();
         if (sectionName.equals("Events")) {
             int i = 1;
             for(MonitorEvent event: requests) {

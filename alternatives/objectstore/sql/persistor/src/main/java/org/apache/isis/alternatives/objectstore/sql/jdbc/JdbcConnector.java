@@ -33,8 +33,8 @@ import org.apache.isis.alternatives.objectstore.sql.Results;
 import org.apache.isis.alternatives.objectstore.sql.SqlMetaData;
 import org.apache.isis.alternatives.objectstore.sql.SqlObjectStore;
 import org.apache.isis.alternatives.objectstore.sql.SqlObjectStoreException;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.log4j.Logger;
 

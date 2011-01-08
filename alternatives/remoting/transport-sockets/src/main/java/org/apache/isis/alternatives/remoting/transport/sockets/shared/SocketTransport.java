@@ -34,7 +34,8 @@ import org.apache.isis.alternatives.remoting.transport.ConnectionException;
 import org.apache.isis.alternatives.remoting.transport.ProfilingInputStream;
 import org.apache.isis.alternatives.remoting.transport.ProfilingOutputStream;
 import org.apache.isis.alternatives.remoting.transport.TransportAbstract;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+
 import org.apache.log4j.Logger;
 
 public class SocketTransport extends TransportAbstract {

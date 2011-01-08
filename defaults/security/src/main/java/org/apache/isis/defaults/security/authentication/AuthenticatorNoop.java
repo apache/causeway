@@ -21,7 +21,7 @@
 package org.apache.isis.defaults.security.authentication;
 
 import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.AuthenticatorAbstract;
 

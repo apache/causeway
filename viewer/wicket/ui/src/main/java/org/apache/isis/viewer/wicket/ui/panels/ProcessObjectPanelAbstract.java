@@ -30,7 +30,8 @@ import org.apache.wicket.markup.repeater.RepeatingView;
 
 import com.google.common.collect.Lists;
 
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -98,8 +99,8 @@ public abstract class ProcessObjectPanelAbstract extends
 
     private Filter<ObjectAssociation> visiblePropertyFilter(
     		ObjectAdapter adapter) {
-        return ObjectAssociationFilters.PROPERTIES
-                .and(ObjectAssociationFilters.dynamicallyVisible(
+        return Filters.and(ObjectAssociationFilters.PROPERTIES,
+                ObjectAssociationFilters.dynamicallyVisible(
                         getAuthenticationSession(), adapter));
     }
 

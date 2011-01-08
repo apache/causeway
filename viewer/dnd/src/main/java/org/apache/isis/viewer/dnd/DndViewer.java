@@ -24,11 +24,12 @@ import java.awt.Dimension;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
-import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.ConfigurationException;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.standard.exploration.AuthenticationRequestExploration;
 import org.apache.isis.core.runtime.authentication.standard.fixture.AuthenticationRequestLogonFixture;
@@ -149,9 +150,9 @@ public class DndViewer extends IsisViewerAbstract {
         final String factoryName = IsisContext.getConfiguration().getString(SPECIFICATION_BASE + name);
         ViewSpecification spec;
         if (factoryName != null) {
-            spec = InstanceFactory.createInstance(factoryName, ViewSpecification.class);
+            spec = InstanceUtil.createInstance(factoryName, ViewSpecification.class);
         } else {
-            spec = InstanceFactory.createInstance(cls.getName(), ViewSpecification.class);
+            spec = InstanceUtil.createInstance(cls.getName(), ViewSpecification.class);
         }
         return spec;
     }
@@ -365,7 +366,7 @@ public class DndViewer extends IsisViewerAbstract {
         this.shutdownListener = shutdownListener;
     }
 
-    private void setupViewFactory() throws ConfigurationException, InstanceCreationException {
+    private void setupViewFactory() throws IsisConfigurationException, InstanceCreationException {
         final SkylarkViewFactory viewFactory = (SkylarkViewFactory) Toolkit.getViewFactory();
 
         LOG.debug("setting up default views (provided by the framework)");

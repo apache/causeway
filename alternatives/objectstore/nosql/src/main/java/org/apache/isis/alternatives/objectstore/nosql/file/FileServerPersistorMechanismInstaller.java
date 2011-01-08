@@ -22,8 +22,8 @@ package org.apache.isis.alternatives.objectstore.nosql.file;
 
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlDataDatabase;
 import org.apache.isis.alternatives.objectstore.nosql.NoSqlPersistorMechanismInstaller;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public class FileServerPersistorMechanismInstaller extends NoSqlPersistorMechanismInstaller {
     

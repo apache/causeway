@@ -36,8 +36,8 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Vector;
 
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.Resources;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.imageloader.TemplateImage;
 import org.apache.isis.core.runtime.imageloader.TemplateImageImpl;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;

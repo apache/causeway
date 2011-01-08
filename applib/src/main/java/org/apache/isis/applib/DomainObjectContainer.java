@@ -21,6 +21,7 @@ package org.apache.isis.applib;
 
 import java.util.List;
 
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.query.Query;
 import org.apache.isis.applib.security.UserMemento;
 

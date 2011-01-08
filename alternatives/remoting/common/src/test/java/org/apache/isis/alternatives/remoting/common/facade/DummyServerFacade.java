@@ -56,7 +56,7 @@ import org.apache.isis.alternatives.remoting.common.exchange.SetAssociationRespo
 import org.apache.isis.alternatives.remoting.common.exchange.SetValueRequest;
 import org.apache.isis.alternatives.remoting.common.exchange.SetValueResponse;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 
 
 /**

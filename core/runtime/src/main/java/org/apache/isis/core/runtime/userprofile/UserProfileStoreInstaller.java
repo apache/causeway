@@ -21,7 +21,7 @@
 package org.apache.isis.core.runtime.userprofile;
 
 import org.apache.isis.core.commons.components.Installer;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public interface UserProfileStoreInstaller extends Installer {
 

@@ -23,12 +23,12 @@ package org.apache.isis.core.runtime.testsystem;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.runtime.userprofile.UserProfile;
 import org.apache.isis.core.runtime.userprofile.UserProfileStore;
 
-public class TestUserProfileStore implements UserProfileStore, DebugInfo {
+public class TestUserProfileStore implements UserProfileStore, DebuggableWithTitle {
 	
     private static final Map<String, UserProfile> profiles = new HashMap<String, UserProfile>();
     

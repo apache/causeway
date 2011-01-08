@@ -24,8 +24,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.NotFoundPolicy;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
@@ -85,12 +86,12 @@ public abstract class OptionHandlerDeploymentType extends OptionHandlerAbstract 
     }
 
     public void primeConfigurationBuilder(
-            ConfigurationBuilder configurationBuilder) {
+            IsisConfigurationBuilder isisConfigurationBuilder) {
         String type = deploymentType.nameLowerCase();
-        configurationBuilder.addConfigurationResource(type + ".properties",
+        isisConfigurationBuilder.addConfigurationResource(type + ".properties",
                 NotFoundPolicy.CONTINUE);
 
-        configurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY,
+        isisConfigurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY,
                 deploymentType.name());
     }
 

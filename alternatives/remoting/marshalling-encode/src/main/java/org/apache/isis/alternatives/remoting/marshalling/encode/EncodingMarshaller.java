@@ -28,15 +28,15 @@ import org.apache.isis.alternatives.remoting.common.exchange.Request;
 import org.apache.isis.alternatives.remoting.common.marshalling.MarshallerAbstract;
 import org.apache.isis.alternatives.remoting.common.marshalling.MarshallingConstants;
 import org.apache.isis.alternatives.remoting.transport.Transport;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataInputStreamExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
+import org.apache.isis.core.commons.encoding.DebugDataInputExtended;
+import org.apache.isis.core.commons.encoding.DebugDataOutputExtended;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataInputStreamExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
-import org.apache.isis.core.metamodel.encoding.DebugDataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DebugDataOutputExtended;
-import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.apache.log4j.Logger;
 
 public class EncodingMarshaller extends MarshallerAbstract {

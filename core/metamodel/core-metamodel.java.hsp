@@ -4,7 +4,7 @@
    <property name="show-needs-to-compile" value="false" />
    <property name="detail-mode" value="false" />
    <classpath>
-      <classpathentry kind="lib" path="target/classes" />
+      <classpathentry kind="lib" path="D:\SVN\ai\isis\trunk\core\metamodel\target\classes" />
    </classpath>
    <sourcepaths>
       <pathentry type="file" path="src/main/java" />
@@ -12,7 +12,7 @@
    <grid-set sep="." version="3.3.722">
       <grid name="all of metamodel with specloader expanded" enforce="true" strict="false">
          <row>
-            <cell name="specloader" pattern="org.apache.isis.core.metamodel.specloader.*" vexpanded="true" visibility="public">
+            <cell name="specloader" pattern="org.apache.isis.core.metamodel.specloader.*" vexpanded="false" visibility="public">
                <grid>
                   <row>
                      <cell name="specloader" pattern="org.apache.isis.core.metamodel.specloader.?" vexpanded="true" visibility="public" />
@@ -35,7 +35,6 @@
          </row>
          <row>
             <cell name="progmodel" pattern="org.apache.isis.core.metamodel.progmodel.*" vexpanded="true" visibility="public" />
-            <cell name="config" pattern="org.apache.isis.core.metamodel.config.*" vexpanded="true" visibility="public" />
             <cell name="facetdecorator" pattern="org.apache.isis.core.metamodel.facetdecorator.*" vexpanded="true" visibility="public" />
             <cell name="runtimecontext" pattern="org.apache.isis.core.metamodel.runtimecontext.*" vexpanded="true" visibility="public" />
             <cell name="layout" pattern="org.apache.isis.core.metamodel.layout.*" vexpanded="true" visibility="public" />
@@ -48,20 +47,110 @@
             <cell name="facets" pattern="org.apache.isis.core.metamodel.facets.*" vexpanded="true" visibility="public" />
          </row>
          <row>
-            <cell name="spec" pattern="org.apache.isis.core.metamodel.spec.*" vexpanded="true" visibility="public" />
-         </row>
-         <row>
-            <cell name="interactions" pattern="org.apache.isis.core.metamodel.interactions.*" vexpanded="true" visibility="public" />
-            <cell name="adapter" pattern="org.apache.isis.core.metamodel.adapter.*" vexpanded="true" visibility="public" />
+            <cell vexpanded="true" visibility="public">
+               <grid>
+                  <row>
+                     <cell name="spec" pattern="org.apache.isis.core.metamodel.spec.*" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="interactions" pattern="org.apache.isis.core.metamodel.interactions.*" vexpanded="true" visibility="public" />
+                     <cell name="adapter" pattern="org.apache.isis.core.metamodel.adapter.*" vexpanded="true" visibility="public" />
+                  </row>
+               </grid>
+            </cell>
          </row>
          <row>
             <cell name="facetapi" pattern="org.apache.isis.core.metamodel.facetapi.*" vexpanded="true" visibility="public" />
             <cell name="consent" pattern="org.apache.isis.core.metamodel.consent.*" vexpanded="true" visibility="public" />
             <cell name="exceptions" pattern="org.apache.isis.core.metamodel.exceptions.*" vexpanded="true" visibility="public" />
-            <cell name="authentication" pattern="org.apache.isis.core.metamodel.authentication.*" vexpanded="true" visibility="public" />
+         </row>
+      </grid>
+      <grid name="Diagram 1" enforce="true" strict="false">
+         <row>
+            <cell name="specloader" pattern="org.apache.isis.core.metamodel.specloader.*" vexpanded="true" visibility="public" />
          </row>
          <row>
-            <cell name="encoding" pattern="org.apache.isis.core.metamodel.encoding.*" vexpanded="true" visibility="public" />
+            <cell name="progmodel" pattern="org.apache.isis.core.metamodel.progmodel.?" vexpanded="true" visibility="public" />
+            <cell name="config" pattern="org.apache.isis.core.metamodel.config.*" vexpanded="true" visibility="public" />
+            <cell name="facetdecorator" pattern="org.apache.isis.core.metamodel.facetdecorator.?" vexpanded="true" visibility="public" />
+            <cell name="runtimecontext" pattern="org.apache.isis.core.metamodel.runtimecontext.*" vexpanded="true" visibility="public" />
+            <cell name="layout" pattern="org.apache.isis.core.metamodel.layout.*" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="services" pattern="org.apache.isis.core.metamodel.services.*" vexpanded="true" visibility="public" />
+            <cell name="facetedmethod" pattern="org.apache.isis.core.metamodel.facetedmethod.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="facets" pattern="org.apache.isis.core.metamodel.facets.*" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="Tangle of 3" vexpanded="true" visibility="public">
+               <grid>
+                  <row>
+                     <cell name="spec" pattern="org.apache.isis.core.metamodel.spec.*" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="interactions" pattern="org.apache.isis.core.metamodel.interactions.?" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="adapter" pattern="org.apache.isis.core.metamodel.adapter.*" vexpanded="true" visibility="public" />
+                  </row>
+               </grid>
+            </cell>
+         </row>
+         <row>
+            <cell name="facetapi" pattern="org.apache.isis.core.metamodel.facetapi.?" vexpanded="true" visibility="public" />
+            <cell name="consent" pattern="org.apache.isis.core.metamodel.consent.?" vexpanded="true" visibility="public" />
+            <cell name="exceptions" pattern="org.apache.isis.core.metamodel.exceptions.?" vexpanded="true" visibility="public" />
+            <cell name="authentication" pattern="org.apache.isis.core.metamodel.authentication.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="encoding" pattern="org.apache.isis.core.metamodel.encoding.?" vexpanded="true" visibility="public" />
+         </row>
+      </grid>
+      <grid name="Diagram 2" enforce="true" strict="false">
+         <row>
+            <cell name="specloader" pattern="org.apache.isis.core.metamodel.specloader.*" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="progmodel" pattern="org.apache.isis.core.metamodel.progmodel.?" vexpanded="true" visibility="public" />
+            <cell name="facetdecorator" pattern="org.apache.isis.core.metamodel.facetdecorator.?" vexpanded="true" visibility="public" />
+            <cell name="runtimecontext" pattern="org.apache.isis.core.metamodel.runtimecontext.*" vexpanded="true" visibility="public" />
+            <cell name="layout" pattern="org.apache.isis.core.metamodel.layout.*" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="services" pattern="org.apache.isis.core.metamodel.services.*" vexpanded="true" visibility="public" />
+            <cell name="facetedmethod" pattern="org.apache.isis.core.metamodel.facetedmethod.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="facets" pattern="org.apache.isis.core.metamodel.facets.*" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="Tangle of 3" vexpanded="true" visibility="public">
+               <grid>
+                  <row>
+                     <cell name="spec" pattern="org.apache.isis.core.metamodel.spec.*" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="interactions" pattern="org.apache.isis.core.metamodel.interactions.?" vexpanded="true" visibility="public" />
+                  </row>
+                  <row>
+                     <cell name="adapter" pattern="org.apache.isis.core.metamodel.adapter.*" vexpanded="true" visibility="public" />
+                  </row>
+               </grid>
+            </cell>
+         </row>
+         <row>
+            <cell name="facetapi" pattern="org.apache.isis.core.metamodel.facetapi.?" vexpanded="true" visibility="public" />
+            <cell name="consent" pattern="org.apache.isis.core.metamodel.consent.?" vexpanded="true" visibility="public" />
+            <cell name="exceptions" pattern="org.apache.isis.core.metamodel.exceptions.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="config" pattern="org.apache.isis.core.metamodel.config.*" vexpanded="true" visibility="public" />
+            <cell name="authentication" pattern="org.apache.isis.core.metamodel.authentication.?" vexpanded="true" visibility="public" />
+         </row>
+         <row>
+            <cell name="encoding" pattern="org.apache.isis.core.metamodel.encoding.?" vexpanded="true" visibility="public" />
          </row>
       </grid>
    </grid-set>

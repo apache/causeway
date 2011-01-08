@@ -22,10 +22,10 @@ package org.apache.isis.alternatives.objectstore.sql;
 
 import java.io.IOException;
 
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 
 
 public final class SqlOid implements Oid {

@@ -38,7 +38,7 @@ import org.apache.isis.alternatives.remoting.transport.ProfilingOutputStream;
 import org.apache.isis.alternatives.remoting.transport.sockets.shared.SocketTransportConstants;
 import org.apache.isis.alternatives.remoting.transport.sockets.shared.Worker;
 import org.apache.isis.alternatives.remoting.transport.sockets.shared.WorkerPool;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.Threads;
@@ -49,7 +49,7 @@ import org.apache.isis.core.runtime.viewer.IsisViewerAbstract;
 import org.apache.log4j.Logger;
 
 
-public abstract class SocketsViewerAbstract extends IsisViewerAbstract implements DebugInfo {
+public abstract class SocketsViewerAbstract extends IsisViewerAbstract implements DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(SocketsViewerAbstract.class);
 

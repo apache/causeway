@@ -26,9 +26,10 @@ import java.io.Writer;
 import java.util.Iterator;
 
 import org.apache.commons.lang.StringUtils;
+
+import org.apache.isis.core.commons.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.commons.xml.ContentWriter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.encoding.DataOutputStreamExtended;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.persistence.services.ServiceUtil;

@@ -23,7 +23,7 @@ package org.apache.isis.core.webapp.auth;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.webapp.IsisSessionFilter;
 
 /**

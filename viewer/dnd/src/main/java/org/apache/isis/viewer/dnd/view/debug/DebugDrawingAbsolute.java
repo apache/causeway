@@ -20,14 +20,14 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.viewer.dnd.drawing.Bounds;
 import org.apache.isis.viewer.dnd.drawing.DebugCanvasAbsolute;
 import org.apache.isis.viewer.dnd.view.View;
 
 
-public class DebugDrawingAbsolute implements DebugInfo {
+public class DebugDrawingAbsolute implements DebuggableWithTitle {
     private final View view;
 
     public DebugDrawingAbsolute(final View display) {

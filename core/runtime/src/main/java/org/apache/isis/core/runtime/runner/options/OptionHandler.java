@@ -22,10 +22,11 @@ package org.apache.isis.core.runtime.runner.options;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 
-public interface OptionHandler extends ConfigurationPrimer {
+public interface OptionHandler extends IsisConfigurationBuilderPrimer {
 
 	public void addOption(Options options);
 	

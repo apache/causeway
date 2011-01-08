@@ -24,8 +24,9 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.NotFoundPolicy;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
@@ -50,11 +51,11 @@ public class OptionHandlerConfiguration extends OptionHandlerAbstract {
         return true;
     }
 
-    public void primeConfigurationBuilder(ConfigurationBuilder configurationBuilder) {
+    public void primeConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
         if (configurationResource == null) {
             return;
         }
-        configurationBuilder.addConfigurationResource(configurationResource, NotFoundPolicy.FAIL_FAST);
+        isisConfigurationBuilder.addConfigurationResource(configurationResource, NotFoundPolicy.FAIL_FAST);
     }
 
 }

@@ -22,7 +22,8 @@ package org.apache.isis.core.runtime.options.standard;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
 
@@ -43,7 +44,7 @@ public class OptionHandlerDebug extends OptionHandlerAbstract {
         return true;
     }
 
-    public void primeConfigurationBuilder(ConfigurationBuilder configurationBuilder) {
+    public void primeConfigurationBuilder(IsisConfigurationBuilder isisConfigurationBuilder) {
         // TODO need to prime or otherwise set logging.
     }
 

@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.imageloader.awt;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoader;
 import org.apache.isis.core.runtime.imageloader.TemplateImageLoaderInstaller;
 

@@ -19,7 +19,7 @@ package org.apache.isis.core.metamodel.adapter;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.Injectable;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAbstract;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 

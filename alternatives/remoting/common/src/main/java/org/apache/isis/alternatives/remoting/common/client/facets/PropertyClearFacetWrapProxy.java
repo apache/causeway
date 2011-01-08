@@ -26,8 +26,8 @@ import org.apache.isis.alternatives.remoting.common.exchange.ClearAssociationReq
 import org.apache.isis.alternatives.remoting.common.exchange.ClearAssociationResponse;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetAbstract;

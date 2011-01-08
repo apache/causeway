@@ -21,9 +21,9 @@
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
 import org.apache.isis.applib.adapters.DefaultsProvider;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
@@ -41,9 +41,9 @@ public final class DefaultsProviderUtil {
     }
 
     public static Class<?> defaultsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        final Class<?> type = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(),
+        final Class<?> type = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
                 DefaultsProvider.class, FacetHolder.class) : null;
-        return type != null ? type : ClassUtil.implementingClassOrNull(classCandidateName, DefaultsProvider.class, FacetHolder.class);
+        return type != null ? type : JavaClassUtils.implementingClassOrNull(classCandidateName, DefaultsProvider.class, FacetHolder.class);
     }
 
 }

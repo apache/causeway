@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.metamodel.adapter.oid;
 
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.encoding.Encodable;
 
 public interface Oid extends Encodable {
     

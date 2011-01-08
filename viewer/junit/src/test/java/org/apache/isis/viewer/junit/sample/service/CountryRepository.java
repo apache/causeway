@@ -23,9 +23,9 @@ package org.apache.isis.viewer.junit.sample.service;
 import java.util.List;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.Filter;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.Named;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.viewer.junit.sample.domain.Country;
 import org.apache.log4j.Logger;
 

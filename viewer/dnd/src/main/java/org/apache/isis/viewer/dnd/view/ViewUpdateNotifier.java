@@ -20,9 +20,9 @@
 
 package org.apache.isis.viewer.dnd.view;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
-public interface ViewUpdateNotifier extends DebugInfo {
+public interface ViewUpdateNotifier extends DebuggableWithTitle {
 
     void add(View view);
 

@@ -19,8 +19,8 @@
 
 package org.apache.isis.alternatives.profilestore.xml.internal;
 
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public class XmlFileUtil {
 

@@ -30,10 +30,11 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.commons.factory.InstanceFactory;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.viewer.scimpi.dispatcher.Dispatcher;
@@ -99,10 +100,10 @@ public abstract class RequestContext {
     public RequestContext() {
         String className = IsisContext.getConfiguration().getString("scimpi.object-mapping.class",
                 DefaultOidObjectMapping.class.getName());
-        objectMapping = (ObjectMapping) InstanceFactory.createInstance(className, ObjectMapping.class);
+        objectMapping = (ObjectMapping) InstanceUtil.createInstance(className, ObjectMapping.class);
         className = IsisContext.getConfiguration().getString("scimpi.version-mapping.class",
                 DefaultVersionMapping.class.getName());
-        versionMapping = (VersionMapping) InstanceFactory.createInstance(className, VersionMapping.class);
+        versionMapping = (VersionMapping) InstanceUtil.createInstance(className, VersionMapping.class);
         variables = new HashMap<Scope, Map<String, Object>>();
 
         variables.put(Scope.GLOBAL, globalVariables);

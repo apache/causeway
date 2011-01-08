@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.fixtures.LogonFixture;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderFileSystem;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.AggregatedOid;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderFileSystem;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.progmodel.facets.value.ValueSemanticsProviderAbstractTemporal;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstallerNoop;
@@ -94,7 +94,7 @@ public class Scenario implements AliasRegistryHolder {
             ensureThatArg(deploymentType,
                 is(anyOf(equalTo(DeploymentType.EXPLORATION), equalTo(DeploymentType.PROTOTYPE))));
 
-        ConfigurationBuilderFileSystem configurationBuilder = new ConfigurationBuilderFileSystem(getConfigDirectory());
+        IsisConfigurationBuilderFileSystem configurationBuilder = new IsisConfigurationBuilderFileSystem(getConfigDirectory());
 
         configurationBuilder.add(SystemConstants.DEPLOYMENT_TYPE_KEY, deploymentType.name());
         defaultStoryComponentsInto(configurationBuilder);
@@ -116,29 +116,29 @@ public class Scenario implements AliasRegistryHolder {
         }
     }
 
-    private IsisSystem createSystem(DeploymentType deploymentType, ConfigurationBuilder configurationBuilder) {
+    private IsisSystem createSystem(DeploymentType deploymentType, IsisConfigurationBuilder isisConfigurationBuilder) {
         this.installerLookup = new InstallerLookupDefault(this.getClass());
-        configurationBuilder.injectInto(installerLookup);
+        isisConfigurationBuilder.injectInto(installerLookup);
 
-        Injector injector = createGuiceInjector(deploymentType, configurationBuilder, installerLookup);
+        Injector injector = createGuiceInjector(deploymentType, isisConfigurationBuilder, installerLookup);
         IsisSystem system = injector.getInstance(IsisSystem.class);
         return system;
     }
 
-    private void defaultStoryComponentsInto(ConfigurationBuilder configurationBuilder) {
-        configurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY,
+    private void defaultStoryComponentsInto(IsisConfigurationBuilder isisConfigurationBuilder) {
+        isisConfigurationBuilder.add(SystemConstants.AUTHENTICATION_INSTALLER_KEY,
             BddAuthenticationManagerInstaller.class.getName());
-        configurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY,
+        isisConfigurationBuilder.add(SystemConstants.OBJECT_PERSISTOR_INSTALLER_KEY,
             BddInMemoryPersistenceMechanismInstaller.class.getName());
-        configurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY,
+        isisConfigurationBuilder.add(SystemConstants.PROFILE_PERSISTOR_INSTALLER_KEY,
             InMemoryUserProfileStoreInstaller.class.getName());
-        configurationBuilder.add(SystemConstants.FIXTURES_INSTALLER_KEY, FixturesInstallerNoop.class.getName());
-        configurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true);
+        isisConfigurationBuilder.add(SystemConstants.FIXTURES_INSTALLER_KEY, FixturesInstallerNoop.class.getName());
+        isisConfigurationBuilder.add(SystemConstants.NOSPLASH_KEY, "" + true);
     }
 
-    private Injector createGuiceInjector(DeploymentType deploymentType, ConfigurationBuilder configurationBuilder,
+    private Injector createGuiceInjector(DeploymentType deploymentType, IsisConfigurationBuilder isisConfigurationBuilder,
         InstallerLookup installerLookup) {
-        IsisModule isisModule = new IsisModule(deploymentType, configurationBuilder, installerLookup);
+        IsisModule isisModule = new IsisModule(deploymentType, isisConfigurationBuilder, installerLookup);
         return Guice.createInjector(isisModule);
     }
 

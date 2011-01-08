@@ -22,7 +22,7 @@ package org.apache.isis.core.webserver.embedded.jetty;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.InstallerAbstract;
 import org.apache.isis.core.runtime.viewer.IsisViewerInstaller;
 import org.apache.isis.core.runtime.web.EmbeddedWebServer;
 import org.apache.isis.core.runtime.web.EmbeddedWebServerInstaller;

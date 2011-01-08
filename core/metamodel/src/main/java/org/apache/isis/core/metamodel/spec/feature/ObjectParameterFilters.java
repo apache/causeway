@@ -20,8 +20,7 @@
 
 package org.apache.isis.core.metamodel.spec.feature;
 
-import org.apache.isis.core.commons.filters.AbstractFilter;
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
 
 
 public class ObjectParameterFilters {
@@ -29,7 +28,7 @@ public class ObjectParameterFilters {
     /**
      * Filters only parameters that are for objects (ie 1:1 associations)
      */
-    public static final Filter<ObjectActionParameter> PARAMETER_ASSOCIATIONS = new AbstractFilter<ObjectActionParameter>() {
+    public static final Filter<ObjectActionParameter> PARAMETER_ASSOCIATIONS = new Filter<ObjectActionParameter>() {
         @Override
         public boolean accept(final ObjectActionParameter parameter) {
             return parameter.getSpecification().isNotCollection();

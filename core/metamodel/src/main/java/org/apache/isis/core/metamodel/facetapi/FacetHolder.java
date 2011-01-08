@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
 
 
 /**

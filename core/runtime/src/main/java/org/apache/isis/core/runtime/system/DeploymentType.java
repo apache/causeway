@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.system;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.context.IsisContextStatic;
@@ -80,8 +80,8 @@ public class DeploymentType {
 		deploymentTypes.add(this);
 	}
 
-	public DebugInfo getDebug() {
-	    return new DebugInfo() {
+	public DebuggableWithTitle getDebug() {
+	    return new DebuggableWithTitle() {
 
             public void debugData(DebugString debug) {
                 debug.appendln("Category", deploymentCategory);

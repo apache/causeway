@@ -100,6 +100,61 @@ public final class JavaClassUtils {
 	    return classList;
     }
 
+
+    /**
+     * Returns the supplied Class so long as it implements (or is a subclass of) the
+     * required class, and also has either a constructor accepting the specified param type,
+     * or has a no-arg constructor.
+     */
+    public static Class<?> implementingClassOrNull(final Class<?> classCandidate, final Class<?> requiredClass, final Class<?> constructorParamType) {
+        if (classCandidate == null) {
+            return null;
+        }
+        if (!requiredClass.isAssignableFrom(classCandidate)) {
+            return null;
+        }
+        try {
+            classCandidate.getConstructor(new Class[] {constructorParamType});
+        } catch (final NoSuchMethodException ex) {
+            try {
+                classCandidate.getConstructor(new Class[]{});
+            } catch (NoSuchMethodException e) {
+                return null;
+            }
+        } catch (final SecurityException e) {
+            return null;
+        }
+        final int modifiers = classCandidate.getModifiers();
+        if (!Modifier.isPublic(modifiers)) {
+            return null;
+        }
+        return classCandidate;
+    }
+
+
+    public static Class<?> implementingClassOrNull(final String classCandidateName, final Class<?> requiredClass, final Class<?> constructorParamType) {
+        if (classCandidateName == null) {
+            return null;
+        }
+        Class<?> classCandidate = null;
+        try {
+            classCandidate = Class.forName(classCandidateName);
+            return implementingClassOrNull(classCandidate, requiredClass, constructorParamType);
+        } catch (final ClassNotFoundException e) {
+            return null;
+        }
+    }
+
+
+    public static boolean directlyImplements(final Class<?> cls, final Class<?> interfaceType) {
+    	for(Class<?> directlyImplementedInterface: cls.getInterfaces()) {
+    		if (directlyImplementedInterface == interfaceType) {
+    			return true;
+    		}
+    	}
+    	return false;
+    }
+
     
 
 }

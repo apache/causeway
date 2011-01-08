@@ -34,9 +34,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.standard.exploration.ExplorationSession;
@@ -77,7 +78,7 @@ public class ActionFieldBuilderTest {
     public void setUp() throws Exception {
         Logger.getRootLogger().setLevel(Level.OFF);
 
-        configuration = new PropertiesConfiguration();
+        configuration = new IsisConfigurationDefault();
         servicesList = Collections.emptyList();
         
         mockTemplateImageLoader = mockery.mock(TemplateImageLoader.class);

@@ -20,8 +20,8 @@
 
 package org.apache.isis.core.metamodel.facetapi;
 
-import org.apache.isis.core.commons.filters.AbstractFilter;
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.applib.filter.Filters;
 
 
 public final class FacetFilters {
@@ -31,16 +31,11 @@ public final class FacetFilters {
     /**
      * {@link Filter<Facet>#accept(Facet) Accepts} everything.
      */
-    public static final Filter<Facet> ANY = new AbstractFilter<Facet>() {
-        @Override
-        public boolean accept(final Facet facet) {
-            return true;
-        }
-    };
+    public static final Filter<Facet> ANY = Filters.anyOfType(Facet.class);
     /**
      * {@link Filter<Facet>#accept(Facet) Accepts} nothing.
      */
-    public static final Filter<Facet> NONE = new AbstractFilter<Facet>() {
+    public static final Filter<Facet> NONE = new Filter<Facet>() {
         @Override
         public boolean accept(final Facet facet) {
             return false;
@@ -48,7 +43,7 @@ public final class FacetFilters {
     };
 
     public static Filter<Facet> isA(final Class<?> superClass) {
-        return new AbstractFilter<Facet>() {
+        return new Filter<Facet>() {
             @Override
             public boolean accept(final Facet facet) {
                 if (facet instanceof DecoratingFacet) {
@@ -59,5 +54,4 @@ public final class FacetFilters {
             }
         };
     }
-
 }

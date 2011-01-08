@@ -32,18 +32,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.commons.components.Installer;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.NotFoundPolicy;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.ensure.Ensure;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.factory.InstanceCreationClassException;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.commons.factory.UnavailableClassException;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
-import org.apache.isis.core.metamodel.config.NotFoundPolicy;
 import org.apache.isis.core.metamodel.specloader.FacetDecoratorInstaller;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorInstaller;
 import org.apache.isis.core.runtime.about.AboutIsis;
@@ -94,9 +94,9 @@ public class InstallerLookupDefault implements InstallerLookup {
      * 
      * <p>
      * 
-     * @see #setConfigurationBuilder(ConfigurationBuilder)
+     * @see #setConfigurationBuilder(IsisConfigurationBuilder)
      */
-    private ConfigurationBuilder configurationBuilder;
+    private IsisConfigurationBuilder isisConfigurationBuilder;
 
     // ////////////////////////////////////////////////////////
     // Constructor
@@ -118,7 +118,7 @@ public class InstallerLookupDefault implements InstallerLookup {
                     continue;
                 }
                 try {
-                    final Installer object = (Installer) InstanceFactory.createInstance(className);
+                    final Installer object = (Installer) InstanceUtil.createInstance(className);
                     LOG.debug("created component installer: " + object.getName() + " - " + className);
                     installerList.add(object);
                 } catch (final UnavailableClassException e) {
@@ -168,7 +168,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     }
 
     private void ensureDependenciesInjected() {
-        Ensure.ensureThatState(configurationBuilder, is(not(nullValue())));
+        Ensure.ensureThatState(isisConfigurationBuilder, is(not(nullValue())));
     }
 
     public void shutdown() {
@@ -293,7 +293,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     @SuppressWarnings("unchecked")
     public Installer getInstaller(final String implClassName) {
         try {
-            Installer installer = CastUtils.cast(InstanceFactory.createInstance(implClassName));
+            Installer installer = CastUtils.cast(InstanceUtil.createInstance(implClassName));
             if (installer != null) {
                 mergeConfigurationFor(installer);
                 injectDependenciesInto(installer);
@@ -309,7 +309,7 @@ public class InstallerLookupDefault implements InstallerLookup {
     @SuppressWarnings("unchecked")
     public <T extends Installer> T getInstaller(final Class<T> installerCls) {
         try {
-            T installer = (T) (InstanceFactory.createInstance(installerCls));
+            T installer = (T) (InstanceUtil.createInstance(installerCls));
             if (installer != null) {
                 mergeConfigurationFor(installer);
                 injectDependenciesInto(installer);
@@ -364,12 +364,12 @@ public class InstallerLookupDefault implements InstallerLookup {
     // ////////////////////////////////////////////////////////
 
     public IsisConfiguration getConfiguration() {
-        return configurationBuilder.getConfiguration();
+        return isisConfigurationBuilder.getConfiguration();
     }
 
     public void mergeConfigurationFor(Installer installer) {
         for (String installerConfigResource : installer.getConfigurationResources()) {
-            configurationBuilder.addConfigurationResource(installerConfigResource, NotFoundPolicy.CONTINUE);
+            isisConfigurationBuilder.addConfigurationResource(installerConfigResource, NotFoundPolicy.CONTINUE);
         }
     }
 
@@ -387,20 +387,20 @@ public class InstallerLookupDefault implements InstallerLookup {
             InstallerLookupAware cast = InstallerLookupAware.class.cast(candidate);
             cast.setInstallerLookup(this);
         }
-        configurationBuilder.injectInto(candidate);
+        isisConfigurationBuilder.injectInto(candidate);
     }
 
     // ////////////////////////////////////////////////////////
     // Dependencies (injected)
     // ////////////////////////////////////////////////////////
 
-    public ConfigurationBuilder getConfigurationBuilder() {
-        return configurationBuilder;
+    public IsisConfigurationBuilder getConfigurationBuilder() {
+        return isisConfigurationBuilder;
     }
 
     @Inject
-    public void setConfigurationBuilder(final ConfigurationBuilder configurationLoader) {
-        this.configurationBuilder = configurationLoader;
+    public void setConfigurationBuilder(final IsisConfigurationBuilder configurationLoader) {
+        this.isisConfigurationBuilder = configurationLoader;
     }
 
 }

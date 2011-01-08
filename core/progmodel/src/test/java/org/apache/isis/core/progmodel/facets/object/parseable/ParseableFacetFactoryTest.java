@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Parseable;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
@@ -31,15 +31,15 @@ import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private ParseableFacetFactory facetFactory;
-    private PropertiesConfiguration propertiesConfiguration;
+    private IsisConfigurationDefault isisConfigurationDefault;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         facetFactory = new ParseableFacetFactory();
-        propertiesConfiguration = new PropertiesConfiguration();
-        facetFactory.setIsisConfiguration(propertiesConfiguration);
+        isisConfigurationDefault = new IsisConfigurationDefault();
+        facetFactory.setIsisConfiguration(isisConfigurationDefault);
     }
 
     @Override
@@ -204,7 +204,7 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testParserNameCanBePickedUpFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactoryTest$MyParseableWithParserSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className)
+        isisConfigurationDefault.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className)
             + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
         facetFactory.process(MyParseableWithParserSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
         final ParseableFacetAbstract facet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);
@@ -225,7 +225,7 @@ public class ParseableFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testNonAnnotatedParseableCanPickUpParserFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetFactoryTest$NonAnnotatedParseableParserSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className)
+        isisConfigurationDefault.add(ParserUtil.PARSER_NAME_KEY_PREFIX + canonical(className)
             + ParserUtil.PARSER_NAME_KEY_SUFFIX, className);
         facetFactory.process(NonAnnotatedParseableParserSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
         final ParseableFacetAbstract facet = (ParseableFacetAbstract) facetHolder.getFacet(ParseableFacet.class);

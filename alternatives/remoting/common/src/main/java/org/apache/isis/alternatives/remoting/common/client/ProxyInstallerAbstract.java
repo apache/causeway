@@ -39,7 +39,7 @@ import org.apache.isis.alternatives.remoting.common.marshalling.ClientMarshaller
 import org.apache.isis.alternatives.remoting.common.protocol.ObjectEncoderDecoder;
 import org.apache.isis.alternatives.remoting.protocol.internal.ObjectEncoderDecoderDefault;
 import org.apache.isis.alternatives.remoting.transport.Transport;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;

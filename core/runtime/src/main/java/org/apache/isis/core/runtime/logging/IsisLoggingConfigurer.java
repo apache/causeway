@@ -33,7 +33,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 import org.apache.log4j.PropertyConfigurator;
-import org.apache.isis.core.commons.io.IoUtils;
+
+import org.apache.isis.core.commons.lang.IoUtils;
 import org.apache.isis.core.runtime.runner.Constants;
 
 

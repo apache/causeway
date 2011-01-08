@@ -20,7 +20,6 @@
 
 package org.apache.isis.core.runtime.snapshot;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
@@ -37,10 +36,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.google.common.collect.Lists;
+
 import org.apache.isis.applib.snapshot.Snapshottable;
 import org.apache.isis.applib.snapshot.SnapshottableWithInclusions;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
+import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
@@ -55,7 +57,6 @@ import org.apache.isis.core.metamodel.spec.feature.OneToManyAssociation;
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
-import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 
 
 /**
@@ -84,7 +85,7 @@ import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
  * Element customerAsXml = snapshot.toXml();
  * </pre>
  */
-public final class XmlSnapshot {
+public class XmlSnapshot {
 
     private static final Logger LOG = Logger.getLogger(XmlSnapshot.class);
 
@@ -100,7 +101,7 @@ public final class XmlSnapshot {
 			private String path;
         	private String annotation;
         }
-        private List<PathAndAnnotation> paths = new ArrayList<PathAndAnnotation>();
+        private List<PathAndAnnotation> paths = Lists.newArrayList();
     	
     	public Builder(Snapshottable domainObject) {
 			this.snapshottable = domainObject;
@@ -118,7 +119,7 @@ public final class XmlSnapshot {
     	}
     	
     	public XmlSnapshot build() {
-    		ObjectAdapter adapter = getAdapterManager().adapterFor(snapshottable);
+    		ObjectAdapter adapter = getAdapterMap().adapterFor(snapshottable);
     		XmlSnapshot snapshot = (schema != null) ? 
     				new XmlSnapshot(adapter, schema) : 
     				new XmlSnapshot(adapter);
@@ -811,7 +812,7 @@ public final class XmlSnapshot {
 	// Dependencies (from context)
 	/////////////////////////////////////////////////////////
 	
-	private static AdapterManager getAdapterManager() {
+	private static AdapterMap getAdapterMap() {
 		return getPersistenceSession().getAdapterManager();
 	}
 	

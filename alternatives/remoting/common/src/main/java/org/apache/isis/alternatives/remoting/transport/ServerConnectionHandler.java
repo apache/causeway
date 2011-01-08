@@ -27,10 +27,10 @@ import org.apache.isis.alternatives.remoting.common.exchange.OpenSessionRequest;
 import org.apache.isis.alternatives.remoting.common.exchange.Request;
 import org.apache.isis.alternatives.remoting.common.exchange.ResponseEnvelope;
 import org.apache.isis.alternatives.remoting.server.ServerConnection;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.system.internal.monitor.Monitor;
 import org.apache.log4j.Logger;
@@ -55,7 +55,7 @@ public class ServerConnectionHandler {
     private String debugResponse;
     private String debugContextId;
 
-    private DebugInfo[] debugSessionInfo;
+    private DebuggableWithTitle[] debugSessionInfo;
 
     private long responseTime;
 
@@ -182,7 +182,7 @@ public class ServerConnectionHandler {
     private void debugSessionInfo(final DebugString debug) {
         try {
             if (debugSessionInfo != null) {
-                for (DebugInfo info : debugSessionInfo) {
+                for (DebuggableWithTitle info : debugSessionInfo) {
                     debug.appendTitle(info.debugTitle());
                     info.debugData(debug);
                 }

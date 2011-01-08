@@ -21,7 +21,7 @@
 package org.apache.isis.core.runtime.persistence.query;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.Filter;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 public interface PersistenceQueryBuiltIn extends PersistenceQuery {

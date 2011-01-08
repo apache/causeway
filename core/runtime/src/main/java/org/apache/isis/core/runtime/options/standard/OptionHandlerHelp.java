@@ -25,7 +25,8 @@ import static org.apache.isis.core.runtime.runner.Constants.HELP_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.Constants;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
@@ -50,7 +51,7 @@ public class OptionHandlerHelp extends OptionHandlerAbstract {
 	}
 	
 	public void primeConfigurationBuilder(
-			ConfigurationBuilder configurationBuilder) {
+			IsisConfigurationBuilder isisConfigurationBuilder) {
 		// nothing to do
 		
 	}

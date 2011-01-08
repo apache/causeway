@@ -21,14 +21,13 @@ package org.apache.isis.core.runtime.context;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.components.TransactionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugInfo;
-import org.apache.isis.core.commons.debug.DebugList;
+import org.apache.isis.core.commons.config.IsisConfigurationException;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.ConfigurationException;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
@@ -53,7 +52,7 @@ import org.apache.log4j.Logger;
  * <p>
  * Somewhat analogous to (the static methods in) <tt>HibernateUtil</tt>.
  */
-public abstract class IsisContext implements DebugInfo {
+public abstract class IsisContext implements DebuggableWithTitle {
 
     private static final Logger LOG = Logger.getLogger(IsisContext.class);
 
@@ -307,7 +306,7 @@ public abstract class IsisContext implements DebugInfo {
      */
     public static IsisConfiguration getConfiguration() {
         if (configuration == null) {
-            throw new ConfigurationException("No configuration available");
+            throw new IsisConfigurationException("No configuration available");
         }
         // REVIEW
         return configuration;
@@ -478,7 +477,7 @@ public abstract class IsisContext implements DebugInfo {
     // Debug
     // ///////////////////////////////////////////////////////////
 
-    public static DebugInfo[] debugSystem() {
+    public static DebuggableWithTitle[] debugSystem() {
         DebugList debugList = new DebugList("Apache Isis System");
         debugList.add("Context", getInstance());
         debugList.add("Apache Isis session factory", getSessionFactory());
@@ -496,7 +495,7 @@ public abstract class IsisContext implements DebugInfo {
         return debugList.debug();
     }
 
-    public static DebugInfo[] debugSession() {
+    public static DebuggableWithTitle[] debugSession() {
         DebugList debugList = new DebugList("Apache Isis Session");
         debugList.add("Apache Isis session", getSession());
         debugList.add("Authentication session", getAuthenticationSession());

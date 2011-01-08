@@ -23,7 +23,7 @@ package org.apache.isis.core.metamodel.facets;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.commons.filters.AbstractFilter;
+import org.apache.isis.applib.filter.Filters;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facetapi.Facet;
@@ -83,7 +83,7 @@ public final class ImperativeFacetUtils {
         if (member == null) {
             return flags;
         }
-        Facet[] allFacets = member.getFacets(AbstractFilter.noop(Facet.class));
+        Facet[] allFacets = member.getFacets(Filters.anyOfType(Facet.class));
         for (Facet facet : allFacets) {
             ImperativeFacet imperativeFacet = ImperativeFacetUtils.getImperativeFacet(facet);
             if (imperativeFacet == null) {

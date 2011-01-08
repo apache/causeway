@@ -24,7 +24,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.options.OptionHandler;
 import org.apache.isis.core.webserver.WebServerConstants;
@@ -48,10 +49,10 @@ public final class OptionHandlerResourceBase implements OptionHandler {
 	}
 
 	public void primeConfigurationBuilder(
-			ConfigurationBuilder configurationBuilder) {
+			IsisConfigurationBuilder isisConfigurationBuilder) {
 		if (resourceBase == null) {
 			return;
 		}
-		configurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, resourceBase);
+		isisConfigurationBuilder.add(WebServerConstants.EMBEDDED_WEB_SERVER_RESOURCE_BASE_KEY, resourceBase);
 	}
 }

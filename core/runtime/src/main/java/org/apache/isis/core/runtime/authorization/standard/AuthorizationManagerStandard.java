@@ -21,9 +21,9 @@
 package org.apache.isis.core.runtime.authorization.standard;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authorization.AuthorizationManagerAbstract;
 
 public class AuthorizationManagerStandard extends AuthorizationManagerAbstract {

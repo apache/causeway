@@ -22,8 +22,8 @@ package org.apache.isis.viewer.dnd.util;
 
 import java.util.StringTokenizer;
 
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.ConfigurationException;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -51,7 +51,7 @@ public class Properties {
                 height = Integer.valueOf(st.nextToken().trim()).intValue();
                 return new Size(width, height);
             } else {
-                throw new ConfigurationException("Size not specified correctly in " + name + ": " + initialSize);
+                throw new IsisConfigurationException("Size not specified correctly in " + name + ": " + initialSize);
             }
         }
         return defaultSize;
@@ -76,7 +76,7 @@ public class Properties {
                 y = Integer.valueOf(st.nextToken().trim()).intValue();
                 return new Location(x, y);
             } else {
-                throw new ConfigurationException("Location not specified correctly in " + name + ": " + initialLocation);
+                throw new IsisConfigurationException("Location not specified correctly in " + name + ": " + initialLocation);
             }
         }
         return defaultLocation;

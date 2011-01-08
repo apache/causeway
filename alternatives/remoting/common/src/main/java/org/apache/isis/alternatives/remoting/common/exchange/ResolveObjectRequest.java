@@ -25,10 +25,10 @@ import java.io.IOException;
 import org.apache.isis.alternatives.remoting.common.data.common.IdentityData;
 import org.apache.isis.alternatives.remoting.common.data.common.ObjectData;
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
 
 public class ResolveObjectRequest extends RequestAbstract {
     private static final long serialVersionUID = 1L;

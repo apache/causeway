@@ -23,9 +23,9 @@ package org.apache.isis.core.runtime.runner;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilderDefault;
-import org.apache.isis.core.metamodel.config.ConfigurationPrimer;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderDefault;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilderPrimer;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.installers.InstallerLookupDefault;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -45,25 +45,25 @@ public class IsisModule extends AbstractModule {
 
     private final DeploymentType deploymentType;
     private final InstallerLookup installerLookup;
-    private final ConfigurationBuilder configurationBuilder;
+    private final IsisConfigurationBuilder isisConfigurationBuilder;
 
-    private final List<ConfigurationPrimer> configurationPrimers = Lists.newArrayList();
+    private final List<IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers = Lists.newArrayList();
     private final List<String> viewerNames = Lists.newArrayList();
 
     private static InstallerLookupDefault defaultInstallerLookup() {
         return new InstallerLookupDefault(IsisModule.class);
     }
     
-    private static ConfigurationBuilderDefault defaultConfigurationBuider() {
-        return new ConfigurationBuilderDefault();
+    private static IsisConfigurationBuilderDefault defaultConfigurationBuider() {
+        return new IsisConfigurationBuilderDefault();
     }
     
     public IsisModule(DeploymentType deploymentType) {
         this(deploymentType, defaultConfigurationBuider(), defaultInstallerLookup());
     }
 
-    public IsisModule(DeploymentType deploymentType, ConfigurationBuilder configurationBuilder) {
-        this(deploymentType, configurationBuilder, defaultInstallerLookup());
+    public IsisModule(DeploymentType deploymentType, IsisConfigurationBuilder isisConfigurationBuilder) {
+        this(deploymentType, isisConfigurationBuilder, defaultInstallerLookup());
     }
     
     public IsisModule(DeploymentType deploymentType, InstallerLookup installerLookup) {
@@ -71,10 +71,10 @@ public class IsisModule extends AbstractModule {
     }
     
     public IsisModule(DeploymentType deploymentType,
-            ConfigurationBuilder configurationBuilder,
+            IsisConfigurationBuilder isisConfigurationBuilder,
             InstallerLookup installerLookup) {
         this.installerLookup = installerLookup;
-        this.configurationBuilder = configurationBuilder;
+        this.isisConfigurationBuilder = isisConfigurationBuilder;
         this.deploymentType = deploymentType;
     }
 
@@ -94,13 +94,13 @@ public class IsisModule extends AbstractModule {
     @SuppressWarnings("unused")
     @Provides
     @Singleton
-    private ConfigurationBuilder providesConfigurationBuilder() {
-        return primeConfiguration(configurationBuilder);
+    private IsisConfigurationBuilder providesConfigurationBuilder() {
+        return primeConfiguration(isisConfigurationBuilder);
     }
 
-    private ConfigurationBuilder primeConfiguration(final ConfigurationBuilder configBuilder) {
-        for (ConfigurationPrimer configurationPrimer : configurationPrimers) {
-            configurationPrimer.primeConfigurationBuilder(configBuilder);
+    private IsisConfigurationBuilder primeConfiguration(final IsisConfigurationBuilder configBuilder) {
+        for (IsisConfigurationBuilderPrimer isisConfigurationBuilderPrimer : isisConfigurationBuilderPrimers) {
+            isisConfigurationBuilderPrimer.primeConfigurationBuilder(configBuilder);
         }
         return configBuilder;
     }
@@ -114,7 +114,7 @@ public class IsisModule extends AbstractModule {
     @Singleton
     @Inject
     private InstallerLookup providesInstallerLookup(
-            ConfigurationBuilder configBuilder) {
+            IsisConfigurationBuilder configBuilder) {
         // wire up and initialize installer lookup
         configBuilder.injectInto(installerLookup);
         installerLookup.init();
@@ -125,8 +125,8 @@ public class IsisModule extends AbstractModule {
     /**
      * Adjustment (as per GOOS book)
      */
-    public void addConfigurationPrimers(List<? extends ConfigurationPrimer> configurationPrimers) {
-        this.configurationPrimers.addAll(configurationPrimers);
+    public void addConfigurationPrimers(List<? extends IsisConfigurationBuilderPrimer> isisConfigurationBuilderPrimers) {
+        this.isisConfigurationBuilderPrimers.addAll(isisConfigurationBuilderPrimers);
     }
 
     /**
@@ -140,7 +140,7 @@ public class IsisModule extends AbstractModule {
     @Override
     protected void configure() {
         requireBinding(DeploymentType.class);
-        requireBinding(ConfigurationBuilder.class);
+        requireBinding(IsisConfigurationBuilder.class);
         requireBinding(InstallerLookup.class);
     }
 

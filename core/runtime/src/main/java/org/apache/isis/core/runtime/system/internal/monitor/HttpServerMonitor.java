@@ -26,7 +26,8 @@ import java.net.URLDecoder;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.system.IsisSystem;
 

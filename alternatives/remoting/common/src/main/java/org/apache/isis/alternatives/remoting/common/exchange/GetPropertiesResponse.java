@@ -24,9 +24,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Properties;
 
-import org.apache.isis.core.metamodel.encoding.DataInputExtended;
-import org.apache.isis.core.metamodel.encoding.DataOutputExtended;
-import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.commons.encoding.DataInputExtended;
+import org.apache.isis.core.commons.encoding.DataOutputExtended;
+import org.apache.isis.core.commons.encoding.Encodable;
 
 public class GetPropertiesResponse implements Encodable, Serializable {
 

@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.testsystem.tests;
 
 import junit.framework.TestCase;
 
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.testsystem.TestProxyConfiguration;
 
 

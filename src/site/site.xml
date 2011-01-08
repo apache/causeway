@@ -97,7 +97,7 @@
 		</menu>
 
         <menu name="For Contributors">
-            <item name="${docbkxGuideTitle} ${docbkxGuideSubTitle}">
+            <item name="Contributor's Guide">
                 <item name="PDF" href="docbkx/pdf/${docbkxGuideName}.pdf" />
                 <item name="HTML" href="docbkx/html/guide/${docbkxGuideName}.html" />
             </item>

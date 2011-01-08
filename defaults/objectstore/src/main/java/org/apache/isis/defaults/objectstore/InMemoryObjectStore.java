@@ -27,7 +27,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 
-import org.apache.isis.core.commons.debug.Debug;
+import org.apache.isis.core.commons.debug.DebugUtils;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
@@ -491,10 +491,10 @@ public class InMemoryObjectStore implements ObjectStore {
 
     private void indent(final StringBuffer s, final int level) {
         for (int indent = 0; indent < level; indent++) {
-            s.append(Debug.indentString(4) + "|");
+            s.append(DebugUtils.indentString(4) + "|");
         }
 
-        s.append(Debug.indentString(4) + "+--");
+        s.append(DebugUtils.indentString(4) + "+--");
     }
 
     

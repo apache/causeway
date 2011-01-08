@@ -21,9 +21,8 @@ package org.apache.isis.core.runtime.persistence.objectstore;
 
 import java.util.List;
 
-import org.apache.isis.core.commons.components.NamedComponent;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -37,7 +36,13 @@ import org.apache.isis.core.runtime.persistence.objectstore.transaction.Persiste
 import org.apache.isis.core.runtime.persistence.objectstore.transaction.SaveObjectCommand;
 import org.apache.isis.core.runtime.persistence.query.PersistenceQuery;
 
-public interface ObjectStorePersistence extends DebugInfo, SessionScopedComponent, NamedComponent {
+public interface ObjectStorePersistence extends DebuggableWithTitle, SessionScopedComponent {
+
+
+    /**
+     * The name of this component.
+     */
+    String name();
 
     /**
      * Determine if the object store has been initialized with its set of start up objects.

@@ -20,7 +20,7 @@
 
 package org.apache.isis.core.runtime.system.internal.monitor;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 
 
@@ -31,13 +31,13 @@ public class MonitorEvent {
     private final String category;
     private DebugString debug;
 
-    public MonitorEvent(final String category, final String message, DebugInfo[] debugDetails) {
+    public MonitorEvent(final String category, final String message, DebuggableWithTitle[] debugDetails) {
         this.message = message;
         this.category = category;
         debug = new DebugString();
         try {
             if (debugDetails != null) {
-                for (DebugInfo info : debugDetails) {
+                for (DebuggableWithTitle info : debugDetails) {
                     debug.appendTitle(info.debugTitle());
                     debug.indent();
                     info.debugData(debug);

@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.isis.applib.AbstractFactoryAndRepository;
-import org.apache.isis.applib.Filter;
+import org.apache.isis.applib.filter.Filter;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.applib.value.Money;
 import org.apache.isis.support.prototype.dom.claim.Claim;

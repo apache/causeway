@@ -29,8 +29,8 @@ import org.apache.log4j.Logger;
 import com.google.common.collect.Lists;
 
 import org.apache.isis.applib.Identifier;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.progmodel.facetdecorators.i18n.I18nManager;
 
 /**

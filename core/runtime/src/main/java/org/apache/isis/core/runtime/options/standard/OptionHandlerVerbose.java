@@ -24,7 +24,8 @@ import static org.apache.isis.core.runtime.runner.Constants.VERBOSE_OPT;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.runner.BootPrinter;
 import org.apache.isis.core.runtime.runner.options.OptionHandlerAbstract;
 import org.apache.isis.core.runtime.system.SystemConstants;
@@ -44,7 +45,7 @@ public class OptionHandlerVerbose extends OptionHandlerAbstract {
 	}
 	
 	public void primeConfigurationBuilder(
-			ConfigurationBuilder configurationBuilder) {
+			IsisConfigurationBuilder isisConfigurationBuilder) {
 		// TODO need to do what, exactly???
 		
 	}

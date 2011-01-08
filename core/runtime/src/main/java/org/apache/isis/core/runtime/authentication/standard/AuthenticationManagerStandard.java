@@ -26,12 +26,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ToString;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.authentication.AuthenticationRequest;
 import org.apache.isis.core.runtime.authentication.NoAuthenticatorException;
@@ -44,7 +44,7 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 
-public class AuthenticationManagerStandard implements AuthenticationManager, DebugInfo {
+public class AuthenticationManagerStandard implements AuthenticationManager, DebuggableWithTitle {
 
     private List<Authenticator> authenticators = new ArrayList<Authenticator>();
     private final Map<String, String> userByValidationCode = new HashMap<String, String>();

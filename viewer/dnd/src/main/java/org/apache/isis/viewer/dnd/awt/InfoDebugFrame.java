@@ -20,29 +20,29 @@
 
 package org.apache.isis.viewer.dnd.awt;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 
 
 public class InfoDebugFrame extends DebugFrame {
     private static final long serialVersionUID = 1L;
-    private DebugInfo[] info;
+    private DebuggableWithTitle[] info;
 
     @Override
-    protected DebugInfo[] getInfo() {
+    protected DebuggableWithTitle[] getInfo() {
         return info;
     }
 
     /**
      * set the display strategy to use to display the information.
      */
-    public void setInfo(final DebugInfo info) {
-        this.info = new DebugInfo[] { info };
+    public void setInfo(final DebuggableWithTitle info) {
+        this.info = new DebuggableWithTitle[] { info };
     }
 
     /**
      * set the display strategies to use to display the information.
      */
-    public void setInfo(final DebugInfo[] info) {
+    public void setInfo(final DebuggableWithTitle[] info) {
         this.info = info;
     }
 

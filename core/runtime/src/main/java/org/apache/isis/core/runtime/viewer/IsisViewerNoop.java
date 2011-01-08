@@ -21,7 +21,7 @@
 package org.apache.isis.core.runtime.viewer;
 
 import org.apache.isis.core.commons.components.Noop;
-import org.apache.isis.core.metamodel.config.ConfigurationBuilder;
+import org.apache.isis.core.commons.config.IsisConfigurationBuilder;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
 import org.apache.isis.core.runtime.web.WebAppSpecification;
 
@@ -34,7 +34,7 @@ public class IsisViewerNoop implements IsisViewer, Noop {
 	public void setInstallerLookup(InstallerLookup installerLookup) {
 	}
 
-	public void setConfigurationBuilder(ConfigurationBuilder configurationLoader) {
+	public void setConfigurationBuilder(IsisConfigurationBuilder configurationLoader) {
 	}
 
 	public boolean bootstrapsSystem() {

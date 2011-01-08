@@ -30,8 +30,8 @@ import org.apache.isis.alternatives.remoting.common.marshalling.MarshallerAbstra
 import org.apache.isis.alternatives.remoting.common.protocol.IllegalRequestException;
 import org.apache.isis.alternatives.remoting.transport.ConnectionException;
 import org.apache.isis.alternatives.remoting.transport.Transport;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.log4j.Logger;
 
 import com.thoughtworks.xstream.XStream;

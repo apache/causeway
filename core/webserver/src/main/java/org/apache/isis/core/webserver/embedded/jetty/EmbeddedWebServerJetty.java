@@ -39,7 +39,7 @@ import org.mortbay.jetty.servlet.ServletHandler;
 import org.mortbay.jetty.servlet.ServletHolder;
 import org.mortbay.jetty.servlet.ServletMapping;
 import org.mortbay.jetty.servlet.SessionHandler;
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.web.EmbeddedWebServerAbstract;
 import org.apache.isis.core.runtime.web.FilterSpecification;
 import org.apache.isis.core.runtime.web.ServletSpecification;
@@ -180,7 +180,7 @@ public class EmbeddedWebServerJetty extends EmbeddedWebServerAbstract {
     private void addServletContextListeners(final ContextHandler contextHandler) {
         for (WebAppSpecification specification : getSpecifications()) {
             for (Class<?> servletContextListenerClass : specification.getServletContextListeners()) {
-                ServletContextListener servletContext = (ServletContextListener) InstanceFactory
+                ServletContextListener servletContext = (ServletContextListener) InstanceUtil
                         .createInstance(servletContextListenerClass);
                 contextHandler.addEventListener(servletContext);
             }

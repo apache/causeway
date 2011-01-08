@@ -28,7 +28,7 @@ import static org.apache.isis.core.commons.ensure.Ensure.ensureThatArg;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.fixturesinstaller.FixturesInstaller;

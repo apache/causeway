@@ -24,16 +24,15 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Properties;
 
 import org.apache.log4j.Logger;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.core.metamodel.config.InstallerAbstract;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.InstallerAbstract;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.runtime.installers.InstallerLookup;
@@ -165,7 +164,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final String configuredClassName =
             configuration.getString(PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME,
                 PersistenceConstants.ADAPTER_FACTORY_CLASS_NAME_DEFAULT);
-        return InstanceFactory.createInstance(configuredClassName, AdapterFactory.class);
+        return InstanceUtil.createInstance(configuredClassName, AdapterFactory.class);
     }
 
     /**
@@ -180,7 +179,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final String configuredClassName =
             configuration.getString(PersistenceConstants.OBJECT_FACTORY_CLASS_NAME,
                 PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT);
-        return InstanceFactory.createInstance(configuredClassName,
+        return InstanceUtil.createInstance(configuredClassName,
             PersistenceConstants.OBJECT_FACTORY_CLASS_NAME_DEFAULT, ObjectFactory.class);
     }
 
@@ -196,7 +195,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final String configuredClassName =
             configuration.getString(PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME,
                 PersistenceConstants.SERVICES_INJECTOR_CLASS_NAME_DEFAULT);
-        return InstanceFactory.createInstance(configuredClassName, ServicesInjector.class);
+        return InstanceUtil.createInstance(configuredClassName, ServicesInjector.class);
     }
 
     /**
@@ -211,7 +210,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final String oidGeneratorClassName =
             configuration.getString(PersistenceConstants.OID_GENERATOR_CLASS_NAME,
                 PersistenceConstants.OID_GENERATOR_CLASS_NAME_DEFAULT);
-        return InstanceFactory.createInstance(oidGeneratorClassName, OidGenerator.class);
+        return InstanceUtil.createInstance(oidGeneratorClassName, OidGenerator.class);
     }
 
     /**
@@ -233,9 +232,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
     protected RuntimeContext createRuntimeContext(final IsisConfiguration configuration) {
         Properties properties = new Properties();
         IsisConfiguration applicationConfiguration = configuration.getProperties("application");
-        Enumeration<String> names = applicationConfiguration.propertyNames();
-        while (names.hasMoreElements()) {
-            String key = names.nextElement();
+        for (String key : applicationConfiguration) {
             String value = applicationConfiguration.getString(key);
             String newKey = key.substring("application.".length());
             properties.setProperty(newKey, value);
@@ -257,7 +254,7 @@ public abstract class PersistenceMechanismInstallerAbstract extends InstallerAbs
         final String configuredClassName =
             configuration.getString(PersistenceConstants.DOMAIN_OBJECT_CONTAINER_CLASS_NAME,
                 PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT);
-        return InstanceFactory.createInstance(configuredClassName,
+        return InstanceUtil.createInstance(configuredClassName,
             PersistenceConstants.DOMAIN_OBJECT_CONTAINER_NAME_DEFAULT, DomainObjectContainer.class);
     }
 

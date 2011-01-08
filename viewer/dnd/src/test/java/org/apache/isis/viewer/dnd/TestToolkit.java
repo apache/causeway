@@ -22,7 +22,7 @@ package org.apache.isis.viewer.dnd;
 
 import java.util.Enumeration;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.UnexpectedCallException;
 import org.apache.isis.viewer.dnd.drawing.Background;
@@ -145,7 +145,7 @@ public class TestToolkit extends Toolkit {
 
             public void showInOverlay(Content content, Location location) {}
 
-            public void showDebugFrame(DebugInfo[] info, Location at) {}
+            public void showDebugFrame(DebuggableWithTitle[] info, Location at) {}
             
             public Size getOverlaySize() {
                 return null;

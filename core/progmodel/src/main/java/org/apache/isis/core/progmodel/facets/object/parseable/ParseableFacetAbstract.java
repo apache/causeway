@@ -21,14 +21,14 @@
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
 import org.apache.isis.applib.adapters.Parser;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
+import org.apache.isis.core.progmodel.facets.ClassUtil;
 
 
 public abstract class ParseableFacetAbstract extends FacetAbstract implements ParseableFacet {

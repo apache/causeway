@@ -38,11 +38,11 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.IsisException;
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
@@ -370,7 +370,7 @@ public class Dispatcher {
                     for (Iterator actions = element.elementIterator("action"); actions.hasNext();) {
                         Element action = (Element) actions.next();
                         String className = action.getText();
-                        Action instance = (Action) InstanceFactory.createInstance(className);
+                        Action instance = (Action) InstanceUtil.createInstance(className);
                         addAction(instance);
                     }
                 }
@@ -379,7 +379,7 @@ public class Dispatcher {
                     for (Iterator processors = element.elementIterator("processor"); processors.hasNext();) {
                         Element processor = (Element) processors.next();
                         String className = processor.getText();
-                        ElementProcessor instance = (ElementProcessor) InstanceFactory.createInstance(className);
+                        ElementProcessor instance = (ElementProcessor) InstanceUtil.createInstance(className);
                         this.processors.addElementProcessor(instance);
                     }
                 }

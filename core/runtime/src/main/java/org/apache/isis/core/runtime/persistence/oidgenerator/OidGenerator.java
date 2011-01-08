@@ -22,18 +22,18 @@ package org.apache.isis.core.runtime.persistence.oidgenerator;
 
 import org.apache.isis.core.commons.components.Injectable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
+import org.apache.isis.core.commons.encoding.Encodable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.OidStringifier;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.DirectlyStringableOid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.hex.OidStringifierHex;
-import org.apache.isis.core.metamodel.encoding.Encodable;
 import org.apache.isis.core.runtime.persistence.adaptermanager.AdapterManager;
 import org.apache.isis.core.runtime.persistence.oidgenerator.simple.SerialOid;
 
 
-public interface OidGenerator extends DebugInfo, SessionScopedComponent, Injectable {
+public interface OidGenerator extends DebuggableWithTitle, SessionScopedComponent, Injectable {
 
 
     /**

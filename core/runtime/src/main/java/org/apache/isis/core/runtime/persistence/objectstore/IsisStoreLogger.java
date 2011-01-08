@@ -22,11 +22,11 @@ package org.apache.isis.core.runtime.persistence.objectstore;
 
 import java.util.List;
 
+import org.apache.isis.core.commons.config.IsisConfigurationException;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.factory.InstanceCreationException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.config.ConfigurationException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.runtime.logging.Logger;
@@ -117,7 +117,7 @@ public class IsisStoreLogger extends Logger implements ObjectStore {
         return isInitialized;
     }
 
-    public void open() throws ConfigurationException, InstanceCreationException, ObjectPersistenceException {
+    public void open() throws IsisConfigurationException, InstanceCreationException, ObjectPersistenceException {
         log("Opening " + name());
         decorated.open();
     }

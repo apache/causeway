@@ -19,8 +19,8 @@
 
 package org.apache.isis.alternatives.objectstore.xml.internal.data.xml;
 
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.IsisConfiguration;
 
 public class XmlFileUtil {
 

@@ -21,9 +21,9 @@
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
-import org.apache.isis.core.commons.lang.ClassUtil;
+import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 
 
@@ -42,9 +42,9 @@ public final class ValueSemanticsProviderUtil {
 
     @SuppressWarnings("unchecked")
 	public static Class<? extends ValueSemanticsProvider<?>> valueSemanticsProviderOrNull(final Class<?> candidateClass, final String classCandidateName) {
-        final Class clazz = candidateClass != null ? ClassUtil.implementingClassOrNull(candidateClass.getName(),
+        final Class clazz = candidateClass != null ? JavaClassUtils.implementingClassOrNull(candidateClass.getName(),
                 ValueSemanticsProvider.class, FacetHolder.class) : null;
-        return clazz != null ? clazz : ClassUtil.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
+        return clazz != null ? clazz : JavaClassUtils.implementingClassOrNull(classCandidateName, ValueSemanticsProvider.class, FacetHolder.class);
     }
 
 }

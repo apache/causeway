@@ -28,7 +28,7 @@ import java.util.Vector;
 
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.debug.DebugString;
-import org.apache.isis.core.commons.factory.InstanceFactory;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -76,7 +76,7 @@ public class SkylarkViewFactory implements GlobalViewFactory {
     
     public void addSpecification(String specClassName) {
             ViewSpecification spec;
-            spec = (ViewSpecification) InstanceFactory.createInstance(specClassName);
+            spec = (ViewSpecification) InstanceUtil.createInstance(specClassName);
             LOG.info("adding view specification: " + spec);
             addSpecification(spec);
     }

@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.annotation.Encodable;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
@@ -34,15 +34,15 @@ import org.apache.isis.core.progmodel.facets.object.encodeable.EncoderDecoderUti
 public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
     private EncodableAnnotationFacetFactory facetFactory;
-    private PropertiesConfiguration propertiesConfiguration;
+    private IsisConfigurationDefault isisConfigurationDefault;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         facetFactory = new EncodableAnnotationFacetFactory();
-        propertiesConfiguration = new PropertiesConfiguration();
-        facetFactory.setIsisConfiguration(propertiesConfiguration);
+        isisConfigurationDefault = new IsisConfigurationDefault();
+        facetFactory.setIsisConfiguration(isisConfigurationDefault);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testEncoderDecoderNameCanBePickedUpFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.encodable.EncodableFacetFactoryTest$MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className)
+        isisConfigurationDefault.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className)
             + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
         facetFactory
             .process(MyEncodableWithEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
@@ -221,7 +221,7 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testNonAnnotatedEncodeableCanPickUpEncoderDecoderFromConfiguration() {
         final String className =
             "org.apache.isis.core.progmodel.facets.object.encodable.EncodableFacetFactoryTest$NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration";
-        propertiesConfiguration.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className)
+        isisConfigurationDefault.add(EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_PREFIX + canonical(className)
             + EncoderDecoderUtil.ENCODER_DECODER_NAME_KEY_SUFFIX, className);
         facetFactory.process(NonAnnotatedEncodeableEncoderDecoderSpecifiedUsingConfiguration.class, methodRemover,
             facetHolder);

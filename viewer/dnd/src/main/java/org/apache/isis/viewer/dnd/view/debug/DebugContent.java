@@ -20,13 +20,13 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;
 
 
-public class DebugContent implements DebugInfo {
+public class DebugContent implements DebuggableWithTitle {
     private final View view;
 
     public DebugContent(final View display) {

@@ -28,7 +28,7 @@ import org.jmock.Mockery;
 import org.jmock.integration.junit4.JUnit4Mockery;
 import org.jmock.lib.legacy.ClassImposteriser;
 
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
@@ -50,7 +50,7 @@ import org.apache.isis.defaults.progmodel.JavaReflectorInstaller;
  */
 public class TestProxySystemII {
     
-    private PropertiesConfiguration configuration;
+    private IsisConfigurationDefault configuration;
     private List<Object> servicesList;
     private Mockery mockery = new JUnit4Mockery(){{
         setImposteriser(ClassImposteriser.INSTANCE);
@@ -77,7 +77,7 @@ public class TestProxySystemII {
             }
         });
 
-        configuration = new PropertiesConfiguration();
+        configuration = new IsisConfigurationDefault();
 
         SpecificationLoader mockSpecificationLoader;
         JavaReflectorInstaller javaReflectorInstaller = new JavaReflectorInstaller();
@@ -109,7 +109,7 @@ public class TestProxySystemII {
         context.openSessionInstance(new SimpleSession("tester", new String[0], "001"));
     }
     
-    public PropertiesConfiguration getConfiguration() {
+    public IsisConfigurationDefault getConfiguration() {
         return configuration;
     }
 

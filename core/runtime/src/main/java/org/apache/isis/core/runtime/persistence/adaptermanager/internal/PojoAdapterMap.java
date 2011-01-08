@@ -22,11 +22,11 @@ package org.apache.isis.core.runtime.persistence.adaptermanager.internal;
 
 import org.apache.isis.core.commons.components.Resettable;
 import org.apache.isis.core.commons.components.SessionScopedComponent;
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
-public interface PojoAdapterMap extends DebugInfo, Iterable<ObjectAdapter>, SessionScopedComponent, Resettable {
+public interface PojoAdapterMap extends DebuggableWithTitle, Iterable<ObjectAdapter>, SessionScopedComponent, Resettable {
 
     void add(Object pojo, ObjectAdapter adapter);
 

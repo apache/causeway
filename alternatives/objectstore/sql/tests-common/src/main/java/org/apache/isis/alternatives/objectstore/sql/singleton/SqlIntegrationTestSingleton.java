@@ -38,7 +38,7 @@ import org.apache.isis.alternatives.objectstore.sql.testsystem.SqlDataClassFacto
 import org.apache.isis.alternatives.objectstore.sql.testsystem.TestProxySystemIII;
 import org.apache.isis.alternatives.objectstore.sql.testsystem.dataclasses.SimpleClass;
 import org.apache.isis.alternatives.objectstore.sql.testsystem.dataclasses.SqlDataClass;
-import org.apache.isis.core.metamodel.config.internal.PropertiesConfiguration;
+import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 
 /**
  * @author Kevin
@@ -73,7 +73,7 @@ public class SqlIntegrationTestSingleton {
 	}
 	
 	public void initNOF(Properties properties) throws  SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-		PropertiesConfiguration configuration = new PropertiesConfiguration();
+		IsisConfigurationDefault configuration = new IsisConfigurationDefault();
 		configuration.add(properties);
         persistorName = configuration.getString("isis.persistence");
         
@@ -94,8 +94,8 @@ public class SqlIntegrationTestSingleton {
 	private SqlDataClass sqlDataClass;
     
 	@SuppressWarnings("unchecked")
-	private void resetPersistorState(PropertiesConfiguration PropertiesConfiguration) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
-		String jdbcClassName = PropertiesConfiguration.getString("isis.persistence.sql.jdbc.driver");
+	private void resetPersistorState(IsisConfigurationDefault IsisConfigurationDefault) throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException{
+		String jdbcClassName = IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.driver");
 		if (jdbcClassName == null){
 			c = null;
 			s = null;
@@ -107,9 +107,9 @@ public class SqlIntegrationTestSingleton {
 		
         // jdbc - connect to DB and drop tables.
     	c = DriverManager.getConnection(
-	    		PropertiesConfiguration.getString("isis.persistence.sql.jdbc.connection"),
-                PropertiesConfiguration.getString("isis.persistence.sql.jdbc.user"), 
-                PropertiesConfiguration.getString("isis.persistence.sql.jdbc.password"));
+	    		IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.connection"),
+                IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.user"), 
+                IsisConfigurationDefault.getString("isis.persistence.sql.jdbc.password"));
 		s = c.createStatement();
 			
 	    dropTable("no_services");

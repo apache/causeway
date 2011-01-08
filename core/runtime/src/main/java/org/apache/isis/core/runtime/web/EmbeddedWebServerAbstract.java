@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.apache.isis.core.metamodel.config.IsisConfiguration;
+
+import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.runtime.context.IsisContext;
 
 

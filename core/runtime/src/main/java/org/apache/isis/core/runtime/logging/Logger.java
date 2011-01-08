@@ -22,7 +22,7 @@ package org.apache.isis.core.runtime.logging;
 
 import org.apache.log4j.Level;
 
-import org.apache.isis.core.metamodel.config.ConfigurationConstants;
+import org.apache.isis.core.commons.config.ConfigurationConstants;
 
 public abstract class Logger {
     public static final String PROPERTY_ROOT = ConfigurationConstants.ROOT + "logging.";

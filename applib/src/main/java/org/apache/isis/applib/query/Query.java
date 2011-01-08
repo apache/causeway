@@ -22,7 +22,7 @@ package org.apache.isis.applib.query;
 import java.io.Serializable;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.applib.Filter;
+import org.apache.isis.applib.filter.Filter;
 
 /**
  * For use by repository implementations, representing the values of a query.

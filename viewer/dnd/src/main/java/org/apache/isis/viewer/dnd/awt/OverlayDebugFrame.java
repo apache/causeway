@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.awt;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.base.AbstractView;
 import org.apache.isis.viewer.dnd.view.content.NullContent;
@@ -37,10 +37,10 @@ public class OverlayDebugFrame extends DebugFrame {
     }
 
     @Override
-    protected DebugInfo[] getInfo() {
+    protected DebuggableWithTitle[] getInfo() {
         final View overlay = viewer.getOverlayView();
         final DebugView debugView = new DebugView(overlay == null ? new EmptyView() : overlay);
-        return new DebugInfo[] { debugView };
+        return new DebuggableWithTitle[] { debugView };
     }
 
     class EmptyView extends AbstractView {

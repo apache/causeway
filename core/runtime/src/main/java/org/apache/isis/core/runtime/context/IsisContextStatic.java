@@ -20,11 +20,11 @@
 
 package org.apache.isis.core.runtime.context;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.applib.maybe.Maybe;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.commons.exceptions.NotYetImplementedException;
-import org.apache.isis.core.commons.lang.Maybe;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
 import org.apache.isis.core.runtime.session.IsisSession;
 import org.apache.isis.core.runtime.session.IsisSessionFactory;
 import org.apache.isis.core.runtime.system.DeploymentType;
@@ -131,8 +131,8 @@ public class IsisContextStatic extends IsisContext {
     }
 
     private void debug(final DebugString debug, final Object object) {
-        if (object instanceof DebugInfo) {
-            final DebugInfo d = (DebugInfo) object;
+        if (object instanceof DebuggableWithTitle) {
+            final DebuggableWithTitle d = (DebuggableWithTitle) object;
             debug.appendTitle(d.debugTitle());
             d.debugData(debug);
         } else {

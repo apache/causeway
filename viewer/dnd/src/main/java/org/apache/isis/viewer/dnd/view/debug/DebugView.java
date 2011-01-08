@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.view.debug;
 
-import org.apache.isis.core.commons.debug.DebugInfo;
+import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -33,7 +33,7 @@ import org.apache.isis.viewer.dnd.view.View;
 import org.apache.isis.viewer.dnd.view.collection.CollectionContent;
 
 
-public class DebugView implements DebugInfo {
+public class DebugView implements DebuggableWithTitle {
     private final View view;
 
     public DebugView(final View display) {

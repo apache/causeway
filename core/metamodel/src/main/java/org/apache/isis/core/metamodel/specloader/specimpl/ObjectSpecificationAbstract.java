@@ -31,13 +31,13 @@ import com.google.common.collect.Lists;
 import com.google.inject.internal.Maps;
 
 import org.apache.isis.applib.Identifier;
-import org.apache.isis.core.commons.filters.Filter;
+import org.apache.isis.applib.filter.Filter;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ServicesProvider;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
@@ -75,7 +75,6 @@ import org.apache.isis.core.metamodel.spec.ObjectSpecificationException;
 import org.apache.isis.core.metamodel.spec.Persistability;
 import org.apache.isis.core.metamodel.spec.SpecificationContext;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.metamodel.spec.ObjectSpecification.CreationMode;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
 import org.apache.isis.core.metamodel.spec.feature.ObjectActionParameter;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
@@ -193,6 +192,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * <p>
      * Not API, but <tt>public</tt> so that {@link FacetedMethodsBuilder} can call it.
      */
+    @Override
     public Class<?> getCorrespondingClass() {
         return correspondingClass;
     }
@@ -639,6 +639,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     // getObjectAction, getAction, getActions
     // //////////////////////////////////////////////////////////////////////
 
+    @Override
     public List<ObjectAction> getObjectActionsAll() {
         return Collections.unmodifiableList(objectActions);
     }

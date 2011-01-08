@@ -23,8 +23,8 @@ package org.apache.isis.alternatives.remoting.common.exchange;
 import java.util.UUID;
 
 import org.apache.isis.alternatives.remoting.common.facade.ServerFacade;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
-import org.apache.isis.core.metamodel.encoding.Encodable;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.encoding.Encodable;
 
 public interface Request extends Encodable {
 

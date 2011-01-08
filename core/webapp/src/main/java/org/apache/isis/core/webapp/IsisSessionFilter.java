@@ -31,8 +31,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.isis.core.commons.factory.InstanceFactory;
-import org.apache.isis.core.metamodel.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.factory.InstanceUtil;
 import org.apache.isis.core.runtime.authentication.AuthenticationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.webapp.auth.AuthenticationSessionLookupStrategy;
@@ -75,7 +75,7 @@ public class IsisSessionFilter implements Filter {
         if (authLookupStrategyClassName == null) {
             authLookupStrategyClassName = AUTHENTICATION_SESSION_LOOKUP_STRATEGY_DEFAULT;
         }
-        authSessionLookupStrategy = (AuthenticationSessionLookupStrategy) InstanceFactory
+        authSessionLookupStrategy = (AuthenticationSessionLookupStrategy) InstanceUtil
                 .createInstance(authLookupStrategyClassName);
     }
 
