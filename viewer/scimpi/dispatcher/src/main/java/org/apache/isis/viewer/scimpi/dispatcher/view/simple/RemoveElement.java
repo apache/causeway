@@ -82,33 +82,41 @@ public class RemoveElement extends AbstractElementProcessor {
         }
         IsisContext.getPersistenceSession().resolveField(adapter, field);
 
-        if (valid(request, adapter)) {
-            String classSegment = " class=\"" + cssClass + "\"";
-
-            String objectId = request.getContext().mapObject(adapter, Scope.INTERACTION);
-            String elementId = request.getContext().mapObject(element, Scope.INTERACTION);
-            String action = RemoveAction.ACTION + Dispatcher.COMMAND_ROOT;
-            request.appendHtml("<form" + classSegment + " method=\"post\" action=\"" + action + "\" >");
-            request.appendHtml("<input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + objectId + "\" />");
-            request.appendHtml("<input type=\"hidden\" name=\"" + FIELD + "\" value=\"" + fieldName + "\" />");
-            request.appendHtml("<input type=\"hidden\" name=\"" + ELEMENT + "\" value=\"" + elementId + "\" />");
-            if (resultOverride != null) {
-                request.appendHtml("<input type=\"hidden\" name=\"" + RESULT_OVERRIDE + "\" value=\"" + resultOverride + "\" />");
-            }
-            request.appendHtml("<input type=\"hidden\" name=\"" + VIEW + "\" value=\"" + view + "\" />");
-            request.appendHtml("<input type=\"hidden\" name=\"" + ERRORS + "\" value=\"" + error + "\" />");
-            request.appendHtml(request.getContext().interactionFields());
-            request.appendHtml("<input class=\"button\" type=\"submit\" value=\"" + title + "\" />");
-            request.appendHtml("</form>");
-        } 
+        if (field.isUsable(IsisContext.getAuthenticationSession(), adapter).isAllowed()) {
+            if (valid(request, adapter)) {
+                String classSegment = " class=\"" + cssClass + "\"";
+    
+                String objectId = request.getContext().mapObject(adapter, Scope.INTERACTION);
+                String elementId = request.getContext().mapObject(element, Scope.INTERACTION);
+                String action = RemoveAction.ACTION + Dispatcher.COMMAND_ROOT;
+                request.appendHtml("<form" + classSegment + " method=\"post\" action=\"" + action + "\" >");
+                request.appendHtml("<input type=\"hidden\" name=\"" + OBJECT + "\" value=\"" + objectId + "\" />");
+                request.appendHtml("<input type=\"hidden\" name=\"" + FIELD + "\" value=\"" + fieldName + "\" />");
+                request.appendHtml("<input type=\"hidden\" name=\"" + ELEMENT + "\" value=\"" + elementId + "\" />");
+                if (resultOverride != null) {
+                    request.appendHtml("<input type=\"hidden\" name=\"" + RESULT_OVERRIDE + "\" value=\"" + resultOverride + "\" />");
+                }
+                request.appendHtml("<input type=\"hidden\" name=\"" + VIEW + "\" value=\"" + view + "\" />");
+                request.appendHtml("<input type=\"hidden\" name=\"" + ERRORS + "\" value=\"" + error + "\" />");
+                request.appendHtml(request.getContext().interactionFields());
+                request.appendHtml("<input class=\"button\" type=\"submit\" value=\"" + title + "\" />");
+                request.appendHtml("</form>");
+            } 
+        }
     }
     
     private static boolean valid(Request request, ObjectAdapter adapter) {
+        // TODO is this check valid/necessary?
+        
         // TODO check is valid to remove element
         AuthenticationSession session = IsisContext.getAuthenticationSession();
         Filter<ObjectAssociation> filter = ObjectAssociationFilters.dynamicallyVisible(session, adapter);
         List<ObjectAssociation> visibleFields = adapter.getSpecification().getAssociations(filter);
-        return visibleFields.size() > 0;
+        if (visibleFields.size() == 0) {
+            return false;
+        }
+        
+        return true;
     }
 }
 
