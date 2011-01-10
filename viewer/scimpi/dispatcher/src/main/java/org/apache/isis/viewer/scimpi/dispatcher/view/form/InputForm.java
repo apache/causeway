@@ -153,7 +153,7 @@ public class InputForm {
         String entryText = field.getValue();
         String valueSegment = entryText != null && entryText.toLowerCase().equals("true") ? " checked=\"checked\"" : "";
         String disabled = field.isEditable() ? "" : " disabled=\"disabled\"";
-        return "<input type=\"checkbox\" name=\"" + field.getName() + "\"" + valueSegment + disabled + " />";
+        return "<input type=\"checkbox\" name=\"" + field.getName() + "\" value=\"true\" " + valueSegment + disabled + " />";
     }
 
     private static String createOptions(InputField field) {
