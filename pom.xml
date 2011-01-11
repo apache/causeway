@@ -1468,6 +1468,37 @@
                 <module>release</module>
             </modules>
         </profile>
+
+        <!--
+        overrides inherited configuration to allow regular
+        deploy plugin to work to snapshot repo.
+
+        Use:
+        -D deploy=snapshot -D modules=standard -D distMgmtSnapshotsUrl=... 
+
+        where the last property is the repo URL to deploy to
+        -->
+        <profile>
+            <id>deploy-snapshot</id>
+            <activation>
+                <property>
+                    <name>deploy</name>
+                    <value>snapshot</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                  <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <inherited>true</inherited>
+                    <configuration>
+                      <skip>false</skip>
+                    </configuration>
+                  </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 </project>
