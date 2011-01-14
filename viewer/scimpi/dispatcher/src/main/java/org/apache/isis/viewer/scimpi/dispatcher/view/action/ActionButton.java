@@ -161,7 +161,7 @@ public class ActionButton extends AbstractElementProcessor {
         request.appendHtml(request.getContext().interactionFields());
         request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" title=\"" 
                 + action.getDescription() + "\" />");
-        HelpLink.append(request, action.getHelp(), action.getDescription());
+        HelpLink.append(request, action.getDescription(), action.getHelp());
         request.appendHtml("\n</form>\n");
     }
 

@@ -77,7 +77,7 @@ public class InputForm {
         Errors.append(request, null);
         
         request.appendHtml("  <input class=\"button\" type=\"submit\" value=\"" + buttonTitle + "\" name=\"execute\" />\n");
-        HelpLink.append(request, helpReference, description);
+        HelpLink.append(request, description, helpReference);
         // TODO reinstate fieldsets when we can specify them
         //request.appendHtml("</fieldset>\n");
         request.appendHtml("</form>\n");

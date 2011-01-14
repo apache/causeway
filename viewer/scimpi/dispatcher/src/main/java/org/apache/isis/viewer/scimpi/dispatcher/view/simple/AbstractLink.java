@@ -55,10 +55,12 @@ public abstract class AbstractLink extends AbstractElementProcessor {
             }
             IsisContext.getPersistenceSession().resolveField(adapter, field);
             adapter = field.get(adapter);
-            objectId = context.mapObject(adapter, Scope.INTERACTION);
+            if (adapter != null) {
+                objectId = context.mapObject(adapter, Scope.INTERACTION);
+            }
         }
         
-        if (valid(request, adapter)) {
+        if (adapter != null && valid(request, adapter)) {
             String variable = request.getOptionalProperty("param-name", RequestContext.RESULT);
             String variableSegment = variable + "=" + objectId;
 

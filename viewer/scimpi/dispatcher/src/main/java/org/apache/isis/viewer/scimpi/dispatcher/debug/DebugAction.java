@@ -188,7 +188,7 @@ public class DebugAction implements Action {
         
         for (int i = 0; i < fields.size(); i++) {
             ObjectAssociation field = fields.get(i);
-            view.divider("<span id=\"" + field.getId() + "\">Field: " + field.getName() + "</span>");
+            view.divider("<span id=\"" + field.getId() + "\"><em>Field:</em> " + field.getId() + "</span>");
             view.appendRow("ID", field.getIdentifier());
             view.appendRow("Short ID", field.getId());
             view.appendRow("Name", field.getName());
@@ -203,7 +203,7 @@ public class DebugAction implements Action {
         
         for (int i = 0; i < userActions.size(); i++) {
             final ObjectAction action = userActions.get(i);
-            view.divider("<span id=\"" + action.getId() + "\">Action: " + action.getName() + "</span>");
+            view.divider("<span id=\"" + action.getId() + "\"><em>Action:</em> " + action.getId() + "</span>");
             view.appendRow("ID", action.getIdentifier());
             view.appendRow("Short ID", action.getId());
             view.appendRow("Name", action.getName());
@@ -250,7 +250,7 @@ public class DebugAction implements Action {
             buffer.append("none");
         } else {
             for (int i = 0; i < members.size(); i++) {
-                buffer.append("<a href=\"#" + members.get(i).getId() + "\">" + members.get(i).getName() + "</a><br>");
+                buffer.append("<a href=\"#" + members.get(i).getId() + "\">" + members.get(i).getId() + "</a><br>");
             }
         }
         view.appendRow(label, buffer.toString());

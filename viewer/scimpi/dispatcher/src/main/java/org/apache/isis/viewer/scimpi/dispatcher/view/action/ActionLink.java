@@ -96,7 +96,7 @@ public class ActionLink extends AbstractElementProcessor {
                 + forwardResultSegment + forwardVoidSegment + resultNameSegment + parameterSegment + scopeSegment + confirmSegment + interactionParamters + "\">");
         request.appendHtml(text);
         request.appendHtml("</a>");
-        HelpLink.append(request, action.getHelp(), action.getDescription());
+        HelpLink.append(request, action.getDescription(), action.getHelp());
     }
 
     public String getName() {

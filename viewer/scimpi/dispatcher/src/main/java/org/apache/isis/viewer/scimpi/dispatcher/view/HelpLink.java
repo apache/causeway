@@ -22,7 +22,7 @@ import org.apache.isis.viewer.scimpi.dispatcher.processor.Request;
 
 public class HelpLink {
 
-    public static void append(Request request, String helpReference, String description) {
+    public static void append(Request request, String description, String helpReference) {
         request.appendHtml(createHelpSegment(description, helpReference));
     }
 

@@ -79,7 +79,8 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             LinkedObject[] linkFields, String classString, String title, String oddRowClass, String evenRowClass) {
         request.appendHtml("<div" + classString + ">");
         if (title != null) {
-            request.appendHtml("<div class=\"title\">" + title+ "</div>");            
+            request.appendHtml("<div class=\"title\">" + title+ "</div>");
+            HelpLink.append(request, object.getSpecification().getDescription(), object.getSpecification().getHelp());
         }
         int row = 1;
         for (int i = 0; i < fields.size(); i++) {
@@ -101,7 +102,7 @@ public abstract class AbstractFormView extends AbstractObjectProcessor {
             request.appendHtml("<div " + cls + description + "><span class=\"label\">" + field.getName() + ":</span>");
             LinkedObject linkedObject = linkFields[i];
             addField(request, object, field, linkedObject);
-            HelpLink.append(request,field.getHelp(), field.getDescription());
+            HelpLink.append(request, field.getDescription(), field.getHelp());
             request.appendHtml("</div>");
         }
         request.appendHtml("</div>");
