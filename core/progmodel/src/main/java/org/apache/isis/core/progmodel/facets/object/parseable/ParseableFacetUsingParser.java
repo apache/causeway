@@ -20,7 +20,10 @@
 
 package org.apache.isis.core.progmodel.facets.object.parseable;
 
+import java.util.IllegalFormatException;
+
 import org.apache.isis.applib.adapters.Parser;
+import org.apache.isis.applib.adapters.ParsingException;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
@@ -30,6 +33,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResultSet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
+import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
@@ -88,20 +92,28 @@ public class ParseableFacetUsingParser extends FacetAbstract implements Parseabl
 
         getDependencyInjector().injectDependenciesInto(parser);
 
-		final Object parsed = parser.parseTextEntry(context, entry);
-        if (parsed == null) {
-			return null;
-		}
-        
-        // check resultant object is also valid
-        // (eg pick up any validate() methods on it)
-		ObjectAdapter adapter = getAdapterMap().adapterFor(parsed);
-		ObjectSpecification specification = adapter.getSpecification();
-		ObjectValidityContext validateContext = 
-		    specification.createValidityInteractionContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
-		validate(validateContext);
-		
-		return adapter;
+        try {
+    		final Object parsed = parser.parseTextEntry(context, entry);
+            if (parsed == null) {
+    			return null;
+    		}
+            
+            // check resultant object is also valid
+            // (eg pick up any validate() methods on it)
+            ObjectAdapter adapter = getAdapterMap().adapterFor(parsed);
+            ObjectSpecification specification = adapter.getSpecification();
+            ObjectValidityContext validateContext = 
+                specification.createValidityInteractionContext(getAuthenticationSessionProvider().getAuthenticationSession(), InteractionInvocationMethod.BY_USER, adapter);
+            validate(validateContext);
+            
+            return adapter;
+        } catch (NumberFormatException e) {
+            throw new TextEntryParseException(e.getMessage(), e);
+        } catch (IllegalFormatException e) {
+            throw new TextEntryParseException(e.getMessage(), e);
+        } catch (ParsingException e) {
+            throw new TextEntryParseException(e.getMessage(), e);
+        }
 	}
 
 	private void validate(ValidityContext<?> validityContext) {

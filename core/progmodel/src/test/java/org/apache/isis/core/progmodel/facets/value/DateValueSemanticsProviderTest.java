@@ -33,6 +33,7 @@ import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 
 @RunWith(JMock.class)
 public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {
@@ -136,6 +137,11 @@ public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstra
     public void testParseEntryOfMonthsBeforeToToday() throws Exception {
         final Date parsed = adapter.parseTextEntry(null, "-4m");
         assertEquals(new Date(2003, 4, 17), parsed);
+    }
+
+    @Test(expected=TextEntryParseException.class)
+    public void illegalEntry() throws Exception {
+        adapter.parseTextEntry(null, "xxx");
     }
 
     @Test
