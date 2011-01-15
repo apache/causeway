@@ -231,6 +231,10 @@ public class TestProxySpecification extends FacetHolderImpl implements ObjectSpe
     public String getDescription() {
         return getSingularName();
     }
+    
+    public String getHelp() {
+        return null;
+    }
 
     @Override
     public String getTitle(final ObjectAdapter adapter) {

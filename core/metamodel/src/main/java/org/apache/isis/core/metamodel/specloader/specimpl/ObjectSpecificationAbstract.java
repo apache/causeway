@@ -46,6 +46,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
@@ -142,6 +143,7 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
      * Expect to be populated using {@link #setDescribedAs(String)} but has default name as well.
      */
     private String describedAs = "(no description)";
+    private String help = null; /* help is typically a reference (eg a URL) and so should not default to a textual value if not set up */ 
 
     private Persistability persistability = Persistability.USER_PERSISTABLE;
 
@@ -317,6 +319,9 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
 
         final DescribedAsFacet describedAsFacet = getFacet(DescribedAsFacet.class);
         describedAs = describedAsFacet.value();
+        
+        final HelpFacet helpFacet = getFacet(HelpFacet.class);
+        help = helpFacet == null ? null : helpFacet.value();
 
         Persistability persistability = determinePersistability();
         this.persistability = persistability;
@@ -436,6 +441,10 @@ public abstract class ObjectSpecificationAbstract extends FacetHolderImpl implem
     @Override
     public String getDescription() {
         return describedAs == null ? "" : describedAs;
+    }
+    
+    public String getHelp() {
+        return help;
     }
 
     @Override

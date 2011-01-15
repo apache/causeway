@@ -211,6 +211,10 @@ public class TestSpecification extends FacetHolderNoop implements ObjectSpecific
     public String getDescription() {
         return getSingularName();
     }
+    
+    public String getHelp() {
+        return null;
+    }
 
     @Override
     public String getTitle(final ObjectAdapter adapter) {

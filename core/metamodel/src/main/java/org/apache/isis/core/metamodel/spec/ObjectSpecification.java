@@ -33,6 +33,7 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
@@ -138,7 +139,16 @@ public interface ObjectSpecification extends Specification, ObjectActionContaine
      */
     @Override
     String getDescription();
-
+    
+    /**
+     * Returns a help string or lookup reference, if any, of the specification.
+     * 
+     * <p>
+     * Corresponds to the {@link HelpFacet#value()) value} of {@link HelpFacet}; 
+     * is not necessarily immutable. 
+     */
+    String getHelp();
+    
     /**
      * Returns the title string for the specified object.
      * 
