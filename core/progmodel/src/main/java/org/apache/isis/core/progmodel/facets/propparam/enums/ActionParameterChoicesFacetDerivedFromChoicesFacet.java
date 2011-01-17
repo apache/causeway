@@ -25,7 +25,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.progmodel.facets.actions.choices.ActionParameterChoicesFacetAbstract;
+import org.apache.isis.core.progmodel.facets.param.choices.ActionParameterChoicesFacetAbstract;
 
 public class ActionParameterChoicesFacetDerivedFromChoicesFacet extends ActionParameterChoicesFacetAbstract {
 

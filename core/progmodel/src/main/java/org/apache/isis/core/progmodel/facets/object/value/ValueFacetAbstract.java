@@ -33,12 +33,12 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.progmodel.facets.ClassUtil;
-import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
-import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsingEncoderDecoder;
+import org.apache.isis.core.progmodel.facets.defaults.DefaultedFacetUsingDefaultsProvider;
+import org.apache.isis.core.progmodel.facets.encodeable.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacetUsingParser;
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
-import org.apache.isis.core.progmodel.facets.propparam.typicallength.TypicalLengthFacetUsingParser;
+import org.apache.isis.core.progmodel.facets.propparam.typicallength.parser.TypicalLengthFacetUsingParser;
+import org.apache.isis.core.progmodel.util.ClassUtil;
 
 
 public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract implements ValueFacet {

@@ -26,8 +26,9 @@ import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.FallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
@@ -39,7 +40,7 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
     private static final String[] PREFIXES = { TO_STRING, TITLE, };
 
     public TitleMethodFacetFactory() {
-        super(PREFIXES, FeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY, PREFIXES);
     }
 
     /**
@@ -47,28 +48,31 @@ public class TitleMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstra
      * instead.
      */
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder facetHolder) {
+    public void process(ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
 
-        Method method = findMethod(type, OBJECT, TITLE, String.class, null);
+
+        Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TITLE, String.class, null);
         if (method != null) {
-            methodRemover.removeMethod(method);
-            return FacetUtil.addFacet(new TitleFacetViaTitleMethod(method, facetHolder));
+            processClassContext.removeMethod(method);
+            FacetUtil.addFacet(new TitleFacetViaTitleMethod(method, facetHolder));
+            return;
         }
 
         try {
-            method = findMethod(type, OBJECT, TO_STRING, String.class, null);
+            method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, TO_STRING, String.class, null);
             if (method == null) {
-                return false;
+                return;
             }
             if (JavaClassUtils.isJavaClass(method.getDeclaringClass())) {
-                return false;
+                return;
             }
-            methodRemover.removeMethod(method);
+            processClassContext.removeMethod(method);
             FacetUtil.addFacet(new TitleFacetViaToStringMethod(method, facetHolder));
-            return false;
 
         } catch (final Exception e) {
-            return false;
+            return;
         }
     }
 }

@@ -25,7 +25,8 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
@@ -36,20 +37,18 @@ public class ValidateObjectViaValidateMethodFacetFactory extends MethodPrefixBas
     private static final String[] PREFIXES = { VALIDATE_PREFIX, };
 
     public ValidateObjectViaValidateMethodFacetFactory() {
-        super(PREFIXES, FeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY, PREFIXES);
     }
 
     @Override
-    public boolean process(
-    		final Class<?> type, 
-    		final MethodRemover methodRemover, 
-    		final FacetHolder facetHolder) {
-        final Method method = findMethod(type, OBJECT, VALIDATE_PREFIX, String.class, NO_PARAMETERS_TYPES);
+    public void process(ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+        
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, VALIDATE_PREFIX, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
-            methodRemover.removeMethod(method);
-            return FacetUtil.addFacet(new ValidateObjectFacetViaValidateMethod(method, facetHolder));
-        } else {
-            return false;
+            FacetUtil.addFacet(new ValidateObjectFacetViaValidateMethod(method, facetHolder));
+            processClassContext.removeMethod(method);
         }
     }
 }

@@ -20,11 +20,9 @@
 
 package org.apache.isis.core.progmodel.facets.object.validprops;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
 public class ObjectValidPropertiesFacetFactory extends FacetFactoryAbstract {
@@ -34,7 +32,7 @@ public class ObjectValidPropertiesFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
-        return FacetUtil.addFacet(new ObjectValidPropertiesFacetImpl(facetHolder));
+    public void process(ProcessClassContext processClassContaxt) {
+        FacetUtil.addFacet(new ObjectValidPropertiesFacetImpl(processClassContaxt.getFacetHolder()));
     }
 }

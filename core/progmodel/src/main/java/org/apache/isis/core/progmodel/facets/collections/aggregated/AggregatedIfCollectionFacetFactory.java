@@ -20,16 +20,14 @@
 
 package org.apache.isis.core.progmodel.facets.collections.aggregated;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
-import org.apache.isis.core.progmodel.facets.collections.CollectionFacetFactory;
+import org.apache.isis.core.progmodel.facets.collections.collection.CollectionFacetFactory;
 
 
 /**
@@ -45,11 +43,11 @@ public class AggregatedIfCollectionFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-        if (!holder.containsFacet(CollectionFacet.class)) {
-            return false;
+    public void process(ProcessClassContext processClassContaxt) {
+        if (!processClassContaxt.getFacetHolder().containsFacet(CollectionFacet.class)) {
+            return;
         }
-        return FacetUtil.addFacet(new AggregatedSinceCollection(holder));
+        FacetUtil.addFacet(new AggregatedSinceCollection(processClassContaxt.getFacetHolder()));
     }
 
 }

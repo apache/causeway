@@ -20,13 +20,11 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
-import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -40,19 +38,18 @@ public class ImmutableAnnotationFacetFactory extends AnnotationBasedFacetFactory
     }
 
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-        final Immutable annotation = getAnnotation(cls, Immutable.class);
-        return FacetUtil.addFacet(create(annotation, holder));
+    public void process(ProcessClassContext processClassContaxt) {
+        final Immutable annotation = getAnnotation(processClassContaxt.getCls(), Immutable.class);
+        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-    	ObjectSpecification spec = getSpecificationLookup().loadSpecification(method.getDeclaringClass());
+    public void process(ProcessMethodContext processMethodContext) {
+    	ObjectSpecification spec = getSpecificationLookup().loadSpecification(processMethodContext.getMethod().getDeclaringClass());
         final ImmutableFacet immutableFacet = spec.getFacet(ImmutableFacet.class);
         if (immutableFacet != null && !immutableFacet.isNoop()) {
-            return FacetUtil.addFacet(new DisabledFacetDerivedFromImmutable(immutableFacet, holder));
+            FacetUtil.addFacet(new DisabledFacetDerivedFromImmutable(immutableFacet, processMethodContext.getFacetHolder()));
         }
-        return false;
     }
 
     private ImmutableFacet create(final Immutable annotation, final FacetHolder holder) {

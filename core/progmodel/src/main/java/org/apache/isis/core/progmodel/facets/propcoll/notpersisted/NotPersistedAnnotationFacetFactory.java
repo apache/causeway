@@ -20,13 +20,11 @@
 
 package org.apache.isis.core.progmodel.facets.propcoll.notpersisted;
 
-import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 
@@ -38,9 +36,9 @@ public class NotPersistedAnnotationFacetFactory extends AnnotationBasedFacetFact
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-        final NotPersisted annotation = getAnnotation(method, NotPersisted.class);
-        return FacetUtil.addFacet(create(annotation, holder));
+    public void process(ProcessMethodContext processMethodContext) {
+        final NotPersisted annotation = getAnnotation(processMethodContext.getMethod(), NotPersisted.class);
+        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private NotPersistedFacet create(final NotPersisted annotation, final FacetHolder holder) {

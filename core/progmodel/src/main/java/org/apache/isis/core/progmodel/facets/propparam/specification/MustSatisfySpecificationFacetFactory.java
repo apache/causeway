@@ -29,7 +29,6 @@ import org.apache.isis.applib.spec.Specification;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 
 public class MustSatisfySpecificationFacetFactory  extends AnnotationBasedFacetFactoryAbstract {
@@ -39,19 +38,17 @@ public class MustSatisfySpecificationFacetFactory  extends AnnotationBasedFacetF
     }
 
     @Override
-    public boolean process(Class<?> clazz, MethodRemover methodRemover,
-    		FacetHolder holder) {
-        return FacetUtil.addFacet(create(clazz, holder));
+    public void process(ProcessClassContext processClassContaxt) {
+        FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
 
     private MustSatisfySpecificationFacet create(Class<?> clazz, FacetHolder holder) {
         return create(getAnnotation(clazz, MustSatisfy.class), holder);
     }
 
-
     @Override
-    public boolean process(Class<?> cls, Method method, MethodRemover methodRemover, FacetHolder holder) {
-        return FacetUtil.addFacet(create(method, holder));
+    public void process(ProcessMethodContext processMethodContext) {
+        FacetUtil.addFacet(create(processMethodContext.getMethod(), processMethodContext.getFacetHolder()));
     }
 
     private MustSatisfySpecificationFacet create(Method method, FacetHolder holder) {
@@ -60,16 +57,16 @@ public class MustSatisfySpecificationFacetFactory  extends AnnotationBasedFacetF
 
 
     @Override
-    public boolean processParams(Method method, int paramNum, FacetHolder holder) {
-        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(method)[paramNum];
+    public void processParams(ProcessParameterContext processParameterContext) {
+        final java.lang.annotation.Annotation[] parameterAnnotations = getParameterAnnotations(processParameterContext.getMethod())[processParameterContext.getParamNum()];
 
         for (int j = 0; j < parameterAnnotations.length; j++) {
             if (parameterAnnotations[j] instanceof MustSatisfy) {
                 final MustSatisfy annotation = (MustSatisfy) parameterAnnotations[j];
-                return FacetUtil.addFacet(create(annotation, holder));
+                FacetUtil.addFacet(create(annotation, processParameterContext.getFacetHolder()));
+                return; 
             }
         }
-        return false;
     }
     
     private MustSatisfySpecificationFacet create(final MustSatisfy annotation, final FacetHolder holder) {

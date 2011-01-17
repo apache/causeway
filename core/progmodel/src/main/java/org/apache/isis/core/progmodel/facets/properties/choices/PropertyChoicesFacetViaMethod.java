@@ -32,7 +32,7 @@ import org.apache.isis.core.metamodel.facets.ChoicesUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.progmodel.facets.ArrayUtil;
+import org.apache.isis.core.progmodel.util.ArrayUtil;
 
 
 public class PropertyChoicesFacetViaMethod extends PropertyChoicesFacetAbstract implements ImperativeFacet {

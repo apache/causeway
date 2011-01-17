@@ -29,9 +29,9 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjectorAware;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.object.value.ValueFacetUsingSemanticsProvider;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
 

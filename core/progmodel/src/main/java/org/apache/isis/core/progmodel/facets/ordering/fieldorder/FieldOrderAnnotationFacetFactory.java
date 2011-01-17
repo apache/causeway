@@ -24,7 +24,6 @@ import org.apache.isis.applib.annotation.FieldOrder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.layout.ordermethod.FieldOrderFacet;
 
@@ -36,9 +35,9 @@ public class FieldOrderAnnotationFacetFactory extends AnnotationBasedFacetFactor
     }
 
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-        final FieldOrder annotation = getAnnotation(cls, FieldOrder.class);
-        return FacetUtil.addFacet(create(annotation, holder));
+    public void process(ProcessClassContext processClassContaxt) {
+        final FieldOrder annotation = getAnnotation(processClassContaxt.getCls(), FieldOrder.class);
+        FacetUtil.addFacet(create(annotation, processClassContaxt.getFacetHolder()));
     }
 
     private FieldOrderFacet create(final FieldOrder annotation, final FacetHolder holder) {

@@ -22,8 +22,8 @@ package org.apache.isis.core.progmodel.facets;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
@@ -35,9 +35,9 @@ public abstract class PropertyOrCollectionIdentifyingFacetFactoryAbstract extend
     private CollectionTypeRegistry collectionTypeRegistry;
 
     public PropertyOrCollectionIdentifyingFacetFactoryAbstract(
-            final String[] prefixes,
-            final List<FeatureType> featureTypes) {
-        super(prefixes, featureTypes);
+            final List<FeatureType> featureTypes,
+            final String... prefixes) {
+        super(featureTypes, prefixes);
     }
 
     protected boolean isCollectionOrArray(final Class<?> cls) {

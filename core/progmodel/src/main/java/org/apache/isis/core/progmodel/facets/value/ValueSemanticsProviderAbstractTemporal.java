@@ -40,6 +40,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
 import org.apache.isis.core.progmodel.facets.object.value.ValueSemanticsProviderContext;
+import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
 
 public abstract class ValueSemanticsProviderAbstractTemporal<T> extends ValueSemanticsProviderAndFacetAbstract<T> implements DateValueFacet {

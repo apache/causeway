@@ -20,17 +20,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
-import org.apache.isis.applib.marker.AlwaysImmutable;
-import org.apache.isis.applib.marker.ImmutableOncePersisted;
-import org.apache.isis.applib.marker.ImmutableUntilPersisted;
-import org.apache.isis.applib.marker.NeverImmutable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
 
 
 public class ImmutableMarkerInterfacesFacetFactory extends FacetFactoryAbstract {
@@ -40,18 +35,9 @@ public class ImmutableMarkerInterfacesFacetFactory extends FacetFactoryAbstract 
     }
 
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-        When when = null;
-        if (AlwaysImmutable.class.isAssignableFrom(cls)) {
-            when = When.ALWAYS;
-        } else if (ImmutableOncePersisted.class.isAssignableFrom(cls)) {
-            when = When.ONCE_PERSISTED;
-        } else if (ImmutableUntilPersisted.class.isAssignableFrom(cls)) {
-            when = When.UNTIL_PERSISTED;
-        } else if (NeverImmutable.class.isAssignableFrom(cls)) {
-            when = When.NEVER;
-        }
-        return FacetUtil.addFacet(create(when, holder));
+    public void process(ProcessClassContext processClassContaxt) {
+        When when = When.forCorrespondingMarkerSubType(processClassContaxt.getCls());
+        FacetUtil.addFacet(create(when, processClassContaxt.getFacetHolder()));
     }
 
     private ImmutableFacet create(final When when, final FacetHolder holder) {

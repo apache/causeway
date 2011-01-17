@@ -26,7 +26,8 @@ import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 
 
@@ -37,18 +38,19 @@ public class SingularMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbs
     private static final String[] PREFIXES = { SINGULAR_NAME, };
 
     public SingularMethodFacetFactory() {
-        super(PREFIXES, FeatureType.OBJECTS_ONLY);
+        super(FeatureType.OBJECTS_ONLY, PREFIXES);
     }
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder facetHolder) {
-        final Method method = findMethod(type, CLASS, SINGULAR_NAME, String.class, NO_PARAMETERS_TYPES);
+    public void process(ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+        final FacetHolder facetHolder = processClassContext.getFacetHolder();
+
+        final Method method = MethodFinderUtils.findMethod(cls, MethodScope.CLASS, SINGULAR_NAME, String.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             final String name = (String) InvokeUtils.invokeStatic(method);
-            methodRemover.removeMethod(method);
-            return FacetUtil.addFacet(new NamedFacetViaMethod(name, facetHolder));
-        } else {
-            return false;
+            processClassContext.removeMethod(method);
+            FacetUtil.addFacet(new NamedFacetViaMethod(name, facetHolder));
         }
     }
 }

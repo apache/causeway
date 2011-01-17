@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.progmodel.facets.ClassUtil;
+import org.apache.isis.core.progmodel.util.ClassUtil;
 
 
 public abstract class ParseableFacetAbstract extends FacetAbstract implements ParseableFacet {

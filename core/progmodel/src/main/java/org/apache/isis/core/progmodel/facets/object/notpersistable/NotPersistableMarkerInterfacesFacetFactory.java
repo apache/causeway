@@ -22,15 +22,12 @@ package org.apache.isis.core.progmodel.facets.object.notpersistable;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.applib.marker.NonPersistable;
-import org.apache.isis.applib.marker.ProgramPersistable;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.InitiatedBy;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
 
 
 public class NotPersistableMarkerInterfacesFacetFactory extends FacetFactoryAbstract {
@@ -44,14 +41,9 @@ public class NotPersistableMarkerInterfacesFacetFactory extends FacetFactoryAbst
     }
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        InitiatedBy initiatedBy = null;
-        if (ProgramPersistable.class.isAssignableFrom(type)) {
-            initiatedBy = InitiatedBy.USER;
-        } else if (NonPersistable.class.isAssignableFrom(type)) {
-            initiatedBy = InitiatedBy.USER_OR_PROGRAM;
-        }
-        return FacetUtil.addFacet(create(initiatedBy, holder));
+    public void process(ProcessClassContext processClassContaxt) {
+        InitiatedBy initiatedBy = InitiatedBy.forCorrespondingMarkerSubType(processClassContaxt.getCls());
+        FacetUtil.addFacet(create(initiatedBy, processClassContaxt.getFacetHolder()));
     }
 
     private NotPersistableFacet create(final InitiatedBy initiatedBy, final FacetHolder holder) {

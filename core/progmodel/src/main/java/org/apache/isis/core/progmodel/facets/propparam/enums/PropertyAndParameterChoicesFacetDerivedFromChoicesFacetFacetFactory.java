@@ -20,15 +20,12 @@
 
 package org.apache.isis.core.progmodel.facets.propparam.enums;
 
-import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory extends
     FacetFactoryAbstract implements AdapterMapAware {
@@ -40,29 +37,26 @@ public class PropertyAndParameterChoicesFacetDerivedFromChoicesFacetFacetFactory
     }
 
     @Override
-    public boolean process(Class<?> cls, Method method,
-            MethodRemover methodRemover, FacetHolder holder) {
+    public void process(ProcessMethodContext processMethodContext) {
 
-        Class<?> returnType = method.getReturnType();
+        Class<?> returnType = processMethodContext.getMethod().getReturnType();
         
         if (!returnType.isEnum()) {
-            return false;
+            return;
         }
         
-        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(holder, getSpecificationLookup()));
-        return true;
+        FacetUtil.addFacet(new PropertyChoicesFacetDerivedFromChoicesFacet(processMethodContext.getFacetHolder(), getSpecificationLookup()));
     }
     
     @Override
-    public boolean processParams(Method method, int paramNum, FacetHolder holder) {
-        Class<?> paramType = method.getParameterTypes()[paramNum];
+    public void processParams(ProcessParameterContext processParameterContext) {
+        Class<?> paramType = processParameterContext.getMethod().getParameterTypes()[processParameterContext.getParamNum()];
         
         if (!paramType.isEnum()) {
-            return false;
+            return;
         }
         
-        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(holder, getSpecificationLookup(), getAdapterMap()));
-        return true;
+        FacetUtil.addFacet(new ActionParameterChoicesFacetDerivedFromChoicesFacet(processParameterContext.getFacetHolder(), getSpecificationLookup(), getAdapterMap()));
     }
 
 

@@ -20,14 +20,12 @@
 
 package org.apache.isis.core.progmodel.facets.properties.validate;
 
-import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 
@@ -46,13 +44,13 @@ public class PropertyValidateDefaultFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-        return FacetUtil.addFacet(create(holder));
+    public void process(ProcessMethodContext processMethodContext) {
+        FacetUtil.addFacet(create(processMethodContext.getFacetHolder()));
     }
 
     @Override
-    public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
-        return FacetUtil.addFacet(create(holder));
+    public void processParams(ProcessParameterContext processParameterContext) {
+        FacetUtil.addFacet(create(processParameterContext.getFacetHolder()));
     }
 
     private PropertyValidateFacet create(final FacetHolder holder) {

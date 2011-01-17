@@ -29,18 +29,17 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
-import org.apache.isis.core.progmodel.facets.actions.choices.ActionChoicesFacetNone;
-import org.apache.isis.core.progmodel.facets.actions.defaults.ActionDefaultsFacetNone;
 import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedFacetAtDefault;
+import org.apache.isis.core.progmodel.facets.describedas.DescribedAsFacetNone;
 import org.apache.isis.core.progmodel.facets.help.HelpFacetNone;
-import org.apache.isis.core.progmodel.facets.naming.describedas.DescribedAsFacetNone;
-import org.apache.isis.core.progmodel.facets.naming.named.NamedFacetNone;
+import org.apache.isis.core.progmodel.facets.named.NamedFacetNone;
 import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacetNone;
 import org.apache.isis.core.progmodel.facets.object.notpersistable.NotPersistableFacetNull;
+import org.apache.isis.core.progmodel.facets.param.choices.ActionChoicesFacetNone;
+import org.apache.isis.core.progmodel.facets.param.defaults.ActionDefaultsFacetNone;
 import org.apache.isis.core.progmodel.facets.propparam.multiline.MultiLineFacetNone;
 import org.apache.isis.core.progmodel.facets.propparam.validate.maxlength.MaxLengthFacetUnlimited;
 
@@ -79,57 +78,64 @@ public class FallbackFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        return FacetUtil.addFacets(new Facet[] { new DescribedAsFacetNone(holder),
+    public void process(ProcessClassContext processClassContaxt) {
+        final FacetHolder facetHolder = processClassContaxt.getFacetHolder();
+        
+        final DescribedAsFacetNone describedAsFacet = new DescribedAsFacetNone(facetHolder);
+        final NotPersistableFacetNull notPersistableFacet = new NotPersistableFacetNull(facetHolder);
+        final TitleFacetNone titleFacet = new TitleFacetNone(facetHolder);
+        
+        final Facet[] facets = new Facet[] { 
+            describedAsFacet,
             // commenting these out, think this whole isNoop business is a little bogus
             // new ImmutableFacetNever(holder),
-            new NotPersistableFacetNull(holder), new TitleFacetNone(holder), });
+            notPersistableFacet, titleFacet, };
+        FacetUtil.addFacets(facets);
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover,
-        final FacetHolder holder) {
+    public void process(ProcessMethodContext processMethodContext) {
         final List<Facet> facets = new ArrayList<Facet>();
 
-        if (holder instanceof FacetedMethod) {
-            facets.add(new NamedFacetNone(holder));
-            facets.add(new DescribedAsFacetNone(holder));
-            facets.add(new HelpFacetNone(holder));
+        if (processMethodContext.getFacetHolder() instanceof FacetedMethod) {
+            facets.add(new NamedFacetNone(processMethodContext.getFacetHolder()));
+            facets.add(new DescribedAsFacetNone(processMethodContext.getFacetHolder()));
+            facets.add(new HelpFacetNone(processMethodContext.getFacetHolder()));
             
-            FacetedMethod facetedMethod = (FacetedMethod) holder;
+            FacetedMethod facetedMethod = processMethodContext.getFacetHolder();
             final FeatureType featureType = facetedMethod.getFeatureType();
             if (featureType.isProperty()) {
-                facets.add(new MaxLengthFacetUnlimited(holder));
-                facets.add(new MultiLineFacetNone(true, holder));
+                facets.add(new MaxLengthFacetUnlimited(processMethodContext.getFacetHolder()));
+                facets.add(new MultiLineFacetNone(true, processMethodContext.getFacetHolder()));
             }
             if (featureType.isAction()) {
-                facets.add(new ExecutedFacetAtDefault(holder));
-                facets.add(new ActionDefaultsFacetNone(holder));
-                facets.add(new ActionChoicesFacetNone(holder));
+                facets.add(new ExecutedFacetAtDefault(processMethodContext.getFacetHolder()));
+                facets.add(new ActionDefaultsFacetNone(processMethodContext.getFacetHolder()));
+                facets.add(new ActionChoicesFacetNone(processMethodContext.getFacetHolder()));
             }
         }
 
-        return FacetUtil.addFacets(facets);
+        FacetUtil.addFacets(facets);
     }
 
     @Override
-    public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
+    public void processParams(ProcessParameterContext processParameterContext) {
         final List<Facet> facets = new ArrayList<Facet>();
 
-        if (holder instanceof TypedHolder) {
+        if (processParameterContext.getFacetHolder() instanceof TypedHolder) {
 
-            TypedHolder typedHolder = (TypedHolder) holder;
+            TypedHolder typedHolder = processParameterContext.getFacetHolder();
             if (typedHolder.getFeatureType().isActionParameter()) {
-                facets.add(new NamedFacetNone(holder));
-                facets.add(new DescribedAsFacetNone(holder));
-                facets.add(new HelpFacetNone(holder));
-                facets.add(new MultiLineFacetNone(false, holder));
+                facets.add(new NamedFacetNone(processParameterContext.getFacetHolder()));
+                facets.add(new DescribedAsFacetNone(processParameterContext.getFacetHolder()));
+                facets.add(new HelpFacetNone(processParameterContext.getFacetHolder()));
+                facets.add(new MultiLineFacetNone(false, processParameterContext.getFacetHolder()));
                 
-                facets.add(new MaxLengthFacetUnlimited(holder));
+                facets.add(new MaxLengthFacetUnlimited(processParameterContext.getFacetHolder()));
             }
         }
 
-        return FacetUtil.addFacets(facets);
+        FacetUtil.addFacets(facets);
     }
 
 }

@@ -20,13 +20,11 @@
 
 package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
-import java.lang.reflect.Method;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
 
@@ -38,10 +36,10 @@ public class MemberOrderAnnotationFacetFactory extends AnnotationBasedFacetFacto
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
+    public void process(ProcessMethodContext processMethodContext) {
         Class<MemberOrder> annotationClass = MemberOrder.class;
-		final MemberOrder annotation = getAnnotation(method, annotationClass);
-        return FacetUtil.addFacet(create(annotation, holder));
+		final MemberOrder annotation = getAnnotation(processMethodContext.getMethod(), annotationClass);
+        FacetUtil.addFacet(create(annotation, processMethodContext.getFacetHolder()));
     }
 
     private MemberOrderFacet create(final MemberOrder annotation, final FacetHolder holder) {

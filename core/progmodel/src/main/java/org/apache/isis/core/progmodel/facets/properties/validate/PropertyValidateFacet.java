@@ -22,8 +22,8 @@ package org.apache.isis.core.progmodel.facets.properties.validate;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacetAbstract;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
-import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetAbstract;
 
 /**
  * The mechanism by which the proposed value of a property can be validated, called immediately before

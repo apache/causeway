@@ -20,16 +20,13 @@
 
 package org.apache.isis.core.progmodel.facets.actcoll.typeof;
 
-import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 
 import org.apache.isis.applib.annotation.TypeOf;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
@@ -43,50 +40,51 @@ public class TypeOfAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbs
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
+    public void process(ProcessMethodContext processMethodContext) {
 
-        final TypeOf annotation = getAnnotation(method, TypeOf.class);
+        final TypeOf annotation = getAnnotation(processMethodContext.getMethod(), TypeOf.class);
 
-        final Class<?> methodReturnType = method.getReturnType();
+        final Class<?> methodReturnType = processMethodContext.getMethod().getReturnType();
         if (!collectionTypeRegistry.isCollectionType(methodReturnType) && !collectionTypeRegistry.isArrayType(methodReturnType)) {
-            return false;
+            return;
         }
 
-        final Class<?> returnType = method.getReturnType();
+        final Class<?> returnType = processMethodContext.getMethod().getReturnType();
         if (returnType.isArray()) {
             final Class<?> componentType = returnType.getComponentType();
-            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, holder, getSpecificationLookup()));
-            return false;
+            FacetUtil.addFacet(new TypeOfFacetInferredFromArray(componentType, processMethodContext.getFacetHolder(), getSpecificationLookup()));
+            return;
         }
 
         if (annotation != null) {
-            return FacetUtil.addFacet(new TypeOfFacetViaAnnotation(annotation.value(), holder, getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetViaAnnotation(annotation.value(), processMethodContext.getFacetHolder(), getSpecificationLookup()));
+            return;
         }
 
-        final Type type = method.getGenericReturnType();
+        final Type type = processMethodContext.getMethod().getGenericReturnType();
         if (!(type instanceof ParameterizedType)) {
-            return false;
+            return;
         }
 
         final ParameterizedType parameterizedType = (ParameterizedType) type;
         final Type[] actualTypeArguments = parameterizedType.getActualTypeArguments();
         if (actualTypeArguments.length == 0) {
-            return false;
+            return;
         }
 
         final Object actualTypeArgument = actualTypeArguments[0];
         if (actualTypeArgument instanceof Class) {
             final Class<?> actualType = (Class<?>) actualTypeArgument;
-            return FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, holder, getSpecificationLookup()));
+            FacetUtil.addFacet(new TypeOfFacetInferredFromGenerics(actualType, processMethodContext.getFacetHolder(), getSpecificationLookup()));
+            return;
         }
 
         if (actualTypeArgument instanceof TypeVariable) {
 
             // TODO: what to do here?
-            return false;
+            return;
         }
 
-        return false;
     }
 
     @Override

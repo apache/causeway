@@ -22,7 +22,6 @@ package org.apache.isis.core.progmodel.facets.propparam.enums;
 import org.apache.isis.core.commons.lang.CastUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 public class EnumFacetFactory<T extends Enum<T>> extends ValueUsingValueSemanticsProviderFacetFactory<T> {
@@ -32,15 +31,17 @@ public class EnumFacetFactory<T extends Enum<T>> extends ValueUsingValueSemantic
     }
 
     @Override
-    public boolean process(Class<?> cls, MethodRemover methodRemover, FacetHolder holder) {
+    public void process(ProcessClassContext processClassContext) {
+        final Class<?> cls = processClassContext.getCls();
+        final FacetHolder holder = processClassContext.getFacetHolder();
+
 
         if (!cls.isEnum()) {
-            return false;
+            return;
         }
 
         addFacets(new EnumValueSemanticsProvider<T>(holder, asT(cls), getConfiguration(), getContext()));
         FacetUtil.addFacet(new ChoicesFacetEnum(holder, cls.getEnumConstants()));
-        return true;
     }
 
     protected Class<T> asT(Class<?> cls) {
