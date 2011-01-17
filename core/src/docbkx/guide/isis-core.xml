@@ -104,8 +104,8 @@
           <para>Default Implementations</para>
 
           <para>This part of the guide discusses the default implementations
-          of the core APIs. (Alternative implementations have their own
-          guides).</para>
+          of the core <acronym>API</acronym>s. (Alternative implementations
+          have their own guides).</para>
         </listitem>
 
         <listitem>
@@ -120,8 +120,6 @@
           requirements).</para>
         </listitem>
       </itemizedlist></para>
-
-    <para></para>
   </preface>
 
   <!-- main content -->
@@ -130,56 +128,85 @@
     <title>Introduction</title>
 
     <partintro>
-      <para>*** part intro.</para>
+      <abstract>
+        <para>Principles and patterns, how Isis works, the quickapp archetype,
+        and a development process.</para>
+      </abstract>
 
-      <para></para>
-
-      <para></para>
+      <para>This part of the guide discusses the principles and patterns of
+      the framework, understanding how an Isis application works, getting
+      started with the quickapp archetype, the process of developing Isis
+      applications, and tips for developing with an
+      <acronym>IDE.</acronym></para>
     </partintro>
 
     <chapter id="chp.Intro">
       <title>Overview</title>
 
       <abstract>
-        <para>***</para>
+        <para>What's in this guide, it's relationship to the applib
+        documentation.</para>
       </abstract>
 
       <para><emphasis>Apache Isis</emphasis> is a full-stack open source
       application development framework, designed to let you rapidly develop
       enterprise business applications following a domain-driven philosophy.
-      Developing an application in Isis is - at least initially - about
-      focusing on the bit that matters to the business, the core domain
-      logic.</para>
+      Developing an application in <emphasis>Isis</emphasis> is - at least
+      initially - about focusing on the bit that matters to the business, the
+      core domain logic.</para>
 
       <sect1>
         <title>What's in this Guide</title>
 
-        <para>**</para>
-
         <para>This guide is intended to provide a comprehensive introduction
-        to the <emphasis>Apache Isis</emphasis> framework. As such, it:</para>
+        to the <emphasis>Apache Isis</emphasis> framework. As such, it
+        describes:</para>
 
         <itemizedlist>
           <listitem>
-            <para>covers the main principles that lie behind the framework
-            (such as enabling domain-driven design)</para>
+            <para>the main principles that lie behind the framework (such as
+            enabling domain-driven design)</para>
           </listitem>
 
           <listitem>
-            <para>describes the patterns that we have adopted to fulfil those
-            principles (such as the naked objects pattern)</para>
+            <para>the patterns that we have adopted to fulfil those principles
+            (such as the naked objects pattern)</para>
           </listitem>
 
           <listitem>
-            <para>describes the high-level architecture of the framework,
-            including why there are different modules and how they fit
-            together</para>
+            <para>the high-level architecture of the framework, including why
+            there are different modules and how they fit together</para>
           </listitem>
 
           <listitem>
-            <para></para>
+            <para>the responsibilities of the various modules that make up the
+            core framework</para>
+          </listitem>
+
+          <listitem>
+            <para>the main <acronym>API</acronym>s defined by the modules of
+            the core framework</para>
+          </listitem>
+
+          <listitem>
+            <para>the default implementations of the core
+            <acronym>API</acronym>s</para>
+          </listitem>
+
+          <listitem>
+            <para>how to deploy an Isis application</para>
           </listitem>
         </itemizedlist>
+
+        <para>Reading the above will give you a good understanding as to how
+        <emphasis>Isis</emphasis> fits together and how it can be
+        extended.</para>
+
+        <para></para>
+
+        <para>However, it does <emphasis>not</emphasis>:</para>
+
+        <para>It does not cover th</para>
 
         <para>, of writing an Isis application, describes the
         architectura</para>
@@ -201,21 +228,41 @@
       </sect1>
 
       <sect1>
-        <title>This Guide vs the AppLib Documentation</title>
+        <title>What's NOT in this Guide</title>
 
-        <para>If you are starting out using <emphasis>Isis</emphasis> then
-        recommended reading is both this guide and also the documentation for
-        the applib (applicaiton library).</para>
+        <para>It's also worth stating what this guide does not cover.</para>
 
-        <para>The applib guide focuses on the specifics of the programming
-        conventions of (what we call the) default programming model.</para>
+        <sect2>
+          <title>AppLib Documentation</title>
 
-        <para>This guide (the core documentation) does not cover the default
-        programming model in the same sort of depth. Instead, it covers the
-        main principles and patterns of writing any Apache Isis application,
-        including the fact that there you can customize your own programming
-        model if you wish. It also goes in depth into the architecture and
-        design of the framework.</para>
+          <para>If you are starting out using <emphasis>Isis</emphasis> then
+          recommended reading is both this guide and also the documentation
+          for the applib (application library).</para>
+
+          <para>The applib guide focuses on the specifics of the programming
+          conventions of (what we call the) default programming model.</para>
+
+          <para>This guide (the core documentation) does not cover the default
+          programming model in the same sort of depth. Instead, it covers the
+          main principles and patterns of writing any Apache Isis application,
+          including the fact that there you can customize your own programming
+          model if you wish. It also goes in depth into the architecture and
+          design of the framework.</para>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Alternative Implementations</title>
+
+          <para></para>
+        </sect2>
+
+        <sect2>
+          <title>Advanced Deployment Options</title>
+
+          <para></para>
+        </sect2>
       </sect1>
 
       <sect1>
@@ -3180,7 +3227,18 @@ tsmith:pass</programlisting>
     <title>Architecture</title>
 
     <partintro>
-      <para>*** partinfo...</para>
+      <abstract>
+        <para>The framework's design, the applib, the core modules and
+        <acronym>API</acronym>s, viewers, default and alternative
+        implementations of <acronym>API</acronym>s.</para>
+      </abstract>
+
+      <para>This part of the guide discusses some of the main architecture
+      elements of the framework's design, distinguishing and explaining the
+      reason for the applib, the core modules, the viewers, the default
+      implementations of the main <acronym>API</acronym>s exposed by the core,
+      and the alternative implementations of those
+      <acronym>API</acronym>s.</para>
     </partintro>
 
     <chapter>
@@ -4307,6 +4365,15 @@ Persistable: User Persistable</screen>
 
   <part id="prt.CoreModules">
     <title>Core Modules</title>
+
+    <partintro>
+      <abstract>
+        <para>The modules that make up the core framework.</para>
+      </abstract>
+
+      <para>This part of the guide goes through each of the modules that make
+      up the core framework.</para>
+    </partintro>
 
     <chapter>
       <title>Test Support</title>
@@ -6111,7 +6178,14 @@ isis.fixtures=ExpenseTypes, Employees, ExampleClaim, Context</programlisting>
     <title>Default Implementations</title>
 
     <partintro>
-      <para>*** part intro</para>
+      <abstract>
+        <para>The default implementations of the core
+        <acronym>API</acronym>s.</para>
+      </abstract>
+
+      <para>This part of the guide discusses the default implementations of
+      the core <acronym>API</acronym>s. (Alternative implementations have
+      their own guides).</para>
     </partintro>
 
     <chapter>
@@ -6656,16 +6730,19 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
     <title>Deployment Guide</title>
 
     <partintro>
-      <para>partintro:</para>
-
-      <para></para>
+      <abstract>
+        <para>The basic deployment options.</para>
+      </abstract>
 
       <para>Assuming that you have developed your domain model and tested it
-      as a standalone prototype (previous section), this section describes the
-      process of deploying the domain object model as an enterprise
-      application.</para>
+      as a standalone prototype, this part of the guide describes the basic
+      deployment options.</para>
 
-      <para></para>
+      <para>Alternative implementations (most notably, remoting for
+      client/server) that allow for different deployments have their own
+      guidance on deployment. The same is also true for viewers that allow for
+      different deployments (eg a viewer that supports a mobile phone or
+      Eclipse OSGi would likely have its own packaging requirements).</para>
     </partintro>
 
     <chapter id="chp.DeployingIsisApplications">
