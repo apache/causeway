@@ -33,14 +33,14 @@ import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
-import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
-import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.InteractionUtils;
 import org.apache.isis.core.metamodel.interactions.PropertyAccessContext;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
@@ -238,7 +238,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
     public boolean hasChoices() {
         final PropertyChoicesFacet propertyChoicesFacet = getFacet(PropertyChoicesFacet.class);
         final boolean optionEnabled = propertyChoicesFacet != null;
-        return SpecificationFacets.isBoundedSet(getSpecification()) || optionEnabled;
+        return BoundedFacetUtils.isBoundedSet(getSpecification()) || optionEnabled;
     }
 
     @Override
@@ -251,7 +251,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
                 options[i] = getAdapterMap().adapterFor(pojoOptions[i]);
             }
             return options;
-        } else if (SpecificationFacets.isBoundedSet(getSpecification())) {
+        } else if (BoundedFacetUtils.isBoundedSet(getSpecification())) {
         	
             QueryFindAllInstances query = new QueryFindAllInstances(getSpecification().getFullIdentifier());
 			final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);

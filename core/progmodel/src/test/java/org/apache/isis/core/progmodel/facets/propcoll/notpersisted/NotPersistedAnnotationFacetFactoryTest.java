@@ -22,46 +22,24 @@ package org.apache.isis.core.progmodel.facets.propcoll.notpersisted;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
+import org.apache.isis.core.metamodel.facets.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation.NotPersistedAnnotationForCollectionFacetFactory;
+import org.apache.isis.core.progmodel.facets.collections.notpersisted.annotation.NotPersistedFacetAnnotationForCollection;
+import org.apache.isis.core.progmodel.facets.properties.notpersisted.annotation.NotPersistedAnnotationForPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.notpersisted.annotation.NotPersistedFacetAnnotationForProperty;
 
 
 public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private NotPersistedAnnotationFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new NotPersistedAnnotationFacetFactory();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testNotPersistedAnnotationPickedUpOnProperty() {
+        NotPersistedAnnotationForPropertyFacetFactory facetFactory = new NotPersistedAnnotationForPropertyFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -76,12 +54,14 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistedFacetAnnotation);
+        assertTrue(facet instanceof NotPersistedFacetAnnotationForProperty);
 
         assertNoMethodsRemoved();
     }
 
     public void testNotPersistedAnnotationPickedUpOnCollection() {
+        NotPersistedAnnotationForCollectionFacetFactory facetFactory = new NotPersistedAnnotationForCollectionFacetFactory();
+
         class Order{}
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
@@ -97,7 +77,7 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NotPersistedFacetAnnotation);
+        assertTrue(facet instanceof NotPersistedFacetAnnotationForCollection);
 
         assertNoMethodsRemoved();
     }

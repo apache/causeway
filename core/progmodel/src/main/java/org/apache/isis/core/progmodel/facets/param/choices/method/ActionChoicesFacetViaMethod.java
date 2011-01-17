@@ -23,17 +23,17 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.isis.core.commons.lang.ArrayUtil;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.ChoicesUtils;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
+import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacetAbstract;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLookup;
-import org.apache.isis.core.progmodel.facets.param.choices.ActionChoicesFacetAbstract;
-import org.apache.isis.core.progmodel.util.ArrayUtil;
+import org.apache.isis.core.progmodel.util.CollectionUtils;
 
 public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract implements ImperativeFacet {
 
@@ -87,7 +87,7 @@ public class ActionChoicesFacetViaMethod extends ActionChoicesFacetAbstract impl
             } else {
                 final ObjectSpecification specification = getSpecificationLookup().loadSpecification(choicesType);
                 results[i] =
-                    ChoicesUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());
+                    CollectionUtils.getCollectionAsObjectArray(options[i], specification, getAdapterMap());
             }
         }
         return results;

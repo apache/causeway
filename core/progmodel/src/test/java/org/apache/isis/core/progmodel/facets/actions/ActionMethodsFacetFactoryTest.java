@@ -31,21 +31,23 @@ import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.When;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
-import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetFactory;
+import org.apache.isis.core.progmodel.facets.actions.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.actions.validate.ActionValidationFacet;
@@ -66,13 +68,11 @@ import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacet;
 import org.apache.isis.core.progmodel.facets.members.hide.forsession.HiddenFacetViaHideForSessionMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.members.hide.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.name.staticmethod.NamedFacetViaNameMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.method.ActionChoicesFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.param.choices.methodnum.ActionParameterChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.choices.methodnum.ActionParameterChoicesFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.param.defaults.method.ActionDefaultsFacetFactory;
-import org.apache.isis.core.progmodel.facets.param.defaults.method.ActionDefaultsFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetFactory;
 import org.apache.isis.core.progmodel.facets.param.defaults.methodnum.ActionParameterDefaultsFacetViaMethod;
 
@@ -85,12 +85,6 @@ public class ActionMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
     private final ObjectSpecification customerSpec = new TestProxySpecification("Customer");
 
     
-    @Override
-    public void testFeatureTypes() {
-        // TODO: can implement only when break out into separate classes
-        // for each facet factory.
-    }
-
     public void testActionInvocationFacetIsInstalledAndMethodRemoved() {
         ActionInvocationFacetFactory facetFactory = new ActionInvocationFacetFactory();
         facetFactory.setSpecificationLookup(reflector);

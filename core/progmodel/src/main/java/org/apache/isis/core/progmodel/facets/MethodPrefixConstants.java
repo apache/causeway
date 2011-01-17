@@ -46,5 +46,23 @@ public class MethodPrefixConstants {
     public static final String VALIDATE_ADD_TO_PREFIX_2 = VALIDATE_PREFIX + StringUtils.capitalize(ADD_TO_PREFIX);
     public static final String VALIDATE_REMOVE_FROM_PREFIX = VALIDATE_PREFIX + REMOVE_FROM_PREFIX;
     public static final String VALIDATE_REMOVE_FROM_PREFIX_2 = VALIDATE_PREFIX + StringUtils.capitalize(REMOVE_FROM_PREFIX);
+    
+    public static final String FIELD_PREFIX = "field";
+    public static final String ACTION_PREFIX = "action";
+
+    public static final String CREATED_PREFIX = "created";
+    public static final String LOADED_PREFIX = "loaded";
+    public static final String LOADING_PREFIX = "loading";
+    public static final String SAVED_PREFIX = "saved";
+    public static final String SAVING_PREFIX = "saving";
+    public static final String PERSISTED_PREFIX = "persisted";
+    public static final String PERSISTING_PREFIX = "persisting";
+    public static final String DELETED_PREFIX = "deleted";
+    public static final String DELETING_PREFIX = "deleting";
+    public static final String REMOVED_PREFIX = "removed";
+    public static final String REMOVING_PREFIX = "removing";
+    public static final String UPDATED_PREFIX = "updated";
+    public static final String UPDATING_PREFIX = "updating";
+    public static final String SINGULAR_NAME = "singularName";
 
 }

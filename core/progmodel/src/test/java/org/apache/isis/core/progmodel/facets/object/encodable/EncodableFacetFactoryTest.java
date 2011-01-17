@@ -19,20 +19,15 @@
 
 package org.apache.isis.core.progmodel.facets.object.encodable;
 
-import java.util.List;
-
 import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.annotation.Encodable;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
-import org.apache.isis.core.progmodel.facets.encodeable.EncodableAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.encodeable.EncodableFacetAbstract;
-import org.apache.isis.core.progmodel.facets.encodeable.EncoderDecoderUtil;
+import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetAbstract;
+import org.apache.isis.core.progmodel.facets.object.encodeable.EncoderDecoderUtil;
 
 public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -54,15 +49,6 @@ public class EncodableFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testFacetPickedUp() {
 

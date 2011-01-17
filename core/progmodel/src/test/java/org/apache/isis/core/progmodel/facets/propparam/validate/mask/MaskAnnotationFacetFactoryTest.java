@@ -21,65 +21,55 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.mask;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mask.annotation.MaskAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mask.annotation.MaskFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.object.mask.MaskFacet;
+import org.apache.isis.core.progmodel.facets.object.mask.annotation.MaskAnnotationForTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.mask.annotation.MaskFacetAnnotationForType;
+import org.apache.isis.core.progmodel.facets.param.validate.maskannot.MaskAnnotationForParameterFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.validate.maskannot.MaskFacetAnnotationForParameter;
+import org.apache.isis.core.progmodel.facets.properties.validate.maskannot.MaskAnnotationForPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.validate.maskannot.MaskFacetAnnotationForProperty;
 
 
 public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private MaskAnnotationFacetFactory facetFactory;
     private final ObjectSpecification customerNoSpec = new TestProxySpecification(String.class);
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-
         reflector.setLoadSpecificationStringReturn(customerNoSpec);
-        facetFactory = new MaskAnnotationFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
     }
 
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testMaskAnnotationPickedUpOnClass() {
+        MaskAnnotationForTypeFacetFactory facetFactory = new MaskAnnotationForTypeFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @Mask("###")
         class Customer {}
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MaskFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MaskFacetAnnotation);
-        final MaskFacetAnnotation maskFacet = (MaskFacetAnnotation) facet;
+        assertTrue(facet instanceof MaskFacetAnnotationForType);
+        final MaskFacetAnnotationForType maskFacet = (MaskFacetAnnotationForType) facet;
         assertEquals("###", maskFacet.value());
     }
 
     public void testMaskAnnotationPickedUpOnProperty() {
+        MaskAnnotationForPropertyFacetFactory facetFactory = new MaskAnnotationForPropertyFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -94,12 +84,15 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(MaskFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MaskFacetAnnotation);
-        final MaskFacetAnnotation maskFacet = (MaskFacetAnnotation) facet;
+        assertTrue(facet instanceof MaskFacetAnnotationForProperty);
+        final MaskFacetAnnotationForProperty maskFacet = (MaskFacetAnnotationForProperty) facet;
         assertEquals("###", maskFacet.value());
     }
 
     public void testMaskAnnotationPickedUpOnActionParameter() {
+        MaskAnnotationForParameterFacetFactory facetFactory = new MaskAnnotationForParameterFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -111,12 +104,15 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethodParameter.getFacet(MaskFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MaskFacetAnnotation);
-        final MaskFacetAnnotation maskFacet = (MaskFacetAnnotation) facet;
+        assertTrue(facet instanceof MaskFacetAnnotationForParameter);
+        final MaskFacetAnnotationForParameter maskFacet = (MaskFacetAnnotationForParameter) facet;
         assertEquals("###", maskFacet.value());
     }
 
     public void testMaskAnnotationNotIgnoredForNonStringsProperty() {
+        MaskAnnotationForPropertyFacetFactory facetFactory = new MaskAnnotationForPropertyFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -133,6 +129,9 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testMaskAnnotationNotIgnoredForPrimitiveOnActionParameter() {
+        MaskAnnotationForParameterFacetFactory facetFactory = new MaskAnnotationForParameterFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")

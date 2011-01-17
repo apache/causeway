@@ -35,8 +35,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.progmodel.facets.properties.validate.perspec.MustSatisfySpecificationOnPropertyFacet;
+import org.apache.isis.core.progmodel.facets.properties.validate.perspec.MustSatisfySpecificationOnPropertyFacetFactory;
 
 @RunWith(JMock.class)
 public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
@@ -47,7 +49,6 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
         }
     };
     
-    private MustSatisfySpecificationFacetFactory facetFactory;
     private MethodRemover mockMethodRemover;
     private FacetedMethod mockFacetHolder;
 
@@ -58,7 +59,6 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
 
     @Before
     public void setUp() throws Exception {
-        facetFactory = new MustSatisfySpecificationFacetFactory();
         mockMethodRemover = mockery.mock(MethodRemover.class);
         mockFacetHolder = mockery.mock(FacetedMethod.class);
         domainObjectClassWithoutAnnotation = DomainObjectWithoutMustSatisfyAnnotations.class;
@@ -69,23 +69,26 @@ public class MustSatisfySpecificationFacetFactoryProcessPropertyTest {
 
     @After
     public void tearDown() throws Exception {
-        facetFactory = null;
         mockMethodRemover = null;
         mockFacetHolder = null;
     }
 
     @Test
     public void addsAMustSatisfySpecificationFacetIfAnnotated() {
+        MustSatisfySpecificationOnPropertyFacetFactory facetFactory = new MustSatisfySpecificationOnPropertyFacetFactory();
+
         mockery.checking(new Expectations() {{
-            one(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationFacet.class)));
+            one(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationOnPropertyFacet.class)));
         }});
         facetFactory.process(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), firstNameMethodWith, mockMethodRemover, mockFacetHolder));
     }
 
     @Test
     public void doesNotAddsAMustSatisfySpecificationFacetIfNotAnnotated() {
+        MustSatisfySpecificationOnPropertyFacetFactory facetFactory = new MustSatisfySpecificationOnPropertyFacetFactory();
+
         mockery.checking(new Expectations() {{
-            never(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationFacet.class)));
+            never(mockFacetHolder).addFacet(with(anInstanceOf(MustSatisfySpecificationOnPropertyFacet.class)));
         }});
         facetFactory.process(new ProcessMethodContext(domainObjectClassWithAnnotation.getClass(), firstNameMethodWithout, mockMethodRemover, mockFacetHolder));
     }

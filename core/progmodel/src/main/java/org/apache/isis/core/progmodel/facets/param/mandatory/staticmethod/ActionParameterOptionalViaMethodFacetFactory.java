@@ -82,7 +82,7 @@ public class ActionParameterOptionalViaMethodFacetFactory extends MethodPrefixBa
             for (int i = 0; i < optionals.length; i++) {
                 if (optionals[i]) {
                     // add facets directly to parameters, not to actions
-                    FacetUtil.addFacet(new MandatoryFacetOverriddenByMethod(parameters.get(i)));
+                    FacetUtil.addFacet(new MandatoryFacetOptionalViaMethodForParameter(parameters.get(i)));
                 }
             }
         } finally {

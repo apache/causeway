@@ -41,7 +41,7 @@ public class HiddenFacetViaAlwaysHideMethodFacetFactory extends MethodPrefixBase
      * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
      */
     public HiddenFacetViaAlwaysHideMethodFacetFactory() {
-        super(FeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS, PREFIXES);
+        super(FeatureType.MEMBERS, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

@@ -30,9 +30,11 @@ import org.apache.isis.core.commons.debug.DebuggableWithTitle;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.cached.CachedFacetUtils;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAction;
@@ -314,16 +316,16 @@ public final class Dump {
         if (specification.isAbstract()) {
             str.append("Abstract ");
         }
-        if (SpecificationFacets.isBoundedSet(specification)) {
+        if (BoundedFacetUtils.isBoundedSet(specification)) {
             str.append("Bounded ");
         }
-        if (SpecificationFacets.isCached(specification)) {
+        if (CachedFacetUtils.isCached(specification)) {
             str.append("Cached ");
         }
-        if (SpecificationFacets.isAlwaysImmutable(specification)) {
+        if (ImmutableFacetUtils.isAlwaysImmutable(specification)) {
             str.append("Immutable (always) ");
         }
-        if (SpecificationFacets.isImmutableOncePersisted(specification)) {
+        if (ImmutableFacetUtils.isImmutableOncePersisted(specification)) {
             str.append("Immutable (once persisted) ");
         }
         if (specification.isService()) {

@@ -22,16 +22,14 @@ package org.apache.isis.core.progmodel.facets.ordering.memberorder;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.member.ordering.MemberOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.members.order.MemberOrderAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
 
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -51,15 +49,6 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testMemberOrderAnnotationPickedUpOnProperty() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")

@@ -21,12 +21,12 @@
 package org.apache.isis.core.progmodel.facets.object.validate;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectFacetViaValidateMethod;
+import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectViaValidateMethodFacetFactory;
 
 
 public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -46,15 +46,6 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testValidateMethodPickedUpAndMethodRemoved() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")

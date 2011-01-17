@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacet;
 
 
 @RunWith(JMock.class)
@@ -50,8 +51,8 @@ public class MustSatisfySpecificationValidatingInteractionTest {
         }
     };
 
-    private MustSatisfySpecificationFacet facetForSpecificationAlwaysSatisfied;
-    private MustSatisfySpecificationFacet facetForSpecificationNeverSatisfied;
+    private MustSatisfySpecificationOnTypeFacet facetForSpecificationAlwaysSatisfied;
+    private MustSatisfySpecificationOnTypeFacet facetForSpecificationNeverSatisfied;
     private FacetHolder mockHolder;
 
     private PropertyModifyContext mockContext;
@@ -68,8 +69,8 @@ public class MustSatisfySpecificationValidatingInteractionTest {
         specificationAlwaysSatisfied = new SpecificationAlwaysSatisfied();
         specificationNeverSatisfied = new SpecificationNeverSatisfied();
         
-        facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationFacet(Utils.listOf(specificationAlwaysSatisfied), mockHolder);
-        facetForSpecificationNeverSatisfied = new MustSatisfySpecificationFacet(Utils.listOf(specificationNeverSatisfied), mockHolder);
+        facetForSpecificationAlwaysSatisfied = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(specificationAlwaysSatisfied), mockHolder);
+        facetForSpecificationNeverSatisfied = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(specificationNeverSatisfied), mockHolder);
 
         mockContext = mockery.mock(PropertyModifyContext.class);
         mockProposedObjectAdapter = mockery.mock(ObjectAdapter.class, "proposed");

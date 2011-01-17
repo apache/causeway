@@ -22,10 +22,10 @@ package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.When;
-import org.apache.isis.core.progmodel.facets.object.immutable.ImmutableFacetImpl;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetAbstract;
 
 
-public class ImmutableFacetViaValueSemantics extends ImmutableFacetImpl {
+public class ImmutableFacetViaValueSemantics extends ImmutableFacetAbstract {
 
     public ImmutableFacetViaValueSemantics(final FacetHolder holder) {
         super(When.ALWAYS, holder);

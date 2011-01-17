@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.tree;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.consent.Allow;
 import org.apache.isis.core.metamodel.consent.Consent;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.viewer.dnd.drawing.Location;
 import org.apache.isis.viewer.dnd.view.UserAction;
@@ -76,7 +76,7 @@ public class TreeDisplayRules {
     }
 
     public static boolean canDisplay(final ObjectAdapter object) {
-        boolean lookupView = object != null && SpecificationFacets.isBoundedSet(object.getSpecification());
+        boolean lookupView = object != null && BoundedFacetUtils.isBoundedSet(object.getSpecification());
         final boolean showNonCollections = !TreeDisplayRules.isCollectionsOnly();
         final boolean objectView = object instanceof ObjectAdapter && showNonCollections;
         final boolean collectionView = object.getSpecification().isCollection();

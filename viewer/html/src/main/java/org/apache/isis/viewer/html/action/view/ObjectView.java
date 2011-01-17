@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.isis.core.commons.exceptions.UnknownTypeException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
@@ -52,8 +52,8 @@ public class ObjectView extends ObjectViewAbstract {
 
         // TODO: this test should be done by the ImmutableFacetFactory installing an immutableFacet on every
         // member
-        boolean immutable = SpecificationFacets.isAlwaysImmutable(specification)
-                || (adapter.isPersistent() && SpecificationFacets.isImmutableOncePersisted(specification));
+        boolean immutable = ImmutableFacetUtils.isAlwaysImmutable(specification)
+                || (adapter.isPersistent() && ImmutableFacetUtils.isImmutableOncePersisted(specification));
 
         boolean allFieldUneditable = true;
         final List<ObjectAssociation> flds = specification.getAssociations();

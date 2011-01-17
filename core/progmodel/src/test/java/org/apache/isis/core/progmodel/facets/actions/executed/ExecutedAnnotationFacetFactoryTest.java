@@ -21,18 +21,15 @@
 package org.apache.isis.core.progmodel.facets.actions.executed;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Executed;
 import org.apache.isis.applib.annotation.Executed.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
+import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacetAbstract;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.actions.executed.annotation.ExecutedAnnotationFacetFactory;
 
 
@@ -53,19 +50,11 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testExecutedLocallyAnnotationPickedUp() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             @Executed(Where.LOCALLY)
             public void someAction() {}
         }

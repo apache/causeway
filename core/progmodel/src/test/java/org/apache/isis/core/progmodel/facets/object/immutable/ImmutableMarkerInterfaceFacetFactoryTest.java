@@ -20,19 +20,16 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
-import java.util.List;
-
 import org.apache.isis.applib.marker.AlwaysImmutable;
 import org.apache.isis.applib.marker.ImmutableOncePersisted;
 import org.apache.isis.applib.marker.ImmutableUntilPersisted;
 import org.apache.isis.applib.marker.NeverImmutable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableFacetMarkerInterface;
+import org.apache.isis.core.progmodel.facets.object.immutable.markerifc.ImmutableMarkerInterfacesFacetFactory;
 
 
 public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -52,15 +49,6 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testAlwaysImmutable() {
         class Customer implements AlwaysImmutable {}

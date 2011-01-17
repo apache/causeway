@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.value.image;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 
 public class ImageValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<org.apache.isis.applib.value.Image> {

@@ -26,7 +26,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
-import org.apache.isis.core.progmodel.facets.object.validate.ValidateObjectFacetViaValidateMethod;
+import org.apache.isis.core.progmodel.facets.object.validate.method.ValidateObjectFacetViaValidateMethod;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.progmodel.wrapper.applib.WrapperObject;
 import org.apache.isis.viewer.junit.sample.domain.Customer;

@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.modify;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 
 /**
  * The mechanism by which the value of the property can be set.

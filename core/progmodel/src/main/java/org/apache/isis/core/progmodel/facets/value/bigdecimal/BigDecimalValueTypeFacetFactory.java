@@ -23,7 +23,7 @@ package org.apache.isis.core.progmodel.facets.value.bigdecimal;
 import java.math.BigDecimal;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 
 public class BigDecimalValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<BigDecimal> {

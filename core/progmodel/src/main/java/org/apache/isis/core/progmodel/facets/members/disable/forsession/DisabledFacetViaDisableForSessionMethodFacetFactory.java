@@ -40,7 +40,7 @@ public class DisabledFacetViaDisableForSessionMethodFacetFactory extends MethodP
      * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
      */
     public DisabledFacetViaDisableForSessionMethodFacetFactory() {
-        super(FeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS, PREFIXES);
+        super(FeatureType.MEMBERS, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

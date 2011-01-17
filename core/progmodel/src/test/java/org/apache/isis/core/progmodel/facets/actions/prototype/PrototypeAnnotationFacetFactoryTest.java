@@ -21,16 +21,12 @@
 package org.apache.isis.core.progmodel.facets.actions.prototype;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Prototype;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.actions.prototype.annotation.PrototypeAnnotationFacetFactory;
 
 
@@ -49,16 +45,6 @@ public class PrototypeAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     protected void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testAnnotationPickedUp() {

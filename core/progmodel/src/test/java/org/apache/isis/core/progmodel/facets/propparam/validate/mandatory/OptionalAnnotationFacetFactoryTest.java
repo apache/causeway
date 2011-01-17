@@ -21,47 +21,25 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.mandatory;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.annotation.MandatoryFacetInvertedByOptional;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.annotation.OptionalAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.mandatory.annotation.MandatoryFacetInvertedByOptionalForParameter;
+import org.apache.isis.core.progmodel.facets.param.mandatory.annotation.OptionalAnnotationForParameterFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.MandatoryFacetInvertedByOptionalForProperty;
+import org.apache.isis.core.progmodel.facets.properties.mandatory.annotation.OptionalAnnotationForPropertyFacetFactory;
 
 
 public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private OptionalAnnotationFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new OptionalAnnotationFacetFactory();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testOptionalAnnotationPickedUpOnProperty() {
+        OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -76,10 +54,12 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
         final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInvertedByOptional);
+        assertTrue(facet instanceof MandatoryFacetInvertedByOptionalForProperty);
     }
 
     public void testOptionalAnnotationPickedUpOnActionParameter() {
+        OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -91,10 +71,12 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
 
         final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MandatoryFacetInvertedByOptional);
+        assertTrue(facet instanceof MandatoryFacetInvertedByOptionalForParameter);
     }
 
     public void testOptionalAnnotationIgnoredForPrimitiveOnProperty() {
+        OptionalAnnotationForPropertyFacetFactory facetFactory = new OptionalAnnotationForPropertyFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -111,6 +93,8 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
     }
 
     public void testOptionalAnnotationIgnoredForPrimitiveOnActionParameter() {
+        OptionalAnnotationForParameterFacetFactory facetFactory = new OptionalAnnotationForParameterFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")

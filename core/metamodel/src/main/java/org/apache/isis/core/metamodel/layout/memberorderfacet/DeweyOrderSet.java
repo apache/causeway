@@ -29,7 +29,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
-import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
+import org.apache.isis.core.metamodel.facets.member.ordering.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 
 

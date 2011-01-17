@@ -19,20 +19,12 @@
 
 package org.apache.isis.core.progmodel.facets.object.defaults;
 
-import java.util.List;
-
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
-import org.apache.isis.core.progmodel.facets.defaults.DefaultedAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.defaults.DefaultedFacet;
-import org.apache.isis.core.progmodel.facets.defaults.DefaultedFacetAbstract;
-import org.apache.isis.core.progmodel.facets.defaults.DefaultsProviderUtil;
+import org.apache.isis.core.progmodel.facets.object.defaults.annotation.DefaultedAnnotationFacetFactory;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -54,15 +46,6 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testFacetPickedUp() {
         facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));

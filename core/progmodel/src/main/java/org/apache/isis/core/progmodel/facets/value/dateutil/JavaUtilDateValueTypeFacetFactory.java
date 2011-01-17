@@ -23,7 +23,7 @@ package org.apache.isis.core.progmodel.facets.value.dateutil;
 import java.util.Date;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
 

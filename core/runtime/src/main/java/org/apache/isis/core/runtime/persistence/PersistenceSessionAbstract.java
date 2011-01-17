@@ -40,7 +40,7 @@ import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
+import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacetUtils;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.query.QueryCardinality;
 import org.apache.isis.core.metamodel.services.container.query.QueryFindByPattern;
@@ -595,8 +595,8 @@ public abstract class PersistenceSessionAbstract implements PersistenceSession {
     
 	protected boolean isImmutable(final ObjectAdapter adapter) {
 		final ObjectSpecification noSpec = adapter.getSpecification();
-		return SpecificationFacets.isAlwaysImmutable(noSpec) || 
-			(SpecificationFacets.isImmutableOncePersisted(noSpec) && 
+		return ImmutableFacetUtils.isAlwaysImmutable(noSpec) || 
+			(ImmutableFacetUtils.isImmutableOncePersisted(noSpec) && 
 			 adapter.isPersistent());
 	}
 

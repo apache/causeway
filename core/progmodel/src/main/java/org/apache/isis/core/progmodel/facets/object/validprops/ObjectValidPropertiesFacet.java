@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.object.validprops;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
 import org.apache.isis.core.metamodel.interactions.ObjectValidityContext;
 import org.apache.isis.core.metamodel.interactions.ValidatingInteractionAdvisor;
 

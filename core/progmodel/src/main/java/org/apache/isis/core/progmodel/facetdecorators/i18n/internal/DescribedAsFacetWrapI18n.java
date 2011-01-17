@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facetdecorators.i18n.internal;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 
 
 public class DescribedAsFacetWrapI18n extends DescribedAsFacetAbstract {

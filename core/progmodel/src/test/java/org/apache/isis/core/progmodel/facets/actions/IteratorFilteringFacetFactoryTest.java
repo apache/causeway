@@ -22,13 +22,9 @@ package org.apache.isis.core.progmodel.facets.actions;
 
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.object.IteratorFilteringFacetFactory;
 
 
@@ -49,19 +45,11 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testRequestsRemoverToRemoveIteratorMethods() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             public void someAction() {}
         }
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));

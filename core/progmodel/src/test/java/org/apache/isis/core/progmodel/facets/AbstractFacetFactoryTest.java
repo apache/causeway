@@ -97,10 +97,5 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         assertTrue(methodRemover.getRemoveMethodArgsCalls().isEmpty());
     }
 
-    /**
-     * Use {@link #contains(FeatureType[], FeatureType)
-     */
-    public abstract void testFeatureTypes();
-
 }
 

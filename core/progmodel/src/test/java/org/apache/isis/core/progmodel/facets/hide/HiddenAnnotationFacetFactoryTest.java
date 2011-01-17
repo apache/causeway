@@ -22,30 +22,26 @@ package org.apache.isis.core.progmodel.facets.hide;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetAbstract;
-import org.apache.isis.core.progmodel.facets.members.hide.annotation.HiddenAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hide.annotation.HiddenAnnotationForMemberFacetFactory;
 
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private HiddenAnnotationFacetFactory facetFactory;
+    private HiddenAnnotationForMemberFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new HiddenAnnotationFacetFactory();
+        facetFactory = new HiddenAnnotationForMemberFacetFactory();
     }
 
     @Override
@@ -54,19 +50,11 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testHiddenAnnotationPickedUpOnProperty() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             @Hidden
             public int getNumberOfOrders() {
                 return 0;

@@ -52,7 +52,7 @@ public class PropertyAccessorFacetFactory extends PropertyOrCollectionIdentifyin
         processMethodContext.removeMethod(accessorMethod);
         
         final FacetHolder property = processMethodContext.getFacetHolder();
-        FacetUtil.addFacet(new PropertyOrCollectionAccessorFacetViaAccessor(accessorMethod, property));
+        FacetUtil.addFacet(new PropertyAccessorFacetViaAccessor(accessorMethod, property));
     }
 
 

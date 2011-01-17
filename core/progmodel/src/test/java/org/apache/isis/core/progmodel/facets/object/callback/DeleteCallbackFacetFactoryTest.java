@@ -21,16 +21,12 @@
 package org.apache.isis.core.progmodel.facets.object.callback;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemoveCallbackViaDeleteMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovedCallbackFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovingCallbackFacetViaMethod;
@@ -53,15 +49,6 @@ public class DeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
 
     public void testDeletingLifecycleMethodPickedUpOn() {

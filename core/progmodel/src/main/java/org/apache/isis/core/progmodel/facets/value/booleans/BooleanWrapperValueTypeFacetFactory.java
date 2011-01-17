@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.value.booleans;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 
 public class BooleanWrapperValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Boolean> {

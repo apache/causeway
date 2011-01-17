@@ -33,14 +33,12 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFa
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 
 public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String REMOVED_PREFIX = "removed";
-    private static final String REMOVING_PREFIX = "removing";
-
-    private static final String[] PREFIXES = { REMOVED_PREFIX, REMOVING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.REMOVED_PREFIX, MethodPrefixConstants.REMOVING_PREFIX, };
 
     public RemoveCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
@@ -55,7 +53,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, REMOVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             RemovingCallbackFacet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
@@ -66,7 +64,7 @@ public class RemoveCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbs
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.REMOVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             RemovedCallbackFacet facet = facetHolder.getFacet(RemovedCallbackFacet.class);

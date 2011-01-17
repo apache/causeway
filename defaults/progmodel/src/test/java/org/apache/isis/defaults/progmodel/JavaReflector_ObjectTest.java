@@ -24,13 +24,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
-import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflectorDefault;
 import org.apache.isis.core.progmodel.facets.object.validprops.ObjectValidPropertiesFacet;

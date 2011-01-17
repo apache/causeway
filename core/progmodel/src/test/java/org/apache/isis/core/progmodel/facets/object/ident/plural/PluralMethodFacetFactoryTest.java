@@ -21,15 +21,11 @@
 package org.apache.isis.core.progmodel.facets.object.ident.plural;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.object.plural.staticmethod.PluralFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.object.plural.staticmethod.PluralMethodFacetFactory;
 
@@ -51,15 +47,6 @@ public class PluralMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public static class Customer {
         public static String pluralName() {

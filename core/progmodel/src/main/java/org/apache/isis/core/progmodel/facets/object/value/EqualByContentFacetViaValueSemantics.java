@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.object.value;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.ebc.EqualByContentFacetAbstract;
+import org.apache.isis.core.metamodel.facets.ebc.EqualByContentFacetAbstract;
 
 
 public class EqualByContentFacetViaValueSemantics extends EqualByContentFacetAbstract {

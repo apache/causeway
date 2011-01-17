@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.value.color;
 
 import org.apache.isis.applib.value.Color;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 
 public class ColorValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<Color> {

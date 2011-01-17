@@ -22,7 +22,7 @@ package org.apache.isis.core.progmodel.facets.value.timestamp;
 
 import org.apache.isis.applib.value.TimeStamp;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 
 

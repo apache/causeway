@@ -22,16 +22,12 @@ package org.apache.isis.core.progmodel.facets.disable;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstract;
 import org.apache.isis.core.progmodel.facets.members.disable.annotation.DisabledAnnotationFacetFactory;
@@ -54,15 +50,6 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testDisabledAnnotationPickedUpOnProperty() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")

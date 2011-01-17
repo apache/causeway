@@ -28,6 +28,7 @@ import org.apache.log4j.LogManager;
 
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
+import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
 
 
 public class MemberOrderComparatorTest extends TestCase {

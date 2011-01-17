@@ -21,47 +21,24 @@
 package org.apache.isis.core.progmodel.facets.propparam.typicallength;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
+import org.apache.isis.core.metamodel.facets.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.typicallength.annotation.TypicalLengthAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.typicallength.annotation.TypicalLengthFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.param.typicallen.annotation.TypicalLengthAnnotationOnParameterFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.typicallen.annotation.TypicalLengthFacetAnnotationOnParameter;
+import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthAnnotationOnPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.typicallen.annotation.TypicalLengthFacetAnnotationOnProperty;
 
 
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private TypicalLengthAnnotationFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new TypicalLengthAnnotationFacetFactory();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
-
     public void testTypicalLengthAnnotationPickedUpOnProperty() {
+        TypicalLengthAnnotationOnPropertyFacetFactory facetFactory = new TypicalLengthAnnotationOnPropertyFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -76,12 +53,15 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
 
         final Facet facet = facetedMethod.getFacet(TypicalLengthFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypicalLengthFacetAnnotation);
-        final TypicalLengthFacetAnnotation typicalLengthFacetAnnotation = (TypicalLengthFacetAnnotation) facet;
+        assertTrue(facet instanceof TypicalLengthFacetAnnotationOnProperty);
+        final TypicalLengthFacetAnnotationOnProperty typicalLengthFacetAnnotation = (TypicalLengthFacetAnnotationOnProperty) facet;
         assertEquals(30, typicalLengthFacetAnnotation.value());
     }
 
     public void testTypicalLengthAnnotationPickedUpOnActionParameter() {
+        TypicalLengthAnnotationOnParameterFacetFactory facetFactory = new TypicalLengthAnnotationOnParameterFacetFactory();
+
+        
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -93,8 +73,8 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
 
         final Facet facet = facetedMethodParameter.getFacet(TypicalLengthFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypicalLengthFacetAnnotation);
-        final TypicalLengthFacetAnnotation typicalLengthFacetAnnotation = (TypicalLengthFacetAnnotation) facet;
+        assertTrue(facet instanceof TypicalLengthFacetAnnotationOnParameter);
+        final TypicalLengthFacetAnnotationOnParameter typicalLengthFacetAnnotation = (TypicalLengthFacetAnnotationOnParameter) facet;
         assertEquals(20, typicalLengthFacetAnnotation.value());
     }
 

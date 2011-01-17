@@ -33,6 +33,7 @@ import com.google.common.collect.ImmutableList;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
+import org.apache.isis.core.progmodel.facets.members.order.MemberOrderFacetAnnotation;
 
 
 public class DeweyOrderSetTest extends TestCase {

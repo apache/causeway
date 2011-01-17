@@ -26,6 +26,7 @@ import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.adapters.ValueSemanticsProvider;
 import org.apache.isis.core.commons.authentication.AuthenticationSessionProvider;
 import org.apache.isis.core.commons.config.IsisConfiguration;
+import org.apache.isis.core.commons.lang.ClassUtil;
 import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
@@ -33,12 +34,10 @@ import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacetAbstract;
 import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
-import org.apache.isis.core.progmodel.facets.defaults.DefaultedFacetUsingDefaultsProvider;
-import org.apache.isis.core.progmodel.facets.encodeable.EncodableFacetUsingEncoderDecoder;
-import org.apache.isis.core.progmodel.facets.object.ident.title.TitleFacetUsingParser;
+import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetUsingDefaultsProvider;
+import org.apache.isis.core.progmodel.facets.object.encodeable.EncodableFacetUsingEncoderDecoder;
 import org.apache.isis.core.progmodel.facets.object.parseable.ParseableFacetUsingParser;
-import org.apache.isis.core.progmodel.facets.propparam.typicallength.parser.TypicalLengthFacetUsingParser;
-import org.apache.isis.core.progmodel.util.ClassUtil;
+import org.apache.isis.core.progmodel.facets.object.title.TitleFacetUsingParser;
 
 
 public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract implements ValueFacet {
@@ -91,7 +90,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
     }
 
     public ValueFacetAbstract(
-            final ValueSemanticsProvider semanticsProvider,
+            final ValueSemanticsProvider<?> semanticsProvider,
             final AddFacetsIfInvalidStrategy addFacetsIfInvalid,
             final FacetHolder holder,
             final ValueSemanticsProviderContext context) {
@@ -132,13 +131,13 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
         if (semanticsProvider != null) {
 
             // install the EncodeableFacet if we've been given an EncoderDecoder
-            final EncoderDecoder encoderDecoder = semanticsProvider.getEncoderDecoder();
+            final EncoderDecoder<?> encoderDecoder = semanticsProvider.getEncoderDecoder();
             if (encoderDecoder != null) {
                 facetHolder.addFacet(new EncodableFacetUsingEncoderDecoder(encoderDecoder, holder, getAdapterMap(), getDependencyInjector()));
             }
 
             // install the ParseableFacet and other facets if we've been given a Parser
-            final Parser parser = semanticsProvider.getParser();
+            final Parser<?> parser = semanticsProvider.getParser();
             if (parser != null) {
                 facetHolder.addFacet(new ParseableFacetUsingParser(parser, holder, getAuthenticationSessionProvider(), getDependencyInjector(), getAdapterMap()));
                 facetHolder.addFacet(new TitleFacetUsingParser(parser, holder, getDependencyInjector()));
@@ -146,7 +145,7 @@ public abstract class ValueFacetAbstract extends MultipleValueFacetAbstract impl
             }
 
             // install the DefaultedFacet if we've been given a DefaultsProvider
-            final DefaultsProvider defaultsProvider = semanticsProvider.getDefaultsProvider();
+            final DefaultsProvider<?> defaultsProvider = semanticsProvider.getDefaultsProvider();
             if (defaultsProvider != null) {
                 facetHolder.addFacet(new DefaultedFacetUsingDefaultsProvider(defaultsProvider, holder, getDependencyInjector()));
             }

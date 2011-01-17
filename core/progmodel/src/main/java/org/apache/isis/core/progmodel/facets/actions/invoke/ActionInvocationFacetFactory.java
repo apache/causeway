@@ -34,8 +34,8 @@ import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
 import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 

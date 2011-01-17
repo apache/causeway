@@ -25,10 +25,10 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.isis.core.commons.authentication.AuthenticationSession;
+import org.apache.isis.core.commons.authentication.AuthenticationSessionUtils;
 import org.apache.isis.core.metamodel.adapter.util.InvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.progmodel.authentication.AuthenticationSessionUtils;
 import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacetAbstract;
 
 

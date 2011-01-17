@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facetdecorators.i18n.internal;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.help.HelpFacetAbstract;
+import org.apache.isis.core.metamodel.facets.help.HelpFacetAbstract;
 
 
 public class HelpFacetWrapI18n extends HelpFacetAbstract {

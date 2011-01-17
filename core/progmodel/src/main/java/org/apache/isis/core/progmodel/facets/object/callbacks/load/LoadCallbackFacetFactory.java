@@ -31,14 +31,12 @@ import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 
 public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String LOADED_PREFIX = "loaded";
-    private static final String LOADING_PREFIX = "loading";
-
-    private static final String[] PREFIXES = { LOADED_PREFIX, LOADING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.LOADED_PREFIX, MethodPrefixConstants.LOADING_PREFIX, };
 
     public LoadCallbackFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
@@ -53,13 +51,13 @@ public class LoadCallbackFacetFactory extends MethodPrefixBasedFacetFactoryAbstr
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LOADING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.LOADING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             facets.add(new LoadingCallbackFacetViaMethod(method, facetHolder));
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, LOADED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.LOADED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             facets.add(new LoadedCallbackFacetViaMethod(method, facetHolder));

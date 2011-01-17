@@ -27,7 +27,7 @@ import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetInferred;
+import org.apache.isis.core.metamodel.facets.named.NamedFacetInferred;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ActionInvocationFacetFactory;
 import org.apache.isis.core.progmodel.facets.actions.invoke.ExecutedFacetViaNamingConvention;
 

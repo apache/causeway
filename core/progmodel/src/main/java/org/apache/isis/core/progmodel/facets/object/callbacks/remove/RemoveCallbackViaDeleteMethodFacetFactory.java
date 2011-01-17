@@ -33,14 +33,12 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFa
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 
 public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String DELETED_PREFIX = "deleted";
-    private static final String DELETING_PREFIX = "deleting";
-
-    private static final String[] PREFIXES = { DELETED_PREFIX, DELETING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.DELETED_PREFIX, MethodPrefixConstants.DELETING_PREFIX, };
 
     public RemoveCallbackViaDeleteMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
@@ -55,7 +53,7 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DELETING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DELETING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             RemovingCallbackFacet facet = holder.getFacet(RemovingCallbackFacet.class);
@@ -66,7 +64,7 @@ public class RemoveCallbackViaDeleteMethodFacetFactory extends MethodPrefixBased
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, DELETED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.DELETED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             RemovedCallbackFacet facet = holder.getFacet(RemovedCallbackFacet.class);

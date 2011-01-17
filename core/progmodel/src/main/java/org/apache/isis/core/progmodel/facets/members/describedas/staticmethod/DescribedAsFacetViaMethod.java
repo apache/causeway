@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facets.ImperativeFacet;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 
 
 public class DescribedAsFacetViaMethod extends DescribedAsFacetAbstract implements ImperativeFacet {

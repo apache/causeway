@@ -27,24 +27,25 @@ import java.util.Set;
 
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromArray;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfAnnotationForCollectionsFacetFactory;
+import org.apache.isis.core.progmodel.facets.collections.typeof.TypeOfFacetAnnotationForCollection;
 
 
 public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private TypeOfAnnotationFacetFactory facetFactory;
+    private TypeOfAnnotationForCollectionsFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new TypeOfAnnotationFacetFactory();
+        facetFactory = new TypeOfAnnotationForCollectionsFacetFactory();
         facetFactory.setCollectionTypeRegistry(new CollectionTypeRegistryDefault());
     }
 
@@ -54,15 +55,6 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testTypeOfFacetInferredForActionWithJavaUtilCollectionReturnType() {
         class Order {}
@@ -80,9 +72,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetViaAnnotation);
-        final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
-        assertEquals(Order.class, typeOfFacetViaAnnotation.value());
+        assertTrue(facet instanceof TypeOfFacetAnnotationForCollection);
+        final TypeOfFacetAnnotationForCollection typeOfFacetAnnotationForCollection = (TypeOfFacetAnnotationForCollection) facet;
+        assertEquals(Order.class, typeOfFacetAnnotationForCollection.value());
 
         assertNoMethodsRemoved();
     }
@@ -103,9 +95,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetViaAnnotation);
-        final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
-        assertEquals(Order.class, typeOfFacetViaAnnotation.value());
+        assertTrue(facet instanceof TypeOfFacetAnnotationForCollection);
+        final TypeOfFacetAnnotationForCollection typeOfFacetAnnotationForCollection = (TypeOfFacetAnnotationForCollection) facet;
+        assertEquals(Order.class, typeOfFacetAnnotationForCollection.value());
 
         assertNoMethodsRemoved();
     }
@@ -168,9 +160,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetViaAnnotation);
-        final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
-        assertEquals(Order.class, typeOfFacetViaAnnotation.value());
+        assertTrue(facet instanceof TypeOfFacetAnnotationForCollection);
+        final TypeOfFacetAnnotationForCollection typeOfFacetAnnotationForCollection = (TypeOfFacetAnnotationForCollection) facet;
+        assertEquals(Order.class, typeOfFacetAnnotationForCollection.value());
 
         assertNoMethodsRemoved();
     }
@@ -191,9 +183,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetViaAnnotation);
-        final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
-        assertEquals(Order.class, typeOfFacetViaAnnotation.value());
+        assertTrue(facet instanceof TypeOfFacetAnnotationForCollection);
+        final TypeOfFacetAnnotationForCollection typeOfFacetAnnotationForCollection = (TypeOfFacetAnnotationForCollection) facet;
+        assertEquals(Order.class, typeOfFacetAnnotationForCollection.value());
 
         assertNoMethodsRemoved();
     }
@@ -214,9 +206,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetViaAnnotation);
-        final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
-        assertEquals(Order.class, typeOfFacetViaAnnotation.value());
+        assertTrue(facet instanceof TypeOfFacetAnnotationForCollection);
+        final TypeOfFacetAnnotationForCollection typeOfFacetAnnotationForCollection = (TypeOfFacetAnnotationForCollection) facet;
+        assertEquals(Order.class, typeOfFacetAnnotationForCollection.value());
 
         assertNoMethodsRemoved();
     }
@@ -237,9 +229,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof TypeOfFacetViaAnnotation);
-        final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
-        assertEquals(Order.class, typeOfFacetViaAnnotation.value());
+        assertTrue(facet instanceof TypeOfFacetAnnotationForCollection);
+        final TypeOfFacetAnnotationForCollection typeOfFacetAnnotationForCollection = (TypeOfFacetAnnotationForCollection) facet;
+        assertEquals(Order.class, typeOfFacetAnnotationForCollection.value());
 
         assertNoMethodsRemoved();
     }

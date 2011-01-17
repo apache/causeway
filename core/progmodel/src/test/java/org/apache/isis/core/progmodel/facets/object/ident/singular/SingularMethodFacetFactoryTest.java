@@ -21,26 +21,24 @@
 package org.apache.isis.core.progmodel.facets.object.ident.singular;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethod;
+import org.apache.isis.core.progmodel.facets.object.named.staticmethod.NamedFacetViaSingularNameStaticMethodFacetFactory;
 
 
 public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private SingularMethodFacetFactory facetFactory;
+    private NamedFacetViaSingularNameStaticMethodFacetFactory facetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        facetFactory = new SingularMethodFacetFactory();
+        facetFactory = new NamedFacetViaSingularNameStaticMethodFacetFactory();
     }
 
     @Override
@@ -49,15 +47,6 @@ public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public static class Customer {
         public static String singularName() {
@@ -72,9 +61,9 @@ public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof NamedFacetViaMethod);
-        final NamedFacetViaMethod namedFacetViaMethod = (NamedFacetViaMethod) facet;
-        assertEquals("Some name", namedFacetViaMethod.value());
+        assertTrue(facet instanceof NamedFacetViaSingularNameStaticMethod);
+        final NamedFacetViaSingularNameStaticMethod namedFacetViaSingularNameStaticMethod = (NamedFacetViaSingularNameStaticMethod) facet;
+        assertEquals("Some name", namedFacetViaSingularNameStaticMethod.value());
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(singularNameMethod));
     }

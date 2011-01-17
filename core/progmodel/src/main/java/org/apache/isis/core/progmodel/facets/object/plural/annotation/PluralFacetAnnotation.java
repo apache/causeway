@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.object.plural.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
 
 public class PluralFacetAnnotation extends PluralFacetAbstract {

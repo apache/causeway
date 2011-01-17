@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.facets.object.parseable;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facets.MultipleValueFacet;
-import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 
 
 /**

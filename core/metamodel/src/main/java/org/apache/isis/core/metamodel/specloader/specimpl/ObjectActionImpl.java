@@ -38,19 +38,23 @@ import org.apache.isis.core.metamodel.adapter.ServicesProvider;
 import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResultSet;
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.actions.ActionTypeFacets;
 import org.apache.isis.core.metamodel.facets.actions.choices.ActionChoicesFacet;
-import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.metamodel.facets.actions.defaults.ActionDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet.Where;
+import org.apache.isis.core.metamodel.facets.actions.exploration.ExplorationFacet;
 import org.apache.isis.core.metamodel.facets.actions.invoke.ActionInvocationFacet;
+import org.apache.isis.core.metamodel.facets.actions.prototype.PrototypeFacet;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionInvocationContext;
 import org.apache.isis.core.metamodel.interactions.ActionUsabilityContext;
 import org.apache.isis.core.metamodel.interactions.ActionVisibilityContext;
@@ -178,7 +182,23 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
 
     @Override
     public ActionType getType() {
-        return ActionTypeFacets.getType(this);
+        return getType(this);
+    }
+
+    private static ActionType getType(FacetHolder facetHolder) {
+        Facet facet = facetHolder.getFacet(DebugFacet.class);
+        if (facet != null) {
+            return ActionType.DEBUG;
+        }
+        facet = facetHolder.getFacet(ExplorationFacet.class);
+        if (facet != null) {
+            return ActionType.EXPLORATION;
+        }
+        facet = facetHolder.getFacet(PrototypeFacet.class);
+        if (facet != null) {
+            return ActionType.PROTOTYPE;
+        }
+        return ActionType.USER;
     }
 
     @Override
@@ -539,7 +559,7 @@ public class ObjectActionImpl extends ObjectMemberAbstract implements ObjectActi
                 for (int j = 0; j < parameterChoicesPojos[i].length; j++) {
                     parameterChoicesAdapters[i][j] = adapterFor(parameterChoicesPojos[i][j]);
                 }
-            } else if (SpecificationFacets.isBoundedSet(paramSpec)) {
+            } else if (BoundedFacetUtils.isBoundedSet(paramSpec)) {
                 QueryFindAllInstances query = new QueryFindAllInstances(paramSpec.getFullIdentifier());
 				final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
                 parameterChoicesAdapters[i] = new ObjectAdapter[allInstancesAdapter.size()];

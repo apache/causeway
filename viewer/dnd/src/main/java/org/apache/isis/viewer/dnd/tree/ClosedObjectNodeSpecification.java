@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.tree;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociationFilters;
 import org.apache.isis.core.runtime.context.IsisContext;
@@ -68,7 +68,7 @@ class ClosedObjectNodeSpecification extends NodeSpecification {
             }
 
             if (  showObjectContents && fields.get(i).isOneToOneAssociation() &&
-                !(SpecificationFacets.isBoundedSet(object.getSpecification()))) {
+                !(BoundedFacetUtils.isBoundedSet(object.getSpecification()))) {
                 return CAN_OPEN;
             }
         }

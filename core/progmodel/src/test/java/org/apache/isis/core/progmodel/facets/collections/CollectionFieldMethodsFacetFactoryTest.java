@@ -27,20 +27,19 @@ import java.util.Set;
 
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.When;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.accessor.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionClearFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyOrCollectionAccessorFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.progmodel.facets.collections.accessor.CollectionAccessorFacetFactory;
+import org.apache.isis.core.progmodel.facets.collections.accessor.CollectionAccessorFacetViaAccessor;
 import org.apache.isis.core.progmodel.facets.collections.clear.CollectionClearFacetFactory;
 import org.apache.isis.core.progmodel.facets.collections.clear.CollectionClearFacetViaAccessor;
 import org.apache.isis.core.progmodel.facets.collections.clear.CollectionClearFacetViaMethod;
@@ -49,6 +48,7 @@ import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToF
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionRemoveFromFacetViaAccessor;
 import org.apache.isis.core.progmodel.facets.collections.modify.CollectionRemoveFromFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.collections.modify.TypeOfFacetInferredFromSupportingMethods;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacet;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacet;
@@ -67,28 +67,12 @@ import org.apache.isis.core.progmodel.facets.members.hide.forsession.HiddenFacet
 import org.apache.isis.core.progmodel.facets.members.hide.forsession.HideForSessionFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlways;
 import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.members.name.staticmethod.NamedFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.members.name.staticmethod.NamedFacetViaNameMethodFacetFactory;
-import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyOrCollectionAccessorFacetViaAccessor;
+import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaNameMethodFacetFactory;
 
 
 public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
-
-    /**
-     * TODO: should do for other Collection*FacetFactory's also.
-     */
-    @Override
-    public void testFeatureTypes() {
-        CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertFalse(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testPropertyAccessorFacetIsInstalledForJavaUtilCollectionAndMethodRemoved() {
         CollectionAccessorFacetFactory facetFactory = new CollectionAccessorFacetFactory();
@@ -107,9 +91,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
-        final PropertyOrCollectionAccessorFacetViaAccessor propertyOrCollectionAccessorFacetViaAccessor = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyOrCollectionAccessorFacetViaAccessor.getMethods().get(0));
+        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -131,9 +115,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
-        final PropertyOrCollectionAccessorFacetViaAccessor propertyOrCollectionAccessorFacetViaAccessor = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyOrCollectionAccessorFacetViaAccessor.getMethods().get(0));
+        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -155,9 +139,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
-        final PropertyOrCollectionAccessorFacetViaAccessor propertyOrCollectionAccessorFacetViaAccessor = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyOrCollectionAccessorFacetViaAccessor.getMethods().get(0));
+        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -179,9 +163,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
-        final PropertyOrCollectionAccessorFacetViaAccessor propertyOrCollectionAccessorFacetViaAccessor = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyOrCollectionAccessorFacetViaAccessor.getMethods().get(0));
+        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -205,9 +189,9 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
-        final PropertyOrCollectionAccessorFacetViaAccessor propertyOrCollectionAccessorFacetViaAccessor = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
-        assertEquals(collectionAccessorMethod, propertyOrCollectionAccessorFacetViaAccessor.getMethods().get(0));
+        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+        final CollectionAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (CollectionAccessorFacetViaAccessor) facet;
+        assertEquals(collectionAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(collectionAccessorMethod));
     }
@@ -542,8 +526,8 @@ public class CollectionFieldMethodsFacetFactoryTest extends AbstractFacetFactory
 
         final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
-        final PropertyOrCollectionAccessorFacetViaAccessor collectionAccessorFacetViaMethod = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
+        assertTrue(facet instanceof CollectionAccessorFacetViaAccessor);
+        final CollectionAccessorFacetViaAccessor collectionAccessorFacetViaMethod = (CollectionAccessorFacetViaAccessor) facet;
         assertEquals(collectionAccessorMethod, collectionAccessorFacetViaMethod.getMethods().get(0));
     }
 

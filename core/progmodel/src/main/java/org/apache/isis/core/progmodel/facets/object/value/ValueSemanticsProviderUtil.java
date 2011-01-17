@@ -34,7 +34,7 @@ public final class ValueSemanticsProviderUtil {
     public static final String SEMANTICS_PROVIDER_NAME_KEY_PREFIX = "isis.core.progmodel.value.";
     public static final String SEMANTICS_PROVIDER_NAME_KEY_SUFFIX = ".semanticsProviderName";
 
-    static String semanticsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
+    public static String semanticsProviderNameFromConfiguration(final Class<?> type, final IsisConfiguration configuration) {
         final String key = SEMANTICS_PROVIDER_NAME_KEY_PREFIX + type.getCanonicalName() + SEMANTICS_PROVIDER_NAME_KEY_SUFFIX;
         final String semanticsProviderName = configuration.getString(key);
         return !StringUtils.isNullOrEmpty(semanticsProviderName) ? semanticsProviderName : null;

@@ -39,6 +39,7 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.interactions.PropertyModifyContext;
+import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacet;
 
 
 @RunWith(JMock.class)
@@ -50,7 +51,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
         }
     };
 
-    private MustSatisfySpecificationFacet facetForSpecificationFirstLetterUpperCase;
+    private MustSatisfySpecificationOnTypeFacet facetForSpecificationFirstLetterUpperCase;
     private FacetHolder mockHolder;
 
     private PropertyModifyContext mockContext;
@@ -64,7 +65,7 @@ public class MustSatisfySpecificationValidatingInteractionMoreTest {
         mockHolder = mockery.mock(IdentifiedHolder.class);
         requiresFirstLetterToBeUpperCase = new SpecificationRequiresFirstLetterToBeUpperCase();
         
-        facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), mockHolder);
+        facetForSpecificationFirstLetterUpperCase = new MustSatisfySpecificationOnTypeFacet(Utils.listOf(requiresFirstLetterToBeUpperCase), mockHolder);
 
         mockContext = mockery.mock(PropertyModifyContext.class);
         mockProposedObjectAdapter = mockery.mock(ObjectAdapter.class, "proposed");

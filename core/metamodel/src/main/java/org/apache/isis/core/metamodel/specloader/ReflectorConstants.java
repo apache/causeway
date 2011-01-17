@@ -23,7 +23,6 @@ import org.apache.isis.core.commons.config.ConfigurationConstants;
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facets.FacetFactory;
-import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverser;
@@ -52,8 +51,7 @@ public final class ReflectorConstants {
      * Key used to lookup implementation of {@link MemberLayoutArrangerDefault} in {@link IsisConfiguration}.
      */
     public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME = ConfigurationConstants.ROOT + "reflector.memberlayoutarranger";
-    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT = MemberLayoutArrangerDefault.class
-        .getName();
+    public static final String MEMBER_LAYOUT_ARRANGER_CLASS_NAME_DEFAULT = "org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault";
 
     /**
      * Key used to lookup implementation of {@link ProgrammingModel} in {@link IsisConfiguration}.

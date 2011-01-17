@@ -23,7 +23,7 @@ package org.apache.isis.core.progmodel.facets.value.biginteger;
 import java.math.BigInteger;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.value.ValueUsingValueSemanticsProviderFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.value.ValueUsingValueSemanticsProviderFacetFactory;
 
 
 public class BigIntegerValueTypeFacetFactory extends ValueUsingValueSemanticsProviderFacetFactory<BigInteger> {

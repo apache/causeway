@@ -25,7 +25,7 @@ import java.lang.reflect.Method;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.util.AdapterInvokeUtils;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.icon.IconFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.icon.IconFacetAbstract;
 
 
 public class IconFacetViaMethod extends IconFacetAbstract {

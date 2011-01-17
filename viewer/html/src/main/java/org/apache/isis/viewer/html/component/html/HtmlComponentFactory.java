@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 import org.apache.isis.core.metamodel.spec.ActionType;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.progmodel.facets.value.booleans.BooleanValueFacet;

@@ -29,8 +29,8 @@ import org.apache.commons.collections.iterators.IteratorEnumeration;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
 
 
 public abstract class CollectionFacetAbstract extends FacetAbstract implements CollectionFacet {
@@ -39,30 +39,35 @@ public abstract class CollectionFacetAbstract extends FacetAbstract implements C
         super(CollectionFacet.class, holder, false);
     }
     
+    @Override
     @SuppressWarnings("unchecked")
     public final Enumeration<ObjectAdapter> elements(final ObjectAdapter collectionAdapter) {
         return new IteratorEnumeration(iterator(collectionAdapter));
     }
 
+    @Override
     public final boolean contains(final ObjectAdapter collectionAdapter, final ObjectAdapter candidateObjectAdapter) {
         Collection<ObjectAdapter> collection = collection(collectionAdapter);
         return collection.contains(candidateObjectAdapter);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
     public final Iterator<ObjectAdapter> iterator(final ObjectAdapter collectionAdapter) {
         Collection<ObjectAdapter> collection = collection(collectionAdapter);
         return collection.iterator();
     }
 
+    @Override
     public Iterable<ObjectAdapter> iterable(final ObjectAdapter collectionAdapter) {
         return new Iterable<ObjectAdapter>() {
+            @Override
             public Iterator<ObjectAdapter> iterator() {
                 return CollectionFacetAbstract.this.iterator(collectionAdapter);
             }
         };
     }
 
+    @Override
     public final TypeOfFacet getTypeOfFacet() {
         return getFacetHolder().getFacet(TypeOfFacet.class);
     }

@@ -21,10 +21,10 @@
 package org.apache.isis.core.progmodel.facets.object.aggregated.annotation;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.object.aggregated.AggregatedFacetImpl;
+import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacetAbstract;
 
 
-public class AggregatedFacetAnnotation extends AggregatedFacetImpl {
+public class AggregatedFacetAnnotation extends AggregatedFacetAbstract {
 
     public AggregatedFacetAnnotation(final FacetHolder holder) {
         super(holder);

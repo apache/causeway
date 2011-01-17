@@ -33,7 +33,7 @@ import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 public class DisabledAnnotationFacetFactory extends AnnotationBasedFacetFactoryAbstract {
 
     public DisabledAnnotationFacetFactory() {
-        super(FeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS);
+        super(FeatureType.MEMBERS);
     }
 
     @Override

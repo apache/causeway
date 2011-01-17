@@ -21,16 +21,15 @@
 package org.apache.isis.core.progmodel.facets.object.ident.title;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
-import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
+import org.apache.isis.core.metamodel.facets.object.title.TitleFacet;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.title.TitleFacetViaTitleMethod;
+import org.apache.isis.core.progmodel.facets.object.title.TitleFacetViaToStringMethod;
+import org.apache.isis.core.progmodel.facets.object.title.TitleMethodFacetFactory;
 
 
 public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -50,15 +49,6 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         super.tearDown();
     }
 
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertFalse(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testTitleMethodPickedUpOnClassAndMethodRemoved() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")

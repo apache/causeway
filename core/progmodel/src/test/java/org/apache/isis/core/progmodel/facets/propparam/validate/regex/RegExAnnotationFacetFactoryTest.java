@@ -21,60 +21,42 @@
 package org.apache.isis.core.progmodel.facets.propparam.validate.regex;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.validate.regex.annotation.RegExAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.validate.regex.annotation.RegExFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.object.regex.RegExFacet;
+import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForType;
+import org.apache.isis.core.progmodel.facets.object.regex.annotation.RegExFacetAnnotationForTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.validate.regexannot.RegExFacetAnnotationForParameter;
+import org.apache.isis.core.progmodel.facets.param.validate.regexannot.RegExFacetAnnotationForParameterFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForProperty;
+import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForPropertyFacetFactory;
 
 
 public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private RegExAnnotationFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new RegExAnnotationFacetFactory();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
-
     public void testRegExAnnotationPickedUpOnClass() {
+        RegExFacetAnnotationForTypeFacetFactory facetFactory = new RegExFacetAnnotationForTypeFacetFactory();
+
         @RegEx(validation = "^A.*", caseSensitive = false)
         class Customer {}
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(RegExFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RegExFacetAnnotation);
-        final RegExFacetAnnotation regExFacet = (RegExFacetAnnotation) facet;
+        assertTrue(facet instanceof RegExFacetAnnotationForType);
+        final RegExFacetAnnotationForType regExFacet = (RegExFacetAnnotationForType) facet;
         assertEquals("^A.*", regExFacet.validation());
         assertEquals(false, regExFacet.caseSensitive());
     }
 
     public void testRegExAnnotationPickedUpOnProperty() {
+        RegExFacetAnnotationForPropertyFacetFactory facetFactory = new RegExFacetAnnotationForPropertyFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -89,13 +71,15 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethod.getFacet(RegExFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RegExFacetAnnotation);
-        final RegExFacetAnnotation regExFacet = (RegExFacetAnnotation) facet;
+        assertTrue(facet instanceof RegExFacetAnnotationForProperty);
+        final RegExFacetAnnotationForProperty regExFacet = (RegExFacetAnnotationForProperty) facet;
         assertEquals("^A.*", regExFacet.validation());
         assertEquals(false, regExFacet.caseSensitive());
     }
 
     public void testRegExAnnotationPickedUpOnActionParameter() {
+        RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -107,13 +91,15 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
         final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof RegExFacetAnnotation);
-        final RegExFacetAnnotation regExFacet = (RegExFacetAnnotation) facet;
+        assertTrue(facet instanceof RegExFacetAnnotationForParameter);
+        final RegExFacetAnnotationForParameter regExFacet = (RegExFacetAnnotationForParameter) facet;
         assertEquals("^A.*", regExFacet.validation());
         assertEquals(false, regExFacet.caseSensitive());
     }
 
     public void testRegExAnnotationIgnoredForNonStringsProperty() {
+        RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -130,6 +116,8 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testRegExAnnotationIgnoredForPrimitiveOnActionParameter() {
+        RegExFacetAnnotationForParameterFacetFactory facetFactory = new RegExFacetAnnotationForParameterFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")

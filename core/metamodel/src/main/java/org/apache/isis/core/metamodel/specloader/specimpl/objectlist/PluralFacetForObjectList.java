@@ -21,7 +21,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl.objectlist;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacetAbstract;
+import org.apache.isis.core.metamodel.facets.object.plural.PluralFacetAbstract;
 
 
 public class PluralFacetForObjectList extends PluralFacetAbstract {

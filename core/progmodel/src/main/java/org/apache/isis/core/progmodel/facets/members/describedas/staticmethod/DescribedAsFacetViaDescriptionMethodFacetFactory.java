@@ -28,7 +28,7 @@ import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
@@ -45,7 +45,7 @@ public class DescribedAsFacetViaDescriptionMethodFacetFactory extends MethodPref
      * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
      */
     public DescribedAsFacetViaDescriptionMethodFacetFactory() {
-        super(FeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS, PREFIXES);
+        super(FeatureType.MEMBERS, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

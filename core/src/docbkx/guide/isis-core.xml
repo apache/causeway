@@ -198,33 +198,10 @@
           </listitem>
         </itemizedlist>
 
-        <para>Reading the above will give you a good understanding as to how
-        <emphasis>Isis</emphasis> fits together and how it can be
-        extended.</para>
-
-        <para></para>
-
-        <para>However, it does <emphasis>not</emphasis>:</para>
-
-        <para>It does not cover th</para>
-
-        <para>, of writing an Isis application, describes the
-        architectura</para>
-
-        <para></para>
-
-        <para>You should also note that the core documentation also explains
-        the wider landscape of what makes up an <emphasis>Isis</emphasis>
-        application, dealing with such matters as running the app with
-        different components, eg viewers or object stores.</para>
-
-        <para>Indeed, it is also possible for developers to build their own
-        programming model, either as a subset of the default programming model
-        described here, and possibly with additional custom elements. See the
-        core documentation for details on how to write your own programming
-        model.</para>
-
-        <para></para>
+        <para>Reading through this guide should give you a good understanding
+        as to how <emphasis>Isis</emphasis> fits together and how it can be
+        extended. You'll also understand the wider "world view" for Isis, in
+        terms of its principles, and its flexibility.</para>
       </sect1>
 
       <sect1>
@@ -235,40 +212,99 @@
         <sect2>
           <title>AppLib Documentation</title>
 
-          <para>If you are starting out using <emphasis>Isis</emphasis> then
-          recommended reading is both this guide and also the documentation
-          for the applib (application library).</para>
+          <para>Reading through this guide will give you a good understanding
+          as to how <emphasis>Isis</emphasis> fits together and how it can be
+          extended. However, it won't precisely tell you what you should write
+          in your application.</para>
 
-          <para>The applib guide focuses on the specifics of the programming
-          conventions of (what we call the) default programming model.</para>
+          <para>For this, you should read the applib (application library)
+          documentation, which focuses on the specifics of the programming
+          conventions of (what we call the) default programming model, in
+          other words what code you should actually write.</para>
 
-          <para>This guide (the core documentation) does not cover the default
-          programming model in the same sort of depth. Instead, it covers the
-          main principles and patterns of writing any Apache Isis application,
-          including the fact that there you can customize your own programming
-          model if you wish. It also goes in depth into the architecture and
-          design of the framework.</para>
+          <para>You'll find that this guide (the core documentation) does not
+          cover the default programming model in the same sort of depth.
+          Rather, it explains why we have an applib in the first place, and
+          more generally covers the main principles and patterns of writing
+          any Apache Isis application (including the fact that there you can
+          customize your own programming model if you wish). It also goes in
+          depth into the architecture and design of the framework.</para>
 
-          <para></para>
+          <para>Put another way: the applib covers the "what", whereas this
+          guide covers more of the "why" along with the underlying
+          "how".</para>
+
+          <para>Therefore, if you are starting out using
+          <emphasis>Isis</emphasis> then recommended reading is both this
+          guide and also the documentation for the applib.</para>
         </sect2>
 
         <sect2>
           <title>Alternative Implementations</title>
 
-          <para></para>
+          <para><emphasis>Isis</emphasis> is component based, with the core
+          modules defining a number of <acronym>API</acronym>s (eg for
+          security and persistence). This guide also covers the default
+          implementations of these <acronym>API</acronym>s (eg the in-memory
+          object store for persistence).</para>
+
+          <para>However, there are multiple other implementations of these
+          <acronym>API</acronym>s. Each of these alternative implementations
+          comes with its own documentation.</para>
         </sect2>
 
         <sect2>
           <title>Advanced Deployment Options</title>
 
-          <para></para>
+          <para>Any application must be deployed, though the details of the
+          deployment will depend upon which implementations of the code APIs
+          are in use.</para>
+
+          <para>This guide describes the deployment options that are available
+          through using the default implementations of the core module
+          <acronym>API</acronym>s, for the most common viewers
+          (<acronym>DnD</acronym> and <acronym>HTML</acronym>). Other viewers
+          and/or alternative module implementations may require or offer
+          different deployment options. For example, the remoting alternative
+          implementation requires the bundling up of different client vs
+          server deployments. Similarly, a viewer for a mobile phone (there
+          isn't one at the time of writing but there could be in the future)
+          would require packaging in a certain way. Or, </para>
         </sect2>
       </sect1>
 
       <sect1>
         <title>Where Next?</title>
 
-        <para></para>
+        <para>We recommend that you read through all the chapters in part 1 of
+        this guide; they'll provide you with a good understanding as to the
+        why's and wherefore's of <emphasis>Isis</emphasis>.</para>
+
+        <para>If you want to just start developing with
+        <emphasis>Isis</emphasis>, you should also read the applib
+        documentation. You should then know enough to start developing
+        <emphasis>Isis</emphasis> prototypes, and using the default
+        implementations of the core module <acronym>API</acronym>s.</para>
+
+        <para>As your application starts to mature, you will probably want to
+        understand more about how <emphasis>Isis</emphasis> works in order to
+        determine which alternative implementations to use. Part 3 describes
+        each of the core modules, and part 4 describes the configuration and
+        capabilities of the default implementations. You'll find both of these
+        parts are good reference material<footnote>
+            <para>They are perhaps more targetted at Isis' own contributors
+            rather than Isis users, so feel free to skim read if you
+            wish.</para>
+          </footnote>, and from there you'll be in a position to evaluate
+        alternative implementations.</para>
+
+        <para>Finally, part 5 describes the basic deployment options. This is
+        useful reading for principles and objectives; and will be relevant if
+        you have only used default implementations or one of the basic
+        viewers. More likely though you will have used an alternative
+        implementations or viewer; you should therefore also read the
+        deployment information in the guide relating to that
+        implementation/viewer.</para>
       </sect1>
     </chapter>
 
@@ -280,10 +316,12 @@
         basis of <emphasis>Apache Isis</emphasis>.</para>
       </abstract>
 
-      <para>There's much more to <emphasis>Apache Isis</emphasis> than being a
-      framework that automatically generates the user interface. This chapter
-      provides an overview of the main principles and patterns that are the
-      basis of the framework.</para>
+      <para>The headline feature that distinguishes Apache Isis from other
+      frameworks is its ability to generate a user interface (at runtime)
+      directly from the domain model. However, there's much more to
+      <emphasis>Apache Isis</emphasis> than this. This chapter provides an
+      overview of the main principles and patterns that are the basis of the
+      framework.</para>
 
       <sect1>
         <title>Principles</title>
@@ -291,32 +329,68 @@
         <sect2>
           <title>Ubiquitous Language</title>
 
-          <para>One of the more influential IT books has been <emphasis>Domain
-          Driven Design</emphasis>, by Eric Evans. In it, Evans provided a set
-          of patterns for building enterprise systems, based on the premise
-          that the domain model should be at the heart of the system, and
-          should have the most attention devoted to it.</para>
+          <para>One of the more influential <acronym>IT</acronym> books has
+          been <emphasis>Domain Driven Design</emphasis>, by Eric Evans. In
+          it, Evans provided a set of patterns for building enterprise
+          systems, based on the premise that the domain model should be at the
+          heart of the system, and should have the most attention devoted to
+          it.</para>
 
           <para>One of the patterns that Evans named was the
           <emphasis>Ubiquitous Language</emphasis>, the idea being that the
           domain experts and the developers should work as a single team to
           communicate through a single common set of terms. This had been
-          advocated before: it's good practice after all for a project to have
-          a glossary of terms. But Evans emphasised the fact that the team
-          (technical and non-technical alike) should <emphasis>only</emphasis>
-          use this set of terms, and if they found themselves unable to then
-          it was an indication of a concept that had not previously been
-          identified.</para>
+          advocated before: after all, it's good practice for a project to
+          have a glossary of commonly understood terms. But Evans emphasised
+          the fact that the team (technical and non-technical alike) should
+          <emphasis>only</emphasis> use this set of terms to communicate. If
+          the team found themselves unable to communicate by doing this then
+          it should be taken as an indication of a concept was missing from
+          the ubiquitous language, and so should be identified.</para>
 
-          <para></para>
+          <para>In <emphasis>Isis</emphasis> we build systems firstly by
+          building the domain model; only later do we consider the
+          presentation layer and persistence concerns. This emphasis helps the
+          team start to think about the domain model as the most important
+          thing to focus on, at least initially.</para>
 
-          <para></para>
+          <para>But <emphasis>Isis</emphasis>' support for the ubiquitous
+          language is a little more fundamental than that. While the idea of
+          developing a solid domain model to act as the team's ubiquitous
+          language sounds fine in principle, in practice many cases teams
+          struggle because it can be hard to demonstrate the domain model to
+          the non-technical domain experts without also writing application
+          layer and user interface code. What often happens is that the
+          technical team can be reluctant to take evolve the domain model once
+          this is done, because it will break not only the domain layer but
+          also the hand-crafted layers in front.</para>
 
-          <para></para>
+          <para><emphasis>Isis</emphasis>' ability automatically generated an
+          user interface means avoids this problem. Not only does the user
+          interface make it easy for the domain experts to identify the domain
+          concepts, it also means that the technical team will more readily
+          refine the domain because they had to invest less to get to the
+          point where they get useful feedback.</para>
         </sect2>
 
         <sect2>
           <title>Rapid Application Development</title>
+
+          <para>Time-to-market </para>
+
+          <para></para>
+
+          <para></para>
+
+          <para>technology concerns. There </para>
+
+          <para></para>
+
+          <para>Metamodel.</para>
+
+          <para></para>
+
+          <para>Similar ROI that might get from an ORM.</para>
 
           <para></para>
 
@@ -4575,8 +4649,6 @@ Persistable: User Persistable</screen>
 
         <para></para>
 
-        <para></para>
-
         <screenshot>
           <screeninfo>Top-level Architecture Diagram with SpecLoader
           expanded</screeninfo>
@@ -4584,6 +4656,19 @@ Persistable: User Persistable</screen>
           <mediaobject>
             <imageobject>
               <imagedata fileref="images/metamodel/architecture-diagram-top-level-with-specloader-expanded.png"
+                         scale="60" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para></para>
+
+        <screenshot>
+          <screeninfo>Composition Diagram</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/metamodel/composition-diagram-top-level.png"
                          scale="60" />
             </imageobject>
           </mediaobject>
@@ -5057,12 +5142,40 @@ for (int i = 0; i &lt; properties.length; i++) {
         be defined.</para>
 
         <para></para>
+
+        <para></para>
+
+        <screenshot>
+          <screeninfo>Architecture Diagram</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/progmodel/architecture-diagram.png"
+                         scale="60" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para></para>
+
+        <screenshot>
+          <screeninfo>Composition Diagram (facets package)</screeninfo>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/progmodel/composition-diagram-facets-package.png"
+                         scale="60" />
+            </imageobject>
+          </mediaobject>
+        </screenshot>
+
+        <para></para>
       </sect1>
 
       <sect1>
         <title>Reflection</title>
 
-        <para>*** this probably should move to progmodel ?</para>
+        <para></para>
 
         <para></para>
 
@@ -6727,11 +6840,12 @@ isis.fixtures = BookingsFixture, PerspectivesFixture</programlisting>
   </part>
 
   <part id="prt.DeploymentGuide">
-    <title>Deployment Guide</title>
+    <title>Deployment Principles</title>
 
     <partintro>
       <abstract>
-        <para>The basic deployment options.</para>
+        <para>The principles for deploying an <emphasis>Isis</emphasis>
+        application.</para>
       </abstract>
 
       <para>Assuming that you have developed your domain model and tested it

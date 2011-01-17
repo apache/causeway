@@ -23,7 +23,7 @@ package org.apache.isis.metamodel.examples.facets.namefile;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
 
 
 public class NameFileFacet extends FacetAbstract implements NamedFacet {

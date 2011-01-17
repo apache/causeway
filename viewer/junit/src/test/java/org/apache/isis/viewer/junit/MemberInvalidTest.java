@@ -25,16 +25,17 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
+import org.junit.Test;
+
+import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacetDefault;
 import org.apache.isis.core.progmodel.facets.actions.validate.method.ActionValidationFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateAddToFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.collections.validate.CollectionValidateRemoveFromFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.MandatoryFacetDefault;
-import org.apache.isis.core.progmodel.facets.propparam.validate.maxlength.annotation.MaxLengthFacetAnnotation;
-import org.apache.isis.core.progmodel.facets.propparam.validate.regex.annotation.RegExFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.properties.validate.maxlenannot.MaxLengthFacetAnnotationForProperty;
+import org.apache.isis.core.progmodel.facets.properties.validate.regexannot.RegExFacetAnnotationForProperty;
 import org.apache.isis.progmodel.wrapper.applib.InvalidException;
 import org.apache.isis.viewer.junit.sample.domain.Country;
-import org.junit.Test;
 
 
 public class MemberInvalidTest extends AbstractTest {
@@ -151,7 +152,7 @@ public class MemberInvalidTest extends AbstractTest {
             custJsVO.setMaxLengthField("This is far too long");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(MaxLengthFacetAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(MaxLengthFacetAnnotationForProperty.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Max Length Field"));
         }
     }
@@ -179,7 +180,7 @@ public class MemberInvalidTest extends AbstractTest {
             custJsVO.setRegExCaseInsensitiveField("abXfoobar");
             fail("Should have thrown exception");
         } catch (final InvalidException ex) {
-            assertThat(ex.getAdvisorClass(), classEqualTo(RegExFacetAnnotation.class));
+            assertThat(ex.getAdvisorClass(), classEqualTo(RegExFacetAnnotationForProperty.class));
             assertThat(ex.getIdentifier().getMemberNaturalName(), equalTo("Reg Ex Case Insensitive Field"));
         }
     }

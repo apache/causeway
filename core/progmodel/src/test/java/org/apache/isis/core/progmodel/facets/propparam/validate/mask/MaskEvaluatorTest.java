@@ -34,6 +34,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import org.apache.isis.core.progmodel.facets.object.mask.MaskEvaluator;
+
 
 @RunWith(Parameterized.class)
 public class MaskEvaluatorTest {

@@ -47,7 +47,7 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMap;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecoratorSet;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.DependencyInjector;
@@ -531,7 +531,7 @@ public class ObjectReflectorDefault implements ObjectReflector, DebuggableWithTi
         for (ObjectSpecification spec : specs) {
             str.append(spec.isAbstract() ? "A" : ".");
             str.append(spec.isService() ? "S" : ".");
-            str.append(SpecificationFacets.isBoundedSet(spec) ? "B"
+            str.append(BoundedFacetUtils.isBoundedSet(spec) ? "B"
                 : ".");
             str.append(spec.isCollection() ? "C" : ".");
             str.append(spec.isNotCollection() ? "O" : ".");

@@ -21,7 +21,7 @@
 package org.apache.isis.core.progmodel.facets.actions.invoke;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.progmodel.facets.actions.executed.ExecutedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacetAbstract;
 
 
 public class ExecutedFacetViaNamingConvention extends ExecutedFacetAbstract {

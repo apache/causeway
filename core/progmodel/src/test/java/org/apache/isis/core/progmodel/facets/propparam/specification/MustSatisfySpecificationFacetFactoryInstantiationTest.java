@@ -22,13 +22,15 @@ package org.apache.isis.core.progmodel.facets.propparam.specification;
 
 import org.junit.Test;
 
+import org.apache.isis.core.progmodel.facets.object.validperspec.MustSatisfySpecificationOnTypeFacetFactory;
+
 
 public class MustSatisfySpecificationFacetFactoryInstantiationTest {
 
 
     @Test
     public void canInstantiate() {
-        new MustSatisfySpecificationFacetFactory();
+        new MustSatisfySpecificationOnTypeFacetFactory();
     }
 
 }

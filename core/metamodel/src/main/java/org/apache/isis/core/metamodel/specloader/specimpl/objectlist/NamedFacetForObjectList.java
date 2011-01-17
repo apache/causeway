@@ -21,7 +21,7 @@
 package org.apache.isis.core.metamodel.specloader.specimpl.objectlist;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacetAbstract;
+import org.apache.isis.core.metamodel.facets.named.NamedFacetAbstract;
 
 
 public class NamedFacetForObjectList extends NamedFacetAbstract {

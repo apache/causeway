@@ -33,14 +33,12 @@ import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallback
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
+import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 
 
 public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {
 
-    private static final String SAVED_PREFIX = "saved";
-    private static final String SAVING_PREFIX = "saving";
-
-    private static final String[] PREFIXES = { SAVED_PREFIX, SAVING_PREFIX, };
+    private static final String[] PREFIXES = { MethodPrefixConstants.SAVED_PREFIX, MethodPrefixConstants.SAVING_PREFIX, };
 
     public PersistCallbackViaSaveMethodFacetFactory() {
         super(FeatureType.OBJECTS_ONLY, PREFIXES);
@@ -55,7 +53,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
         final List<Method> methods = new ArrayList<Method>();
 
         Method method = null;
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVING_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             PersistingCallbackFacet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
@@ -66,7 +64,7 @@ public class PersistCallbackViaSaveMethodFacetFactory extends MethodPrefixBasedF
             }
         }
 
-        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
+        method = MethodFinderUtils.findMethod(cls, MethodScope.OBJECT, MethodPrefixConstants.SAVED_PREFIX, void.class, NO_PARAMETERS_TYPES);
         if (method != null) {
             methods.add(method);
             PersistedCallbackFacet facet = facetHolder.getFacet(PersistedCallbackFacet.class);

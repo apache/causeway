@@ -37,13 +37,13 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
 import org.apache.isis.core.metamodel.facets.TypedHolder;
-import org.apache.isis.core.metamodel.facets.actions.choices.ActionParameterChoicesFacet;
-import org.apache.isis.core.metamodel.facets.actions.defaults.ActionParameterDefaultsFacet;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.mandatory.MandatoryFacet;
+import org.apache.isis.core.metamodel.facets.named.NamedFacet;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
+import org.apache.isis.core.metamodel.facets.param.choices.ActionParameterChoicesFacet;
+import org.apache.isis.core.metamodel.facets.param.defaults.ActionParameterDefaultsFacet;
 import org.apache.isis.core.metamodel.interactions.ActionArgumentContext;
 import org.apache.isis.core.metamodel.spec.DomainModelException;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
@@ -215,7 +215,7 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
                 parameterChoices.add(getAdapterMap().adapterFor(choice));
             }
         }
-        if (parameterChoices.size() == 0 && SpecificationFacets.isBoundedSet(getSpecification())) {
+        if (parameterChoices.size() == 0 && BoundedFacetUtils.isBoundedSet(getSpecification())) {
             Query query = new QueryFindAllInstances(getSpecification().getFullIdentifier());
 			final List<ObjectAdapter> allInstancesAdapter = getQuerySubmitter().allMatchingQuery(query);
             for (ObjectAdapter choiceAdapter: allInstancesAdapter) {

@@ -41,7 +41,7 @@ public class HiddenFacetViaHideForSessionMethodFacetFactory extends MethodPrefix
      * Note that the {@link Facet}s registered are the generic ones from noa-architecture (where they exist)
      */
     public HiddenFacetViaHideForSessionMethodFacetFactory() {
-        super(FeatureType.PROPERTIES_COLLECTIONS_AND_ACTIONS, PREFIXES);
+        super(FeatureType.MEMBERS, PREFIXES);
     }
 
     // ///////////////////////////////////////////////////////

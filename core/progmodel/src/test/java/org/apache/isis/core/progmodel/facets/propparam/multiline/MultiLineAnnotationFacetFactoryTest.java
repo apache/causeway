@@ -21,48 +21,27 @@
 package org.apache.isis.core.progmodel.facets.propparam.multiline;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
+import org.apache.isis.core.metamodel.facets.multiline.MultiLineFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.propparam.multiline.annotation.MultiLineAnnotationFacetFactory;
-import org.apache.isis.core.progmodel.facets.propparam.multiline.annotation.MultiLineFacetAnnotation;
+import org.apache.isis.core.progmodel.facets.object.multiline.annotation.MultiLineAnnotationOnTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.multiline.annotation.MultiLineFacetAnnotationOnType;
+import org.apache.isis.core.progmodel.facets.param.multiline.annotation.MultiLineAnnotationOnParameterFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.multiline.annotation.MultiLineFacetAnnotationOnParameter;
+import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineAnnotationOnPropertyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.multiline.annotation.MultiLineFacetAnnotationOnProperty;
 
 
 public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private MultiLineAnnotationFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new MultiLineAnnotationFacetFactory();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertFalse(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
-
     public void testMultiLineAnnotationPickedUpOnClass() {
+        MultiLineAnnotationOnTypeFacetFactory facetFactory = new MultiLineAnnotationOnTypeFacetFactory();
+
         @MultiLine(numberOfLines = 3, preventWrapping = false)
         class Customer {}
 
@@ -70,13 +49,15 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MultiLineFacetAnnotation);
-        final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
+        assertTrue(facet instanceof MultiLineFacetAnnotationOnType);
+        final MultiLineFacetAnnotationOnType multiLineFacetAnnotation = (MultiLineFacetAnnotationOnType) facet;
         assertEquals(3, multiLineFacetAnnotation.numberOfLines());
         assertEquals(false, multiLineFacetAnnotation.preventWrapping());
     }
 
     public void testMultiLineAnnotationPickedUpOnProperty() {
+        MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -91,13 +72,15 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MultiLineFacetAnnotation);
-        final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
+        assertTrue(facet instanceof MultiLineFacetAnnotationOnProperty);
+        final MultiLineFacetAnnotationOnProperty multiLineFacetAnnotation = (MultiLineFacetAnnotationOnProperty) facet;
         assertEquals(12, multiLineFacetAnnotation.numberOfLines());
         assertEquals(true, multiLineFacetAnnotation.preventWrapping());
     }
 
     public void testMultiLineAnnotationPickedUpOnActionParameter() {
+        MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
+        
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -109,13 +92,15 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
 
         final Facet facet = facetedMethodParameter.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof MultiLineFacetAnnotation);
-        final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
+        assertTrue(facet instanceof MultiLineFacetAnnotationOnParameter);
+        final MultiLineFacetAnnotationOnParameter multiLineFacetAnnotation = (MultiLineFacetAnnotationOnParameter) facet;
         assertEquals(8, multiLineFacetAnnotation.numberOfLines());
         assertEquals(false, multiLineFacetAnnotation.preventWrapping());
     }
 
     public void testMultiLineAnnotationDefaults() {
+        MultiLineAnnotationOnTypeFacetFactory facetFactory = new MultiLineAnnotationOnTypeFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         @MultiLine
         class Customer {}
@@ -123,12 +108,14 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
-        final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
-        assertEquals(6, multiLineFacetAnnotation.numberOfLines());
-        assertEquals(true, multiLineFacetAnnotation.preventWrapping());
+        final MultiLineFacetAnnotationOnType multiLineFacetAnnotationOnType = (MultiLineFacetAnnotationOnType) facet;
+        assertEquals(6, multiLineFacetAnnotationOnType.numberOfLines());
+        assertEquals(true, multiLineFacetAnnotationOnType.preventWrapping());
     }
 
     public void testMultiLineAnnotationIgnoredForNonStringProperties() {
+        MultiLineAnnotationOnPropertyFacetFactory facetFactory = new MultiLineAnnotationOnPropertyFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -146,6 +133,8 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     }
 
     public void testMultiLineAnnotationIgnoredForNonStringActionParameters() {
+        MultiLineAnnotationOnParameterFacetFactory facetFactory = new MultiLineAnnotationOnParameterFacetFactory();
+        
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")

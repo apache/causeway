@@ -28,7 +28,7 @@ import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetDefaultToObject;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.specloader.ObjectReflector;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;

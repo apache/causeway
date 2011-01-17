@@ -22,48 +22,26 @@ package org.apache.isis.core.progmodel.facets.naming.describedas;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.List;
 
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
-import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacet;
+import org.apache.isis.core.metamodel.facets.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.describedas.annotation.DescribedAsAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.describedas.annotation.DescribedAsAnnotationOnMemberFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.describedas.annotation.DescribedAsAnnotationOnTypeFacetFactory;
+import org.apache.isis.core.progmodel.facets.param.describedas.annotation.DescribedAsAnnotationOnParameterFacetFactory;
 
 
 public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private DescribedAsAnnotationFacetFactory facetFactory;
-
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new DescribedAsAnnotationFacetFactory();
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION));
-        assertTrue(contains(featureTypes, FeatureType.ACTION_PARAMETER));
-    }
 
     public void testDescribedAsAnnotationPickedUpOnClass() {
+        DescribedAsAnnotationOnTypeFacetFactory facetFactory = new DescribedAsAnnotationOnTypeFacetFactory();
+
         @DescribedAs("some description")
         class Customer {}
 
@@ -79,8 +57,11 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testDescribedAsAnnotationPickedUpOnProperty() {
+        DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             @DescribedAs("some description")
             public int getNumberOfOrders() {
                 return 0;
@@ -100,10 +81,13 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testDescribedAsAnnotationPickedUpOnCollection() {
+        DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             @DescribedAs("some description")
-            public Collection getOrders() {
+            public Collection<?> getOrders() {
                 return null;
             }
         }
@@ -121,8 +105,11 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testDescribedAsAnnotationPickedUpOnAction() {
+        DescribedAsAnnotationOnMemberFacetFactory facetFactory = new DescribedAsAnnotationOnMemberFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             @DescribedAs("some description")
             public void someAction() {}
         }
@@ -140,6 +127,8 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     }
 
     public void testDescribedAsAnnotationPickedUpOnActionParameter() {
+        DescribedAsAnnotationOnParameterFacetFactory facetFactory = new DescribedAsAnnotationOnParameterFacetFactory();
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")

@@ -32,7 +32,7 @@ import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstra
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
 import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlways;
-import org.apache.isis.core.progmodel.facets.propcoll.derived.DerivedFacetInferred;
+import org.apache.isis.core.progmodel.facets.properties.derived.inferred.DerivedFacetInferred;
 
 
 public class PropertySetAndClearFacetFactory extends MethodPrefixBasedFacetFactoryAbstract {

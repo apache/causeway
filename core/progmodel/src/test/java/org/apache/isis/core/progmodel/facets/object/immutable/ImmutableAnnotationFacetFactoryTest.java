@@ -20,17 +20,14 @@
 
 package org.apache.isis.core.progmodel.facets.object.immutable;
 
-import java.util.List;
-
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
-import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.immutable.annotation.ImmutableFacetAnnotation;
 
 
 public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -48,16 +45,6 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
     protected void tearDown() throws Exception {
         facetFactory = null;
         super.tearDown();
-    }
-
-    @Override
-    public void testFeatureTypes() {
-        final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
-        assertTrue(contains(featureTypes, FeatureType.OBJECT));
-        assertTrue(contains(featureTypes, FeatureType.PROPERTY));
-        assertTrue(contains(featureTypes, FeatureType.COLLECTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION));
-        assertFalse(contains(featureTypes, FeatureType.ACTION_PARAMETER));
     }
 
     public void testImmutableAnnotationPickedUpOnClassAndDefaultsToAlways() {

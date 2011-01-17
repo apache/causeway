@@ -22,7 +22,7 @@ package org.apache.isis.viewer.html.task;
 
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facets.SpecificationFacets;
+import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.parseable.InvalidEntryException;
 import org.apache.isis.core.metamodel.facets.object.parseable.ParseableFacet;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
@@ -178,7 +178,7 @@ public abstract class Task {
     }
 
     protected boolean simpleField(final ObjectSpecification specification, final int i) {
-        return readOnly[i] || (specification.isNotCollection() && SpecificationFacets.isBoundedSet(specification));
+        return readOnly[i] || (specification.isNotCollection() && BoundedFacetUtils.isBoundedSet(specification));
     }
 
     private int firstEntryInThisStep() {

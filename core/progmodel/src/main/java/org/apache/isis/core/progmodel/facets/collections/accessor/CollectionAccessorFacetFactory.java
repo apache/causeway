@@ -31,7 +31,6 @@ import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
 import org.apache.isis.core.progmodel.facets.PropertyOrCollectionIdentifyingFacetFactoryAbstract;
-import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyOrCollectionAccessorFacetViaAccessor;
 
 
 public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentifyingFacetFactoryAbstract {
@@ -53,7 +52,7 @@ public class CollectionAccessorFacetFactory extends PropertyOrCollectionIdentify
         processMethodContext.removeMethod(accessorMethod);
         
         final FacetHolder holder = processMethodContext.getFacetHolder();
-        final Facet facet = new PropertyOrCollectionAccessorFacetViaAccessor(accessorMethod, holder);
+        final Facet facet = new CollectionAccessorFacetViaAccessor(accessorMethod, holder);
         FacetUtil.addFacet(facet);
     }
 

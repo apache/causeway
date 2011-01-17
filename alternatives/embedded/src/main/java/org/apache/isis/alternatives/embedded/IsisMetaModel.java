@@ -40,7 +40,6 @@ import org.apache.isis.core.commons.config.IsisConfigurationDefault;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.facetdecorator.FacetDecorator;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
-import org.apache.isis.core.metamodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.services.ServicesInjector;
 import org.apache.isis.core.metamodel.services.container.DomainObjectContainerDefault;
@@ -54,6 +53,7 @@ import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverse
 import org.apache.isis.core.metamodel.specloader.traverser.SpecificationTraverserDefault;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidator;
 import org.apache.isis.core.metamodel.specloader.validator.MetaModelValidatorNoop;
+import org.apache.isis.core.progmodel.layout.dflt.MemberLayoutArrangerDefault;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 import org.apache.isis.progmodel.wrapper.applib.WrapperFactory;
 import org.apache.isis.progmodel.wrapper.metamodel.DomainObjectContainerWrapperFactory;

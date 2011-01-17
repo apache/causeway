@@ -25,12 +25,12 @@ import org.apache.isis.core.metamodel.adapter.map.AdapterMapAware;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
-import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacetDefaultToObject;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacet;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetDefaultToObject;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromArray;
+import org.apache.isis.core.metamodel.facets.typeof.TypeOfFacetInferredFromGenerics;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistry;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryAware;
-import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromArray;
-import org.apache.isis.core.progmodel.facets.actcoll.typeof.TypeOfFacetInferredFromGenerics;
 
 
 public class CollectionFacetFactory extends FacetFactoryAbstract implements CollectionTypeRegistryAware, AdapterMapAware {

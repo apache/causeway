@@ -36,7 +36,7 @@ import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.progmodel.facets.MethodFinderUtils;
 import org.apache.isis.core.progmodel.facets.MethodPrefixBasedFacetFactoryAbstract;
 import org.apache.isis.core.progmodel.facets.MethodPrefixConstants;
-import org.apache.isis.core.progmodel.facets.members.name.staticmethod.NamedFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.named.staticmethod.NamedFacetViaMethod;
 
 /**
  * Sets up all the {@link Facet}s for an action in a single shot.

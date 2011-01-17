@@ -37,6 +37,7 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+import org.apache.isis.core.progmodel.facets.object.title.TitleFacetViaTitleMethod;
 
 @RunWith(JMock.class)
 public class TitleFacetViaMethodTest  {
