@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.metamodel.facetedmethod;
+package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 import java.util.Collections;
@@ -32,7 +32,6 @@ import org.apache.isis.core.commons.debug.Debuggable;
 import org.apache.isis.core.commons.lang.StringUtils;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facets.TypedHolderDefault;
 
 
 /**
@@ -66,7 +65,7 @@ public class FacetedMethod extends TypedHolderDefault implements IdentifiedHolde
         return new FacetedMethod(FeatureType.COLLECTION, declaringType, method, null, emptyParameterList());
     }
 
-    public static FacetedMethod createActionPeer(Class<?> declaringType, Method method) {
+    public static FacetedMethod createActionFacetedMethod(Class<?> declaringType, Method method) {
         return new FacetedMethod(FeatureType.ACTION, declaringType, method, method.getReturnType(), getParameters(method));
     }
 

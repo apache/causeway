@@ -43,7 +43,6 @@ import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.ensure.Assert;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.resource.ResourceStreamSource;
-import org.apache.isis.core.metamodel.facetedmethod.IdentifierUtils;
 import org.apache.isis.core.runtime.authorization.standard.AuthorizorAbstract;
 
 
@@ -148,7 +147,7 @@ public class FileAuthorizor extends AuthorizorAbstract {
     }
 
     private Identifier memberFromString(final String identifier) {
-    	return IdentifierUtils.fromIdentityString(identifier);
+    	return Identifier.fromIdentityString(identifier);
     }
 
     private List<String> tokenizeRoles(final String allRoles) {

@@ -25,12 +25,12 @@ import org.apache.log4j.Logger;
 
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.StringUtils;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
-import org.apache.isis.core.metamodel.facetedmethod.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ordering.actionorder.ActionOrderFacet;
 import org.apache.isis.core.metamodel.layout.MemberLayoutArranger;
 import org.apache.isis.core.metamodel.layout.OrderSet;
+import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public class MemberLayoutArrangerUsingOrderMethod implements MemberLayoutArranger {

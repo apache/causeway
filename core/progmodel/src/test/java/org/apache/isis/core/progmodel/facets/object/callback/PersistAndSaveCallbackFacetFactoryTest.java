@@ -24,25 +24,28 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.callbacks.PersistCallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.callbacks.PersistedCallbackFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.object.callbacks.PersistingCallbackFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.object.callbacks.SaveCallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistCallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistedCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistingCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistCallbackViaSaveMethodFacetFactory;
 
 
 public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private SaveCallbackFacetFactory saveFacetFactory;
+    private PersistCallbackViaSaveMethodFacetFactory saveFacetFactory;
     private PersistCallbackFacetFactory persistFacetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
-        saveFacetFactory = new SaveCallbackFacetFactory();
+        saveFacetFactory = new PersistCallbackViaSaveMethodFacetFactory();
         persistFacetFactory = new PersistCallbackFacetFactory();
     }
 
@@ -70,10 +73,10 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         final Method saveMethod = findMethod(Customer.class, "saving");
         final Method persistMethod = findMethod(Customer.class, "persisting");
 
-        saveFacetFactory.process(Customer.class, methodRemover, facetHolder);
-        persistFacetFactory.process(Customer.class, methodRemover, facetHolder);
+        saveFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        persistFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(PersistingCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PersistingCallbackFacetViaMethod);
         final PersistingCallbackFacetViaMethod persistingCallbackFacetViaMethod = (PersistingCallbackFacetViaMethod) facet;
@@ -95,10 +98,10 @@ public class PersistAndSaveCallbackFacetFactoryTest extends AbstractFacetFactory
         final Method saveMethod = findMethod(Customer.class, "saved");
         final Method persistMethod = findMethod(Customer.class, "persisted");
 
-        saveFacetFactory.process(Customer.class, methodRemover, facetHolder);
-        persistFacetFactory.process(Customer.class, methodRemover, facetHolder);
+        saveFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        persistFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PersistedCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(PersistedCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PersistedCallbackFacetViaMethod);
         final PersistedCallbackFacetViaMethod persistedCallbackFacetViaMethod = (PersistedCallbackFacetViaMethod) facet;

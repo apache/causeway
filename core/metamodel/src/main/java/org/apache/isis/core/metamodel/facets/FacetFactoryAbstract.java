@@ -18,18 +18,16 @@
  */
 
 
-package org.apache.isis.core.metamodel.spec;
+package org.apache.isis.core.metamodel.facets;
 
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.spec.SpecificationLookup;
+import org.apache.isis.core.metamodel.spec.SpecificationLookupAware;
 
 
 public abstract class FacetFactoryAbstract implements FacetFactory, SpecificationLookupAware {
@@ -48,18 +46,15 @@ public abstract class FacetFactoryAbstract implements FacetFactory, Specificatio
     }
 
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-        return false;
+    public void process(ProcessClassContext processClassContaxt) {
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-        return false;
+    public void process(ProcessMethodContext processMethodContext) {
     }
 
     @Override
-    public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
-        return false;
+    public void processParams(ProcessParameterContext processParameterContext) {
     }
 
     

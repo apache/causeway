@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 
 
 /**

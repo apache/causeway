@@ -24,8 +24,12 @@ import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.IteratorFilteringFacetFactory;
 
 
 public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -60,7 +64,7 @@ public class IteratorFilteringFacetFactoryTest extends AbstractFacetFactoryTest 
         class Customer {
             public void someAction() {}
         }
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
         assertEquals(1, methodRemover.getRemoveMethodArgsCalls().size());
     }

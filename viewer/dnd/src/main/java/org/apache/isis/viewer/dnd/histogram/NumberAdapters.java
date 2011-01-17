@@ -23,10 +23,10 @@ package org.apache.isis.viewer.dnd.histogram;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
-import org.apache.isis.core.progmodel.facets.value.DoubleFloatingPointValueFacet;
-import org.apache.isis.core.progmodel.facets.value.FloatingPointValueFacet;
-import org.apache.isis.core.progmodel.facets.value.IntegerValueFacet;
-import org.apache.isis.core.progmodel.facets.value.MoneyValueFacet;
+import org.apache.isis.core.progmodel.facets.value.floats.FloatingPointValueFacet;
+import org.apache.isis.core.progmodel.facets.value.integer.IntegerValueFacet;
+import org.apache.isis.core.progmodel.facets.value.longs.DoubleFloatingPointValueFacet;
+import org.apache.isis.core.progmodel.facets.value.money.MoneyValueFacet;
 
 
 public class NumberAdapters {

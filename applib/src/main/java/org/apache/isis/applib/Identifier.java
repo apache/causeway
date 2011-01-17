@@ -19,8 +19,10 @@
 
 package org.apache.isis.applib;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.StringTokenizer;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -339,6 +341,42 @@ public class Identifier implements Comparable<Identifier> {
             asString = buf.toString();
         }
         return asString;
+    }
+
+    /**
+     * Factory method.
+     * 
+     * @see #toIdentityString(int)
+     */
+    public static Identifier fromIdentityString(final String asString) {
+        if(asString == null) {
+            throw new IllegalArgumentException("expected: non-null identity string");
+        }
+    
+        final int indexOfHash = asString.indexOf("#");
+        final int indexOfOpenBracket = asString.indexOf("(");
+        final int indexOfCloseBracket = asString.indexOf(")");
+        final String className = asString.substring(0, indexOfHash == -1 ? asString.length() : indexOfHash);
+        if (indexOfHash == -1 || indexOfHash == (asString.length() - 1)) {
+            return classIdentifier(className);
+        }
+        String name = null;
+        if (indexOfOpenBracket == -1) {
+            name = asString.substring(indexOfHash + 1);
+            return propertyOrCollectionIdentifier(className, name);
+        }
+        List<String> parmList = new ArrayList<String>();
+        name = asString.substring(indexOfHash + 1, indexOfOpenBracket);
+        final String allParms = asString.substring(indexOfOpenBracket + 1, indexOfCloseBracket).trim();
+        if (allParms.length() > 0) {
+            // use StringTokenizer for .NET compatibility
+            final StringTokenizer tokens = new StringTokenizer(allParms, ",", false);
+            for (int i = 0; tokens.hasMoreTokens(); i++) {
+                String nextParam = tokens.nextToken();
+                parmList.add(nextParam);
+            }
+        }
+        return actionIdentifier(className, name, parmList);
     }
 
 

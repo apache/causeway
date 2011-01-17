@@ -34,6 +34,7 @@ import org.apache.isis.applib.value.Money;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.progmodel.facets.value.money.MoneyValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class MoneyValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

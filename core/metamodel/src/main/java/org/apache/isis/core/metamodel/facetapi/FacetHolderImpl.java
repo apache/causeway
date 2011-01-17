@@ -39,6 +39,12 @@ public class FacetHolderImpl implements FacetHolder {
     }
 
     @Override
+    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+        final Facet facet = getFacet(facetType);
+        return facet != null && !facet.isNoop();
+    }
+
+    @Override
     public void addFacet(final Facet facet) {
         addFacet(facet.facetType(), facet);
     }

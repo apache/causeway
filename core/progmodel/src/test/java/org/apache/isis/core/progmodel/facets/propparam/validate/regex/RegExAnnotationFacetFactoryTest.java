@@ -26,7 +26,12 @@ import java.util.List;
 import org.apache.isis.applib.annotation.RegEx;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.propparam.validate.regex.annotation.RegExAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.propparam.validate.regex.annotation.RegExFacetAnnotation;
 
 
 public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -59,9 +64,9 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testRegExAnnotationPickedUpOnClass() {
         @RegEx(validation = "^A.*", caseSensitive = false)
         class Customer {}
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(RegExFacet.class);
+        final Facet facet = facetedMethod.getFacet(RegExFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof RegExFacetAnnotation);
         final RegExFacetAnnotation regExFacet = (RegExFacetAnnotation) facet;
@@ -80,9 +85,9 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(RegExFacet.class);
+        final Facet facet = facetedMethod.getFacet(RegExFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof RegExFacetAnnotation);
         final RegExFacetAnnotation regExFacet = (RegExFacetAnnotation) facet;
@@ -98,9 +103,9 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        final Facet facet = facetHolder.getFacet(RegExFacet.class);
+        final Facet facet = facetedMethodParameter.getFacet(RegExFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof RegExFacetAnnotation);
         final RegExFacetAnnotation regExFacet = (RegExFacetAnnotation) facet;
@@ -119,9 +124,9 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        assertNull(facetHolder.getFacet(RegExFacet.class));
+        assertNull(facetedMethod.getFacet(RegExFacet.class));
     }
 
     public void testRegExAnnotationIgnoredForPrimitiveOnActionParameter() {
@@ -132,9 +137,9 @@ public class RegExAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        assertNull(facetHolder.getFacet(RegExFacet.class));
+        assertNull(facetedMethod.getFacet(RegExFacet.class));
     }
 
 }

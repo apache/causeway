@@ -22,11 +22,9 @@ package org.apache.isis.core.metamodel.facets.object.java5;
 
 import java.lang.reflect.Method;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
 /**
@@ -57,13 +55,11 @@ public class RemoveJavaLangObjectMethodsFacetFactory extends FacetFactoryAbstrac
     }
 
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
+    public void process(ProcessClassContext processClassContext) {
         final Method[] methods = Object.class.getMethods();
         for (int i = 0; i < methods.length; i++) {
-            methodRemover.removeMethod(MethodScope.OBJECT, objectMethodNames[i], null, objectMethodParameters[i]);
+            processClassContext.removeMethod(MethodScope.OBJECT, objectMethodNames[i], null, objectMethodParameters[i]);
         }
-
-        return false;
     }
 
 }

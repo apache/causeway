@@ -20,6 +20,10 @@
 
 package org.apache.isis.core.metamodel.facets;
 
+import org.apache.isis.applib.marker.AlwaysImmutable;
+import org.apache.isis.applib.marker.ImmutableOncePersisted;
+import org.apache.isis.applib.marker.ImmutableUntilPersisted;
+import org.apache.isis.applib.marker.NeverImmutable;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 
 
@@ -42,6 +46,19 @@ public final class When extends EnumerationAbstract {
         return this == When.ALWAYS || 
                this == When.ONCE_PERSISTED && !isTransient || 
                this == When.UNTIL_PERSISTED && isTransient;
+    }
+
+    public static When forCorrespondingMarkerSubType(final Class<?> cls) {
+        if (AlwaysImmutable.class.isAssignableFrom(cls)) {
+            return ALWAYS;
+        } else if (ImmutableOncePersisted.class.isAssignableFrom(cls)) {
+            return ONCE_PERSISTED;
+        } else if (ImmutableUntilPersisted.class.isAssignableFrom(cls)) {
+            return UNTIL_PERSISTED;
+        } else if (NeverImmutable.class.isAssignableFrom(cls)) {
+            return NEVER;
+        }
+        return null;
     }
 
     public static org.apache.isis.core.metamodel.facets.When decode(org.apache.isis.applib.annotation.When when) {

@@ -18,7 +18,7 @@ package org.apache.isis.core.metamodel.layout;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public interface MemberLayoutArranger {

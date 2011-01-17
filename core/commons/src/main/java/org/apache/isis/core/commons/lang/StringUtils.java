@@ -332,6 +332,14 @@ public final class StringUtils {
         return stringList.toArray(new String[]{});
     }
 
+    public static String removePrefix(final String name, final String prefix) {
+        if (name.startsWith(prefix)) {
+            return name.substring(prefix.length());
+        } else {
+            return name;
+        }
+    }
+
 
 
 }

@@ -21,11 +21,9 @@
 package org.apache.isis.core.metamodel.facets.object.isis;
 
 import org.apache.isis.applib.DomainObjectContainer;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
 /**
@@ -38,10 +36,9 @@ public class RemoveSetDomainObjectContainerMethodFacetFactory extends FacetFacto
     }
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        methodRemover.removeMethod(MethodScope.OBJECT, "setContainer", void.class, new Class[] { DomainObjectContainer.class });
-        methodRemover.removeMethod(MethodScope.OBJECT, "set_Container", void.class, new Class[] { DomainObjectContainer.class });
-        return false;
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "setContainer", void.class, new Class[] { DomainObjectContainer.class });
+        processClassContext.removeMethod(MethodScope.OBJECT, "set_Container", void.class, new Class[] { DomainObjectContainer.class });
     }
 
 }

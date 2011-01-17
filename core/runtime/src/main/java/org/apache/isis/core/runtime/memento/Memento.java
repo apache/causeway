@@ -39,7 +39,7 @@ import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
@@ -105,7 +105,7 @@ public class Memento implements Serializable {
                 if (fields.get(i).isOneToManyAssociation()) {
                     continue;
                 }
-                if (fields.get(i).containsFacet(PropertyAccessorFacet.class)
+                if (fields.get(i).containsFacet(PropertyOrCollectionAccessorFacet.class)
                     && !fields.get(i).containsFacet(PropertySetterFacet.class)) {
                     LOG.debug("ignoring not-settable field " + fields.get(i).getName());
                     continue;
@@ -287,7 +287,7 @@ public class Memento implements Serializable {
                 if (field.isOneToManyAssociation()) {
                     continue;
                 }
-                if (field.containsFacet(PropertyAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
+                if (field.containsFacet(PropertyOrCollectionAccessorFacet.class) && !field.containsFacet(PropertySetterFacet.class)) {
                     LOG.debug("ignoring not-settable field " + field.getName());
                     continue;
                 }

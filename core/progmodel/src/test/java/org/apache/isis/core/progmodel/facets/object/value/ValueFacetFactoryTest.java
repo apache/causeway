@@ -27,7 +27,9 @@ import org.apache.isis.applib.adapters.EncoderDecoder;
 import org.apache.isis.applib.adapters.Parser;
 import org.apache.isis.applib.annotation.Value;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
 import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
@@ -36,7 +38,8 @@ import org.apache.isis.core.metamodel.facets.object.value.ValueFacet;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacet;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.defaults.DefaultedFacet;
 import org.apache.isis.core.progmodel.facets.object.ebc.EqualByContentFacet;
 
 public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -84,24 +87,24 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testFacetPickedUp() {
 
-        facetFactory.process(MyParseableUsingParserName2.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyParseableUsingParserName2.class, methodRemover, facetedMethod));
 
-        final ValueFacet facet = facetHolder.getFacet(ValueFacet.class);
+        final ValueFacet facet = facetedMethod.getFacet(ValueFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ValueFacetAnnotation);
     }
 
     public void testFacetFacetHolderStored() {
 
-        facetFactory.process(MyParseableUsingParserName2.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyParseableUsingParserName2.class, methodRemover, facetedMethod));
 
-        final ValueFacetAnnotation valueFacet = (ValueFacetAnnotation) facetHolder.getFacet(ValueFacet.class);
-        assertEquals(facetHolder, valueFacet.getFacetHolder());
+        final ValueFacetAnnotation valueFacet = (ValueFacetAnnotation) facetedMethod.getFacet(ValueFacet.class);
+        assertEquals(facetedMethod, valueFacet.getFacetHolder());
     }
 
     public void testNoMethodsRemoved() {
 
-        facetFactory.process(MyParseableUsingParserName2.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyParseableUsingParserName2.class, methodRemover, facetedMethod));
 
         assertNoMethodsRemoved();
     }
@@ -119,9 +122,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPickUpSemanticsProviderViaNameAndInstallsValueFacet() {
 
-        facetFactory.process(MyValueSemanticsProviderUsingSemanticsProviderName.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderUsingSemanticsProviderName.class, methodRemover, facetedMethod));
 
-        assertNotNull(facetHolder.getFacet(ValueFacet.class));
+        assertNotNull(facetedMethod.getFacet(ValueFacet.class));
     }
 
     @Value(semanticsProviderClass = MyValueSemanticsProviderUsingSemanticsProviderClass.class)
@@ -137,9 +140,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testPickUpSemanticsProviderViaClassAndInstallsValueFacet() {
 
-        facetFactory.process(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetedMethod));
 
-        assertNotNull(facetHolder.getFacet(ValueFacet.class));
+        assertNotNull(facetedMethod.getFacet(ValueFacet.class));
     }
 
     public void testValueSemanticsProviderMustBeAValueSemanticsProvider() {
@@ -160,10 +163,10 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testValueSemanticsProviderMustHaveANoArgConstructor() {
-        facetFactory.process(MyValueSemanticsProviderWithoutNoArgConstructor.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderWithoutNoArgConstructor.class, methodRemover, facetedMethod));
 
         // the fact that we have an immutable means that the provider wasn't picked up
-        assertNotNull(facetHolder.getFacet(ImmutableFacet.class));
+        assertNotNull(facetedMethod.getFacet(ImmutableFacet.class));
     }
 
     @Value(semanticsProviderClass = MyValueSemanticsProviderWithoutPublicNoArgConstructor.class)
@@ -182,15 +185,15 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testValueSemanticsProviderMustHaveAPublicNoArgConstructor() {
-        facetFactory.process(MyValueSemanticsProviderWithoutPublicNoArgConstructor.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderWithoutPublicNoArgConstructor.class, methodRemover, facetedMethod));
 
         // the fact that we have an immutable means that the provider wasn't picked up
-        assertNotNull(facetHolder.getFacet(ImmutableFacet.class));
+        assertNotNull(facetedMethod.getFacet(ImmutableFacet.class));
     }
 
     public void testValueSemanticsProviderThatIsNotAParserDoesNotInstallParseableFacet() {
-        facetFactory.process(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetHolder);
-        assertNull(facetHolder.getFacet(ParseableFacet.class));
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetedMethod));
+        assertNull(facetedMethod.getFacet(ParseableFacet.class));
     }
 
     @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsAParser")
@@ -232,23 +235,23 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testValueSemanticsProviderThatIsAParserInstallsParseableFacet() {
-        facetFactory.process(MyValueSemanticsProviderThatIsAParser.class, methodRemover, facetHolder);
-        assertNotNull(facetHolder.getFacet(ParseableFacet.class));
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatIsAParser.class, methodRemover, facetedMethod));
+        assertNotNull(facetedMethod.getFacet(ParseableFacet.class));
     }
 
     public void testValueSemanticsProviderThatIsAParserInstallsTitleFacet() {
-        facetFactory.process(MyValueSemanticsProviderThatIsAParser.class, methodRemover, facetHolder);
-        assertNotNull(facetHolder.getFacet(TitleFacet.class));
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatIsAParser.class, methodRemover, facetedMethod));
+        assertNotNull(facetedMethod.getFacet(TitleFacet.class));
     }
 
     public void testValueSemanticsProviderThatIsAParserInstallsTypicalLengthFacet() {
-        facetFactory.process(MyValueSemanticsProviderThatIsAParser.class, methodRemover, facetHolder);
-        assertNotNull(facetHolder.getFacet(TypicalLengthFacet.class));
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatIsAParser.class, methodRemover, facetedMethod));
+        assertNotNull(facetedMethod.getFacet(TypicalLengthFacet.class));
     }
 
     public void testValueSemanticsProviderThatIsNotADefaultsProviderDoesNotInstallDefaultedFacet() {
-        facetFactory.process(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetHolder);
-        assertNull(facetHolder.getFacet(DefaultedFacet.class));
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetedMethod));
+        assertNull(facetedMethod.getFacet(DefaultedFacet.class));
     }
 
     @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsADefaultsProvider")
@@ -269,15 +272,15 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testValueSemanticsProviderThatIsADefaultsProviderInstallsDefaultedFacet() {
-        facetFactory.process(MyValueSemanticsProviderThatIsADefaultsProvider.class, methodRemover, facetHolder);
-        assertNotNull(facetHolder.getFacet(DefaultedFacet.class));
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatIsADefaultsProvider.class, methodRemover, facetedMethod));
+        assertNotNull(facetedMethod.getFacet(DefaultedFacet.class));
     }
 
     public void testValueSemanticsProviderThatIsNotAnEncoderDecoderDoesNotInstallEncodeableFacet() {
 
-        facetFactory.process(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderUsingSemanticsProviderClass.class, methodRemover, facetedMethod));
 
-        assertNull(facetHolder.getFacet(EncodableFacet.class));
+        assertNull(facetedMethod.getFacet(EncodableFacet.class));
     }
 
     @Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueSemanticsProviderThatIsAnEncoderDecoder")
@@ -304,9 +307,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testValueSemanticsProviderThatIsAnEncoderInstallsEncodeableFacet() {
 
-        facetFactory.process(MyValueSemanticsProviderThatIsAnEncoderDecoder.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatIsAnEncoderDecoder.class, methodRemover, facetedMethod));
 
-        assertNotNull(facetHolder.getFacet(EncodableFacet.class));
+        assertNotNull(facetedMethod.getFacet(EncodableFacet.class));
     }
 
     public void testImmutableFacetsIsInstalledIfNoSemanticsProviderSpecified() {
@@ -315,9 +318,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         class MyNumberImmutableDefault {
         }
 
-        facetFactory.process(MyNumberImmutableDefault.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyNumberImmutableDefault.class, methodRemover, facetedMethod));
 
-        final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final ImmutableFacet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
     }
 
@@ -335,9 +338,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testImmutableFacetsIsInstalledIfSpecifiesImmutable() {
 
-        facetFactory.process(MyValueSemanticsProviderThatSpecifiesImmutableSemantic.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatSpecifiesImmutableSemantic.class, methodRemover, facetedMethod));
 
-        final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final ImmutableFacet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
     }
 
@@ -355,10 +358,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testImmutableFacetsIsNotInstalledIfSpecifiesNotImmutable() {
 
-        facetFactory.process(MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic.class, methodRemover,
-            facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatSpecifiesNotImmutableSemantic.class, methodRemover, facetedMethod));
 
-        final ImmutableFacet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final ImmutableFacet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNull(facet);
     }
 
@@ -368,9 +370,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
         class MyNumberEqualByContentDefault {
         }
 
-        facetFactory.process(MyNumberEqualByContentDefault.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyNumberEqualByContentDefault.class, methodRemover, facetedMethod));
 
-        final EqualByContentFacet facet = facetHolder.getFacet(EqualByContentFacet.class);
+        final EqualByContentFacet facet = facetedMethod.getFacet(EqualByContentFacet.class);
         assertNotNull(facet);
     }
 
@@ -388,10 +390,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testEqualByContentFacetsIsInstalledIfSpecifiesEqualByContent() {
 
-        facetFactory.process(MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic.class, methodRemover,
-            facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatSpecifiesEqualByContentSemantic.class, methodRemover, facetedMethod));
 
-        final EqualByContentFacet facet = facetHolder.getFacet(EqualByContentFacet.class);
+        final EqualByContentFacet facet = facetedMethod.getFacet(EqualByContentFacet.class);
         assertNotNull(facet);
     }
 
@@ -409,10 +410,9 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
 
     public void testEqualByContentFacetsIsNotInstalledIfSpecifiesNotEqualByContent() {
 
-        facetFactory.process(MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic.class, methodRemover,
-            facetHolder);
+        facetFactory.process(new ProcessClassContext(MyValueSemanticsProviderThatSpecifiesNotEqualByContentSemantic.class, methodRemover, facetedMethod));
 
-        final EqualByContentFacet facet = facetHolder.getFacet(EqualByContentFacet.class);
+        final EqualByContentFacet facet = facetedMethod.getFacet(EqualByContentFacet.class);
         assertNull(facet);
     }
 
@@ -459,11 +459,11 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
             "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$MyValueWithSemanticsProviderSpecifiedUsingConfiguration";
         isisConfigurationDefault.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
             + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetHolder);
-        final ValueFacetAbstract facet = (ValueFacetAbstract) facetHolder.getFacet(ValueFacet.class);
+        facetFactory.process(new ProcessClassContext(MyValueWithSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+        final ValueFacetAbstract facet = (ValueFacetAbstract) facetedMethod.getFacet(ValueFacet.class);
         assertNotNull(facet);
         // should also be a ParserFacet, since the VSP implements Parser
-        final ParseableFacet parseableFacet = facetHolder.getFacet(ParseableFacet.class);
+        final ParseableFacet parseableFacet = facetedMethod.getFacet(ParseableFacet.class);
         assertNotNull(parseableFacet);
     }
 
@@ -509,12 +509,11 @@ public class ValueFacetFactoryTest extends AbstractFacetFactoryTest {
             "org.apache.isis.core.progmodel.facets.object.value.ValueFacetFactoryTest$NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration";
         isisConfigurationDefault.add(ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_PREFIX
             + canonical(className) + ValueSemanticsProviderUtil.SEMANTICS_PROVIDER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover,
-            facetHolder);
-        final ValueFacetAbstract facet = (ValueFacetAbstract) facetHolder.getFacet(ValueFacet.class);
+        facetFactory.process(new ProcessClassContext(NonAnnotatedValueSemanticsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+        final ValueFacetAbstract facet = (ValueFacetAbstract) facetedMethod.getFacet(ValueFacet.class);
         assertNotNull(facet);
         // should also be a ParserFacet, since the VSP implements Parser
-        final ParseableFacet parseableFacet = facetHolder.getFacet(ParseableFacet.class);
+        final ParseableFacet parseableFacet = facetedMethod.getFacet(ParseableFacet.class);
         assertNotNull(parseableFacet);
     }
 

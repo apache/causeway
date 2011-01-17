@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.timestampsql.JavaSqlTimeStampValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class JavaSqlTimeStampValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

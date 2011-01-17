@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.string.StringValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class StringValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

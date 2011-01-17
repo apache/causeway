@@ -28,7 +28,7 @@ import org.apache.isis.applib.clock.Clock;
 /**
  * Value object representing a date and time value.
  */
-@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.DateTimeValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.datetime.DateTimeValueSemanticsProvider")
 public class DateTime extends Magnitude<DateTime> {
 
     private static final long serialVersionUID = 1L;

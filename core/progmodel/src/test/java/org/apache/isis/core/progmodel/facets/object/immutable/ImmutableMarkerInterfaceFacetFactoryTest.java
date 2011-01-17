@@ -27,9 +27,12 @@ import org.apache.isis.applib.marker.ImmutableOncePersisted;
 import org.apache.isis.applib.marker.ImmutableUntilPersisted;
 import org.apache.isis.applib.marker.NeverImmutable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -62,9 +65,9 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     public void testAlwaysImmutable() {
         class Customer implements AlwaysImmutable {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
@@ -76,9 +79,9 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     public void testImmutableOncePersisted() {
         class Customer implements ImmutableOncePersisted {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
@@ -90,9 +93,9 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     public void testImmutableUntilPersisted() {
         class Customer implements ImmutableUntilPersisted {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;
@@ -104,9 +107,9 @@ public class ImmutableMarkerInterfaceFacetFactoryTest extends AbstractFacetFacto
     public void testNeverImmutable() {
         class Customer implements NeverImmutable {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetMarkerInterface);
         final ImmutableFacetMarkerInterface immutableFacetMarkerInterface = (ImmutableFacetMarkerInterface) facet;

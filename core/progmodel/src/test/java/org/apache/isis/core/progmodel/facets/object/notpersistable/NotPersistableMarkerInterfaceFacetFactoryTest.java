@@ -25,9 +25,12 @@ import java.util.List;
 import org.apache.isis.applib.marker.NonPersistable;
 import org.apache.isis.applib.marker.ProgramPersistable;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -60,9 +63,9 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
     public void testProgramPersistableMeansNotPersistableByUser() {
         class Customer implements ProgramPersistable {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotPersistableFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetMarkerInterface);
         final NotPersistableFacetMarkerInterface notPersistableFacetMarkerInterface = (NotPersistableFacetMarkerInterface) facet;
@@ -75,9 +78,9 @@ public class NotPersistableMarkerInterfaceFacetFactoryTest extends AbstractFacet
     public void testNotPersistable() {
         class Customer implements NonPersistable {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotPersistableFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetMarkerInterface);
         final NotPersistableFacetMarkerInterface notPersistableFacetMarkerInterface = (NotPersistableFacetMarkerInterface) facet;

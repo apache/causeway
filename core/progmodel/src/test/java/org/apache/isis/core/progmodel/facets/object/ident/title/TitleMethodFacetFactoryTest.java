@@ -24,10 +24,13 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.ident.title.TitleFacet;
 import org.apache.isis.core.metamodel.specloader.specimpl.ObjectSpecificationAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -67,9 +70,9 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method titleMethod = findMethod(Customer.class, "title");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TitleFacet.class);
+        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetViaTitleMethod);
         final TitleFacetViaTitleMethod titleFacetViaTitleMethod = (TitleFacetViaTitleMethod) facet;
@@ -87,9 +90,9 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method toStringMethod = findMethod(Customer.class, "toString");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TitleFacet.class);
+        final Facet facet = facetedMethod.getFacet(TitleFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TitleFacetViaToStringMethod);
         final TitleFacetViaToStringMethod titleFacetViaTitleMethod = (TitleFacetViaToStringMethod) facet;
@@ -103,15 +106,15 @@ public class TitleMethodFacetFactoryTest extends AbstractFacetFactoryTest {
      * is the superclass has a none no-op implementation.
      */
     public void testTitleFacetMethodUsingToStringIsClassifiedAsANoop() {
-        assertTrue(new TitleFacetViaToStringMethod(null, facetHolder).isNoop());
+        assertTrue(new TitleFacetViaToStringMethod(null, facetedMethod).isNoop());
     }
 
     public void testNoExplicitTitleOrToStringMethod() {
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        assertNull(facetHolder.getFacet(TitleFacet.class));
+        assertNull(facetedMethod.getFacet(TitleFacet.class));
 
         assertNoMethodsRemoved();
     }

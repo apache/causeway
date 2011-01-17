@@ -26,9 +26,14 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Mask;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.testspec.TestProxySpecification;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.propparam.validate.mask.annotation.MaskAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.propparam.validate.mask.annotation.MaskFacetAnnotation;
 
 
 public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -65,9 +70,9 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testMaskAnnotationPickedUpOnClass() {
         @Mask("###")
         class Customer {}
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MaskFacet.class);
+        final Facet facet = facetedMethod.getFacet(MaskFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MaskFacetAnnotation);
         final MaskFacetAnnotation maskFacet = (MaskFacetAnnotation) facet;
@@ -85,9 +90,9 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MaskFacet.class);
+        final Facet facet = facetedMethod.getFacet(MaskFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MaskFacetAnnotation);
         final MaskFacetAnnotation maskFacet = (MaskFacetAnnotation) facet;
@@ -102,9 +107,9 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        final Facet facet = facetHolder.getFacet(MaskFacet.class);
+        final Facet facet = facetedMethodParameter.getFacet(MaskFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MaskFacetAnnotation);
         final MaskFacetAnnotation maskFacet = (MaskFacetAnnotation) facet;
@@ -122,9 +127,9 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        assertNotNull(facetHolder.getFacet(MaskFacet.class));
+        assertNotNull(facetedMethod.getFacet(MaskFacet.class));
     }
 
     public void testMaskAnnotationNotIgnoredForPrimitiveOnActionParameter() {
@@ -135,9 +140,9 @@ public class MaskAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        assertNotNull(facetHolder.getFacet(MaskFacet.class));
+        assertNotNull(facetedMethodParameter.getFacet(MaskFacet.class));
     }
 
 }

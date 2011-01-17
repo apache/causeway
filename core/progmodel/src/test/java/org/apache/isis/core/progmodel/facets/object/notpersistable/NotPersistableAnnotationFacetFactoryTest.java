@@ -25,9 +25,12 @@ import java.util.List;
 import org.apache.isis.applib.annotation.NotPersistable;
 import org.apache.isis.applib.annotation.NotPersistable.By;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.notpersistable.NotPersistableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -61,9 +64,9 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
         @NotPersistable
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotPersistableFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetAnnotation);
         final NotPersistableFacetAnnotation notPersistableFacetAnnotation = (NotPersistableFacetAnnotation) facet;
@@ -77,9 +80,9 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
         @NotPersistable(By.USER_OR_PROGRAM)
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotPersistableFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetAnnotation);
         final NotPersistableFacetAnnotation notPersistableFacetAnnotation = (NotPersistableFacetAnnotation) facet;
@@ -93,9 +96,9 @@ public class NotPersistableAnnotationFacetFactoryTest extends AbstractFacetFacto
         @NotPersistable(By.USER)
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotPersistableFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistableFacetAnnotation);
         final NotPersistableFacetAnnotation notPersistableFacetAnnotation = (NotPersistableFacetAnnotation) facet;

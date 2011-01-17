@@ -32,7 +32,7 @@ import java.io.File;
 import org.apache.log4j.Logger;
 import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.progmodel.facets.value.ImageValueFacet;
+import org.apache.isis.core.progmodel.facets.value.image.ImageValueFacet;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;

@@ -26,8 +26,12 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Optional;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.propparam.validate.mandatory.MandatoryFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.annotation.MandatoryFacetInvertedByOptional;
+import org.apache.isis.core.progmodel.facets.propparam.validate.mandatory.annotation.OptionalAnnotationFacetFactory;
 
 
 public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -68,11 +72,11 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MandatoryFacet.class);
+        final Facet facet = facetedMethod.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof OptionalFacet);
+        assertTrue(facet instanceof MandatoryFacetInvertedByOptional);
     }
 
     public void testOptionalAnnotationPickedUpOnActionParameter() {
@@ -83,11 +87,11 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        final Facet facet = facetHolder.getFacet(MandatoryFacet.class);
+        final Facet facet = facetedMethodParameter.getFacet(MandatoryFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof OptionalFacet);
+        assertTrue(facet instanceof MandatoryFacetInvertedByOptional);
     }
 
     public void testOptionalAnnotationIgnoredForPrimitiveOnProperty() {
@@ -101,9 +105,9 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        assertNull(facetHolder.getFacet(MandatoryFacet.class));
+        assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }
 
     public void testOptionalAnnotationIgnoredForPrimitiveOnActionParameter() {
@@ -114,9 +118,9 @@ public class OptionalAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        assertNull(facetHolder.getFacet(MandatoryFacet.class));
+        assertNull(facetedMethod.getFacet(MandatoryFacet.class));
     }
 
 }

@@ -87,6 +87,11 @@ public class ObjectActionNoop implements ObjectAction {
     }
 
     @Override
+    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+        return false;
+    }
+
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         return null;
     }

@@ -25,11 +25,14 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.NotInServiceMenu;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacet;
 import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.NotInServiceMenuFacetAbstract;
+import org.apache.isis.core.progmodel.facets.actions.notinservicemenu.annotation.NotInServiceMenuAnnotationFacetFactory;
 
 
 public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -68,9 +71,9 @@ public class NotInRepositoryMenuAnnotationFacetFactoryTest extends AbstractFacet
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
-        facetFactory.process(CustomerRepository.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotInServiceMenuFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotInServiceMenuFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotInServiceMenuFacetAbstract);
 

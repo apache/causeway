@@ -32,16 +32,24 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.lang.ListUtils;
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 import org.apache.isis.core.metamodel.facets.MethodFilteringFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodPrefixBasedFacetFactory;
 import org.apache.isis.core.metamodel.facets.MethodRemoverConstants;
 import org.apache.isis.core.metamodel.facets.PropertyOrCollectionIdentifyingFacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContextAware;
@@ -62,13 +70,13 @@ public class FacetProcessor implements RuntimeContextAware {
     /**
      * Class<FacetFactory> => FacetFactory
      */
-    private final Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType = new HashMap<Class<? extends FacetFactory>, FacetFactory>();
+    private final Map<Class<? extends FacetFactory>, FacetFactory> factoryByFactoryType = Maps.newHashMap();
 
     /**
      * {@link FacetFactory Facet factories}, in order they were {@link #registerFactory(FacetFactory)
      * registered}.
      */
-    private final List<FacetFactory> factories = new ArrayList<FacetFactory>();
+    private final List<FacetFactory> factories = Lists.newArrayList();
 
     /**
      * All method prefixes to check in {@link #recognizes(Method)}.
@@ -269,22 +277,19 @@ public class FacetProcessor implements RuntimeContextAware {
      * <p>
      * Delegates to {@link FacetFactory#process(Class, FacetHolder)} for each appropriate factory.
      * 
-     * @see FacetFactory#process(Class, MethodRemover, FacetHolder)
+     * @see FacetFactory#process(ProcessClassContext)
      * 
      * @param cls
      *            - class to process
      * @param facetHolder
      *            - holder to attach facets to.
      * 
-     * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
-        boolean facetsAdded = false;
+    public void process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder facetHolder) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.OBJECT);
         for (final FacetFactory facetFactory : factoryList) {
-            facetsAdded = facetFactory.process(cls, removerElseNullRemover(methodRemover), facetHolder) | facetsAdded;
+            facetFactory.process(new ProcessClassContext(cls, removerElseNullRemover(methodRemover), facetHolder));
         }
-        return facetsAdded;
     }
 
     /**
@@ -300,25 +305,21 @@ public class FacetProcessor implements RuntimeContextAware {
      *           - class in which introspect; allowing the helper methods to be found is subclasses of that which the method was originally found.
      * @param method
      *            - method to process
-     * @param facetHolder
+     * @param facetedMethod
      *            - holder to attach facets to.
      * @param featureType
      *            - what type of feature the method represents (property, action, collection etc)
-     * 
-     * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
-    public boolean process(
+    public void process(
             final Class<?> cls,
             final Method method,
             final MethodRemover methodRemover,
-            final FacetHolder facetHolder,
+            final FacetedMethod facetedMethod,
             final FeatureType featureType) {
-        boolean facetsAdded = false;
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(featureType);
         for (final FacetFactory facetFactory : factoryList) {
-            facetsAdded = facetFactory.process(cls, method, removerElseNullRemover(methodRemover), facetHolder) | facetsAdded;
+            facetFactory.process(new ProcessMethodContext(cls, method, removerElseNullRemover(methodRemover), facetedMethod));
         }
-        return facetsAdded;
     }
 
     /**
@@ -326,26 +327,22 @@ public class FacetProcessor implements RuntimeContextAware {
      * parameter}), to the supplied {@link FacetHolder}.
      * 
      * <p>
-     * Delegates to {@link FacetFactory#processParams(Method, int, FacetHolder)} for each appropriate factory.
+     * Delegates to {@link FacetFactory#processParams(ProcessParameterContext)} for each appropriate factory.
      * 
-     * @see FacetFactory#processParams(Method, int, FacetHolder)
+     * @see FacetFactory#processParams(ProcessParameterContext)
      * 
      * @param method
      *            - action method to process
      * @param paramNum
      *            - 0-based
-     * @param facetHolder
+     * @param facetedMethodParameter
      *            - holder to attach facets to.
-     * 
-     * @return <tt>true</tt> if any facets were added, <tt>false</tt> otherwise.
      */
-    public boolean processParams(final Method method, final int paramNum, final FacetHolder facetHolder) {
-        boolean facetsAdded = false;
+    public void processParams(final Method method, final int paramNum, final FacetedMethodParameter facetedMethodParameter) {
         final List<FacetFactory> factoryList = getFactoryListByFeatureType(FeatureType.ACTION_PARAMETER);
         for (final FacetFactory facetFactory : factoryList) {
-            facetsAdded = facetFactory.processParams(method, paramNum, facetHolder) | facetsAdded;
+            facetFactory.processParams(new ProcessParameterContext(method, paramNum, facetedMethodParameter));
         }
-        return facetsAdded;
     }
 
     private List<FacetFactory> getFactoryListByFeatureType(final FeatureType featureType) {
@@ -378,7 +375,7 @@ public class FacetProcessor implements RuntimeContextAware {
         if (cachedMethodPrefixes != null) {
             return;
         }
-        cachedMethodPrefixes = new ArrayList<String>();
+        cachedMethodPrefixes = Lists.newArrayList();
         for (final FacetFactory facetFactory : factories) {
             if (facetFactory instanceof MethodPrefixBasedFacetFactory) {
                 final MethodPrefixBasedFacetFactory methodPrefixBasedFacetFactory = (MethodPrefixBasedFacetFactory) facetFactory;
@@ -391,7 +388,7 @@ public class FacetProcessor implements RuntimeContextAware {
         if (cachedMethodFilteringFactories != null) {
             return;
         }
-        cachedMethodFilteringFactories = new ArrayList<MethodFilteringFacetFactory>();
+        cachedMethodFilteringFactories = Lists.newArrayList();
         for (final FacetFactory factory : factories) {
             if (factory instanceof MethodFilteringFacetFactory) {
                 final MethodFilteringFacetFactory methodFilteringFacetFactory = (MethodFilteringFacetFactory) factory;
@@ -404,7 +401,7 @@ public class FacetProcessor implements RuntimeContextAware {
         if (cachedPropertyOrCollectionIdentifyingFactories != null) {
             return;
         }
-        cachedPropertyOrCollectionIdentifyingFactories = new ArrayList<PropertyOrCollectionIdentifyingFacetFactory>();
+        cachedPropertyOrCollectionIdentifyingFactories = Lists.newArrayList();
         final Iterator<FacetFactory> iter = factories.iterator();
         while (iter.hasNext()) {
             final FacetFactory factory = iter.next();

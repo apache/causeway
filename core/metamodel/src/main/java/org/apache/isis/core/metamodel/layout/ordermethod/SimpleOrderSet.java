@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.isis.core.commons.lang.NameUtils;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 
 

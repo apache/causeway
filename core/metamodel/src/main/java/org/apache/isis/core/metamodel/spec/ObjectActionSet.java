@@ -209,6 +209,14 @@ public class ObjectActionSet implements ObjectAction {
      * Does nothing
      */
     @Override
+    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+        return false;
+    }
+
+    /**
+     * Does nothing
+     */
+    @Override
     public void removeFacet(final Class<? extends Facet> facetType) {}
 
     // /////////////////////////////////////////////////////////////

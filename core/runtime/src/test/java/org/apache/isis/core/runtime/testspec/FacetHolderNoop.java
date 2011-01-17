@@ -69,5 +69,14 @@ public class FacetHolderNoop implements FacetHolder {
     @Override
     public void removeFacet(final Class<? extends Facet> facetType) {}
 
+    /* (non-Javadoc)
+     * @see org.apache.isis.core.metamodel.facetapi.FacetHolder#containsDoOpFacet(java.lang.Class)
+     */
+    @Override
+    public boolean containsDoOpFacet(Class<? extends Facet> facetType) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
 }
 

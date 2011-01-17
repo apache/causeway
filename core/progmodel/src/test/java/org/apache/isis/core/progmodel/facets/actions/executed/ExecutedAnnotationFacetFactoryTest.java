@@ -26,10 +26,14 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Executed;
 import org.apache.isis.applib.annotation.Executed.Where;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.executed.ExecutedFacet;
 import org.apache.isis.core.metamodel.spec.Target;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.actions.executed.annotation.ExecutedAnnotationFacetFactory;
 
 
 public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -67,9 +71,9 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ExecutedFacet.class);
+        final Facet facet = facetedMethod.getFacet(ExecutedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ExecutedFacetAbstract);
         final ExecutedFacetAbstract executedFacetAbstract = (ExecutedFacetAbstract) facet;
@@ -86,9 +90,9 @@ public class ExecutedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ExecutedFacet.class);
+        final Facet facet = facetedMethod.getFacet(ExecutedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ExecutedFacetAbstract);
         final ExecutedFacetAbstract executedFacetAbstract = (ExecutedFacetAbstract) facet;

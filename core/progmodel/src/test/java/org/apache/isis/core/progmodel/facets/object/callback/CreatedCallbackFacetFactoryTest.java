@@ -24,11 +24,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.CreatedCallbackFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.callbacks.CreatedCallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.callbacks.CreatedCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.callbacks.create.CreatedCallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.callbacks.create.CreatedCallbackFacetViaMethod;
 
 
 public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -66,9 +69,9 @@ public class CreatedCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "created");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(CreatedCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(CreatedCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof CreatedCallbackFacetViaMethod);
         final CreatedCallbackFacetViaMethod createdCallbackFacetViaMethod = (CreatedCallbackFacetViaMethod) facet;

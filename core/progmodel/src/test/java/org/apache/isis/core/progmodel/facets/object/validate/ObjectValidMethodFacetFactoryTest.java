@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
 
 
@@ -65,7 +66,8 @@ public class ObjectValidMethodFacetFactoryTest extends AbstractFacetFactoryTest 
         }
         final Method validateMethod = findMethod(Customer.class, "validate");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        final ProcessClassContext processClassContext = new ProcessClassContext(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(processClassContext);
 
         final Facet facet = facetHolder.getFacet(ValidateObjectFacet.class);
         assertNotNull(facet);

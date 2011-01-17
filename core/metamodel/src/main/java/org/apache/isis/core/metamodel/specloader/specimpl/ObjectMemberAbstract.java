@@ -34,7 +34,7 @@ import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MultiTypedFacet;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.help.HelpFacet;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
@@ -120,6 +120,11 @@ public abstract class ObjectMemberAbstract implements ObjectMember {
     @Override
     public boolean containsFacet(final Class<? extends Facet> facetType) {
         return getFacetedMethod().containsFacet(facetType);
+    }
+
+    @Override
+    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+        return getFacetedMethod().containsDoOpFacet(facetType);
     }
 
     @Override

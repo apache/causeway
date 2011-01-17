@@ -24,11 +24,18 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.dirty.ClearDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.IsDirtyObjectFacet;
 import org.apache.isis.core.metamodel.facets.object.dirty.MarkDirtyObjectFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.dirty.method.ClearDirtyObjectFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.dirty.method.DirtyMethodsFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.dirty.method.IsDirtyObjectFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.dirty.method.MarkDirtyObjectFacetViaMethod;
 
 
 public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -66,9 +73,9 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "markDirty");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MarkDirtyObjectFacet.class);
+        final Facet facet = facetedMethod.getFacet(MarkDirtyObjectFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MarkDirtyObjectFacetViaMethod);
         final MarkDirtyObjectFacetViaMethod markDirtyFacet = (MarkDirtyObjectFacetViaMethod) facet;
@@ -87,9 +94,9 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "isDirty");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(IsDirtyObjectFacet.class);
+        final Facet facet = facetedMethod.getFacet(IsDirtyObjectFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof IsDirtyObjectFacetViaMethod);
         final IsDirtyObjectFacetViaMethod isDirtyFacet = (IsDirtyObjectFacetViaMethod) facet;
@@ -106,9 +113,9 @@ public class DirtyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "clearDirty");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ClearDirtyObjectFacet.class);
+        final Facet facet = facetedMethod.getFacet(ClearDirtyObjectFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ClearDirtyObjectFacetViaMethod);
         final ClearDirtyObjectFacetViaMethod clearDirtyFacet = (ClearDirtyObjectFacetViaMethod) facet;

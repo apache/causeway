@@ -24,9 +24,12 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -65,9 +68,9 @@ public class SingularMethodFacetFactoryTest extends AbstractFacetFactoryTest {
     public void testSingularNameMethodPickedUpOnClassAndMethodRemoved() {
         final Method singularNameMethod = findMethod(Customer.class, "singularName");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NamedFacet.class);
+        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NamedFacetViaMethod);
         final NamedFacetViaMethod namedFacetViaMethod = (NamedFacetViaMethod) facet;

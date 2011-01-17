@@ -24,9 +24,14 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.ident.icon.IconFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.icon.method.IconFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.icon.method.IconMethodFacetFactory;
 
 
 public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -66,9 +71,9 @@ public class IconMethodFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method iconNameMethod = findMethod(Customer.class, "iconName");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(IconFacet.class);
+        final Facet facet = facetedMethod.getFacet(IconFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof IconFacetViaMethod);
 

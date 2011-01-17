@@ -141,6 +141,11 @@ public abstract class ObjectActionParameterAbstract implements ObjectActionParam
     }
 
     @Override
+    public boolean containsDoOpFacet(final Class<? extends Facet> facetType) {
+        return peer == null ? false : peer.containsDoOpFacet(facetType);
+    }
+
+    @Override
     public <T extends Facet> T getFacet(final Class<T> cls) {
         return peer != null ? peer.getFacet(cls) : null;
     }

@@ -24,13 +24,16 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.UpdatingCallbackFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.callbacks.UpdateCallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.callbacks.UpdatedCallbackFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.object.callbacks.UpdatingCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.callbacks.update.UpdateCallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.callbacks.update.UpdatedCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.callbacks.update.UpdatingCallbackFacetViaMethod;
 
 
 public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -69,9 +72,9 @@ public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "updating");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(UpdatingCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(UpdatingCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof UpdatingCallbackFacetViaMethod);
         final UpdatingCallbackFacetViaMethod updatingCallbackFacetViaMethod = (UpdatingCallbackFacetViaMethod) facet;
@@ -88,9 +91,9 @@ public class UpdateCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "updated");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(UpdatedCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(UpdatedCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof UpdatedCallbackFacetViaMethod);
         final UpdatedCallbackFacetViaMethod updatedCallbackFacetViaMethod = (UpdatedCallbackFacetViaMethod) facet;

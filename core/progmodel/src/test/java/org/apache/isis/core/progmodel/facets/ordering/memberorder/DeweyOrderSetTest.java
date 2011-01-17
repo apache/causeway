@@ -30,7 +30,7 @@ import org.apache.log4j.LogManager;
 
 import com.google.common.collect.ImmutableList;
 
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.DeweyOrderSet;
 

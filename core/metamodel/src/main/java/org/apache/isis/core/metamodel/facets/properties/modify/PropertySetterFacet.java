@@ -21,7 +21,7 @@ package org.apache.isis.core.metamodel.facets.properties.modify;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyOrCollectionAccessorFacet;
 
 /**
  * The mechanism by which the value of the property can be set.
@@ -29,7 +29,7 @@ import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFac
  * <p>
  * In the standard Apache Isis Programming Model, corresponds to invoking the mutator method for a property.
  * 
- * @see PropertyAccessorFacet
+ * @see PropertyOrCollectionAccessorFacet
  * @see PropertyClearFacet
  * @see PropertyInitializationFacet
  */

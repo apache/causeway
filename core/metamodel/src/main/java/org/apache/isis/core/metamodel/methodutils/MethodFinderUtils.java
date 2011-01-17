@@ -18,7 +18,7 @@
  */
 
 
-package org.apache.isis.core.metamodel.facetedmethod;
+package org.apache.isis.core.metamodel.methodutils;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
@@ -30,7 +30,6 @@ import com.google.common.collect.Maps;
 
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.commons.lang.WrapperUtils;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
 
 
 /**

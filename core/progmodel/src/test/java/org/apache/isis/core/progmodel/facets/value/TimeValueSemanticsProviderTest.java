@@ -33,6 +33,7 @@ import org.apache.isis.applib.adapters.EncodingException;
 import org.apache.isis.applib.value.Time;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class TimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

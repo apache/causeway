@@ -42,6 +42,14 @@ public interface FacetHolder {
     boolean containsFacet(Class<? extends Facet> facetType);
 
     /**
+     * Whether there is a facet registered of the specified type that is not a {@link Facet#isNoop() no-op}.
+     * 
+     * <p>
+     * Convenience; saves having to {@link #getFacet(Class)} and then check if <tt>null</tt>.
+     */
+    boolean containsDoOpFacet(Class<? extends Facet> facetType);
+
+    /**
      * Get the facet of the specified type (as per the type it reports from {@link Facet#facetType()}).
      */
     <T extends Facet> T getFacet(Class<T> cls);

@@ -35,16 +35,17 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.commons.lang.ListUtils;
 import org.apache.isis.core.commons.lang.ToString;
 import org.apache.isis.core.metamodel.exceptions.MetaModelException;
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethodParameter;
-import org.apache.isis.core.metamodel.facetedmethod.MethodFinderUtils;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
+import org.apache.isis.core.metamodel.methodutils.MethodFinderUtils;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 import org.apache.isis.core.metamodel.spec.SpecificationLoader;
 import org.apache.isis.core.metamodel.specloader.classsubstitutor.ClassSubstitutor;
@@ -79,6 +80,9 @@ public class FacetedMethodsBuilder {
 
         @Override
         public void removeMethod(final Method method) {
+            if(method==null) {
+                return;
+            }
             for (int i = 0; i < methods.size(); i++) {
                 if (methods.get(i) == null) {
                     continue;
@@ -193,7 +197,7 @@ public class FacetedMethodsBuilder {
                     throw new IsisException(e);
                 }
                 getFacetProcessor().injectDependenciesInto(facetFactory);
-                facetFactory.process(introspectedClass, methodRemover, spec);
+                facetFactory.process(new ProcessClassContext(introspectedClass, methodRemover, spec));
             }
         }
     }
@@ -392,7 +396,7 @@ public class FacetedMethodsBuilder {
             return null;
         }
 
-        final FacetedMethod action = FacetedMethod.createActionPeer(introspectedClass, actionMethod);
+        final FacetedMethod action = FacetedMethod.createActionFacetedMethod(introspectedClass, actionMethod);
 
         // process facets on the action & parameters
         getFacetProcessor()
@@ -436,6 +440,7 @@ public class FacetedMethodsBuilder {
         }
 
         if (getFacetProcessor().recognizes(actionMethod)) {
+            // a bit of a hack
             if (actionMethod.getName().startsWith("set")) {
                 return false;
             }

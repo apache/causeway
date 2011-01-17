@@ -23,7 +23,7 @@ package org.apache.isis.core.runtime.transaction.facets;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacet;
-import org.apache.isis.core.progmodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionRemoveFromFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.PersistenceSession;
 import org.apache.isis.core.runtime.transaction.IsisTransactionManager;

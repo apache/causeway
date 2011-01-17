@@ -41,7 +41,7 @@ import org.apache.isis.applib.clock.Clock;
  * this.minutes >= d.minutes + minutes</li>
  * </ul>
  */
-@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.TimeValueSemanticsProvider")
+@Value(semanticsProviderName = "org.apache.isis.core.progmodel.facets.value.time.TimeValueSemanticsProvider")
 public class Time extends Magnitude<Time> {
 
     private static final long serialVersionUID = 1L;

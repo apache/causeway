@@ -20,11 +20,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.java5;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
 /**
@@ -37,9 +35,8 @@ public class RemoveInitMethodFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        methodRemover.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
-        return false;
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethod(MethodScope.OBJECT, "init", void.class, new Class[0]);
     }
 
 }

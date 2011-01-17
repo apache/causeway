@@ -20,7 +20,7 @@
 
 package org.apache.isis.metamodel.examples.facets.namefile;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 import org.apache.isis.core.metamodel.progmodel.ProgrammingModel;
 import org.apache.isis.defaults.progmodel.ProgrammingModelFacetsJava5;
 

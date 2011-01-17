@@ -20,7 +20,7 @@
 
 package org.apache.isis.viewer.dnd.field;
 
-import org.apache.isis.core.progmodel.facets.value.PasswordValueFacet;
+import org.apache.isis.core.progmodel.facets.value.password.PasswordValueFacet;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.Content;
 import org.apache.isis.viewer.dnd.view.View;

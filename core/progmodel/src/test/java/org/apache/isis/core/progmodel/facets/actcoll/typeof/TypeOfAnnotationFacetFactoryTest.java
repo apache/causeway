@@ -27,10 +27,13 @@ import java.util.Set;
 
 import org.apache.isis.applib.annotation.TypeOf;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actcoll.typeof.TypeOfFacet;
 import org.apache.isis.core.metamodel.specloader.collectiontyperegistry.CollectionTypeRegistryDefault;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -73,9 +76,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetViaAnnotation);
         final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
@@ -96,9 +99,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method accessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, accessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, accessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetViaAnnotation);
         final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
@@ -118,9 +121,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
         final TypeOfFacetInferredFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetInferredFromGenerics) facet;
@@ -139,9 +142,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, collectionAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, collectionAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetInferredFromGenerics);
         final TypeOfFacetInferredFromGenerics typeOfFacetInferredFromGenerics = (TypeOfFacetInferredFromGenerics) facet;
@@ -161,9 +164,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetViaAnnotation);
         final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
@@ -184,9 +187,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method accessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, accessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, accessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetViaAnnotation);
         final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
@@ -207,9 +210,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetViaAnnotation);
         final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
@@ -230,9 +233,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method accessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, accessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, accessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetViaAnnotation);
         final TypeOfFacetViaAnnotation typeOfFacetViaAnnotation = (TypeOfFacetViaAnnotation) facet;
@@ -252,9 +255,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetInferredFromArray);
         final TypeOfFacetInferredFromArray typeOfFacetInferredFromArray = (TypeOfFacetInferredFromArray) facet;
@@ -274,9 +277,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method collectionAccessorMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, collectionAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, collectionAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypeOfFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypeOfFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypeOfFacetInferredFromArray);
         final TypeOfFacetInferredFromArray typeOfFacetInferredFromArray = (TypeOfFacetInferredFromArray) facet;
@@ -296,9 +299,9 @@ public class TypeOfAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        assertNull(facetHolder.getFacet(TypeOfFacet.class));
+        assertNull(facetedMethod.getFacet(TypeOfFacet.class));
 
         assertNoMethodsRemoved();
     }

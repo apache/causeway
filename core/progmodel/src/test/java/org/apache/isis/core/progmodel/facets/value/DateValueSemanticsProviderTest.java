@@ -34,6 +34,7 @@ import org.apache.isis.applib.value.Date;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.progmodel.facets.value.date.DateValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class DateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

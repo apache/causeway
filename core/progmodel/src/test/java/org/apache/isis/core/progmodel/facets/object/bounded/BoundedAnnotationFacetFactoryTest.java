@@ -24,9 +24,13 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Bounded;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.bounded.BoundedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.bounded.annotation.BoundedAnnotationFacetFactory;
 
 
 public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -60,9 +64,9 @@ public class BoundedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest 
         @Bounded
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(BoundedFacet.class);
+        final Facet facet = facetedMethod.getFacet(BoundedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof BoundedFacetAbstract);
 

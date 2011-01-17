@@ -26,10 +26,11 @@ import java.util.List;
 import org.apache.isis.applib.security.UserMemento;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.named.NamedFacet;
-import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
@@ -37,52 +38,57 @@ import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFace
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyInitializationFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertySetterFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.actions.DescribedAsFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.actions.NamedFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.disable.DisableForContextFacet;
-import org.apache.isis.core.progmodel.facets.disable.DisableForContextFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.disable.DisableForSessionFacet;
-import org.apache.isis.core.progmodel.facets.disable.DisableForSessionFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.disable.DisabledFacet;
-import org.apache.isis.core.progmodel.facets.disable.DisabledFacetAlways;
-import org.apache.isis.core.progmodel.facets.hide.HiddenFacetAlways;
-import org.apache.isis.core.progmodel.facets.hide.HideForContextFacet;
-import org.apache.isis.core.progmodel.facets.hide.HideForContextFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacet;
-import org.apache.isis.core.progmodel.facets.hide.HideForSessionFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.propcoll.access.PropertyAccessorFacetViaAccessor;
+import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaDescriptionMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.describedas.staticmethod.DescribedAsFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disable.DisableForContextFacet;
+import org.apache.isis.core.progmodel.facets.members.disable.DisableForSessionFacet;
+import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
+import org.apache.isis.core.progmodel.facets.members.disable.forsession.DisableForSessionFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disable.forsession.DisabledFacetViaDisableForSessionMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.disable.method.DisableForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.disable.method.DisabledFacetViaDisableMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetAlways;
+import org.apache.isis.core.progmodel.facets.members.disable.staticmethod.DisabledFacetViaProtectMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hide.HideForContextFacet;
+import org.apache.isis.core.progmodel.facets.members.hide.HideForSessionFacet;
+import org.apache.isis.core.progmodel.facets.members.hide.forsession.HiddenFacetViaHideForSessionMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hide.forsession.HideForSessionFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.hide.method.HiddenFacetViaHideMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.hide.method.HideForContextFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetAlways;
+import org.apache.isis.core.progmodel.facets.members.hide.staticmethod.HiddenFacetViaAlwaysHideMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.members.name.staticmethod.NamedFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.members.name.staticmethod.NamedFacetViaNameMethodFacetFactory;
 import org.apache.isis.core.progmodel.facets.propcoll.derived.DerivedFacetInferred;
+import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyAccessorFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.accessor.PropertyOrCollectionAccessorFacetViaAccessor;
+import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.choices.PropertyChoicesFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.properties.defaults.PropertyDefaultFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.defaults.PropertyDefaultFacetViaMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaClearMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetViaSetterMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertyInitializationFacetViaSetterMethod;
+import org.apache.isis.core.progmodel.facets.properties.modify.PropertyModifyFacetFactory;
+import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetAndClearFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaModifyMethod;
 import org.apache.isis.core.progmodel.facets.properties.modify.PropertySetterFacetViaSetterMethod;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacet;
+import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetFactory;
 import org.apache.isis.core.progmodel.facets.properties.validate.PropertyValidateFacetViaMethod;
 
 
-public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
+public class PropertyMethodsFacetFactoryTest extends AbstractFacetFactoryTest {
 
-    private PropertyMethodsFacetFactory facetFactory;
 
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-
-        facetFactory = new PropertyMethodsFacetFactory();
-        facetFactory.setSpecificationLookup(reflector);
-    }
-
-    @Override
-    protected void tearDown() throws Exception {
-        facetFactory = null;
-        super.tearDown();
-    }
-
+    /**
+     * TODO: copy for other facet factories also.
+     */
     @Override
     public void testFeatureTypes() {
+        PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final List<FeatureType> featureTypes = facetFactory.getFeatureTypes();
         assertFalse(contains(featureTypes, FeatureType.OBJECT));
         assertTrue(contains(featureTypes, FeatureType.PROPERTY));
@@ -92,6 +98,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testPropertyAccessorFacetIsInstalledAndMethodRemoved() {
+        PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -101,18 +110,21 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyAccessorFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-        final PropertyAccessorFacetViaAccessor propertyAccessorFacetViaAccessor = (PropertyAccessorFacetViaAccessor) facet;
-        assertEquals(propertyAccessorMethod, propertyAccessorFacetViaAccessor.getMethods().get(0));
+        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
+        final PropertyOrCollectionAccessorFacetViaAccessor propertyOrCollectionAccessorFacetViaAccessor = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
+        assertEquals(propertyAccessorMethod, propertyOrCollectionAccessorFacetViaAccessor.getMethods().get(0));
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(propertyAccessorMethod));
     }
 
     public void testSetterFacetIsInstalledForSetterMethodAndMethodRemoved() {
+        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -126,9 +138,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertySetterFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertySetterFacetViaSetterMethod);
         final PropertySetterFacetViaSetterMethod propertySetterFacet = (PropertySetterFacetViaSetterMethod) facet;
@@ -138,6 +150,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testInitializationFacetIsInstalledForSetterMethodAndMethodRemoved() {
+        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -151,9 +166,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyInitializationFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyInitializationFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyInitializationFacet);
         final PropertyInitializationFacetViaSetterMethod propertySetterFacet = (PropertyInitializationFacetViaSetterMethod) facet;
@@ -163,6 +178,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testSetterFacetIsInstalledMeansNoDisabledOrDerivedFacetsInstalled() {
+        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -175,13 +193,19 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        assertNull(facetHolder.getFacet(NotPersistedFacet.class));
-        assertNull(facetHolder.getFacet(NotPersistedFacet.class));
+        assertNull(facetedMethod.getFacet(NotPersistedFacet.class));
+        assertNull(facetedMethod.getFacet(NotPersistedFacet.class));
     }
 
     public void testSetterFacetIsInstalledForModifyMethodAndMethodRemoved() {
+        
+        PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
+        facetFactoryForModify.setSpecificationLookup(reflector);
+        PropertySetAndClearFacetFactory facetFactoryForSetter = new PropertySetAndClearFacetFactory();
+        facetFactoryForSetter.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -195,9 +219,11 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyModifyMethod = findMethod(Customer.class, "modifyFirstName", new Class[] { String.class });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod);
+        facetFactoryForModify.process(processMethodContext);
+        facetFactoryForSetter.process(processMethodContext);
 
-        final Facet facet = facetHolder.getFacet(PropertySetterFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertySetterFacetViaModifyMethod);
         final PropertySetterFacetViaModifyMethod propertySetterFacet = (PropertySetterFacetViaModifyMethod) facet;
@@ -207,6 +233,11 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testModifyMethodWithNoSetterStillInstallsDisabledAndDerivedFacets() {
+        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+        PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
+        facetFactoryForModify.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -219,18 +250,25 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod);
+        facetFactory.process(processMethodContext);
+        facetFactoryForModify.process(processMethodContext);
 
-        Facet facet = facetHolder.getFacet(NotPersistedFacet.class);
+        Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DerivedFacetInferred);
 
-        facet = facetHolder.getFacet(DisabledFacet.class);
+        facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAlways);
     }
 
     public void testIfHaveSetterAndModifyFacetThenTheModifyFacetWinsOut() {
+        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+        PropertyModifyFacetFactory facetFactoryForModify = new PropertyModifyFacetFactory();
+        facetFactoryForModify.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -248,9 +286,11 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
         final Method propertyModifyMethod = findMethod(Customer.class, "modifyFirstName", new Class[] { String.class });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod);
+        facetFactory.process(processMethodContext);
+        facetFactoryForModify.process(processMethodContext);
 
-        final Facet facet = facetHolder.getFacet(PropertySetterFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertySetterFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertySetterFacetViaModifyMethod);
         final PropertySetterFacetViaModifyMethod propertySetterFacet = (PropertySetterFacetViaModifyMethod) facet;
@@ -261,6 +301,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testClearFacet() {
+        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -274,9 +317,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyClearMethod = findMethod(Customer.class, "clearFirstName");
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyClearFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyClearFacetViaClearMethod);
         final PropertyClearFacetViaClearMethod propertyClearFacet = (PropertyClearFacetViaClearMethod) facet;
@@ -286,6 +329,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testClearFacetViaSetterIfNoExplicitClearMethod() {
+        PropertySetAndClearFacetFactory facetFactory = new PropertySetAndClearFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -299,9 +345,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertySetterMethod = findMethod(Customer.class, "setFirstName", new Class[] { String.class });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyClearFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyClearFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyClearFacetViaSetterMethod);
         final PropertyClearFacetViaSetterMethod propertyClearFacet = (PropertyClearFacetViaSetterMethod) facet;
@@ -309,6 +355,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testChoicesFacetFoundAndMethodRemoved() {
+        PropertyChoicesFacetFactory facetFactory = new PropertyChoicesFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -324,9 +373,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyChoicesMethod = findMethod(Customer.class, "choicesFirstName");
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyChoicesFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyChoicesFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyChoicesFacetViaMethod);
         final PropertyChoicesFacetViaMethod propertyChoicesFacet = (PropertyChoicesFacetViaMethod) facet;
@@ -336,6 +385,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testDefaultFacetFoundAndMethodRemoved() {
+        PropertyDefaultFacetFactory facetFactory = new PropertyDefaultFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -351,9 +403,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyDefaultMethod = findMethod(Customer.class, "defaultFirstName");
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyDefaultFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyDefaultFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyDefaultFacetViaMethod);
         final PropertyDefaultFacetViaMethod propertyDefaultFacet = (PropertyDefaultFacetViaMethod) facet;
@@ -363,6 +415,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testValidateFacetFoundAndMethodRemoved() {
+        PropertyValidateFacetFactory facetFactory = new PropertyValidateFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -378,9 +433,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyValidateMethod = findMethod(Customer.class, "validateFirstName", new Class[] { String.class });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyValidateFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyValidateFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PropertyValidateFacetViaMethod);
         final PropertyValidateFacetViaMethod propertyValidateFacet = (PropertyValidateFacetViaMethod) facet;
@@ -390,6 +445,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testDisableFacetFoundAndMethodRemoved() {
+        DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -398,16 +456,16 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
             }
 
             @SuppressWarnings("unused")
-            public String disableFirstName(final String fn) {
+            public String disableFirstName() {
                 return "disabled";
             }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName", new Class[] { String.class });
+        final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName", new Class[] { });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisableForContextFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
@@ -417,6 +475,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testDisableFacetNoArgsFoundAndMethodRemoved() {
+        DisabledFacetViaDisableMethodFacetFactory facetFactory = new DisabledFacetViaDisableMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -432,9 +493,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyDisableMethod = findMethod(Customer.class, "disableFirstName");
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisableForContextFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisableForContextFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet;
@@ -444,6 +505,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testHiddenFacetFoundAndMethodRemoved() {
+        HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -452,16 +516,16 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
             }
 
             @SuppressWarnings("unused")
-            public boolean hideFirstName(final String fn) {
+            public boolean hideFirstName() {
                 return true;
             }
         }
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
-        final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName", new Class[] { String.class });
+        final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName", new Class[] { });
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HideForContextFacet.class);
+        final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HideForContextFacetViaMethod);
         final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
@@ -471,6 +535,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testHiddenFacetWithNoArgFoundAndMethodRemoved() {
+        HiddenFacetViaHideMethodFacetFactory facetFactory = new HiddenFacetViaHideMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -486,9 +553,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
         final Method propertyHideMethod = findMethod(Customer.class, "hideFirstName");
 
-        facetFactory.process(Customer.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HideForContextFacet.class);
+        final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HideForContextFacetViaMethod);
         final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
@@ -498,6 +565,9 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testPropertyFoundOnSuperclass() {
+        PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -511,16 +581,23 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
 
         final Method propertyAccessorMethod = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(CustomerEx.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerEx.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PropertyAccessorFacet.class);
+        final Facet facet = facetedMethod.getFacet(PropertyOrCollectionAccessorFacet.class);
         assertNotNull(facet);
-        assertTrue(facet instanceof PropertyAccessorFacetViaAccessor);
-        final PropertyAccessorFacetViaAccessor accessorFacet = (PropertyAccessorFacetViaAccessor) facet;
+        assertTrue(facet instanceof PropertyOrCollectionAccessorFacetViaAccessor);
+        final PropertyOrCollectionAccessorFacetViaAccessor accessorFacet = (PropertyOrCollectionAccessorFacetViaAccessor) facet;
         assertEquals(propertyAccessorMethod, accessorFacet.getMethods().get(0));
     }
 
     public void testPropertyFoundOnSuperclassButHelperMethodFoundOnSubclass() {
+        PropertyAccessorFacetFactory facetFactory = new PropertyAccessorFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+        HiddenFacetViaHideMethodFacetFactory facetFactoryForHide = new HiddenFacetViaHideMethodFacetFactory();
+        facetFactoryForHide.setSpecificationLookup(reflector);
+        DisabledFacetViaDisableMethodFacetFactory facetFactoryForDisable = new DisabledFacetViaDisableMethodFacetFactory();
+        facetFactoryForDisable.setSpecificationLookup(reflector);
+
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
             @SuppressWarnings("unused")
@@ -548,15 +625,18 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
         final Method propertyHideMethod = findMethod(CustomerEx.class, "hideFirstName");
         final Method propertyDisableMethod = findMethod(CustomerEx.class, "disableFirstName");
 
-        facetFactory.process(CustomerEx.class, propertyAccessorMethod, methodRemover, facetHolder);
+        final ProcessMethodContext processMethodContext = new ProcessMethodContext(CustomerEx.class, propertyAccessorMethod, methodRemover, facetedMethod);
+        facetFactory.process(processMethodContext);
+        facetFactoryForHide.process(processMethodContext);
+        facetFactoryForDisable.process(processMethodContext);
 
-        final Facet facet = facetHolder.getFacet(HideForContextFacet.class);
+        final Facet facet = facetedMethod.getFacet(HideForContextFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HideForContextFacetViaMethod);
         final HideForContextFacetViaMethod hideForContextFacet = (HideForContextFacetViaMethod) facet;
         assertEquals(propertyHideMethod, hideForContextFacet.getMethods().get(0));
 
-        final Facet facet2 = facetHolder.getFacet(DisableForContextFacet.class);
+        final Facet facet2 = facetedMethod.getFacet(DisableForContextFacet.class);
         assertNotNull(facet2);
         assertTrue(facet2 instanceof DisableForContextFacetViaMethod);
         final DisableForContextFacetViaMethod disableForContextFacet = (DisableForContextFacetViaMethod) facet2;
@@ -612,12 +692,15 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testInstallsNamedFacetUsingNameMethodAndRemovesMethod() {
+        NamedFacetViaNameMethodFacetFactory facetFactory = new NamedFacetViaNameMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method nameMethod = findMethod(CustomerStatic.class, "nameFirstName");
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NamedFacet.class);
+        final Facet facet = facetedMethod.getFacet(NamedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NamedFacetViaMethod);
         final NamedFacetViaMethod namedFacet = (NamedFacetViaMethod) facet;
@@ -627,12 +710,15 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testInstallsDescribedAsFacetUsingDescriptionAndRemovesMethod() {
+        DescribedAsFacetViaDescriptionMethodFacetFactory facetFactory = new DescribedAsFacetViaDescriptionMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method descriptionMethod = findMethod(CustomerStatic.class, "descriptionFirstName");
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+        final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DescribedAsFacetViaMethod);
         final DescribedAsFacetViaMethod describedAsFacet = (DescribedAsFacetViaMethod) facet;
@@ -642,12 +728,15 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideAndRemovesMethod() {
+        HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideFirstName");
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HiddenFacetAlways);
 
@@ -655,23 +744,29 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testInstallsHiddenFacetUsingAlwaysHideWhenNotAndRemovesMethod() {
+        HiddenFacetViaAlwaysHideMethodFacetFactory facetFactory = new HiddenFacetViaAlwaysHideMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyAlwaysHideMethod = findMethod(CustomerStatic.class, "alwaysHideLastName");
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        assertNull(facetHolder.getFacet(HiddenFacet.class));
+        assertNull(facetedMethod.getFacet(HiddenFacet.class));
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(propertyAlwaysHideMethod));
     }
 
     public void testInstallsDisabledFacetUsingProtectAndRemovesMethod() {
+        DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectFirstName");
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAlways);
 
@@ -679,24 +774,30 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testDoesNotInstallDisabledFacetUsingProtectWhenNotAndRemovesMethod() {
+        DisabledFacetViaProtectMethodFacetFactory facetFactory = new DisabledFacetViaProtectMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getLastName");
         final Method propertyProtectMethod = findMethod(CustomerStatic.class, "protectLastName");
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNull(facet);
 
         assertTrue(methodRemover.getRemoveMethodMethodCalls().contains(propertyProtectMethod));
     }
 
     public void testInstallsHiddenForSessionFacetAndRemovesMethod() {
+        HiddenFacetViaHideForSessionMethodFacetFactory facetFactory = new HiddenFacetViaHideForSessionMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method hideMethod = findMethod(CustomerStatic.class, "hideFirstName", new Class[] { UserMemento.class });
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HideForSessionFacet.class);
+        final Facet facet = facetedMethod.getFacet(HideForSessionFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HideForSessionFacetViaMethod);
         final HideForSessionFacetViaMethod hideForSessionFacetViaMethod = (HideForSessionFacetViaMethod) facet;
@@ -707,12 +808,15 @@ public class PropertyFieldMethodsFacetFactoryTest extends AbstractFacetFactoryTe
     }
 
     public void testInstallsDisabledForSessionFacetAndRemovesMethod() {
+        DisabledFacetViaDisableForSessionMethodFacetFactory facetFactory = new DisabledFacetViaDisableForSessionMethodFacetFactory();
+        facetFactory.setSpecificationLookup(reflector);
+
         final Method propertyAccessorMethod = findMethod(CustomerStatic.class, "getFirstName");
         final Method disableMethod = findMethod(CustomerStatic.class, "disableFirstName", new Class[] { UserMemento.class });
 
-        facetFactory.process(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerStatic.class, propertyAccessorMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisableForSessionFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisableForSessionFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisableForSessionFacetViaMethod);
         final DisableForSessionFacetViaMethod disableForSessionFacetViaMethod = (DisableForSessionFacetViaMethod) facet;

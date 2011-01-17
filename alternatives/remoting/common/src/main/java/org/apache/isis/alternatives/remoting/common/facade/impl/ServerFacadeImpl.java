@@ -85,7 +85,6 @@ import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.adapter.ResolveState;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.version.Version;
-import org.apache.isis.core.metamodel.facetedmethod.IdentifierUtils;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionFacetUtils;
 import org.apache.isis.core.metamodel.facets.object.encodeable.EncodableFacet;
@@ -171,7 +170,7 @@ public class ServerFacadeImpl implements ServerFacade {
     }
 
     private ObjectMember getMember(final String memberName) {
-        final Identifier id = IdentifierUtils.fromIdentityString(memberName);
+        final Identifier id = Identifier.fromIdentityString(memberName);
         final ObjectSpecification specification = getSpecificationLoader().loadSpecification(id.getClassName());
         if (id.isPropertyOrCollection()) {
             return getAssociationElseThrowException(id, specification);

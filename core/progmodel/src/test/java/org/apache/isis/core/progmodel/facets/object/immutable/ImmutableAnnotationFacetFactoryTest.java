@@ -25,9 +25,12 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Immutable;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.immutable.ImmutableFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -61,9 +64,9 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         @Immutable
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
@@ -76,9 +79,9 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         @Immutable(When.ALWAYS)
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
@@ -91,9 +94,9 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         @Immutable(When.NEVER)
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
@@ -106,9 +109,9 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         @Immutable(When.ONCE_PERSISTED)
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;
@@ -121,9 +124,9 @@ public class ImmutableAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         @Immutable(When.UNTIL_PERSISTED)
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(ImmutableFacet.class);
+        final Facet facet = facetedMethod.getFacet(ImmutableFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof ImmutableFacetAnnotation);
         final ImmutableFacetAnnotation immutableFacetAnnotation = (ImmutableFacetAnnotation) facet;

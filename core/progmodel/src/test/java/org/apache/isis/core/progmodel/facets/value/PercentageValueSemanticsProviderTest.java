@@ -31,6 +31,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.value.Percentage;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.percentage.PercentageValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class PercentageValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

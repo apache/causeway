@@ -20,6 +20,8 @@
 
 package org.apache.isis.metamodel.examples.facets.namefile;
 
+import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
+
 import java.lang.reflect.Method;
 
 import org.jmock.Expectations;
@@ -31,12 +33,13 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
 import org.apache.isis.applib.Identifier;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-
-import static org.apache.isis.core.commons.matchers.IsisMatchers.anInstanceOf;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 
 
 
@@ -51,7 +54,7 @@ public class NameFileFacetFactoryProcessTest {
     
     private NameFileFacetFactory facetFactory;
     private MethodRemover mockMethodRemover;
-    private IdentifiedHolder mockFacetHolder;
+    private FacetedMethod mockFacetHolder;
 
     private Class<DomainObjectWithNameFileEntry> domainObjectWithNameFileEntryClass;
     private Method domainObjectWithNameFileEntryMethod;
@@ -63,7 +66,7 @@ public class NameFileFacetFactoryProcessTest {
     public void setUp() throws Exception {
         facetFactory = new NameFileFacetFactory();
         mockMethodRemover = mockery.mock(MethodRemover.class);
-        mockFacetHolder = mockery.mock(IdentifiedHolder.class);
+        mockFacetHolder = mockery.mock(FacetedMethod.class);
         
         domainObjectWithNameFileEntryClass = DomainObjectWithNameFileEntry.class;
         domainObjectWithNameFileEntryMethod = domainObjectWithNameFileEntryClass.getMethod("getLastName");
@@ -85,7 +88,7 @@ public class NameFileFacetFactoryProcessTest {
             one(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
         }});
         
-        facetFactory.process(domainObjectWithNameFileEntryClass, mockMethodRemover, mockFacetHolder);
+        facetFactory.process(new ProcessClassContext(domainObjectWithNameFileEntryClass, mockMethodRemover, mockFacetHolder));
     }
 
     @Test
@@ -94,7 +97,7 @@ public class NameFileFacetFactoryProcessTest {
             never(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
         }});
         
-        facetFactory.process(domainObjectWithoutNameFileEntryClass, mockMethodRemover, mockFacetHolder);
+        facetFactory.process(new ProcessClassContext(domainObjectWithoutNameFileEntryClass, mockMethodRemover, mockFacetHolder));
     }
     
     @Test
@@ -106,7 +109,7 @@ public class NameFileFacetFactoryProcessTest {
             one(mockFacetHolder).addFacet(with(anInstanceOf(NameFileFacet.class)));
         }});
         
-        facetFactory.process(domainObjectWithNameFileEntryClass, domainObjectWithNameFileEntryMethod, mockMethodRemover, mockFacetHolder);
+        facetFactory.process(new ProcessMethodContext(domainObjectWithNameFileEntryClass, domainObjectWithNameFileEntryMethod, mockMethodRemover, mockFacetHolder));
     }
     
     @Test
@@ -118,7 +121,7 @@ public class NameFileFacetFactoryProcessTest {
             never(mockFacetHolder).addFacet(with(anInstanceOf(Facet.class)));
         }});
         
-        facetFactory.process(domainObjectWithoutNameFileEntryClass, domainObjectWithoutNameFileEntryMethod, mockMethodRemover, mockFacetHolder);
+        facetFactory.process(new ProcessMethodContext(domainObjectWithoutNameFileEntryClass, domainObjectWithoutNameFileEntryMethod, mockMethodRemover, mockFacetHolder));
     }
     
 }

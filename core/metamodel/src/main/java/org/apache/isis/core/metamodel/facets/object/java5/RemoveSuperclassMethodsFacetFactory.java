@@ -24,10 +24,9 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.lang.JavaClassUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 
 
 /**
@@ -43,9 +42,8 @@ public class RemoveSuperclassMethodsFacetFactory extends FacetFactoryAbstract {
     }
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        removeSuperclassMethods(type, methodRemover);
-        return false;
+    public void process(ProcessClassContext processClassContext) {
+        removeSuperclassMethods(processClassContext.getCls(), processClassContext);
     }
 
     private void removeSuperclassMethods(final Class<?> type, final MethodRemover methodRemover) {

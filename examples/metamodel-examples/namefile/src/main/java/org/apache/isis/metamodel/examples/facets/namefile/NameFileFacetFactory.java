@@ -21,15 +21,13 @@
 package org.apache.isis.metamodel.examples.facets.namefile;
 
 import java.io.IOException;
-import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.IdentifiedHolder;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 
 public class NameFileFacetFactory implements FacetFactory {
@@ -55,8 +53,8 @@ public class NameFileFacetFactory implements FacetFactory {
      * Simply attaches a {@link NameFileFacet}.
      */
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-        return FacetUtil.addFacet(create(cls, holder));
+    public void process(ProcessClassContext processClassContaxt) {
+        FacetUtil.addFacet(create(processClassContaxt.getCls(), processClassContaxt.getFacetHolder()));
     }
 
     private NameFileFacet create(final Class<?> cls, FacetHolder holder) {
@@ -68,14 +66,14 @@ public class NameFileFacetFactory implements FacetFactory {
      * Simply attaches a {@link NameFileFacet}.
      */
     @Override
-    public boolean process(final Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-    	if (!(holder instanceof IdentifiedHolder)) {
-    		return false;
+    public void process(ProcessMethodContext processMethodContext) {
+    	if (!(processMethodContext.getFacetHolder() instanceof IdentifiedHolder)) {
+    		return;
     	}
-		IdentifiedHolder identifiedHolder = (IdentifiedHolder) holder;
-        Class<?> declaringClass = method.getDeclaringClass();
+		IdentifiedHolder identifiedHolder = processMethodContext.getFacetHolder();
+        Class<?> declaringClass = processMethodContext.getMethod().getDeclaringClass();
         String memberName = identifiedHolder.getIdentifier().getMemberName();
-        return FacetUtil.addFacet(create(declaringClass, memberName, holder));
+        FacetUtil.addFacet(create(declaringClass, memberName, processMethodContext.getFacetHolder()));
     }
 
     private NameFileFacet create(final Class<?> declaringClass, final String memberName, FacetHolder holder) {
@@ -85,9 +83,8 @@ public class NameFileFacetFactory implements FacetFactory {
 
 
     @Override
-    public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
+    public void processParams(ProcessParameterContext processParameterContext) {
         // nothing to do
-        return false;
     }
 
 

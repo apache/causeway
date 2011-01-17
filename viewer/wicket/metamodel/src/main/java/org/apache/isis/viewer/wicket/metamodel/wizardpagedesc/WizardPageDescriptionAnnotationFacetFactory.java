@@ -21,12 +21,10 @@
 package org.apache.isis.viewer.wicket.metamodel.wizardpagedesc;
 
 
-import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
 import org.apache.isis.core.metamodel.facets.AnnotationBasedFacetFactoryAbstract;
 import org.apache.isis.viewer.wicket.applib.WizardPageDescription;
 
@@ -38,16 +36,14 @@ public class WizardPageDescriptionAnnotationFacetFactory extends AnnotationBased
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
+    public void process(ProcessMethodContext processMethodContext) {
 
         // look for annotation on the property
-        final WizardPageDescription annotation = getAnnotation(method, WizardPageDescription.class);
-        WizardPageDescriptionFacet facet = create(annotation, holder);
+        final WizardPageDescription annotation = getAnnotation(processMethodContext.getMethod(), WizardPageDescription.class);
+        WizardPageDescriptionFacet facet = create(annotation, processMethodContext.getFacetHolder());
         if (facet != null) {
-            return FacetUtil.addFacet(facet);
+            FacetUtil.addFacet(facet);
         }
-
-        return false;
     }
 
     private WizardPageDescriptionFacet create(final WizardPageDescription annotation, final FacetHolder holder) {

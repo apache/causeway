@@ -18,11 +18,21 @@
  */
 
 
-package org.apache.isis.core.metamodel.facetapi;
+package org.apache.isis.core.metamodel.facets.collections.modify;
 
-/**
- * As used in the <tt>findAndRemove...</tt> methods.
- */
-public enum MethodScope {
-    CLASS, OBJECT
+import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetAbstract;
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
+
+
+public abstract class CollectionRemoveFromFacetAbstract extends FacetAbstract implements CollectionRemoveFromFacet {
+
+    public static Class<? extends Facet> type() {
+        return CollectionRemoveFromFacet.class;
+    }
+
+    public CollectionRemoveFromFacetAbstract(final FacetHolder holder) {
+        super(type(), holder, false);
+    }
+
 }

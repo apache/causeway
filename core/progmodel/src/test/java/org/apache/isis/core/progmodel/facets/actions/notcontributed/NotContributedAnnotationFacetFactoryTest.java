@@ -25,8 +25,12 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.NotContributed;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.actions.notcontributed.annotation.NotContributedAnnotationFacetFactory;
 
 
 public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -65,9 +69,9 @@ public class NotContributedAnnotationFacetFactoryTest extends AbstractFacetFacto
         }
         final Method actionMethod = findMethod(CustomerRepository.class, "someAction");
 
-        facetFactory.process(CustomerRepository.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(CustomerRepository.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotContributedFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotContributedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotContributedFacetAbstract);
 

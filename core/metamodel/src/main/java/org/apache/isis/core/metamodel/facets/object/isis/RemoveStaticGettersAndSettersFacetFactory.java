@@ -20,11 +20,9 @@
 
 package org.apache.isis.core.metamodel.facets.object.isis;
 
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
 /**
@@ -37,10 +35,9 @@ public class RemoveStaticGettersAndSettersFacetFactory extends FacetFactoryAbstr
     }
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover methodRemover, final FacetHolder holder) {
-        methodRemover.removeMethods(MethodScope.CLASS, "get", null, false, 0);
-        methodRemover.removeMethods(MethodScope.CLASS, "set", null, false, 0);
-        return false;
+    public void process(ProcessClassContext processClassContext) {
+        processClassContext.removeMethods(MethodScope.CLASS, "get", null, false, 0);
+        processClassContext.removeMethods(MethodScope.CLASS, "set", null, false, 0);
     }
 
 }

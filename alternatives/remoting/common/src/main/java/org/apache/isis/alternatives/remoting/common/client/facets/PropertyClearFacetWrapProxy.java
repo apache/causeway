@@ -30,7 +30,7 @@ import org.apache.isis.core.commons.authentication.AuthenticationSession;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
-import org.apache.isis.core.progmodel.facets.properties.modify.PropertyClearFacetAbstract;
+import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 

@@ -23,7 +23,7 @@ package org.apache.isis.viewer.dnd.calendar;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.spec.feature.OneToOneAssociation;
-import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
+import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 import org.apache.isis.viewer.dnd.view.Axes;
 import org.apache.isis.viewer.dnd.view.CompositeViewSpecification;
 import org.apache.isis.viewer.dnd.view.Content;

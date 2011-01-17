@@ -24,26 +24,29 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.RemovingCallbackFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.callbacks.DeleteCallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.callbacks.RemoveCallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.callbacks.RemovedCallbackFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.object.callbacks.RemovingCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemoveCallbackViaDeleteMethodFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemoveCallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovedCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.callbacks.remove.RemovingCallbackFacetViaMethod;
 
 
 public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
 
 	private RemoveCallbackFacetFactory removeFacetFactory;
-    private DeleteCallbackFacetFactory deleteFacetFactory;
+    private RemoveCallbackViaDeleteMethodFacetFactory deleteFacetFactory;
 
     @Override
     protected void setUp() throws Exception {
         super.setUp();
 
         removeFacetFactory = new RemoveCallbackFacetFactory();
-        deleteFacetFactory = new DeleteCallbackFacetFactory();
+        deleteFacetFactory = new RemoveCallbackViaDeleteMethodFacetFactory();
     }
 
 	@Override
@@ -70,10 +73,10 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
         final Method deleteMethod = findMethod(Customer.class, "deleting");
         final Method removeMethod = findMethod(Customer.class, "removing");
 
-        removeFacetFactory.process(Customer.class, methodRemover, facetHolder);
-        deleteFacetFactory.process(Customer.class, methodRemover, facetHolder);
+        removeFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        deleteFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(RemovingCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(RemovingCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof RemovingCallbackFacetViaMethod);
         final RemovingCallbackFacetViaMethod removingCallbackFacetViaMethod = (RemovingCallbackFacetViaMethod) facet;
@@ -95,10 +98,10 @@ public class RemoveAndDeleteCallbackFacetFactoryTest extends AbstractFacetFactor
         final Method removeMethod = findMethod(Customer.class, "removed");
         final Method deleteMethod = findMethod(Customer.class, "deleted");
 
-        removeFacetFactory.process(Customer.class, methodRemover, facetHolder);
-        deleteFacetFactory.process(Customer.class, methodRemover, facetHolder);
+        removeFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
+        deleteFacetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(RemovedCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(RemovedCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof RemovedCallbackFacetViaMethod);
         final RemovedCallbackFacetViaMethod removedCallbackFacetViaMethod = (RemovedCallbackFacetViaMethod) facet;

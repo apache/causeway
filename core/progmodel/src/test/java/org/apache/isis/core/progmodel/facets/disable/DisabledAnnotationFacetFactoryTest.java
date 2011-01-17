@@ -27,8 +27,14 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Disabled;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacet;
+import org.apache.isis.core.progmodel.facets.members.disable.DisabledFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.disable.annotation.DisabledAnnotationFacetFactory;
 
 
 public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -68,9 +74,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstract);
 
@@ -87,9 +93,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstract);
 
@@ -104,9 +110,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DisabledFacetAbstract);
 
@@ -121,9 +127,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, disabledFacetAbstract.value());
@@ -137,9 +143,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, disabledFacetAbstract.value());
@@ -153,9 +159,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, disabledFacetAbstract.value());
@@ -170,9 +176,9 @@ public class DisabledAnnotationFacetFactoryTest extends AbstractFacetFactoryTest
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DisabledFacet.class);
+        final Facet facet = facetedMethod.getFacet(DisabledFacet.class);
         final DisabledFacetAbstract disabledFacetAbstract = (DisabledFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, disabledFacetAbstract.value());

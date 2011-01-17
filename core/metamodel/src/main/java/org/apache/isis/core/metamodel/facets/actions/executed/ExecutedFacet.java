@@ -19,6 +19,9 @@
 
 package org.apache.isis.core.metamodel.facets.actions.executed;
 
+import java.lang.reflect.Method;
+
+import org.apache.isis.core.commons.lang.NameUtils;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facets.EnumerationAbstract;
 import org.apache.isis.core.metamodel.spec.Target;
@@ -38,8 +41,21 @@ public interface ExecutedFacet extends Facet {
         public static Where LOCALLY = new Where(1, "LOCAL", "Locally");
         public static Where REMOTELY = new Where(2, "REMOTE", "Remotely");
 
+        public static final String REMOTE_PREFIX = "Remote";
+        public static final String LOCAL_PREFIX = "Local";
+
         private Where(final int num, final String nameInCode, final String friendlyName) {
             super(num, nameInCode, friendlyName);
+        }
+
+        public static Where lookup(final Method actionMethod) {
+            final String capitalizedName = NameUtils.capitalizeName(actionMethod.getName());
+            if (capitalizedName.startsWith(LOCAL_PREFIX)) {
+                return LOCALLY;
+            } else if (capitalizedName.startsWith(REMOTE_PREFIX)) {
+                return REMOTELY;
+            }
+            return null;
         }
 
     }

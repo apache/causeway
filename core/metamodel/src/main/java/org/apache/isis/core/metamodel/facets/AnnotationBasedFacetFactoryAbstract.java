@@ -24,9 +24,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
 
 
 
@@ -57,7 +55,7 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected <T extends Annotation> T getAnnotation(final Class<?> cls, Class<T> annotationClass) {
+	protected static <T extends Annotation> T getAnnotation(final Class<?> cls, Class<T> annotationClass) {
 		if (cls == null) {
 			return null;
 		}
@@ -98,7 +96,7 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected <T extends Annotation> T getAnnotation(final Method method, Class<T> annotationClass) {
+	protected static <T extends Annotation> T getAnnotation(final Method method, Class<T> annotationClass) {
 		if (method == null) {
 			return null;
 		}
@@ -144,7 +142,7 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected boolean isAnnotationPresent(final Method method, Class<? extends Annotation> annotationClass) {
+	protected static boolean isAnnotationPresent(final Method method, Class<? extends Annotation> annotationClass) {
 		if (method == null) {
 			return false;
 		}
@@ -191,7 +189,7 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
      * <p>
      * Added to allow bytecode-mangling libraries such as CGLIB to be supported.
      */
-	protected Annotation[][] getParameterAnnotations(final Method method) {
+	protected static Annotation[][] getParameterAnnotations(final Method method) {
 		if (method == null) {
 			return new Annotation[0][0];
 		}
@@ -239,7 +237,7 @@ public abstract class AnnotationBasedFacetFactoryAbstract extends FacetFactoryAb
 		return noParamAnnotationsFor(method);
 	}
 
-	private Annotation[][] noParamAnnotationsFor(final Method method) {
+	private static Annotation[][] noParamAnnotationsFor(final Method method) {
 	    return new Annotation[method.getParameterTypes().length][0];
 	}
 

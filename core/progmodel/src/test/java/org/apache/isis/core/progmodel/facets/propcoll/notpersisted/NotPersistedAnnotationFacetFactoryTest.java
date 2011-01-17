@@ -26,9 +26,12 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.NotPersisted;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.propcoll.notpersisted.NotPersistedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -69,9 +72,9 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotPersistedFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistedFacetAnnotation);
 
@@ -90,9 +93,9 @@ public class NotPersistedAnnotationFacetFactoryTest extends AbstractFacetFactory
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(NotPersistedFacet.class);
+        final Facet facet = facetedMethod.getFacet(NotPersistedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof NotPersistedFacetAnnotation);
 

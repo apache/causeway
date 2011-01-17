@@ -22,7 +22,6 @@ package org.apache.isis.core.metamodel.facets;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
 import org.apache.isis.core.metamodel.specloader.facetprocessor.FacetProcessor;
 
 

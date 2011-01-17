@@ -26,8 +26,13 @@ import java.util.List;
 import org.apache.isis.applib.annotation.MultiLine;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.propparam.multiline.MultiLineFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.propparam.multiline.annotation.MultiLineAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.propparam.multiline.annotation.MultiLineFacetAnnotation;
 
 
 public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -61,9 +66,9 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         @MultiLine(numberOfLines = 3, preventWrapping = false)
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MultiLineFacet.class);
+        final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MultiLineFacetAnnotation);
         final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
@@ -82,9 +87,9 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MultiLineFacet.class);
+        final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MultiLineFacetAnnotation);
         final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
@@ -100,9 +105,9 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { String.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        final Facet facet = facetHolder.getFacet(MultiLineFacet.class);
+        final Facet facet = facetedMethodParameter.getFacet(MultiLineFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MultiLineFacetAnnotation);
         final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
@@ -115,9 +120,9 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         @MultiLine
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MultiLineFacet.class);
+        final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
         final MultiLineFacetAnnotation multiLineFacetAnnotation = (MultiLineFacetAnnotation) facet;
         assertEquals(6, multiLineFacetAnnotation.numberOfLines());
         assertEquals(true, multiLineFacetAnnotation.preventWrapping());
@@ -134,9 +139,9 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MultiLineFacet.class);
+        final Facet facet = facetedMethod.getFacet(MultiLineFacet.class);
         assertNull(facet);
     }
 
@@ -148,9 +153,9 @@ public class MultiLineAnnotationFacetFactoryTest extends AbstractFacetFactoryTes
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        assertNull(facetHolder.getFacet(MultiLineFacet.class));
+        assertNull(facetedMethod.getFacet(MultiLineFacet.class));
     }
 
 }

@@ -22,7 +22,7 @@ package org.apache.isis.core.metamodel.progmodel;
 
 import java.util.List;
 
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
 
 
 public interface ProgrammingModel {

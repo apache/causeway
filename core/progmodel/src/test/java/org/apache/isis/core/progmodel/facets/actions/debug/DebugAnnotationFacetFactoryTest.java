@@ -25,9 +25,13 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Debug;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.actions.debug.DebugFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.actions.debug.annotation.DebugAnnotationFacetFactory;
 
 
 public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -65,9 +69,9 @@ public class DebugAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DebugFacet.class);
+        final Facet facet = facetedMethod.getFacet(DebugFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DebugFacetAbstract);
 

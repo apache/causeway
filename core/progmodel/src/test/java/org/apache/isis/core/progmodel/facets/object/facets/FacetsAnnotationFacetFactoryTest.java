@@ -19,17 +19,17 @@
 
 package org.apache.isis.core.progmodel.facets.object.facets;
 
-import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.applib.annotation.Facets;
 import org.apache.isis.core.metamodel.facetapi.Facet;
-import org.apache.isis.core.metamodel.facetapi.FacetFactory;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
+import org.apache.isis.core.metamodel.facets.FacetFactory;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.facets.FacetsFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.object.facets.annotation.FacetsAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.facets.annotation.FacetsFacetAnnotation;
 
 public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -65,19 +65,15 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-            return false;
+        public void process(ProcessClassContext processClassContaxt) {
         }
 
         @Override
-        public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover,
-            final FacetHolder holder) {
-            return false;
+        public void process(ProcessMethodContext processMethodContext) {
         }
 
         @Override
-        public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
-            return false;
+        public void processParams(ProcessParameterContext processParameterContext) {
         }
     }
 
@@ -88,19 +84,15 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
 
         @Override
-        public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-            return false;
+        public void process(ProcessClassContext processClassContaxt) {
         }
 
         @Override
-        public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover,
-            final FacetHolder holder) {
-            return false;
+        public void process(ProcessMethodContext processMethodContext) {
         }
 
         @Override
-        public boolean processParams(final Method method, final int paramNum, final FacetHolder holder) {
-            return false;
+        public void processParams(ProcessParameterContext processParameterContext) {
         }
     }
 
@@ -111,9 +103,9 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(FacetsFacet.class);
+        final Facet facet = facetedMethod.getFacet(FacetsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof FacetsFacetAnnotation);
         final FacetsFacetAnnotation facetsFacet = (FacetsFacetAnnotation) facet;
@@ -131,9 +123,9 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(FacetsFacet.class);
+        final Facet facet = facetedMethod.getFacet(FacetsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof FacetsFacetAnnotation);
         final FacetsFacetAnnotation facetsFacet = (FacetsFacetAnnotation) facet;
@@ -150,9 +142,9 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(FacetsFacet.class);
+        final Facet facet = facetedMethod.getFacet(FacetsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof FacetsFacetAnnotation);
         final FacetsFacetAnnotation facetsFacet = (FacetsFacetAnnotation) facet;
@@ -167,9 +159,9 @@ public class FacetsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         class Customer {
         }
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(FacetsFacet.class);
+        final Facet facet = facetedMethod.getFacet(FacetsFacet.class);
         assertNull(facet);
     }
 

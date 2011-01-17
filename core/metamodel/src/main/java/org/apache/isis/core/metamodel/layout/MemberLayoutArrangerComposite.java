@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 import com.google.inject.internal.Lists;
 
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.ObjectSpecification;
 
 public abstract class MemberLayoutArrangerComposite implements MemberLayoutArranger {

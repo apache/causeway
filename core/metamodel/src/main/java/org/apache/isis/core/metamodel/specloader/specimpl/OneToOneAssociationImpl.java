@@ -32,9 +32,9 @@ import org.apache.isis.core.metamodel.consent.Consent;
 import org.apache.isis.core.metamodel.consent.InteractionInvocationMethod;
 import org.apache.isis.core.metamodel.consent.InteractionResult;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.SpecificationFacets;
-import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyAccessorFacet;
+import org.apache.isis.core.metamodel.facets.propcoll.access.PropertyOrCollectionAccessorFacet;
 import org.apache.isis.core.metamodel.facets.properties.choices.PropertyChoicesFacet;
 import org.apache.isis.core.metamodel.facets.properties.defaults.PropertyDefaultFacet;
 import org.apache.isis.core.metamodel.facets.properties.modify.PropertyClearFacet;
@@ -135,7 +135,7 @@ public class OneToOneAssociationImpl extends ObjectAssociationAbstract implement
 
     @Override
     public ObjectAdapter get(final ObjectAdapter ownerAdapter) {
-        final PropertyAccessorFacet facet = getFacet(PropertyAccessorFacet.class);
+        final PropertyOrCollectionAccessorFacet facet = getFacet(PropertyOrCollectionAccessorFacet.class);
         final Object referencedPojo = facet.getProperty(ownerAdapter);
         
         if (referencedPojo == null) {

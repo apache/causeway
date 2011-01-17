@@ -24,8 +24,15 @@ import java.util.List;
 import org.apache.isis.applib.adapters.DefaultsProvider;
 import org.apache.isis.applib.annotation.Defaulted;
 import org.apache.isis.core.commons.config.IsisConfigurationDefault;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.defaults.DefaultedAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.defaults.DefaultedFacet;
+import org.apache.isis.core.progmodel.facets.defaults.DefaultedFacetAbstract;
+import org.apache.isis.core.progmodel.facets.defaults.DefaultsProviderUtil;
 
 public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
 
@@ -58,24 +65,24 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testFacetPickedUp() {
-        facetFactory.process(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
 
-        final DefaultedFacet facet = facetHolder.getFacet(DefaultedFacet.class);
+        final DefaultedFacet facet = facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DefaultedFacetAbstract);
     }
 
     public void testFacetFacetHolderStored() {
 
-        facetFactory.process(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
 
-        final DefaultedFacetAbstract valueFacet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
-        assertEquals(facetHolder, valueFacet.getFacetHolder());
+        final DefaultedFacetAbstract valueFacet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
+        assertEquals(facetedMethod, valueFacet.getFacetHolder());
     }
 
     public void testNoMethodsRemoved() {
 
-        facetFactory.process(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
 
         assertNoMethodsRemoved();
     }
@@ -103,8 +110,8 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedUsingDefaultsProviderName() {
-        facetFactory.process(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetHolder);
-        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
+        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProvider.class, methodRemover, facetedMethod));
+        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertEquals(MyDefaultedUsingDefaultsProvider.class, facet.getDefaultsProviderClass());
     }
 
@@ -125,8 +132,8 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedUsingDefaultsProviderClass() {
-        facetFactory.process(MyDefaultedUsingDefaultsProviderClass.class, methodRemover, facetHolder);
-        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
+        facetFactory.process(new ProcessClassContext(MyDefaultedUsingDefaultsProviderClass.class, methodRemover, facetedMethod));
+        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertEquals(MyDefaultedUsingDefaultsProviderClass.class, facet.getDefaultsProviderClass());
     }
 
@@ -152,8 +159,8 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedMustHaveANoArgConstructor() {
-        facetFactory.process(MyDefaultedWithoutNoArgConstructor.class, methodRemover, facetHolder);
-        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
+        facetFactory.process(new ProcessClassContext(MyDefaultedWithoutNoArgConstructor.class, methodRemover, facetedMethod));
+        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNull(facet);
     }
 
@@ -176,8 +183,8 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
     }
 
     public void testDefaultedHaveAPublicNoArgConstructor() {
-        facetFactory.process(MyDefaultedWithoutPublicNoArgConstructor.class, methodRemover, facetHolder);
-        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
+        facetFactory.process(new ProcessClassContext(MyDefaultedWithoutPublicNoArgConstructor.class, methodRemover, facetedMethod));
+        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNull(facet);
     }
 
@@ -202,9 +209,8 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
             "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration";
         isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
             + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover,
-            facetHolder);
-        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
+        facetFactory.process(new ProcessClassContext(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
         assertEquals(MyDefaultedWithDefaultsProviderSpecifiedUsingConfiguration.class, facet.getDefaultsProviderClass());
     }
@@ -229,9 +235,8 @@ public class DefaultedFacetFactoryTest extends AbstractFacetFactoryTest {
             "org.apache.isis.core.progmodel.facets.object.defaults.DefaultedFacetFactoryTest$NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration";
         isisConfigurationDefault.add(DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_PREFIX + canonical(className)
             + DefaultsProviderUtil.DEFAULTS_PROVIDER_NAME_KEY_SUFFIX, className);
-        facetFactory.process(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover,
-            facetHolder);
-        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetHolder.getFacet(DefaultedFacet.class);
+        facetFactory.process(new ProcessClassContext(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class, methodRemover, facetedMethod));
+        final DefaultedFacetAbstract facet = (DefaultedFacetAbstract) facetedMethod.getFacet(DefaultedFacet.class);
         assertNotNull(facet);
         assertEquals(NonAnnotatedDefaultedDefaultsProviderSpecifiedUsingConfiguration.class,
             facet.getDefaultsProviderClass());

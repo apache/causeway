@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 
 public class MethodRemoverConstants {

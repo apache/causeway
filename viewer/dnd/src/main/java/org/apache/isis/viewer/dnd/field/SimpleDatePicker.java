@@ -25,7 +25,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.progmodel.facets.value.DateValueFacet;
+import org.apache.isis.core.progmodel.facets.value.date.DateValueFacet;
 import org.apache.isis.viewer.dnd.drawing.Canvas;
 import org.apache.isis.viewer.dnd.drawing.Color;
 import org.apache.isis.viewer.dnd.drawing.ColorsAndFonts;

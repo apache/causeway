@@ -26,7 +26,7 @@ import junit.framework.TestSuite;
 import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.layout.memberorderfacet.MemberOrderComparator;
 
 

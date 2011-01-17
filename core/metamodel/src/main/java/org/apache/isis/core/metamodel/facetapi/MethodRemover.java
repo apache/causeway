@@ -23,6 +23,8 @@ package org.apache.isis.core.metamodel.facetapi;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
+
 
 
 /**
@@ -35,7 +37,7 @@ public interface MethodRemover {
      * remove them from the implementation's list so that they are not considered for subsequent scans.
      * 
      * @param methodScope
-     *            - whethre looking for <tt>static</tt> (class) or instance-level methods.
+     *            - whether looking for <tt>static</tt> (class) or instance-level methods.
      * @return any methods that were removed.
      */
     List<Method> removeMethods(

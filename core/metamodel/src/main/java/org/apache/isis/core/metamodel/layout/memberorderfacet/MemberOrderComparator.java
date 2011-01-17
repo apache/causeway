@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.StringTokenizer;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
 import org.apache.isis.core.metamodel.layout.OrderSet;
 

@@ -20,13 +20,11 @@
 
 package org.apache.isis.core.runtime.authorization.standard;
 
-import java.lang.reflect.Method;
 
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetUtil;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
 import org.apache.isis.core.runtime.authorization.AuthorizationManager;
 import org.apache.isis.core.runtime.context.IsisContext;
 
@@ -38,13 +36,13 @@ public class AuthorizationFacetFactoryImpl extends FacetFactoryAbstract {
     }
     
     @Override
-    public boolean process(final Class<?> cls, final MethodRemover methodRemover, final FacetHolder holder) {
-        return FacetUtil.addFacet(createFacet(holder));
+    public void process(ProcessClassContext processClassContaxt) {
+        FacetUtil.addFacet(createFacet(processClassContaxt.getFacetHolder()));
     }
 
     @Override
-    public boolean process(Class<?> cls, final Method method, final MethodRemover methodRemover, final FacetHolder holder) {
-        return FacetUtil.addFacet(createFacet(holder));
+    public void process(ProcessMethodContext processMethodContext) {
+        FacetUtil.addFacet(createFacet(processMethodContext.getFacetHolder()));
     }
 
     private AuthorizationFacetImpl createFacet(final FacetHolder holder) {

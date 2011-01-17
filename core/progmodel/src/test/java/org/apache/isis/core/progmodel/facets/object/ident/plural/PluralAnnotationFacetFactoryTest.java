@@ -24,9 +24,14 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Plural;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.ident.plural.PluralFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.plural.annotation.PluralAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.plural.annotation.PluralFacetAnnotation;
 
 
 public class PluralAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -60,9 +65,9 @@ public class PluralAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         @Plural("Some plural name")
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PluralFacet.class);
+        final Facet facet = facetedMethod.getFacet(PluralFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PluralFacetAnnotation);
         final PluralFacetAnnotation pluralFacet = (PluralFacetAnnotation) facet;

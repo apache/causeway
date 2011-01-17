@@ -31,7 +31,7 @@
  * <tt>nof-core</tt>.  This implementation defines two further sub-APIs which are based on 
  * the {@link org.apache.isis.core.metamodel.facetapi.Facet}s and {@link org.apache.isis.core.metamodel.facetdecorator.FacetDecorator}s:
  * <ul>
- * <li> the {@link ProgrammingModelInstaller} is used to specify the collection of {@link org.apache.isis.core.metamodel.facetapi.FacetFactory}s
+ * <li> the {@link ProgrammingModelInstaller} is used to specify the collection of {@link org.apache.isis.core.metamodel.facets.FacetFactory}s
  *      that will be used to actually process and build up the metamodel.
  * <li> the {@link FacetDecoratorInstaller} API specifies how {@link org.apache.isis.core.metamodel.facetapi.Facet}, once created, 
  *      can be additionally decorated to modify their behaviour.  A number of other components are implemented as

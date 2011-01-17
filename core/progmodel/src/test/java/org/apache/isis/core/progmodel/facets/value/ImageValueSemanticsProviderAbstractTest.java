@@ -33,6 +33,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.runtimecontext.RuntimeContext;
+import org.apache.isis.core.progmodel.facets.value.image.ImageValueSemanticsProviderAbstract;
 
 @RunWith(JMock.class)
 public class ImageValueSemanticsProviderAbstractTest {

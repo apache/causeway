@@ -25,7 +25,7 @@ package org.apache.isis.alternatives.objectstore.sql.auto;
 
 import org.apache.isis.alternatives.objectstore.sql.FieldMappingLookup;
 import org.apache.isis.alternatives.objectstore.sql.ObjectMappingLookup;
-import org.apache.isis.core.metamodel.facetedmethod.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
 import org.apache.isis.core.metamodel.spec.feature.ObjectAssociation;
 import org.apache.isis.core.metamodel.specloader.specimpl.OneToManyAssociationImpl;
 

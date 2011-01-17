@@ -24,9 +24,12 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.FieldOrder;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.layout.ordermethod.FieldOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -60,9 +63,9 @@ public class FieldOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
         @FieldOrder("foo,bar")
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(FieldOrderFacet.class);
+        final Facet facet = facetedMethod.getFacet(FieldOrderFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof FieldOrderFacetAnnotation);
         final FieldOrderFacetAnnotation fieldOrderFacetAnnotation = (FieldOrderFacetAnnotation) facet;

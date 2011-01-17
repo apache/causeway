@@ -4,11 +4,10 @@ import java.lang.reflect.Method;
 
 import org.apache.isis.core.commons.config.IsisConfiguration;
 import org.apache.isis.core.commons.config.IsisConfigurationAware;
-import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
 import org.apache.isis.core.metamodel.facetapi.MethodRemover;
-import org.apache.isis.core.metamodel.facetapi.MethodScope;
-import org.apache.isis.core.metamodel.spec.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.facets.FacetFactoryAbstract;
+import org.apache.isis.core.metamodel.methodutils.MethodScope;
 
 public class RemoveGroovyMethodsFacetFactory extends FacetFactoryAbstract implements IsisConfigurationAware {
 	
@@ -61,25 +60,24 @@ public class RemoveGroovyMethodsFacetFactory extends FacetFactoryAbstract implem
 	}
 
     @Override
-    public boolean process(final Class<?> type, final MethodRemover remover, final FacetHolder holder) {
-    	MethodSpec.specFor("invokeMethod").param(String.class, Object.class).ret(Object.class).remove(remover);
-    	MethodSpec.specFor("getMetaClass").ret(groovy.lang.MetaClass.class).remove(remover);
-    	MethodSpec.specFor("setMetaClass").param(groovy.lang.MetaClass.class).remove(remover);
-    	MethodSpec.specFor("getProperty").param(String.class).ret(Object.class).remove(remover);
+    public void process(ProcessClassContext processClassContext) {
+    	MethodSpec.specFor("invokeMethod").param(String.class, Object.class).ret(Object.class).remove(processClassContext);
+    	MethodSpec.specFor("getMetaClass").ret(groovy.lang.MetaClass.class).remove(processClassContext);
+    	MethodSpec.specFor("setMetaClass").param(groovy.lang.MetaClass.class).remove(processClassContext);
+    	MethodSpec.specFor("getProperty").param(String.class).ret(Object.class).remove(processClassContext);
 
         int depth = determineDepth();
 		for(int i=1; i<depth; i++) {
-	    	MethodSpec.specFor("this$dist$invoke$%d", i).param(String.class, Object.class).ret(Object.class).remove(remover);
-	    	MethodSpec.specFor("this$dist$set$%d", i).param(String.class, Object.class).remove(remover);
-	    	MethodSpec.specFor("this$dist$get$%d", i).param(String.class).ret(Object.class).remove(remover);
+	    	MethodSpec.specFor("this$dist$invoke$%d", i).param(String.class, Object.class).ret(Object.class).remove(processClassContext);
+	    	MethodSpec.specFor("this$dist$set$%d", i).param(String.class, Object.class).remove(processClassContext);
+	    	MethodSpec.specFor("this$dist$get$%d", i).param(String.class).ret(Object.class).remove(processClassContext);
         }
-		Method[] methods = type.getMethods();
+		Method[] methods = processClassContext.getCls().getMethods();
 		for(Method method: methods) {
 			if (method.getName().startsWith("super$")) {
-				remover.removeMethod(method);
+				processClassContext.removeMethod(method);
 			}
 		}
-        return false;
     }
 
 	private int determineDepth() {

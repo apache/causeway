@@ -24,13 +24,16 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.PersistingCallbackFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.callbacks.PersistCallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.callbacks.PersistedCallbackFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.object.callbacks.PersistingCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistCallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistedCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.callbacks.persist.PersistingCallbackFacetViaMethod;
 
 
 public class PersistCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -69,9 +72,9 @@ public class PersistCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "persisting");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PersistingCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(PersistingCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PersistingCallbackFacetViaMethod);
         final PersistingCallbackFacetViaMethod persistingCallbackFacetViaMethod = (PersistingCallbackFacetViaMethod) facet;
@@ -88,9 +91,9 @@ public class PersistCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "persisted");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(PersistedCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(PersistedCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof PersistedCallbackFacetViaMethod);
         final PersistedCallbackFacetViaMethod persistedCallbackFacetViaMethod = (PersistedCallbackFacetViaMethod) facet;

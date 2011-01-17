@@ -29,16 +29,32 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
+import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetedMethod;
+import org.apache.isis.core.metamodel.facets.FacetedMethodParameter;
 
 
 public abstract class AbstractFacetFactoryTest extends TestCase {
 
+    public static class Customer {
+        
+        private String firstName;
+        public String getFirstName() {
+            return firstName;
+        }
+        public void setFirstName(String firstName) {
+            this.firstName = firstName;
+        }
+    }
+
     protected ProgrammableReflector reflector;
     protected ProgrammableMethodRemover methodRemover;
 
-    protected FacetHolderImpl facetHolder;
+    protected FacetHolder facetHolder;
+    protected FacetedMethod facetedMethod;
+    protected FacetedMethodParameter facetedMethodParameter;
 
     @Override
     protected void setUp() throws Exception {
@@ -47,6 +63,8 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
         BasicConfigurator.configure();
         reflector = new ProgrammableReflector();
         facetHolder = new FacetHolderImpl();
+        facetedMethod = FacetedMethod.createProperty(Customer.class, "firstName");
+        facetedMethodParameter = new FacetedMethodParameter(String.class);
         methodRemover = new ProgrammableMethodRemover();
     }
 
@@ -54,19 +72,19 @@ public abstract class AbstractFacetFactoryTest extends TestCase {
     protected void tearDown() throws Exception {
         reflector = null;
         methodRemover = null;
-        facetHolder = null;
+        facetedMethod = null;
         super.tearDown();
     }
 
-    protected boolean contains(final Class<?>[] types, final Class<?> type) {
+    protected static boolean contains(final Class<?>[] types, final Class<?> type) {
     	return Utils.contains(types, type);
     }
 
-    protected boolean contains(final List<FeatureType> featureTypes, final FeatureType featureType) {
+    protected static boolean contains(final List<FeatureType> featureTypes, final FeatureType featureType) {
     	return Utils.contains(featureTypes, featureType);
     }
 
-    protected Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
+    protected static Method findMethod(final Class<?> type, final String methodName, final Class<?>[] methodTypes) {
     	return Utils.findMethod(type, methodName, methodTypes);
     }
 

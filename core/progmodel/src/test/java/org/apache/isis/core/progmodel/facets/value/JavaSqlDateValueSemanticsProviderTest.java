@@ -36,6 +36,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facets.object.parseable.TextEntryParseException;
+import org.apache.isis.core.progmodel.facets.value.datesql.JavaSqlDateValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class JavaSqlDateValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

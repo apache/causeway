@@ -24,9 +24,14 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.Aggregated;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.aggregated.AggregatedFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.aggregated.annotation.AggregatedFacetAnnotation;
 
 
 public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -60,9 +65,9 @@ public class AggregatedAnnotationFacetFactoryTest extends AbstractFacetFactoryTe
         @Aggregated
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(AggregatedFacet.class);
+        final Facet facet = facetedMethod.getFacet(AggregatedFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof AggregatedFacetAnnotation);
 

@@ -26,8 +26,12 @@ import java.util.List;
 import org.apache.isis.applib.annotation.TypicalLength;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.propparam.typicallength.TypicalLengthFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.propparam.typicallength.annotation.TypicalLengthAnnotationFacetFactory;
+import org.apache.isis.core.progmodel.facets.propparam.typicallength.annotation.TypicalLengthFacetAnnotation;
 
 
 public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -68,9 +72,9 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(TypicalLengthFacet.class);
+        final Facet facet = facetedMethod.getFacet(TypicalLengthFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypicalLengthFacetAnnotation);
         final TypicalLengthFacetAnnotation typicalLengthFacetAnnotation = (TypicalLengthFacetAnnotation) facet;
@@ -85,9 +89,9 @@ public class TypicalLengthAnnotationFacetFactoryTest extends AbstractFacetFactor
         }
         final Method method = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(method, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(method, 0, facetedMethodParameter));
 
-        final Facet facet = facetHolder.getFacet(TypicalLengthFacet.class);
+        final Facet facet = facetedMethodParameter.getFacet(TypicalLengthFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof TypicalLengthFacetAnnotation);
         final TypicalLengthFacetAnnotation typicalLengthFacetAnnotation = (TypicalLengthFacetAnnotation) facet;

@@ -26,9 +26,12 @@ import java.util.List;
 
 import org.apache.isis.applib.annotation.MemberOrder;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.ordering.MemberOrderFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
 
 
 public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -69,9 +72,9 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method method = findMethod(Customer.class, "getFirstName");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MemberOrderFacet.class);
+        final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MemberOrderFacetAnnotation);
         final MemberOrderFacetAnnotation memberOrderFacetAnnotation = (MemberOrderFacetAnnotation) facet;
@@ -94,9 +97,9 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method method = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MemberOrderFacet.class);
+        final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MemberOrderFacetAnnotation);
         final MemberOrderFacetAnnotation memberOrderFacetAnnotation = (MemberOrderFacetAnnotation) facet;
@@ -114,9 +117,9 @@ public class MemberOrderAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method method = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, method, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, method, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(MemberOrderFacet.class);
+        final Facet facet = facetedMethod.getFacet(MemberOrderFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof MemberOrderFacetAnnotation);
         final MemberOrderFacetAnnotation memberOrderFacetAnnotation = (MemberOrderFacetAnnotation) facet;

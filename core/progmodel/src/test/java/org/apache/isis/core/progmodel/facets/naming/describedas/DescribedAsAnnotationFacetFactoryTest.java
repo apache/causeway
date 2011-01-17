@@ -27,9 +27,13 @@ import java.util.List;
 import org.apache.isis.applib.annotation.DescribedAs;
 import org.apache.isis.core.metamodel.facetapi.Facet;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessParameterContext;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacet;
 import org.apache.isis.core.metamodel.facets.naming.describedas.DescribedAsFacetAbstract;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.describedas.annotation.DescribedAsAnnotationFacetFactory;
 
 
 public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -63,9 +67,9 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         @DescribedAs("some description")
         class Customer {}
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+        final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DescribedAsFacetAbstract);
         final DescribedAsFacetAbstract describedAsFacetAbstract = (DescribedAsFacetAbstract) facet;
@@ -84,9 +88,9 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+        final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DescribedAsFacetAbstract);
         final DescribedAsFacetAbstract describedAsFacetAbstract = (DescribedAsFacetAbstract) facet;
@@ -105,9 +109,9 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+        final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DescribedAsFacetAbstract);
         final DescribedAsFacetAbstract describedAsFacetAbstract = (DescribedAsFacetAbstract) facet;
@@ -124,9 +128,9 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+        final Facet facet = facetedMethod.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DescribedAsFacetAbstract);
         final DescribedAsFacetAbstract describedAsFacetAbstract = (DescribedAsFacetAbstract) facet;
@@ -138,13 +142,14 @@ public class DescribedAsAnnotationFacetFactoryTest extends AbstractFacetFactoryT
     public void testDescribedAsAnnotationPickedUpOnActionParameter() {
         @edu.umd.cs.findbugs.annotations.SuppressWarnings("UMAC_UNCALLABLE_METHOD_OF_ANONYMOUS_CLASS")
         class Customer {
+            @SuppressWarnings("unused")
             public void someAction(@DescribedAs("some description") final int x) {}
         }
         final Method actionMethod = findMethod(Customer.class, "someAction", new Class[] { int.class });
 
-        facetFactory.processParams(actionMethod, 0, facetHolder);
+        facetFactory.processParams(new ProcessParameterContext(actionMethod, 0, facetedMethodParameter));
 
-        final Facet facet = facetHolder.getFacet(DescribedAsFacet.class);
+        final Facet facet = facetedMethodParameter.getFacet(DescribedAsFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof DescribedAsFacetAbstract);
         final DescribedAsFacetAbstract describedAsFacetAbstract = (DescribedAsFacetAbstract) facet;

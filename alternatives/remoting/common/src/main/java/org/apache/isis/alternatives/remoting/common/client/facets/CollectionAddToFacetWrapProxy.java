@@ -31,7 +31,7 @@ import org.apache.isis.core.commons.exceptions.IsisException;
 import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
 import org.apache.isis.core.metamodel.facetapi.DecoratingFacet;
 import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacet;
-import org.apache.isis.core.progmodel.facets.collections.modify.CollectionAddToFacetAbstract;
+import org.apache.isis.core.metamodel.facets.collections.modify.CollectionAddToFacetAbstract;
 import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.ConcurrencyException;
 import org.apache.log4j.Logger;

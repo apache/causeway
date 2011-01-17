@@ -17,21 +17,16 @@
  *  under the License.
  */
 
-package org.apache.isis.core.metamodel.facets.propcoll.access;
-
-import org.apache.isis.core.metamodel.adapter.ObjectAdapter;
-import org.apache.isis.core.metamodel.facetapi.Facet;
-
 /**
- * The mechanism by which the value of the property can be accessed.
+ * Defines {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter} interface,
+ * a wrapper around each domain object pojo.
  * 
  * <p>
- * In the standard Apache Isis Programming Model, corresponds to invoking the accessor method for a property.
+ * {@link org.apache.isis.core.metamodel.adapter.ObjectAdapter} is analogous
+ * to {@link java.lang.Object java.lang.Object}; from it the {@link org.apache.isis.core.metamodel.spec.ObjectSpecification}
+ * can be obtained (analogous to {@link java.lang.Class java.lang.Class}.
+ * 
+ * <p>
+ * The other significant type defined by  
  */
-public interface PropertyAccessorFacet extends Facet {
-
-    /**
-     * Gets the value of this property from this object.
-     */
-    public Object getProperty(ObjectAdapter inObject);
-}
+package org.apache.isis.core.metamodel.adapter;

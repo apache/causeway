@@ -73,6 +73,14 @@ public final class NameUtils {
         }
     }
 
+    public static String javaBaseNameStripAccessorPrefixIfRequired(final String javaName) {
+        if(javaName.startsWith("is") || javaName.startsWith("get")) {
+            return javaBaseName(javaName);
+        } else {
+            return capitalizeName(javaName);
+        }
+    }
+
     public static String capitalizeName(final String name) {
         return Character.toUpperCase(name.charAt(0)) + name.substring(1);
     }

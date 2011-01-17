@@ -27,9 +27,14 @@ import java.util.List;
 import org.apache.isis.applib.annotation.Hidden;
 import org.apache.isis.applib.annotation.When;
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessMethodContext;
 import org.apache.isis.core.metamodel.facets.hide.HiddenFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.members.hide.HiddenFacetAbstract;
+import org.apache.isis.core.progmodel.facets.members.hide.annotation.HiddenAnnotationFacetFactory;
 
 
 public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -69,9 +74,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "getNumberOfOrders");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HiddenFacetAbstract);
 
@@ -88,9 +93,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "getOrders");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HiddenFacetAbstract);
 
@@ -105,9 +110,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof HiddenFacetAbstract);
 
@@ -122,9 +127,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.ALWAYS, hiddenFacetAbstract.value());
@@ -138,9 +143,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.NEVER, hiddenFacetAbstract.value());
@@ -154,9 +159,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.ONCE_PERSISTED, hiddenFacetAbstract.value());
@@ -170,9 +175,9 @@ public class HiddenAnnotationFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method actionMethod = findMethod(Customer.class, "someAction");
 
-        facetFactory.process(Customer.class, actionMethod, methodRemover, facetHolder);
+        facetFactory.process(new ProcessMethodContext(Customer.class, actionMethod, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(HiddenFacet.class);
+        final Facet facet = facetedMethod.getFacet(HiddenFacet.class);
         final HiddenFacetAbstract hiddenFacetAbstract = (HiddenFacetAbstract) facet;
 
         assertEquals(org.apache.isis.core.metamodel.facets.When.UNTIL_PERSISTED, hiddenFacetAbstract.value());

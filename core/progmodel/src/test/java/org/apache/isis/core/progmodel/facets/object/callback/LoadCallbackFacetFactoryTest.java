@@ -24,13 +24,16 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import org.apache.isis.core.metamodel.facetapi.Facet;
+import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
+import org.apache.isis.core.metamodel.facets.FacetFactory.ProcessClassContext;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadedCallbackFacet;
 import org.apache.isis.core.metamodel.facets.object.callbacks.LoadingCallbackFacet;
 import org.apache.isis.core.progmodel.facets.AbstractFacetFactoryTest;
-import org.apache.isis.core.progmodel.facets.object.callbacks.LoadCallbackFacetFactory;
-import org.apache.isis.core.progmodel.facets.object.callbacks.LoadedCallbackFacetViaMethod;
-import org.apache.isis.core.progmodel.facets.object.callbacks.LoadingCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.ProgrammableMethodRemover;
+import org.apache.isis.core.progmodel.facets.object.callbacks.load.LoadCallbackFacetFactory;
+import org.apache.isis.core.progmodel.facets.object.callbacks.load.LoadedCallbackFacetViaMethod;
+import org.apache.isis.core.progmodel.facets.object.callbacks.load.LoadingCallbackFacetViaMethod;
 
 
 public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
@@ -69,9 +72,9 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "loading");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(LoadingCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(LoadingCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof LoadingCallbackFacetViaMethod);
         final LoadingCallbackFacetViaMethod loadingCallbackFacetViaMethod = (LoadingCallbackFacetViaMethod) facet;
@@ -88,9 +91,9 @@ public class LoadCallbackFacetFactoryTest extends AbstractFacetFactoryTest {
         }
         final Method method = findMethod(Customer.class, "loaded");
 
-        facetFactory.process(Customer.class, methodRemover, facetHolder);
+        facetFactory.process(new ProcessClassContext(Customer.class, methodRemover, facetedMethod));
 
-        final Facet facet = facetHolder.getFacet(LoadedCallbackFacet.class);
+        final Facet facet = facetedMethod.getFacet(LoadedCallbackFacet.class);
         assertNotNull(facet);
         assertTrue(facet instanceof LoadedCallbackFacetViaMethod);
         final LoadedCallbackFacetViaMethod loadedCallbackFacetViaMethod = (LoadedCallbackFacetViaMethod) facet;

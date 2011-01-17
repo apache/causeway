@@ -84,10 +84,6 @@ public final class JavaClassUtils {
         return type.getName().startsWith(JAVA_CLASS_PREFIX) || type.getName().startsWith("sun.");
     }
 
-    public static boolean isStatic(final Method method) {
-        return Modifier.isStatic(method.getModifiers());
-    }
-    
     public static boolean isPublic(final Method method) {
         return Modifier.isPublic(method.getModifiers());
     }
@@ -154,6 +150,12 @@ public final class JavaClassUtils {
     	}
     	return false;
     }
+
+
+    public static boolean isStatic(final Method method) {
+        return Modifier.isStatic(method.getModifiers());
+    }
+    
 
     
 

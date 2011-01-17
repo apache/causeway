@@ -32,6 +32,7 @@ import org.junit.runner.RunWith;
 import org.apache.isis.applib.value.DateTime;
 import org.apache.isis.core.metamodel.facetapi.FacetHolder;
 import org.apache.isis.core.metamodel.facetapi.FacetHolderImpl;
+import org.apache.isis.core.progmodel.facets.value.datetime.DateTimeValueSemanticsProvider;
 
 @RunWith(JMock.class)
 public class DateTimeValueSemanticsProviderTest extends ValueSemanticsProviderAbstractTestCase {

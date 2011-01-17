@@ -14,12 +14,11 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package org.apache.isis.core.metamodel.facetedmethod;
+package org.apache.isis.core.metamodel.facets;
 
 import org.apache.isis.core.metamodel.facetapi.FeatureType;
-import org.apache.isis.core.metamodel.facets.TypedHolderDefault;
 
-public final class FacetedMethodParameter extends TypedHolderDefault {
+public class FacetedMethodParameter extends TypedHolderDefault {
 
     public FacetedMethodParameter(Class<?> type) {
         super(FeatureType.ACTION_PARAMETER, type);
