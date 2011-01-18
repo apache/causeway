@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.apache.isis.alternatives</groupId>
 		<artifactId>remoting</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 	
 	<groupId>org.apache.isis.alternatives.remoting</groupId>
 	<artifactId>transport-http</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1.0-incubating-SNAPSHOT</version>
 	
 	<name>HTTP Transport</name>
 	
@@ -55,12 +55,12 @@
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>transport-http-client</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>transport-http-server</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 		</dependencies>
 	

@@ -4,12 +4,12 @@
     <parent>
 		<groupId>org.apache.isis</groupId>
         <artifactId>alternatives</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.alternatives</groupId>
 	<artifactId>embedded</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0-incubating-SNAPSHOT</version>
 
 	<name>Embedded Deployment</name>
 
@@ -17,8 +17,8 @@
         <siteBaseDir>../..</siteBaseDir>
 		<relativeUrl>alternatives/embedded/</relativeUrl>
 
-        <wrapper-progmodel.version>0.1-SNAPSHOT</wrapper-progmodel.version>
-        <identity-bytecode.version>0.1-SNAPSHOT</identity-bytecode.version>
+        <wrapper-progmodel.version>0.1.0-incubating-SNAPSHOT</wrapper-progmodel.version>
+        <identity-bytecode.version>0.1.0-incubating-SNAPSHOT</identity-bytecode.version>
 
         <docbkxGuideTitle>Apache Isis Embedded Deployment</docbkxGuideTitle>
         <docbkxGuideSubTitle>Programming, Configuration and Deployment Guide</docbkxGuideSubTitle>

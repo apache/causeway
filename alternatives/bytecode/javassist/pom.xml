@@ -4,12 +4,12 @@
 	<parent>
 		<groupId>org.apache.isis.alternatives</groupId>
 		<artifactId>bytecode</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.alternatives.bytecode</groupId>
 	<artifactId>javassist</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1.0-incubating-SNAPSHOT</version>
 
 	<name>Javassist Bytecode Implementation</name>
 

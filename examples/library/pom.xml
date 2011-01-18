@@ -5,7 +5,7 @@
 
     <groupId>org.apache.isis.examples.apps</groupId>
     <artifactId>library</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0-incubating-SNAPSHOT</version>
 
     <name>Example Library (Scimpi) (all-in-one)</name>
 
@@ -31,7 +31,7 @@
             <dependency>
                 <groupId>org.apache.isis</groupId>
                 <artifactId>release</artifactId>
-                <version>0.1-SNAPSHOT</version>
+                <version>0.1.0-incubating-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

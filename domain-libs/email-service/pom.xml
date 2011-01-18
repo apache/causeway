@@ -7,12 +7,12 @@
     <name>Email service</name>
     <groupId>org.apache.isis.service</groupId>
     <artifactId>email</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0-incubating-SNAPSHOT</version>
     
     <parent>
         <groupId>org.apache.isis</groupId>
         <artifactId>release</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
     <build>

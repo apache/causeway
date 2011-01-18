@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>alternatives</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.alternatives</groupId>
@@ -71,7 +71,7 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>core</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
@@ -79,38 +79,38 @@
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>common</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>marshalling-encode</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>marshalling-serialize</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>marshalling-xstream</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>transport-sockets</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.isis.alternatives.remoting</groupId>
 				<artifactId>transport-http</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 			</dependency>
             
             <dependency>
                 <groupId>org.apache.isis.alternatives.bytecode</groupId>
                 <artifactId>identity</artifactId>
-                <version>0.1-SNAPSHOT</version>
+                <version>0.1.0-incubating-SNAPSHOT</version>
                 <scope>test</scope>
             </dependency>
             

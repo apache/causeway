@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.apache.isis.alternatives.remoting</groupId>
 		<artifactId>transport-http</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>transport-http-server</artifactId>

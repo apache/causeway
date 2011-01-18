@@ -7,7 +7,7 @@
     <parent>
 	    <groupId>org.apache.isis.distribution</groupId>
 	    <artifactId>examples</artifactId>
-	    <version>0.1-SNAPSHOT</version>
+	    <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
 	<dependencies>

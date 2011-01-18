@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>alternatives</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.alternatives</groupId>
@@ -57,7 +57,7 @@
 			<dependency>
 				<groupId>org.apache.isis</groupId>
 				<artifactId>core</artifactId>
-				<version>0.1-SNAPSHOT</version>
+				<version>0.1.0-incubating-SNAPSHOT</version>
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>

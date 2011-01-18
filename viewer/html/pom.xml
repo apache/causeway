@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.apache.isis</groupId>
 		<artifactId>viewer</artifactId>
-		<version>0.1-SNAPSHOT</version>
+		<version>0.1.0-incubating-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.apache.isis.viewer</groupId>
 	<artifactId>html</artifactId>
-	<version>0.1-SNAPSHOT</version>
+	<version>0.1.0-incubating-SNAPSHOT</version>
 
 	<name>Html Viewer</name>
 

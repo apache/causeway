@@ -6,12 +6,12 @@
     <parent>
         <groupId>org.apache.isis.support</groupId>
         <artifactId>archetypes</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
     
     <groupId>org.apache.isis.support.archetypes</groupId>
     <artifactId>application</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0-incubating-SNAPSHOT</version>
     
     <name>Apache Isis Application Archetype</name>
     

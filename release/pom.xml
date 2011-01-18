@@ -13,7 +13,7 @@
 
     <groupId>org.apache.isis</groupId>
     <artifactId>release</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0-incubating-SNAPSHOT</version>
     
     <name>Apache Isis Release</name>
 
@@ -29,34 +29,34 @@
 
     <properties>
         <!-- used for applib, core, and defaults -->
-        <isis.version>0.1-SNAPSHOT</isis.version>
+        <isis.version>0.1.0-incubating-SNAPSHOT</isis.version>
 
-        <isis.viewer-dnd.version>0.1-SNAPSHOT</isis.viewer-dnd.version>
-        <isis.viewer-html.version>0.1-SNAPSHOT</isis.viewer-html.version>
-        <isis.viewer-scimpi.version>0.1-SNAPSHOT</isis.viewer-scimpi.version>
-        <isis.viewer-wicket.version>0.1-SNAPSHOT</isis.viewer-wicket.version>
-        <isis.viewer-restful.version>0.1-SNAPSHOT</isis.viewer-restful.version>
-        <isis.viewer-junit.version>0.1-SNAPSHOT</isis.viewer-junit.version>
+        <isis.viewer-dnd.version>0.1.0-incubating-SNAPSHOT</isis.viewer-dnd.version>
+        <isis.viewer-html.version>0.1.0-incubating-SNAPSHOT</isis.viewer-html.version>
+        <isis.viewer-scimpi.version>0.1.0-incubating-SNAPSHOT</isis.viewer-scimpi.version>
+        <isis.viewer-wicket.version>0.1.0-incubating-SNAPSHOT</isis.viewer-wicket.version>
+        <isis.viewer-restful.version>0.1.0-incubating-SNAPSHOT</isis.viewer-restful.version>
+        <isis.viewer-junit.version>0.1.0-incubating-SNAPSHOT</isis.viewer-junit.version>
 
-        <isis.alternatives-objectstore-xml.version>0.1-SNAPSHOT</isis.alternatives-objectstore-xml.version>
-        <isis.alternatives-objectstore-sql.version>0.1-SNAPSHOT</isis.alternatives-objectstore-sql.version>
-        <isis.alternatives-objectstore-nosql.version>0.1-SNAPSHOT</isis.alternatives-objectstore-nosql.version>
+        <isis.alternatives-objectstore-xml.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-objectstore-xml.version>
+        <isis.alternatives-objectstore-sql.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-objectstore-sql.version>
+        <isis.alternatives-objectstore-nosql.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-objectstore-nosql.version>
 
-        <isis.alternatives-profilestore-xml.version>0.1-SNAPSHOT</isis.alternatives-profilestore-xml.version>
+        <isis.alternatives-profilestore-xml.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-profilestore-xml.version>
 
         <!-- used for javassist, identity -->
-        <isis.alternatives-bytecode.version>0.1-SNAPSHOT</isis.alternatives-bytecode.version>
+        <isis.alternatives-bytecode.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-bytecode.version>
 
-        <isis.alternatives-progmodel-groovy.version>0.1-SNAPSHOT</isis.alternatives-progmodel-groovy.version>
-        <isis.alternatives-progmodel-wrapper.version>0.1-SNAPSHOT</isis.alternatives-progmodel-wrapper.version>
+        <isis.alternatives-progmodel-groovy.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-progmodel-groovy.version>
+        <isis.alternatives-progmodel-wrapper.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-progmodel-wrapper.version>
 
         <!-- used for common, transport-sockets, marshalling-encoding, marshalling-serialize -->
-        <isis.alternatives-remoting.version>0.1-SNAPSHOT</isis.alternatives-remoting.version>
+        <isis.alternatives-remoting.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-remoting.version>
 
-        <isis.alternatives-security-ldap.version>0.1-SNAPSHOT</isis.alternatives-security-ldap.version>
-        <isis.alternatives-security-file.version>0.1-SNAPSHOT</isis.alternatives-security-file.version>
+        <isis.alternatives-security-ldap.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-security-ldap.version>
+        <isis.alternatives-security-file.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-security-file.version>
 
-        <isis.alternatives-embedded.version>0.1-SNAPSHOT</isis.alternatives-embedded.version>
+        <isis.alternatives-embedded.version>0.1.0-incubating-SNAPSHOT</isis.alternatives-embedded.version>
     </properties>
 
     <build>

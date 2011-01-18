@@ -4,13 +4,13 @@
     <name>Examples</name>
 	<groupId>org.apache.isis</groupId>
 	<artifactId>service</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1.0-incubating-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <parent>
         <groupId>org.apache.isis</groupId>
         <artifactId>release</artifactId>
-        <version>0.1-SNAPSHOT</version>
+        <version>0.1.0-incubating-SNAPSHOT</version>
     </parent>
 
     <scm>
