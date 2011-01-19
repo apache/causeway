@@ -247,9 +247,11 @@ public class FileAuthorizor extends AuthorizorAbstract {
     private void writeMap() {
         try {
             OutputStream whiteListOutputResource = resourceStreamSource.writeResource(whiteListResourceName);
-            if (whiteListOutputResource == null && !printedWarning) {
-            	LOG.warn("unable to write out authorisation details");
-            	printedWarning = true; // just to stop flooding log
+            if (whiteListOutputResource == null) {
+                if (!printedWarning) {
+                	LOG.warn("unable to write out authorisation details");
+                	printedWarning = true; // just to stop flooding log
+                }
             	return;
             }
             if (LOG.isDebugEnabled() && !printedDebug) {
