@@ -28,6 +28,7 @@
 		<menu name="Getting Started">
 			<item name="Downloads" href="downloads.html" />
             <item name="IDE Support" href="ide-support.html"/>
+            <item name="Cheat Sheet" href="IsisCheatSheet.pdf"/>
 		</menu>
 
 		<menu name="Community and Help">
