@@ -27,8 +27,10 @@ import static org.apache.isis.core.commons.matchers.IsisMatchers.greaterThan;
 import org.apache.isis.core.commons.debug.DebugString;
 import org.apache.isis.core.metamodel.adapter.oid.Oid;
 import org.apache.isis.core.metamodel.adapter.oid.stringable.directly.OidStringifierDirect;
+import org.apache.isis.core.runtime.context.IsisContext;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGenerator;
 import org.apache.isis.core.runtime.persistence.oidgenerator.OidGeneratorAbstract;
+import org.apache.isis.core.runtime.session.IsisSession;
 
 
 /**
